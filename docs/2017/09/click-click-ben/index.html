@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="zh-tw" dir="ltr">
+  <head>
+  <meta charset="utf-8" />
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <title>3rd Practice: Click Click Ben &middot; </title>
+  <meta name="description" content="100 個練習計畫：第三個練習" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/normalize/8.0.1/normalize.min.css" />
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.10.0/dist/katex.min.css" integrity="sha384-9eLZqc9ds8eNjO3TmqPeYcDj8n+Qfa4nuSiGYa6DjLNcv9BtN69ZIulL9+8CqC9Y" crossorigin="anonymous">
+  
+  
+  
+  
+  <link href="http://idontwannarock.github.io/tech_blog/css/concated.min.css" rel="stylesheet">
+  
+<script type="application/javascript">
+var doNotTrack = false;
+if (!doNotTrack) {
+	(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+	(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+	m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+	})(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+	ga('create', 'UA-106499565-1', 'auto');
+	
+	ga('send', 'pageview');
+}
+</script>
+
+  <style>
+    body {
+      background: #ecedef url("https://images.unsplash.com/photo-1533035336122-4327d347d2fe") repeat;
+    }
+  </style>
+</head>
+
+  <body class="single-body">
+    <nav class="nav-bar side-padding">
+  <h1 class="nav-header"><a href="http://idontwannarock.github.io/tech_blog/" class="nav-text">Howard 技術筆記</a></h1>
+  <div class="hamburger-menu">
+    <button onclick="hamburgerMenuPressed.call(this)" aria-haspopup="true" aria-expanded="false" aria-controls="menu" aria-label="Menu">
+      <span></span>
+      <span></span>
+    </button>
+    <ul id="menu" class="hamburger-menu-overlay">
+      <li><a href="http://idontwannarock.github.io/tech_blog/" class="hamburger-menu-overlay-link">Home</a></li>
+      <li><a href="http://idontwannarock.github.io/tech_blog/categories/application" class="hamburger-menu-overlay-link">Application</a></li><li><a href="http://idontwannarock.github.io/tech_blog/categories/concept" class="hamburger-menu-overlay-link">Concept</a></li><li><a href="http://idontwannarock.github.io/tech_blog/categories/practice" class="hamburger-menu-overlay-link">Practice</a></li>
+    </ul>
+  </div>
+</nav>
+    <main class="content side-text-padding">
+      <article class="post ">
+        <header class="post-header">
+        	<h1 class="post-title">3rd Practice: Click Click Ben</h1>
+          <p class="post-date">Posted <time datetime="2017-09-15">Sep 15, 2017</time></p>
+        </header>
+        
+        <picture class="post-figure">
+            
+            <source srcset="http://idontwannarock.github.io/tech_blog/">
+          <img src="http://idontwannarock.github.io/tech_blog/" alt="">
+        </picture>
+        
+        
+
+<h1 id="第三個目標">第三個目標</h1>
+
+<p>練習 JavaScript 跟 <code>random()</code> 函數。</p>
+
+<ul>
+<li>作品：<a href="https://goo.gl/sgAjR3">Click Click Ben</a></li>
+<li>參考：大帥哥 <a href="https://www.facebook.com/ben.shieh.3">Ben Hsieh</a> ~</li>
+</ul>
+
+<h1 id="遇到困難">遇到困難</h1>
+
+<h2 id="帥哥阿-ben-照片太難挑">帥哥阿 Ben 照片太難挑</h2>
+
+<p>這是我製作這個作品中碰到最大的困難！太多太帥了，我無法選擇！！我的媽！！！誰來救救我！！！！</p>
+
+<h2 id="照片亂數出現位置及亂數間隔時間">照片亂數出現位置及亂數間隔時間</h2>
+
+<p>其實這個問題我之前就有學過，所以這邊大概紀錄一下作法。</p>
+
+<p>先用 JavaScript 的 <code>Math.random()</code> 來亂數產生 0-1 的浮點數，然後為了適應各種大小的視窗，要乘上 <code>document.documentElement.clientHeight</code> 或 <code>document.documentElement.clientWidth</code> 來亂數產生要往右或往下多少 px 的數字。</p>
+
+<p>然後用 <code>document.getElementById(&quot;id&quot;).style.top</code> 或 <code>document.getElementById(&quot;id&quot;).style.left</code> 來設定位置。</p>
+
+<p>亂數間隔時間則用 <code>setTimeout()</code> 來作，記得括號的兩個參數要用逗點分隔，第一個參數是暫停後要執行的程式，第二個是暫停的時間，單位是千分之一秒。</p>
+
+<h2 id="控制照片出現或消失">控制照片出現或消失</h2>
+
+<p>原本想都用 JavaScript 控制，但發現直接寫好所有 HTML+CSS 後，用 <code>display: block;</code> 跟 <code>display: none;</code> 來控制最方便。</p>
+
+<h2 id="控制次數">控制次數</h2>
+
+<p>這也沒什麼好說的，只是做個記錄。</p>
+
+<p>最基礎的做法就是設一個變數，然後用 <code>if</code> 判斷來控制次數。</p>
+
+<p>控制次數感覺可以用 <code>for</code> 或 <code>while</code> loop 來寫，但中間要卡一個按的功能，不知道能不能行？</p>
+
+      </article>
+      <div id="disqus_thread"></div>
+<script type="application/javascript">
+    var disqus_config = function () {
+    
+    
+    
+    };
+    (function() {
+        if (["localhost", "127.0.0.1"].indexOf(window.location.hostname) != -1) {
+            document.getElementById('disqus_thread').innerHTML = 'Disqus comments not available by default when the website is previewed locally.';
+            return;
+        }
+        var d = document, s = d.createElement('script'); s.async = true;
+        s.src = '//' + "howard-tech-blog" + '.disqus.com/embed.js';
+        s.setAttribute('data-timestamp', +new Date());
+        (d.head || d.body).appendChild(s);
+    })();
+</script>
+<noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+<a href="https://disqus.com" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
+    </main>
+    <nav class="end-nav side-padding">
+      
+      <a ontouchstart="cardPressed.call(this)" ontouchend="cardReleased.call(this)" ontouchmove="cardReleased.call(this)" 
+  href="http://idontwannarock.github.io/tech_blog/2017/09/retina-morning-post/" class="card blog-card" rel="bookmark" >
+    
+    <div class="card-img-container">
+      <p class="card-img-overlay">Next Article</p>
+      <picture>
+        
+        <source srcset="http://idontwannarock.github.io/tech_blog/">
+        <img src="http://idontwannarock.github.io/tech_blog/" class="card-img" alt="">
+      </picture>
+    </div>
+    
+  <article class="card-body">
+    <h2 class="card-title">2nd Practice: Retina Morning Post</h2>
+    <p class="card-text">100 個練習計畫：第二個練習</p>
+    <div class="card-subtext muted-text">
+      <p>Posted <time datetime="2017-09-15 915:00">Sep 15, 2017</time></p>
+      <p>#practice </p>
+    </div>
+  </article>
+</a>
+      
+      <a ontouchstart="cardPressed.call(this)" ontouchend="cardReleased.call(this)" ontouchmove="cardReleased.call(this)" 
+  href="http://idontwannarock.github.io/tech_blog/" class="card home-card" style="background-image: url( https://images.unsplash.com/photo-1530305408560-82d13781b33a )" rel="bookmark" >
+  Home
+</a>
+    </nav>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.13.1/highlight.min.js"></script>
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.10.0/dist/katex.min.js" integrity="sha384-K3vbOmF2BtaVai+Qk37uypf7VrgBubhQreNQe9aGsz9lB63dIFiQVlJbr92dw2Lx" crossorigin="anonymous"></script>
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.10.0/dist/contrib/auto-render.min.js" integrity="sha384-kmZOZB5ObwgQnS/DuDg6TScgOiWWBiVt0plIRkZCmE6rDZGrEOQeHM5PcHi+nyqe" crossorigin="anonymous"
+    onload="renderMathInElement(document.body);"></script>
+  
+  <script src="http://idontwannarock.github.io/tech_blog/js/core.min.js"></script>
+<script>
+  hljs.initHighlightingOnLoad();
+</script>
+
+  </body>
+</html>

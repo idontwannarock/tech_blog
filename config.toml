@@ -1,0 +1,19 @@
+baseURL = "http://idontwannarock.github.io/tech_blog/"
+languageCode = "zh-tw"
+DefaultContentLanguage = "zh-tw"
+#title = "Howard 技術筆記"
+theme = "aether"
+publishDir = "docs"
+canonifyURLs = true
+
+googleAnalytics = "UA-106499565-1"
+disqusShortname = "howard-tech-blog"
+
+[params]
+brand = "Howard 技術筆記"
+description = "分享 * 紀錄 * 程式"
+homeimg = "https://images.unsplash.com/photo-1530305408560-82d13781b33a"
+bgimg = "https://images.unsplash.com/photo-1533035336122-4327d347d2fe"
+
+[permalinks]
+post = "/:year/:month/:slug/"

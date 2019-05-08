@@ -1,0 +1,35 @@
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>github-pages - </title>
+    <link>http://idontwannarock.github.io/tech_blog/tags/github-pages/</link>
+    <description>Recent content in github-pages on </description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>zh-tw</language>
+    <lastBuildDate>Tue, 07 May 2019 16:03:07 +0800</lastBuildDate>
+    
+        <atom:link href="http://idontwannarock.github.io/tech_blog/tags/github-pages/index.xml" rel="self" type="application/rss+xml" />
+    
+    <item>
+      <title>Hugo 入門教學</title>
+      <link>http://idontwannarock.github.io/tech_blog/2019/05/hugo-tutorial/</link>
+      <pubDate>Tue, 07 May 2019 16:03:07 +0800</pubDate>
+      
+      <guid>http://idontwannarock.github.io/tech_blog/2019/05/hugo-tutorial/</guid>
+      <description>介紹 Hugo 及基本使用</description>
+    </item><item>
+      <title>Hugo 練習 (2)</title>
+      <link>http://idontwannarock.github.io/tech_blog/2017/09/hugo-practice-2/</link>
+      <pubDate>Sat, 09 Sep 2017 15:22:03 +0800</pubDate>
+      
+      <guid>http://idontwannarock.github.io/tech_blog/2017/09/hugo-practice-2/</guid>
+      <description>練習操作 Hugo 生成靜態網站，並透過 git 及 ssh 部署到 GitHub Pages</description>
+    </item><item>
+      <title>Hugo 練習 (1)</title>
+      <link>http://idontwannarock.github.io/tech_blog/2017/09/hugo-practice-1/</link>
+      <pubDate>Sat, 09 Sep 2017 00:17:31 +0800</pubDate>
+      
+      <guid>http://idontwannarock.github.io/tech_blog/2017/09/hugo-practice-1/</guid>
+      <description>釐清 Hugo 與 GitHub Pages 概念</description>
+    </item>
+  </channel>
+</rss>

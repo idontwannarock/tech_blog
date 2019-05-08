@@ -1,0 +1,21 @@
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>algorithm - </title>
+    <link>http://idontwannarock.github.io/tech_blog/tags/algorithm/</link>
+    <description>Recent content in algorithm on </description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>zh-tw</language>
+    <lastBuildDate>Wed, 15 Nov 2017 14:26:17 +0800</lastBuildDate>
+    
+        <atom:link href="http://idontwannarock.github.io/tech_blog/tags/algorithm/index.xml" rel="self" type="application/rss+xml" />
+    
+    <item>
+      <title>Java 樂透抽取算法初探</title>
+      <link>http://idontwannarock.github.io/tech_blog/2017/11/java-lottery-algorithm-basic/</link>
+      <pubDate>Wed, 15 Nov 2017 14:26:17 +0800</pubDate>
+      
+      <guid>http://idontwannarock.github.io/tech_blog/2017/11/java-lottery-algorithm-basic/</guid>
+      <description>初步探討樂透抽取演算法及 Java 中的隨機</description>
+    </item>
+  </channel>
+</rss>
