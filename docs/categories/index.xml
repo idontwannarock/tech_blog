@@ -1,34 +1,34 @@
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
     <title>Categories - </title>
-    <link>http://idontwannarock.github.io/tech_blog/categories/</link>
+    <link>https://idontwannarock.github.io/tech_blog/categories/</link>
     <description>Recent content in Categories on </description>
     <generator>Hugo -- gohugo.io</generator>
     <language>zh-tw</language>
     <lastBuildDate>Tue, 07 May 2019 16:03:07 +0800</lastBuildDate>
     
-        <atom:link href="http://idontwannarock.github.io/tech_blog/categories/index.xml" rel="self" type="application/rss+xml" />
+        <atom:link href="https://idontwannarock.github.io/tech_blog/categories/index.xml" rel="self" type="application/rss+xml" />
     
     <item>
       <title>application</title>
-      <link>http://idontwannarock.github.io/tech_blog/categories/application/</link>
+      <link>https://idontwannarock.github.io/tech_blog/categories/application/</link>
       <pubDate>Tue, 07 May 2019 16:03:07 +0800</pubDate>
       
-      <guid>http://idontwannarock.github.io/tech_blog/categories/application/</guid>
+      <guid>https://idontwannarock.github.io/tech_blog/categories/application/</guid>
       <description></description>
     </item><item>
       <title>concept</title>
-      <link>http://idontwannarock.github.io/tech_blog/categories/concept/</link>
+      <link>https://idontwannarock.github.io/tech_blog/categories/concept/</link>
       <pubDate>Tue, 10 Apr 2018 13:22:52 +0800</pubDate>
       
-      <guid>http://idontwannarock.github.io/tech_blog/categories/concept/</guid>
+      <guid>https://idontwannarock.github.io/tech_blog/categories/concept/</guid>
       <description></description>
     </item><item>
       <title>practice</title>
-      <link>http://idontwannarock.github.io/tech_blog/categories/practice/</link>
+      <link>https://idontwannarock.github.io/tech_blog/categories/practice/</link>
       <pubDate>Fri, 15 Sep 2017 10:27:28 +0800</pubDate>
       
-      <guid>http://idontwannarock.github.io/tech_blog/categories/practice/</guid>
+      <guid>https://idontwannarock.github.io/tech_blog/categories/practice/</guid>
       <description></description>
     </item>
   </channel>

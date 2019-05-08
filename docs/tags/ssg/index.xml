@@ -1,20 +1,20 @@
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
     <title>ssg - </title>
-    <link>http://idontwannarock.github.io/tech_blog/tags/ssg/</link>
+    <link>https://idontwannarock.github.io/tech_blog/tags/ssg/</link>
     <description>Recent content in ssg on </description>
     <generator>Hugo -- gohugo.io</generator>
     <language>zh-tw</language>
     <lastBuildDate>Sat, 09 Sep 2017 00:17:31 +0800</lastBuildDate>
     
-        <atom:link href="http://idontwannarock.github.io/tech_blog/tags/ssg/index.xml" rel="self" type="application/rss+xml" />
+        <atom:link href="https://idontwannarock.github.io/tech_blog/tags/ssg/index.xml" rel="self" type="application/rss+xml" />
     
     <item>
       <title>Hugo 練習 (1)</title>
-      <link>http://idontwannarock.github.io/tech_blog/2017/09/hugo-practice-1/</link>
+      <link>https://idontwannarock.github.io/tech_blog/2017/09/hugo-practice-1/</link>
       <pubDate>Sat, 09 Sep 2017 00:17:31 +0800</pubDate>
       
-      <guid>http://idontwannarock.github.io/tech_blog/2017/09/hugo-practice-1/</guid>
+      <guid>https://idontwannarock.github.io/tech_blog/2017/09/hugo-practice-1/</guid>
       <description>釐清 Hugo 與 GitHub Pages 概念</description>
     </item>
   </channel>

@@ -1,34 +1,34 @@
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
     <title>javascript - </title>
-    <link>http://idontwannarock.github.io/tech_blog/tags/javascript/</link>
+    <link>https://idontwannarock.github.io/tech_blog/tags/javascript/</link>
     <description>Recent content in javascript on </description>
     <generator>Hugo -- gohugo.io</generator>
     <language>zh-tw</language>
     <lastBuildDate>Fri, 15 Sep 2017 10:11:46 +0800</lastBuildDate>
     
-        <atom:link href="http://idontwannarock.github.io/tech_blog/tags/javascript/index.xml" rel="self" type="application/rss+xml" />
+        <atom:link href="https://idontwannarock.github.io/tech_blog/tags/javascript/index.xml" rel="self" type="application/rss+xml" />
     
     <item>
       <title>3rd Practice: Click Click Ben</title>
-      <link>http://idontwannarock.github.io/tech_blog/2017/09/click-click-ben/</link>
+      <link>https://idontwannarock.github.io/tech_blog/2017/09/click-click-ben/</link>
       <pubDate>Fri, 15 Sep 2017 10:11:46 +0800</pubDate>
       
-      <guid>http://idontwannarock.github.io/tech_blog/2017/09/click-click-ben/</guid>
+      <guid>https://idontwannarock.github.io/tech_blog/2017/09/click-click-ben/</guid>
       <description>100 個練習計畫：第三個練習</description>
     </item><item>
       <title>2nd Practice: Retina Morning Post</title>
-      <link>http://idontwannarock.github.io/tech_blog/2017/09/retina-morning-post/</link>
+      <link>https://idontwannarock.github.io/tech_blog/2017/09/retina-morning-post/</link>
       <pubDate>Fri, 15 Sep 2017 09:44:03 +0800</pubDate>
       
-      <guid>http://idontwannarock.github.io/tech_blog/2017/09/retina-morning-post/</guid>
+      <guid>https://idontwannarock.github.io/tech_blog/2017/09/retina-morning-post/</guid>
       <description>100 個練習計畫：第二個練習</description>
     </item><item>
       <title>1st Practice: Click Click Boom</title>
-      <link>http://idontwannarock.github.io/tech_blog/2017/09/click-click-boom/</link>
+      <link>https://idontwannarock.github.io/tech_blog/2017/09/click-click-boom/</link>
       <pubDate>Fri, 15 Sep 2017 07:36:23 +0800</pubDate>
       
-      <guid>http://idontwannarock.github.io/tech_blog/2017/09/click-click-boom/</guid>
+      <guid>https://idontwannarock.github.io/tech_blog/2017/09/click-click-boom/</guid>
       <description>100 個練習計畫：第一個練習</description>
     </item>
   </channel>

@@ -1,20 +1,20 @@
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
     <title>hash - </title>
-    <link>http://idontwannarock.github.io/tech_blog/tags/hash/</link>
+    <link>https://idontwannarock.github.io/tech_blog/tags/hash/</link>
     <description>Recent content in hash on </description>
     <generator>Hugo -- gohugo.io</generator>
     <language>zh-tw</language>
     <lastBuildDate>Mon, 11 Sep 2017 07:11:59 +0800</lastBuildDate>
     
-        <atom:link href="http://idontwannarock.github.io/tech_blog/tags/hash/index.xml" rel="self" type="application/rss+xml" />
+        <atom:link href="https://idontwannarock.github.io/tech_blog/tags/hash/index.xml" rel="self" type="application/rss+xml" />
     
     <item>
       <title>實作簡單登入會員系統 (1)</title>
-      <link>http://idontwannarock.github.io/tech_blog/2017/09/login-signup-function-1/</link>
+      <link>https://idontwannarock.github.io/tech_blog/2017/09/login-signup-function-1/</link>
       <pubDate>Mon, 11 Sep 2017 07:11:59 +0800</pubDate>
       
-      <guid>http://idontwannarock.github.io/tech_blog/2017/09/login-signup-function-1/</guid>
+      <guid>https://idontwannarock.github.io/tech_blog/2017/09/login-signup-function-1/</guid>
       <description>100 個練習計畫：第六個練習第一部分</description>
     </item>
   </channel>

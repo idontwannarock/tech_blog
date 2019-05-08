@@ -1,5 +1,5 @@
 ---
-title: "About"
+title: "開發者介紹"
 slug: "about"
 date: 2019-05-07T17:32:00+08:00
 description: "About Howard"
@@ -11,8 +11,6 @@ displayInMenu: true
 displayInList: false
 draft: true
 ---
-
-# 開發者介紹
 
 從自學 PHP 到上課學習 Java 入門，從事軟體工程師工作一年有餘，目前主要工作內容為 Java 網路應用開發及 SAP BPM 系統維護
 

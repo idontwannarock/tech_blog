@@ -1,55 +1,55 @@
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
     <title></title>
-    <link>http://idontwannarock.github.io/tech_blog/</link>
+    <link>https://idontwannarock.github.io/tech_blog/</link>
     <description>Recent content on </description>
     <generator>Hugo -- gohugo.io</generator>
     <language>zh-tw</language>
     <lastBuildDate>Tue, 07 May 2019 16:03:07 +0800</lastBuildDate>
     
-        <atom:link href="http://idontwannarock.github.io/tech_blog/index.xml" rel="self" type="application/rss+xml" />
+        <atom:link href="https://idontwannarock.github.io/tech_blog/index.xml" rel="self" type="application/rss+xml" />
     
     <item>
       <title>1st Practice: Click Click Boom</title>
-      <link>http://idontwannarock.github.io/tech_blog/2017/09/click-click-boom/</link>
+      <link>https://idontwannarock.github.io/tech_blog/2017/09/click-click-boom/</link>
       <pubDate>Fri, 15 Sep 2017 07:36:23 +0800</pubDate>
       
-      <guid>http://idontwannarock.github.io/tech_blog/2017/09/click-click-boom/</guid>
+      <guid>https://idontwannarock.github.io/tech_blog/2017/09/click-click-boom/</guid>
       <description>100 個練習計畫：第一個練習</description>
     </item><item>
       <title>Git 及 GitHub 基礎認識</title>
-      <link>http://idontwannarock.github.io/tech_blog/2017/09/git-and-github-basic/</link>
+      <link>https://idontwannarock.github.io/tech_blog/2017/09/git-and-github-basic/</link>
       <pubDate>Thu, 14 Sep 2017 07:13:01 +0800</pubDate>
       
-      <guid>http://idontwannarock.github.io/tech_blog/2017/09/git-and-github-basic/</guid>
+      <guid>https://idontwannarock.github.io/tech_blog/2017/09/git-and-github-basic/</guid>
       <description>介紹 Git 概念及基礎指令，並用 SSH 同步到 GitHub</description>
     </item><item>
       <title>實作簡單登入會員系統 (1)</title>
-      <link>http://idontwannarock.github.io/tech_blog/2017/09/login-signup-function-1/</link>
+      <link>https://idontwannarock.github.io/tech_blog/2017/09/login-signup-function-1/</link>
       <pubDate>Mon, 11 Sep 2017 07:11:59 +0800</pubDate>
       
-      <guid>http://idontwannarock.github.io/tech_blog/2017/09/login-signup-function-1/</guid>
+      <guid>https://idontwannarock.github.io/tech_blog/2017/09/login-signup-function-1/</guid>
       <description>100 個練習計畫：第六個練習第一部分</description>
     </item><item>
       <title>XAMPP 安裝設定及簡單 PHP 練習</title>
-      <link>http://idontwannarock.github.io/tech_blog/2017/09/xampp-setup-and-php-practice/</link>
+      <link>https://idontwannarock.github.io/tech_blog/2017/09/xampp-setup-and-php-practice/</link>
       <pubDate>Sun, 10 Sep 2017 07:39:23 +0800</pubDate>
       
-      <guid>http://idontwannarock.github.io/tech_blog/2017/09/xampp-setup-and-php-practice/</guid>
+      <guid>https://idontwannarock.github.io/tech_blog/2017/09/xampp-setup-and-php-practice/</guid>
       <description>100 個練習計畫：第五個練習</description>
     </item><item>
       <title>Hugo 練習 (2)</title>
-      <link>http://idontwannarock.github.io/tech_blog/2017/09/hugo-practice-2/</link>
+      <link>https://idontwannarock.github.io/tech_blog/2017/09/hugo-practice-2/</link>
       <pubDate>Sat, 09 Sep 2017 15:22:03 +0800</pubDate>
       
-      <guid>http://idontwannarock.github.io/tech_blog/2017/09/hugo-practice-2/</guid>
+      <guid>https://idontwannarock.github.io/tech_blog/2017/09/hugo-practice-2/</guid>
       <description>練習操作 Hugo 生成靜態網站，並透過 git 及 ssh 部署到 GitHub Pages</description>
     </item><item>
       <title>Hugo 練習 (1)</title>
-      <link>http://idontwannarock.github.io/tech_blog/2017/09/hugo-practice-1/</link>
+      <link>https://idontwannarock.github.io/tech_blog/2017/09/hugo-practice-1/</link>
       <pubDate>Sat, 09 Sep 2017 00:17:31 +0800</pubDate>
       
-      <guid>http://idontwannarock.github.io/tech_blog/2017/09/hugo-practice-1/</guid>
+      <guid>https://idontwannarock.github.io/tech_blog/2017/09/hugo-practice-1/</guid>
       <description>釐清 Hugo 與 GitHub Pages 概念</description>
     </item>
   </channel>

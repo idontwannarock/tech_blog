@@ -1,48 +1,48 @@
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
     <title>practice - </title>
-    <link>http://idontwannarock.github.io/tech_blog/categories/practice/</link>
+    <link>https://idontwannarock.github.io/tech_blog/categories/practice/</link>
     <description>Recent content in practice on </description>
     <generator>Hugo -- gohugo.io</generator>
     <language>zh-tw</language>
     <lastBuildDate>Fri, 15 Sep 2017 10:27:28 +0800</lastBuildDate>
     
-        <atom:link href="http://idontwannarock.github.io/tech_blog/categories/practice/index.xml" rel="self" type="application/rss+xml" />
+        <atom:link href="https://idontwannarock.github.io/tech_blog/categories/practice/index.xml" rel="self" type="application/rss+xml" />
     
     <item>
       <title>4th Practice: Twitter Clone</title>
-      <link>http://idontwannarock.github.io/tech_blog/2017/09/twitter-clone/</link>
+      <link>https://idontwannarock.github.io/tech_blog/2017/09/twitter-clone/</link>
       <pubDate>Fri, 15 Sep 2017 10:27:28 +0800</pubDate>
       
-      <guid>http://idontwannarock.github.io/tech_blog/2017/09/twitter-clone/</guid>
+      <guid>https://idontwannarock.github.io/tech_blog/2017/09/twitter-clone/</guid>
       <description>100 個練習計畫：第四個練習</description>
     </item><item>
       <title>3rd Practice: Click Click Ben</title>
-      <link>http://idontwannarock.github.io/tech_blog/2017/09/click-click-ben/</link>
+      <link>https://idontwannarock.github.io/tech_blog/2017/09/click-click-ben/</link>
       <pubDate>Fri, 15 Sep 2017 10:11:46 +0800</pubDate>
       
-      <guid>http://idontwannarock.github.io/tech_blog/2017/09/click-click-ben/</guid>
+      <guid>https://idontwannarock.github.io/tech_blog/2017/09/click-click-ben/</guid>
       <description>100 個練習計畫：第三個練習</description>
     </item><item>
       <title>2nd Practice: Retina Morning Post</title>
-      <link>http://idontwannarock.github.io/tech_blog/2017/09/retina-morning-post/</link>
+      <link>https://idontwannarock.github.io/tech_blog/2017/09/retina-morning-post/</link>
       <pubDate>Fri, 15 Sep 2017 09:44:03 +0800</pubDate>
       
-      <guid>http://idontwannarock.github.io/tech_blog/2017/09/retina-morning-post/</guid>
+      <guid>https://idontwannarock.github.io/tech_blog/2017/09/retina-morning-post/</guid>
       <description>100 個練習計畫：第二個練習</description>
     </item><item>
       <title>1st Practice: Click Click Boom</title>
-      <link>http://idontwannarock.github.io/tech_blog/2017/09/click-click-boom/</link>
+      <link>https://idontwannarock.github.io/tech_blog/2017/09/click-click-boom/</link>
       <pubDate>Fri, 15 Sep 2017 07:36:23 +0800</pubDate>
       
-      <guid>http://idontwannarock.github.io/tech_blog/2017/09/click-click-boom/</guid>
+      <guid>https://idontwannarock.github.io/tech_blog/2017/09/click-click-boom/</guid>
       <description>100 個練習計畫：第一個練習</description>
     </item><item>
       <title>實作簡單登入會員系統 (1)</title>
-      <link>http://idontwannarock.github.io/tech_blog/2017/09/login-signup-function-1/</link>
+      <link>https://idontwannarock.github.io/tech_blog/2017/09/login-signup-function-1/</link>
       <pubDate>Mon, 11 Sep 2017 07:11:59 +0800</pubDate>
       
-      <guid>http://idontwannarock.github.io/tech_blog/2017/09/login-signup-function-1/</guid>
+      <guid>https://idontwannarock.github.io/tech_blog/2017/09/login-signup-function-1/</guid>
       <description>100 個練習計畫：第六個練習第一部分</description>
     </item>
   </channel>

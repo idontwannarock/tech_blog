@@ -1,4 +1,4 @@
-baseURL = "http://idontwannarock.github.io/tech_blog/"
+baseURL = "https://idontwannarock.github.io/tech_blog/"
 languageCode = "zh-tw"
 DefaultContentLanguage = "zh-tw"
 #title = "Howard 技術筆記"

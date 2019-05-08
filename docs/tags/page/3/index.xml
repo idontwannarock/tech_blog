@@ -1,83 +1,83 @@
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
     <title>Tags - </title>
-    <link>http://idontwannarock.github.io/tech_blog/tags/</link>
+    <link>https://idontwannarock.github.io/tech_blog/tags/</link>
     <description>Recent content in Tags on </description>
     <generator>Hugo -- gohugo.io</generator>
     <language>zh-tw</language>
     <lastBuildDate>Tue, 07 May 2019 16:03:07 +0800</lastBuildDate>
     
-        <atom:link href="http://idontwannarock.github.io/tech_blog/tags/index.xml" rel="self" type="application/rss+xml" />
+        <atom:link href="https://idontwannarock.github.io/tech_blog/tags/index.xml" rel="self" type="application/rss+xml" />
     
     <item>
       <title>mvc</title>
-      <link>http://idontwannarock.github.io/tech_blog/tags/mvc/</link>
+      <link>https://idontwannarock.github.io/tech_blog/tags/mvc/</link>
       <pubDate>Fri, 15 Sep 2017 10:27:28 +0800</pubDate>
       
-      <guid>http://idontwannarock.github.io/tech_blog/tags/mvc/</guid>
+      <guid>https://idontwannarock.github.io/tech_blog/tags/mvc/</guid>
       <description></description>
     </item><item>
       <title>mysql</title>
-      <link>http://idontwannarock.github.io/tech_blog/tags/mysql/</link>
+      <link>https://idontwannarock.github.io/tech_blog/tags/mysql/</link>
       <pubDate>Fri, 15 Sep 2017 10:27:28 +0800</pubDate>
       
-      <guid>http://idontwannarock.github.io/tech_blog/tags/mysql/</guid>
+      <guid>https://idontwannarock.github.io/tech_blog/tags/mysql/</guid>
       <description></description>
     </item><item>
       <title>php</title>
-      <link>http://idontwannarock.github.io/tech_blog/tags/php/</link>
+      <link>https://idontwannarock.github.io/tech_blog/tags/php/</link>
       <pubDate>Fri, 15 Sep 2017 10:27:28 +0800</pubDate>
       
-      <guid>http://idontwannarock.github.io/tech_blog/tags/php/</guid>
+      <guid>https://idontwannarock.github.io/tech_blog/tags/php/</guid>
       <description></description>
     </item><item>
       <title>javascript</title>
-      <link>http://idontwannarock.github.io/tech_blog/tags/javascript/</link>
+      <link>https://idontwannarock.github.io/tech_blog/tags/javascript/</link>
       <pubDate>Fri, 15 Sep 2017 10:11:46 +0800</pubDate>
       
-      <guid>http://idontwannarock.github.io/tech_blog/tags/javascript/</guid>
+      <guid>https://idontwannarock.github.io/tech_blog/tags/javascript/</guid>
       <description></description>
     </item><item>
       <title>css</title>
-      <link>http://idontwannarock.github.io/tech_blog/tags/css/</link>
+      <link>https://idontwannarock.github.io/tech_blog/tags/css/</link>
       <pubDate>Fri, 15 Sep 2017 09:44:03 +0800</pubDate>
       
-      <guid>http://idontwannarock.github.io/tech_blog/tags/css/</guid>
+      <guid>https://idontwannarock.github.io/tech_blog/tags/css/</guid>
       <description></description>
     </item><item>
       <title>git-bash</title>
-      <link>http://idontwannarock.github.io/tech_blog/tags/git-bash/</link>
+      <link>https://idontwannarock.github.io/tech_blog/tags/git-bash/</link>
       <pubDate>Thu, 14 Sep 2017 07:13:01 +0800</pubDate>
       
-      <guid>http://idontwannarock.github.io/tech_blog/tags/git-bash/</guid>
+      <guid>https://idontwannarock.github.io/tech_blog/tags/git-bash/</guid>
       <description></description>
     </item><item>
       <title>macos</title>
-      <link>http://idontwannarock.github.io/tech_blog/tags/macos/</link>
+      <link>https://idontwannarock.github.io/tech_blog/tags/macos/</link>
       <pubDate>Thu, 14 Sep 2017 07:13:01 +0800</pubDate>
       
-      <guid>http://idontwannarock.github.io/tech_blog/tags/macos/</guid>
+      <guid>https://idontwannarock.github.io/tech_blog/tags/macos/</guid>
       <description></description>
     </item><item>
       <title>ssh</title>
-      <link>http://idontwannarock.github.io/tech_blog/tags/ssh/</link>
+      <link>https://idontwannarock.github.io/tech_blog/tags/ssh/</link>
       <pubDate>Thu, 14 Sep 2017 07:13:01 +0800</pubDate>
       
-      <guid>http://idontwannarock.github.io/tech_blog/tags/ssh/</guid>
+      <guid>https://idontwannarock.github.io/tech_blog/tags/ssh/</guid>
       <description></description>
     </item><item>
       <title>win10</title>
-      <link>http://idontwannarock.github.io/tech_blog/tags/win10/</link>
+      <link>https://idontwannarock.github.io/tech_blog/tags/win10/</link>
       <pubDate>Thu, 14 Sep 2017 07:13:01 +0800</pubDate>
       
-      <guid>http://idontwannarock.github.io/tech_blog/tags/win10/</guid>
+      <guid>https://idontwannarock.github.io/tech_blog/tags/win10/</guid>
       <description></description>
     </item><item>
       <title>hash</title>
-      <link>http://idontwannarock.github.io/tech_blog/tags/hash/</link>
+      <link>https://idontwannarock.github.io/tech_blog/tags/hash/</link>
       <pubDate>Mon, 11 Sep 2017 07:11:59 +0800</pubDate>
       
-      <guid>http://idontwannarock.github.io/tech_blog/tags/hash/</guid>
+      <guid>https://idontwannarock.github.io/tech_blog/tags/hash/</guid>
       <description></description>
     </item>
   </channel>

@@ -1,83 +1,83 @@
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
     <title></title>
-    <link>http://idontwannarock.github.io/tech_blog/</link>
+    <link>https://idontwannarock.github.io/tech_blog/</link>
     <description>Recent content on </description>
     <generator>Hugo -- gohugo.io</generator>
     <language>zh-tw</language>
     <lastBuildDate>Tue, 07 May 2019 16:03:07 +0800</lastBuildDate>
     
-        <atom:link href="http://idontwannarock.github.io/tech_blog/index.xml" rel="self" type="application/rss+xml" />
+        <atom:link href="https://idontwannarock.github.io/tech_blog/index.xml" rel="self" type="application/rss+xml" />
     
     <item>
       <title>Hugo 入門教學</title>
-      <link>http://idontwannarock.github.io/tech_blog/2019/05/hugo-tutorial/</link>
+      <link>https://idontwannarock.github.io/tech_blog/2019/05/hugo-tutorial/</link>
       <pubDate>Tue, 07 May 2019 16:03:07 +0800</pubDate>
       
-      <guid>http://idontwannarock.github.io/tech_blog/2019/05/hugo-tutorial/</guid>
+      <guid>https://idontwannarock.github.io/tech_blog/2019/05/hugo-tutorial/</guid>
       <description>介紹 Hugo 及基本使用</description>
     </item><item>
       <title>AOP 及 Spring AOP 簡述</title>
-      <link>http://idontwannarock.github.io/tech_blog/2018/04/aop-and-spring-aop-basic/</link>
+      <link>https://idontwannarock.github.io/tech_blog/2018/04/aop-and-spring-aop-basic/</link>
       <pubDate>Tue, 10 Apr 2018 13:22:52 +0800</pubDate>
       
-      <guid>http://idontwannarock.github.io/tech_blog/2018/04/aop-and-spring-aop-basic/</guid>
+      <guid>https://idontwannarock.github.io/tech_blog/2018/04/aop-and-spring-aop-basic/</guid>
       <description>探討 AOP 概念及 Spring AOP 應用</description>
     </item><item>
       <title>Java 字串判定</title>
-      <link>http://idontwannarock.github.io/tech_blog/2018/02/java-string-check/</link>
+      <link>https://idontwannarock.github.io/tech_blog/2018/02/java-string-check/</link>
       <pubDate>Tue, 06 Feb 2018 14:09:25 +0800</pubDate>
       
-      <guid>http://idontwannarock.github.io/tech_blog/2018/02/java-string-check/</guid>
+      <guid>https://idontwannarock.github.io/tech_blog/2018/02/java-string-check/</guid>
       <description>探討 Java 字串的空字串及 null 判定</description>
     </item><item>
       <title>Java 樂透抽取算法初探</title>
-      <link>http://idontwannarock.github.io/tech_blog/2017/11/java-lottery-algorithm-basic/</link>
+      <link>https://idontwannarock.github.io/tech_blog/2017/11/java-lottery-algorithm-basic/</link>
       <pubDate>Wed, 15 Nov 2017 14:26:17 +0800</pubDate>
       
-      <guid>http://idontwannarock.github.io/tech_blog/2017/11/java-lottery-algorithm-basic/</guid>
+      <guid>https://idontwannarock.github.io/tech_blog/2017/11/java-lottery-algorithm-basic/</guid>
       <description>初步探討樂透抽取演算法及 Java 中的隨機</description>
     </item><item>
       <title>Macbook Pro 的設置 2017 版</title>
-      <link>http://idontwannarock.github.io/tech_blog/2017/11/mbp-setup-2017/</link>
+      <link>https://idontwannarock.github.io/tech_blog/2017/11/mbp-setup-2017/</link>
       <pubDate>Fri, 03 Nov 2017 09:05:02 +0800</pubDate>
       
-      <guid>http://idontwannarock.github.io/tech_blog/2017/11/mbp-setup-2017/</guid>
+      <guid>https://idontwannarock.github.io/tech_blog/2017/11/mbp-setup-2017/</guid>
       <description>紀錄 2017 年我在 MBP 上的設定</description>
     </item><item>
       <title>Markdown 語法</title>
-      <link>http://idontwannarock.github.io/tech_blog/2017/10/markdown-syntax/</link>
+      <link>https://idontwannarock.github.io/tech_blog/2017/10/markdown-syntax/</link>
       <pubDate>Sun, 22 Oct 2017 15:42:04 +0800</pubDate>
       
-      <guid>http://idontwannarock.github.io/tech_blog/2017/10/markdown-syntax/</guid>
+      <guid>https://idontwannarock.github.io/tech_blog/2017/10/markdown-syntax/</guid>
       <description>紀錄 Markdown 語法，包括 GFM</description>
     </item><item>
       <title>整數溢位 Integer Overflow</title>
-      <link>http://idontwannarock.github.io/tech_blog/2017/10/integer-overflow/</link>
+      <link>https://idontwannarock.github.io/tech_blog/2017/10/integer-overflow/</link>
       <pubDate>Sun, 01 Oct 2017 07:04:47 +0800</pubDate>
       
-      <guid>http://idontwannarock.github.io/tech_blog/2017/10/integer-overflow/</guid>
+      <guid>https://idontwannarock.github.io/tech_blog/2017/10/integer-overflow/</guid>
       <description>從電腦的數字系統開始，討論電腦如何儲存整數，並探討為何會產生整數溢位</description>
     </item><item>
       <title>4th Practice: Twitter Clone</title>
-      <link>http://idontwannarock.github.io/tech_blog/2017/09/twitter-clone/</link>
+      <link>https://idontwannarock.github.io/tech_blog/2017/09/twitter-clone/</link>
       <pubDate>Fri, 15 Sep 2017 10:27:28 +0800</pubDate>
       
-      <guid>http://idontwannarock.github.io/tech_blog/2017/09/twitter-clone/</guid>
+      <guid>https://idontwannarock.github.io/tech_blog/2017/09/twitter-clone/</guid>
       <description>100 個練習計畫：第四個練習</description>
     </item><item>
       <title>3rd Practice: Click Click Ben</title>
-      <link>http://idontwannarock.github.io/tech_blog/2017/09/click-click-ben/</link>
+      <link>https://idontwannarock.github.io/tech_blog/2017/09/click-click-ben/</link>
       <pubDate>Fri, 15 Sep 2017 10:11:46 +0800</pubDate>
       
-      <guid>http://idontwannarock.github.io/tech_blog/2017/09/click-click-ben/</guid>
+      <guid>https://idontwannarock.github.io/tech_blog/2017/09/click-click-ben/</guid>
       <description>100 個練習計畫：第三個練習</description>
     </item><item>
       <title>2nd Practice: Retina Morning Post</title>
-      <link>http://idontwannarock.github.io/tech_blog/2017/09/retina-morning-post/</link>
+      <link>https://idontwannarock.github.io/tech_blog/2017/09/retina-morning-post/</link>
       <pubDate>Fri, 15 Sep 2017 09:44:03 +0800</pubDate>
       
-      <guid>http://idontwannarock.github.io/tech_blog/2017/09/retina-morning-post/</guid>
+      <guid>https://idontwannarock.github.io/tech_blog/2017/09/retina-morning-post/</guid>
       <description>100 個練習計畫：第二個練習</description>
     </item>
   </channel>

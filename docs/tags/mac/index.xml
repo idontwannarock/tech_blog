@@ -1,20 +1,20 @@
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
     <title>mac - </title>
-    <link>http://idontwannarock.github.io/tech_blog/tags/mac/</link>
+    <link>https://idontwannarock.github.io/tech_blog/tags/mac/</link>
     <description>Recent content in mac on </description>
     <generator>Hugo -- gohugo.io</generator>
     <language>zh-tw</language>
     <lastBuildDate>Fri, 03 Nov 2017 09:05:02 +0800</lastBuildDate>
     
-        <atom:link href="http://idontwannarock.github.io/tech_blog/tags/mac/index.xml" rel="self" type="application/rss+xml" />
+        <atom:link href="https://idontwannarock.github.io/tech_blog/tags/mac/index.xml" rel="self" type="application/rss+xml" />
     
     <item>
       <title>Macbook Pro 的設置 2017 版</title>
-      <link>http://idontwannarock.github.io/tech_blog/2017/11/mbp-setup-2017/</link>
+      <link>https://idontwannarock.github.io/tech_blog/2017/11/mbp-setup-2017/</link>
       <pubDate>Fri, 03 Nov 2017 09:05:02 +0800</pubDate>
       
-      <guid>http://idontwannarock.github.io/tech_blog/2017/11/mbp-setup-2017/</guid>
+      <guid>https://idontwannarock.github.io/tech_blog/2017/11/mbp-setup-2017/</guid>
       <description>紀錄 2017 年我在 MBP 上的設定</description>
     </item>
   </channel>
