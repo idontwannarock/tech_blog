@@ -5,23 +5,23 @@
     <description>Recent content in Categories on </description>
     <generator>Hugo -- gohugo.io</generator>
     <language>zh-tw</language>
-    <lastBuildDate>Tue, 07 May 2019 16:03:07 +0800</lastBuildDate>
+    <lastBuildDate>Wed, 29 May 2019 10:52:45 +0800</lastBuildDate>
     
         <atom:link href="https://idontwannarock.github.io/tech_blog/categories/index.xml" rel="self" type="application/rss+xml" />
     
     <item>
+      <title>concept</title>
+      <link>https://idontwannarock.github.io/tech_blog/categories/concept/</link>
+      <pubDate>Wed, 29 May 2019 10:52:45 +0800</pubDate>
+      
+      <guid>https://idontwannarock.github.io/tech_blog/categories/concept/</guid>
+      <description></description>
+    </item><item>
       <title>application</title>
       <link>https://idontwannarock.github.io/tech_blog/categories/application/</link>
       <pubDate>Tue, 07 May 2019 16:03:07 +0800</pubDate>
       
       <guid>https://idontwannarock.github.io/tech_blog/categories/application/</guid>
-      <description></description>
-    </item><item>
-      <title>concept</title>
-      <link>https://idontwannarock.github.io/tech_blog/categories/concept/</link>
-      <pubDate>Tue, 10 Apr 2018 13:22:52 +0800</pubDate>
-      
-      <guid>https://idontwannarock.github.io/tech_blog/categories/concept/</guid>
       <description></description>
     </item><item>
       <title>practice</title>

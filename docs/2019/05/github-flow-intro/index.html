@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html lang="zh-tw" dir="ltr">
+  <head>
+  <meta charset="utf-8" />
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <title>Github Flow 簡介 &middot; </title>
+  <meta name="description" content="依照官方說明簡述 GitHub flow" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/normalize/8.0.1/normalize.min.css" />
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.10.0/dist/katex.min.css" integrity="sha384-9eLZqc9ds8eNjO3TmqPeYcDj8n+Qfa4nuSiGYa6DjLNcv9BtN69ZIulL9+8CqC9Y" crossorigin="anonymous">
+  
+  
+  
+  
+  <link href="https://idontwannarock.github.io/tech_blog/css/concated.min.css" rel="stylesheet">
+  
+<script type="application/javascript">
+var doNotTrack = false;
+if (!doNotTrack) {
+	(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+	(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+	m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+	})(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+	ga('create', 'UA-106499565-1', 'auto');
+	
+	ga('send', 'pageview');
+}
+</script>
+
+  <style>
+    body {
+      background: #ecedef url("https://res.cloudinary.com/dcvgho2zc/image/upload/v1559096880/photo-1533035336122-4327d347d2fe_cbwmq3.jpg") repeat;
+    }
+  </style>
+</head>
+
+  <body class="single-body">
+    <nav class="nav-bar side-padding">
+  <h1 class="nav-header"><a href="https://idontwannarock.github.io/tech_blog/" class="nav-text">Howard 技術筆記</a></h1>
+  <div class="hamburger-menu">
+    <button onclick="hamburgerMenuPressed.call(this)" aria-haspopup="true" aria-expanded="false" aria-controls="menu" aria-label="Menu">
+      <span></span>
+      <span></span>
+    </button>
+    <ul id="menu" class="hamburger-menu-overlay">
+      <li><a href="https://idontwannarock.github.io/tech_blog/" class="hamburger-menu-overlay-link">Home</a></li>
+      <li><a href="https://idontwannarock.github.io/tech_blog/categories/application" class="hamburger-menu-overlay-link">Application</a></li><li><a href="https://idontwannarock.github.io/tech_blog/categories/concept" class="hamburger-menu-overlay-link">Concept</a></li><li><a href="https://idontwannarock.github.io/tech_blog/categories/practice" class="hamburger-menu-overlay-link">Practice</a></li>
+    </ul>
+  </div>
+</nav>
+    <main class="content side-text-padding">
+      <article class="post ">
+        <header class="post-header">
+        	<h1 class="post-title">Github Flow 簡介</h1>
+          <p class="post-date">Posted <time datetime="2019-05-29">May 29, 2019</time></p>
+        </header>
+        
+        <picture class="post-figure">
+            
+            <source srcset="https://idontwannarock.github.io/tech_blog/github-flow-cover.png">
+          <img src="https://idontwannarock.github.io/tech_blog/github-flow-cover.png" alt="GitHub flow chart">
+        </picture>
+        
+        <p><a href="https://guides.github.com/introduction/flow/">Understanding the GitHub flow</a></p>
+
+<p>GitHub flow 只有一條原則：</p>
+
+<blockquote>
+<p><strong>在 master 的任何 commit 永遠都是可以被部署的</strong></p>
+</blockquote>
+
+<p>所以所有要做開發的 branch 都直接從 master 分支出去，不論是 feature 或 fix</p>
+
+<p>開發的每個 commit 都要寫清楚 message，註明該 commit 做的變動以及理由等等</p>
+
+<p>當開發到一定階段後，就可以對 master 開 Pull Request, PR，這在 GitHub flow 很重要</p>
+
+<p>如果是用 Fork &amp; Pull 模式，PR 就是用來通知專案維護者關於你希望他們考慮的變更；如果是用 Shared Repository 模式，則 PR 就像是用來開一個討論空間，在 merge 到 master 之前來做 code review 或針對特定變更的討論</p>
+
+<blockquote>
+<p>Fork &amp; Pull 模式就是需要先 fork 後再 pull 到本機做開發，完成並 push 後，開 PR 要求合併到主專案</p>
+
+<p>Shared Repository 模式則是直接可以對主專案開 branch 做開發</p>
+</blockquote>
+
+<p>在開 PR 之後，還是可以在該分支繼續開發，可以是有關討論的變更或 fix 等，重要的是要在 commit message 寫清楚變更以及變更的理由或決策的脈絡</p>
+
+<p>在變更經過討論並測試完畢後，在 merge 到 master 之前，直接用分支的 commit 部署到 production 做最後的驗證，如果有問題，則用 master 上的 commit 重新部署到 production 來回復</p>
+
+<blockquote>
+<p>所以在 GitHub flow 中，測試是很重要的部分</p>
+</blockquote>
+
+<p>當變更通過部署在 production 的驗證後，就可以將該變更 merge 到 master，此時 PR 就結束，並會留下該變更的整個紀錄，讓其他人了解整個變更的流程以及脈絡</p>
+
+<p>而且因為 PR 可以連結 Issue，當 PR 被 merge 後，關聯到的 Issue 也會同時關閉</p>
+
+      </article>
+      <div id="disqus_thread"></div>
+<script type="application/javascript">
+    var disqus_config = function () {
+    
+    
+    
+    };
+    (function() {
+        if (["localhost", "127.0.0.1"].indexOf(window.location.hostname) != -1) {
+            document.getElementById('disqus_thread').innerHTML = 'Disqus comments not available by default when the website is previewed locally.';
+            return;
+        }
+        var d = document, s = d.createElement('script'); s.async = true;
+        s.src = '//' + "howard-tech-blog" + '.disqus.com/embed.js';
+        s.setAttribute('data-timestamp', +new Date());
+        (d.head || d.body).appendChild(s);
+    })();
+</script>
+<noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+<a href="https://disqus.com" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
+    </main>
+    <nav class="end-nav side-padding">
+      
+      <a ontouchstart="cardPressed.call(this)" ontouchend="cardReleased.call(this)" ontouchmove="cardReleased.call(this)" 
+  href="https://idontwannarock.github.io/tech_blog/2019/05/hugo-tutorial/" class="card blog-card" rel="bookmark" >
+    
+    <div class="card-img-container">
+      <p class="card-img-overlay">Next Article</p>
+      <picture>
+        
+        <source srcset="https://idontwannarock.github.io/tech_blog/">
+        <img src="https://idontwannarock.github.io/tech_blog/" class="card-img" alt="">
+      </picture>
+    </div>
+    
+  <article class="card-body">
+    <h2 class="card-title">Hugo 入門教學</h2>
+    <p class="card-text">介紹 Hugo 及基本使用</p>
+    <div class="card-subtext muted-text">
+      <p>Posted <time datetime="2019-05-07 57:00">May 7, 2019</time></p>
+      <p>#application </p>
+    </div>
+  </article>
+</a>
+      
+      <a ontouchstart="cardPressed.call(this)" ontouchend="cardReleased.call(this)" ontouchmove="cardReleased.call(this)" 
+  href="https://idontwannarock.github.io/tech_blog/" class="card home-card" style="background-image: url( https://res.cloudinary.com/dcvgho2zc/image/upload/v1559096537/photo-1530305408560-82d13781b33a_erww1b.jpg )" rel="bookmark" >
+  Home
+</a>
+    </nav>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.13.1/highlight.min.js"></script>
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.10.0/dist/katex.min.js" integrity="sha384-K3vbOmF2BtaVai+Qk37uypf7VrgBubhQreNQe9aGsz9lB63dIFiQVlJbr92dw2Lx" crossorigin="anonymous"></script>
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.10.0/dist/contrib/auto-render.min.js" integrity="sha384-kmZOZB5ObwgQnS/DuDg6TScgOiWWBiVt0plIRkZCmE6rDZGrEOQeHM5PcHi+nyqe" crossorigin="anonymous"
+    onload="renderMathInElement(document.body);"></script>
+  
+  <script src="https://idontwannarock.github.io/tech_blog/js/core.min.js"></script>
+<script>
+  hljs.initHighlightingOnLoad();
+</script>
+
+  </body>
+</html>

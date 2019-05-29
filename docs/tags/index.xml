@@ -5,11 +5,18 @@
     <description>Recent content in Tags on </description>
     <generator>Hugo -- gohugo.io</generator>
     <language>zh-tw</language>
-    <lastBuildDate>Tue, 07 May 2019 16:03:07 +0800</lastBuildDate>
+    <lastBuildDate>Wed, 29 May 2019 10:52:45 +0800</lastBuildDate>
     
         <atom:link href="https://idontwannarock.github.io/tech_blog/tags/index.xml" rel="self" type="application/rss+xml" />
     
     <item>
+      <title>github-flow</title>
+      <link>https://idontwannarock.github.io/tech_blog/tags/github-flow/</link>
+      <pubDate>Wed, 29 May 2019 10:52:45 +0800</pubDate>
+      
+      <guid>https://idontwannarock.github.io/tech_blog/tags/github-flow/</guid>
+      <description></description>
+    </item><item>
       <title>git</title>
       <link>https://idontwannarock.github.io/tech_blog/tags/git/</link>
       <pubDate>Tue, 07 May 2019 16:03:07 +0800</pubDate>
@@ -71,13 +78,6 @@
       <pubDate>Wed, 15 Nov 2017 14:26:17 +0800</pubDate>
       
       <guid>https://idontwannarock.github.io/tech_blog/tags/algorithm/</guid>
-      <description></description>
-    </item><item>
-      <title>brew</title>
-      <link>https://idontwannarock.github.io/tech_blog/tags/brew/</link>
-      <pubDate>Fri, 03 Nov 2017 09:05:02 +0800</pubDate>
-      
-      <guid>https://idontwannarock.github.io/tech_blog/tags/brew/</guid>
       <description></description>
     </item>
   </channel>
