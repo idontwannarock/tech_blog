@@ -12,8 +12,8 @@ disqusShortname = "howard-tech-blog"
 [params]
 brand = "Howard 技術筆記"
 description = "分享 * 紀錄 * 程式"
-homeimg = "https://images.unsplash.com/photo-1530305408560-82d13781b33a"
-bgimg = "https://images.unsplash.com/photo-1533035336122-4327d347d2fe"
+homeimg = "https://res.cloudinary.com/dcvgho2zc/image/upload/v1559096537/photo-1530305408560-82d13781b33a_erww1b.jpg"
+bgimg = "https://res.cloudinary.com/dcvgho2zc/image/upload/v1559096880/photo-1533035336122-4327d347d2fe_cbwmq3.jpg"
 
 [permalinks]
 post = "/:year/:month/:slug/"
