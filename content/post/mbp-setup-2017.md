@@ -5,8 +5,8 @@ date: 2017-11-03T09:05:02+08:00
 description: "紀錄 2017 年我在 MBP 上的設定"
 tags: ["mac", "brew", "cask", "zsh", "oh-my-zsh"]
 categories: ["application"]
-featuredImage: ""
-featuredImageDescription: ""
+featuredImage: "mbp-icon.png"
+featuredImageDescription: "mbp-icon"
 dropCap: false
 displayInMenu: false
 displayInList: true

@@ -5,11 +5,18 @@
     <description>Recent content in java on </description>
     <generator>Hugo -- gohugo.io</generator>
     <language>zh-tw</language>
-    <lastBuildDate>Tue, 10 Apr 2018 13:22:52 +0800</lastBuildDate>
+    <lastBuildDate>Thu, 30 May 2019 15:33:07 +0800</lastBuildDate>
     
         <atom:link href="https://idontwannarock.github.io/tech_blog/tags/java/index.xml" rel="self" type="application/rss+xml" />
     
     <item>
+      <title>Spring Security 整合 RBAC</title>
+      <link>https://idontwannarock.github.io/tech_blog/2019/05/spring-security-rbac/</link>
+      <pubDate>Thu, 30 May 2019 15:33:07 +0800</pubDate>
+      
+      <guid>https://idontwannarock.github.io/tech_blog/2019/05/spring-security-rbac/</guid>
+      <description>探討如何利用 Spring Security 提供的自訂方式整合 RBAC</description>
+    </item><item>
       <title>AOP 及 Spring AOP 簡述</title>
       <link>https://idontwannarock.github.io/tech_blog/2018/04/aop-and-spring-aop-basic/</link>
       <pubDate>Tue, 10 Apr 2018 13:22:52 +0800</pubDate>

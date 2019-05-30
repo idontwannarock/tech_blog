@@ -5,8 +5,8 @@ date: 2018-02-06T14:09:25+08:00
 description: "探討 Java 字串的空字串及 null 判定"
 tags: ["java", "string"]
 categories: ["concept"]
-featuredImage: ""
-featuredImageDescription: ""
+featuredImage: "javase-icon.png"
+featuredImageDescription: "javase-icon"
 dropCap: false
 displayInMenu: false
 displayInList: true

@@ -5,8 +5,8 @@ date: 2017-11-15T14:26:17+08:00
 description: "初步探討樂透抽取演算法及 Java 中的隨機"
 tags: ["java", "algorithm"]
 categories: ["concept"]
-featuredImage: ""
-featuredImageDescription: ""
+featuredImage: "process-icon.png"
+featuredImageDescription: "process-icon"
 dropCap: false
 displayInMenu: false
 displayInList: true

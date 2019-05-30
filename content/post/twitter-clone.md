@@ -5,8 +5,8 @@ date: 2017-09-15T10:27:28+08:00
 description: "100 個練習計畫：第四個練習"
 tags: ["php", "mysql", "mvc", "bootstrap"]
 categories: ["practice"]
-featuredImage: ""
-featuredImageDescription: ""
+featuredImage: "twitter-icon.png"
+featuredImageDescription: "twitter-icon"
 dropCap: false
 displayInMenu: false
 displayInList: true

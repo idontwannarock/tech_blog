@@ -5,8 +5,8 @@ date: 2017-10-22T15:42:04+08:00
 description: "紀錄 Markdown 語法，包括 GFM"
 tags: ["markdown", "html"]
 categories: ["concept"]
-featuredImage: ""
-featuredImageDescription: ""
+featuredImage: "markdown-icon.png"
+featuredImageDescription: "markdown-icon"
 dropCap: false
 displayInMenu: false
 displayInList: true

@@ -5,11 +5,18 @@
     <description>Recent content on </description>
     <generator>Hugo -- gohugo.io</generator>
     <language>zh-tw</language>
-    <lastBuildDate>Wed, 29 May 2019 10:52:45 +0800</lastBuildDate>
+    <lastBuildDate>Thu, 30 May 2019 15:33:07 +0800</lastBuildDate>
     
         <atom:link href="https://idontwannarock.github.io/tech_blog/index.xml" rel="self" type="application/rss+xml" />
     
     <item>
+      <title>Spring Security 整合 RBAC</title>
+      <link>https://idontwannarock.github.io/tech_blog/2019/05/spring-security-rbac/</link>
+      <pubDate>Thu, 30 May 2019 15:33:07 +0800</pubDate>
+      
+      <guid>https://idontwannarock.github.io/tech_blog/2019/05/spring-security-rbac/</guid>
+      <description>探討如何利用 Spring Security 提供的自訂方式整合 RBAC</description>
+    </item><item>
       <title>Github Flow 簡介</title>
       <link>https://idontwannarock.github.io/tech_blog/2019/05/github-flow-intro/</link>
       <pubDate>Wed, 29 May 2019 10:52:45 +0800</pubDate>
@@ -72,13 +79,6 @@
       
       <guid>https://idontwannarock.github.io/tech_blog/2017/09/twitter-clone/</guid>
       <description>100 個練習計畫：第四個練習</description>
-    </item><item>
-      <title>3rd Practice: Click Click Ben</title>
-      <link>https://idontwannarock.github.io/tech_blog/2017/09/click-click-ben/</link>
-      <pubDate>Fri, 15 Sep 2017 10:11:46 +0800</pubDate>
-      
-      <guid>https://idontwannarock.github.io/tech_blog/2017/09/click-click-ben/</guid>
-      <description>100 個練習計畫：第三個練習</description>
     </item>
   </channel>
 </rss>

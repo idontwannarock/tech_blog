@@ -5,8 +5,8 @@ date: 2019-05-07T16:03:07+08:00
 description: "介紹 Hugo 及基本使用"
 tags: ["hugo", "git", "github", "github-pages"]
 categories: ["application"]
-featuredImage: ""
-featuredImageDescription: ""
+featuredImage: "hugo-icon.png"
+featuredImageDescription: "hugo"
 dropCap: false
 displayInMenu: false
 displayInList: true
