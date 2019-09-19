@@ -11,17 +11,17 @@
     
     <item>
       <title>Markdown 語法</title>
-      <link>https://idontwannarock.github.io/tech_blog/2017/10/markdown-syntax/</link>
+      <link>https://idontwannarock.github.io/tech_blog/2017/10/markdown_syntax/</link>
       <pubDate>Sun, 22 Oct 2017 15:42:04 +0800</pubDate>
       
-      <guid>https://idontwannarock.github.io/tech_blog/2017/10/markdown-syntax/</guid>
+      <guid>https://idontwannarock.github.io/tech_blog/2017/10/markdown_syntax/</guid>
       <description>紀錄 Markdown 語法，包括 GFM</description>
     </item><item>
       <title>Hugo 練習 (1)</title>
-      <link>https://idontwannarock.github.io/tech_blog/2017/09/hugo-practice-1/</link>
+      <link>https://idontwannarock.github.io/tech_blog/2017/09/hugo_practice_1/</link>
       <pubDate>Sat, 09 Sep 2017 00:17:31 +0800</pubDate>
       
-      <guid>https://idontwannarock.github.io/tech_blog/2017/09/hugo-practice-1/</guid>
+      <guid>https://idontwannarock.github.io/tech_blog/2017/09/hugo_practice_1/</guid>
       <description>釐清 Hugo 與 GitHub Pages 概念</description>
     </item>
   </channel>

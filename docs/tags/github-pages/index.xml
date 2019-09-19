@@ -11,24 +11,24 @@
     
     <item>
       <title>Hugo 入門教學</title>
-      <link>https://idontwannarock.github.io/tech_blog/2019/05/hugo-tutorial/</link>
+      <link>https://idontwannarock.github.io/tech_blog/2019/05/hugo_tutorial/</link>
       <pubDate>Tue, 07 May 2019 16:03:07 +0800</pubDate>
       
-      <guid>https://idontwannarock.github.io/tech_blog/2019/05/hugo-tutorial/</guid>
+      <guid>https://idontwannarock.github.io/tech_blog/2019/05/hugo_tutorial/</guid>
       <description>介紹 Hugo 及基本使用</description>
     </item><item>
       <title>Hugo 練習 (2)</title>
-      <link>https://idontwannarock.github.io/tech_blog/2017/09/hugo-practice-2/</link>
+      <link>https://idontwannarock.github.io/tech_blog/2017/09/hugo_practice_2/</link>
       <pubDate>Sat, 09 Sep 2017 15:22:03 +0800</pubDate>
       
-      <guid>https://idontwannarock.github.io/tech_blog/2017/09/hugo-practice-2/</guid>
+      <guid>https://idontwannarock.github.io/tech_blog/2017/09/hugo_practice_2/</guid>
       <description>練習操作 Hugo 生成靜態網站，並透過 git 及 ssh 部署到 GitHub Pages</description>
     </item><item>
       <title>Hugo 練習 (1)</title>
-      <link>https://idontwannarock.github.io/tech_blog/2017/09/hugo-practice-1/</link>
+      <link>https://idontwannarock.github.io/tech_blog/2017/09/hugo_practice_1/</link>
       <pubDate>Sat, 09 Sep 2017 00:17:31 +0800</pubDate>
       
-      <guid>https://idontwannarock.github.io/tech_blog/2017/09/hugo-practice-1/</guid>
+      <guid>https://idontwannarock.github.io/tech_blog/2017/09/hugo_practice_1/</guid>
       <description>釐清 Hugo 與 GitHub Pages 概念</description>
     </item>
   </channel>

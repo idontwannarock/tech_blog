@@ -5,80 +5,80 @@
     <description>Recent content in Posts on </description>
     <generator>Hugo -- gohugo.io</generator>
     <language>zh-tw</language>
-    <lastBuildDate>Thu, 30 May 2019 15:33:07 +0800</lastBuildDate>
+    <lastBuildDate>Thu, 19 Sep 2019 15:53:36 +0800</lastBuildDate>
     
         <atom:link href="https://idontwannarock.github.io/tech_blog/post/index.xml" rel="self" type="application/rss+xml" />
     
     <item>
+      <title>Spring Boot 實作 API 版本控制</title>
+      <link>https://idontwannarock.github.io/tech_blog/2019/09/spring_api_version_with_swagger_security/</link>
+      <pubDate>Thu, 19 Sep 2019 15:53:36 +0800</pubDate>
+      
+      <guid>https://idontwannarock.github.io/tech_blog/2019/09/spring_api_version_with_swagger_security/</guid>
+      <description>在 Spring Boot Web 專案實作動態 API 版本控制，並能兼容 Swagger 及 Spring Security</description>
+    </item><item>
       <title>Spring Security 整合 RBAC</title>
-      <link>https://idontwannarock.github.io/tech_blog/2019/05/spring-security-rbac/</link>
+      <link>https://idontwannarock.github.io/tech_blog/2019/05/spring_security_rbac/</link>
       <pubDate>Thu, 30 May 2019 15:33:07 +0800</pubDate>
       
-      <guid>https://idontwannarock.github.io/tech_blog/2019/05/spring-security-rbac/</guid>
+      <guid>https://idontwannarock.github.io/tech_blog/2019/05/spring_security_rbac/</guid>
       <description>探討如何利用 Spring Security 提供的自訂方式整合 RBAC</description>
     </item><item>
       <title>Github Flow 簡介</title>
-      <link>https://idontwannarock.github.io/tech_blog/2019/05/github-flow-intro/</link>
+      <link>https://idontwannarock.github.io/tech_blog/2019/05/github_flow_intro/</link>
       <pubDate>Wed, 29 May 2019 10:52:45 +0800</pubDate>
       
-      <guid>https://idontwannarock.github.io/tech_blog/2019/05/github-flow-intro/</guid>
+      <guid>https://idontwannarock.github.io/tech_blog/2019/05/github_flow_intro/</guid>
       <description>依照官方說明簡述 GitHub flow</description>
     </item><item>
       <title>Hugo 入門教學</title>
-      <link>https://idontwannarock.github.io/tech_blog/2019/05/hugo-tutorial/</link>
+      <link>https://idontwannarock.github.io/tech_blog/2019/05/hugo_tutorial/</link>
       <pubDate>Tue, 07 May 2019 16:03:07 +0800</pubDate>
       
-      <guid>https://idontwannarock.github.io/tech_blog/2019/05/hugo-tutorial/</guid>
+      <guid>https://idontwannarock.github.io/tech_blog/2019/05/hugo_tutorial/</guid>
       <description>介紹 Hugo 及基本使用</description>
     </item><item>
       <title>AOP 及 Spring AOP 簡述</title>
-      <link>https://idontwannarock.github.io/tech_blog/2018/04/aop-and-spring-aop-basic/</link>
+      <link>https://idontwannarock.github.io/tech_blog/2018/04/aop_and_spring_aop_basic/</link>
       <pubDate>Tue, 10 Apr 2018 13:22:52 +0800</pubDate>
       
-      <guid>https://idontwannarock.github.io/tech_blog/2018/04/aop-and-spring-aop-basic/</guid>
+      <guid>https://idontwannarock.github.io/tech_blog/2018/04/aop_and_spring_aop_basic/</guid>
       <description>探討 AOP 概念及 Spring AOP 應用</description>
     </item><item>
       <title>Java 字串判定</title>
-      <link>https://idontwannarock.github.io/tech_blog/2018/02/java-string-check/</link>
+      <link>https://idontwannarock.github.io/tech_blog/2018/02/java_string_check/</link>
       <pubDate>Tue, 06 Feb 2018 14:09:25 +0800</pubDate>
       
-      <guid>https://idontwannarock.github.io/tech_blog/2018/02/java-string-check/</guid>
+      <guid>https://idontwannarock.github.io/tech_blog/2018/02/java_string_check/</guid>
       <description>探討 Java 字串的空字串及 null 判定</description>
     </item><item>
       <title>Java 樂透抽取算法初探</title>
-      <link>https://idontwannarock.github.io/tech_blog/2017/11/java-lottery-algorithm-basic/</link>
+      <link>https://idontwannarock.github.io/tech_blog/2017/11/java_lottery_algorithm_basic/</link>
       <pubDate>Wed, 15 Nov 2017 14:26:17 +0800</pubDate>
       
-      <guid>https://idontwannarock.github.io/tech_blog/2017/11/java-lottery-algorithm-basic/</guid>
+      <guid>https://idontwannarock.github.io/tech_blog/2017/11/java_lottery_algorithm_basic/</guid>
       <description>初步探討樂透抽取演算法及 Java 中的隨機</description>
     </item><item>
       <title>Macbook Pro 的設置 2017 版</title>
-      <link>https://idontwannarock.github.io/tech_blog/2017/11/mbp-setup-2017/</link>
+      <link>https://idontwannarock.github.io/tech_blog/2017/11/mbp_setup_2017/</link>
       <pubDate>Fri, 03 Nov 2017 09:05:02 +0800</pubDate>
       
-      <guid>https://idontwannarock.github.io/tech_blog/2017/11/mbp-setup-2017/</guid>
+      <guid>https://idontwannarock.github.io/tech_blog/2017/11/mbp_setup_2017/</guid>
       <description>紀錄 2017 年我在 MBP 上的設定</description>
     </item><item>
       <title>Markdown 語法</title>
-      <link>https://idontwannarock.github.io/tech_blog/2017/10/markdown-syntax/</link>
+      <link>https://idontwannarock.github.io/tech_blog/2017/10/markdown_syntax/</link>
       <pubDate>Sun, 22 Oct 2017 15:42:04 +0800</pubDate>
       
-      <guid>https://idontwannarock.github.io/tech_blog/2017/10/markdown-syntax/</guid>
+      <guid>https://idontwannarock.github.io/tech_blog/2017/10/markdown_syntax/</guid>
       <description>紀錄 Markdown 語法，包括 GFM</description>
     </item><item>
       <title>整數溢位 Integer Overflow</title>
-      <link>https://idontwannarock.github.io/tech_blog/2017/10/integer-overflow/</link>
+      <link>https://idontwannarock.github.io/tech_blog/2017/10/integer_overflow/</link>
       <pubDate>Sun, 01 Oct 2017 07:04:47 +0800</pubDate>
       
-      <guid>https://idontwannarock.github.io/tech_blog/2017/10/integer-overflow/</guid>
+      <guid>https://idontwannarock.github.io/tech_blog/2017/10/integer_overflow/</guid>
       <description>從電腦的數字系統開始，討論電腦如何儲存整數，並探討為何會產生整數溢位</description>
-    </item><item>
-      <title>4th Practice: Twitter Clone</title>
-      <link>https://idontwannarock.github.io/tech_blog/2017/09/twitter-clone/</link>
-      <pubDate>Fri, 15 Sep 2017 10:27:28 +0800</pubDate>
-      
-      <guid>https://idontwannarock.github.io/tech_blog/2017/09/twitter-clone/</guid>
-      <description>100 個練習計畫：第四個練習</description>
     </item>
   </channel>
 </rss>

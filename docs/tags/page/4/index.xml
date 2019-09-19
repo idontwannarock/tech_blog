@@ -5,11 +5,32 @@
     <description>Recent content in Tags on </description>
     <generator>Hugo -- gohugo.io</generator>
     <language>zh-tw</language>
-    <lastBuildDate>Thu, 30 May 2019 15:33:07 +0800</lastBuildDate>
+    <lastBuildDate>Thu, 19 Sep 2019 15:53:36 +0800</lastBuildDate>
     
         <atom:link href="https://idontwannarock.github.io/tech_blog/tags/index.xml" rel="self" type="application/rss+xml" />
     
     <item>
+      <title>css</title>
+      <link>https://idontwannarock.github.io/tech_blog/tags/css/</link>
+      <pubDate>Fri, 15 Sep 2017 09:44:03 +0800</pubDate>
+      
+      <guid>https://idontwannarock.github.io/tech_blog/tags/css/</guid>
+      <description></description>
+    </item><item>
+      <title>git-bash</title>
+      <link>https://idontwannarock.github.io/tech_blog/tags/git-bash/</link>
+      <pubDate>Thu, 14 Sep 2017 07:13:01 +0800</pubDate>
+      
+      <guid>https://idontwannarock.github.io/tech_blog/tags/git-bash/</guid>
+      <description></description>
+    </item><item>
+      <title>macos</title>
+      <link>https://idontwannarock.github.io/tech_blog/tags/macos/</link>
+      <pubDate>Thu, 14 Sep 2017 07:13:01 +0800</pubDate>
+      
+      <guid>https://idontwannarock.github.io/tech_blog/tags/macos/</guid>
+      <description></description>
+    </item><item>
       <title>ssh</title>
       <link>https://idontwannarock.github.io/tech_blog/tags/ssh/</link>
       <pubDate>Thu, 14 Sep 2017 07:13:01 +0800</pubDate>

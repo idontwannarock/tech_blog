@@ -5,11 +5,32 @@
     <description>Recent content in Tags on </description>
     <generator>Hugo -- gohugo.io</generator>
     <language>zh-tw</language>
-    <lastBuildDate>Thu, 30 May 2019 15:33:07 +0800</lastBuildDate>
+    <lastBuildDate>Thu, 19 Sep 2019 15:53:36 +0800</lastBuildDate>
     
         <atom:link href="https://idontwannarock.github.io/tech_blog/tags/index.xml" rel="self" type="application/rss+xml" />
     
     <item>
+      <title>html</title>
+      <link>https://idontwannarock.github.io/tech_blog/tags/html/</link>
+      <pubDate>Sun, 22 Oct 2017 15:42:04 +0800</pubDate>
+      
+      <guid>https://idontwannarock.github.io/tech_blog/tags/html/</guid>
+      <description></description>
+    </item><item>
+      <title>markdown</title>
+      <link>https://idontwannarock.github.io/tech_blog/tags/markdown/</link>
+      <pubDate>Sun, 22 Oct 2017 15:42:04 +0800</pubDate>
+      
+      <guid>https://idontwannarock.github.io/tech_blog/tags/markdown/</guid>
+      <description></description>
+    </item><item>
+      <title>binary</title>
+      <link>https://idontwannarock.github.io/tech_blog/tags/binary/</link>
+      <pubDate>Sun, 01 Oct 2017 07:04:47 +0800</pubDate>
+      
+      <guid>https://idontwannarock.github.io/tech_blog/tags/binary/</guid>
+      <description></description>
+    </item><item>
       <title>integer</title>
       <link>https://idontwannarock.github.io/tech_blog/tags/integer/</link>
       <pubDate>Sun, 01 Oct 2017 07:04:47 +0800</pubDate>
@@ -57,27 +78,6 @@
       <pubDate>Fri, 15 Sep 2017 10:11:46 +0800</pubDate>
       
       <guid>https://idontwannarock.github.io/tech_blog/tags/javascript/</guid>
-      <description></description>
-    </item><item>
-      <title>css</title>
-      <link>https://idontwannarock.github.io/tech_blog/tags/css/</link>
-      <pubDate>Fri, 15 Sep 2017 09:44:03 +0800</pubDate>
-      
-      <guid>https://idontwannarock.github.io/tech_blog/tags/css/</guid>
-      <description></description>
-    </item><item>
-      <title>git-bash</title>
-      <link>https://idontwannarock.github.io/tech_blog/tags/git-bash/</link>
-      <pubDate>Thu, 14 Sep 2017 07:13:01 +0800</pubDate>
-      
-      <guid>https://idontwannarock.github.io/tech_blog/tags/git-bash/</guid>
-      <description></description>
-    </item><item>
-      <title>macos</title>
-      <link>https://idontwannarock.github.io/tech_blog/tags/macos/</link>
-      <pubDate>Thu, 14 Sep 2017 07:13:01 +0800</pubDate>
-      
-      <guid>https://idontwannarock.github.io/tech_blog/tags/macos/</guid>
       <description></description>
     </item>
   </channel>

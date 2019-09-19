@@ -1,0 +1,682 @@
+<!DOCTYPE html>
+<html lang="zh-tw" dir="ltr">
+  <head>
+  <meta charset="utf-8" />
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <title>Markdown 語法 &middot; </title>
+  <meta name="description" content="紀錄 Markdown 語法，包括 GFM" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/normalize/8.0.1/normalize.min.css" />
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.10.0/dist/katex.min.css" integrity="sha384-9eLZqc9ds8eNjO3TmqPeYcDj8n+Qfa4nuSiGYa6DjLNcv9BtN69ZIulL9+8CqC9Y" crossorigin="anonymous">
+  
+  
+  
+  
+  <link href="https://idontwannarock.github.io/tech_blog/css/concated.min.css" rel="stylesheet">
+  
+<script type="application/javascript">
+var doNotTrack = false;
+if (!doNotTrack) {
+	(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+	(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+	m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+	})(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+	ga('create', 'UA-106499565-1', 'auto');
+	
+	ga('send', 'pageview');
+}
+</script>
+
+  <style>
+    body {
+      background: #ecedef url("https://res.cloudinary.com/dcvgho2zc/image/upload/v1568880571/repeat_bg_1_dqzr93.jpg") repeat;
+    }
+  </style>
+</head>
+
+  <body class="single-body">
+    <nav class="nav-bar side-padding">
+  <h1 class="nav-header"><a href="https://idontwannarock.github.io/tech_blog/" class="nav-text">Howard 技術筆記</a></h1>
+  <div class="hamburger-menu">
+    <button onclick="hamburgerMenuPressed.call(this)" aria-haspopup="true" aria-expanded="false" aria-controls="menu" aria-label="Menu">
+      <span></span>
+      <span></span>
+    </button>
+    <ul id="menu" class="hamburger-menu-overlay">
+      <li><a href="https://idontwannarock.github.io/tech_blog/" class="hamburger-menu-overlay-link">Home</a></li>
+      <li><a href="https://idontwannarock.github.io/tech_blog/categories/application" class="hamburger-menu-overlay-link">Application</a></li><li><a href="https://idontwannarock.github.io/tech_blog/categories/concept" class="hamburger-menu-overlay-link">Concept</a></li><li><a href="https://idontwannarock.github.io/tech_blog/categories/practice" class="hamburger-menu-overlay-link">Practice</a></li>
+    </ul>
+  </div>
+</nav>
+    <main class="content side-text-padding">
+      <article class="post ">
+        <header class="post-header">
+        	<h1 class="post-title">Markdown 語法</h1>
+          <p class="post-date">Posted <time datetime="2017-10-22">Oct 22, 2017</time></p>
+        </header>
+        
+        <picture class="post-figure">
+            
+            <source srcset="https://idontwannarock.github.io/tech_blog/markdown-icon.png">
+          <img src="https://idontwannarock.github.io/tech_blog/markdown-icon.png" alt="markdown-icon">
+        </picture>
+        
+        
+
+<h1 id="markdown-特色">Markdown 特色</h1>
+
+<h2 id="易編寫">易編寫</h2>
+
+<p>相對於 HTML 需要注意各種 tag、屬性、特殊字元，Markdown 是更容易編寫的方式，雖然無法像 HTML 那樣可以直接透過各種屬性，甚至 CSS 來達到各種效果，但純粹以書寫來說，Markdown 的功能已經相當夠用。</p>
+
+<h2 id="轉換-html">轉換 HTML</h2>
+
+<p>不過如果有需要的話，Markdown 可以用各種方式轉換成 HTML，以方便我們發布成網頁或部落格文章，網路上有相當多的程式可以達到這點；相對之下，從 HTML 轉換回 Markdown 就沒這麼方便了，主要原因就是 HTML 有相當多屬性等並不被 Markdown 支援，所以有轉換回 Markdown 的困難。</p>
+
+<p>但還是有補救的辦法，在編寫 Markdown 文件的時候，其實還是可以使用 HTML 語法的，我使用過的轉換器都可以讀取 HTML 語法，並正常顯示以及轉換，所以真的有什麼 Markdown 找不到的 HTML 功能，就直接寫 HTML 吧！當然這就需要對 HTML 語法有更多認識了。</p>
+
+<h2 id="編寫-視覺">編寫／視覺</h2>
+
+<p>跟 HTML 一樣，在編寫 Markdown 的時候呈現的畫面，跟實際呈現的畫面其實是不一樣的。</p>
+
+<p>例如我們編寫 Markdown 如下：</p>
+
+<pre><code class="language-md">- ***This*** is a [sample](http://example.com/ &quot;example.com&quot;).
+</code></pre>
+
+<p>實際呈現的畫面其實是這樣的：</p>
+
+<blockquote>
+<ul>
+<li><strong><em>This</em></strong> is a <a href="http://example.com/" title="example.com">sample</a>.</li>
+</ul>
+</blockquote>
+
+<p>所以在編寫 Markdown 的時候，最好找個可以隨時觀看實際畫面的編輯器來確認實際畫面。</p>
+
+<h1 id="區塊元素">區塊元素</h1>
+
+<h2 id="換行">換行</h2>
+
+<p>原則上按 Enter 鍵就是換行。</p>
+
+<p>要注意的是有些轉換器會要求不同的換行字元，例如有些會要求在行尾加上兩個空白，再按 Enter 鍵，才代表換行；也有些會要求兩個空白加一個 tab 鍵等等，所以建議要找可以即時顯示畫面的編輯器，隨時確認實際畫面。</p>
+
+<h2 id="分段">分段</h2>
+
+<p>Markdown 是以空白行來分段，原則上就是該行只有一個 Enter 就換行。</p>
+
+<p>同樣的，要注意有些編輯器會要求不同的特殊字元來代表空白行。</p>
+
+<h2 id="標題">標題</h2>
+
+<p>Markdown 支援 Setext 以及 atx 兩種形式的標題。一般都用 atx 語法，標題的階層較多，語法也比較好記。</p>
+
+<h3 id="setex-形式">Setex 形式</h3>
+
+<p>以底線的方式來表示標題，只有兩種如下：</p>
+
+<pre><code class="language-md">This is an H1
+=============
+This is an H2
+-------------
+</code></pre>
+
+<p>實際顯示就會變成這樣：</p>
+
+<blockquote>
+<h1 id="this-is-an-h1">This is an H1</h1>
+
+<h2 id="this-is-an-h2">This is an H2</h2>
+</blockquote>
+
+<h3 id="atx-形式">atx 形式</h3>
+
+<p>在標題前面加上 1 到 6 個 <code>#</code>，剛好對應到 HTML 的 <code>h1</code> 到 <code>h6</code>，如：</p>
+
+<pre><code class="language-md"># This is an H1
+## This is an H2
+### This is an H3
+</code></pre>
+
+<p>實際呈現：</p>
+
+<blockquote>
+<h1 id="this-is-an-h1-1">This is an H1</h1>
+
+<h2 id="this-is-an-h2-1">This is an H2</h2>
+
+<h3 id="this-is-an-h3">This is an H3</h3>
+</blockquote>
+
+<p>若你寫完有考慮轉為 HTML 發布為網頁或部落格，確切使用標題是個好習慣。一是轉換完不用再花心思調整，只需要考慮 CSS 或 Javascript 做美化就好；二是良好的標題設定跟 SEO 優化有關。</p>
+
+<h2 id="清單">清單</h2>
+
+<p>與 HTML 相同，也分為有序清單及無序清單。</p>
+
+<h3 id="有序清單">有序清單</h3>
+
+<p>使用一個數字，加一個英文句點 <code>.</code>，再空一格。</p>
+
+<p>注意 <strong>數字並不會影響實際畫面的排序</strong>，例如：</p>
+
+<pre><code class="language-md">9527. First item
+9487. Second item
+</code></pre>
+
+<p>實際上 Markdown 會自動排序：</p>
+
+<blockquote>
+<ol>
+<li>First item</li>
+<li>Second item</li>
+</ol>
+</blockquote>
+
+<p>但建議還是照正常順序編排啦，自己編寫看得比較清楚，而且也不清楚什麼時候 Markdown 就改成一定要照順序排序（攤手）。</p>
+
+<h3 id="無序清單">無序清單</h3>
+
+<p>使用 <code>*</code>、<code>+</code> 或 <code>-</code> 做無序清單的標記。例如：</p>
+
+<pre><code class="language-md">* First item
+* Second item
+* Third item
+</code></pre>
+
+<p>會顯示成：</p>
+
+<blockquote>
+<ul>
+<li>First item</li>
+<li>Second item</li>
+<li>Third item</li>
+</ul>
+</blockquote>
+
+<h3 id="巢狀清單">巢狀清單</h3>
+
+<p>不論是有序還是無序清單，都可以使用縮排 tab 鍵來做出巢狀的清單。例如：</p>
+
+<pre><code class="language-md">* First item
+	* Second item
+		* Third item
+</code></pre>
+
+<p>會顯示成：</p>
+
+<blockquote>
+<ul>
+<li>First item
+
+<ul>
+<li>Second item
+
+<ul>
+<li>Third item</li>
+</ul></li>
+</ul></li>
+</ul>
+</blockquote>
+
+<h2 id="區塊引言">區塊引言</h2>
+
+<p>使用 <code>&gt;</code> 來標記區塊引言。例如：</p>
+
+<pre><code class="language-md">&gt; This is a blockquote paragraph.
+</code></pre>
+
+<p>就會顯示成：</p>
+
+<blockquote>
+<p>This is a blockquote paragraph.</p>
+</blockquote>
+
+<p>區塊引言也可以巢狀分層，例如：</p>
+
+<pre><code class="language-md">&gt; This is a blockquote sentence 1.
+
+&gt; &gt; This is a blockquote sentence 2.
+</code></pre>
+
+<p>會顯示成：</p>
+
+<blockquote>
+<p>This is a blockquote sentence 1.</p>
+
+<blockquote>
+<p>This is a blockquote sentence 2.</p>
+</blockquote>
+</blockquote>
+
+<p>區塊引言也可以只在一個「段落」的第一行加入 <code>&gt;</code> 標記區塊，記得「段落」是要以「空白行」做為區隔。</p>
+
+<p>另外區塊內也支援 Markdown 語法。例如：</p>
+
+<pre><code class="language-md">&gt; *This* is a blockquote paragraph 1 sentence 1.
+**This** is a blockquote paragraph 1 ***sentence 2***.
+This is a blockquote paragraph 1 sentence 3.
+
+&gt; &gt; - [ ] This is a blockquote paragraph 2 sentence 1.
+</code></pre>
+
+<p>會顯示成：</p>
+
+<blockquote>
+<p><em>This</em> is a blockquote paragraph 1 sentence 1.<br />
+<strong>This</strong> is a blockquote paragraph 1 <strong><em>sentence 2</em></strong>.<br />
+This is a blockquote paragraph 1 sentence 3.</p>
+
+<blockquote>
+<ul class="task-list">
+<li><label><input type="checkbox" disabled class="task-list-item"> This is a blockquote paragraph 2 sentence 2.</label></li>
+</ul>
+</blockquote>
+</blockquote>
+
+<p>但注意區塊引言內常常會自動加上斜體屬性，所以強調的三種狀態在區塊引言內其實只會剩粗體一種。</p>
+
+<h2 id="程式碼區塊">程式碼區塊</h2>
+
+<p>在程式碼區塊內，Markdown 語法並不會被轉換，所以可以如實呈現實際寫的 Markdown 語法內容。若是其他種程式語言的程式碼，則會有限度的辨識，並標記出有支援的語法，這部分目前有很多擴充，容後再敘。</p>
+
+<p>當然以 Markdown 語法要做程式碼區塊，有幾種辦法，一是用 <code>```</code> 將整段程式碼包起來，一是在開頭用縮排 tab鍵來做標記，直到沒有縮排的一行空白行為止。</p>
+
+<p>例如：</p>
+
+<pre><code>```
+This is a code block.
+```
+</code></pre>
+
+<p>呈現起來會是這樣：</p>
+
+<blockquote>
+<pre><code>&gt; This is a code block.
+&gt; ```
+
+## 分隔線
+
+在同一行用三個以上的 `*`、`-` 或 `_` 可以組成一個分隔線，同一行不可以有其他的文字或標記，但在三個 `*`、`-` 或 `_`中間可以插入空白。
+
+以下幾種方式都可以組成分隔線：
+
+</code></pre>
+
+<p>md</p>
+
+<hr />
+
+<hr />
+
+<hr />
+
+<pre><code>
+都會顯示成同一種分隔線：
+
+&gt; ---
+
+# 區段元素
+
+## 連結
+
+Markdown 的連結有兩種方式，一是行內，一是參考。兩種都是用 `[]` 來標記要形成超連結的文字。
+
+### 行內連結
+
+行內連結是用 `[]` 將文字包起來後，再加上 `()`，並在小括號內加上連結網址即可。若想幫連結加上標題，也就是滑鼠移動到連結文字上會顯示的標題，在小括號內的連結網址後，空一格，用 `&quot;` 將標題文字包起來即可。
+
+例如：
+
+</code></pre>
+
+<p>md
+This is a <a href="http://example.com/" title="example.com">sample</a>.</p>
+
+<pre><code>
+就會呈現為：
+
+&gt; This is a [sample](http://example.com/ &quot;example.com&quot;).
+
+### 參考連結
+
+若你的文章內有多處要連結到同一個網址連結，則用參考連結是較好的方式。
+
+參考連結一樣是用 `[]` 將文字包起來，後面再用一次 `[]` 將用來辨識連結的標籤包起來。例如：
+
+</code></pre>
+
+<p>md
+Let me <a href="http://www.google.com/" title="Google">Google</a> that for you.</p>
+
+<pre><code>
+同樣會呈現為：
+
+&gt; Let me [Google][0] that for you.
+
+然後在文件的任意處，對，「任意處」，放上標籤內的連結內容定義，例如：
+
+</code></pre>
+
+<p>md
+<a href="http://www.google.com/" title="Google">0</a>: <a href="http://www.google.com/">http://www.google.com/</a> &ldquo;Google&rdquo;</p>
+
+<pre><code>
+但很抱歉，這個參考連結的內容定義並不會實際呈現出來，想檢查正確與否，就是直接點超連結的文字來測試。
+
+而連結的內容定義，有一定的語法，所以有以下幾點需要注意：
+
+* `[]` 內輸入連結的辨識標籤，可以是字母、數字、空白和標點符號，但並無大小寫區分
+* `[]` 後必須接一個 `:`，再接著一個以上的空白或縮排 tab
+* 空白或縮排 tab 後再接連結網址，可以選擇用 `&lt;&gt;` 將網址包起來，但非必要
+* 網址後面可以選擇性地加上連結標題，也就是滑鼠游標移到超連結文字上後會顯示的標題，須用 `''`、`&quot;&quot;` 或 `()` 包住標題
+
+## 強調
+
+將想要強調的文字用 `*` 或 `_` 包起來，就可以呈現三種強調的方式。例如：
+
+</code></pre>
+
+<p>md
+<strong><em>粗斜體</em></strong><br />
+<strong>粗體</strong><br />
+<em>斜體</em></p>
+
+<pre><code>
+會呈現如下：
+
+&gt; ***粗斜體***  
+&gt; __粗體__  
+&gt; *斜體*
+
+## 程式碼
+
+這邊跟程式碼區塊的區別，是只用來標記一小段行內程式碼，直接用 &lt;code&gt;`&lt;/code&gt; 將程式碼包起來即可。例如：
+
+</code></pre>
+
+<p>md
+<code>This is a code.</code></p>
+
+<pre><code>
+就會顯示為：
+
+`This is a code.`
+
+若程式碼內有需要用到 `` ` `` 這個符號，可以用多個 `` ` `` 符號來包住程式碼以作區別，例如：
+
+</code></pre>
+
+<p>md
+A single backtick in a code span: <code>`</code><br />
+A bakctick-delimited string in a code span: <code>`foo`</code></p>
+
+<pre><code>
+就會顯示為：
+
+&gt; A single backtick in a code span: `` ` ``  
+&gt; A bakctick-delimited string in a code span: `` `foo` ``
+
+## 圖片
+
+插入圖片的 Markdown 語法跟連結非常相似，幾乎只差在需要在開頭加上一個 `!` 符號。例如：
+
+</code></pre>
+
+<p>md
+<img src="https://upload.wikimedia.org/wikipedia/commons/thumb/4/48/Markdown-mark.svg/208px-Markdown-mark.svg.png" alt="Markdown logo" title="Markdown" /></p>
+
+<pre><code>
+就會顯示出圖片：
+
+&gt; ![Markdown logo](https://upload.wikimedia.org/wikipedia/commons/thumb/4/48/Markdown-mark.svg/208px-Markdown-mark.svg.png &quot;Markdown&quot;)
+
+行內圖片的語法注意如下：
+
+* 須以一個 `!` 開頭
+* 接著以 `[]` 加入替代文字，也就是圖片路徑、網址失效的時候顯示的文字
+* 再以 `()` 加入圖片路徑或網址
+* `()` 內的網址後面，只可以 `''` 或 `&quot;&quot;` 包住可以選擇加上的標題
+
+參考圖片的語法則像這樣：
+
+</code></pre>
+
+<p>md
+<img src="https://upload.wikimedia.org/wikipedia/commons/a/a4/Evernote_Icon.png" alt="Evernote logo" title="Evernote" /></p>
+
+<pre><code>
+參考的定義方式則與連結的參考內容定義方式一模一樣：
+
+</code></pre>
+
+<p>md
+<a href="https://upload.wikimedia.org/wikipedia/commons/a/a4/Evernote_Icon.png" title="Evernote">1</a>: <a href="https://upload.wikimedia.org/wikipedia/commons/a/a4/Evernote_Icon.png">https://upload.wikimedia.org/wikipedia/commons/a/a4/Evernote_Icon.png</a> &ldquo;Evernote&rdquo;</p>
+
+<pre><code>
+同樣可以顯示出圖片：
+
+&gt; ![Evernote logo][1]
+
+# 其他
+
+## 自動連結
+
+Markdown 也支援比較簡短的連結形式，可以用來表達連結網址及信箱，同時也能有超連結功能，只需要用 `&lt;&gt;` 包住網址即可。例如：
+
+</code></pre>
+
+<p>md
+<a href="http://example.com/">http://example.com/</a></p>
+
+<pre><code>
+就可以顯示為：
+
+&gt; &lt;http://example.com/&gt;
+
+## 跳脫字元
+
+前面講了很多 Markdown 的語法，使用很多符號來達成指定功能的標記，那如果只是需要在文章中加入那些符號，但並不想使用相關的功能，就需要在該符號前面加上 `\` 這個符號，以達成跳脫字元的功能。
+
+例如：
+
+</code></pre>
+
+<p>md
+If I want to **emphasize** something without making it <strong>bold</strong>.</p>
+
+<pre><code>
+就會顯示為：
+
+&gt; If I want to \*\*emphasize\*\* something without making it **bold**.
+
+以下是 Markdown 支援能在前面加上 `\` 以形成跳脫字元的符號：
+
+&gt; `\` 反斜線  
+&gt; `` ` `` 反引號  
+&gt; `*` 星號  
+&gt; `_` 底線  
+&gt; `{}` 大括號  
+&gt; `[]` 中括號  
+&gt; `()` 小括號  
+&gt; `#` 井字號  
+&gt; `+` 加號  
+&gt; `-` 減號  
+&gt; `.` 英文句點  
+&gt; `!` 驚嘆號
+
+## 特殊功能
+
+前面都是介紹 Markdown 原生支援的語法，其實有很多通用的寫法也能適用在 Markdown 當中。這邊列出我找到的一些語法，但請注意使用的編輯器或轉換器的支援度。
+
+### Checkbox
+
+語法是先用一個 `-`，一個空格，再加上 `[ ]`，空格後再加上敘述。注意 `[ ]` 當中必須有一個空格。若需要顯示的 checkbox 已經勾選，請將 `[ ]` 當中的空格替換成 `x` 或 `X`。
+
+例如：
+
+</code></pre>
+
+<p>md
+- [ ] First box</p>
+
+<pre><code>
+就會顯示為：
+
+&gt; - [ ] First box
+
+### Table
+
+Markdown 也支援做表格，基本上需要三個部分，標題列、設定列、內容表格。基本上都是用 `|` 做為分隔符號。
+
+例如：
+
+</code></pre>
+
+<p>md
+No.|Pokemon|神奇寶貝
+:&mdash;:|:&mdash;|&mdash;:
+1|Bulbasaur|妙蛙種子
+2|Ivysaur|妙蛙草
+3|Venusaur|妙蛙花</p>
+
+<pre><code>
+會顯示為：
+
+&gt; No.|Pokemon|神奇寶貝
+&gt; :---:|:---|---:
+&gt; 1|Bulbasaur|妙蛙種子
+&gt; 2|Ivysaur|妙蛙草
+&gt; 3|Venusaur|妙蛙花
+
+在畫表格的時候，有幾項注意事項：
+
+* 左邊界跟右邊界的框線非必要
+* 標題列必須每欄都填入欄位名稱
+* 第二列設定列，每一欄都必須填入至少一個 `-` 符號，並用 `:` 設定對齊方式。預設是靠左對齊；`:-` 也代表靠左對齊；`-:` 代表靠右對齊；`:-:` 則代表置中
+* 內容表格必須至少一列
+
+## 支援程式碼
+
+這邊特指的是程式碼區塊。
+
+其實大家應該注意到前面的程式碼區塊的文字有各種顏色，其實就是 Markdown 在做辨識程式語言的工作，並試圖將跟辨識出來的語言的關鍵字做顏色標記。
+
+如果記錄在程式碼區塊的程式碼有確切的語言，不仿試用以下的辦法，讓 Markdown 能更好的辨認程式碼，並更好地標記。
+
+首先必須使用三個 `` ` `` 來前後包住程式碼區塊，然後在第一排 `` ` `` 的後面加上程式語言名稱。
+
+例如：
+
+</code></pre>
+
+<p>md
+	<code>java  
+	public static void main(String[] args) {  
+		System.out.println(&quot;Hello World!&quot;);  
+	}  
+	</code>
+```</p>
+</blockquote>
+
+<p>就可以讓 Markdown 辨識如下：</p>
+
+<pre><code class="language-java">public static void main(String[] args) {
+	System.out.println(&quot;Hello World!&quot;);
+}
+</code></pre>
+
+<p>另外，利用這個辨識的功能，還能延伸為繪製一些簡單的圖表，如流程圖。</p>
+
+<p>詳細語法請上網搜尋 <code>markdown</code> 加 <code>flow</code>。這邊僅舉例：</p>
+
+<pre><code>```flow
+st=&gt;start
+op=&gt;operation: operation
+con=&gt;condition: condition
+e=&gt;end
+
+st-&gt;op(right)-&gt;con
+con(yes)-&gt;e
+con(no)-&gt;op
+```
+</code></pre>
+
+<p>Markdown 辨識後，會自動繪圖如下：</p>
+
+<pre><code class="language-flow">st=&gt;start  
+op=&gt;operation: operation  
+con=&gt;condition: yes or no?  
+e=&gt;end  
+
+st-&gt;op(right)-&gt;con  
+con(yes)-&gt;e  
+con(no)-&gt;op  
+</code></pre>
+
+<p>（很顯然 Hugo 提供的轉換器並不支援這種擴充的繪圖功能）</p>
+
+      </article>
+      <div id="disqus_thread"></div>
+<script type="application/javascript">
+    var disqus_config = function () {
+    
+    
+    
+    };
+    (function() {
+        if (["localhost", "127.0.0.1"].indexOf(window.location.hostname) != -1) {
+            document.getElementById('disqus_thread').innerHTML = 'Disqus comments not available by default when the website is previewed locally.';
+            return;
+        }
+        var d = document, s = d.createElement('script'); s.async = true;
+        s.src = '//' + "howard-tech-blog" + '.disqus.com/embed.js';
+        s.setAttribute('data-timestamp', +new Date());
+        (d.head || d.body).appendChild(s);
+    })();
+</script>
+<noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+<a href="https://disqus.com" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
+    </main>
+    <nav class="end-nav side-padding">
+      
+      <a ontouchstart="cardPressed.call(this)" ontouchend="cardReleased.call(this)" ontouchmove="cardReleased.call(this)" 
+  href="https://idontwannarock.github.io/tech_blog/2017/10/integer_overflow/" class="card blog-card" rel="bookmark" >
+    
+    <div class="card-img-container">
+      <p class="card-img-overlay">Next Article</p>
+      <picture>
+        
+        <source srcset="https://idontwannarock.github.io/tech_blog/binary-digit.png">
+        <img src="https://idontwannarock.github.io/tech_blog/binary-digit.png" class="card-img" alt="binary-digit">
+      </picture>
+    </div>
+    
+  <article class="card-body">
+    <h2 class="card-title">整數溢位 Integer Overflow</h2>
+    <p class="card-text">從電腦的數字系統開始，討論電腦如何儲存整數，並探討為何會產生整數溢位</p>
+    <div class="card-subtext muted-text">
+      <p>Posted <time datetime="2017-10-01 101:00">Oct 1, 2017</time></p>
+      <p>#concept </p>
+    </div>
+  </article>
+</a>
+      
+      <a ontouchstart="cardPressed.call(this)" ontouchend="cardReleased.call(this)" ontouchmove="cardReleased.call(this)" 
+  href="https://idontwannarock.github.io/tech_blog/" class="card home-card" style="background-image: url( https://res.cloudinary.com/dcvgho2zc/image/upload/v1559096537/photo-1530305408560-82d13781b33a_erww1b.jpg )" rel="bookmark" >
+  Home
+</a>
+    </nav>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.13.1/highlight.min.js"></script>
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.10.0/dist/katex.min.js" integrity="sha384-K3vbOmF2BtaVai+Qk37uypf7VrgBubhQreNQe9aGsz9lB63dIFiQVlJbr92dw2Lx" crossorigin="anonymous"></script>
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.10.0/dist/contrib/auto-render.min.js" integrity="sha384-kmZOZB5ObwgQnS/DuDg6TScgOiWWBiVt0plIRkZCmE6rDZGrEOQeHM5PcHi+nyqe" crossorigin="anonymous"
+    onload="renderMathInElement(document.body);"></script>
+  
+  <script src="https://idontwannarock.github.io/tech_blog/js/core.min.js"></script>
+<script>
+  hljs.initHighlightingOnLoad();
+</script>
+
+  </body>
+</html>

@@ -11,10 +11,10 @@
     
     <item>
       <title>Spring Security 整合 RBAC</title>
-      <link>https://idontwannarock.github.io/tech_blog/2019/05/spring-security-rbac/</link>
+      <link>https://idontwannarock.github.io/tech_blog/2019/05/spring_security_rbac/</link>
       <pubDate>Thu, 30 May 2019 15:33:07 +0800</pubDate>
       
-      <guid>https://idontwannarock.github.io/tech_blog/2019/05/spring-security-rbac/</guid>
+      <guid>https://idontwannarock.github.io/tech_blog/2019/05/spring_security_rbac/</guid>
       <description>探討如何利用 Spring Security 提供的自訂方式整合 RBAC</description>
     </item>
   </channel>
