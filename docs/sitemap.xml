@@ -28,12 +28,7 @@
   </url>
   
   <url>
-    <loc>https://idontwannarock.github.io/tech_blog/post/</loc>
-    <lastmod>2019-09-19T15:53:36+08:00</lastmod>
-  </url>
-  
-  <url>
-    <loc>https://idontwannarock.github.io/tech_blog/2019/09/spring_api_version_with_swagger_security/</loc>
+    <loc>https://idontwannarock.github.io/tech_blog/spring_api_version_with_swagger_security/</loc>
     <lastmod>2019-09-19T15:53:36+08:00</lastmod>
   </url>
   
@@ -68,12 +63,12 @@
   </url>
   
   <url>
-    <loc>https://idontwannarock.github.io/tech_blog/2019/05/spring_security_rbac/</loc>
+    <loc>https://idontwannarock.github.io/tech_blog/spring_security_rbac/</loc>
     <lastmod>2019-05-30T15:33:07+08:00</lastmod>
   </url>
   
   <url>
-    <loc>https://idontwannarock.github.io/tech_blog/2019/05/github_flow_intro/</loc>
+    <loc>https://idontwannarock.github.io/tech_blog/github_flow_intro/</loc>
     <lastmod>2019-05-29T10:52:45+08:00</lastmod>
   </url>
   
@@ -103,7 +98,7 @@
   </url>
   
   <url>
-    <loc>https://idontwannarock.github.io/tech_blog/2019/05/hugo_tutorial/</loc>
+    <loc>https://idontwannarock.github.io/tech_blog/hugo_tutorial/</loc>
     <lastmod>2019-05-07T16:03:07+08:00</lastmod>
   </url>
   
@@ -113,7 +108,7 @@
   </url>
   
   <url>
-    <loc>https://idontwannarock.github.io/tech_blog/2018/04/aop_and_spring_aop_basic/</loc>
+    <loc>https://idontwannarock.github.io/tech_blog/aop_and_spring_aop_basic/</loc>
     <lastmod>2018-04-10T13:22:52+08:00</lastmod>
   </url>
   
@@ -123,7 +118,7 @@
   </url>
   
   <url>
-    <loc>https://idontwannarock.github.io/tech_blog/2018/02/java_string_check/</loc>
+    <loc>https://idontwannarock.github.io/tech_blog/java_string_check/</loc>
     <lastmod>2018-02-06T14:09:25+08:00</lastmod>
   </url>
   
@@ -138,7 +133,7 @@
   </url>
   
   <url>
-    <loc>https://idontwannarock.github.io/tech_blog/2017/11/java_lottery_algorithm_basic/</loc>
+    <loc>https://idontwannarock.github.io/tech_blog/java_lottery_algorithm_basic/</loc>
     <lastmod>2017-11-15T14:26:17+08:00</lastmod>
   </url>
   
@@ -158,7 +153,7 @@
   </url>
   
   <url>
-    <loc>https://idontwannarock.github.io/tech_blog/2017/11/mbp_setup_2017/</loc>
+    <loc>https://idontwannarock.github.io/tech_blog/mbp_setup_2017/</loc>
     <lastmod>2017-11-03T09:05:02+08:00</lastmod>
   </url>
   
@@ -183,7 +178,7 @@
   </url>
   
   <url>
-    <loc>https://idontwannarock.github.io/tech_blog/2017/10/markdown_syntax/</loc>
+    <loc>https://idontwannarock.github.io/tech_blog/markdown_syntax/</loc>
     <lastmod>2017-10-22T15:42:04+08:00</lastmod>
   </url>
   
@@ -203,12 +198,12 @@
   </url>
   
   <url>
-    <loc>https://idontwannarock.github.io/tech_blog/2017/10/integer_overflow/</loc>
+    <loc>https://idontwannarock.github.io/tech_blog/integer_overflow/</loc>
     <lastmod>2017-10-01T07:04:47+08:00</lastmod>
   </url>
   
   <url>
-    <loc>https://idontwannarock.github.io/tech_blog/2017/09/twitter_clone/</loc>
+    <loc>https://idontwannarock.github.io/tech_blog/twitter_clone/</loc>
     <lastmod>2017-09-15T10:27:28+08:00</lastmod>
   </url>
   
@@ -238,7 +233,7 @@
   </url>
   
   <url>
-    <loc>https://idontwannarock.github.io/tech_blog/2017/09/click_click_ben/</loc>
+    <loc>https://idontwannarock.github.io/tech_blog/click_click_ben/</loc>
     <lastmod>2017-09-15T10:11:46+08:00</lastmod>
   </url>
   
@@ -248,7 +243,7 @@
   </url>
   
   <url>
-    <loc>https://idontwannarock.github.io/tech_blog/2017/09/retina_morning_post/</loc>
+    <loc>https://idontwannarock.github.io/tech_blog/retina_morning_post/</loc>
     <lastmod>2017-09-15T09:44:03+08:00</lastmod>
   </url>
   
@@ -258,12 +253,12 @@
   </url>
   
   <url>
-    <loc>https://idontwannarock.github.io/tech_blog/2017/09/click_click_boom/</loc>
+    <loc>https://idontwannarock.github.io/tech_blog/click_click_boom/</loc>
     <lastmod>2017-09-15T07:36:23+08:00</lastmod>
   </url>
   
   <url>
-    <loc>https://idontwannarock.github.io/tech_blog/2017/09/git_and_github_basic/</loc>
+    <loc>https://idontwannarock.github.io/tech_blog/git_and_github_basic/</loc>
     <lastmod>2017-09-14T07:13:01+08:00</lastmod>
   </url>
   
@@ -293,7 +288,7 @@
   </url>
   
   <url>
-    <loc>https://idontwannarock.github.io/tech_blog/2017/09/login_signup_function_1/</loc>
+    <loc>https://idontwannarock.github.io/tech_blog/login_signup_function_1/</loc>
     <lastmod>2017-09-11T07:11:59+08:00</lastmod>
   </url>
   
@@ -308,17 +303,17 @@
   </url>
   
   <url>
-    <loc>https://idontwannarock.github.io/tech_blog/2017/09/xampp_setup_and_php_practice/</loc>
+    <loc>https://idontwannarock.github.io/tech_blog/xampp_setup_and_php_practice/</loc>
     <lastmod>2017-09-10T07:39:23+08:00</lastmod>
   </url>
   
   <url>
-    <loc>https://idontwannarock.github.io/tech_blog/2017/09/hugo_practice_2/</loc>
+    <loc>https://idontwannarock.github.io/tech_blog/hugo_practice_2/</loc>
     <lastmod>2017-09-09T15:22:03+08:00</lastmod>
   </url>
   
   <url>
-    <loc>https://idontwannarock.github.io/tech_blog/2017/09/hugo_practice_1/</loc>
+    <loc>https://idontwannarock.github.io/tech_blog/hugo_practice_1/</loc>
     <lastmod>2017-09-09T00:17:31+08:00</lastmod>
   </url>
   

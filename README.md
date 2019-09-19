@@ -4,7 +4,7 @@
 
 ## Hugo 基本操作
 
-`hugo new post/<fileName>.md`: 生成新 Markdown 文件
+`hugo new <fileName>.md`: 生成新 Markdown 文件
 
 `hugo server`: 本機測試
 

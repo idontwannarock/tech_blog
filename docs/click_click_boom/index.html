@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html lang="zh-tw" dir="ltr">
+  <head>
+  <meta charset="utf-8" />
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <title>1st Practice: Click Click Boom &middot; </title>
+  <meta name="description" content="100 個練習計畫：第一個練習" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/normalize/8.0.1/normalize.min.css" />
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.10.0/dist/katex.min.css" integrity="sha384-9eLZqc9ds8eNjO3TmqPeYcDj8n+Qfa4nuSiGYa6DjLNcv9BtN69ZIulL9+8CqC9Y" crossorigin="anonymous">
+  
+  
+  
+  
+  <link href="https://idontwannarock.github.io/tech_blog/css/concated.min.css" rel="stylesheet">
+  
+<script type="application/javascript">
+var doNotTrack = false;
+if (!doNotTrack) {
+	(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+	(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+	m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+	})(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+	ga('create', 'UA-106499565-1', 'auto');
+	
+	ga('send', 'pageview');
+}
+</script>
+
+  <style>
+    body {
+      background: #ecedef url("https://res.cloudinary.com/dcvgho2zc/image/upload/v1568880571/repeat_bg_1_dqzr93.jpg") repeat;
+    }
+  </style>
+</head>
+
+  <body class="single-body">
+    <nav class="nav-bar side-padding">
+  <h1 class="nav-header"><a href="https://idontwannarock.github.io/tech_blog/" class="nav-text">Howard 技術筆記</a></h1>
+  <div class="hamburger-menu">
+    <button onclick="hamburgerMenuPressed.call(this)" aria-haspopup="true" aria-expanded="false" aria-controls="menu" aria-label="Menu">
+      <span></span>
+      <span></span>
+    </button>
+    <ul id="menu" class="hamburger-menu-overlay">
+      <li><a href="https://idontwannarock.github.io/tech_blog/" class="hamburger-menu-overlay-link">Home</a></li>
+      <li><a href="https://idontwannarock.github.io/tech_blog/categories/application" class="hamburger-menu-overlay-link">Application</a></li><li><a href="https://idontwannarock.github.io/tech_blog/categories/concept" class="hamburger-menu-overlay-link">Concept</a></li><li><a href="https://idontwannarock.github.io/tech_blog/categories/practice" class="hamburger-menu-overlay-link">Practice</a></li>
+    </ul>
+  </div>
+</nav>
+    <main class="content side-text-padding">
+      <article class="post ">
+        <header class="post-header">
+        	<h1 class="post-title">1st Practice: Click Click Boom</h1>
+          <p class="post-date">Posted <time datetime="2017-09-15">Sep 15, 2017</time></p>
+        </header>
+        
+        <picture class="post-figure">
+            
+            <source srcset="https://idontwannarock.github.io/tech_blog/">
+          <img src="https://idontwannarock.github.io/tech_blog/" alt="">
+        </picture>
+        
+        
+
+<h1 id="第一個目標">第一個目標</h1>
+
+<p>寫個簡單作品來練習 HTML 跟 CSS</p>
+
+<ul>
+<li>作品：Click Click Boom<br />
+
+<ul>
+<li><a href="https://goo.gl/vPtbzB">黑白版本</a><br /></li>
+<li><a href="https://goo.gl/CfT2Ro">粉紅大理石版本</a><br /></li>
+<li><a href="https://goo.gl/NVdhAk">黑色大理石版本</a><br /></li>
+</ul></li>
+</ul>
+
+<h1 id="遇到困難">遇到困難</h1>
+
+<h2 id="置中">置中</h2>
+
+<p>左右置中很容易，但上下置中就麻煩了，還要隨瀏覽器視窗大小變動就更麻煩。</p>
+
+<p>最後在 stackoverflow 查到一種解法，就是先設定 <code>position: absolute;</code>，然後 <code>top</code>、<code>bottom</code>、<code>left</code>、<code>right</code> 都設 <code>0</code>，再用 <code>margin: 0;</code> 來自動對齊。</p>
+
+<h2 id="套框">套框</h2>
+
+<p>因為想要使用 HTML+CSS 作套框而不是用畫去背圖的方式，這真的殺死很多腦筋，內部框跟文字怎麼排都無法置中，對，又是無法上下置中，用 <code>text-align</code> 只能左右置中，<code>vertical-align</code> 完全不理我。</p>
+
+<p>最後又是 stackoverflow 查到解法，要用 CSS3 的新 property，<code>display: flex;</code> 來解，然後設定 <code>align-item: center;</code> 跟 <code>justify-content: center;</code> 來上下左右置中，但當然衍伸出下個問題。</p>
+
+<h2 id="相容">相容</h2>
+
+<p>瀏覽器太多種，新舊版本對 HTML5 或 CSS3 相容度又不一致，真的會搞死，實務上難道也是只能靠經驗？或出問題再來修改嗎？還是有更合理的作法？</p>
+
+<p>最後是上 <a href="https://www.w3schools.com/">w3schools</a> 一項一項 property 查相容再加相容敘述 <code>-webkit-</code> 或 <code>-moz-</code> 來解決。</p>
+
+<h2 id="ios相容">iOS相容</h2>
+
+<p>這個真的超哭，我整個都做完了，就只有在 iOS 裝置上，按鈕按不下去！</p>
+
+<p>我先是想說應該是 <code>transform</code> 可能不相容，所以一樣查了 w3schools 加上相容敘述，結果還是不行！</p>
+
+<p>以我的智商真的想不出來惹，最後只能跟阿混求救，大神就是大神，瞬間幫我找出答案，因為 <code>Pseudo class active</code> 跟 iOS 不相容……</p>
+
+<p>當然阿混很好心的幫我查好解法，結果是要用 JavaScript 來解，這跟我只想練習 HTML+CSS 本意不符，但找了一下好像真的沒有更好的解法，所以最後還是用了這個解法。</p>
+
+<h1 id="感想">感想</h1>
+
+<p>工程師真的很辛苦，但也很爽。能親手做出成品很有成就感！後續再來想要加什麼功能會更舒壓 XD</p>
+
+      </article>
+      <div id="disqus_thread"></div>
+<script type="application/javascript">
+    var disqus_config = function () {
+    
+    
+    
+    };
+    (function() {
+        if (["localhost", "127.0.0.1"].indexOf(window.location.hostname) != -1) {
+            document.getElementById('disqus_thread').innerHTML = 'Disqus comments not available by default when the website is previewed locally.';
+            return;
+        }
+        var d = document, s = d.createElement('script'); s.async = true;
+        s.src = '//' + "howard-tech-blog" + '.disqus.com/embed.js';
+        s.setAttribute('data-timestamp', +new Date());
+        (d.head || d.body).appendChild(s);
+    })();
+</script>
+<noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+<a href="https://disqus.com" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
+    </main>
+    <nav class="end-nav side-padding">
+      
+      <a ontouchstart="cardPressed.call(this)" ontouchend="cardReleased.call(this)" ontouchmove="cardReleased.call(this)" 
+  href="https://idontwannarock.github.io/tech_blog/git_and_github_basic/" class="card blog-card" rel="bookmark" >
+    
+    <div class="card-img-container">
+      <p class="card-img-overlay">Next Article</p>
+      <picture>
+        
+        <source srcset="https://idontwannarock.github.io/tech_blog/">
+        <img src="https://idontwannarock.github.io/tech_blog/" class="card-img" alt="">
+      </picture>
+    </div>
+    
+  <article class="card-body">
+    <h2 class="card-title">Git 及 GitHub 基礎認識</h2>
+    <p class="card-text">介紹 Git 概念及基礎指令，並用 SSH 同步到 GitHub</p>
+    <div class="card-subtext muted-text">
+      <p>Posted <time datetime="2017-09-14 914:00">Sep 14, 2017</time></p>
+      <p>#application </p>
+    </div>
+  </article>
+</a>
+      
+      <a ontouchstart="cardPressed.call(this)" ontouchend="cardReleased.call(this)" ontouchmove="cardReleased.call(this)" 
+  href="https://idontwannarock.github.io/tech_blog/" class="card home-card" style="background-image: url( https://res.cloudinary.com/dcvgho2zc/image/upload/v1559096537/photo-1530305408560-82d13781b33a_erww1b.jpg )" rel="bookmark" >
+  Home
+</a>
+    </nav>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.13.1/highlight.min.js"></script>
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.10.0/dist/katex.min.js" integrity="sha384-K3vbOmF2BtaVai+Qk37uypf7VrgBubhQreNQe9aGsz9lB63dIFiQVlJbr92dw2Lx" crossorigin="anonymous"></script>
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.10.0/dist/contrib/auto-render.min.js" integrity="sha384-kmZOZB5ObwgQnS/DuDg6TScgOiWWBiVt0plIRkZCmE6rDZGrEOQeHM5PcHi+nyqe" crossorigin="anonymous"
+    onload="renderMathInElement(document.body);"></script>
+  
+  <script src="https://idontwannarock.github.io/tech_blog/js/core.min.js"></script>
+<script>
+  hljs.initHighlightingOnLoad();
+</script>
+
+  </body>
+</html>

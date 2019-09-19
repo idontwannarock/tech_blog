@@ -11,10 +11,10 @@
     
     <item>
       <title>AOP 及 Spring AOP 簡述</title>
-      <link>https://idontwannarock.github.io/tech_blog/2018/04/aop_and_spring_aop_basic/</link>
+      <link>https://idontwannarock.github.io/tech_blog/aop_and_spring_aop_basic/</link>
       <pubDate>Tue, 10 Apr 2018 13:22:52 +0800</pubDate>
       
-      <guid>https://idontwannarock.github.io/tech_blog/2018/04/aop_and_spring_aop_basic/</guid>
+      <guid>https://idontwannarock.github.io/tech_blog/aop_and_spring_aop_basic/</guid>
       <description>探討 AOP 概念及 Spring AOP 應用</description>
     </item>
   </channel>

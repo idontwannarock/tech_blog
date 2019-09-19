@@ -1,0 +1,396 @@
+<!DOCTYPE html>
+<html lang="zh-tw" dir="ltr">
+  <head>
+  <meta charset="utf-8" />
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <title>Spring Boot 實作 API 版本控制 &middot; </title>
+  <meta name="description" content="在 Spring Boot Web 專案實作動態 API 版本控制，並能兼容 Swagger 及 Spring Security" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/normalize/8.0.1/normalize.min.css" />
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.10.0/dist/katex.min.css" integrity="sha384-9eLZqc9ds8eNjO3TmqPeYcDj8n+Qfa4nuSiGYa6DjLNcv9BtN69ZIulL9+8CqC9Y" crossorigin="anonymous">
+  
+  
+  
+  
+  <link href="https://idontwannarock.github.io/tech_blog/css/concated.min.css" rel="stylesheet">
+  
+<script type="application/javascript">
+var doNotTrack = false;
+if (!doNotTrack) {
+	(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+	(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+	m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+	})(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+	ga('create', 'UA-106499565-1', 'auto');
+	
+	ga('send', 'pageview');
+}
+</script>
+
+  <style>
+    body {
+      background: #ecedef url("https://res.cloudinary.com/dcvgho2zc/image/upload/v1568880571/repeat_bg_1_dqzr93.jpg") repeat;
+    }
+  </style>
+</head>
+
+  <body class="single-body">
+    <nav class="nav-bar side-padding">
+  <h1 class="nav-header"><a href="https://idontwannarock.github.io/tech_blog/" class="nav-text">Howard 技術筆記</a></h1>
+  <div class="hamburger-menu">
+    <button onclick="hamburgerMenuPressed.call(this)" aria-haspopup="true" aria-expanded="false" aria-controls="menu" aria-label="Menu">
+      <span></span>
+      <span></span>
+    </button>
+    <ul id="menu" class="hamburger-menu-overlay">
+      <li><a href="https://idontwannarock.github.io/tech_blog/" class="hamburger-menu-overlay-link">Home</a></li>
+      <li><a href="https://idontwannarock.github.io/tech_blog/categories/application" class="hamburger-menu-overlay-link">Application</a></li><li><a href="https://idontwannarock.github.io/tech_blog/categories/concept" class="hamburger-menu-overlay-link">Concept</a></li><li><a href="https://idontwannarock.github.io/tech_blog/categories/practice" class="hamburger-menu-overlay-link">Practice</a></li>
+    </ul>
+  </div>
+</nav>
+    <main class="content side-text-padding">
+      <article class="post ">
+        <header class="post-header">
+        	<h1 class="post-title">Spring Boot 實作 API 版本控制</h1>
+          <p class="post-date">Posted <time datetime="2019-09-19">Sep 19, 2019</time></p>
+        </header>
+        
+        <picture class="post-figure">
+            
+            <source srcset="https://idontwannarock.github.io/tech_blog/spring-framework.png">
+          <img src="https://idontwannarock.github.io/tech_blog/spring-framework.png" alt="spring-framework">
+        </picture>
+        
+        
+
+<p>本文目的是為了探討在 Spring Boot Web 專案中，實作 API 版本控制，並兼容 Swagger 及 Spring Security 的解決方式</p>
+
+<p>需要有 Spring Boot、Spring MVC、Spring Security 及 Swagger 的基礎概念會比較好理解</p>
+
+<h1 id="api-版本控制">API 版本控制</h1>
+
+<p>常見的 API 版本控制方式有三種: URI, header, content-type</p>
+
+<p>考量到 RESTful API 其中的一個好處是方便快取，使用 header 跟 content-type 的方式則可能無法正確的快取以及達成 idempotent，所以我個人採用的是在 URI 中加入版本號的方式</p>
+
+<p>再來因為有時候面對的專案有數量眾多的 handler，導致每次修改版本號都要手動修改每一支 handler 對應的 uri，這樣既麻煩又不潮，所以一定要研究一下怎麼在 Spring Boot 專案中利用註解的方式自動幫 handler 對應的 uri 自動插入版本號</p>
+
+<h1 id="tech-stack">Tech Stack</h1>
+
+<p>專案採用的是 Spring Boot 2.0 架構，Java 1.8 版本</p>
+
+<p>有關 Maven 依賴如下:</p>
+
+<ul>
+<li>org.springframework.boot:spring-boot-starter-web:2.1.x</li>
+<li>org.springframework.boot:spring-boot-starter-security:2.1.x</li>
+<li>io.springfox:springfox-swagger2:2.9.2</li>
+<li>io.springfox:springfox-swagger-ui:2.9.2</li>
+</ul>
+
+<p>這邊強調要採用 Spring Boot 主要是因為想要利用 Spring Boot auto configuration 的功能，也因為想要利用這個功能，所以過程才會這麼曲折&hellip;</p>
+
+<h1 id="常見作法及整合問題">常見作法及整合問題</h1>
+
+<p>網路上 API 版本控制的文章的做法都雷同</p>
+
+<p>通常都是先建立自訂 <code>ApiVersion</code> 註解，裡面有版本號屬性，可以是 <code>int</code> 也可以是字串，通常都會有預設值，然後容許加註在類別或方法</p>
+
+<pre><code class="language-java">import java.lang.annotation.*;
+
+@Target({ElementType.TYPE, ElementType.METHOD})
+@Retention(RetentionPolicy.RUNTIME)
+public @interface ApiVersion {
+
+    int value() default 1;
+}
+</code></pre>
+
+<p>再來寫 <code>ApiVersionCondition</code> 實作 <code>RequestCondition</code> 介面來判斷 request 跟 handler mapping 的條件</p>
+
+<pre><code class="language-java">import org.springframework.web.servlet.mvc.condition.RequestCondition;
+
+import javax.servlet.http.HttpServletRequest;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
+public class ApiVersionCondition implements RequestCondition&lt;ApiVersionCondition&gt; {
+
+    private int apiVersion;
+
+    private final static Pattern VERSION_PREFIX_PATTERN = Pattern.compile(&quot;/v(\\d+)/&quot;);
+
+    public ApiVersionCondition(int apiVersion) {
+        this.apiVersion = apiVersion;
+    }
+
+    @Override
+    public ApiVersionCondition combine(ApiVersionCondition other) {
+        return new ApiVersionCondition(other.getApiVersion());
+    }
+
+    @Override
+    public ApiVersionCondition getMatchingCondition(HttpServletRequest request) {
+        Matcher m = VERSION_PREFIX_PATTERN.matcher(request.getRequestURI());
+        if (m.find()) {
+            int version = Integer.parseInt(m.group(1));
+            if (version &gt;= getApiVersion()) {
+                return this;
+            }
+        }
+        return null;
+    }
+
+    @Override
+    public int compareTo(ApiVersionCondition other, HttpServletRequest request) {
+        return other.getApiVersion() - getApiVersion();
+    }
+
+    public int getApiVersion() {
+        return apiVersion;
+    }
+
+    public void setApiVersion(int apiVersion) {
+        this.apiVersion = apiVersion;
+    }
+}
+</code></pre>
+
+<p>接著寫自訂 <code>CustomRequestMappingHandlerMapping</code> 類別，繼承 <code>RequestMappingHandlerMapping</code> 並 override <code>getCustomTypeCondition(Class&lt;?&gt; handlerType)</code> 跟 <code>getCustomMethodCondition(Method method)</code> 這兩個方法，以分別取得類別跟方法上的 <code>ApiVersion</code> 註解，並據此建立 <code>ApiVersionCondition</code> 給 Spring MVC 做 request mapping 時調用</p>
+
+<pre><code class="language-java">import org.springframework.core.annotation.AnnotationUtils;
+import org.springframework.web.servlet.mvc.condition.*;
+import org.springframework.web.servlet.mvc.method.RequestMappingInfo;
+import org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerMapping;
+
+import java.lang.reflect.Method;
+
+public class ApiVersionHandlerMapping extends RequestMappingHandlerMapping {
+
+    @Override
+    public RequestCondition&lt;?&gt; getCustomTypeCondition(Class&lt;?&gt; handlerType) {
+        ApiVersion apiVersion = AnnotationUtils.findAnnotation(handlerType, ApiVersion.class);
+        return createRequestCondition(apiVersion);
+    }
+
+    @Override
+    public RequestCondition&lt;?&gt; getCustomMethodCondition(Method method) {
+        ApiVersion apiVersion = AnnotationUtils.findAnnotation(method, ApiVersion.class);
+        return createRequestCondition(apiVersion);
+    }
+
+    private RequestCondition&lt;ApiVersionCondition&gt; createRequestCondition(ApiVersion apiVersion) {
+        if (apiVersion == null || apiVersion.value() &lt; 1) {
+            return null;
+        }
+        return new ApiVersionCondition(apiVersion.value());
+    }
+}
+</code></pre>
+
+<p>最後再建立一個設定類別繼承 <code>WebMvcConfigurationSupport</code> 類別並 override <code>requestMappingHandlerMapping()</code> 方法來提供自訂的 <code>CustomRequestMappingHandlerMapping</code></p>
+
+<pre><code class="language-java">import org.springframework.context.annotation.Configuration;
+import org.springframework.web.servlet.config.annotation.WebMvcConfigurationSupport;
+import org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerMapping;
+
+@Configuration
+public class WebMvcConfig extends WebMvcConfigurationSupport {
+
+    @Override
+    public RequestMappingHandlerMapping requestMappingHandlerMapping() {
+        ApiVersionHandlerMapping handlerMapping = new ApiVersionHandlerMapping();
+        handlerMapping.setOrder(0);
+        handlerMapping.setInterceptors(getInterceptors());
+        return handlerMapping;
+    }
+}
+</code></pre>
+
+<p>這樣就可以在 controller 開心地加上 <code>ApiVersion</code> 註解啦</p>
+
+<pre><code class="language-java">import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
+
+@ApiVersion
+@RequestMapping(&quot;home&quot;)
+@RestController
+public class HomeController {
+
+    @GetMapping(&quot;hello&quot;)
+    public ResponseEntity&lt;?&gt; hello() {
+        return ResponseEntity.ok(&quot;Hello world!&quot;);
+    }
+
+    @ApiVersion(2)
+    @GetMapping(&quot;hello&quot;)
+    public ResponseEntity&lt;?&gt; helloV2() {
+        return ResponseEntity.ok(&quot;Nice to meet you!&quot;);
+    }
+}
+</code></pre>
+
+<p><strong>BUT，人生就是這個 BUT</strong></p>
+
+<p>當你要兼容 Swagger 的時候，事情就沒這麼簡單惹，你會發現馬德，swagger-ui.html 開起來打 API 怎麼都沒有版本號？！</p>
+
+<p>其實到這邊本文才要正式開始，否則你隨便 google 都是這樣的內容，我還寫個毛</p>
+
+<h2 id="兼容-swagger">兼容 Swagger</h2>
+
+<p>首先，要整合 Swagger 有個問題，Swagger 會讀取 handler 的 <code>RequestMappingInfo</code> 來產生文件；但前面的作法其實是 request 進來後，利用 <code>RequestCondition</code> 來邏輯上將 request 導向 handler，實際上的 path 沒有改變，所以 Swagger 當然讀不到正確的 uri 來產生文件</p>
+
+<p>於是就有了另外一種做法</p>
+
+<p>在前面寫好的 <code>CustomRequestMappingHandlerMapping</code> 中，另外再 override <code>getMappingForMethod(Method method, Class&lt;?&gt; handlerType)</code> 方法去調整 <code>RequestMappingInfo</code></p>
+
+<p>這部分的作法其實要看狀況，但網路上有些範例不知道是不是比較早期的文章，還有用到 <code>Proxy</code> 來操作的寫法，我是覺得有點不必要</p>
+
+<p>Spring MVC 其實在 <code>RequestMappingInfo</code> 裡面已經有很靈活的 constructor 可以做這方面的設定，並且提供方法可以跟原有的 <code>RequestMappingInfo</code> 做合併</p>
+
+<pre><code class="language-java">@Override
+public RequestMappingInfo getMappingForMethod(Method method, Class&lt;?&gt; handlerType) {
+    RequestMappingInfo info = super.getMappingForMethod(method, handlerType);
+    if (info == null) return null;
+
+    ApiVersion methodAnnotation = AnnotationUtils.findAnnotation(method, ApiVersion.class);
+    if (methodAnnotation != null) {
+        RequestCondition&lt;?&gt; methodCondition = getCustomMethodCondition(method);
+        info = createApiVersionInfo(methodAnnotation, methodCondition).combine(info);
+    } else {
+        ApiVersion typeAnnotation = AnnotationUtils.findAnnotation(handlerType, ApiVersion.class);
+        if (typeAnnotation != null) {
+            RequestCondition&lt;?&gt; typeCondition = getCustomTypeCondition(handlerType);
+            info = createApiVersionInfo(typeAnnotation, typeCondition).combine(info);
+        }
+    }
+    return info;
+}
+
+private RequestMappingInfo createApiVersionInfo(ApiVersion annotation, RequestCondition&lt;?&gt; customCondition) {
+    return new RequestMappingInfo(
+            new PatternsRequestCondition(&quot;v&quot;.concat(String.valueOf(annotation.value()))),
+            new RequestMethodsRequestCondition(),
+            new ParamsRequestCondition(),
+            new HeadersRequestCondition(),
+            new ConsumesRequestCondition(),
+            new ProducesRequestCondition(),
+            customCondition);
+}
+</code></pre>
+
+<p>這時候再打開 swagger-ui.html，就會覺得空氣是多麼清新，世界是多麼美好</p>
+
+<h2 id="spring-security-設定">Spring Security 設定</h2>
+
+<p>當然，因為現在很多 handler 的 uri 不一樣了，設定 Spring Security 哪些請求要擋哪些不用的部分當然也要改</p>
+
+<p>最簡單就是在繼承 <code>WebSecurityConfigurerAdapter</code> 的設定類別那邊手動加版本號，我自己是採用這種方式，因為考慮 Spring Security 本來就是安全考量要盡量嚴謹，會開放不用做驗證的部分應該本來就很少，所以手動修改這部分我覺得可以接受</p>
+
+<p>另外提醒一下如果要使用 swagger-ui.html，要將相關的靜態資源開放，建議可以做在繼承 <code>WebSecurityConfigurerAdapter</code> 的設定類別的 <code>configure(HttpSecurity httpSecurity)</code> 方法中，可以省下另外註冊 resource 的功夫</p>
+
+<h2 id="spring-boot-auto-configuration-失效問題">Spring Boot auto configuration 失效問題</h2>
+
+<p>其實這樣寫完還有一個問題，萬一我有其他自訂部分有用到從 <code>WebMvcConfigurer</code> 繼承來的方法，你會發現馬德，全都失效了</p>
+
+<p>崩╰(〒皿〒)╯潰</p>
+
+<p>這是因為前面繼承到萬惡的 <code>WebMvcConfigurationSupport</code> 了</p>
+
+<p>Spring Boot 的原則是 convention over configuration，所以它有很多自動設定，關於 Spring MVC 的部分就是 <code>WebMvcAutoConfiguration</code> 在管</p>
+
+<p>而不論是 <code>@EnableWebMvc</code> 註解或直接繼承 <code>WebMvcConfigurationSupport</code> 都會停用 <code>WebMvcAutoConfiguration</code>，Spring Boot 就會改用你 <code>@EnableWebMvc</code> 註解的類別或直接繼承 <code>WebMvcConfigurationSupport</code> 的類別來做設定；如果剛好你需要的自訂部分在這裡沒有想辦法設定進去，那你繼承 <code>WebMvcConfigurer</code> 的設定就白寫了</p>
+
+<p>解決的關鍵點就是 <code>WebMvcRegistrations</code> 介面，看是要實作介面還是匿名類別的 <code>@Bean</code> 給 Spring Boot 都可以</p>
+
+<p>我是寫在繼承 <code>WebMvcConfigurer</code> 的設定類別裡面，讓 Sring MVC 相關設定集中</p>
+
+<pre><code class="language-java">import org.springframework.boot.autoconfigure.web.servlet.WebMvcRegistrations;
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
+import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
+import org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerMapping;
+
+@Configuration
+public class CustomWebMvcConfigurer implements WebMvcConfigurer {
+
+    @Bean
+    public WebMvcRegistrations webMvcRegistrationsRequestMappingHandlerMapping() {
+        return new WebMvcRegistrations() {
+            
+            @Override
+            public RequestMappingHandlerMapping getRequestMappingHandlerMapping() {
+                return new ApiVersionHandlerMapping();
+            }
+        };
+    }
+}
+</code></pre>
+
+<p>至此就可以把前面寫的 <code>WebMvcConfig</code> 刪掉啦</p>
+
+<p>至於沒找到 <code>WebMvcRegistrations</code> 介面的朋友，要不就是你 Spring Boot 版本太低，不然就只能改用 <code>WebMvcRegistrationsAdpater</code> 試試看了 (攤手)</p>
+
+      </article>
+      <div id="disqus_thread"></div>
+<script type="application/javascript">
+    var disqus_config = function () {
+    
+    
+    
+    };
+    (function() {
+        if (["localhost", "127.0.0.1"].indexOf(window.location.hostname) != -1) {
+            document.getElementById('disqus_thread').innerHTML = 'Disqus comments not available by default when the website is previewed locally.';
+            return;
+        }
+        var d = document, s = d.createElement('script'); s.async = true;
+        s.src = '//' + "howard-tech-blog" + '.disqus.com/embed.js';
+        s.setAttribute('data-timestamp', +new Date());
+        (d.head || d.body).appendChild(s);
+    })();
+</script>
+<noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+<a href="https://disqus.com" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
+    </main>
+    <nav class="end-nav side-padding">
+      
+      <a ontouchstart="cardPressed.call(this)" ontouchend="cardReleased.call(this)" ontouchmove="cardReleased.call(this)" 
+  href="https://idontwannarock.github.io/tech_blog/spring_security_rbac/" class="card blog-card" rel="bookmark" >
+    
+    <div class="card-img-container">
+      <p class="card-img-overlay">Next Article</p>
+      <picture>
+        
+        <source srcset="https://idontwannarock.github.io/tech_blog/spring-security-icon.png">
+        <img src="https://idontwannarock.github.io/tech_blog/spring-security-icon.png" class="card-img" alt="spring-security">
+      </picture>
+    </div>
+    
+  <article class="card-body">
+    <h2 class="card-title">Spring Security 整合 RBAC</h2>
+    <p class="card-text">探討如何利用 Spring Security 提供的自訂方式整合 RBAC</p>
+    <div class="card-subtext muted-text">
+      <p>Posted <time datetime="2019-05-30 530:00">May 30, 2019</time></p>
+      <p>#concept </p>
+    </div>
+  </article>
+</a>
+      
+      <a ontouchstart="cardPressed.call(this)" ontouchend="cardReleased.call(this)" ontouchmove="cardReleased.call(this)" 
+  href="https://idontwannarock.github.io/tech_blog/" class="card home-card" style="background-image: url( https://res.cloudinary.com/dcvgho2zc/image/upload/v1559096537/photo-1530305408560-82d13781b33a_erww1b.jpg )" rel="bookmark" >
+  Home
+</a>
+    </nav>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.13.1/highlight.min.js"></script>
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.10.0/dist/katex.min.js" integrity="sha384-K3vbOmF2BtaVai+Qk37uypf7VrgBubhQreNQe9aGsz9lB63dIFiQVlJbr92dw2Lx" crossorigin="anonymous"></script>
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.10.0/dist/contrib/auto-render.min.js" integrity="sha384-kmZOZB5ObwgQnS/DuDg6TScgOiWWBiVt0plIRkZCmE6rDZGrEOQeHM5PcHi+nyqe" crossorigin="anonymous"
+    onload="renderMathInElement(document.body);"></script>
+  
+  <script src="https://idontwannarock.github.io/tech_blog/js/core.min.js"></script>
+<script>
+  hljs.initHighlightingOnLoad();
+</script>
+
+  </body>
+</html>

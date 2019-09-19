@@ -11,17 +11,17 @@
     
     <item>
       <title>Spring Boot 實作 API 版本控制</title>
-      <link>https://idontwannarock.github.io/tech_blog/2019/09/spring_api_version_with_swagger_security/</link>
+      <link>https://idontwannarock.github.io/tech_blog/spring_api_version_with_swagger_security/</link>
       <pubDate>Thu, 19 Sep 2019 15:53:36 +0800</pubDate>
       
-      <guid>https://idontwannarock.github.io/tech_blog/2019/09/spring_api_version_with_swagger_security/</guid>
+      <guid>https://idontwannarock.github.io/tech_blog/spring_api_version_with_swagger_security/</guid>
       <description>在 Spring Boot Web 專案實作動態 API 版本控制，並能兼容 Swagger 及 Spring Security</description>
     </item><item>
       <title>Spring Security 整合 RBAC</title>
-      <link>https://idontwannarock.github.io/tech_blog/2019/05/spring_security_rbac/</link>
+      <link>https://idontwannarock.github.io/tech_blog/spring_security_rbac/</link>
       <pubDate>Thu, 30 May 2019 15:33:07 +0800</pubDate>
       
-      <guid>https://idontwannarock.github.io/tech_blog/2019/05/spring_security_rbac/</guid>
+      <guid>https://idontwannarock.github.io/tech_blog/spring_security_rbac/</guid>
       <description>探討如何利用 Spring Security 提供的自訂方式整合 RBAC</description>
     </item>
   </channel>
