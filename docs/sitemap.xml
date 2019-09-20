@@ -3,11 +3,6 @@
   xmlns:xhtml="http://www.w3.org/1999/xhtml">
   
   <url>
-    <loc>https://idontwannarock.github.io/tech_blog/</loc>
-    <lastmod>2019-09-19T15:53:36+08:00</lastmod>
-  </url>
-  
-  <url>
     <loc>https://idontwannarock.github.io/tech_blog/tags/api-versioning/</loc>
     <lastmod>2019-09-19T15:53:36+08:00</lastmod>
   </url>
@@ -19,6 +14,11 @@
   
   <url>
     <loc>https://idontwannarock.github.io/tech_blog/categories/</loc>
+    <lastmod>2019-09-19T15:53:36+08:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>https://idontwannarock.github.io/tech_blog/</loc>
     <lastmod>2019-09-19T15:53:36+08:00</lastmod>
   </url>
   

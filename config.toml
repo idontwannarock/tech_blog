@@ -1,7 +1,7 @@
 baseURL = "https://idontwannarock.github.io/tech_blog/"
 languageCode = "zh-tw"
 DefaultContentLanguage = "zh-tw"
-#title = "Howard 技術筆記"
+title = "Howard 技術筆記"
 theme = "aether"
 publishDir = "docs"
 canonifyURLs = true
@@ -10,9 +10,9 @@ googleAnalytics = "UA-106499565-1"
 disqusShortname = "howard-tech-blog"
 
 [params]
-brand = "Howard 技術筆記"
+brand = "WCH Tech Note"
 description = "分享 * 紀錄 * 程式"
-homeimg = "https://res.cloudinary.com/dcvgho2zc/image/upload/v1559096537/photo-1530305408560-82d13781b33a_erww1b.jpg"
+#homeimg = "https://res.cloudinary.com/dcvgho2zc/image/upload/v1559096537/photo-1530305408560-82d13781b33a_erww1b.jpg"
 bgimg = "https://res.cloudinary.com/dcvgho2zc/image/upload/v1568880571/repeat_bg_1_dqzr93.jpg"
 
 [permalinks]
