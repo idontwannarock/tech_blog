@@ -2,16 +2,29 @@
 title: "XAMPP 安裝設定及簡單 PHP 練習"
 slug: "xampp_setup_and_php_practice"
 date: 2017-09-10T07:39:23+08:00
+url: "/2017/09/xampp_setup_and_php_practice"
 description: "100 個練習計畫：第五個練習"
 tags: ["xampp", "apache", "php"]
 categories: ["application"]
-featuredImage: ""
-featuredImageDescription: ""
+# featuredImage: ""
+# featuredImageDescription: ""
 dropCap: false
 displayInMenu: false
 displayInList: true
 draft: false
+resources:
+- name: featuredImage
+  src: "https://res.cloudinary.com/dcvgho2zc/image/upload/v1568963649/xampp-logo_qgagal.png"
+  params:
+    description: "XAMPP Logo"
 ---
+
+- [源起](#源起)
+- [學習目標](#學習目標)
+- [學習內容](#學習內容)
+    - [什麼是 XAMPP](#什麼是-xampp)
+    - [安裝 XAMPP](#安裝-xampp)
+    - [寫測試 PHP 網頁](#寫測試-php-網頁)
 
 > 這篇文章是初學的時候撰寫的，其中一些觀念並不正確，步驟也可能因為更新或觀念問題而不適用或者多餘，此篇文章僅為留做紀錄
 

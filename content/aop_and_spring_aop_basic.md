@@ -2,20 +2,34 @@
 title: "AOP 及 Spring AOP 簡述"
 slug: "aop_and_spring_aop_basic"
 date: 2018-04-10T13:22:52+08:00
+url: "/2018/04/aop_and_spring_aop_basic"
 description: "探討 AOP 概念及 Spring AOP 應用"
 tags: ["java", "spring", "aop"]
 categories: ["concept"]
-featuredImage: "spring-aop-icon.png"
-featuredImageDescription: "spring-aop"
+# featuredImage: "https://res.cloudinary.com/dcvgho2zc/image/upload/v1568953103/aop-icon_ffdmul.png"
+# featuredImageDescription: "Spring AOP"
 dropCap: false
 displayInMenu: false
 displayInList: true
 draft: false
+resources:
+- name: featuredImage
+  src: "https://res.cloudinary.com/dcvgho2zc/image/upload/v1568953103/aop-icon_ffdmul.png"
+  params:
+    description: "Spring AOP"
 ---
 
-> 這篇文章是初學的時候撰寫的，其中一些觀念並不正確，步驟也可能因為更新或觀念問題而不適用或者多餘，此篇文章僅為留做紀錄
+- [優點](#優點)
+- [術語及概念](#術語及概念)
+- [Spring AOP](#spring-aop)
+	- [Dependencies](#dependencies)
+		- [Spring](#spring)
+		- [Spring AOP](#spring-aop-1)
+	- [設定](#設定)
+		- [基於註解的方式](#基於註解的方式)
+		- [基於 XML 文件的方式](#基於-xml-文件的方式)
 
-# 簡述
+> 這篇文章是初學的時候撰寫的，其中一些觀念並不正確，步驟也可能因為更新或觀念問題而不適用或者多餘，此篇文章僅為留做紀錄
 
 - AOP(Aspect-Oriented Programming) 是一種基於 OOP(Object-Oriented Programming) 的改進
 - AOP 是基於動態代理 (Dynamic Proxy) 這種 design pattern
@@ -27,7 +41,7 @@ draft: false
 - 交易相關的邏輯位於同一位置，便於維護與升級
 - 業務邏輯更簡潔，只包含核心業務代碼
 
-# AOP術語及概念
+# 術語及概念
 
 - **Cross-Cutting Concern 橫切關注點**：橫跨應用系統多個流程、模組的功能，例如日誌 (Logging)、安全 (Security) 檢查、交易 (Transaction) 等動作，在許多流程的多個位置都需要執行，這種動作就被稱為橫切關注點
 - **Aspect 切面**：橫切關注點被模組化後的一種特殊物件；還未模組化前是橫切關注點，抽取後成為一組一組的切面；另一方面來說代理會將一個一個切面重組為橫切關注點
@@ -40,8 +54,6 @@ draft: false
 - **Pointcut 切面定義**：每個類別都有多個連接點，**類別的所有方法某種程度上都可以想成是 JoinPoint 連接點**。AOP通過切面定位到特定的連接點
 
 # Spring AOP
-
-## 簡述
 
 - AspectJ：Java 社群最完整、最廣為人知的 AOP 實作
 - Spring 2.0 以上，可以使用基於 AspectJ 的 annotation 註解或基於 XML 設定的 AOP

@@ -2,18 +2,28 @@
 title: "Java 樂透抽取算法初探"
 slug: "java_lottery_algorithm_basic"
 date: 2017-11-15T14:26:17+08:00
+url: "/2017/11/java_lottery_algorithm_basic"
 description: "初步探討樂透抽取演算法及 Java 中的隨機"
 tags: ["java", "algorithm"]
 categories: ["concept"]
-featuredImage: "process-icon.png"
-featuredImageDescription: "process-icon"
+# featuredImage: "process-icon.png"
+# featuredImageDescription: "process-icon"
 dropCap: false
 displayInMenu: false
 displayInList: true
 draft: false
+resources:
+- name: featuredImage
+  src: "https://res.cloudinary.com/dcvgho2zc/image/upload/v1568906236/javase-logo_jayzns.png"
+  params:
+    description: "Java SE Logo"
 ---
 
-# 前言
+- [題目](#題目)
+- [解法](#解法)
+    - [暴力解：重複檢查](#暴力解重複檢查)
+    - [Fisher-Yates shuffle](#fisher-yates-shuffle)
+- [限制](#限制)
 
 因為做到這個經典練習演算法的題目，雖然是非常入門級的，也是讓我想了很久，覺得都做了這麼久，不記錄下來也是蠻可惜。
 

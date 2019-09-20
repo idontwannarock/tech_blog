@@ -2,16 +2,40 @@
 title: "實作簡單登入會員系統 (1)"
 slug: "login_signup_function_1"
 date: 2017-09-11T07:11:59+08:00
+url: "/2017/08/login_signup_function_1"
 description: "100 個練習計畫：第六個練習第一部分"
 tags: ["php", "mysql", "hash"]
 categories: ["practice"]
-featuredImage: ""
-featuredImageDescription: ""
+# featuredImage: ""
+# featuredImageDescription: ""
 dropCap: false
 displayInMenu: false
 displayInList: true
 draft: false
+resources:
+- name: featuredImage
+  src: "https://res.cloudinary.com/dcvgho2zc/image/upload/v1568962308/user-profile-symbol_vcbneb.png"
+  params:
+    description: "User Profile Icon"
 ---
+
+- [學習目標](#學習目標)
+- [學習內容](#學習內容)
+    - [構思](#構思)
+    - [版面設定](#版面設定)
+    - [切換功能](#切換功能)
+    - [設置資料庫](#設置資料庫)
+    - [連接資料庫](#連接資料庫)
+    - [設計結構](#設計結構)
+    - [ajax 傳資料](#ajax-傳資料)
+    - [Login 驗證功能](#login-驗證功能)
+    - [PHP 語法跟函數庫](#php-語法跟函數庫)
+    - [Sign Up 功能](#sign-up-功能)
+    - [Login 功能 -> cookie | session](#login-功能---cookie--session)
+    - [登入狀態表示](#登入狀態表示)
+    - [SQL Injection 及 XSS 簡單防範](#sql-injection-及-xss-簡單防範)
+    - [儲存密碼 - hash 及 salting](#儲存密碼---hash-及-salting)
+- [感想](#感想)
 
 > 這篇文章是初學的時候撰寫的，其中一些觀念並不正確，步驟也可能因為更新或觀念問題而不適用或者多餘，此篇文章僅為留做紀錄
 
@@ -40,7 +64,7 @@ draft: false
 
 接著作 SQL Injection 及 XSS 攻擊的防範。最後再將使用者 Sign Up 時輸入的 `password` 作 hash 處理。
 
-另外以下是以只架站在自己 Windows 電腦的 XAMPP 上為前提，XAMPP 架站簡單教學可以看我之前寫的這篇筆記：[XAMPP安裝設定及簡單 PHP練習](https://idontwannarock.github.io/hugo_blog/2017/09/xampp-setup-1/)。
+另外以下是以只架站在自己 Windows 電腦的 XAMPP 上為前提，XAMPP 架站簡單教學可以看我之前寫的這篇筆記：[XAMPP安裝設定及簡單 PHP練習]({{< relref "xampp_setup_and_php_practice.md" >}})。
 
 還有就是如果想要讓自己寫完的作品可以讓別人看到，可能要自己先想辦法查做法，我自己都還搞不太清楚。（攤手）
 
@@ -273,5 +297,3 @@ password_hash($_POST['password'], PASSWORD_DEFAULT)
 
 - [作品網站 Sign Up Login Function](http://idontwannarock-com.stackstaging.com/project/login-signup/)
 - [我放在 Github 的原始碼](https://github.com/idontwannarock/Tiny-Projects-and-Functions/tree/master/login-signup)
-
-我又重構了一遍，嘗試增加以及改進一些部分。實作筆記在這：[實作簡單登入會員系統(2)](https://idontwannarock.github.io/hugo_blog/2017/09/login-signup-function-2/)

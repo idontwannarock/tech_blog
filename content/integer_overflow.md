@@ -2,18 +2,30 @@
 title: "整數溢位 Integer Overflow"
 slug: "integer_overflow"
 date: 2017-10-01T07:04:47+08:00
+url: "/2017/10/integer_overflow"
 description: "從電腦的數字系統開始，討論電腦如何儲存整數，並探討為何會產生整數溢位"
 tags: ["binary", "integer", "overflow"]
 categories: ["concept"]
-featuredImage: "binary-digit.png"
-featuredImageDescription: "binary-digit"
+# featuredImage: "binary-digit.png"
+# featuredImageDescription: "binary-digit"
 dropCap: false
 displayInMenu: false
 displayInList: true
 draft: false
+resources:
+- name: featuredImage
+  src: "https://res.cloudinary.com/dcvgho2zc/image/upload/v1568961579/binary-number_nctg0k.png"
+  params:
+    description: "Binary Numbers"
 ---
 
-# 前言
+- [數字系統](#數字系統)
+- [電腦基本運算方式](#電腦基本運算方式)
+- [資料型態](#資料型態)
+- [整數儲存方式](#整數儲存方式)
+- [1's 補數](#1s-補數)
+- [2's 補數](#2s-補數)
+- [整數溢位 Integer Overflow](#整數溢位-integer-overflow)
 
 這是我查到一些資料後的理解，希望能多一點對整數溢位後為何會正負循環的了解。
 

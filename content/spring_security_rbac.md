@@ -2,16 +2,26 @@
 title: "Spring Security 整合 RBAC"
 slug: "spring_security_rbac"
 date: 2019-05-30T15:33:07+08:00
+url: "/2019/05/spring_security_rbac"
 description: "探討如何利用 Spring Security 提供的自訂方式整合 RBAC"
 tags: ["java", "spring-security", "rbac"]
 categories: ["concept"]
-featuredImage: "spring-security-icon.png"
-featuredImageDescription: "spring-security"
+# featuredImage: "spring-security-icon.png"
+# featuredImageDescription: "spring-security"
 dropCap: false
 displayInMenu: false
 displayInList: true
 draft: false
+resources:
+- name: featuredImage
+  src: "https://res.cloudinary.com/dcvgho2zc/image/upload/v1568907350/spring-security-icon_qahaqz.png"
+  params:
+    description: "Spring Security"
 ---
+
+- [Spring Security 權限架構](#spring-security-權限架構)
+    - [`UserDetailsService`](#userdetailsservice)
+    - [`AccessDecisionVoter` 及 `AccessDecisionManager`](#accessdecisionvoter-及-accessdecisionmanager)
 
 目前比較主流的 [Role-based Access Control, RBAC](https://en.wikipedia.org/wiki/Role-based_access_control) 算是比較成熟且彈性的權限架構，若要在 Spring Security 實作 RBAC 並搭配 JWT 或 OAuth 2.0，大概要探討兩個問題
 

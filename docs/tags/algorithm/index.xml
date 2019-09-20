@@ -11,10 +11,10 @@
     
     <item>
       <title>Java 樂透抽取算法初探</title>
-      <link>https://idontwannarock.github.io/tech_blog/java_lottery_algorithm_basic/</link>
+      <link>https://idontwannarock.github.io/tech_blog/2017/11/java_lottery_algorithm_basic/</link>
       <pubDate>Wed, 15 Nov 2017 14:26:17 +0800</pubDate>
       
-      <guid>https://idontwannarock.github.io/tech_blog/java_lottery_algorithm_basic/</guid>
+      <guid>https://idontwannarock.github.io/tech_blog/2017/11/java_lottery_algorithm_basic/</guid>
       <description>初步探討樂透抽取演算法及 Java 中的隨機</description>
     </item>
   </channel>

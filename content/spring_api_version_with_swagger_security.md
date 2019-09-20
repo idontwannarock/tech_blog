@@ -2,16 +2,29 @@
 title: "Spring Boot 實作 API 版本控制"
 slug: "spring_api_version_with_swagger_security"
 date: 2019-09-19T15:53:36+08:00
+url: "/2019/09/spring_api_version_with_swagger_security"
 description: "在 Spring Boot Web 專案實作動態 API 版本控制，並能兼容 Swagger 及 Spring Security"
 tags: ["java", "spring-boot", "spring-security", "swagger", "api-versioning"]
 categories: ["application"]
-featuredImage: "spring-framework.png"
-featuredImageDescription: "spring-framework"
+# featuredImage: "spring-framework.png"
+# featuredImageDescription: "spring-framework"
 dropCap: false
 displayInMenu: false
 displayInList: true
 draft: false
+resources:
+- name: featuredImage
+  src: "https://res.cloudinary.com/dcvgho2zc/image/upload/v1568911044/icon-spring-framework_lskrrp.svg"
+  params:
+    description: "Spring Framework"
 ---
+
+- [API 版本控制](#api-版本控制)
+- [Tech Stack](#tech-stack)
+- [常見作法及整合問題](#常見作法及整合問題)
+    - [兼容 Swagger](#兼容-swagger)
+    - [Spring Security 設定](#spring-security-設定)
+    - [Spring Boot auto configuration 失效問題](#spring-boot-auto-configuration-失效問題)
 
 本文目的是為了探討在 Spring Boot Web 專案中，實作 API 版本控制，並兼容 Swagger 及 Spring Security 的解決方式
 

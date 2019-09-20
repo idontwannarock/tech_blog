@@ -2,16 +2,30 @@
 title: "1st Practice: Click Click Boom"
 slug: "click_click_boom"
 date: 2017-09-15T07:36:23+08:00
+url: "/2017/09/click_click_boom"
 description: "100 個練習計畫：第一個練習"
 tags: ["html", "css", "javascript"]
 categories: ["practice"]
-featuredImage: ""
-featuredImageDescription: ""
+# featuredImage: "https://res.cloudinary.com/dcvgho2zc/image/upload/v1505435536/1st-practice-cover-1024x550_mdnblw.jpg"
+# featuredImageDescription: "Click Click Boom"
 dropCap: false
 displayInMenu: false
 displayInList: true
 draft: false
+resources:
+- name: featuredImage
+  src: "https://res.cloudinary.com/dcvgho2zc/image/upload/v1505435536/1st-practice-cover-1024x550_mdnblw.jpg"
+  params:
+    description: "Click Click Boom"
 ---
+
+- [第一個目標](#第一個目標)
+- [遇到困難](#遇到困難)
+    - [置中](#置中)
+    - [套框](#套框)
+    - [相容](#相容)
+    - [iOS相容](#ios相容)
+- [感想](#感想)
 
 # 第一個目標
 

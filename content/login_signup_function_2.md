@@ -2,16 +2,32 @@
 title: "實作簡單登入會員系統 (2)"
 slug: "login_signup_function_2"
 date: 2017-09-19T00:23:29+08:00
+url: "/2017/09/login_signup_function_2"
 description: "100 個練習計畫：第六個練習第二部分"
 tags: ["php", "mysql", "ajax"]
 categories: ["practice"]
-featuredImage: ""
-featuredImageDescription: ""
+# featuredImage: ""
+# featuredImageDescription: ""
 dropCap: false
 displayInMenu: false
 displayInList: false
 draft: true
+resources:
+- name: featuredImage
+  src: "https://res.cloudinary.com/dcvgho2zc/image/upload/v1568962308/user-profile-symbol_vcbneb.png"
+  params:
+    description: "User Profile Icon"
 ---
+
+- [學習目標](#學習目標)
+- [學習內容](#學習內容)
+    - [緣起](#緣起)
+    - [構思](#構思)
+    - [前端設定](#前端設定)
+    - [Ajax 語法](#ajax-語法)
+    - [資料庫連線](#資料庫連線)
+    - [call class function](#call-class-function)
+    - [session 及 cookie](#session-及-cookie)
 
 > 這篇文章是初學的時候撰寫的，其中一些觀念並不正確，步驟也可能因為更新或觀念問題而不適用或者多餘，此篇文章僅為留做紀錄
 
@@ -123,4 +139,4 @@ $callVar = $callFuntions->functionName1();
 
 這次除了 cookie 以外，也加入 session。cookie 是給使用者未來再回到網頁時檢查登入狀況，session 則是處理使用者登入後在線上活動用。
 
-[1]: https://idontwannarock.github.io/tech_blog/2017/09/login-signup-function/
+[1]: {{< relref "login_signup_function_1.md" >}}

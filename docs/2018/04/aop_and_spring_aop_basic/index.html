@@ -1,0 +1,247 @@
+<!DOCTYPE html>
+<html lang="zh-tw" dir="ltr">
+  <head>
+  <meta charset="utf-8" />
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <title>AOP 及 Spring AOP 簡述 &middot; </title>
+  <meta name="description" content="探討 AOP 概念及 Spring AOP 應用" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/normalize/8.0.1/normalize.min.css" />
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.10.0/dist/katex.min.css" integrity="sha384-9eLZqc9ds8eNjO3TmqPeYcDj8n+Qfa4nuSiGYa6DjLNcv9BtN69ZIulL9+8CqC9Y" crossorigin="anonymous">
+  
+  
+  
+  
+  <link href="https://idontwannarock.github.io/tech_blog/css/concated.min.css" rel="stylesheet">
+  
+<script type="application/javascript">
+var doNotTrack = false;
+if (!doNotTrack) {
+	(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+	(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+	m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+	})(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+	ga('create', 'UA-106499565-1', 'auto');
+	
+	ga('send', 'pageview');
+}
+</script>
+
+  <style>
+    body {
+      background: #ecedef url("https://res.cloudinary.com/dcvgho2zc/image/upload/v1568880571/repeat_bg_1_dqzr93.jpg") repeat;
+    }
+  </style>
+</head>
+
+  <body class="single-body">
+    <nav class="nav-bar side-padding">
+  <h1 class="nav-header"><a href="https://idontwannarock.github.io/tech_blog/" class="nav-text">Howard 技術筆記</a></h1>
+  <div class="hamburger-menu">
+    <button onclick="hamburgerMenuPressed.call(this)" aria-haspopup="true" aria-expanded="false" aria-controls="menu" aria-label="Menu">
+      <span></span>
+      <span></span>
+    </button>
+    <ul id="menu" class="hamburger-menu-overlay">
+      <li><a href="https://idontwannarock.github.io/tech_blog/" class="hamburger-menu-overlay-link">Home</a></li>
+      <li><a href="https://idontwannarock.github.io/tech_blog/about/" class="hamburger-menu-overlay-link">About</a></li>
+      <li><a href="https://idontwannarock.github.io/tech_blog/categories/application" class="hamburger-menu-overlay-link">Application</a></li><li><a href="https://idontwannarock.github.io/tech_blog/categories/concept" class="hamburger-menu-overlay-link">Concept</a></li><li><a href="https://idontwannarock.github.io/tech_blog/categories/practice" class="hamburger-menu-overlay-link">Practice</a></li>
+    </ul>
+  </div>
+</nav>
+    <main class="content side-text-padding">
+      <article class="post ">
+        <header class="post-header">
+        	<h1 class="post-title">AOP 及 Spring AOP 簡述</h1>
+          <p class="post-date">Posted <time datetime="2018-04-10">Apr 10, 2018</time></p>
+        </header>
+        
+        
+
+<ul>
+<li><a href="#優點">優點</a></li>
+<li><a href="#術語及概念">術語及概念</a></li>
+<li><a href="#spring-aop">Spring AOP</a>
+
+<ul>
+<li><a href="#dependencies">Dependencies</a>
+
+<ul>
+<li><a href="#spring">Spring</a></li>
+<li><a href="#spring-aop-1">Spring AOP</a></li>
+</ul></li>
+<li><a href="#設定">設定</a>
+
+<ul>
+<li><a href="#基於註解的方式">基於註解的方式</a></li>
+<li><a href="#基於-xml-文件的方式">基於 XML 文件的方式</a></li>
+</ul></li>
+</ul></li>
+</ul>
+
+<blockquote>
+<p>這篇文章是初學的時候撰寫的，其中一些觀念並不正確，步驟也可能因為更新或觀念問題而不適用或者多餘，此篇文章僅為留做紀錄</p>
+</blockquote>
+
+<ul>
+<li>AOP(Aspect-Oriented Programming) 是一種基於 OOP(Object-Oriented Programming) 的改進</li>
+<li>AOP 是基於動態代理 (Dynamic Proxy) 這種 design pattern</li>
+<li>AOP 主要的設計對象是切面 (Aspect)，而切面是用來模組化橫切關注點 (Cross-Cutting Concern)</li>
+<li>切面需要定義公共功能，但可以明確定義功能在哪裡或以什麼方式應用，而不必修改受影響的類別。如此切面關注點就可以被模組化到特殊的類別 (切面) 裡面</li>
+</ul>
+
+<h1 id="優點">優點</h1>
+
+<ul>
+<li>交易相關的邏輯位於同一位置，便於維護與升級</li>
+<li>業務邏輯更簡潔，只包含核心業務代碼</li>
+</ul>
+
+<h1 id="術語及概念">術語及概念</h1>
+
+<ul>
+<li><strong>Cross-Cutting Concern 橫切關注點</strong>：橫跨應用系統多個流程、模組的功能，例如日誌 (Logging)、安全 (Security) 檢查、交易 (Transaction) 等動作，在許多流程的多個位置都需要執行，這種動作就被稱為橫切關注點</li>
+<li><strong>Aspect 切面</strong>：橫切關注點被模組化後的一種特殊物件；還未模組化前是橫切關注點，抽取後成為一組一組的切面；另一方面來說代理會將一個一個切面重組為橫切關注點</li>
+<li><strong>Advice 通知</strong>：切面必須要完成的工作或行為，也就是切面的實作內容。切面裡面的各個方法即是一個、一個的通知</li>
+<li><strong>Target 目標</strong>：被通知的物件，也就是要被橫切的業務邏輯類別</li>
+<li><strong>Proxy 代理</strong>：向目標物件通知之後創建的對象。容器會建立一個代理，依照設定去縫合 (weave) 切面到應用程式中</li>
+<li><strong>JoinPoint 連接點</strong>：程序執行的某個特定位置或時機。例如某個類別的某個方法呼叫前、呼叫後、拋出異常後等等。
+
+<ul>
+<li>連接點由兩個因素決定：<strong>以方法表示的程式執行點、相對執行點表示的方位</strong>。例如 A 類別的 a() 方法執行前的 JoinPoint 連接點決定要素為：執行點 A#a()，方位為執行前的位置</li>
+<li>概念類比：<strong>JoinPoint 連接點相當於資料庫的紀錄，切面相當於查詢條件</strong></li>
+</ul></li>
+<li><strong>Pointcut 切面定義</strong>：每個類別都有多個連接點，<strong>類別的所有方法某種程度上都可以想成是 JoinPoint 連接點</strong>。AOP通過切面定位到特定的連接點</li>
+</ul>
+
+<h1 id="spring-aop">Spring AOP</h1>
+
+<ul>
+<li>AspectJ：Java 社群最完整、最廣為人知的 AOP 實作</li>
+<li>Spring 2.0 以上，可以使用基於 AspectJ 的 annotation 註解或基於 XML 設定的 AOP</li>
+</ul>
+
+<h2 id="dependencies">Dependencies</h2>
+
+<h3 id="spring">Spring</h3>
+
+<ul>
+<li>commons logging</li>
+<li>spring beans</li>
+<li>spring context</li>
+<li>spring core</li>
+<li>spring expression</li>
+</ul>
+
+<h3 id="spring-aop-1">Spring AOP</h3>
+
+<ul>
+<li>aopalliance</li>
+<li>aspectj weaver</li>
+<li>spring aop</li>
+<li>spring aspects</li>
+</ul>
+
+<p><strong>註：Spring 框架的版本可以更動，但須一致</strong></p>
+
+<h2 id="設定">設定</h2>
+
+<ul>
+<li>在 XML 文件中加入 aop namespace</li>
+</ul>
+
+<h3 id="基於註解的方式">基於註解的方式</h3>
+
+<ul>
+<li>在 XML 文件中加入以下設定：
+
+<ul>
+<li><code>&lt;aop:aspectj-autoproxy/&gt;</code></li>
+</ul></li>
+<li>把橫切關注點的程式碼抽象到切面的類別中
+
+<ul>
+<li>切面首先是一個 IOC 中的 bean，所以要加上 <code>@Component</code> 註解</li>
+<li>切面還需要加入 <code>@Aspect</code> 註解</li>
+</ul></li>
+<li>在類別中聲明各種通知：
+
+<ul>
+<li>聲明一個方法</li>
+<li>在方法前加入五種註解，並配合要通知的目標：
+
+<ul>
+<li><code>@Before</code>：執行點之前</li>
+<li><code>@After</code>：執行點之後，但無法取得回傳值</li>
+<li><code>@AfterReturning</code>：執行點之後，但可以取得回傳值，執行順序在 <code>@After</code> 之前</li>
+<li><code>@AfterThrowing</code>：執行出現異常後，可以取得異常資訊，執行順序在 <code>@After</code> 之前</li>
+<li><code>@Around</code>：執行點前、後、回傳值等全都包括，通常會配合 ProceedingJoinPoint 類別當參數使用</li>
+</ul></li>
+</ul></li>
+<li>可以在通知方法中聲明一個類別為 JoinPoint 的參數，然後就可以藉此物件取出目標連接點的細節，例如方法名稱及其參數等</li>
+</ul>
+
+<h3 id="基於-xml-文件的方式">基於 XML 文件的方式</h3>
+
+<ul>
+<li>所有相關類別都不需要任何註解</li>
+<li>XML 文件中加入 aop 跟 beans namespace</li>
+<li>在 XML 文件中先設定好有關的 bean，包括目標類別及切面類別</li>
+<li>再於 XML 文件中在<code>&lt;aop:config&gt;&lt;/aop:config&gt;</code>元素內設定 AOP 有關設定</li>
+<li>其中設定的元素跟屬性都跟註解相同</li>
+</ul>
+
+      </article>
+      <div id="disqus_thread"></div>
+<script type="application/javascript">
+    var disqus_config = function () {
+    
+    
+    
+    };
+    (function() {
+        if (["localhost", "127.0.0.1"].indexOf(window.location.hostname) != -1) {
+            document.getElementById('disqus_thread').innerHTML = 'Disqus comments not available by default when the website is previewed locally.';
+            return;
+        }
+        var d = document, s = d.createElement('script'); s.async = true;
+        s.src = '//' + "howard-tech-blog" + '.disqus.com/embed.js';
+        s.setAttribute('data-timestamp', +new Date());
+        (d.head || d.body).appendChild(s);
+    })();
+</script>
+<noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+<a href="https://disqus.com" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
+    </main>
+    <nav class="end-nav side-padding">
+      
+      <a ontouchstart="cardPressed.call(this)" ontouchend="cardReleased.call(this)" ontouchmove="cardReleased.call(this)" 
+  href="https://idontwannarock.github.io/tech_blog/2018/02/java_string_check/" class="card blog-card" rel="bookmark" >
+    
+  <article class="card-body">
+    <h2 class="card-title">Java 字串判定</h2>
+    <p class="card-text">探討 Java 字串的空字串及 null 判定</p>
+    <div class="card-subtext muted-text">
+      <p>Posted <time datetime="2018-02-06 26:00">Feb 6, 2018</time></p>
+      <p>#concept </p>
+    </div>
+  </article>
+</a>
+      
+      <a ontouchstart="cardPressed.call(this)" ontouchend="cardReleased.call(this)" ontouchmove="cardReleased.call(this)" 
+  href="https://idontwannarock.github.io/tech_blog/" class="card home-card" style="background-image: url( https://res.cloudinary.com/dcvgho2zc/image/upload/v1559096537/photo-1530305408560-82d13781b33a_erww1b.jpg )" rel="bookmark" >
+  Home
+</a>
+    </nav>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.13.1/highlight.min.js"></script>
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.10.0/dist/katex.min.js" integrity="sha384-K3vbOmF2BtaVai+Qk37uypf7VrgBubhQreNQe9aGsz9lB63dIFiQVlJbr92dw2Lx" crossorigin="anonymous"></script>
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.10.0/dist/contrib/auto-render.min.js" integrity="sha384-kmZOZB5ObwgQnS/DuDg6TScgOiWWBiVt0plIRkZCmE6rDZGrEOQeHM5PcHi+nyqe" crossorigin="anonymous"
+    onload="renderMathInElement(document.body);"></script>
+  
+  <script src="https://idontwannarock.github.io/tech_blog/js/core.min.js"></script>
+<script>
+  hljs.initHighlightingOnLoad();
+</script>
+
+  </body>
+</html>

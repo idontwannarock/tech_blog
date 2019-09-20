@@ -2,16 +2,34 @@
 title: "Hugo 練習 (2)"
 slug: "hugo_practice_2"
 date: 2017-09-09T15:22:03+08:00
+url: "/2017/09/hugo_practice_2"
 description: "練習操作 Hugo 生成靜態網站，並透過 git 及 ssh 部署到 GitHub Pages"
 tags: ["hugo", "git", "git-bash", "github-pages", "ssh"]
 categories: ["application"]
-featuredImage: ""
-featuredImageDescription: ""
+# featuredImage: ""
+# featuredImageDescription: ""
 dropCap: false
 displayInMenu: false
 displayInList: true
 draft: false
+resources:
+- name: featuredImage
+  src: "https://res.cloudinary.com/dcvgho2zc/image/upload/v1568903691/hugo-logo_zjncdo.png"
+  params:
+    description: "Hugo Logo"
 ---
+
+- [學習目標](#學習目標)
+- [學習內容](#學習內容)
+   - [環境設定](#環境設定)
+   - [Hugo 環境設定](#hugo-環境設定)
+   - [安裝 Git、申請 Github 帳號及設定 SSH](#安裝-git申請-github-帳號及設定-ssh)
+   - [生成基本網頁](#生成基本網頁)
+   - [生成新文章](#生成新文章)
+   - [設定 theme](#設定-theme)
+   - [生成測試網頁](#生成測試網頁)
+   - [生成網頁](#生成網頁)
+   - [上傳到 Github](#上傳到-github)
 
 > 這篇文章是初學的時候撰寫的，其中一些觀念並不正確，步驟也可能因為更新或觀念問題而不適用或者多餘，此篇文章僅為留做紀錄
 
@@ -41,7 +59,7 @@ draft: false
 
 這段建議直接參考另外一篇筆記來操作。
 
-[Git及 Github基礎認識](https://idontwannarock.github.io/Hugo-Blog/2017/09/git-and-github-basic-1/)
+[Git及 Github基礎認識]({{< relref "git_and_github_basic.md" >}})
 
 ## 生成基本網頁
 
@@ -214,4 +232,4 @@ git push origin master
 
 大 guy 4 醬。
 
-如果對 Git 指令不熟悉，可以參考我另外寫的 [這篇筆記](https://idontwannarock.github.io/Hugo-Blog/2017/09/git-and-github-basic-1/)。
+如果對 Git 指令不熟悉，可以參考我另外寫的 [這篇筆記]({{< relref "git_and_github_basic.md" >}})。

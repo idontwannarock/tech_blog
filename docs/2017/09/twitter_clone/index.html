@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="zh-tw" dir="ltr">
+  <head>
+  <meta charset="utf-8" />
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <title>4th Practice: Twitter Clone &middot; </title>
+  <meta name="description" content="100 個練習計畫：第四個練習" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/normalize/8.0.1/normalize.min.css" />
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.10.0/dist/katex.min.css" integrity="sha384-9eLZqc9ds8eNjO3TmqPeYcDj8n+Qfa4nuSiGYa6DjLNcv9BtN69ZIulL9+8CqC9Y" crossorigin="anonymous">
+  
+  
+  
+  
+  <link href="https://idontwannarock.github.io/tech_blog/css/concated.min.css" rel="stylesheet">
+  
+<script type="application/javascript">
+var doNotTrack = false;
+if (!doNotTrack) {
+	(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+	(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+	m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+	})(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+	ga('create', 'UA-106499565-1', 'auto');
+	
+	ga('send', 'pageview');
+}
+</script>
+
+  <style>
+    body {
+      background: #ecedef url("https://res.cloudinary.com/dcvgho2zc/image/upload/v1568880571/repeat_bg_1_dqzr93.jpg") repeat;
+    }
+  </style>
+</head>
+
+  <body class="single-body">
+    <nav class="nav-bar side-padding">
+  <h1 class="nav-header"><a href="https://idontwannarock.github.io/tech_blog/" class="nav-text">Howard 技術筆記</a></h1>
+  <div class="hamburger-menu">
+    <button onclick="hamburgerMenuPressed.call(this)" aria-haspopup="true" aria-expanded="false" aria-controls="menu" aria-label="Menu">
+      <span></span>
+      <span></span>
+    </button>
+    <ul id="menu" class="hamburger-menu-overlay">
+      <li><a href="https://idontwannarock.github.io/tech_blog/" class="hamburger-menu-overlay-link">Home</a></li>
+      <li><a href="https://idontwannarock.github.io/tech_blog/about/" class="hamburger-menu-overlay-link">About</a></li>
+      <li><a href="https://idontwannarock.github.io/tech_blog/categories/application" class="hamburger-menu-overlay-link">Application</a></li><li><a href="https://idontwannarock.github.io/tech_blog/categories/concept" class="hamburger-menu-overlay-link">Concept</a></li><li><a href="https://idontwannarock.github.io/tech_blog/categories/practice" class="hamburger-menu-overlay-link">Practice</a></li>
+    </ul>
+  </div>
+</nav>
+    <main class="content side-text-padding">
+      <article class="post ">
+        <header class="post-header">
+        	<h1 class="post-title">4th Practice: Twitter Clone</h1>
+          <p class="post-date">Posted <time datetime="2017-09-15">Sep 15, 2017</time></p>
+        </header>
+        
+        
+
+<ul>
+<li><a href="#第四個目標">第四個目標</a></li>
+<li><a href="#遇到困難">遇到困難</a>
+
+<ul>
+<li><a href="#對自己智商產生質疑">對自己智商產生質疑</a></li>
+<li><a href="#debug">debug</a></li>
+<li><a href="#ajax">AJAX</a></li>
+</ul></li>
+</ul>
+
+<h1 id="第四個目標">第四個目標</h1>
+
+<p>練習 PHP、MySQL 跟 MVC，因為 Bootstrap 很方便，所以 HTML 跟 CSS 就這樣吧！廠廠~</p>
+
+<ul>
+<li>作品：<a href="https://goo.gl/PVUtXQ">史上最簡陋 Twitter</a></li>
+<li>參考：這參考太多了，只能說各種參考 orz</li>
+<li>原始碼：可以參考 <a href="https://github.com/idontwannarock">我的Github</a></li>
+</ul>
+
+<p>還是要先講一下，這並不是我憑空寫出來的作品，是跟著 Udemy 網路課程教學作出來的。</p>
+
+<h1 id="遇到困難">遇到困難</h1>
+
+<h2 id="對自己智商產生質疑">對自己智商產生質疑</h2>
+
+<p>真的是這樣，之所以這麼廢的東西還能作這麼久，事後檢討的結果，絕大多數時間都浪費在因為智商太低產生的各種製造障礙，簡稱製障問題上。</p>
+
+<p>譬如說出現什麼 404 或 500 錯誤訊息，花了三個多小時觀看 stackoverflow 上高手討論，最後發現是 PHP 某一行少加了一個 <code>;</code>，當天直接氣到作不下去之類的…</p>
+
+<h2 id="debug">debug</h2>
+
+<p>作這個真心受教了，要馬每一步都先作測試，要馬就要會查 bug，人生就是要接受 bug 的出現，沒 bug 絕對是陰德值爆滿。</p>
+
+<p>所以我目前領悟到的順序是：</p>
+
+<ol>
+<li>先查 code 有沒有漏加什麼 <code>;</code> 或 <code>,</code>或者哪裡括號沒關好，這些出現的頻率超乎你想像，即使有 autocomplete 功能也是一樣</li>
+<li>再來用 Chrome 的 <code>Inspect</code> 或 Firefox 的 <code>Inspector</code> 來查錯誤訊息，運氣好就會跟你說你程式碼哪一行有問題</li>
+<li>還找不到，先不要急著 google，先查 Log！先查 Log！先查 Log！很重要，所以講三次。通常 Log 也會跟你講執行到哪一行有問題</li>
+<li>最後真的都不行，再拿錯誤訊息去拜 google 大神</li>
+</ol>
+
+<p>以上是我的切身之痛，其他的難點在這兩個困難底下，都已經不再重要…喔不是啦，還是補充一個。</p>
+
+<h2 id="ajax">AJAX</h2>
+
+<p>不太確定這算不算常識，但大家在使用 jQuery+AJAX 的時候要注意 jQuery 的版本，請不要用到 slim 版的喔， jQuery slim 版把 AJAX 功能拿掉了，所以最起碼要用 minified 或更完整的版本，切記切記！</p>
+
+<p>尤其在套 Bootstrap 4 的模板的時候要注意，官方預設是載入 slim 版本的 jQuery，要記得自己去改 cdn。</p>
+
+      </article>
+      <div id="disqus_thread"></div>
+<script type="application/javascript">
+    var disqus_config = function () {
+    
+    
+    
+    };
+    (function() {
+        if (["localhost", "127.0.0.1"].indexOf(window.location.hostname) != -1) {
+            document.getElementById('disqus_thread').innerHTML = 'Disqus comments not available by default when the website is previewed locally.';
+            return;
+        }
+        var d = document, s = d.createElement('script'); s.async = true;
+        s.src = '//' + "howard-tech-blog" + '.disqus.com/embed.js';
+        s.setAttribute('data-timestamp', +new Date());
+        (d.head || d.body).appendChild(s);
+    })();
+</script>
+<noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+<a href="https://disqus.com" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
+    </main>
+    <nav class="end-nav side-padding">
+      
+      <a ontouchstart="cardPressed.call(this)" ontouchend="cardReleased.call(this)" ontouchmove="cardReleased.call(this)" 
+  href="https://idontwannarock.github.io/tech_blog/2017/09/click_click_ben/" class="card blog-card" rel="bookmark" >
+    
+  <article class="card-body">
+    <h2 class="card-title">3rd Practice: Click Click Ben</h2>
+    <p class="card-text">100 個練習計畫：第三個練習</p>
+    <div class="card-subtext muted-text">
+      <p>Posted <time datetime="2017-09-15 915:00">Sep 15, 2017</time></p>
+      <p>#practice </p>
+    </div>
+  </article>
+</a>
+      
+      <a ontouchstart="cardPressed.call(this)" ontouchend="cardReleased.call(this)" ontouchmove="cardReleased.call(this)" 
+  href="https://idontwannarock.github.io/tech_blog/" class="card home-card" style="background-image: url( https://res.cloudinary.com/dcvgho2zc/image/upload/v1559096537/photo-1530305408560-82d13781b33a_erww1b.jpg )" rel="bookmark" >
+  Home
+</a>
+    </nav>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.13.1/highlight.min.js"></script>
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.10.0/dist/katex.min.js" integrity="sha384-K3vbOmF2BtaVai+Qk37uypf7VrgBubhQreNQe9aGsz9lB63dIFiQVlJbr92dw2Lx" crossorigin="anonymous"></script>
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.10.0/dist/contrib/auto-render.min.js" integrity="sha384-kmZOZB5ObwgQnS/DuDg6TScgOiWWBiVt0plIRkZCmE6rDZGrEOQeHM5PcHi+nyqe" crossorigin="anonymous"
+    onload="renderMathInElement(document.body);"></script>
+  
+  <script src="https://idontwannarock.github.io/tech_blog/js/core.min.js"></script>
+<script>
+  hljs.initHighlightingOnLoad();
+</script>
+
+  </body>
+</html>

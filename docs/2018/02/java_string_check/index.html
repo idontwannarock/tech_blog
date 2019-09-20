@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html lang="zh-tw" dir="ltr">
+  <head>
+  <meta charset="utf-8" />
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <title>Java 字串判定 &middot; </title>
+  <meta name="description" content="探討 Java 字串的空字串及 null 判定" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/normalize/8.0.1/normalize.min.css" />
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.10.0/dist/katex.min.css" integrity="sha384-9eLZqc9ds8eNjO3TmqPeYcDj8n+Qfa4nuSiGYa6DjLNcv9BtN69ZIulL9+8CqC9Y" crossorigin="anonymous">
+  
+  
+  
+  
+  <link href="https://idontwannarock.github.io/tech_blog/css/concated.min.css" rel="stylesheet">
+  
+<script type="application/javascript">
+var doNotTrack = false;
+if (!doNotTrack) {
+	(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+	(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+	m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+	})(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+	ga('create', 'UA-106499565-1', 'auto');
+	
+	ga('send', 'pageview');
+}
+</script>
+
+  <style>
+    body {
+      background: #ecedef url("https://res.cloudinary.com/dcvgho2zc/image/upload/v1568880571/repeat_bg_1_dqzr93.jpg") repeat;
+    }
+  </style>
+</head>
+
+  <body class="single-body">
+    <nav class="nav-bar side-padding">
+  <h1 class="nav-header"><a href="https://idontwannarock.github.io/tech_blog/" class="nav-text">Howard 技術筆記</a></h1>
+  <div class="hamburger-menu">
+    <button onclick="hamburgerMenuPressed.call(this)" aria-haspopup="true" aria-expanded="false" aria-controls="menu" aria-label="Menu">
+      <span></span>
+      <span></span>
+    </button>
+    <ul id="menu" class="hamburger-menu-overlay">
+      <li><a href="https://idontwannarock.github.io/tech_blog/" class="hamburger-menu-overlay-link">Home</a></li>
+      <li><a href="https://idontwannarock.github.io/tech_blog/about/" class="hamburger-menu-overlay-link">About</a></li>
+      <li><a href="https://idontwannarock.github.io/tech_blog/categories/application" class="hamburger-menu-overlay-link">Application</a></li><li><a href="https://idontwannarock.github.io/tech_blog/categories/concept" class="hamburger-menu-overlay-link">Concept</a></li><li><a href="https://idontwannarock.github.io/tech_blog/categories/practice" class="hamburger-menu-overlay-link">Practice</a></li>
+    </ul>
+  </div>
+</nav>
+    <main class="content side-text-padding">
+      <article class="post ">
+        <header class="post-header">
+        	<h1 class="post-title">Java 字串判定</h1>
+          <p class="post-date">Posted <time datetime="2018-02-06">Feb 6, 2018</time></p>
+        </header>
+        
+        
+
+<ul>
+<li><a href="#去除字串空白">去除字串空白</a></li>
+<li><a href="#檢查空值">檢查空值</a>
+
+<ul>
+<li><a href="#length--0"><code>.length == 0</code></a></li>
+<li><a href="#isempty"><code>.isEmpty()</code></a></li>
+<li><a href="#equals"><code>.equals(&quot;&quot;)</code></a></li>
+<li><a href="#-null"><code>!= null</code></a></li>
+<li><a href="#equalsstring"><code>&quot;&quot;.equals(string)</code></a></li>
+</ul></li>
+<li><a href="#結語">結語</a></li>
+</ul>
+
+<p>因為開始做專題，開始要作資料檢查，首先會要碰到的就是最基本的檢查是否有輸入資料，也就是要檢查字串，記錄一下 Java 當中有關字串檢查的東西。</p>
+
+<h1 id="去除字串空白">去除字串空白</h1>
+
+<p>這主要分兩個部分，一是去掉頭尾空白，一是去掉字串中間空白。</p>
+
+<p>去掉頭尾空白就用 <code>.trim()</code>，去掉字串中間空白則可以用 <code>.replaceAll(&quot; &quot;, &quot;&quot;)</code> 的方式簡單完成。</p>
+
+<p>但用 <code>replaceAll()</code> 方法有個小小的問題，就是萬一碰到的是空白字元，例如 <code>\t</code>、<code>\r</code> 這種就會有困難，所以必須要用正規表示式來去除，例如：</p>
+
+<pre><code class="language-java">String str = &quot;\t&quot;;
+str.replaceAll(&quot;\\s+&quot;, &quot;&quot;);
+</code></pre>
+
+<h1 id="檢查空值">檢查空值</h1>
+
+<p>接著如果要檢查字串是否有東西，要分成檢查兩種狀態，null 或空字串。</p>
+
+<p>這邊有幾個方法檢查這個部分，但要注意它們實際功能上的區別。</p>
+
+<h2 id="length-0"><code>.length == 0</code></h2>
+
+<p>這個是 Java 最原始的功能，基本上就是檢查字串長度是否為 0，回傳值型態為 boolean。</p>
+
+<h2 id="isempty"><code>.isEmpty()</code></h2>
+
+<p>這個方法是 Java 6.0 之後推出用來取代 <code>.length() == 0</code> 的方法。<code>isEmpty()</code> 其實也是在檢查字串長度是否為 0，回傳值型態一樣為 boolean。</p>
+
+<h2 id="equals"><code>.equals(&quot;&quot;)</code></h2>
+
+<p>這個功能是用字串的比對功能，比對是否為空字串，結果應該會跟前兩個方法相同。</p>
+
+<h2 id="null"><code>!= null</code></h2>
+
+<p>前面幾個方法都有一個共同的問題：萬一字串為 null，全都來不及檢查就會跳 NullPointerException。</p>
+
+<p>所以必須要用這個方式檢查是否為 Null，再檢查是否為空字串，也就是要寫成類似下面這樣：</p>
+
+<pre><code class="language-java">String string;
+if (string != null &amp;&amp; string.isEmpty()) {
+    // things to do when string is neither null nor blank;
+}
+</code></pre>
+
+<h2 id="equals-string"><code>&quot;&quot;.equals(string)</code></h2>
+
+<p>但有一個更簡短的方法 <code>&quot;&quot;.equals(string)</code>。</p>
+
+<p>因為用 String 本身的 <code>.equals()</code> 方法，會先檢查括號內參數字串是否為 null，若是 null 就會直接回傳 <code>false</code>；若參數字串不為 null，才會繼續檢查是否跟 <code>&quot;&quot;</code> 空字串相等。</p>
+
+<p>所以前一段的檢查式就可以縮短如下：</p>
+
+<pre><code class="language-java">String string;
+if (!&quot;&quot;.equals(string)) {
+    // things to do when string is neither null nor blank;
+}
+</code></pre>
+
+<h1 id="結語">結語</h1>
+
+<p>雖然最後一個方法最簡短，但其實可讀性不見得比較優秀；而倒數第二個方法雖然比較囉唆，但整體上可讀性比較好。</p>
+
+<p>所以要用哪種方法還是要看簡潔跟可讀性怎麼取捨。</p>
+
+      </article>
+      <div id="disqus_thread"></div>
+<script type="application/javascript">
+    var disqus_config = function () {
+    
+    
+    
+    };
+    (function() {
+        if (["localhost", "127.0.0.1"].indexOf(window.location.hostname) != -1) {
+            document.getElementById('disqus_thread').innerHTML = 'Disqus comments not available by default when the website is previewed locally.';
+            return;
+        }
+        var d = document, s = d.createElement('script'); s.async = true;
+        s.src = '//' + "howard-tech-blog" + '.disqus.com/embed.js';
+        s.setAttribute('data-timestamp', +new Date());
+        (d.head || d.body).appendChild(s);
+    })();
+</script>
+<noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+<a href="https://disqus.com" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
+    </main>
+    <nav class="end-nav side-padding">
+      
+      <a ontouchstart="cardPressed.call(this)" ontouchend="cardReleased.call(this)" ontouchmove="cardReleased.call(this)" 
+  href="https://idontwannarock.github.io/tech_blog/2017/11/java_lottery_algorithm_basic/" class="card blog-card" rel="bookmark" >
+    
+  <article class="card-body">
+    <h2 class="card-title">Java 樂透抽取算法初探</h2>
+    <p class="card-text">初步探討樂透抽取演算法及 Java 中的隨機</p>
+    <div class="card-subtext muted-text">
+      <p>Posted <time datetime="2017-11-15 1115:00">Nov 15, 2017</time></p>
+      <p>#concept </p>
+    </div>
+  </article>
+</a>
+      
+      <a ontouchstart="cardPressed.call(this)" ontouchend="cardReleased.call(this)" ontouchmove="cardReleased.call(this)" 
+  href="https://idontwannarock.github.io/tech_blog/" class="card home-card" style="background-image: url( https://res.cloudinary.com/dcvgho2zc/image/upload/v1559096537/photo-1530305408560-82d13781b33a_erww1b.jpg )" rel="bookmark" >
+  Home
+</a>
+    </nav>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.13.1/highlight.min.js"></script>
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.10.0/dist/katex.min.js" integrity="sha384-K3vbOmF2BtaVai+Qk37uypf7VrgBubhQreNQe9aGsz9lB63dIFiQVlJbr92dw2Lx" crossorigin="anonymous"></script>
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.10.0/dist/contrib/auto-render.min.js" integrity="sha384-kmZOZB5ObwgQnS/DuDg6TScgOiWWBiVt0plIRkZCmE6rDZGrEOQeHM5PcHi+nyqe" crossorigin="anonymous"
+    onload="renderMathInElement(document.body);"></script>
+  
+  <script src="https://idontwannarock.github.io/tech_blog/js/core.min.js"></script>
+<script>
+  hljs.initHighlightingOnLoad();
+</script>
+
+  </body>
+</html>

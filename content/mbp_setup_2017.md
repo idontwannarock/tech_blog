@@ -2,20 +2,40 @@
 title: "Macbook Pro 的設置 2017 版"
 slug: "mbp_setup_2017"
 date: 2017-11-03T09:05:02+08:00
+url: "/2017/11/mbp_setup_2017"
 description: "紀錄 2017 年我在 MBP 上的設定"
 tags: ["mac", "brew", "cask", "zsh", "oh-my-zsh"]
 categories: ["application"]
-featuredImage: "mbp-icon.png"
-featuredImageDescription: "mbp-icon"
+# featuredImage: "mbp-icon.png"
+# featuredImageDescription: "mbp-icon"
 dropCap: false
 displayInMenu: false
 displayInList: true
 draft: false
+resources:
+- name: featuredImage
+  src: "https://res.cloudinary.com/dcvgho2zc/image/upload/v1568963009/apple-logo_d6c5a7.png"
+  params:
+    description: "Apple Logo"
 ---
 
-> 這篇文章是初學的時候撰寫的，其中一些觀念並不正確，步驟也可能因為更新或觀念問題而不適用或者多餘，此篇文章僅為留做紀錄
+- [軟體環境設置](#軟體環境設置)
+    - [安裝 Homebrew](#安裝-homebrew)
+    - [安裝 Caskroom](#安裝-caskroom)
+    - [使用 Homebrew 及 Caskroom](#使用-homebrew-及-caskroom)
+    - [我的安裝列表](#我的安裝列表)
+        - [Honorable Mention: oh my zsh](#honorable-mention-oh-my-zsh)
+            - [安裝設置 oh my zsh](#安裝設置-oh-my-zsh)
+- [工作環境設置](#工作環境設置)
+    - [開發同步](#開發同步)
+    - [筆記同步](#筆記同步)
+        - [GitHub Pages](#github-pages)
+        - [部署 Hugo 產生的靜態網頁到 GitHub Pages](#部署-hugo-產生的靜態網頁到-github-pages)
+            - [Default Source Settings](#default-source-settings)
+            - [Publish From a `docs` Folder on `master` Branch](#publish-from-a-docs-folder-on-master-branch)
+            - [Publish from `master` or `gh-pages` Branch](#publish-from-master-or-gh-pages-branch)
 
-# 前言
+> 這篇文章是初學的時候撰寫的，其中一些觀念並不正確，步驟也可能因為更新或觀念問題而不適用或者多餘，此篇文章僅為留做紀錄
 
 一直以來都是 PC 人，從來沒用過任何 Apple 或 Linux 的相關產品，剛好有買筆電的需求，想趁機接觸一下不同的作業系統生態，而且久聞 Apple 筆電品質很好，就添購了 Macbook Pro 來當我人生第一台筆電。
 
@@ -151,13 +171,13 @@ $ sh -c "$(curl -fsSL https://raw.githubusercontent.com/robbyryssell/oh-my-zsh/m
 
 所有專案、檔案，都透過 Sourcetree push 到 GitHub 的 repositories。然後每個裝置要編輯開發前，都先 pull Github 上的最新進度，這樣就可以簡單的保持各裝置開發進度相同。
 
-當然，使用 Sourcetree 會需要一些 Git 觀念。有關 Git 的簡單觀念及操作，可以參考我寫的 [這一篇文章](https://idontwannarock.github.io/hugo_blog/2017/09/git-and-github-basic-1/)。
+當然，使用 Sourcetree 會需要一些 Git 觀念。有關 Git 的簡單觀念及操作，可以參考我寫的 [這一篇文章]({{< relref "git_and_github_basic.md" >}})。
 
 ## 筆記同步
 
 這部分比較麻煩一點，因為我習慣統一用 Markdown 語法寫筆記跟部落格，這樣規格統一，筆記跟部落格文章可以很方便地互相轉換。
 
-Markdown 簡介跟語法可以參考我的[這一篇文章](https://idontwannarock.github.io/hugo_blog/2017/10/markdown-syntax/)。
+Markdown 簡介跟語法可以參考我的 [這一篇文章]({{< relref "markdown_syntax.md" >}})。
 
 而我的筆記都習慣收在 Evernote，這樣可以隨時利用 Evernote 的分類以及搜尋功能，並且手機上也可以看。但要將 Markdown 筆記轉成 Evernote 讀得懂的格式並上傳到 Evernote 並不是很容易。
 
@@ -165,7 +185,7 @@ Markdown 簡介跟語法可以參考我的[這一篇文章](https://idontwannaro
 
 於是我換到 [Marxico](https://marxi.co/)，其實算是相當方便，只是要收費，但在找不到更好的替換工具之下，也只能忍痛花下去。但好處就是我只要寫好 Markdown 筆記，就可以很方便的上傳 Evernote，也可以匯出 Markdown、HTML，甚至是 PDF 檔。
 
-另一方面部落格就真的很麻煩了，我原本只有 PC 的時候，就是寫 Markdown 草稿，然後用靜態部落格產生器 Hugo 轉換並生成部落格，再 Host 到 GitHub Pages 來部署我的靜態部落格，可以參考我 [這一篇](https://idontwannarock.github.io/hugo_blog/2017/09/hugo-practice-2/)。
+另一方面部落格就真的很麻煩了，我原本只有 PC 的時候，就是寫 Markdown 草稿，然後用靜態部落格產生器 Hugo 轉換並生成部落格，再 Host 到 GitHub Pages 來部署我的靜態部落格，可以參考我 [這一篇]({{< relref "hugo_practice_2.md" >}})。
 
 但這個方法的問題就是無法多部裝置間同步，因為 push 到 GitHub 的只有 Hugo 生成的 `public` 資料夾，而不是整個包含 layout 跟 Markdown 原稿的完整資料夾，所以換一部裝置就要用很麻煩的方式另外傳送整個資料夾。
 
@@ -191,7 +211,7 @@ Markdown 簡介跟語法可以參考我的[這一篇文章](https://idontwannaro
 
 第一種參考官網說明 [這一段](https://help.github.com/articles/configuring-a-publishing-source-for-github-pages/#default-source-settings-for-repositories-without-the-username-naming-scheme)。
 
-就是我之前用的方式，在 [這一篇](https://idontwannarock.github.io/hugo_blog/2017/09/hugo-practice-2/) 裡有說明。
+就是我之前用的方式，在 [這一篇]({{< relref "hugo_practice_2.md" >}}) 裡有說明。
 
 簡單來說，就是將 Hugo 預設產生的 `public` 資料夾，直接 push 到 GitHub 的 Repo，GitHub 預設會直接讀取 Repo 中的檔案生成靜態網站。
 

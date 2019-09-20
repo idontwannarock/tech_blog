@@ -2,16 +2,30 @@
 title: "2nd Practice: Retina Morning Post"
 slug: "retina_morning_post"
 date: 2017-09-15T09:44:03+08:00
+url: "/2017/09/retina_morning_post"
 description: "100 個練習計畫：第二個練習"
 tags: ["html", "css", "javascript"]
 categories: ["practice"]
-featuredImage: ""
-featuredImageDescription: ""
+# featuredImage: ""
+# featuredImageDescription: ""
 dropCap: false
 displayInMenu: false
 displayInList: true
 draft: false
+resources:
+- name: featuredImage
+  src: "https://res.cloudinary.com/dcvgho2zc/image/upload/v1505440548/2nd-practice-cover_pyfetr.jpg"
+  params:
+    description: "Retina Morning Post"
 ---
+
+- [第二個目標](#第二個目標)
+- [遇到困難](#遇到困難)
+    - [分散對齊](#分散對齊)
+    - [水平向下對齊](#水平向下對齊)
+    - [分隔線加粗](#分隔線加粗)
+    - [縱排文字](#縱排文字)
+- [感想](#感想)
 
 # 第二個目標
 

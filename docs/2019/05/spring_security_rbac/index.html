@@ -1,0 +1,200 @@
+<!DOCTYPE html>
+<html lang="zh-tw" dir="ltr">
+  <head>
+  <meta charset="utf-8" />
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <title>Spring Security 整合 RBAC &middot; </title>
+  <meta name="description" content="探討如何利用 Spring Security 提供的自訂方式整合 RBAC" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/normalize/8.0.1/normalize.min.css" />
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.10.0/dist/katex.min.css" integrity="sha384-9eLZqc9ds8eNjO3TmqPeYcDj8n+Qfa4nuSiGYa6DjLNcv9BtN69ZIulL9+8CqC9Y" crossorigin="anonymous">
+  
+  
+  
+  
+  <link href="https://idontwannarock.github.io/tech_blog/css/concated.min.css" rel="stylesheet">
+  
+<script type="application/javascript">
+var doNotTrack = false;
+if (!doNotTrack) {
+	(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+	(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+	m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+	})(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+	ga('create', 'UA-106499565-1', 'auto');
+	
+	ga('send', 'pageview');
+}
+</script>
+
+  <style>
+    body {
+      background: #ecedef url("https://res.cloudinary.com/dcvgho2zc/image/upload/v1568880571/repeat_bg_1_dqzr93.jpg") repeat;
+    }
+  </style>
+</head>
+
+  <body class="single-body">
+    <nav class="nav-bar side-padding">
+  <h1 class="nav-header"><a href="https://idontwannarock.github.io/tech_blog/" class="nav-text">Howard 技術筆記</a></h1>
+  <div class="hamburger-menu">
+    <button onclick="hamburgerMenuPressed.call(this)" aria-haspopup="true" aria-expanded="false" aria-controls="menu" aria-label="Menu">
+      <span></span>
+      <span></span>
+    </button>
+    <ul id="menu" class="hamburger-menu-overlay">
+      <li><a href="https://idontwannarock.github.io/tech_blog/" class="hamburger-menu-overlay-link">Home</a></li>
+      <li><a href="https://idontwannarock.github.io/tech_blog/about/" class="hamburger-menu-overlay-link">About</a></li>
+      <li><a href="https://idontwannarock.github.io/tech_blog/categories/application" class="hamburger-menu-overlay-link">Application</a></li><li><a href="https://idontwannarock.github.io/tech_blog/categories/concept" class="hamburger-menu-overlay-link">Concept</a></li><li><a href="https://idontwannarock.github.io/tech_blog/categories/practice" class="hamburger-menu-overlay-link">Practice</a></li>
+    </ul>
+  </div>
+</nav>
+    <main class="content side-text-padding">
+      <article class="post ">
+        <header class="post-header">
+        	<h1 class="post-title">Spring Security 整合 RBAC</h1>
+          <p class="post-date">Posted <time datetime="2019-05-30">May 30, 2019</time></p>
+        </header>
+        
+        
+
+<ul>
+<li><a href="#spring-security-權限架構">Spring Security 權限架構</a>
+
+<ul>
+<li><a href="#userdetailsservice"><code>UserDetailsService</code></a></li>
+<li><a href="#accessdecisionvoter-及-accessdecisionmanager"><code>AccessDecisionVoter</code> 及 <code>AccessDecisionManager</code></a></li>
+</ul></li>
+</ul>
+
+<p>目前比較主流的 <a href="https://en.wikipedia.org/wiki/Role-based_access_control">Role-based Access Control, RBAC</a> 算是比較成熟且彈性的權限架構，若要在 Spring Security 實作 RBAC 並搭配 JWT 或 OAuth 2.0，大概要探討兩個問題</p>
+
+<ol>
+<li>是否值得為了減少查詢資料源的次數，而將角色或權限直接置入 JWT 或 Authorization Server 回傳的 token</li>
+<li>是否採取 Spring Security 原生只使用最細粒度的權限來進行存取控制</li>
+</ol>
+
+<p>關於第一個問題，目前的思考點大概就是考量系統的併發度跟使用者總數</p>
+
+<p>如果需要高併發，那自然希望盡量減少查詢資料的次數或資料量，盡量避免同時大量消耗 DB 資源；相反的，如果不需要高併發，那每次驗證都重新取得角色及權限資料也沒關係</p>
+
+<p>使用者數量的考量也是類似，如果每次查詢的成本太高，則盡量減少查詢的次數</p>
+
+<p>而第二個問題，則是要考量實際的業務場景</p>
+
+<p>如果角色跟權限很大量且複雜，或可能要考慮角色分層甚至使用者群組，或不同 Domain 有不同的權限邏輯，則可能用 Spring Security 原生方式會不敷使用，相對如果角色權限結構簡單，則直接使用原生方式可能成本較低</p>
+
+<p>所以以下探討主要專注於使用 Spring Security 提供的自訂空間來實作較為複雜的存取控制</p>
+
+<h1 id="spring-security-權限架構">Spring Security 權限架構</h1>
+
+<p>首先要探討 Spring Security 原生提供的權限架構</p>
+
+<ul>
+<li>GrantedAuthority: 可以將每個 GrantedAuthority 想成是個別的 privilege，所以在 Spring Security 中，authority 就是 privilege 的概念</li>
+<li>Role: 在 Spring Security 中為了保持彈性，Role 可以當作 Authority 也可以當作一組 Authority 的組合
+
+<ul>
+<li>Role as Authority: 直接把 Role 當成一種 Authority 的情況，就是將 Role 當作一個有 ROLE_ 前綴的字串，這種情況下 Role 跟 Authority 就只是語意上的差別</li>
+<li>Role as Container: Role 可以包含一組 Authority，Spring Security 在這個概念上沒有提供太多指引說明，需要自行實作</li>
+</ul></li>
+</ul>
+
+<blockquote>
+<p><a href="https://www.baeldung.com/spring-security-granted-authority-vs-role">Granted Authority Versus Role in Spring Security</a></p>
+</blockquote>
+
+<p>所以概念上 Spring Security 的 Role 比較像是有特別命名方式 (ROLE_ 前綴) 的一種 Authority，因此在預設中，<code>hasAuthority('ROLE_ADMIN')</code> 跟 <code>hasRole('ADMIN')</code> 是一樣的</p>
+
+<p>在 Spring Security 中 Role as Authority 最明顯的例子就是 SimpleGrantedAuthority，建構子直接吃 role 字串，<code>getAuthority()</code> 方法也直接吐回 role 字串屬性</p>
+
+<p>因此，如果要建立 Role 跟 Authority 分離的權限架構，首先要確認的是在設定 access control 時，<code>hasRole()</code> 跟 <code>hasAuthority()</code> 兩個方法到底是用什麼機制、從哪裡取得</p>
+
+<p>Spring Security 的整體架構分成驗證跟存取控制兩個部分，由於驗證部分會由 API 搭配 JWT 做掉大部分，甚至未來整合 OAuth 2.0，所以需要探討的只有如何在驗證過程將使用者資料及權限放入 SecurityContext 中讓後續的存取控制使用，並且存取控制部分如何依照使用者資料及權限進行控制</p>
+
+<h2 id="userdetailsservice"><code>UserDetailsService</code></h2>
+
+<p>要在驗證過程將使用者資料及權限放入 SecurityContext 中，最簡單就是實作 <code>UserDetailsService</code> 的 <code>loadUserByUsername</code> 方法，然後將自訂的 <code>UserDetailsService</code> 提供給 <code>AuthenticationManager</code> 即可</p>
+
+<p>這部分主要還是要考慮繼承 <code>UserDetails</code> 物件後，如何設定權限部分以及該將什麼樣的資料放入 Authentication 的 authorities 中</p>
+
+<h2 id="accessdecisionvoter-及-accessdecisionmanager"><code>AccessDecisionVoter</code> 及 <code>AccessDecisionManager</code></h2>
+
+<p>而存取控制的邏輯部分就要實作 <code>AccessDecisionVoter</code> 的 <code>vote</code> 方法</p>
+
+<p>voter 可以選擇回傳三種決策:</p>
+
+<ul>
+<li><code>ACCESS_GRANTED</code>: 通過</li>
+<li><code>ACCESS_DENIED</code>: 否決</li>
+<li><code>ACCESS_ABSTAIN</code>: 棄權</li>
+</ul>
+
+<p>實作完 voter 後，要將 voter 加入 <code>AccessDecisionManager</code>，而 <code>AccessDecisionManager</code> 預設有三種決策策略</p>
+
+<ul>
+<li><code>AffirmativeBased</code>: 任何 voter 回傳通過即可</li>
+<li><code>ConsensusBased</code>: 通過數大於否決數，忽略棄權</li>
+<li><code>UnanimousBased</code>: 所有 voter 通過或棄權，也就是不能有任何否決</li>
+</ul>
+
+<blockquote>
+<p><a href="https://www.baeldung.com/spring-security-custom-voter">Custom AccessDecisionVoters in Spring Security</a></p>
+</blockquote>
+
+<p>這部分就只能基於實際業務邏輯做考量</p>
+
+      </article>
+      <div id="disqus_thread"></div>
+<script type="application/javascript">
+    var disqus_config = function () {
+    
+    
+    
+    };
+    (function() {
+        if (["localhost", "127.0.0.1"].indexOf(window.location.hostname) != -1) {
+            document.getElementById('disqus_thread').innerHTML = 'Disqus comments not available by default when the website is previewed locally.';
+            return;
+        }
+        var d = document, s = d.createElement('script'); s.async = true;
+        s.src = '//' + "howard-tech-blog" + '.disqus.com/embed.js';
+        s.setAttribute('data-timestamp', +new Date());
+        (d.head || d.body).appendChild(s);
+    })();
+</script>
+<noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+<a href="https://disqus.com" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
+    </main>
+    <nav class="end-nav side-padding">
+      
+      <a ontouchstart="cardPressed.call(this)" ontouchend="cardReleased.call(this)" ontouchmove="cardReleased.call(this)" 
+  href="https://idontwannarock.github.io/tech_blog/2019/05/github_flow_intro/" class="card blog-card" rel="bookmark" >
+    
+  <article class="card-body">
+    <h2 class="card-title">Github Flow 簡介</h2>
+    <p class="card-text">依照官方說明簡述 GitHub flow</p>
+    <div class="card-subtext muted-text">
+      <p>Posted <time datetime="2019-05-29 529:00">May 29, 2019</time></p>
+      <p>#concept </p>
+    </div>
+  </article>
+</a>
+      
+      <a ontouchstart="cardPressed.call(this)" ontouchend="cardReleased.call(this)" ontouchmove="cardReleased.call(this)" 
+  href="https://idontwannarock.github.io/tech_blog/" class="card home-card" style="background-image: url( https://res.cloudinary.com/dcvgho2zc/image/upload/v1559096537/photo-1530305408560-82d13781b33a_erww1b.jpg )" rel="bookmark" >
+  Home
+</a>
+    </nav>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.13.1/highlight.min.js"></script>
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.10.0/dist/katex.min.js" integrity="sha384-K3vbOmF2BtaVai+Qk37uypf7VrgBubhQreNQe9aGsz9lB63dIFiQVlJbr92dw2Lx" crossorigin="anonymous"></script>
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.10.0/dist/contrib/auto-render.min.js" integrity="sha384-kmZOZB5ObwgQnS/DuDg6TScgOiWWBiVt0plIRkZCmE6rDZGrEOQeHM5PcHi+nyqe" crossorigin="anonymous"
+    onload="renderMathInElement(document.body);"></script>
+  
+  <script src="https://idontwannarock.github.io/tech_blog/js/core.min.js"></script>
+<script>
+  hljs.initHighlightingOnLoad();
+</script>
+
+  </body>
+</html>

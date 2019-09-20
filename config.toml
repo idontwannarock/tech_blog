@@ -16,4 +16,4 @@ homeimg = "https://res.cloudinary.com/dcvgho2zc/image/upload/v1559096537/photo-1
 bgimg = "https://res.cloudinary.com/dcvgho2zc/image/upload/v1568880571/repeat_bg_1_dqzr93.jpg"
 
 [permalinks]
-post = "/:year/:month/:slug/"
+post = "/:year/:month/:slug"

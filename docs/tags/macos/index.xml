@@ -11,10 +11,10 @@
     
     <item>
       <title>Git 及 GitHub 基礎認識</title>
-      <link>https://idontwannarock.github.io/tech_blog/git_and_github_basic/</link>
+      <link>https://idontwannarock.github.io/tech_blog/2017/09/git_and_github_basic/</link>
       <pubDate>Thu, 14 Sep 2017 07:13:01 +0800</pubDate>
       
-      <guid>https://idontwannarock.github.io/tech_blog/git_and_github_basic/</guid>
+      <guid>https://idontwannarock.github.io/tech_blog/2017/09/git_and_github_basic/</guid>
       <description>介紹 Git 概念及基礎指令，並用 SSH 同步到 GitHub</description>
     </item>
   </channel>

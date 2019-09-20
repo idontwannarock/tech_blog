@@ -2,15 +2,21 @@
 title: "Github Flow 簡介"
 slug: "github_flow_intro"
 date: 2019-05-29T10:52:45+08:00
+url: "/2019/05/github_flow_intro"
 description: "依照官方說明簡述 GitHub flow"
 tags: ["github-flow"]
 categories: ["concept"]
-featuredImage: "github-flow-cover.png"
-featuredImageDescription: "GitHub flow chart"
+# featuredImage: "github-flow-cover.png"
+# featuredImageDescription: "GitHub flow chart"
 dropCap: false
 displayInMenu: false
 displayInList: true
 draft: false
+resources:
+- name: featuredImage
+  src: "https://res.cloudinary.com/dcvgho2zc/image/upload/v1568960688/git-branching_ivvwjs.png"
+  params:
+    description: "Git Branching"
 ---
 
 [Understanding the GitHub flow](https://guides.github.com/introduction/flow/)

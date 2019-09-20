@@ -2,16 +2,29 @@
 title: "3rd Practice: Click Click Ben"
 slug: "click_click_ben"
 date: 2017-09-15T10:11:46+08:00
+url: "/2017/09/click_click_ben"
 description: "100 個練習計畫：第三個練習"
 tags: ["javascript"]
 categories: ["practice"]
-featuredImage: ""
-featuredImageDescription: ""
+# featuredImage: "https://res.cloudinary.com/dcvgho2zc/image/upload/v1505442040/3rd-practice-cover_zigtzi.jpg"
+# featuredImageDescription: "Click Click Ben"
 dropCap: false
 displayInMenu: false
 displayInList: true
 draft: false
+resources:
+- name: featuredImage
+  src: "https://res.cloudinary.com/dcvgho2zc/image/upload/v1505442040/3rd-practice-cover_zigtzi.jpg"
+  params:
+    description: "Click Click Ben"
 ---
+
+- [第三個目標](#第三個目標)
+- [遇到困難](#遇到困難)
+    - [帥哥阿 Ben 照片太難挑](#帥哥阿-ben-照片太難挑)
+    - [照片亂數出現位置及亂數間隔時間](#照片亂數出現位置及亂數間隔時間)
+    - [控制照片出現或消失](#控制照片出現或消失)
+    - [控制次數](#控制次數)
 
 # 第三個目標
 

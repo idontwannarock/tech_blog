@@ -2,16 +2,54 @@
 title: "Markdown 語法"
 slug: "markdown_syntax"
 date: 2017-10-22T15:42:04+08:00
+url: "/2017/10/markdown_syntax"
 description: "紀錄 Markdown 語法，包括 GFM"
 tags: ["markdown", "html"]
 categories: ["concept"]
-featuredImage: "markdown-icon.png"
-featuredImageDescription: "markdown-icon"
+# featuredImage: "markdown-icon.png"
+# featuredImageDescription: "markdown-icon"
 dropCap: false
 displayInMenu: false
 displayInList: true
 draft: false
+resources:
+- name: featuredImage
+  src: "https://res.cloudinary.com/dcvgho2zc/image/upload/v1568962680/markdown-icons_nka7a1.png"
+  params:
+    description: "Markdown Icon"
 ---
+
+- [Markdown 特色](#markdown-特色)
+	- [易編寫](#易編寫)
+	- [轉換 HTML](#轉換-html)
+	- [編寫／視覺](#編寫視覺)
+- [區塊元素](#區塊元素)
+	- [換行](#換行)
+	- [分段](#分段)
+	- [標題](#標題)
+		- [Setex 形式](#setex-形式)
+		- [atx 形式](#atx-形式)
+	- [清單](#清單)
+		- [有序清單](#有序清單)
+		- [無序清單](#無序清單)
+		- [巢狀清單](#巢狀清單)
+	- [區塊引言](#區塊引言)
+	- [程式碼區塊](#程式碼區塊)
+	- [分隔線](#分隔線)
+- [區段元素](#區段元素)
+	- [連結](#連結)
+		- [行內連結](#行內連結)
+		- [參考連結](#參考連結)
+	- [強調](#強調)
+	- [程式碼](#程式碼)
+	- [圖片](#圖片)
+- [其他](#其他)
+	- [自動連結](#自動連結)
+	- [跳脫字元](#跳脫字元)
+	- [特殊功能](#特殊功能)
+		- [Checkbox](#checkbox)
+		- [Table](#table)
+	- [支援程式碼](#支援程式碼)
 
 # Markdown 特色
 
@@ -106,8 +144,8 @@ This is an H2
 注意 **數字並不會影響實際畫面的排序**，例如：
 
 ```md
-9527. First item
-9487. Second item
+1.    First item
+2.    Second item
 ```
 
 實際上 Markdown 會自動排序：

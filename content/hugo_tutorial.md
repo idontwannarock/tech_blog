@@ -2,16 +2,33 @@
 title: "Hugo 入門教學"
 slug: "hugo_tutorial"
 date: 2019-05-07T16:03:07+08:00
+url: "/2019/05/hugo_tutorial"
 description: "介紹 Hugo 及基本使用"
 tags: ["hugo", "git", "github", "github-pages"]
 categories: ["application"]
-featuredImage: "hugo-icon.png"
-featuredImageDescription: "hugo"
+# featuredImage: "hugo-icon.png"
+# featuredImageDescription: "hugo"
 dropCap: false
 displayInMenu: false
 displayInList: true
 draft: false
+resources:
+- name: featuredImage
+  src: "https://res.cloudinary.com/dcvgho2zc/image/upload/v1568903691/hugo-logo_zjncdo.png"
+  params:
+    description: "Hugo Logo"
 ---
+
+- [Hugo 與靜態網站](#hugo-與靜態網站)
+- [這樣誰看的到？](#這樣誰看的到)
+- [Git、GitHub 與 GitHub Pages](#gitgithub-與-github-pages)
+- [安裝 Hugo](#安裝-hugo)
+- [建立新網站](#建立新網站)
+- [安裝佈景主題](#安裝佈景主題)
+- [新增文章](#新增文章)
+- [測試網站](#測試網站)
+- [生成網站](#生成網站)
+- [GitHub Pages](#github-pages)
 
 我個人在建立部落格的路上碰到了很多問題：
 

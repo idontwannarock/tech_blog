@@ -2,16 +2,32 @@
 title: "Hugo 練習 (1)"
 slug: "hugo_practice_1"
 date: 2017-09-09T00:17:31+08:00
+url: "/2017/09/hugo_practice_1"
 description: "釐清 Hugo 與 GitHub Pages 概念"
 tags: ["hugo", "github-pages", "markdown", "ssg"]
 categories: ["application"]
-featuredImage: ""
-featuredImageDescription: ""
+# featuredImage: ""
+# featuredImageDescription: ""
 dropCap: false
 displayInMenu: false
 displayInList: true
 draft: false
+resources:
+- name: featuredImage
+  src: "https://res.cloudinary.com/dcvgho2zc/image/upload/v1568903691/hugo-logo_zjncdo.png"
+  params:
+    description: "Hugo Logo"
 ---
+
+- [源起](#源起)
+- [學習目標](#學習目標)
+- [學習內容](#學習內容)
+    - [什麼是靜態、動態](#什麼是靜態動態)
+    - [什麼是靜態部落格 (網頁) 產生系統 Static Site Generator](#什麼是靜態部落格-網頁-產生系統-static-site-generator)
+    - [什麼是 Markdown 語法](#什麼是-markdown-語法)
+    - [什麼是 Github](#什麼是-github)
+    - [什麼是 Github Pages](#什麼是-github-pages)
+    - [怎麼使用 Hugo 架設網頁在 Github Pages](#怎麼使用-hugo-架設網頁在-github-pages)
 
 > 這篇文章是初學的時候撰寫的，其中一些觀念並不正確，步驟也可能因為更新或觀念問題而不適用或者多餘，此篇文章僅為留做紀錄
 
@@ -95,4 +111,4 @@ Github 有提供靜態網頁的 hosting 功能，可以把網頁直接存在 Git
 
 下一篇再來寫我完整的作法，我並不是本科出身，有很多基礎知識不清楚，只能從別人寫的作法中去理解，有問題請見諒，也可以提出來指正我，謝謝大家，今天就到這邊。
 
-這裡是 [下一篇](https://idontwannarock.github.io/hugo_blog/2017/09/hugo-practice-2/)。
+這裡是 [下一篇]({{< relref "hugo_practice_2.md" >}})。

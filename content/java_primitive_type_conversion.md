@@ -2,18 +2,27 @@
 title: "Java 基本型態的轉換方式"
 slug: "java_primitive_type_conversion"
 date: 2018-02-09T10:00:29+08:00
+url: "/2018/02/java_primitive_type_conversion"
 description: "探討 Java 的基本型態間的轉換方式"
 tags: ["java", "primitive-type"]
 categories: ["concept"]
-featuredImage: ""
-featuredImageDescription: ""
+# featuredImage: ""
+# featuredImageDescription: ""
 dropCap: false
 displayInMenu: false
 displayInList: false
 draft: true
+resources:
+- name: featuredImage
+  src: "https://res.cloudinary.com/dcvgho2zc/image/upload/v1568906236/javase-logo_jayzns.png"
+  params:
+    description: "Java SE Logo"
 ---
 
-# 前言
+- [基本型態](#基本型態)
+    - [基本型態簡介](#基本型態簡介)
+    - [變數與常數](#變數與常數)
+    - [基本型態 -> 基本型態](#基本型態---基本型態)
 
 紀錄自己在學習 Java 中歸納的各種資料型態轉換的方式，這篇先探討基本型態的轉換。
 

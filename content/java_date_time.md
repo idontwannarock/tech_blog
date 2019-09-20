@@ -2,18 +2,33 @@
 title: "Java 有關時間的物件、方法"
 slug: "java_date_time"
 date: 2017-11-18T15:44:37+08:00
+url: "/2017/11/java_date_time"
 description: "紀錄 Java 中有關時間的物件及方法"
 tags: ["java", "date"]
 categories: ["concept"]
-featuredImage: ""
-featuredImageDescription: ""
+# featuredImage: ""
+# featuredImageDescription: ""
 dropCap: false
 displayInMenu: false
 displayInList: false
 draft: true
+resources:
+- name: featuredImage
+  src: "https://res.cloudinary.com/dcvgho2zc/image/upload/v1568906236/javase-logo_jayzns.png"
+  params:
+    description: "Java SE Logo"
 ---
 
-# 前言
+- [時間物件、方法簡述](#時間物件方法簡述)
+    - [`System.currentTimeMillis()`](#systemcurrenttimemillis)
+    - [`java.util.Date` 物件](#javautildate-物件)
+    - [`java.sql.Date` 物件](#javasqldate-物件)
+    - [`java.util.Calendar`](#javautilcalendar)
+        - [`Calendar` 類別靜態變數](#calendar-類別靜態變數)
+        - [`java.util.GregorianCalendar`](#javautilgregoriancalendar)
+    - [`java.text.SimpleDateFormat`](#javatextsimpledateformat)
+- [比較](#比較)
+- [轉換](#轉換)
 
 紀錄 Java 內較常用跟時間有關的物件、方法。
 
