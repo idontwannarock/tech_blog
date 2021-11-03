@@ -7,6 +7,7 @@ tags: ["markdown", "html"]
 categories: concept
 featured_image: "https://res.cloudinary.com/dcvgho2zc/image/upload/v1568962680/markdown-icons_nka7a1.png"
 draft: false
+comment: true
 ---
 
 # Markdown 特色

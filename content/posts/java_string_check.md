@@ -7,6 +7,7 @@ tags: ["java", "string"]
 categories: concept
 featured_image: "https://res.cloudinary.com/dcvgho2zc/image/upload/v1568906236/javase-logo_jayzns.png"
 draft: false
+comment: true
 ---
 
 因為開始做專題，開始要作資料檢查，首先會要碰到的就是最基本的檢查是否有輸入資料，也就是要檢查字串，記錄一下 Java 當中有關字串檢查的東西。

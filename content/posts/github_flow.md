@@ -7,6 +7,7 @@ tags: ["github-flow"]
 categories: concept
 featured_image: "https://res.cloudinary.com/dcvgho2zc/image/upload/v1568960688/git-branching_ivvwjs.png"
 draft: false
+comment: true
 ---
 
 [Understanding the GitHub flow](https://guides.github.com/introduction/flow/)

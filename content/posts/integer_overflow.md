@@ -7,6 +7,7 @@ tags: ["binary", "integer", "overflow"]
 categories: concept
 featured_image: "https://res.cloudinary.com/dcvgho2zc/image/upload/v1568961579/binary-number_nctg0k.png"
 draft: false
+comment: true
 ---
 
 這是我查到一些資料後的理解，希望能多一點對整數溢位後為何會正負循環的了解。

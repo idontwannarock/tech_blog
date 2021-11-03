@@ -7,6 +7,7 @@ tags: ["java", "algorithm"]
 categories: concept
 featured_image: "https://res.cloudinary.com/dcvgho2zc/image/upload/v1568906236/javase-logo_jayzns.png"
 draft: false
+comment: true
 ---
 
 因為做到這個經典練習演算法的題目，雖然是非常入門級的，也是讓我想了很久，覺得都做了這麼久，不記錄下來也是蠻可惜。

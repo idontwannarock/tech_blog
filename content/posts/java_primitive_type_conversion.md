@@ -7,6 +7,7 @@ tags: ["java", "primitive-type"]
 categories: concept
 featured_image: "https://res.cloudinary.com/dcvgho2zc/image/upload/v1568906236/javase-logo_jayzns.png"
 draft: true
+comment: true
 ---
 
 紀錄自己在學習 Java 中歸納的各種資料型態轉換的方式，這篇先探討基本型態的轉換。

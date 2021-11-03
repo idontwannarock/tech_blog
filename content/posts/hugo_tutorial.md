@@ -7,6 +7,7 @@ tags: ["hugo", "git", "github", "github-pages"]
 categories: application
 featured_image: "https://res.cloudinary.com/dcvgho2zc/image/upload/v1568903691/hugo-logo_zjncdo.png"
 draft: false
+comment: true
 ---
 
 我個人在建立部落格的路上碰到了很多問題：

@@ -7,6 +7,7 @@ tags: ["java", "spring-security", "rbac"]
 categories: concept
 featured_image: "https://res.cloudinary.com/dcvgho2zc/image/upload/v1568907350/spring-security-icon_qahaqz.png"
 draft: false
+comment: true
 ---
 
 目前比較主流的 [Role-based Access Control, RBAC](https://en.wikipedia.org/wiki/Role-based_access_control) 算是比較成熟且彈性的權限架構，若要在 Spring Security 實作 RBAC 並搭配 JWT 或 OAuth 2.0，大概要探討兩個問題

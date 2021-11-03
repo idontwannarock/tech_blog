@@ -7,6 +7,7 @@ tags: ["php", "mysql", "mvc", "bootstrap"]
 categories: practice
 featured_image: "https://res.cloudinary.com/dcvgho2zc/image/upload/v1568953399/twitter-logo_hi9yrc.png"
 draft: false
+comment: true
 ---
 
 # 第四個目標

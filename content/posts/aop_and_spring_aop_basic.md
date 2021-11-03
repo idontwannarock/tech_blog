@@ -7,6 +7,7 @@ tags: ["java", "spring", "aop"]
 categories: concept
 featured_image: "https://res.cloudinary.com/dcvgho2zc/image/upload/v1568953103/aop-icon_ffdmul.png"
 draft: false
+comment: true
 ---
 
 > 這篇文章是初學的時候撰寫的，其中一些觀念並不正確，步驟也可能因為更新或觀念問題而不適用或者多餘，此篇文章僅為留做紀錄

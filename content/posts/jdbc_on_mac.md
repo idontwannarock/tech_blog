@@ -7,6 +7,7 @@ tags: ["java", "jdbc", "macos"]
 categories: application
 featured_image: "https://res.cloudinary.com/dcvgho2zc/image/upload/v1568962040/database-application-software_nbgmjh.png"
 draft: true
+comment: true
 ---
 
 為了貫徹在不同平台上都能同步工作進度的目標，要想辦法在 MacOS 上也能進行 Java 及 JDBC 開發。

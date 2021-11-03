@@ -7,6 +7,7 @@ tags: ["java", "spring-boot", "spring-security", "swagger", "api-versioning"]
 categories: application
 featured_image: "https://res.cloudinary.com/dcvgho2zc/image/upload/v1568911044/icon-spring-framework_lskrrp.svg"
 draft: false
+comment: true
 ---
 
 本文目的是為了探討在 Spring Boot Web 專案中，實作 API 版本控制，並兼容 Swagger 及 Spring Security 的解決方式

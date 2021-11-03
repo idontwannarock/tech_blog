@@ -7,6 +7,7 @@ tags: ["html", "css", "javascript"]
 categories: practice
 featured_image: "https://res.cloudinary.com/dcvgho2zc/image/upload/v1505440548/2nd-practice-cover_pyfetr.jpg"
 draft: false
+comment: true
 ---
 
 # 第二個目標

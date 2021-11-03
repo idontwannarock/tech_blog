@@ -7,6 +7,7 @@ tags: ["javascript"]
 categories: practice
 featured_image: "https://res.cloudinary.com/dcvgho2zc/image/upload/v1505442040/3rd-practice-cover_zigtzi.jpg"
 draft: false
+comment: true
 ---
 
 # 第三個目標

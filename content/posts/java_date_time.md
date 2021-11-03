@@ -7,6 +7,7 @@ tags: ["java", "date"]
 categories: concept
 featured_image: "https://res.cloudinary.com/dcvgho2zc/image/upload/v1568906236/javase-logo_jayzns.png"
 draft: true
+comment: true
 ---
 
 紀錄 Java 內較常用跟時間有關的物件、方法。

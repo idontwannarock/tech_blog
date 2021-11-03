@@ -7,6 +7,7 @@ tags: ["html", "css", "javascript"]
 categories: practice
 featured_image: "https://res.cloudinary.com/dcvgho2zc/image/upload/v1505435536/1st-practice-cover-1024x550_mdnblw.jpg"
 draft: false
+comment: true
 ---
 
 # 第一個目標
