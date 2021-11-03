@@ -2,22 +2,40 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
   xmlns:xhtml="http://www.w3.org/1999/xhtml">
   <url>
+    <loc>https://idontwannarock.github.io/tech_blog/categories/application/</loc>
+    <lastmod>2021-11-03T16:29:03+08:00</lastmod>
+  </url><url>
+    <loc>https://idontwannarock.github.io/tech_blog/categories/</loc>
+    <lastmod>2021-11-03T16:29:03+08:00</lastmod>
+  </url><url>
+    <loc>https://idontwannarock.github.io/tech_blog/tags/git/</loc>
+    <lastmod>2021-11-03T16:29:03+08:00</lastmod>
+  </url><url>
+    <loc>https://idontwannarock.github.io/tech_blog/tags/github/</loc>
+    <lastmod>2021-11-03T16:29:03+08:00</lastmod>
+  </url><url>
+    <loc>https://idontwannarock.github.io/tech_blog/tags/github-pages/</loc>
+    <lastmod>2021-11-03T16:29:03+08:00</lastmod>
+  </url><url>
+    <loc>https://idontwannarock.github.io/tech_blog/</loc>
+    <lastmod>2021-11-03T16:29:03+08:00</lastmod>
+  </url><url>
+    <loc>https://idontwannarock.github.io/tech_blog/tags/hugo/</loc>
+    <lastmod>2021-11-03T16:29:03+08:00</lastmod>
+  </url><url>
+    <loc>https://idontwannarock.github.io/tech_blog/2021/11/hugo_semi_auto_deploy/</loc>
+    <lastmod>2021-11-03T16:29:03+08:00</lastmod>
+  </url><url>
+    <loc>https://idontwannarock.github.io/tech_blog/posts/</loc>
+    <lastmod>2021-11-03T16:29:03+08:00</lastmod>
+  </url><url>
+    <loc>https://idontwannarock.github.io/tech_blog/tags/</loc>
+    <lastmod>2021-11-03T16:29:03+08:00</lastmod>
+  </url><url>
     <loc>https://idontwannarock.github.io/tech_blog/tags/api-versioning/</loc>
     <lastmod>2019-09-19T15:53:36+08:00</lastmod>
   </url><url>
-    <loc>https://idontwannarock.github.io/tech_blog/categories/application/</loc>
-    <lastmod>2019-09-19T15:53:36+08:00</lastmod>
-  </url><url>
-    <loc>https://idontwannarock.github.io/tech_blog/categories/</loc>
-    <lastmod>2019-09-19T15:53:36+08:00</lastmod>
-  </url><url>
-    <loc>https://idontwannarock.github.io/tech_blog/</loc>
-    <lastmod>2019-09-19T15:53:36+08:00</lastmod>
-  </url><url>
     <loc>https://idontwannarock.github.io/tech_blog/tags/java/</loc>
-    <lastmod>2019-09-19T15:53:36+08:00</lastmod>
-  </url><url>
-    <loc>https://idontwannarock.github.io/tech_blog/posts/</loc>
     <lastmod>2019-09-19T15:53:36+08:00</lastmod>
   </url><url>
     <loc>https://idontwannarock.github.io/tech_blog/2019/09/spring_api_version_with_swagger_security/</loc>
@@ -30,9 +48,6 @@
     <lastmod>2019-09-19T15:53:36+08:00</lastmod>
   </url><url>
     <loc>https://idontwannarock.github.io/tech_blog/tags/swagger/</loc>
-    <lastmod>2019-09-19T15:53:36+08:00</lastmod>
-  </url><url>
-    <loc>https://idontwannarock.github.io/tech_blog/tags/</loc>
     <lastmod>2019-09-19T15:53:36+08:00</lastmod>
   </url><url>
     <loc>https://idontwannarock.github.io/tech_blog/categories/concept/</loc>
@@ -49,18 +64,6 @@
   </url><url>
     <loc>https://idontwannarock.github.io/tech_blog/tags/github-flow/</loc>
     <lastmod>2019-05-29T10:52:45+08:00</lastmod>
-  </url><url>
-    <loc>https://idontwannarock.github.io/tech_blog/tags/git/</loc>
-    <lastmod>2019-05-07T16:03:07+08:00</lastmod>
-  </url><url>
-    <loc>https://idontwannarock.github.io/tech_blog/tags/github/</loc>
-    <lastmod>2019-05-07T16:03:07+08:00</lastmod>
-  </url><url>
-    <loc>https://idontwannarock.github.io/tech_blog/tags/github-pages/</loc>
-    <lastmod>2019-05-07T16:03:07+08:00</lastmod>
-  </url><url>
-    <loc>https://idontwannarock.github.io/tech_blog/tags/hugo/</loc>
-    <lastmod>2019-05-07T16:03:07+08:00</lastmod>
   </url><url>
     <loc>https://idontwannarock.github.io/tech_blog/2019/05/hugo_tutorial/</loc>
     <lastmod>2019-05-07T16:03:07+08:00</lastmod>
