@@ -1,11 +1,16 @@
-# Howard 技術筆記
+# Howard Tech Blog
 
-記錄自己學習的過程，也希望能與不同的想法多做交流！
+## Prerequisite
 
-## Hugo 基本操作
+- Hugo 0.88+
+- Git 2.33.1+
 
-`hugo new <fileName>.md`: 生成新 Markdown 文件
+## Quick Publish
 
-`hugo server`: 本機測試
+Execute `publish.sh`
 
-`hugo`: 正式生成網站
+## Hugo Basic Operation
+
+- `hugo new post <fileName>.md`: generate new post in Markdown file
+- `hugo server`: test locally
+- `hugo`: generate site
