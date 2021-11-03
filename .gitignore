@@ -123,3 +123,8 @@ modules.xml
 !.vscode/*.code-snippets
 
 # End of https://www.toptal.com/developers/gitignore/api/hugo,intellij+all,visualstudiocode
+
+# Custom ignore
+
+## Hugo 0.89
+/.hugo_build.lock
