@@ -9,7 +9,6 @@ theme = "diary"
 canonifyURLs = true
 
 googleAnalytics = "UA-106499565-1"
-disqusShortname = "howard-tech-blog"
 
 [markup]
   [markup.highlight]
@@ -25,6 +24,7 @@ disqusShortname = "howard-tech-blog"
 
 [params]
 subtitle = "Share * Record * Program"
+disqusShortname = "howard-tech-blog"
 
 [permalinks]
 posts = "/:year/:month/:slug"
