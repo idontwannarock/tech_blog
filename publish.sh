@@ -2,7 +2,7 @@
 
 DIR=$(dirname "$0")
 
-cd "$DIR"/.. || echo "$DIR does not exist" & exit
+cd "$DIR" || (echo "$DIR does not exist" & exit)
 
 if [ "$(git status -s)" ]
 then
