@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>hugo on Howard Tech Note</title>
+    <link>https://idontwannarock.github.io/tech_blog/tags/hugo/</link>
+    <description>Recent content in hugo on Howard Tech Note</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-us</language>
+    <copyright>This website by Howard Wang is licensed under a Creative Common Attribution-ShareAlike 4.0 International License.</copyright>
+    <lastBuildDate>Tue, 07 May 2019 16:03:07 +0800</lastBuildDate><atom:link href="https://idontwannarock.github.io/tech_blog/tags/hugo/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Hugo 入門教學</title>
+      <link>https://idontwannarock.github.io/tech_blog/2019/05/hugo_tutorial/</link>
+      <pubDate>Tue, 07 May 2019 16:03:07 +0800</pubDate>
+      
+      <guid>https://idontwannarock.github.io/tech_blog/2019/05/hugo_tutorial/</guid>
+      <description>我個人在建立部落格的路上碰到了很多問題：
+ Wordpress 要花錢，雖然好像不多，但作為一個沒有人看的部落格，這樣還要花錢就是不爽 沒有網路無法寫文章，就算寫了純文字的內容，等有網路後貼到 Wordpress 的編輯器還要重新設定字體大小等等 沒辦法在自己的電腦或電腦們很方便的做備份，而且我只是個簡單的男人簡單的部落格，不需要備份一堆只有 Wordpress 能用的東西好嗎 不能用工程師宅宅必備命令列工具裝潮，假裝駭客任務 最重要的，身為一個工程師宅宅，用 Wordpress 寫部落格說得出口嗎？很顯然可以，但要付錢我就不想用  如果你對以上絕大多數的問題都有切身之痛，那可以考慮繼續閱讀下去，否則建議還是直接使用 Wordpress 或 Wix 吧
+Hugo 與靜態網站 唉唷，還繼續，那大概不是 M 就是工程師宅宅相關種，那靜態網站不用講了，Hugo 自己研究就好啦，本篇結束
+不能醬喔？那好吧
+Hugo 是一種 Static Site Generator, SSG 靜態網站產生器，靜態網站簡單來說就是有固定內容的網站，所謂的固定內容就是 HTML 這種瀏覽器可以直接開啟的網頁檔案，配合 CSS, Javascript 做美化，這些檔案只要沒有被修改過，每次打開都會產生固定的內容，所以稱為靜態網站
+而基於後面會提到 Hugo 這個工具的特性，它很適合用來產生部落格，使用者只需要撰寫 Markdown 這種純文字檔案作為每篇文章的內容，就可以透過 Hugo 快速的建立或修改網站，而不必每次都要修改相對應的 HTML 甚至 CSS 及 Javascript 檔案
+Hugo 作為一個世界範圍內前三熱門的 SSG 工具，它還有很多熱心工程師宅宅幫他寫了很多佈景主題讓使用者可以直接套用來產生網站，所以使用者只需要把文章內容寫成 Markdown 這種純文字檔案，就可以直接用 Hugo 將文章按照佈景主題產生出美美的網站了
+這樣誰看的到？ 不過這樣產生出來的網站有一個關鍵的問題，這些檔案只放在你電腦裡，沒人看得到，除了你自己
+所以我們需要「把它放到網路上」
+一般要做到「把它放到網路上」並且「誰都看得見」，其實要做很多事情，例如租用網路空間、買域名、部署網站等等，Wordpress 的好處就在這，它提供一條龍的服務幫你做到底
+但現在沒有 Wordpress 而且要堅持不花錢的懶惰工程師宅宅原則，所以我們要走另一條路，使用 Git 跟 GitHub</description>
+    </item>
+    
+    <item>
+      <title>Hugo 練習 (2)</title>
+      <link>https://idontwannarock.github.io/tech_blog/2017/09/hugo_practice_2/</link>
+      <pubDate>Sat, 09 Sep 2017 15:22:03 +0800</pubDate>
+      
+      <guid>https://idontwannarock.github.io/tech_blog/2017/09/hugo_practice_2/</guid>
+      <description>這篇文章是初學的時候撰寫的，其中一些觀念並不正確，步驟也可能因為更新或觀念問題而不適用或者多餘，此篇文章僅為留做紀錄
+ 學習目標 學習怎麼使用 Hugo 架設網頁在 Github Pages。
+學習內容 環境設定 我並非本科，所以以下作法全都是從各官網跟谷哥研究而來。先說明我只會用 Windows，而且是 Win10，所以想用 MacOS 或 Linux 的可以左轉出去自己上官網跟谷哥研究。
+環境設定這邊需要作幾件事，設定 Hugo，設定 Git，新增 Github 帳號，跟設定 SSH，除了設定 SSH 要最後作以外，其他順序無所謂。
+Hugo 環境設定 如同上一篇所述，Hugo 雖然是 Go 語言寫的，但現在的版本並不用安裝 Go，只要到 這個網址 下載最新版本，找地方解壓縮，然後將解壓縮後的 exe 檔路徑設定到 Path 環境變數裡面就可以了。
+比較完整的流程應該是先創建 Hugo 目錄，例如 C:\Hugo，然後建兩個子資料夾 bin 和 Sites。下載 Hugo 最新版本的 zip 檔，解壓縮到 bin 資料夾裡面，若 exe 檔檔名不是 hugo.exe 就改成 hugo.exe。
+然後要設定 Path 環境變數，厲害的人可以直接用 cmd 設定，就不講了。來講我這種菜鳥的方法，右鍵點開始鍵（就是狀態列 Windows 圖案的那個鈕），選「系統」，然後選右上方的「系統資訊」，跳出來視窗後，選左邊的「進階系統設定」，再跳出一個視窗後，選「進階」頁面下方的「環境變數(N)&amp;hellip;」，會再跳出一個視窗分成上下兩區塊，在上方的使用者變數區塊，變數那一欄找到 Path 後，連點兩下又會跳出一個新視窗，這次直接按右邊的「新增(N)」，然後填上剛剛 hugo.exe 的路徑，例如 C:\Hugo\bin，最後再一路按確定以及關閉視窗出去。
+然後為了確定是否有設定成功，請再右鍵點一次開始鍵，選「Windows PowerShell(系統管理員)(A)」來打開 PowerShell，然後直接輸入 hugo version 後按 Enter 鍵，如果有顯示出版本資訊，那就是設定成功。</description>
+    </item>
+    
+    <item>
+      <title>Hugo 練習 (1)</title>
+      <link>https://idontwannarock.github.io/tech_blog/2017/09/hugo_practice_1/</link>
+      <pubDate>Sat, 09 Sep 2017 00:17:31 +0800</pubDate>
+      
+      <guid>https://idontwannarock.github.io/tech_blog/2017/09/hugo_practice_1/</guid>
+      <description>這篇文章是初學的時候撰寫的，其中一些觀念並不正確，步驟也可能因為更新或觀念問題而不適用或者多餘，此篇文章僅為留做紀錄
+ 源起 2017 年 9 月 7 日在 ptt Soft_Job 版看到胡立大大 po 文準備作一個計劃-建立 Slack 群組來幫助大家練習討論一些網頁相關的東西，而我需要多作一些練習，並且最好能有人詢問或討論所以加入。
+而 9 月 8 日胡立大大就回信了，基本上就是解釋他想建立一個開放的群組，群組裡沒有老師，他擔任類似助教的腳色，會固定提出練習的題目，解答一些疑問跟提供一些資源這樣。
+其中胡立大大有提到希望大家能養成自學、解決問題以及歸納知識的習慣，我覺得很有道理很重要，所以剛好他也有提到希望大家學習「怎麼用靜態部落格產生系統」，可以練習怎麼使用靜態部落格產生系統、Git 的基本操作以及 Github 的相關知識。
+所以，就來吧！
+學習目標 學習怎麼用靜態部落格產生系統 Hugo，並且把部落格架在 Github Pages 上面。
+學習內容 什麼是靜態、動態 就我看網路多種說法，歸納的概念大概是部落格或網站本身顯示不需要重複跟 server 端交流的就算靜態，反之就算動態；最近因為 SEO 的興起，還有一種偽靜態。
+什麼是靜態部落格 (網頁) 產生系統 Static Site Generator 在網路上找到 這篇文章，講得蠻清楚的。
+在講什麼是靜態部落格（網頁）產生系統 Static Site Generator(SSG) 之前，應該講一下內容管理系統 Content Management System(CMS)，例如 Wordpress。
+CMS 的理念是讓作者不用擔心部落格，也就是網頁輸出的各種技術問題，只需要選擇喜歡的模板 template，就可以使用 CMS 提供的文字編輯器寫作，節省很多技術上的麻煩，相信有用過 Wordpress 都能理解。
+但相對之下 CMS 就有一些壞處，例如只能使用 CMS 提供的編輯功能（不然還是要會網頁或程式知識去作修改）、因為很多動態功能所以伺服器工作比較重可能影響效能、可能因為某些軟體或功能升級或資料庫出問題而導致網頁也出問題。
+而 SSG 算是在 CMS 跟完全自己 coding 寫網頁架部落格的中間，比較知名的有 Jekyll 跟 Hugo，或胡立提到的 Hexo。</description>
+    </item>
+    
+  </channel>
+</rss>

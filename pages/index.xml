@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Pages on Howard Tech Note</title>
+    <link>https://idontwannarock.github.io/tech_blog/pages/</link>
+    <description>Recent content in Pages on Howard Tech Note</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-us</language>
+    <copyright>This website by Howard Wang is licensed under a Creative Common Attribution-ShareAlike 4.0 International License.</copyright>
+    <lastBuildDate>Mon, 08 May 2017 09:43:46 +0800</lastBuildDate><atom:link href="https://idontwannarock.github.io/tech_blog/pages/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>作品介紹</title>
+      <link>https://idontwannarock.github.io/tech_blog/works/</link>
+      <pubDate>Mon, 08 May 2017 09:43:46 +0800</pubDate>
+      
+      <guid>https://idontwannarock.github.io/tech_blog/works/</guid>
+      <description>正在整理過去的作品，見諒</description>
+    </item>
+    
+    <item>
+      <title>About</title>
+      <link>https://idontwannarock.github.io/tech_blog/about/</link>
+      <pubDate>Sun, 07 May 2017 17:32:00 +0800</pubDate>
+      
+      <guid>https://idontwannarock.github.io/tech_blog/about/</guid>
+      <description>從自學 PHP 到北科上課學習 Java 入門，從事軟體工程師工作一年有餘，目前主要工作內容為 Java 網路應用開發及 SAP BPM 系統維護
+過去接觸過的技術包括 Java, Servlet/JSP, JUnit, Mockito, Hibernate, MyBatis, MySQL, Oracle, MongoDB, Spring, Spring MVC, Spring AOP, Spring Boot, Spring Data JPA, Spring Security, Spring Cloud, Zuul, Netflix OSS, Git, SVN, Jenkins, Docker&amp;hellip;等
+最熟練的是 Java 及 Spring 全家桶，Git Flow 或 GitHub Flow 版控，JUnit 及 Mockito 做單元測試及整合測試，Jenkins 搭配 GitHub Hook 做 CI/CD
+未來主要朝向後端工程繼續開發者的道路，希望能以軟工能力為自己、家庭及社會做出貢獻
+撰寫這個部落格的用意除了記錄自己學習的過程，也是希望能與不同的想法多做交流！
+ GitHub  </description>
+    </item>
+    
+  </channel>
+</rss>

@@ -1,0 +1,1446 @@
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Howard Tech Note</title>
+    <link>https://idontwannarock.github.io/tech_blog/</link>
+    <description>Recent content on Howard Tech Note</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-us</language>
+    <copyright>This website by Howard Wang is licensed under a Creative Common Attribution-ShareAlike 4.0 International License.</copyright>
+    <lastBuildDate>Thu, 19 Sep 2019 15:53:36 +0800</lastBuildDate>
+    
+        <atom:link href="https://idontwannarock.github.io/tech_blog/index.xml" rel="self" type="application/rss+xml" />
+    
+    
+    
+        <item>
+        <title>Spring Boot 實作 API 版本控制</title>
+        <link>https://idontwannarock.github.io/tech_blog/2019/09/spring_api_version_with_swagger_security/</link>
+        <pubDate>Thu, 19 Sep 2019 15:53:36 +0800</pubDate>
+        
+        <guid>https://idontwannarock.github.io/tech_blog/2019/09/spring_api_version_with_swagger_security/</guid>
+        <description>Howard Tech Note https://idontwannarock.github.io/tech_blog/2019/09/spring_api_version_with_swagger_security/ -&lt;p&gt;本文目的是為了探討在 Spring Boot Web 專案中，實作 API 版本控制，並兼容 Swagger 及 Spring Security 的解決方式&lt;/p&gt;
+&lt;p&gt;需要有 Spring Boot、Spring MVC、Spring Security 及 Swagger 的基礎概念會比較好理解&lt;/p&gt;
+&lt;h1 id=&#34;api-版本控制&#34;&gt;API 版本控制&lt;/h1&gt;
+&lt;p&gt;常見的 API 版本控制方式有三種: URI, header, content-type&lt;/p&gt;
+&lt;p&gt;考量到 RESTful API 其中的一個好處是方便快取，使用 header 跟 content-type 的方式則可能無法正確的快取以及達成 idempotent，所以我個人採用的是在 URI 中加入版本號的方式&lt;/p&gt;
+&lt;p&gt;再來因為有時候面對的專案有數量眾多的 handler，導致每次修改版本號都要手動修改每一支 handler 對應的 uri，這樣既麻煩又不潮，所以一定要研究一下怎麼在 Spring Boot 專案中利用註解的方式自動幫 handler 對應的 uri 自動插入版本號&lt;/p&gt;
+&lt;h1 id=&#34;tech-stack&#34;&gt;Tech Stack&lt;/h1&gt;
+&lt;p&gt;專案採用的是 Spring Boot 2.0 架構，Java 1.8 版本&lt;/p&gt;
+&lt;p&gt;有關 Maven 依賴如下:&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;org.springframework.boot:spring-boot-starter-web:2.1.x&lt;/li&gt;
+&lt;li&gt;org.springframework.boot:spring-boot-starter-security:2.1.x&lt;/li&gt;
+&lt;li&gt;io.springfox:springfox-swagger2:2.9.2&lt;/li&gt;
+&lt;li&gt;io.springfox:springfox-swagger-ui:2.9.2&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;這邊強調要採用 Spring Boot 主要是因為想要利用 Spring Boot auto configuration 的功能，也因為想要利用這個功能，所以過程才會這麼曲折&amp;hellip;&lt;/p&gt;
+&lt;h1 id=&#34;常見作法及整合問題&#34;&gt;常見作法及整合問題&lt;/h1&gt;
+&lt;p&gt;網路上 API 版本控制的文章的做法都雷同&lt;/p&gt;
+&lt;p&gt;通常都是先建立自訂 &lt;code&gt;ApiVersion&lt;/code&gt; 註解，裡面有版本號屬性，可以是 &lt;code&gt;int&lt;/code&gt; 也可以是字串，通常都會有預設值，然後容許加註在類別或方法&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#e7e9db;background-color:#2f1e2e;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-java&#34; data-lang=&#34;java&#34;&gt;&lt;span style=&#34;color:#5bc4bf&#34;&gt;import&lt;/span&gt; &lt;span style=&#34;color:#fec418&#34;&gt;java.lang.annotation.*&lt;/span&gt;&lt;span style=&#34;color:#5bc4bf&#34;&gt;;&lt;/span&gt;
+
+&lt;span style=&#34;color:#5bc4bf&#34;&gt;@Target&lt;/span&gt;&lt;span style=&#34;color:#5bc4bf&#34;&gt;({&lt;/span&gt;ElementType&lt;span style=&#34;color:#5bc4bf&#34;&gt;.&lt;/span&gt;&lt;span style=&#34;color:#06b6ef&#34;&gt;TYPE&lt;/span&gt;&lt;span style=&#34;color:#5bc4bf&#34;&gt;,&lt;/span&gt; ElementType&lt;span style=&#34;color:#5bc4bf&#34;&gt;.&lt;/span&gt;&lt;span style=&#34;color:#06b6ef&#34;&gt;METHOD&lt;/span&gt;&lt;span style=&#34;color:#5bc4bf&#34;&gt;})&lt;/span&gt;
+&lt;span style=&#34;color:#5bc4bf&#34;&gt;@Retention&lt;/span&gt;&lt;span style=&#34;color:#5bc4bf&#34;&gt;(&lt;/span&gt;RetentionPolicy&lt;span style=&#34;color:#5bc4bf&#34;&gt;.&lt;/span&gt;&lt;span style=&#34;color:#06b6ef&#34;&gt;RUNTIME&lt;/span&gt;&lt;span style=&#34;color:#5bc4bf&#34;&gt;)&lt;/span&gt;
+&lt;span style=&#34;color:#815ba4&#34;&gt;public&lt;/span&gt; &lt;span style=&#34;color:#5bc4bf&#34;&gt;@interface&lt;/span&gt; ApiVersion &lt;span style=&#34;color:#5bc4bf&#34;&gt;{&lt;/span&gt;
+
+    &lt;span style=&#34;color:#fec418&#34;&gt;int&lt;/span&gt; &lt;span style=&#34;color:#06b6ef&#34;&gt;value&lt;/span&gt;&lt;span style=&#34;color:#5bc4bf&#34;&gt;()&lt;/span&gt; &lt;span style=&#34;color:#815ba4&#34;&gt;default&lt;/span&gt; 1&lt;span style=&#34;color:#5bc4bf&#34;&gt;;&lt;/span&gt;
+&lt;span style=&#34;color:#5bc4bf&#34;&gt;}&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;再來寫 &lt;code&gt;ApiVersionCondition&lt;/code&gt; 實作 &lt;code&gt;RequestCondition&lt;/code&gt; 介面來判斷 request 跟 handler mapping 的條件&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#e7e9db;background-color:#2f1e2e;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-java&#34; data-lang=&#34;java&#34;&gt;&lt;span style=&#34;color:#5bc4bf&#34;&gt;import&lt;/span&gt; &lt;span style=&#34;color:#fec418&#34;&gt;org.springframework.web.servlet.mvc.condition.RequestCondition&lt;/span&gt;&lt;span style=&#34;color:#5bc4bf&#34;&gt;;&lt;/span&gt;
+
+&lt;span style=&#34;color:#5bc4bf&#34;&gt;import&lt;/span&gt; &lt;span style=&#34;color:#fec418&#34;&gt;javax.servlet.http.HttpServletRequest&lt;/span&gt;&lt;span style=&#34;color:#5bc4bf&#34;&gt;;&lt;/span&gt;
+&lt;span style=&#34;color:#5bc4bf&#34;&gt;import&lt;/span&gt; &lt;span style=&#34;color:#fec418&#34;&gt;java.util.regex.Matcher&lt;/span&gt;&lt;span style=&#34;color:#5bc4bf&#34;&gt;;&lt;/span&gt;
+&lt;span style=&#34;color:#5bc4bf&#34;&gt;import&lt;/span&gt; &lt;span style=&#34;color:#fec418&#34;&gt;java.util.regex.Pattern&lt;/span&gt;&lt;span style=&#34;color:#5bc4bf&#34;&gt;;&lt;/span&gt;
+
+&lt;span style=&#34;color:#815ba4&#34;&gt;public&lt;/span&gt; &lt;span style=&#34;color:#815ba4&#34;&gt;class&lt;/span&gt; &lt;span style=&#34;color:#fec418&#34;&gt;ApiVersionCondition&lt;/span&gt; &lt;span style=&#34;color:#815ba4&#34;&gt;implements&lt;/span&gt; RequestCondition&lt;span style=&#34;color:#5bc4bf&#34;&gt;&amp;lt;&lt;/span&gt;ApiVersionCondition&lt;span style=&#34;color:#5bc4bf&#34;&gt;&amp;gt;&lt;/span&gt; &lt;span style=&#34;color:#5bc4bf&#34;&gt;{&lt;/span&gt;
+
+    &lt;span style=&#34;color:#815ba4&#34;&gt;private&lt;/span&gt; &lt;span style=&#34;color:#fec418&#34;&gt;int&lt;/span&gt; apiVersion&lt;span style=&#34;color:#5bc4bf&#34;&gt;;&lt;/span&gt;
+
+    &lt;span style=&#34;color:#815ba4&#34;&gt;private&lt;/span&gt; &lt;span style=&#34;color:#815ba4&#34;&gt;final&lt;/span&gt; &lt;span style=&#34;color:#815ba4&#34;&gt;static&lt;/span&gt; Pattern VERSION_PREFIX_PATTERN &lt;span style=&#34;color:#5bc4bf&#34;&gt;=&lt;/span&gt; Pattern&lt;span style=&#34;color:#5bc4bf&#34;&gt;.&lt;/span&gt;&lt;span style=&#34;color:#06b6ef&#34;&gt;compile&lt;/span&gt;&lt;span style=&#34;color:#5bc4bf&#34;&gt;(&lt;/span&gt;&lt;span style=&#34;color:#48b685&#34;&gt;&amp;#34;/v(\\d+)/&amp;#34;&lt;/span&gt;&lt;span style=&#34;color:#5bc4bf&#34;&gt;);&lt;/span&gt;
+
+    &lt;span style=&#34;color:#815ba4&#34;&gt;public&lt;/span&gt; &lt;span style=&#34;color:#06b6ef&#34;&gt;ApiVersionCondition&lt;/span&gt;&lt;span style=&#34;color:#5bc4bf&#34;&gt;(&lt;/span&gt;&lt;span style=&#34;color:#fec418&#34;&gt;int&lt;/span&gt; apiVersion&lt;span style=&#34;color:#5bc4bf&#34;&gt;)&lt;/span&gt; &lt;span style=&#34;color:#5bc4bf&#34;&gt;{&lt;/span&gt;
+        &lt;span style=&#34;color:#815ba4&#34;&gt;this&lt;/span&gt;&lt;span style=&#34;color:#5bc4bf&#34;&gt;.&lt;/span&gt;&lt;span style=&#34;color:#06b6ef&#34;&gt;apiVersion&lt;/span&gt; &lt;span style=&#34;color:#5bc4bf&#34;&gt;=&lt;/span&gt; apiVersion&lt;span style=&#34;color:#5bc4bf&#34;&gt;;&lt;/span&gt;
+    &lt;span style=&#34;color:#5bc4bf&#34;&gt;}&lt;/span&gt;
+
+    &lt;span style=&#34;color:#5bc4bf&#34;&gt;@Override&lt;/span&gt;
+    &lt;span style=&#34;color:#815ba4&#34;&gt;public&lt;/span&gt; ApiVersionCondition &lt;span style=&#34;color:#06b6ef&#34;&gt;combine&lt;/span&gt;&lt;span style=&#34;color:#5bc4bf&#34;&gt;(&lt;/span&gt;ApiVersionCondition other&lt;span style=&#34;color:#5bc4bf&#34;&gt;)&lt;/span&gt; &lt;span style=&#34;color:#5bc4bf&#34;&gt;{&lt;/span&gt;
+        &lt;span style=&#34;color:#815ba4&#34;&gt;return&lt;/span&gt; &lt;span style=&#34;color:#815ba4&#34;&gt;new&lt;/span&gt; ApiVersionCondition&lt;span style=&#34;color:#5bc4bf&#34;&gt;(&lt;/span&gt;other&lt;span style=&#34;color:#5bc4bf&#34;&gt;.&lt;/span&gt;&lt;span style=&#34;color:#06b6ef&#34;&gt;getApiVersion&lt;/span&gt;&lt;span style=&#34;color:#5bc4bf&#34;&gt;());&lt;/span&gt;
+    &lt;span style=&#34;color:#5bc4bf&#34;&gt;}&lt;/span&gt;
+
+    &lt;span style=&#34;color:#5bc4bf&#34;&gt;@Override&lt;/span&gt;
+    &lt;span style=&#34;color:#815ba4&#34;&gt;public&lt;/span&gt; ApiVersionCondition &lt;span style=&#34;color:#06b6ef&#34;&gt;getMatchingCondition&lt;/span&gt;&lt;span style=&#34;color:#5bc4bf&#34;&gt;(&lt;/span&gt;HttpServletRequest request&lt;span style=&#34;color:#5bc4bf&#34;&gt;)&lt;/span&gt; &lt;span style=&#34;color:#5bc4bf&#34;&gt;{&lt;/span&gt;
+        Matcher m &lt;span style=&#34;color:#5bc4bf&#34;&gt;=&lt;/span&gt; VERSION_PREFIX_PATTERN&lt;span style=&#34;color:#5bc4bf&#34;&gt;.&lt;/span&gt;&lt;span style=&#34;color:#06b6ef&#34;&gt;matcher&lt;/span&gt;&lt;span style=&#34;color:#5bc4bf&#34;&gt;(&lt;/span&gt;request&lt;span style=&#34;color:#5bc4bf&#34;&gt;.&lt;/span&gt;&lt;span style=&#34;color:#06b6ef&#34;&gt;getRequestURI&lt;/span&gt;&lt;span style=&#34;color:#5bc4bf&#34;&gt;());&lt;/span&gt;
+        &lt;span style=&#34;color:#815ba4&#34;&gt;if&lt;/span&gt; &lt;span style=&#34;color:#5bc4bf&#34;&gt;(&lt;/span&gt;m&lt;span style=&#34;color:#5bc4bf&#34;&gt;.&lt;/span&gt;&lt;span style=&#34;color:#06b6ef&#34;&gt;find&lt;/span&gt;&lt;span style=&#34;color:#5bc4bf&#34;&gt;())&lt;/span&gt; &lt;span style=&#34;color:#5bc4bf&#34;&gt;{&lt;/span&gt;
+            &lt;span style=&#34;color:#fec418&#34;&gt;int&lt;/span&gt; version &lt;span style=&#34;color:#5bc4bf&#34;&gt;=&lt;/span&gt; Integer&lt;span style=&#34;color:#5bc4bf&#34;&gt;.&lt;/span&gt;&lt;span style=&#34;color:#06b6ef&#34;&gt;parseInt&lt;/span&gt;&lt;span style=&#34;color:#5bc4bf&#34;&gt;(&lt;/span&gt;m&lt;span style=&#34;color:#5bc4bf&#34;&gt;.&lt;/span&gt;&lt;span style=&#34;color:#06b6ef&#34;&gt;group&lt;/span&gt;&lt;span style=&#34;color:#5bc4bf&#34;&gt;(&lt;/span&gt;1&lt;span style=&#34;color:#5bc4bf&#34;&gt;));&lt;/span&gt;
+            &lt;span style=&#34;color:#815ba4&#34;&gt;if&lt;/span&gt; &lt;span style=&#34;color:#5bc4bf&#34;&gt;(&lt;/span&gt;version &lt;span style=&#34;color:#5bc4bf&#34;&gt;&amp;gt;=&lt;/span&gt; getApiVersion&lt;span style=&#34;color:#5bc4bf&#34;&gt;())&lt;/span&gt; &lt;span style=&#34;color:#5bc4bf&#34;&gt;{&lt;/span&gt;
+                &lt;span style=&#34;color:#815ba4&#34;&gt;return&lt;/span&gt; &lt;span style=&#34;color:#815ba4&#34;&gt;this&lt;/span&gt;&lt;span style=&#34;color:#5bc4bf&#34;&gt;;&lt;/span&gt;
+            &lt;span style=&#34;color:#5bc4bf&#34;&gt;}&lt;/span&gt;
+        &lt;span style=&#34;color:#5bc4bf&#34;&gt;}&lt;/span&gt;
+        &lt;span style=&#34;color:#815ba4&#34;&gt;return&lt;/span&gt; &lt;span style=&#34;color:#815ba4&#34;&gt;null&lt;/span&gt;&lt;span style=&#34;color:#5bc4bf&#34;&gt;;&lt;/span&gt;
+    &lt;span style=&#34;color:#5bc4bf&#34;&gt;}&lt;/span&gt;
+
+    &lt;span style=&#34;color:#5bc4bf&#34;&gt;@Override&lt;/span&gt;
+    &lt;span style=&#34;color:#815ba4&#34;&gt;public&lt;/span&gt; &lt;span style=&#34;color:#fec418&#34;&gt;int&lt;/span&gt; &lt;span style=&#34;color:#06b6ef&#34;&gt;compareTo&lt;/span&gt;&lt;span style=&#34;color:#5bc4bf&#34;&gt;(&lt;/span&gt;ApiVersionCondition other&lt;span style=&#34;color:#5bc4bf&#34;&gt;,&lt;/span&gt; HttpServletRequest request&lt;span style=&#34;color:#5bc4bf&#34;&gt;)&lt;/span&gt; &lt;span style=&#34;color:#5bc4bf&#34;&gt;{&lt;/span&gt;
+        &lt;span style=&#34;color:#815ba4&#34;&gt;return&lt;/span&gt; other&lt;span style=&#34;color:#5bc4bf&#34;&gt;.&lt;/span&gt;&lt;span style=&#34;color:#06b6ef&#34;&gt;getApiVersion&lt;/span&gt;&lt;span style=&#34;color:#5bc4bf&#34;&gt;()&lt;/span&gt; &lt;span style=&#34;color:#5bc4bf&#34;&gt;-&lt;/span&gt; getApiVersion&lt;span style=&#34;color:#5bc4bf&#34;&gt;();&lt;/span&gt;
+    &lt;span style=&#34;color:#5bc4bf&#34;&gt;}&lt;/span&gt;
+
+    &lt;span style=&#34;color:#815ba4&#34;&gt;public&lt;/span&gt; &lt;span style=&#34;color:#fec418&#34;&gt;int&lt;/span&gt; &lt;span style=&#34;color:#06b6ef&#34;&gt;getApiVersion&lt;/span&gt;&lt;span style=&#34;color:#5bc4bf&#34;&gt;()&lt;/span&gt; &lt;span style=&#34;color:#5bc4bf&#34;&gt;{&lt;/span&gt;
+        &lt;span style=&#34;color:#815ba4&#34;&gt;return&lt;/span&gt; apiVersion&lt;span style=&#34;color:#5bc4bf&#34;&gt;;&lt;/span&gt;
+    &lt;span style=&#34;color:#5bc4bf&#34;&gt;}&lt;/span&gt;
+
+    &lt;span style=&#34;color:#815ba4&#34;&gt;public&lt;/span&gt; &lt;span style=&#34;color:#fec418&#34;&gt;void&lt;/span&gt; &lt;span style=&#34;color:#06b6ef&#34;&gt;setApiVersion&lt;/span&gt;&lt;span style=&#34;color:#5bc4bf&#34;&gt;(&lt;/span&gt;&lt;span style=&#34;color:#fec418&#34;&gt;int&lt;/span&gt; apiVersion&lt;span style=&#34;color:#5bc4bf&#34;&gt;)&lt;/span&gt; &lt;span style=&#34;color:#5bc4bf&#34;&gt;{&lt;/span&gt;
+        &lt;span style=&#34;color:#815ba4&#34;&gt;this&lt;/span&gt;&lt;span style=&#34;color:#5bc4bf&#34;&gt;.&lt;/span&gt;&lt;span style=&#34;color:#06b6ef&#34;&gt;apiVersion&lt;/span&gt; &lt;span style=&#34;color:#5bc4bf&#34;&gt;=&lt;/span&gt; apiVersion&lt;span style=&#34;color:#5bc4bf&#34;&gt;;&lt;/span&gt;
+    &lt;span style=&#34;color:#5bc4bf&#34;&gt;}&lt;/span&gt;
+&lt;span style=&#34;color:#5bc4bf&#34;&gt;}&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;接著寫自訂 &lt;code&gt;CustomRequestMappingHandlerMapping&lt;/code&gt; 類別，繼承 &lt;code&gt;RequestMappingHandlerMapping&lt;/code&gt; 並 override &lt;code&gt;getCustomTypeCondition(Class&amp;lt;?&amp;gt; handlerType)&lt;/code&gt; 跟 &lt;code&gt;getCustomMethodCondition(Method method)&lt;/code&gt; 這兩個方法，以分別取得類別跟方法上的 &lt;code&gt;ApiVersion&lt;/code&gt; 註解，並據此建立 &lt;code&gt;ApiVersionCondition&lt;/code&gt; 給 Spring MVC 做 request mapping 時調用&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#e7e9db;background-color:#2f1e2e;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-java&#34; data-lang=&#34;java&#34;&gt;&lt;span style=&#34;color:#5bc4bf&#34;&gt;import&lt;/span&gt; &lt;span style=&#34;color:#fec418&#34;&gt;org.springframework.core.annotation.AnnotationUtils&lt;/span&gt;&lt;span style=&#34;color:#5bc4bf&#34;&gt;;&lt;/span&gt;
+&lt;span style=&#34;color:#5bc4bf&#34;&gt;import&lt;/span&gt; &lt;span style=&#34;color:#fec418&#34;&gt;org.springframework.web.servlet.mvc.condition.*&lt;/span&gt;&lt;span style=&#34;color:#5bc4bf&#34;&gt;;&lt;/span&gt;
+&lt;span style=&#34;color:#5bc4bf&#34;&gt;import&lt;/span&gt; &lt;span style=&#34;color:#fec418&#34;&gt;org.springframework.web.servlet.mvc.method.RequestMappingInfo&lt;/span&gt;&lt;span style=&#34;color:#5bc4bf&#34;&gt;;&lt;/span&gt;
+&lt;span style=&#34;color:#5bc4bf&#34;&gt;import&lt;/span&gt; &lt;span style=&#34;color:#fec418&#34;&gt;org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerMapping&lt;/span&gt;&lt;span style=&#34;color:#5bc4bf&#34;&gt;;&lt;/span&gt;
+
+&lt;span style=&#34;color:#5bc4bf&#34;&gt;import&lt;/span&gt; &lt;span style=&#34;color:#fec418&#34;&gt;java.lang.reflect.Method&lt;/span&gt;&lt;span style=&#34;color:#5bc4bf&#34;&gt;;&lt;/span&gt;
+
+&lt;span style=&#34;color:#815ba4&#34;&gt;public&lt;/span&gt; &lt;span style=&#34;color:#815ba4&#34;&gt;class&lt;/span&gt; &lt;span style=&#34;color:#fec418&#34;&gt;ApiVersionHandlerMapping&lt;/span&gt; &lt;span style=&#34;color:#815ba4&#34;&gt;extends&lt;/span&gt; RequestMappingHandlerMapping &lt;span style=&#34;color:#5bc4bf&#34;&gt;{&lt;/span&gt;
+
+    &lt;span style=&#34;color:#5bc4bf&#34;&gt;@Override&lt;/span&gt;
+    &lt;span style=&#34;color:#815ba4&#34;&gt;public&lt;/span&gt; RequestCondition&lt;span style=&#34;color:#5bc4bf&#34;&gt;&amp;lt;?&amp;gt;&lt;/span&gt; getCustomTypeCondition&lt;span style=&#34;color:#5bc4bf&#34;&gt;(&lt;/span&gt;Class&lt;span style=&#34;color:#5bc4bf&#34;&gt;&amp;lt;?&amp;gt;&lt;/span&gt; handlerType&lt;span style=&#34;color:#5bc4bf&#34;&gt;)&lt;/span&gt; &lt;span style=&#34;color:#5bc4bf&#34;&gt;{&lt;/span&gt;
+        ApiVersion apiVersion &lt;span style=&#34;color:#5bc4bf&#34;&gt;=&lt;/span&gt; AnnotationUtils&lt;span style=&#34;color:#5bc4bf&#34;&gt;.&lt;/span&gt;&lt;span style=&#34;color:#06b6ef&#34;&gt;findAnnotation&lt;/span&gt;&lt;span style=&#34;color:#5bc4bf&#34;&gt;(&lt;/span&gt;handlerType&lt;span style=&#34;color:#5bc4bf&#34;&gt;,&lt;/span&gt; ApiVersion&lt;span style=&#34;color:#5bc4bf&#34;&gt;.&lt;/span&gt;&lt;span style=&#34;color:#06b6ef&#34;&gt;class&lt;/span&gt;&lt;span style=&#34;color:#5bc4bf&#34;&gt;);&lt;/span&gt;
+        &lt;span style=&#34;color:#815ba4&#34;&gt;return&lt;/span&gt; createRequestCondition&lt;span style=&#34;color:#5bc4bf&#34;&gt;(&lt;/span&gt;apiVersion&lt;span style=&#34;color:#5bc4bf&#34;&gt;);&lt;/span&gt;
+    &lt;span style=&#34;color:#5bc4bf&#34;&gt;}&lt;/span&gt;
+
+    &lt;span style=&#34;color:#5bc4bf&#34;&gt;@Override&lt;/span&gt;
+    &lt;span style=&#34;color:#815ba4&#34;&gt;public&lt;/span&gt; RequestCondition&lt;span style=&#34;color:#5bc4bf&#34;&gt;&amp;lt;?&amp;gt;&lt;/span&gt; getCustomMethodCondition&lt;span style=&#34;color:#5bc4bf&#34;&gt;(&lt;/span&gt;Method method&lt;span style=&#34;color:#5bc4bf&#34;&gt;)&lt;/span&gt; &lt;span style=&#34;color:#5bc4bf&#34;&gt;{&lt;/span&gt;
+        ApiVersion apiVersion &lt;span style=&#34;color:#5bc4bf&#34;&gt;=&lt;/span&gt; AnnotationUtils&lt;span style=&#34;color:#5bc4bf&#34;&gt;.&lt;/span&gt;&lt;span style=&#34;color:#06b6ef&#34;&gt;findAnnotation&lt;/span&gt;&lt;span style=&#34;color:#5bc4bf&#34;&gt;(&lt;/span&gt;method&lt;span style=&#34;color:#5bc4bf&#34;&gt;,&lt;/span&gt; ApiVersion&lt;span style=&#34;color:#5bc4bf&#34;&gt;.&lt;/span&gt;&lt;span style=&#34;color:#06b6ef&#34;&gt;class&lt;/span&gt;&lt;span style=&#34;color:#5bc4bf&#34;&gt;);&lt;/span&gt;
+        &lt;span style=&#34;color:#815ba4&#34;&gt;return&lt;/span&gt; createRequestCondition&lt;span style=&#34;color:#5bc4bf&#34;&gt;(&lt;/span&gt;apiVersion&lt;span style=&#34;color:#5bc4bf&#34;&gt;);&lt;/span&gt;
+    &lt;span style=&#34;color:#5bc4bf&#34;&gt;}&lt;/span&gt;
+
+    &lt;span style=&#34;color:#815ba4&#34;&gt;private&lt;/span&gt; RequestCondition&lt;span style=&#34;color:#5bc4bf&#34;&gt;&amp;lt;&lt;/span&gt;ApiVersionCondition&lt;span style=&#34;color:#5bc4bf&#34;&gt;&amp;gt;&lt;/span&gt; &lt;span style=&#34;color:#06b6ef&#34;&gt;createRequestCondition&lt;/span&gt;&lt;span style=&#34;color:#5bc4bf&#34;&gt;(&lt;/span&gt;ApiVersion apiVersion&lt;span style=&#34;color:#5bc4bf&#34;&gt;)&lt;/span&gt; &lt;span style=&#34;color:#5bc4bf&#34;&gt;{&lt;/span&gt;
+        &lt;span style=&#34;color:#815ba4&#34;&gt;if&lt;/span&gt; &lt;span style=&#34;color:#5bc4bf&#34;&gt;(&lt;/span&gt;apiVersion &lt;span style=&#34;color:#5bc4bf&#34;&gt;==&lt;/span&gt; &lt;span style=&#34;color:#815ba4&#34;&gt;null&lt;/span&gt; &lt;span style=&#34;color:#5bc4bf&#34;&gt;||&lt;/span&gt; apiVersion&lt;span style=&#34;color:#5bc4bf&#34;&gt;.&lt;/span&gt;&lt;span style=&#34;color:#06b6ef&#34;&gt;value&lt;/span&gt;&lt;span style=&#34;color:#5bc4bf&#34;&gt;()&lt;/span&gt; &lt;span style=&#34;color:#5bc4bf&#34;&gt;&amp;lt;&lt;/span&gt; 1&lt;span style=&#34;color:#5bc4bf&#34;&gt;)&lt;/span&gt; &lt;span style=&#34;color:#5bc4bf&#34;&gt;{&lt;/span&gt;
+            &lt;span style=&#34;color:#815ba4&#34;&gt;return&lt;/span&gt; &lt;span style=&#34;color:#815ba4&#34;&gt;null&lt;/span&gt;&lt;span style=&#34;color:#5bc4bf&#34;&gt;;&lt;/span&gt;
+        &lt;span style=&#34;color:#5bc4bf&#34;&gt;}&lt;/span&gt;
+        &lt;span style=&#34;color:#815ba4&#34;&gt;return&lt;/span&gt; &lt;span style=&#34;color:#815ba4&#34;&gt;new&lt;/span&gt; ApiVersionCondition&lt;span style=&#34;color:#5bc4bf&#34;&gt;(&lt;/span&gt;apiVersion&lt;span style=&#34;color:#5bc4bf&#34;&gt;.&lt;/span&gt;&lt;span style=&#34;color:#06b6ef&#34;&gt;value&lt;/span&gt;&lt;span style=&#34;color:#5bc4bf&#34;&gt;());&lt;/span&gt;
+    &lt;span style=&#34;color:#5bc4bf&#34;&gt;}&lt;/span&gt;
+&lt;span style=&#34;color:#5bc4bf&#34;&gt;}&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;最後再建立一個設定類別繼承 &lt;code&gt;WebMvcConfigurationSupport&lt;/code&gt; 類別並 override &lt;code&gt;requestMappingHandlerMapping()&lt;/code&gt; 方法來提供自訂的 &lt;code&gt;CustomRequestMappingHandlerMapping&lt;/code&gt;&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#e7e9db;background-color:#2f1e2e;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-java&#34; data-lang=&#34;java&#34;&gt;&lt;span style=&#34;color:#5bc4bf&#34;&gt;import&lt;/span&gt; &lt;span style=&#34;color:#fec418&#34;&gt;org.springframework.context.annotation.Configuration&lt;/span&gt;&lt;span style=&#34;color:#5bc4bf&#34;&gt;;&lt;/span&gt;
+&lt;span style=&#34;color:#5bc4bf&#34;&gt;import&lt;/span&gt; &lt;span style=&#34;color:#fec418&#34;&gt;org.springframework.web.servlet.config.annotation.WebMvcConfigurationSupport&lt;/span&gt;&lt;span style=&#34;color:#5bc4bf&#34;&gt;;&lt;/span&gt;
+&lt;span style=&#34;color:#5bc4bf&#34;&gt;import&lt;/span&gt; &lt;span style=&#34;color:#fec418&#34;&gt;org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerMapping&lt;/span&gt;&lt;span style=&#34;color:#5bc4bf&#34;&gt;;&lt;/span&gt;
+
+&lt;span style=&#34;color:#5bc4bf&#34;&gt;@Configuration&lt;/span&gt;
+&lt;span style=&#34;color:#815ba4&#34;&gt;public&lt;/span&gt; &lt;span style=&#34;color:#815ba4&#34;&gt;class&lt;/span&gt; &lt;span style=&#34;color:#fec418&#34;&gt;WebMvcConfig&lt;/span&gt; &lt;span style=&#34;color:#815ba4&#34;&gt;extends&lt;/span&gt; WebMvcConfigurationSupport &lt;span style=&#34;color:#5bc4bf&#34;&gt;{&lt;/span&gt;
+
+    &lt;span style=&#34;color:#5bc4bf&#34;&gt;@Override&lt;/span&gt;
+    &lt;span style=&#34;color:#815ba4&#34;&gt;public&lt;/span&gt; RequestMappingHandlerMapping &lt;span style=&#34;color:#06b6ef&#34;&gt;requestMappingHandlerMapping&lt;/span&gt;&lt;span style=&#34;color:#5bc4bf&#34;&gt;()&lt;/span&gt; &lt;span style=&#34;color:#5bc4bf&#34;&gt;{&lt;/span&gt;
+        ApiVersionHandlerMapping handlerMapping &lt;span style=&#34;color:#5bc4bf&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color:#815ba4&#34;&gt;new&lt;/span&gt; ApiVersionHandlerMapping&lt;span style=&#34;color:#5bc4bf&#34;&gt;();&lt;/span&gt;
+        handlerMapping&lt;span style=&#34;color:#5bc4bf&#34;&gt;.&lt;/span&gt;&lt;span style=&#34;color:#06b6ef&#34;&gt;setOrder&lt;/span&gt;&lt;span style=&#34;color:#5bc4bf&#34;&gt;(&lt;/span&gt;0&lt;span style=&#34;color:#5bc4bf&#34;&gt;);&lt;/span&gt;
+        handlerMapping&lt;span style=&#34;color:#5bc4bf&#34;&gt;.&lt;/span&gt;&lt;span style=&#34;color:#06b6ef&#34;&gt;setInterceptors&lt;/span&gt;&lt;span style=&#34;color:#5bc4bf&#34;&gt;(&lt;/span&gt;getInterceptors&lt;span style=&#34;color:#5bc4bf&#34;&gt;());&lt;/span&gt;
+        &lt;span style=&#34;color:#815ba4&#34;&gt;return&lt;/span&gt; handlerMapping&lt;span style=&#34;color:#5bc4bf&#34;&gt;;&lt;/span&gt;
+    &lt;span style=&#34;color:#5bc4bf&#34;&gt;}&lt;/span&gt;
+&lt;span style=&#34;color:#5bc4bf&#34;&gt;}&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;這樣就可以在 controller 開心地加上 &lt;code&gt;ApiVersion&lt;/code&gt; 註解啦&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#e7e9db;background-color:#2f1e2e;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-java&#34; data-lang=&#34;java&#34;&gt;&lt;span style=&#34;color:#5bc4bf&#34;&gt;import&lt;/span&gt; &lt;span style=&#34;color:#fec418&#34;&gt;org.springframework.http.ResponseEntity&lt;/span&gt;&lt;span style=&#34;color:#5bc4bf&#34;&gt;;&lt;/span&gt;
+&lt;span style=&#34;color:#5bc4bf&#34;&gt;import&lt;/span&gt; &lt;span style=&#34;color:#fec418&#34;&gt;org.springframework.web.bind.annotation.*&lt;/span&gt;&lt;span style=&#34;color:#5bc4bf&#34;&gt;;&lt;/span&gt;
+
+&lt;span style=&#34;color:#5bc4bf&#34;&gt;@ApiVersion&lt;/span&gt;
+&lt;span style=&#34;color:#5bc4bf&#34;&gt;@RequestMapping&lt;/span&gt;&lt;span style=&#34;color:#5bc4bf&#34;&gt;(&lt;/span&gt;&lt;span style=&#34;color:#48b685&#34;&gt;&amp;#34;home&amp;#34;&lt;/span&gt;&lt;span style=&#34;color:#5bc4bf&#34;&gt;)&lt;/span&gt;
+&lt;span style=&#34;color:#5bc4bf&#34;&gt;@RestController&lt;/span&gt;
+&lt;span style=&#34;color:#815ba4&#34;&gt;public&lt;/span&gt; &lt;span style=&#34;color:#815ba4&#34;&gt;class&lt;/span&gt; &lt;span style=&#34;color:#fec418&#34;&gt;HomeController&lt;/span&gt; &lt;span style=&#34;color:#5bc4bf&#34;&gt;{&lt;/span&gt;
+
+    &lt;span style=&#34;color:#5bc4bf&#34;&gt;@GetMapping&lt;/span&gt;&lt;span style=&#34;color:#5bc4bf&#34;&gt;(&lt;/span&gt;&lt;span style=&#34;color:#48b685&#34;&gt;&amp;#34;hello&amp;#34;&lt;/span&gt;&lt;span style=&#34;color:#5bc4bf&#34;&gt;)&lt;/span&gt;
+    &lt;span style=&#34;color:#815ba4&#34;&gt;public&lt;/span&gt; ResponseEntity&lt;span style=&#34;color:#5bc4bf&#34;&gt;&amp;lt;?&amp;gt;&lt;/span&gt; hello&lt;span style=&#34;color:#5bc4bf&#34;&gt;()&lt;/span&gt; &lt;span style=&#34;color:#5bc4bf&#34;&gt;{&lt;/span&gt;
+        &lt;span style=&#34;color:#815ba4&#34;&gt;return&lt;/span&gt; ResponseEntity&lt;span style=&#34;color:#5bc4bf&#34;&gt;.&lt;/span&gt;&lt;span style=&#34;color:#06b6ef&#34;&gt;ok&lt;/span&gt;&lt;span style=&#34;color:#5bc4bf&#34;&gt;(&lt;/span&gt;&lt;span style=&#34;color:#48b685&#34;&gt;&amp;#34;Hello world!&amp;#34;&lt;/span&gt;&lt;span style=&#34;color:#5bc4bf&#34;&gt;);&lt;/span&gt;
+    &lt;span style=&#34;color:#5bc4bf&#34;&gt;}&lt;/span&gt;
+
+    &lt;span style=&#34;color:#5bc4bf&#34;&gt;@ApiVersion&lt;/span&gt;&lt;span style=&#34;color:#5bc4bf&#34;&gt;(&lt;/span&gt;2&lt;span style=&#34;color:#5bc4bf&#34;&gt;)&lt;/span&gt;
+    &lt;span style=&#34;color:#5bc4bf&#34;&gt;@GetMapping&lt;/span&gt;&lt;span style=&#34;color:#5bc4bf&#34;&gt;(&lt;/span&gt;&lt;span style=&#34;color:#48b685&#34;&gt;&amp;#34;hello&amp;#34;&lt;/span&gt;&lt;span style=&#34;color:#5bc4bf&#34;&gt;)&lt;/span&gt;
+    &lt;span style=&#34;color:#815ba4&#34;&gt;public&lt;/span&gt; ResponseEntity&lt;span style=&#34;color:#5bc4bf&#34;&gt;&amp;lt;?&amp;gt;&lt;/span&gt; helloV2&lt;span style=&#34;color:#5bc4bf&#34;&gt;()&lt;/span&gt; &lt;span style=&#34;color:#5bc4bf&#34;&gt;{&lt;/span&gt;
+        &lt;span style=&#34;color:#815ba4&#34;&gt;return&lt;/span&gt; ResponseEntity&lt;span style=&#34;color:#5bc4bf&#34;&gt;.&lt;/span&gt;&lt;span style=&#34;color:#06b6ef&#34;&gt;ok&lt;/span&gt;&lt;span style=&#34;color:#5bc4bf&#34;&gt;(&lt;/span&gt;&lt;span style=&#34;color:#48b685&#34;&gt;&amp;#34;Nice to meet you!&amp;#34;&lt;/span&gt;&lt;span style=&#34;color:#5bc4bf&#34;&gt;);&lt;/span&gt;
+    &lt;span style=&#34;color:#5bc4bf&#34;&gt;}&lt;/span&gt;
+&lt;span style=&#34;color:#5bc4bf&#34;&gt;}&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;&lt;strong&gt;BUT，人生就是這個 BUT&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;當你要兼容 Swagger 的時候，事情就沒這麼簡單惹，你會發現馬德，swagger-ui.html 開起來打 API 怎麼都沒有版本號？！&lt;/p&gt;
+&lt;p&gt;其實到這邊本文才要正式開始，否則你隨便 google 都是這樣的內容，我還寫個毛&lt;/p&gt;
+&lt;h2 id=&#34;兼容-swagger&#34;&gt;兼容 Swagger&lt;/h2&gt;
+&lt;p&gt;首先，要整合 Swagger 有個問題，Swagger 會讀取 handler 的 &lt;code&gt;RequestMappingInfo&lt;/code&gt; 來產生文件；但前面的作法其實是 request 進來後，利用 &lt;code&gt;RequestCondition&lt;/code&gt; 來邏輯上將 request 導向 handler，實際上的 path 沒有改變，所以 Swagger 當然讀不到正確的 uri 來產生文件&lt;/p&gt;
+&lt;p&gt;於是就有了另外一種做法&lt;/p&gt;
+&lt;p&gt;在前面寫好的 &lt;code&gt;CustomRequestMappingHandlerMapping&lt;/code&gt; 中，另外再 override &lt;code&gt;getMappingForMethod(Method method, Class&amp;lt;?&amp;gt; handlerType)&lt;/code&gt; 方法去調整 &lt;code&gt;RequestMappingInfo&lt;/code&gt;&lt;/p&gt;
+&lt;p&gt;這部分的作法其實要看狀況，但網路上有些範例不知道是不是比較早期的文章，還有用到 &lt;code&gt;Proxy&lt;/code&gt; 來操作的寫法，我是覺得有點不必要&lt;/p&gt;
+&lt;p&gt;Spring MVC 其實在 &lt;code&gt;RequestMappingInfo&lt;/code&gt; 裡面已經有很靈活的 constructor 可以做這方面的設定，並且提供方法可以跟原有的 &lt;code&gt;RequestMappingInfo&lt;/code&gt; 做合併&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#e7e9db;background-color:#2f1e2e;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-java&#34; data-lang=&#34;java&#34;&gt;&lt;span style=&#34;color:#5bc4bf&#34;&gt;@Override&lt;/span&gt;
+&lt;span style=&#34;color:#815ba4&#34;&gt;public&lt;/span&gt; RequestMappingInfo &lt;span style=&#34;color:#06b6ef&#34;&gt;getMappingForMethod&lt;/span&gt;&lt;span style=&#34;color:#5bc4bf&#34;&gt;(&lt;/span&gt;Method method&lt;span style=&#34;color:#5bc4bf&#34;&gt;,&lt;/span&gt; Class&lt;span style=&#34;color:#5bc4bf&#34;&gt;&amp;lt;?&amp;gt;&lt;/span&gt; handlerType&lt;span style=&#34;color:#5bc4bf&#34;&gt;)&lt;/span&gt; &lt;span style=&#34;color:#5bc4bf&#34;&gt;{&lt;/span&gt;
+    RequestMappingInfo info &lt;span style=&#34;color:#5bc4bf&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color:#815ba4&#34;&gt;super&lt;/span&gt;&lt;span style=&#34;color:#5bc4bf&#34;&gt;.&lt;/span&gt;&lt;span style=&#34;color:#06b6ef&#34;&gt;getMappingForMethod&lt;/span&gt;&lt;span style=&#34;color:#5bc4bf&#34;&gt;(&lt;/span&gt;method&lt;span style=&#34;color:#5bc4bf&#34;&gt;,&lt;/span&gt; handlerType&lt;span style=&#34;color:#5bc4bf&#34;&gt;);&lt;/span&gt;
+    &lt;span style=&#34;color:#815ba4&#34;&gt;if&lt;/span&gt; &lt;span style=&#34;color:#5bc4bf&#34;&gt;(&lt;/span&gt;info &lt;span style=&#34;color:#5bc4bf&#34;&gt;==&lt;/span&gt; &lt;span style=&#34;color:#815ba4&#34;&gt;null&lt;/span&gt;&lt;span style=&#34;color:#5bc4bf&#34;&gt;)&lt;/span&gt; &lt;span style=&#34;color:#815ba4&#34;&gt;return&lt;/span&gt; &lt;span style=&#34;color:#815ba4&#34;&gt;null&lt;/span&gt;&lt;span style=&#34;color:#5bc4bf&#34;&gt;;&lt;/span&gt;
+
+    ApiVersion methodAnnotation &lt;span style=&#34;color:#5bc4bf&#34;&gt;=&lt;/span&gt; AnnotationUtils&lt;span style=&#34;color:#5bc4bf&#34;&gt;.&lt;/span&gt;&lt;span style=&#34;color:#06b6ef&#34;&gt;findAnnotation&lt;/span&gt;&lt;span style=&#34;color:#5bc4bf&#34;&gt;(&lt;/span&gt;method&lt;span style=&#34;color:#5bc4bf&#34;&gt;,&lt;/span&gt; ApiVersion&lt;span style=&#34;color:#5bc4bf&#34;&gt;.&lt;/span&gt;&lt;span style=&#34;color:#06b6ef&#34;&gt;class&lt;/span&gt;&lt;span style=&#34;color:#5bc4bf&#34;&gt;);&lt;/span&gt;
+    &lt;span style=&#34;color:#815ba4&#34;&gt;if&lt;/span&gt; &lt;span style=&#34;color:#5bc4bf&#34;&gt;(&lt;/span&gt;methodAnnotation &lt;span style=&#34;color:#5bc4bf&#34;&gt;!=&lt;/span&gt; &lt;span style=&#34;color:#815ba4&#34;&gt;null&lt;/span&gt;&lt;span style=&#34;color:#5bc4bf&#34;&gt;)&lt;/span&gt; &lt;span style=&#34;color:#5bc4bf&#34;&gt;{&lt;/span&gt;
+        RequestCondition&lt;span style=&#34;color:#5bc4bf&#34;&gt;&amp;lt;?&amp;gt;&lt;/span&gt; methodCondition &lt;span style=&#34;color:#5bc4bf&#34;&gt;=&lt;/span&gt; getCustomMethodCondition&lt;span style=&#34;color:#5bc4bf&#34;&gt;(&lt;/span&gt;method&lt;span style=&#34;color:#5bc4bf&#34;&gt;);&lt;/span&gt;
+        info &lt;span style=&#34;color:#5bc4bf&#34;&gt;=&lt;/span&gt; createApiVersionInfo&lt;span style=&#34;color:#5bc4bf&#34;&gt;(&lt;/span&gt;methodAnnotation&lt;span style=&#34;color:#5bc4bf&#34;&gt;,&lt;/span&gt; methodCondition&lt;span style=&#34;color:#5bc4bf&#34;&gt;).&lt;/span&gt;&lt;span style=&#34;color:#06b6ef&#34;&gt;combine&lt;/span&gt;&lt;span style=&#34;color:#5bc4bf&#34;&gt;(&lt;/span&gt;info&lt;span style=&#34;color:#5bc4bf&#34;&gt;);&lt;/span&gt;
+    &lt;span style=&#34;color:#5bc4bf&#34;&gt;}&lt;/span&gt; &lt;span style=&#34;color:#815ba4&#34;&gt;else&lt;/span&gt; &lt;span style=&#34;color:#5bc4bf&#34;&gt;{&lt;/span&gt;
+        ApiVersion typeAnnotation &lt;span style=&#34;color:#5bc4bf&#34;&gt;=&lt;/span&gt; AnnotationUtils&lt;span style=&#34;color:#5bc4bf&#34;&gt;.&lt;/span&gt;&lt;span style=&#34;color:#06b6ef&#34;&gt;findAnnotation&lt;/span&gt;&lt;span style=&#34;color:#5bc4bf&#34;&gt;(&lt;/span&gt;handlerType&lt;span style=&#34;color:#5bc4bf&#34;&gt;,&lt;/span&gt; ApiVersion&lt;span style=&#34;color:#5bc4bf&#34;&gt;.&lt;/span&gt;&lt;span style=&#34;color:#06b6ef&#34;&gt;class&lt;/span&gt;&lt;span style=&#34;color:#5bc4bf&#34;&gt;);&lt;/span&gt;
+        &lt;span style=&#34;color:#815ba4&#34;&gt;if&lt;/span&gt; &lt;span style=&#34;color:#5bc4bf&#34;&gt;(&lt;/span&gt;typeAnnotation &lt;span style=&#34;color:#5bc4bf&#34;&gt;!=&lt;/span&gt; &lt;span style=&#34;color:#815ba4&#34;&gt;null&lt;/span&gt;&lt;span style=&#34;color:#5bc4bf&#34;&gt;)&lt;/span&gt; &lt;span style=&#34;color:#5bc4bf&#34;&gt;{&lt;/span&gt;
+            RequestCondition&lt;span style=&#34;color:#5bc4bf&#34;&gt;&amp;lt;?&amp;gt;&lt;/span&gt; typeCondition &lt;span style=&#34;color:#5bc4bf&#34;&gt;=&lt;/span&gt; getCustomTypeCondition&lt;span style=&#34;color:#5bc4bf&#34;&gt;(&lt;/span&gt;handlerType&lt;span style=&#34;color:#5bc4bf&#34;&gt;);&lt;/span&gt;
+            info &lt;span style=&#34;color:#5bc4bf&#34;&gt;=&lt;/span&gt; createApiVersionInfo&lt;span style=&#34;color:#5bc4bf&#34;&gt;(&lt;/span&gt;typeAnnotation&lt;span style=&#34;color:#5bc4bf&#34;&gt;,&lt;/span&gt; typeCondition&lt;span style=&#34;color:#5bc4bf&#34;&gt;).&lt;/span&gt;&lt;span style=&#34;color:#06b6ef&#34;&gt;combine&lt;/span&gt;&lt;span style=&#34;color:#5bc4bf&#34;&gt;(&lt;/span&gt;info&lt;span style=&#34;color:#5bc4bf&#34;&gt;);&lt;/span&gt;
+        &lt;span style=&#34;color:#5bc4bf&#34;&gt;}&lt;/span&gt;
+    &lt;span style=&#34;color:#5bc4bf&#34;&gt;}&lt;/span&gt;
+    &lt;span style=&#34;color:#815ba4&#34;&gt;return&lt;/span&gt; info&lt;span style=&#34;color:#5bc4bf&#34;&gt;;&lt;/span&gt;
+&lt;span style=&#34;color:#5bc4bf&#34;&gt;}&lt;/span&gt;
+
+&lt;span style=&#34;color:#815ba4&#34;&gt;private&lt;/span&gt; RequestMappingInfo &lt;span style=&#34;color:#06b6ef&#34;&gt;createApiVersionInfo&lt;/span&gt;&lt;span style=&#34;color:#5bc4bf&#34;&gt;(&lt;/span&gt;ApiVersion annotation&lt;span style=&#34;color:#5bc4bf&#34;&gt;,&lt;/span&gt; RequestCondition&lt;span style=&#34;color:#5bc4bf&#34;&gt;&amp;lt;?&amp;gt;&lt;/span&gt; customCondition&lt;span style=&#34;color:#5bc4bf&#34;&gt;)&lt;/span&gt; &lt;span style=&#34;color:#5bc4bf&#34;&gt;{&lt;/span&gt;
+    &lt;span style=&#34;color:#815ba4&#34;&gt;return&lt;/span&gt; &lt;span style=&#34;color:#815ba4&#34;&gt;new&lt;/span&gt; RequestMappingInfo&lt;span style=&#34;color:#5bc4bf&#34;&gt;(&lt;/span&gt;
+            &lt;span style=&#34;color:#815ba4&#34;&gt;new&lt;/span&gt; PatternsRequestCondition&lt;span style=&#34;color:#5bc4bf&#34;&gt;(&lt;/span&gt;&lt;span style=&#34;color:#48b685&#34;&gt;&amp;#34;v&amp;#34;&lt;/span&gt;&lt;span style=&#34;color:#5bc4bf&#34;&gt;.&lt;/span&gt;&lt;span style=&#34;color:#06b6ef&#34;&gt;concat&lt;/span&gt;&lt;span style=&#34;color:#5bc4bf&#34;&gt;(&lt;/span&gt;String&lt;span style=&#34;color:#5bc4bf&#34;&gt;.&lt;/span&gt;&lt;span style=&#34;color:#06b6ef&#34;&gt;valueOf&lt;/span&gt;&lt;span style=&#34;color:#5bc4bf&#34;&gt;(&lt;/span&gt;annotation&lt;span style=&#34;color:#5bc4bf&#34;&gt;.&lt;/span&gt;&lt;span style=&#34;color:#06b6ef&#34;&gt;value&lt;/span&gt;&lt;span style=&#34;color:#5bc4bf&#34;&gt;()))),&lt;/span&gt;
+            &lt;span style=&#34;color:#815ba4&#34;&gt;new&lt;/span&gt; RequestMethodsRequestCondition&lt;span style=&#34;color:#5bc4bf&#34;&gt;(),&lt;/span&gt;
+            &lt;span style=&#34;color:#815ba4&#34;&gt;new&lt;/span&gt; ParamsRequestCondition&lt;span style=&#34;color:#5bc4bf&#34;&gt;(),&lt;/span&gt;
+            &lt;span style=&#34;color:#815ba4&#34;&gt;new&lt;/span&gt; HeadersRequestCondition&lt;span style=&#34;color:#5bc4bf&#34;&gt;(),&lt;/span&gt;
+            &lt;span style=&#34;color:#815ba4&#34;&gt;new&lt;/span&gt; ConsumesRequestCondition&lt;span style=&#34;color:#5bc4bf&#34;&gt;(),&lt;/span&gt;
+            &lt;span style=&#34;color:#815ba4&#34;&gt;new&lt;/span&gt; ProducesRequestCondition&lt;span style=&#34;color:#5bc4bf&#34;&gt;(),&lt;/span&gt;
+            customCondition&lt;span style=&#34;color:#5bc4bf&#34;&gt;);&lt;/span&gt;
+&lt;span style=&#34;color:#5bc4bf&#34;&gt;}&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;這時候再打開 swagger-ui.html，就會覺得空氣是多麼清新，世界是多麼美好&lt;/p&gt;
+&lt;h2 id=&#34;spring-security-設定&#34;&gt;Spring Security 設定&lt;/h2&gt;
+&lt;p&gt;當然，因為現在很多 handler 的 uri 不一樣了，設定 Spring Security 哪些請求要擋哪些不用的部分當然也要改&lt;/p&gt;
+&lt;p&gt;最簡單就是在繼承 &lt;code&gt;WebSecurityConfigurerAdapter&lt;/code&gt; 的設定類別那邊手動加版本號，我自己是採用這種方式，因為考慮 Spring Security 本來就是安全考量要盡量嚴謹，會開放不用做驗證的部分應該本來就很少，所以手動修改這部分我覺得可以接受&lt;/p&gt;
+&lt;p&gt;另外提醒一下如果要使用 swagger-ui.html，要將相關的靜態資源開放，建議可以做在繼承 &lt;code&gt;WebSecurityConfigurerAdapter&lt;/code&gt; 的設定類別的 &lt;code&gt;configure(HttpSecurity httpSecurity)&lt;/code&gt; 方法中，可以省下另外註冊 resource 的功夫&lt;/p&gt;
+&lt;h2 id=&#34;spring-boot-auto-configuration-失效問題&#34;&gt;Spring Boot auto configuration 失效問題&lt;/h2&gt;
+&lt;p&gt;其實這樣寫完還有一個問題，萬一我有其他自訂部分有用到從 &lt;code&gt;WebMvcConfigurer&lt;/code&gt; 繼承來的方法，你會發現馬德，全都失效了&lt;/p&gt;
+&lt;p&gt;崩╰(〒皿〒)╯潰&lt;/p&gt;
+&lt;p&gt;這是因為前面繼承到萬惡的 &lt;code&gt;WebMvcConfigurationSupport&lt;/code&gt; 了&lt;/p&gt;
+&lt;p&gt;Spring Boot 的原則是 convention over configuration，所以它有很多自動設定，關於 Spring MVC 的部分就是 &lt;code&gt;WebMvcAutoConfiguration&lt;/code&gt; 在管&lt;/p&gt;
+&lt;p&gt;而不論是 &lt;code&gt;@EnableWebMvc&lt;/code&gt; 註解或直接繼承 &lt;code&gt;WebMvcConfigurationSupport&lt;/code&gt; 都會停用 &lt;code&gt;WebMvcAutoConfiguration&lt;/code&gt;，Spring Boot 就會改用你 &lt;code&gt;@EnableWebMvc&lt;/code&gt; 註解的類別或直接繼承 &lt;code&gt;WebMvcConfigurationSupport&lt;/code&gt; 的類別來做設定；如果剛好你需要的自訂部分在這裡沒有想辦法設定進去，那你繼承 &lt;code&gt;WebMvcConfigurer&lt;/code&gt; 的設定就白寫了&lt;/p&gt;
+&lt;p&gt;解決的關鍵點就是 &lt;code&gt;WebMvcRegistrations&lt;/code&gt; 介面，看是要實作介面還是匿名類別的 &lt;code&gt;@Bean&lt;/code&gt; 給 Spring Boot 都可以&lt;/p&gt;
+&lt;p&gt;我是寫在繼承 &lt;code&gt;WebMvcConfigurer&lt;/code&gt; 的設定類別裡面，讓 Sring MVC 相關設定集中&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#e7e9db;background-color:#2f1e2e;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-java&#34; data-lang=&#34;java&#34;&gt;&lt;span style=&#34;color:#5bc4bf&#34;&gt;import&lt;/span&gt; &lt;span style=&#34;color:#fec418&#34;&gt;org.springframework.boot.autoconfigure.web.servlet.WebMvcRegistrations&lt;/span&gt;&lt;span style=&#34;color:#5bc4bf&#34;&gt;;&lt;/span&gt;
+&lt;span style=&#34;color:#5bc4bf&#34;&gt;import&lt;/span&gt; &lt;span style=&#34;color:#fec418&#34;&gt;org.springframework.context.annotation.Bean&lt;/span&gt;&lt;span style=&#34;color:#5bc4bf&#34;&gt;;&lt;/span&gt;
+&lt;span style=&#34;color:#5bc4bf&#34;&gt;import&lt;/span&gt; &lt;span style=&#34;color:#fec418&#34;&gt;org.springframework.context.annotation.Configuration&lt;/span&gt;&lt;span style=&#34;color:#5bc4bf&#34;&gt;;&lt;/span&gt;
+&lt;span style=&#34;color:#5bc4bf&#34;&gt;import&lt;/span&gt; &lt;span style=&#34;color:#fec418&#34;&gt;org.springframework.web.servlet.config.annotation.WebMvcConfigurer&lt;/span&gt;&lt;span style=&#34;color:#5bc4bf&#34;&gt;;&lt;/span&gt;
+&lt;span style=&#34;color:#5bc4bf&#34;&gt;import&lt;/span&gt; &lt;span style=&#34;color:#fec418&#34;&gt;org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerMapping&lt;/span&gt;&lt;span style=&#34;color:#5bc4bf&#34;&gt;;&lt;/span&gt;
+
+&lt;span style=&#34;color:#5bc4bf&#34;&gt;@Configuration&lt;/span&gt;
+&lt;span style=&#34;color:#815ba4&#34;&gt;public&lt;/span&gt; &lt;span style=&#34;color:#815ba4&#34;&gt;class&lt;/span&gt; &lt;span style=&#34;color:#fec418&#34;&gt;CustomWebMvcConfigurer&lt;/span&gt; &lt;span style=&#34;color:#815ba4&#34;&gt;implements&lt;/span&gt; WebMvcConfigurer &lt;span style=&#34;color:#5bc4bf&#34;&gt;{&lt;/span&gt;
+
+    &lt;span style=&#34;color:#5bc4bf&#34;&gt;@Bean&lt;/span&gt;
+    &lt;span style=&#34;color:#815ba4&#34;&gt;public&lt;/span&gt; WebMvcRegistrations &lt;span style=&#34;color:#06b6ef&#34;&gt;webMvcRegistrationsRequestMappingHandlerMapping&lt;/span&gt;&lt;span style=&#34;color:#5bc4bf&#34;&gt;()&lt;/span&gt; &lt;span style=&#34;color:#5bc4bf&#34;&gt;{&lt;/span&gt;
+        &lt;span style=&#34;color:#815ba4&#34;&gt;return&lt;/span&gt; &lt;span style=&#34;color:#815ba4&#34;&gt;new&lt;/span&gt; WebMvcRegistrations&lt;span style=&#34;color:#5bc4bf&#34;&gt;()&lt;/span&gt; &lt;span style=&#34;color:#5bc4bf&#34;&gt;{&lt;/span&gt;
+            
+            &lt;span style=&#34;color:#5bc4bf&#34;&gt;@Override&lt;/span&gt;
+            &lt;span style=&#34;color:#815ba4&#34;&gt;public&lt;/span&gt; RequestMappingHandlerMapping &lt;span style=&#34;color:#06b6ef&#34;&gt;getRequestMappingHandlerMapping&lt;/span&gt;&lt;span style=&#34;color:#5bc4bf&#34;&gt;()&lt;/span&gt; &lt;span style=&#34;color:#5bc4bf&#34;&gt;{&lt;/span&gt;
+                &lt;span style=&#34;color:#815ba4&#34;&gt;return&lt;/span&gt; &lt;span style=&#34;color:#815ba4&#34;&gt;new&lt;/span&gt; ApiVersionHandlerMapping&lt;span style=&#34;color:#5bc4bf&#34;&gt;();&lt;/span&gt;
+            &lt;span style=&#34;color:#5bc4bf&#34;&gt;}&lt;/span&gt;
+        &lt;span style=&#34;color:#5bc4bf&#34;&gt;};&lt;/span&gt;
+    &lt;span style=&#34;color:#5bc4bf&#34;&gt;}&lt;/span&gt;
+&lt;span style=&#34;color:#5bc4bf&#34;&gt;}&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;至此就可以把前面寫的 &lt;code&gt;WebMvcConfig&lt;/code&gt; 刪掉啦&lt;/p&gt;
+&lt;p&gt;至於沒找到 &lt;code&gt;WebMvcRegistrations&lt;/code&gt; 介面的朋友，要不就是你 Spring Boot 版本太低，不然就只能改用 &lt;code&gt;WebMvcRegistrationsAdpater&lt;/code&gt; 試試看了 (攤手)&lt;/p&gt;
+- https://idontwannarock.github.io/tech_blog/2019/09/spring_api_version_with_swagger_security/ - This website by Howard Wang is licensed under a Creative Common Attribution-ShareAlike 4.0 International License.</description>
+        </item>
+    
+    
+    
+        <item>
+        <title>Spring Security 整合 RBAC</title>
+        <link>https://idontwannarock.github.io/tech_blog/2019/05/spring_security_rbac/</link>
+        <pubDate>Thu, 30 May 2019 15:33:07 +0800</pubDate>
+        
+        <guid>https://idontwannarock.github.io/tech_blog/2019/05/spring_security_rbac/</guid>
+        <description>Howard Tech Note https://idontwannarock.github.io/tech_blog/2019/05/spring_security_rbac/ -&lt;p&gt;目前比較主流的 &lt;a href=&#34;https://en.wikipedia.org/wiki/Role-based_access_control&#34;&gt;Role-based Access Control, RBAC&lt;/a&gt; 算是比較成熟且彈性的權限架構，若要在 Spring Security 實作 RBAC 並搭配 JWT 或 OAuth 2.0，大概要探討兩個問題&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;是否值得為了減少查詢資料源的次數，而將角色或權限直接置入 JWT 或 Authorization Server 回傳的 token&lt;/li&gt;
+&lt;li&gt;是否採取 Spring Security 原生只使用最細粒度的權限來進行存取控制&lt;/li&gt;
+&lt;/ol&gt;
+&lt;p&gt;關於第一個問題，目前的思考點大概就是考量系統的併發度跟使用者總數&lt;/p&gt;
+&lt;p&gt;如果需要高併發，那自然希望盡量減少查詢資料的次數或資料量，盡量避免同時大量消耗 DB 資源；相反的，如果不需要高併發，那每次驗證都重新取得角色及權限資料也沒關係&lt;/p&gt;
+&lt;p&gt;使用者數量的考量也是類似，如果每次查詢的成本太高，則盡量減少查詢的次數&lt;/p&gt;
+&lt;p&gt;而第二個問題，則是要考量實際的業務場景&lt;/p&gt;
+&lt;p&gt;如果角色跟權限很大量且複雜，或可能要考慮角色分層甚至使用者群組，或不同 Domain 有不同的權限邏輯，則可能用 Spring Security 原生方式會不敷使用，相對如果角色權限結構簡單，則直接使用原生方式可能成本較低&lt;/p&gt;
+&lt;p&gt;所以以下探討主要專注於使用 Spring Security 提供的自訂空間來實作較為複雜的存取控制&lt;/p&gt;
+&lt;h1 id=&#34;spring-security-權限架構&#34;&gt;Spring Security 權限架構&lt;/h1&gt;
+&lt;p&gt;首先要探討 Spring Security 原生提供的權限架構&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;GrantedAuthority: 可以將每個 GrantedAuthority 想成是個別的 privilege，所以在 Spring Security 中，authority 就是 privilege 的概念&lt;/li&gt;
+&lt;li&gt;Role: 在 Spring Security 中為了保持彈性，Role 可以當作 Authority 也可以當作一組 Authority 的組合
+&lt;ul&gt;
+&lt;li&gt;Role as Authority: 直接把 Role 當成一種 Authority 的情況，就是將 Role 當作一個有 ROLE_ 前綴的字串，這種情況下 Role 跟 Authority 就只是語意上的差別&lt;/li&gt;
+&lt;li&gt;Role as Container: Role 可以包含一組 Authority，Spring Security 在這個概念上沒有提供太多指引說明，需要自行實作&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;blockquote&gt;
+&lt;p&gt;&lt;a href=&#34;https://www.baeldung.com/spring-security-granted-authority-vs-role&#34;&gt;Granted Authority Versus Role in Spring Security&lt;/a&gt;&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;p&gt;所以概念上 Spring Security 的 Role 比較像是有特別命名方式 (ROLE_ 前綴) 的一種 Authority，因此在預設中，&lt;code&gt;hasAuthority(&#39;ROLE_ADMIN&#39;)&lt;/code&gt; 跟 &lt;code&gt;hasRole(&#39;ADMIN&#39;)&lt;/code&gt; 是一樣的&lt;/p&gt;
+&lt;p&gt;在 Spring Security 中 Role as Authority 最明顯的例子就是 SimpleGrantedAuthority，建構子直接吃 role 字串，&lt;code&gt;getAuthority()&lt;/code&gt; 方法也直接吐回 role 字串屬性&lt;/p&gt;
+&lt;p&gt;因此，如果要建立 Role 跟 Authority 分離的權限架構，首先要確認的是在設定 access control 時，&lt;code&gt;hasRole()&lt;/code&gt; 跟 &lt;code&gt;hasAuthority()&lt;/code&gt; 兩個方法到底是用什麼機制、從哪裡取得&lt;/p&gt;
+&lt;p&gt;Spring Security 的整體架構分成驗證跟存取控制兩個部分，由於驗證部分會由 API 搭配 JWT 做掉大部分，甚至未來整合 OAuth 2.0，所以需要探討的只有如何在驗證過程將使用者資料及權限放入 SecurityContext 中讓後續的存取控制使用，並且存取控制部分如何依照使用者資料及權限進行控制&lt;/p&gt;
+&lt;h2 id=&#34;userdetailsservice&#34;&gt;&lt;code&gt;UserDetailsService&lt;/code&gt;&lt;/h2&gt;
+&lt;p&gt;要在驗證過程將使用者資料及權限放入 SecurityContext 中，最簡單就是實作 &lt;code&gt;UserDetailsService&lt;/code&gt; 的 &lt;code&gt;loadUserByUsername&lt;/code&gt; 方法，然後將自訂的 &lt;code&gt;UserDetailsService&lt;/code&gt; 提供給 &lt;code&gt;AuthenticationManager&lt;/code&gt; 即可&lt;/p&gt;
+&lt;p&gt;這部分主要還是要考慮繼承 &lt;code&gt;UserDetails&lt;/code&gt; 物件後，如何設定權限部分以及該將什麼樣的資料放入 Authentication 的 authorities 中&lt;/p&gt;
+&lt;h2 id=&#34;accessdecisionvoter-及-accessdecisionmanager&#34;&gt;&lt;code&gt;AccessDecisionVoter&lt;/code&gt; 及 &lt;code&gt;AccessDecisionManager&lt;/code&gt;&lt;/h2&gt;
+&lt;p&gt;而存取控制的邏輯部分就要實作 &lt;code&gt;AccessDecisionVoter&lt;/code&gt; 的 &lt;code&gt;vote&lt;/code&gt; 方法&lt;/p&gt;
+&lt;p&gt;voter 可以選擇回傳三種決策:&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;code&gt;ACCESS_GRANTED&lt;/code&gt;: 通過&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;ACCESS_DENIED&lt;/code&gt;: 否決&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;ACCESS_ABSTAIN&lt;/code&gt;: 棄權&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;實作完 voter 後，要將 voter 加入 &lt;code&gt;AccessDecisionManager&lt;/code&gt;，而 &lt;code&gt;AccessDecisionManager&lt;/code&gt; 預設有三種決策策略&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;code&gt;AffirmativeBased&lt;/code&gt;: 任何 voter 回傳通過即可&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;ConsensusBased&lt;/code&gt;: 通過數大於否決數，忽略棄權&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;UnanimousBased&lt;/code&gt;: 所有 voter 通過或棄權，也就是不能有任何否決&lt;/li&gt;
+&lt;/ul&gt;
+&lt;blockquote&gt;
+&lt;p&gt;&lt;a href=&#34;https://www.baeldung.com/spring-security-custom-voter&#34;&gt;Custom AccessDecisionVoters in Spring Security&lt;/a&gt;&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;p&gt;這部分就只能基於實際業務邏輯做考量&lt;/p&gt;
+- https://idontwannarock.github.io/tech_blog/2019/05/spring_security_rbac/ - This website by Howard Wang is licensed under a Creative Common Attribution-ShareAlike 4.0 International License.</description>
+        </item>
+    
+    
+    
+        <item>
+        <title>Github Flow 簡介</title>
+        <link>https://idontwannarock.github.io/tech_blog/2019/05/github_flow_intro/</link>
+        <pubDate>Wed, 29 May 2019 10:52:45 +0800</pubDate>
+        
+        <guid>https://idontwannarock.github.io/tech_blog/2019/05/github_flow_intro/</guid>
+        <description>Howard Tech Note https://idontwannarock.github.io/tech_blog/2019/05/github_flow_intro/ -&lt;p&gt;&lt;a href=&#34;https://guides.github.com/introduction/flow/&#34;&gt;Understanding the GitHub flow&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;GitHub flow 只有一條原則：&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;p&gt;&lt;strong&gt;在 master 的任何 commit 永遠都是可以被部署的&lt;/strong&gt;&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;p&gt;所以所有要做開發的 branch 都直接從 master 分支出去，不論是 feature 或 fix&lt;/p&gt;
+&lt;p&gt;開發的每個 commit 都要寫清楚 message，註明該 commit 做的變動以及理由等等&lt;/p&gt;
+&lt;p&gt;當開發到一定階段後，就可以對 master 開 Pull Request, PR，這在 GitHub flow 很重要&lt;/p&gt;
+&lt;p&gt;如果是用 Fork &amp;amp; Pull 模式，PR 就是用來通知專案維護者關於你希望他們考慮的變更；如果是用 Shared Repository 模式，則 PR 就像是用來開一個討論空間，在 merge 到 master 之前來做 code review 或針對特定變更的討論&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;p&gt;Fork &amp;amp; Pull 模式就是需要先 fork 後再 pull 到本機做開發，完成並 push 後，開 PR 要求合併到主專案&lt;/p&gt;
+&lt;p&gt;Shared Repository 模式則是直接可以對主專案開 branch 做開發&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;p&gt;在開 PR 之後，還是可以在該分支繼續開發，可以是有關討論的變更或 fix 等，重要的是要在 commit message 寫清楚變更以及變更的理由或決策的脈絡&lt;/p&gt;
+&lt;p&gt;在變更經過討論並測試完畢後，在 merge 到 master 之前，直接用分支的 commit 部署到 production 做最後的驗證，如果有問題，則用 master 上的 commit 重新部署到 production 來回復&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;p&gt;所以在 GitHub flow 中，測試是很重要的部分&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;p&gt;當變更通過部署在 production 的驗證後，就可以將該變更 merge 到 master，此時 PR 就結束，並會留下該變更的整個紀錄，讓其他人了解整個變更的流程以及脈絡&lt;/p&gt;
+&lt;p&gt;而且因為 PR 可以連結 Issue，當 PR 被 merge 後，關聯到的 Issue 也會同時關閉&lt;/p&gt;
+- https://idontwannarock.github.io/tech_blog/2019/05/github_flow_intro/ - This website by Howard Wang is licensed under a Creative Common Attribution-ShareAlike 4.0 International License.</description>
+        </item>
+    
+    
+    
+        <item>
+        <title>Hugo 入門教學</title>
+        <link>https://idontwannarock.github.io/tech_blog/2019/05/hugo_tutorial/</link>
+        <pubDate>Tue, 07 May 2019 16:03:07 +0800</pubDate>
+        
+        <guid>https://idontwannarock.github.io/tech_blog/2019/05/hugo_tutorial/</guid>
+        <description>Howard Tech Note https://idontwannarock.github.io/tech_blog/2019/05/hugo_tutorial/ -&lt;p&gt;我個人在建立部落格的路上碰到了很多問題：&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;Wordpress 要花錢，雖然好像不多，但作為一個沒有人看的部落格，這樣還要花錢就是不爽&lt;/li&gt;
+&lt;li&gt;沒有網路無法寫文章，就算寫了純文字的內容，等有網路後貼到 Wordpress 的編輯器還要重新設定字體大小等等&lt;/li&gt;
+&lt;li&gt;沒辦法在自己的電腦或電腦們很方便的做備份，而且我只是個&lt;!-- raw HTML omitted --&gt;&lt;del&gt;簡單的男人&lt;/del&gt;&lt;!-- raw HTML omitted --&gt;簡單的部落格，不需要備份一堆只有 Wordpress 能用的東西好嗎&lt;/li&gt;
+&lt;li&gt;不能用工程師宅宅必備命令列工具裝潮，假裝駭客任務&lt;/li&gt;
+&lt;li&gt;最重要的，身為一個工程師宅宅，用 Wordpress 寫部落格說得出口嗎？很顯然可以，但要付錢我就不想用&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;如果你對以上絕大多數的問題都有切身之痛，那可以考慮繼續閱讀下去，否則建議還是直接使用 Wordpress 或 Wix 吧&lt;/p&gt;
+&lt;h1 id=&#34;hugo-與靜態網站&#34;&gt;Hugo 與靜態網站&lt;/h1&gt;
+&lt;p&gt;唉唷，還繼續，那大概不是 M 就是工程師宅宅相關種，那靜態網站不用講了，Hugo 自己研究就好啦，本篇結束&lt;/p&gt;
+&lt;p&gt;&lt;!-- raw HTML omitted --&gt;&lt;!-- raw HTML omitted --&gt;&lt;!-- raw HTML omitted --&gt;&lt;!-- raw HTML omitted --&gt;&lt;!-- raw HTML omitted --&gt;&lt;!-- raw HTML omitted --&gt;&lt;!-- raw HTML omitted --&gt;&lt;!-- raw HTML omitted --&gt;&lt;!-- raw HTML omitted --&gt;&lt;!-- raw HTML omitted --&gt;&lt;!-- raw HTML omitted --&gt;&lt;!-- raw HTML omitted --&gt;&lt;!-- raw HTML omitted --&gt;&lt;!-- raw HTML omitted --&gt;&lt;!-- raw HTML omitted --&gt;&lt;/p&gt;
+&lt;p&gt;不能醬喔？那好吧&lt;/p&gt;
+&lt;p&gt;Hugo 是一種 Static Site Generator, SSG 靜態網站產生器，靜態網站簡單來說就是有固定內容的網站，所謂的固定內容就是 HTML 這種瀏覽器可以直接開啟的網頁檔案，配合 CSS, Javascript 做美化，這些檔案只要沒有被修改過，每次打開都會產生固定的內容，所以稱為靜態網站&lt;/p&gt;
+&lt;p&gt;而基於後面會提到 Hugo 這個工具的特性，它很適合用來產生部落格，使用者只需要撰寫 Markdown 這種純文字檔案作為每篇文章的內容，就可以透過 Hugo 快速的建立或修改網站，而不必每次都要修改相對應的 HTML 甚至 CSS 及 Javascript 檔案&lt;/p&gt;
+&lt;p&gt;Hugo 作為一個世界範圍內前三熱門的 SSG 工具，它還有很多熱心工程師宅宅幫他寫了很多佈景主題讓使用者可以直接套用來產生網站，所以使用者只需要把文章內容寫成 Markdown 這種純文字檔案，就可以直接用 Hugo 將文章按照佈景主題產生出美美的網站了&lt;/p&gt;
+&lt;h1 id=&#34;這樣誰看的到&#34;&gt;這樣誰看的到？&lt;/h1&gt;
+&lt;p&gt;不過這樣產生出來的網站有一個關鍵的問題，這些檔案只放在你電腦裡，沒人看得到，除了你自己&lt;/p&gt;
+&lt;p&gt;所以我們需要「把它放到網路上」&lt;/p&gt;
+&lt;p&gt;一般要做到「把它放到網路上」並且「誰都看得見」，其實要做很多事情，例如租用網路空間、買域名、部署網站等等，Wordpress 的好處就在這，它提供一條龍的服務幫你做到底&lt;/p&gt;
+&lt;p&gt;但現在沒有 Wordpress 而且要堅持不花錢的懶惰工程師宅宅原則，所以我們要走另一條路，使用 Git 跟 GitHub&lt;/p&gt;
+&lt;h1 id=&#34;gitgithub-與-github-pages&#34;&gt;Git、GitHub 與 GitHub Pages&lt;/h1&gt;
+&lt;p&gt;Git 是一種版本控制工具，簡單來說就是可以保存每次改動檔案的紀錄的工具，所以要做修改或要放棄修改，也不會因為存了檔或沒存檔就整個完蛋&lt;/p&gt;
+&lt;p&gt;GitHub 可以理解為一個全世界最多工程師宅宅在用的&lt;!-- raw HTML omitted --&gt;&lt;del&gt;交友網站&lt;/del&gt;&lt;!-- raw HTML omitted --&gt;免費空間，只不過它原生就支援 Git 可以對你放在這個免費空間的檔案做版本控制，也可以直接跟你電腦上的 Git 做同步&lt;/p&gt;
+&lt;p&gt;GitHub 有幾個好處，裝潮、幾乎無限空間、免費，對，免費，免費就贏 Wordpress 了&lt;/p&gt;
+&lt;p&gt;GitHub 還有一個方便的功能，就是它可以根據你放在空間中的靜態檔案自動建立一個靜態網站，還自帶域名，不用付錢給 Wordpress、GoDaddy 或中華電信，也就是我們要用的 GitHub Pages&lt;/p&gt;
+&lt;h1 id=&#34;安裝-hugo&#34;&gt;安裝 Hugo&lt;/h1&gt;
+&lt;p&gt;坐而言不如起而行，沒有能不能只有行不行，高雄發大財！&lt;/p&gt;
+&lt;p&gt;首先有關安裝 Hugo，順帶說明一下 Hugo 雖然是用 Go 寫得，但跟其他也很紅的 SSG 如 Jekyll 要裝 Ruby 或 Hexo 要裝 Node.js 跟 NPM 不同，它不用安裝 Go，所以可以直接裝 Hugo 就好&lt;/p&gt;
+&lt;p&gt;當然安裝 Hugo 有幾種方式，&lt;a href=&#34;https://gohugo.io/getting-started/installing&#34;&gt;官方說明&lt;/a&gt;中說可以直接下載 Binary 檔然後自己設定變數，MacOS 系統推薦用 Homebrew 做安裝，Windows 系統推薦用 Chocolatey 或 Scoop&lt;/p&gt;
+&lt;p&gt;我是推薦用 Homebrew 或 Chocolatey 這種管理工具，這樣你就不用自己設定變數，安裝跟解安裝都很方便，要升級也很方便&lt;/p&gt;
+&lt;p&gt;Hugo 的操作都在命令列執行，所以MacOS 請打開 Terminal 終端機或 iTerm2 這種命令列工具，Windows 開 Powershell，輸入以下命令做安裝&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#e7e9db;background-color:#2f1e2e;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-bash&#34; data-lang=&#34;bash&#34;&gt;// MacOs
+brew install hugo
+
+// Windows
+choco install hugo
+// or
+scoop install hugo
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;裝完之後，輸入以下命令檢查有沒有裝好&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#e7e9db;background-color:#2f1e2e;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-bash&#34; data-lang=&#34;bash&#34;&gt;hugo version
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;應該會出現類似以下這行訊息，有出現就 ok 啦&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;p&gt;Hugo Static Site Generator v0.55.5-A83256B9 windows/amd64 BuildDate: 2019-05-02T13:04:07Z&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;h1 id=&#34;建立新網站&#34;&gt;建立新網站&lt;/h1&gt;
+&lt;p&gt;一樣在命令列工具輸入命令就可以產生一個基本的靜態網站&lt;/p&gt;
+&lt;p&gt;但記得要先移動到你要建立這網站檔案的目錄底下，MacOS 幾乎都是用 &lt;code&gt;cd &amp;lt;目錄名稱&amp;gt;&lt;/code&gt; 就可以，Windows 比較麻煩要先確定是在哪一個磁碟機， &lt;code&gt;&amp;lt;磁碟機編號&amp;gt;:&lt;/code&gt; 可以移動到該磁碟機，例如 &lt;code&gt;C:&lt;/code&gt; 就是移到 C 槽，然後再用 &lt;code&gt;cd &amp;lt;目錄名稱&amp;gt;&lt;/code&gt; 移動到目的地的目錄&lt;/p&gt;
+&lt;p&gt;要回到上一層資料夾則用 &lt;code&gt;cd..&lt;/code&gt;&lt;/p&gt;
+&lt;p&gt;移動的過程中，如果你不清楚目前資料夾底下有哪些資料夾跟檔案，或不知道資料夾完整名稱，可以簡單用 &lt;code&gt;ls&lt;/code&gt; 命令來列出資料夾跟檔案名稱列表&lt;/p&gt;
+&lt;p&gt;如果要建立資料夾，可用以下命令&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#e7e9db;background-color:#2f1e2e;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-bash&#34; data-lang=&#34;bash&#34;&gt;mkdir &amp;lt;資料夾名稱&amp;gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;移動到目的地資料夾後，再輸入以下命令&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#e7e9db;background-color:#2f1e2e;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-bash&#34; data-lang=&#34;bash&#34;&gt;hugo new site &amp;lt;網站名稱&amp;gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;Hugo 預設會直接用你給的網站名稱，假設就叫 test，在當前目錄底下建立 test 資料夾，並將網站生成在該資料夾中&lt;/p&gt;
+&lt;h1 id=&#34;安裝佈景主題&#34;&gt;安裝佈景主題&lt;/h1&gt;
+&lt;p&gt;再來講一下不是必須但可以浪費很多生命的安裝佈景主題&lt;/p&gt;
+&lt;p&gt;有兩種做法，簡單跟裝逼&lt;/p&gt;
+&lt;p&gt;先講簡單&lt;/p&gt;
+&lt;p&gt;就是到 &lt;a href=&#34;https://themes.gohugo.io/&#34;&gt;Hugo Themes&lt;/a&gt; 這個網站選一個主題，以下都以 &lt;a href=&#34;https://themes.gohugo.io/aether/&#34;&gt;aether&lt;/a&gt; 來舉例，不要問為什麼，問了就不簡單了&lt;/p&gt;
+&lt;p&gt;首先要先下載主題包，所以點 &lt;a href=&#34;https://themes.gohugo.io/aether/&#34;&gt;aether&lt;/a&gt; 網頁中的 Download 按鈕；再點綠色的 Clone or download 按鈕，然後點 Download ZIP 下載壓縮檔&lt;/p&gt;
+&lt;p&gt;然後在剛建立的 Hugo 網站 test 資料夾中建立一個 themes 資料夾，然後將主題包解壓縮到 themes 資料夾，應該會產生一個 aether-master 資料夾，裡面是一堆不知道在幹嘛的檔案&lt;/p&gt;
+&lt;p&gt;不要緊張，先回到 test 資料夾，打開那個唯一的檔案 config.toml，這是個純文字檔，所以看你是要用筆記本、WordPad 或隨便什麼文字編輯器打開都可以&lt;/p&gt;
+&lt;p&gt;裡面目前大概只有這樣&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#e7e9db;background-color:#2f1e2e;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-toml&#34; data-lang=&#34;toml&#34;&gt;&lt;span style=&#34;color:#06b6ef&#34;&gt;baseURL&lt;/span&gt; = &lt;span style=&#34;color:#48b685&#34;&gt;&amp;#34;http://example.org/&amp;#34;&lt;/span&gt;
+&lt;span style=&#34;color:#06b6ef&#34;&gt;languageCode&lt;/span&gt; = &lt;span style=&#34;color:#48b685&#34;&gt;&amp;#34;en-us&amp;#34;&lt;/span&gt;
+&lt;span style=&#34;color:#06b6ef&#34;&gt;title&lt;/span&gt; = &lt;span style=&#34;color:#48b685&#34;&gt;&amp;#34;My New Hugo Site&amp;#34;&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;但我們應該起碼要將它填到這樣&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#e7e9db;background-color:#2f1e2e;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-toml&#34; data-lang=&#34;toml&#34;&gt;&lt;span style=&#34;color:#06b6ef&#34;&gt;baseURL&lt;/span&gt; = &lt;span style=&#34;color:#48b685&#34;&gt;&amp;#34;https://yourwebsitenamegoeshere.com/&amp;#34;&lt;/span&gt;
+&lt;span style=&#34;color:#06b6ef&#34;&gt;languageCode&lt;/span&gt; = &lt;span style=&#34;color:#48b685&#34;&gt;&amp;#34;The language code for the language the website is written in&amp;#34;&lt;/span&gt;
+&lt;span style=&#34;color:#06b6ef&#34;&gt;title&lt;/span&gt; = &lt;span style=&#34;color:#48b685&#34;&gt;&amp;#34;The website title that is used in each page title, displayed in the browser tab and search results&amp;#34;&lt;/span&gt;
+&lt;span style=&#34;color:#06b6ef&#34;&gt;theme&lt;/span&gt; = &lt;span style=&#34;color:#48b685&#34;&gt;&amp;#34;aether&amp;#34;&lt;/span&gt;
+&lt;span style=&#34;color:#06b6ef&#34;&gt;googleAnalytics&lt;/span&gt; = &lt;span style=&#34;color:#48b685&#34;&gt;&amp;#34;Your google analytics tracking ID - optional&amp;#34;&lt;/span&gt;
+&lt;span style=&#34;color:#06b6ef&#34;&gt;disqusShortname&lt;/span&gt; = &lt;span style=&#34;color:#48b685&#34;&gt;&amp;#34;Your shortname for Disqus - optional&amp;#34;&lt;/span&gt;
+
+[&lt;span style=&#34;color:#06b6ef&#34;&gt;params&lt;/span&gt;]
+&lt;span style=&#34;color:#06b6ef&#34;&gt;brand&lt;/span&gt; = &lt;span style=&#34;color:#48b685&#34;&gt;&amp;#34;The name that is displayed in the top left of the website, consider it the website name&amp;#34;&lt;/span&gt;
+&lt;span style=&#34;color:#06b6ef&#34;&gt;description&lt;/span&gt; = &lt;span style=&#34;color:#48b685&#34;&gt;&amp;#34;The website&amp;#39;s description&amp;#34;&lt;/span&gt;
+&lt;span style=&#34;color:#06b6ef&#34;&gt;homeimg&lt;/span&gt; = &lt;span style=&#34;color:#48b685&#34;&gt;&amp;#34;URL to the image used for the home button at the bottom of each post - optional&amp;#34;&lt;/span&gt;
+&lt;span style=&#34;color:#06b6ef&#34;&gt;bgimg&lt;/span&gt; = &lt;span style=&#34;color:#48b685&#34;&gt;&amp;#34;URL to the image used for the page background - optional&amp;#34;&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;其中有 &lt;code&gt;- optional&lt;/code&gt; 的選項都不是必填，像是 googleAnalytics 跟 disqusShortname；如果不想填，就在該行最左邊加一個 &lt;code&gt;#&lt;/code&gt;&lt;/p&gt;
+&lt;p&gt;簡單的大概是降&lt;/p&gt;
+&lt;p&gt;裝逼的做法首先你電腦要裝好 Git，什麼？你不會，那你裝什麼逼？&lt;/p&gt;
+&lt;p&gt;總之一樣到 &lt;a href=&#34;https://themes.gohugo.io/aether/&#34;&gt;aether&lt;/a&gt; 主題的 &lt;a href=&#34;https://github.com/josephhutch/aether&#34;&gt;GitHub Repo 頁面&lt;/a&gt; 請流利的使用 Git 指令將這個主題用 &lt;code&gt;git submodule&lt;/code&gt; 的方式加到 test 資料夾下的 themes 資料夾&lt;/p&gt;
+&lt;p&gt;然後一樣針對 config.toml 檔案做設定&lt;/p&gt;
+&lt;p&gt;安裝佈景主題的流程就降&lt;/p&gt;
+&lt;h1 id=&#34;新增文章&#34;&gt;新增文章&lt;/h1&gt;
+&lt;p&gt;使用以下命令，可以生成一篇新的 Markdown 檔，裡面就可以撰寫你的部落格文章內容，但要記得利用 Markdown 語法，各種方便啊&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#e7e9db;background-color:#2f1e2e;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-bash&#34; data-lang=&#34;bash&#34;&gt;hugo new post/&amp;lt;文章檔案名稱&amp;gt;.md
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;注意 &lt;code&gt;post/&lt;/code&gt; 不能省略，這是 aether 這個主題預設會掃描文章內容的資料夾，如果你放錯位置，那文章就白寫了好嗎&lt;/p&gt;
+&lt;h1 id=&#34;測試網站&#34;&gt;測試網站&lt;/h1&gt;
+&lt;p&gt;裝好主題也寫好文章以後，想看一下網站實際上長怎樣，就在命令列輸入以下命令&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#e7e9db;background-color:#2f1e2e;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-bash&#34; data-lang=&#34;bash&#34;&gt;hugo server -D
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;然後隨便開一個瀏覽器，在網址列輸入 &lt;code&gt;http://localhost:1313/&lt;/code&gt; 就可以看到成果啦&lt;/p&gt;
+&lt;p&gt;測試完畢就按 Ctrl + C 結束&lt;/p&gt;
+&lt;h1 id=&#34;生成網站&#34;&gt;生成網站&lt;/h1&gt;
+&lt;p&gt;剛才只是在自己的電腦上模擬生成的網站，但實際上真正可以讓瀏覽器直接開啟的靜態網站並沒有永久生成，在你按下 Ctrl + C 或關掉命令列工具的同時，它就死了哭哭&lt;/p&gt;
+&lt;p&gt;所以現在要來真正的生成靜態網站的檔案，其實就是在 test 資料夾輸入 &lt;code&gt;hugo&lt;/code&gt;，Hugo 就會自動在 test 資料夾底下建立 public 資料夾，並在 public 資料夾依照 config.toml 裡選擇的 theme 生成靜態網站，而這步驟生成的靜態網站內容，其實就跟上一步你在測試網站看到的內容一模一樣&lt;/p&gt;
+&lt;p&gt;不信你可以用瀏覽器打開 public 資料夾中的 index.html 檔案就知道了&lt;/p&gt;
+&lt;h1 id=&#34;github-pages&#34;&gt;GitHub Pages&lt;/h1&gt;
+&lt;p&gt;最後我們來解決「把它放到網路上」這個問題&lt;/p&gt;
+&lt;p&gt;前面說了要用 GitHub Pages，但並不是說這個世界上只有 GitHub Pages 才有這種免費的功能啊，只是這邊用它舉例，你也可以自己玩玩看 GitLab Pages，基本上是一樣的概念，但還自帶 CI/CD 功能，CI/CD 是什麼請點 &lt;a href=&#34;http://bfy.tw/BJQS&#34;&gt;這裡&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;請先自己到 GitHub 申請個帳號，免費；然後新增一個 Repository，名字隨意，或可以取得跟你網站資料夾一樣的名字方便你之後辨識&lt;/p&gt;
+&lt;p&gt;不會申請或開 repo？不會自己 google 啊？申請免費帳號這種事情還要我教？&lt;/p&gt;
+&lt;p&gt;接著我們要把網站搬到新建的 repo 中，這邊也有簡單跟裝逼兩種做法&lt;/p&gt;
+&lt;p&gt;一樣先講簡單&lt;/p&gt;
+&lt;p&gt;請進入剛生成靜態網站檔案的 public 資料夾，然後全選，用拖曳的方式直接拉到新建 repo 的頁面當中，它就會自己上傳了，就這麼簡單&lt;/p&gt;
+&lt;p&gt;但記得之後每新增一篇文章就要做一次 &lt;a href=&#34;#%E7%94%9F%E6%88%90%E7%B6%B2%E7%AB%99&#34;&gt;生成網站&lt;/a&gt; 這段的內容，然後再將 public 資料夾裡面的東西整個上傳到 GitHub repo 中&lt;/p&gt;
+&lt;p&gt;接著點 Settings，往下拉到倒數第二個區塊 GitHub Pages，然後點第一個下拉選單選 master branch，應該就會出現你的網站網址，如此就大功告成啦！可喜可賀可喜可賀&lt;/p&gt;
+&lt;p&gt;最後講一下裝逼做法&lt;/p&gt;
+&lt;p&gt;為了適應到不同電腦都能同步作業，而且不會變動到部落格基本設定的目的，我們會希望把整個 test 資料夾上傳&lt;/p&gt;
+&lt;p&gt;所以要先在 config.toml 裡面新增一行 &lt;code&gt;publishDir = &amp;quot;docs&amp;quot;&lt;/code&gt; 讓生成靜態網站的資料夾從 public 改為 docs&lt;/p&gt;
+&lt;p&gt;然後用 &lt;code&gt;git add .&lt;/code&gt;、&lt;code&gt;git commit -m &amp;quot;&amp;lt;commit message&amp;gt;&amp;quot;&lt;/code&gt;、&lt;code&gt;git push&lt;/code&gt; 的組合技把整個 test 資料夾 push 到指定的 repo master branch&lt;/p&gt;
+&lt;p&gt;最後到 Settings 的 GitHub Pages 區塊，下拉選單選 master branch /docs folder，如此 GitHub 就會自動讀取 docs 資料夾中的靜態網站資料&lt;/p&gt;
+&lt;p&gt;什麼？你跟我說不會 Git？再說一次，那你裝什麼逼？&lt;/p&gt;
+- https://idontwannarock.github.io/tech_blog/2019/05/hugo_tutorial/ - This website by Howard Wang is licensed under a Creative Common Attribution-ShareAlike 4.0 International License.</description>
+        </item>
+    
+    
+    
+        <item>
+        <title>AOP 及 Spring AOP 簡述</title>
+        <link>https://idontwannarock.github.io/tech_blog/2018/04/aop_and_spring_aop_basic/</link>
+        <pubDate>Tue, 10 Apr 2018 13:22:52 +0800</pubDate>
+        
+        <guid>https://idontwannarock.github.io/tech_blog/2018/04/aop_and_spring_aop_basic/</guid>
+        <description>Howard Tech Note https://idontwannarock.github.io/tech_blog/2018/04/aop_and_spring_aop_basic/ -&lt;blockquote&gt;
+&lt;p&gt;這篇文章是初學的時候撰寫的，其中一些觀念並不正確，步驟也可能因為更新或觀念問題而不適用或者多餘，此篇文章僅為留做紀錄&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;ul&gt;
+&lt;li&gt;AOP(Aspect-Oriented Programming) 是一種基於 OOP(Object-Oriented Programming) 的改進&lt;/li&gt;
+&lt;li&gt;AOP 是基於動態代理 (Dynamic Proxy) 這種 design pattern&lt;/li&gt;
+&lt;li&gt;AOP 主要的設計對象是切面 (Aspect)，而切面是用來模組化橫切關注點 (Cross-Cutting Concern)&lt;/li&gt;
+&lt;li&gt;切面需要定義公共功能，但可以明確定義功能在哪裡或以什麼方式應用，而不必修改受影響的類別。如此切面關注點就可以被模組化到特殊的類別 (切面) 裡面&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h1 id=&#34;優點&#34;&gt;優點&lt;/h1&gt;
+&lt;ul&gt;
+&lt;li&gt;交易相關的邏輯位於同一位置，便於維護與升級&lt;/li&gt;
+&lt;li&gt;業務邏輯更簡潔，只包含核心業務代碼&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h1 id=&#34;術語及概念&#34;&gt;術語及概念&lt;/h1&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;strong&gt;Cross-Cutting Concern 橫切關注點&lt;/strong&gt;：橫跨應用系統多個流程、模組的功能，例如日誌 (Logging)、安全 (Security) 檢查、交易 (Transaction) 等動作，在許多流程的多個位置都需要執行，這種動作就被稱為橫切關注點&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;Aspect 切面&lt;/strong&gt;：橫切關注點被模組化後的一種特殊物件；還未模組化前是橫切關注點，抽取後成為一組一組的切面；另一方面來說代理會將一個一個切面重組為橫切關注點&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;Advice 通知&lt;/strong&gt;：切面必須要完成的工作或行為，也就是切面的實作內容。切面裡面的各個方法即是一個、一個的通知&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;Target 目標&lt;/strong&gt;：被通知的物件，也就是要被橫切的業務邏輯類別&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;Proxy 代理&lt;/strong&gt;：向目標物件通知之後創建的對象。容器會建立一個代理，依照設定去縫合 (weave) 切面到應用程式中&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;JoinPoint 連接點&lt;/strong&gt;：程序執行的某個特定位置或時機。例如某個類別的某個方法呼叫前、呼叫後、拋出異常後等等。
+&lt;ul&gt;
+&lt;li&gt;連接點由兩個因素決定：&lt;strong&gt;以方法表示的程式執行點、相對執行點表示的方位&lt;/strong&gt;。例如 A 類別的 a() 方法執行前的 JoinPoint 連接點決定要素為：執行點 A#a()，方位為執行前的位置&lt;/li&gt;
+&lt;li&gt;概念類比：&lt;strong&gt;JoinPoint 連接點相當於資料庫的紀錄，切面相當於查詢條件&lt;/strong&gt;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;Pointcut 切面定義&lt;/strong&gt;：每個類別都有多個連接點，&lt;strong&gt;類別的所有方法某種程度上都可以想成是 JoinPoint 連接點&lt;/strong&gt;。AOP通過切面定位到特定的連接點&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h1 id=&#34;spring-aop&#34;&gt;Spring AOP&lt;/h1&gt;
+&lt;ul&gt;
+&lt;li&gt;AspectJ：Java 社群最完整、最廣為人知的 AOP 實作&lt;/li&gt;
+&lt;li&gt;Spring 2.0 以上，可以使用基於 AspectJ 的 annotation 註解或基於 XML 設定的 AOP&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2 id=&#34;dependencies&#34;&gt;Dependencies&lt;/h2&gt;
+&lt;h3 id=&#34;spring&#34;&gt;Spring&lt;/h3&gt;
+&lt;ul&gt;
+&lt;li&gt;commons logging&lt;/li&gt;
+&lt;li&gt;spring beans&lt;/li&gt;
+&lt;li&gt;spring context&lt;/li&gt;
+&lt;li&gt;spring core&lt;/li&gt;
+&lt;li&gt;spring expression&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h3 id=&#34;spring-aop-1&#34;&gt;Spring AOP&lt;/h3&gt;
+&lt;ul&gt;
+&lt;li&gt;aopalliance&lt;/li&gt;
+&lt;li&gt;aspectj weaver&lt;/li&gt;
+&lt;li&gt;spring aop&lt;/li&gt;
+&lt;li&gt;spring aspects&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;&lt;strong&gt;註：Spring 框架的版本可以更動，但須一致&lt;/strong&gt;&lt;/p&gt;
+&lt;h2 id=&#34;設定&#34;&gt;設定&lt;/h2&gt;
+&lt;ul&gt;
+&lt;li&gt;在 XML 文件中加入 aop namespace&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h3 id=&#34;基於註解的方式&#34;&gt;基於註解的方式&lt;/h3&gt;
+&lt;ul&gt;
+&lt;li&gt;在 XML 文件中加入以下設定：
+&lt;ul&gt;
+&lt;li&gt;&lt;code&gt;&amp;lt;aop:aspectj-autoproxy/&amp;gt;&lt;/code&gt;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;把橫切關注點的程式碼抽象到切面的類別中
+&lt;ul&gt;
+&lt;li&gt;切面首先是一個 IOC 中的 bean，所以要加上 &lt;code&gt;@Component&lt;/code&gt; 註解&lt;/li&gt;
+&lt;li&gt;切面還需要加入 &lt;code&gt;@Aspect&lt;/code&gt; 註解&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;在類別中聲明各種通知：
+&lt;ul&gt;
+&lt;li&gt;聲明一個方法&lt;/li&gt;
+&lt;li&gt;在方法前加入五種註解，並配合要通知的目標：
+&lt;ul&gt;
+&lt;li&gt;&lt;code&gt;@Before&lt;/code&gt;：執行點之前&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;@After&lt;/code&gt;：執行點之後，但無法取得回傳值&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;@AfterReturning&lt;/code&gt;：執行點之後，但可以取得回傳值，執行順序在 &lt;code&gt;@After&lt;/code&gt; 之前&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;@AfterThrowing&lt;/code&gt;：執行出現異常後，可以取得異常資訊，執行順序在 &lt;code&gt;@After&lt;/code&gt; 之前&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;@Around&lt;/code&gt;：執行點前、後、回傳值等全都包括，通常會配合 ProceedingJoinPoint 類別當參數使用&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;可以在通知方法中聲明一個類別為 JoinPoint 的參數，然後就可以藉此物件取出目標連接點的細節，例如方法名稱及其參數等&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h3 id=&#34;基於-xml-文件的方式&#34;&gt;基於 XML 文件的方式&lt;/h3&gt;
+&lt;ul&gt;
+&lt;li&gt;所有相關類別都不需要任何註解&lt;/li&gt;
+&lt;li&gt;XML 文件中加入 aop 跟 beans namespace&lt;/li&gt;
+&lt;li&gt;在 XML 文件中先設定好有關的 bean，包括目標類別及切面類別&lt;/li&gt;
+&lt;li&gt;再於 XML 文件中在&lt;code&gt;&amp;lt;aop:config&amp;gt;&amp;lt;/aop:config&amp;gt;&lt;/code&gt;元素內設定 AOP 有關設定&lt;/li&gt;
+&lt;li&gt;其中設定的元素跟屬性都跟註解相同&lt;/li&gt;
+&lt;/ul&gt;
+- https://idontwannarock.github.io/tech_blog/2018/04/aop_and_spring_aop_basic/ - This website by Howard Wang is licensed under a Creative Common Attribution-ShareAlike 4.0 International License.</description>
+        </item>
+    
+    
+    
+        <item>
+        <title>Java 字串判定</title>
+        <link>https://idontwannarock.github.io/tech_blog/2018/02/java_string_check/</link>
+        <pubDate>Tue, 06 Feb 2018 14:09:25 +0800</pubDate>
+        
+        <guid>https://idontwannarock.github.io/tech_blog/2018/02/java_string_check/</guid>
+        <description>Howard Tech Note https://idontwannarock.github.io/tech_blog/2018/02/java_string_check/ -&lt;p&gt;因為開始做專題，開始要作資料檢查，首先會要碰到的就是最基本的檢查是否有輸入資料，也就是要檢查字串，記錄一下 Java 當中有關字串檢查的東西。&lt;/p&gt;
+&lt;h1 id=&#34;去除字串空白&#34;&gt;去除字串空白&lt;/h1&gt;
+&lt;p&gt;這主要分兩個部分，一是去掉頭尾空白，一是去掉字串中間空白。&lt;/p&gt;
+&lt;p&gt;去掉頭尾空白就用 &lt;code&gt;.trim()&lt;/code&gt;，去掉字串中間空白則可以用 &lt;code&gt;.replaceAll(&amp;quot; &amp;quot;, &amp;quot;&amp;quot;)&lt;/code&gt; 的方式簡單完成。&lt;/p&gt;
+&lt;p&gt;但用 &lt;code&gt;replaceAll()&lt;/code&gt; 方法有個小小的問題，就是萬一碰到的是空白字元，例如 &lt;code&gt;\t&lt;/code&gt;、&lt;code&gt;\r&lt;/code&gt; 這種就會有困難，所以必須要用正規表示式來去除，例如：&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#e7e9db;background-color:#2f1e2e;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-java&#34; data-lang=&#34;java&#34;&gt;String str &lt;span style=&#34;color:#5bc4bf&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color:#48b685&#34;&gt;&amp;#34;\t&amp;#34;&lt;/span&gt;&lt;span style=&#34;color:#5bc4bf&#34;&gt;;&lt;/span&gt;
+str&lt;span style=&#34;color:#5bc4bf&#34;&gt;.&lt;/span&gt;&lt;span style=&#34;color:#06b6ef&#34;&gt;replaceAll&lt;/span&gt;&lt;span style=&#34;color:#5bc4bf&#34;&gt;(&lt;/span&gt;&lt;span style=&#34;color:#48b685&#34;&gt;&amp;#34;\\s+&amp;#34;&lt;/span&gt;&lt;span style=&#34;color:#5bc4bf&#34;&gt;,&lt;/span&gt; &lt;span style=&#34;color:#48b685&#34;&gt;&amp;#34;&amp;#34;&lt;/span&gt;&lt;span style=&#34;color:#5bc4bf&#34;&gt;);&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h1 id=&#34;檢查空值&#34;&gt;檢查空值&lt;/h1&gt;
+&lt;p&gt;接著如果要檢查字串是否有東西，要分成檢查兩種狀態，null 或空字串。&lt;/p&gt;
+&lt;p&gt;這邊有幾個方法檢查這個部分，但要注意它們實際功能上的區別。&lt;/p&gt;
+&lt;h2 id=&#34;length--0&#34;&gt;&lt;code&gt;.length == 0&lt;/code&gt;&lt;/h2&gt;
+&lt;p&gt;這個是 Java 最原始的功能，基本上就是檢查字串長度是否為 0，回傳值型態為 boolean。&lt;/p&gt;
+&lt;h2 id=&#34;isempty&#34;&gt;&lt;code&gt;.isEmpty()&lt;/code&gt;&lt;/h2&gt;
+&lt;p&gt;這個方法是 Java 6.0 之後推出用來取代 &lt;code&gt;.length() == 0&lt;/code&gt; 的方法。&lt;code&gt;isEmpty()&lt;/code&gt; 其實也是在檢查字串長度是否為 0，回傳值型態一樣為 boolean。&lt;/p&gt;
+&lt;h2 id=&#34;equals&#34;&gt;&lt;code&gt;.equals(&amp;quot;&amp;quot;)&lt;/code&gt;&lt;/h2&gt;
+&lt;p&gt;這個功能是用字串的比對功能，比對是否為空字串，結果應該會跟前兩個方法相同。&lt;/p&gt;
+&lt;h2 id=&#34;-null&#34;&gt;&lt;code&gt;!= null&lt;/code&gt;&lt;/h2&gt;
+&lt;p&gt;前面幾個方法都有一個共同的問題：萬一字串為 null，全都來不及檢查就會跳 NullPointerException。&lt;/p&gt;
+&lt;p&gt;所以必須要用這個方式檢查是否為 Null，再檢查是否為空字串，也就是要寫成類似下面這樣：&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#e7e9db;background-color:#2f1e2e;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-java&#34; data-lang=&#34;java&#34;&gt;String string&lt;span style=&#34;color:#5bc4bf&#34;&gt;;&lt;/span&gt;
+&lt;span style=&#34;color:#815ba4&#34;&gt;if&lt;/span&gt; &lt;span style=&#34;color:#5bc4bf&#34;&gt;(&lt;/span&gt;string &lt;span style=&#34;color:#5bc4bf&#34;&gt;!=&lt;/span&gt; &lt;span style=&#34;color:#815ba4&#34;&gt;null&lt;/span&gt; &lt;span style=&#34;color:#5bc4bf&#34;&gt;&amp;amp;&amp;amp;&lt;/span&gt; string&lt;span style=&#34;color:#5bc4bf&#34;&gt;.&lt;/span&gt;&lt;span style=&#34;color:#06b6ef&#34;&gt;isEmpty&lt;/span&gt;&lt;span style=&#34;color:#5bc4bf&#34;&gt;())&lt;/span&gt; &lt;span style=&#34;color:#5bc4bf&#34;&gt;{&lt;/span&gt;
+    &lt;span style=&#34;color:#776e71&#34;&gt;// things to do when string is neither null nor blank;
+&lt;/span&gt;&lt;span style=&#34;color:#776e71&#34;&gt;&lt;/span&gt;&lt;span style=&#34;color:#5bc4bf&#34;&gt;}&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h2 id=&#34;equalsstring&#34;&gt;&lt;code&gt;&amp;quot;&amp;quot;.equals(string)&lt;/code&gt;&lt;/h2&gt;
+&lt;p&gt;但有一個更簡短的方法 &lt;code&gt;&amp;quot;&amp;quot;.equals(string)&lt;/code&gt;。&lt;/p&gt;
+&lt;p&gt;因為用 String 本身的 &lt;code&gt;.equals()&lt;/code&gt; 方法，會先檢查括號內參數字串是否為 null，若是 null 就會直接回傳 &lt;code&gt;false&lt;/code&gt;；若參數字串不為 null，才會繼續檢查是否跟 &lt;code&gt;&amp;quot;&amp;quot;&lt;/code&gt; 空字串相等。&lt;/p&gt;
+&lt;p&gt;所以前一段的檢查式就可以縮短如下：&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#e7e9db;background-color:#2f1e2e;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-java&#34; data-lang=&#34;java&#34;&gt;String string&lt;span style=&#34;color:#5bc4bf&#34;&gt;;&lt;/span&gt;
+&lt;span style=&#34;color:#815ba4&#34;&gt;if&lt;/span&gt; &lt;span style=&#34;color:#5bc4bf&#34;&gt;(!&lt;/span&gt;&lt;span style=&#34;color:#48b685&#34;&gt;&amp;#34;&amp;#34;&lt;/span&gt;&lt;span style=&#34;color:#5bc4bf&#34;&gt;.&lt;/span&gt;&lt;span style=&#34;color:#06b6ef&#34;&gt;equals&lt;/span&gt;&lt;span style=&#34;color:#5bc4bf&#34;&gt;(&lt;/span&gt;string&lt;span style=&#34;color:#5bc4bf&#34;&gt;))&lt;/span&gt; &lt;span style=&#34;color:#5bc4bf&#34;&gt;{&lt;/span&gt;
+    &lt;span style=&#34;color:#776e71&#34;&gt;// things to do when string is neither null nor blank;
+&lt;/span&gt;&lt;span style=&#34;color:#776e71&#34;&gt;&lt;/span&gt;&lt;span style=&#34;color:#5bc4bf&#34;&gt;}&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h1 id=&#34;結語&#34;&gt;結語&lt;/h1&gt;
+&lt;p&gt;雖然最後一個方法最簡短，但其實可讀性不見得比較優秀；而倒數第二個方法雖然比較囉唆，但整體上可讀性比較好。&lt;/p&gt;
+&lt;p&gt;所以要用哪種方法還是要看簡潔跟可讀性怎麼取捨。&lt;/p&gt;
+- https://idontwannarock.github.io/tech_blog/2018/02/java_string_check/ - This website by Howard Wang is licensed under a Creative Common Attribution-ShareAlike 4.0 International License.</description>
+        </item>
+    
+    
+    
+        <item>
+        <title>Java 樂透抽取算法初探</title>
+        <link>https://idontwannarock.github.io/tech_blog/2017/11/java_lottery_algorithm_basic/</link>
+        <pubDate>Wed, 15 Nov 2017 14:26:17 +0800</pubDate>
+        
+        <guid>https://idontwannarock.github.io/tech_blog/2017/11/java_lottery_algorithm_basic/</guid>
+        <description>Howard Tech Note https://idontwannarock.github.io/tech_blog/2017/11/java_lottery_algorithm_basic/ -&lt;p&gt;因為做到這個經典練習演算法的題目，雖然是非常入門級的，也是讓我想了很久，覺得都做了這麼久，不記錄下來也是蠻可惜。&lt;/p&gt;
+&lt;h1 id=&#34;題目&#34;&gt;題目&lt;/h1&gt;
+&lt;p&gt;請隨機從正整數 1-42當中隨機抽出 6個數字，不用排序，但不可重複。&lt;/p&gt;
+&lt;h1 id=&#34;解法&#34;&gt;解法&lt;/h1&gt;
+&lt;p&gt;樂透這個題目主要可以練習的有三個地方，隨機、迴圈，還有就是如何確保數字不重複。&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;p&gt;以 Java 來說，隨機就是使用 &lt;code&gt;java.lang.Math&lt;/code&gt; 類別裡的靜態方法 &lt;code&gt;random()&lt;/code&gt;，但要注意&lt;code&gt;Math.random()&lt;/code&gt; 之後產生的是大於等於 0、小於 1，也就是 &lt;code&gt;0 &amp;lt;= Math.random() &amp;lt; 1&lt;/code&gt; 的 &lt;code&gt;double&lt;/code&gt; 型態浮點常數。&lt;br&gt;
+因此，以這題來說，還要記得利用 &lt;code&gt;(int)&lt;/code&gt; 轉換型態成整數型態的常數。&lt;br&gt;
+另外，若不放心浮點數轉換為整數後的值，可以利用一樣是 &lt;code&gt;Math&lt;/code&gt; 類別裡的靜態方法 &lt;code&gt;floor()&lt;/code&gt; 或 &lt;code&gt;ceiling()&lt;/code&gt; 來取無條件進位或無條件捨去後的整數值。
+而產生指定範圍內的亂數的公式為 &lt;code&gt;Math.random() * 範圍個數 + 初值&lt;/code&gt;&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;p&gt;然後因為已經確定要抽出的數目，所以可以使用元素個數不能變動的陣列，當然也可以用可以變動個數的 &lt;code&gt;Collection&lt;/code&gt; 或其子介面去解決。關鍵就在於不可重複。&lt;/p&gt;
+&lt;p&gt;這篇只討論陣列的解法。&lt;/p&gt;
+&lt;h2 id=&#34;暴力解重複檢查&#34;&gt;暴力解：重複檢查&lt;/h2&gt;
+&lt;p&gt;最簡單的寫法肯定就是暴力解：每抽出一個數字就存到結果陣列，然後每抽一次，就跟陣列裡每個數字都比對一次，一有重複就重抽。&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#e7e9db;background-color:#2f1e2e;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-java&#34; data-lang=&#34;java&#34;&gt;&lt;span style=&#34;color:#776e71&#34;&gt;// 設定存儲樂透數字陣列
+&lt;/span&gt;&lt;span style=&#34;color:#776e71&#34;&gt;&lt;/span&gt;&lt;span style=&#34;color:#fec418&#34;&gt;int&lt;/span&gt;&lt;span style=&#34;color:#5bc4bf&#34;&gt;[]&lt;/span&gt; randomArray &lt;span style=&#34;color:#5bc4bf&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color:#815ba4&#34;&gt;new&lt;/span&gt; &lt;span style=&#34;color:#fec418&#34;&gt;int&lt;/span&gt;&lt;span style=&#34;color:#5bc4bf&#34;&gt;[&lt;/span&gt;6&lt;span style=&#34;color:#5bc4bf&#34;&gt;];&lt;/span&gt;
+
+&lt;span style=&#34;color:#776e71&#34;&gt;// 執行抽取樂透數字的動作 6次
+&lt;/span&gt;&lt;span style=&#34;color:#776e71&#34;&gt;&lt;/span&gt;&lt;span style=&#34;color:#815ba4&#34;&gt;for&lt;/span&gt; &lt;span style=&#34;color:#5bc4bf&#34;&gt;(&lt;/span&gt;&lt;span style=&#34;color:#fec418&#34;&gt;int&lt;/span&gt; i &lt;span style=&#34;color:#5bc4bf&#34;&gt;=&lt;/span&gt; 0&lt;span style=&#34;color:#5bc4bf&#34;&gt;;&lt;/span&gt; i &lt;span style=&#34;color:#5bc4bf&#34;&gt;&amp;lt;&lt;/span&gt; randomArray&lt;span style=&#34;color:#5bc4bf&#34;&gt;.&lt;/span&gt;&lt;span style=&#34;color:#06b6ef&#34;&gt;length&lt;/span&gt;&lt;span style=&#34;color:#5bc4bf&#34;&gt;;&lt;/span&gt; i&lt;span style=&#34;color:#5bc4bf&#34;&gt;++)&lt;/span&gt; &lt;span style=&#34;color:#5bc4bf&#34;&gt;{&lt;/span&gt;
+    &lt;span style=&#34;color:#776e71&#34;&gt;// 先將亂數出來的數字存入陣列第 i個位置
+&lt;/span&gt;&lt;span style=&#34;color:#776e71&#34;&gt;&lt;/span&gt;     randomArray&lt;span style=&#34;color:#5bc4bf&#34;&gt;[&lt;/span&gt;i&lt;span style=&#34;color:#5bc4bf&#34;&gt;]&lt;/span&gt; &lt;span style=&#34;color:#5bc4bf&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color:#5bc4bf&#34;&gt;(&lt;/span&gt;&lt;span style=&#34;color:#fec418&#34;&gt;int&lt;/span&gt;&lt;span style=&#34;color:#5bc4bf&#34;&gt;)(&lt;/span&gt;Math&lt;span style=&#34;color:#5bc4bf&#34;&gt;.&lt;/span&gt;&lt;span style=&#34;color:#06b6ef&#34;&gt;random&lt;/span&gt;&lt;span style=&#34;color:#5bc4bf&#34;&gt;()&lt;/span&gt; &lt;span style=&#34;color:#5bc4bf&#34;&gt;*&lt;/span&gt; 42&lt;span style=&#34;color:#5bc4bf&#34;&gt;)&lt;/span&gt; &lt;span style=&#34;color:#5bc4bf&#34;&gt;+&lt;/span&gt; 1&lt;span style=&#34;color:#5bc4bf&#34;&gt;;&lt;/span&gt;
+    &lt;span style=&#34;color:#776e71&#34;&gt;// 接著執行檢查迴圈
+&lt;/span&gt;&lt;span style=&#34;color:#776e71&#34;&gt;&lt;/span&gt;    &lt;span style=&#34;color:#815ba4&#34;&gt;for&lt;/span&gt; &lt;span style=&#34;color:#5bc4bf&#34;&gt;(&lt;/span&gt;&lt;span style=&#34;color:#fec418&#34;&gt;int&lt;/span&gt; j &lt;span style=&#34;color:#5bc4bf&#34;&gt;=&lt;/span&gt; 0&lt;span style=&#34;color:#5bc4bf&#34;&gt;;&lt;/span&gt; j &lt;span style=&#34;color:#5bc4bf&#34;&gt;&amp;lt;&lt;/span&gt; i&lt;span style=&#34;color:#5bc4bf&#34;&gt;;&lt;/span&gt; j&lt;span style=&#34;color:#5bc4bf&#34;&gt;++)&lt;/span&gt; &lt;span style=&#34;color:#5bc4bf&#34;&gt;{&lt;/span&gt;
+        &lt;span style=&#34;color:#776e71&#34;&gt;// 輪流跟陣列中目前存在的其他元素比對
+&lt;/span&gt;&lt;span style=&#34;color:#776e71&#34;&gt;&lt;/span&gt;        &lt;span style=&#34;color:#815ba4&#34;&gt;if&lt;/span&gt; &lt;span style=&#34;color:#5bc4bf&#34;&gt;(&lt;/span&gt;randomArray&lt;span style=&#34;color:#5bc4bf&#34;&gt;[&lt;/span&gt;i&lt;span style=&#34;color:#5bc4bf&#34;&gt;]&lt;/span&gt; &lt;span style=&#34;color:#5bc4bf&#34;&gt;==&lt;/span&gt; randomArray&lt;span style=&#34;color:#5bc4bf&#34;&gt;[&lt;/span&gt;j&lt;span style=&#34;color:#5bc4bf&#34;&gt;])&lt;/span&gt; &lt;span style=&#34;color:#5bc4bf&#34;&gt;{&lt;/span&gt;
+            &lt;span style=&#34;color:#776e71&#34;&gt;// 如果有找到重複數字，就將計數器 i減 1，然後重抽
+&lt;/span&gt;&lt;span style=&#34;color:#776e71&#34;&gt;&lt;/span&gt;            i&lt;span style=&#34;color:#5bc4bf&#34;&gt;--;&lt;/span&gt;
+            &lt;span style=&#34;color:#776e71&#34;&gt;// 注意這邊 break是跳出 if外面一層的 for迴圈
+&lt;/span&gt;&lt;span style=&#34;color:#776e71&#34;&gt;&lt;/span&gt;            &lt;span style=&#34;color:#815ba4&#34;&gt;break&lt;/span&gt;&lt;span style=&#34;color:#5bc4bf&#34;&gt;;&lt;/span&gt;
+        &lt;span style=&#34;color:#5bc4bf&#34;&gt;}&lt;/span&gt;
+    &lt;span style=&#34;color:#5bc4bf&#34;&gt;}&lt;/span&gt;
+&lt;span style=&#34;color:#5bc4bf&#34;&gt;}&lt;/span&gt;
+
+&lt;span style=&#34;color:#776e71&#34;&gt;// 印出樂透數字陣列中的數字，列印陣列也要用迴圈，這邊是用新版寫法
+&lt;/span&gt;&lt;span style=&#34;color:#776e71&#34;&gt;&lt;/span&gt;&lt;span style=&#34;color:#815ba4&#34;&gt;for&lt;/span&gt; &lt;span style=&#34;color:#5bc4bf&#34;&gt;(&lt;/span&gt;&lt;span style=&#34;color:#fec418&#34;&gt;int&lt;/span&gt; num &lt;span style=&#34;color:#5bc4bf&#34;&gt;:&lt;/span&gt; randomArray&lt;span style=&#34;color:#5bc4bf&#34;&gt;)&lt;/span&gt; &lt;span style=&#34;color:#5bc4bf&#34;&gt;{&lt;/span&gt;
+    System&lt;span style=&#34;color:#5bc4bf&#34;&gt;.&lt;/span&gt;&lt;span style=&#34;color:#06b6ef&#34;&gt;out&lt;/span&gt;&lt;span style=&#34;color:#5bc4bf&#34;&gt;.&lt;/span&gt;&lt;span style=&#34;color:#06b6ef&#34;&gt;print&lt;/span&gt;&lt;span style=&#34;color:#5bc4bf&#34;&gt;(&lt;/span&gt;num &lt;span style=&#34;color:#5bc4bf&#34;&gt;+&lt;/span&gt; &lt;span style=&#34;color:#48b685&#34;&gt;&amp;#34; &amp;#34;&lt;/span&gt;&lt;span style=&#34;color:#5bc4bf&#34;&gt;);&lt;/span&gt;
+&lt;span style=&#34;color:#5bc4bf&#34;&gt;}&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h2 id=&#34;fisher-yates-shuffle&#34;&gt;Fisher-Yates shuffle&lt;/h2&gt;
+&lt;p&gt;能解決問題的方法就是好方法，但暴力解有一個問題，因為要檢查已存入陣列的其他元素，所以抽到越後面就要檢查越多次，現在只有 42 個數字抽 6 個，萬一是從一百億中抽一百萬個不重複數字，那該檢查多久？&lt;/p&gt;
+&lt;p&gt;所以就有一個經典的演算法來解決這個問題，是兩位統計學家 Ronald Fisher 爵士以及 Frank Yates 於 1938 年提出的。&lt;/p&gt;
+&lt;p&gt;原始的演算法是為了解決一個問題：如何產生一串無重複數字的亂數數列。&lt;/p&gt;
+&lt;p&gt;這個算法其實已經經過很多改良，它的概念是這樣：&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;先產生一串固定個數且照數值大小排列的字串&lt;/li&gt;
+&lt;li&gt;然後隨機從數列中抽出一個數字&lt;/li&gt;
+&lt;li&gt;將這個數字從原始數列中刪除&lt;/li&gt;
+&lt;li&gt;將這個數字寫道另外一個數列的頭或尾&lt;/li&gt;
+&lt;li&gt;重複步驟 2-4 直到所有數字都從原始數列刪除，並且都依照寫到另外一個數列中後停止&lt;/li&gt;
+&lt;/ol&gt;
+&lt;p&gt;這個算法的目的就很好地確保了每次隨機抽取數字肯定不會重複，因為之前的數字都已經從要抽取數字的數列中刪除了。&lt;/p&gt;
+&lt;p&gt;而且因為不用每次都檢查，所以可以大幅提升效率。&lt;/p&gt;
+&lt;p&gt;我們利用這個算法不會抽取到重複數字的特性，可以延伸出解法如下：&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#e7e9db;background-color:#2f1e2e;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-java&#34; data-lang=&#34;java&#34;&gt;&lt;span style=&#34;color:#776e71&#34;&gt;// 設定要抽取個數
+&lt;/span&gt;&lt;span style=&#34;color:#776e71&#34;&gt;&lt;/span&gt;&lt;span style=&#34;color:#fec418&#34;&gt;int&lt;/span&gt; picks &lt;span style=&#34;color:#5bc4bf&#34;&gt;=&lt;/span&gt; 6&lt;span style=&#34;color:#5bc4bf&#34;&gt;;&lt;/span&gt;
+&lt;span style=&#34;color:#776e71&#34;&gt;// 設定樂透數字範圍起始數字及結束數字
+&lt;/span&gt;&lt;span style=&#34;color:#776e71&#34;&gt;&lt;/span&gt;&lt;span style=&#34;color:#fec418&#34;&gt;int&lt;/span&gt; startNumber &lt;span style=&#34;color:#5bc4bf&#34;&gt;=&lt;/span&gt; 1&lt;span style=&#34;color:#5bc4bf&#34;&gt;,&lt;/span&gt; endNumber &lt;span style=&#34;color:#5bc4bf&#34;&gt;=&lt;/span&gt; 42&lt;span style=&#34;color:#5bc4bf&#34;&gt;;&lt;/span&gt;
+&lt;span style=&#34;color:#776e71&#34;&gt;// 設定儲存數字的陣列
+&lt;/span&gt;&lt;span style=&#34;color:#776e71&#34;&gt;&lt;/span&gt;&lt;span style=&#34;color:#fec418&#34;&gt;int&lt;/span&gt;&lt;span style=&#34;color:#5bc4bf&#34;&gt;[]&lt;/span&gt; randomArray &lt;span style=&#34;color:#5bc4bf&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color:#815ba4&#34;&gt;new&lt;/span&gt; &lt;span style=&#34;color:#fec418&#34;&gt;int&lt;/span&gt;&lt;span style=&#34;color:#5bc4bf&#34;&gt;[&lt;/span&gt;endNumber &lt;span style=&#34;color:#5bc4bf&#34;&gt;-&lt;/span&gt; startNumber &lt;span style=&#34;color:#5bc4bf&#34;&gt;+&lt;/span&gt; 1&lt;span style=&#34;color:#5bc4bf&#34;&gt;];&lt;/span&gt;
+&lt;span style=&#34;color:#776e71&#34;&gt;// 產生按照數值大小排序好的數列
+&lt;/span&gt;&lt;span style=&#34;color:#776e71&#34;&gt;&lt;/span&gt;&lt;span style=&#34;color:#815ba4&#34;&gt;for&lt;/span&gt; &lt;span style=&#34;color:#5bc4bf&#34;&gt;(&lt;/span&gt;&lt;span style=&#34;color:#fec418&#34;&gt;int&lt;/span&gt; i &lt;span style=&#34;color:#5bc4bf&#34;&gt;=&lt;/span&gt; startNumber&lt;span style=&#34;color:#5bc4bf&#34;&gt;;&lt;/span&gt; i &lt;span style=&#34;color:#5bc4bf&#34;&gt;&amp;lt;=&lt;/span&gt; endNumber&lt;span style=&#34;color:#5bc4bf&#34;&gt;;&lt;/span&gt; i&lt;span style=&#34;color:#5bc4bf&#34;&gt;++)&lt;/span&gt; &lt;span style=&#34;color:#5bc4bf&#34;&gt;{&lt;/span&gt;
+    randomArray&lt;span style=&#34;color:#5bc4bf&#34;&gt;[&lt;/span&gt;i&lt;span style=&#34;color:#5bc4bf&#34;&gt;]&lt;/span&gt; &lt;span style=&#34;color:#5bc4bf&#34;&gt;=&lt;/span&gt; i&lt;span style=&#34;color:#5bc4bf&#34;&gt;;&lt;/span&gt;
+&lt;span style=&#34;color:#5bc4bf&#34;&gt;}&lt;/span&gt;
+
+&lt;span style=&#34;color:#776e71&#34;&gt;// 開始亂數程序，但我們不用將整個數列都亂數shuffle，只需要做我們要抽取個數，也就是 6次
+&lt;/span&gt;&lt;span style=&#34;color:#776e71&#34;&gt;&lt;/span&gt;&lt;span style=&#34;color:#815ba4&#34;&gt;for&lt;/span&gt; &lt;span style=&#34;color:#5bc4bf&#34;&gt;(&lt;/span&gt;&lt;span style=&#34;color:#fec418&#34;&gt;int&lt;/span&gt; j &lt;span style=&#34;color:#5bc4bf&#34;&gt;=&lt;/span&gt; 0&lt;span style=&#34;color:#5bc4bf&#34;&gt;;&lt;/span&gt; j &lt;span style=&#34;color:#5bc4bf&#34;&gt;&amp;lt;&lt;/span&gt; picks&lt;span style=&#34;color:#5bc4bf&#34;&gt;;&lt;/span&gt; j&lt;span style=&#34;color:#5bc4bf&#34;&gt;++)&lt;/span&gt; &lt;span style=&#34;color:#5bc4bf&#34;&gt;{&lt;/span&gt;
+    &lt;span style=&#34;color:#776e71&#34;&gt;// 先設定一個暫存亂數數字的變數 randomIndex，這是要用來當指標指向陣列元素用的
+&lt;/span&gt;&lt;span style=&#34;color:#776e71&#34;&gt;&lt;/span&gt;    &lt;span style=&#34;color:#fec418&#34;&gt;int&lt;/span&gt; randomIndex &lt;span style=&#34;color:#5bc4bf&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color:#5bc4bf&#34;&gt;(&lt;/span&gt;&lt;span style=&#34;color:#fec418&#34;&gt;int&lt;/span&gt;&lt;span style=&#34;color:#5bc4bf&#34;&gt;)(&lt;/span&gt;Math&lt;span style=&#34;color:#5bc4bf&#34;&gt;.&lt;/span&gt;&lt;span style=&#34;color:#06b6ef&#34;&gt;random&lt;/span&gt;&lt;span style=&#34;color:#5bc4bf&#34;&gt;()&lt;/span&gt; &lt;span style=&#34;color:#5bc4bf&#34;&gt;*&lt;/span&gt; &lt;span style=&#34;color:#5bc4bf&#34;&gt;(&lt;/span&gt;endNumber &lt;span style=&#34;color:#5bc4bf&#34;&gt;-&lt;/span&gt; startNumber &lt;span style=&#34;color:#5bc4bf&#34;&gt;+&lt;/span&gt; 1&lt;span style=&#34;color:#5bc4bf&#34;&gt;))&lt;/span&gt; &lt;span style=&#34;color:#5bc4bf&#34;&gt;+&lt;/span&gt; 1&lt;span style=&#34;color:#5bc4bf&#34;&gt;;&lt;/span&gt;
+    &lt;span style=&#34;color:#776e71&#34;&gt;// 然後再設定一個暫存數字的變數 temp，暫存陣列中指標 randomIndex對應的數字
+&lt;/span&gt;&lt;span style=&#34;color:#776e71&#34;&gt;&lt;/span&gt;    &lt;span style=&#34;color:#fec418&#34;&gt;int&lt;/span&gt; temp &lt;span style=&#34;color:#5bc4bf&#34;&gt;=&lt;/span&gt; randomArray&lt;span style=&#34;color:#5bc4bf&#34;&gt;[&lt;/span&gt;randomIndex&lt;span style=&#34;color:#5bc4bf&#34;&gt;];&lt;/span&gt;
+    &lt;span style=&#34;color:#776e71&#34;&gt;// 將 randomArray[randomIndex]跟第 j個元素對調位置
+&lt;/span&gt;&lt;span style=&#34;color:#776e71&#34;&gt;&lt;/span&gt;    randomArray&lt;span style=&#34;color:#5bc4bf&#34;&gt;[&lt;/span&gt;randomIndex&lt;span style=&#34;color:#5bc4bf&#34;&gt;]&lt;/span&gt; &lt;span style=&#34;color:#5bc4bf&#34;&gt;=&lt;/span&gt; randomArray&lt;span style=&#34;color:#5bc4bf&#34;&gt;[&lt;/span&gt;j&lt;span style=&#34;color:#5bc4bf&#34;&gt;];&lt;/span&gt;
+    randomArray&lt;span style=&#34;color:#5bc4bf&#34;&gt;[&lt;/span&gt;j&lt;span style=&#34;color:#5bc4bf&#34;&gt;]&lt;/span&gt; &lt;span style=&#34;color:#5bc4bf&#34;&gt;=&lt;/span&gt; temp&lt;span style=&#34;color:#5bc4bf&#34;&gt;;&lt;/span&gt;
+&lt;span style=&#34;color:#5bc4bf&#34;&gt;}&lt;/span&gt;
+
+&lt;span style=&#34;color:#776e71&#34;&gt;// 印出樂透數字陣列中的數字
+&lt;/span&gt;&lt;span style=&#34;color:#776e71&#34;&gt;&lt;/span&gt;&lt;span style=&#34;color:#815ba4&#34;&gt;for&lt;/span&gt; &lt;span style=&#34;color:#5bc4bf&#34;&gt;(&lt;/span&gt;&lt;span style=&#34;color:#fec418&#34;&gt;int&lt;/span&gt; k &lt;span style=&#34;color:#5bc4bf&#34;&gt;=&lt;/span&gt; 0&lt;span style=&#34;color:#5bc4bf&#34;&gt;;&lt;/span&gt; k &lt;span style=&#34;color:#5bc4bf&#34;&gt;&amp;lt;&lt;/span&gt; picks&lt;span style=&#34;color:#5bc4bf&#34;&gt;;&lt;/span&gt; k&lt;span style=&#34;color:#5bc4bf&#34;&gt;++)&lt;/span&gt; &lt;span style=&#34;color:#5bc4bf&#34;&gt;{&lt;/span&gt;
+    System&lt;span style=&#34;color:#5bc4bf&#34;&gt;.&lt;/span&gt;&lt;span style=&#34;color:#06b6ef&#34;&gt;out&lt;/span&gt;&lt;span style=&#34;color:#5bc4bf&#34;&gt;.&lt;/span&gt;&lt;span style=&#34;color:#06b6ef&#34;&gt;print&lt;/span&gt;&lt;span style=&#34;color:#5bc4bf&#34;&gt;(&lt;/span&gt;num &lt;span style=&#34;color:#5bc4bf&#34;&gt;+&lt;/span&gt; &lt;span style=&#34;color:#48b685&#34;&gt;&amp;#34; &amp;#34;&lt;/span&gt;&lt;span style=&#34;color:#5bc4bf&#34;&gt;);&lt;/span&gt;
+&lt;span style=&#34;color:#5bc4bf&#34;&gt;}&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;我有特別設定要樂透的數字個數，以及抽取範圍的起始及終止值，以便將來更動這三個參數就可以做各種不同範圍個數的樂透，甚至也可以利用 &lt;code&gt;java.util.Scanner&lt;/code&gt; 的功能讓使用者能直接用鍵盤輸入這三個參數，不過那就不在這個題目要討論的重點。&lt;/p&gt;
+&lt;h1 id=&#34;限制&#34;&gt;限制&lt;/h1&gt;
+&lt;p&gt;其實這些解法最大的問題都不在於算法本身，而是 Java 提供的 &lt;code&gt;random()&lt;/code&gt; 方法是不是真正的隨機，其實這也可以寫一個程式來檢驗，我們將這個程式跑個幾千、幾萬，甚至幾百萬次之後，每一個數字抽到的次數是不是趨於相等。&lt;/p&gt;
+&lt;p&gt;就我現在粗淺的理解，基本上還沒有能產生真正隨機數字的演算法；或者說，能用演算法產生的隨機數字都不是真正的隨機，只是趨近於隨機。&lt;/p&gt;
+&lt;p&gt;畢竟只要提到演算，就代表有一定規則，而透過一定規則產生出來的東西就無法稱為真正的隨機。&lt;/p&gt;
+&lt;p&gt;而 Java 提供的 &lt;code&gt;random()&lt;/code&gt; 方法則是透過線性同餘公式產生的偽隨機數，詳細可以參考 &lt;a href=&#34;https://zh.wikipedia.org/wiki/%E7%B7%9A%E6%80%A7%E5%90%8C%E9%A4%98%E6%96%B9%E6%B3%95&#34;&gt;維基&lt;/a&gt;。&lt;/p&gt;
+- https://idontwannarock.github.io/tech_blog/2017/11/java_lottery_algorithm_basic/ - This website by Howard Wang is licensed under a Creative Common Attribution-ShareAlike 4.0 International License.</description>
+        </item>
+    
+    
+    
+        <item>
+        <title>Macbook Pro 的設置 2017 版</title>
+        <link>https://idontwannarock.github.io/tech_blog/2017/11/mbp_setup_2017/</link>
+        <pubDate>Fri, 03 Nov 2017 09:05:02 +0800</pubDate>
+        
+        <guid>https://idontwannarock.github.io/tech_blog/2017/11/mbp_setup_2017/</guid>
+        <description>Howard Tech Note https://idontwannarock.github.io/tech_blog/2017/11/mbp_setup_2017/ -&lt;blockquote&gt;
+&lt;p&gt;這篇文章是初學的時候撰寫的，其中一些觀念並不正確，步驟也可能因為更新或觀念問題而不適用或者多餘，此篇文章僅為留做紀錄&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;p&gt;一直以來都是 PC 人，從來沒用過任何 Apple 或 Linux 的相關產品，剛好有買筆電的需求，想趁機接觸一下不同的作業系統生態，而且久聞 Apple 筆電品質很好，就添購了 Macbook Pro 來當我人生第一台筆電。&lt;/p&gt;
+&lt;p&gt;剛拿到筆電總是需要一些設置，盡量讓 PC 跟 MBP 之間資訊同步以及應用軟體上相通或相容，以達到同步並簡化作業環境的目標，提高生產效率。&lt;/p&gt;
+&lt;p&gt;於是跟朋友詢問以及上網稍作了解後，有了以下的設置。&lt;/p&gt;
+&lt;h1 id=&#34;軟體環境設置&#34;&gt;軟體環境設置&lt;/h1&gt;
+&lt;p&gt;因為是要習慣 Unix-based 的作業環境，所以我並沒有特別強求各方面都要設置到跟 Windows 環境類似，所以操作模式上並沒有更動。&lt;/p&gt;
+&lt;p&gt;但安裝的軟體上就有些考量，希望能達到集中管理，這就不得不提每個 MacOS 都應該必備的 Homebrew。&lt;/p&gt;
+&lt;h2 id=&#34;安裝-homebrew&#34;&gt;安裝 Homebrew&lt;/h2&gt;
+&lt;p&gt;&lt;a href=&#34;https://brew.sh/&#34;&gt;Homebrew&lt;/a&gt; 是一套開源的 MacOS 系統的軟體套件管理系統，用來簡化 MacOS 系統上的軟體安裝、卸載等過程，是用 MacOS 內建的 Ruby 語言寫成。&lt;/p&gt;
+&lt;p&gt;但 Homebrew 在安裝前需要先安裝 &lt;a href=&#34;https://itunes.apple.com/us/app/xcode/id497799835?mt=12&#34;&gt;Xcode&lt;/a&gt;，似乎是因為 Xcode 會一併安裝一些常用的 command line。&lt;/p&gt;
+&lt;p&gt;還好 Xcode 也是免費軟體，可以直接透過 App Store 下載，要注意檔案蠻大的，下載安裝的過程會要花一點時間。&lt;/p&gt;
+&lt;p&gt;Xcode 安裝好之後，就打開「終端機」，輸入下面這行來下載安裝 Homebrew：&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#e7e9db;background-color:#2f1e2e;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-bash&#34; data-lang=&#34;bash&#34;&gt;$ ruby -e &lt;span style=&#34;color:#48b685&#34;&gt;&amp;#34;&lt;/span&gt;&lt;span style=&#34;color:#815ba4&#34;&gt;$(&lt;/span&gt;curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install&lt;span style=&#34;color:#815ba4&#34;&gt;)&lt;/span&gt;&lt;span style=&#34;color:#48b685&#34;&gt;&amp;#34;&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;注意第一個 &lt;code&gt;$&lt;/code&gt; 是開啟終端機就會顯示在你可以打字的那一行的開頭，不用重複輸入。&lt;/p&gt;
+&lt;p&gt;讓他自動跑完之後，就可以開始使用 &lt;code&gt;brew&lt;/code&gt; 指令來操作啦！&lt;/p&gt;
+&lt;p&gt;日後要更新 Homebrew 這個軟體本身，也是一樣在終端機輸入 &lt;code&gt;brew update&lt;/code&gt; 以及 &lt;code&gt;brew tap homebrew/dupes&lt;/code&gt; 就可以了。&lt;/p&gt;
+&lt;h2 id=&#34;安裝-caskroom&#34;&gt;安裝 Caskroom&lt;/h2&gt;
+&lt;p&gt;除了 Homebrew 以外，第二個推薦安裝的就是 &lt;a href=&#34;https://caskroom.github.io/&#34;&gt;Caskroom&lt;/a&gt;，這也是一個軟體套件管理系統，是 Homebrew 的擴充。&lt;/p&gt;
+&lt;p&gt;一般來說 Caskroom 主要用來下載安裝一些有操作介面的應用軟體，譬如 Chrome、Spotify、Evernote 等等；Homebrew 則常用於下載安裝一些沒有操作介面的工具或第三方資源，例如 Git、Hugo、Telnet 這種。&lt;/p&gt;
+&lt;p&gt;Caskroom 可以看成 App Store 的擴充，並附帶自動安裝管理的功能，而且因為也是開源專案，它能安裝的軟體是由開放社群中的使用者提供維護，有很多 App Store 沒有的軟體，當然是正版、免費版或試用版。&lt;/p&gt;
+&lt;p&gt;而且 Caskroom 還有 &lt;strong&gt;更新管理&lt;/strong&gt; 的功能，除非軟體自帶自動更新功能，否則可以透過 Caskroom 統一更新。所以一般來說，Homebrew 更偏開發者使用，Caskroom 則更適合一般使用者。&lt;/p&gt;
+&lt;p&gt;而 Caskroom 的安裝也很簡單，安裝過 Homebrew 後，只需要輸入以下這行就可以安裝好 Homebrew：&lt;/p&gt;
+&lt;pre tabindex=&#34;0&#34;&gt;&lt;code&gt;$ brew install caskroom/cask/brew-cask
+&lt;/code&gt;&lt;/pre&gt;&lt;h2 id=&#34;使用-homebrew-及-caskroom&#34;&gt;使用 Homebrew 及 Caskroom&lt;/h2&gt;
+&lt;p&gt;這兩個軟體的指令都很類似而且很容易，Homebrew 就是指令前面加上 &lt;code&gt;brew&lt;/code&gt;，Caskroom 就是 &lt;code&gt;brew cask&lt;/code&gt;。&lt;/p&gt;
+&lt;p&gt;然後共通的常用指令就是 &lt;code&gt;install&lt;/code&gt; 安裝、&lt;code&gt;uninstall&lt;/code&gt; 解安裝、&lt;code&gt;info&lt;/code&gt; 查詢軟體資料以及 &lt;code&gt;list&lt;/code&gt; 列出已安裝軟體，一樣都是前面加上 &lt;code&gt;brew&lt;/code&gt; 或 &lt;code&gt;brew cask&lt;/code&gt;，然後加上選擇的指令，最後再加上軟體名稱。&lt;/p&gt;
+&lt;p&gt;Caskroom 還有一個很好用的功能 &lt;code&gt;search&lt;/code&gt;，也就是你輸入 &lt;code&gt;brew cask search xxx&lt;/code&gt;，它會搜尋比對已安裝、未安裝的軟體名稱，未安裝的軟體名稱還會分成完全相同 (Exact Match) 以及部份相同 (Partial Matches) 兩部份，讓你選擇需要的軟體來安裝。&lt;/p&gt;
+&lt;h2 id=&#34;我的安裝列表&#34;&gt;我的安裝列表&lt;/h2&gt;
+&lt;p&gt;這邊列出我的安裝列表，都是一些我覺得在 MacOS 上，很通用、方便的軟體跟功能，提供給大家參考：&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;p&gt;&lt;strong&gt;Homebrew&lt;/strong&gt;&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;git // 開發版本管理工具&lt;/li&gt;
+&lt;li&gt;hugo // 靜態網站生成器&lt;/li&gt;
+&lt;li&gt;telnet // 上 ptt 用環境設置&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;&lt;strong&gt;Caskroom&lt;/strong&gt;&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;google-chrome // 上網必備&lt;/li&gt;
+&lt;li&gt;appcleaner // 好用的刪除軟體工具&lt;/li&gt;
+&lt;li&gt;istat-menus // 顯示系統資訊，可以在桌面頂部的資訊列顯示上下傳速度、電池狀況、CPU 溫度等等資訊&lt;/li&gt;
+&lt;li&gt;sourcetree // Git 的圖形化介面軟體&lt;/li&gt;
+&lt;li&gt;iterm2 // 更好用的終端機，可以多開分頁！&lt;/li&gt;
+&lt;li&gt;spotify // 聽音樂，不解釋&lt;/li&gt;
+&lt;li&gt;moom // 讓 Mac 可以調整最大化視窗的位置&lt;/li&gt;
+&lt;li&gt;cheatsheet // Mac 快速鍵指令表&lt;/li&gt;
+&lt;li&gt;the-unarchiver // 增強解壓縮功能的工具&lt;/li&gt;
+&lt;li&gt;vlc // 強悍影音播放程式&lt;/li&gt;
+&lt;li&gt;evernote // 資訊管理、筆記軟體，跨平台超好用，重點還可以 web clip 存網頁&lt;/li&gt;
+&lt;li&gt;welly // 上 ptt 用軟體&lt;/li&gt;
+&lt;li&gt;xmind // 心智圖軟體&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/blockquote&gt;
+&lt;p&gt;當然每個人都有不同的偏好，其中有些也有很好的替代軟體，像是 Welly 就有相同功能的 Nally，再加上 PTT 最近基於 &lt;a href=&#34;https://iamchucky.github.io/PttChrome/&#34;&gt;PttChrome&lt;/a&gt;，採用實驗性的 Websocket 連線而推出一個新的服務，直接在瀏覽器輸入 &lt;code&gt;term.ptt.cc&lt;/code&gt; 就可以直接上 PTT，不用額外安裝任何軟體或插件，讓 Welly 跟 Nally 對我來說幾乎就要淘汰(攤手)。&lt;/p&gt;
+&lt;p&gt;詳情可參考這篇公告：&lt;a href=&#34;https://www.ptt.cc/bbs/SYSOP/M.1508496102.A.17E.html&#34;&gt;[公告] 使用瀏覽器直接連線至批踢踢&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;另外，因為 Homebrew 跟 Caskroom 的安裝指令都要在終端機或 iTerm2 這類 CLI 軟體上輸入指令，厲害的人可以把你有安裝的軟體，每一條指令合起來做成 .sh 檔，這樣如果有需要重灌系統，只要執行一遍 .sh檔，所有軟體就可以一次性的安裝回來啦！&lt;/p&gt;
+&lt;h3 id=&#34;honorable-mention-oh-my-zsh&#34;&gt;Honorable Mention: oh my zsh&lt;/h3&gt;
+&lt;p&gt;這邊想推薦的是對常用終端機類 CLI 軟體的使用者或開發者比較有用的東西，所以不常用或對 CLI 沒興趣的讀者直接跳過這段吧！&lt;/p&gt;
+&lt;p&gt;在說明 oh my zsh 之前，要先簡單說明，也是記錄一下什麼是 zsh。&lt;/p&gt;
+&lt;p&gt;但在說明 zsh 之前要再說明一下什麼是 shell (跪)。&lt;/p&gt;
+&lt;p&gt;shell 是一種泛稱。在 Unix-based 的作業系統，例如 Linux 或 MacOS 中，shell 就是指用來跟系統核心 (kernel) 溝通的工具，kernel 收到 shell 傳來的指令後，會解析成各種電腦看得懂的指令，然後交給 CPU 或其他有關的電子元件做資料處理，kernel 的簡單說明可以參考 &lt;a href=&#34;https://zh.wikipedia.org/zh-tw/%E5%85%A7%E6%A0%B8&#34;&gt;wiki&lt;/a&gt;。&lt;/p&gt;
+&lt;p&gt;zsh(z shell) 也是一種 shell，但 Unix-based 的作業系統默認的 shell 是 bash，總之都是一種 shell。&lt;/p&gt;
+&lt;p&gt;而 zsh 的好處就在於比預設的 bash 有更多、更方便的指令，例如忘記完整指令，只要輸入指令前幾個字，按 &lt;code&gt;tab&lt;/code&gt; 鍵，zsh 就會幫你列出所有選項，再按一次 &lt;code&gt;tab&lt;/code&gt; 鍵就可以切換到選擇模式，在列出的指令列表中選擇要執行的指令，光這點就不用選了，就是 zsh 了！&lt;/p&gt;
+&lt;p&gt;然後講到 oh my zsh，這是一套基於 zsh 的框架，也就是提供更進階的功能，身為剛入門的開發者，我覺得它最大的好處就是彩色化！oh my zsh 可以安裝 themes，各種 themes 會對許多常用的關鍵字做不同的彩色化等等的處理，這樣用純文字畫面的 CLI 時，就可以更清楚的區分畫面上的資訊！&lt;/p&gt;
+&lt;h4 id=&#34;安裝設置-oh-my-zsh&#34;&gt;安裝設置 oh my zsh&lt;/h4&gt;
+&lt;p&gt;基本上 MacOS 都已經預設安裝好 zsh，所以不用我們安裝，所以直接安裝 oh my zsh 就好。&lt;/p&gt;
+&lt;p&gt;要安裝 oh my zsh，請打開任一 CLI，輸入以下這行指令就可以自動下載並安裝：&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#e7e9db;background-color:#2f1e2e;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-bash&#34; data-lang=&#34;bash&#34;&gt;$ sh -c &lt;span style=&#34;color:#48b685&#34;&gt;&amp;#34;&lt;/span&gt;&lt;span style=&#34;color:#815ba4&#34;&gt;$(&lt;/span&gt;curl -fsSL https://raw.githubusercontent.com/robbyryssell/oh-my-zsh/master/tools/install.sh&lt;span style=&#34;color:#815ba4&#34;&gt;)&lt;/span&gt;&lt;span style=&#34;color:#48b685&#34;&gt;&amp;#34;&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;安裝好 oh my zsh 之後，預設就會有主題，對初學者的我來說夠用，但如果你想做調整，就要到 &lt;code&gt;MacOS 帳號名稱&lt;/code&gt; 資料夾的隱藏檔案中尋找 &lt;code&gt;.zshrc&lt;/code&gt; 檔案，這就是 oh my zsh 的設定檔，所有東西都可以在這邊設置。&lt;/p&gt;
+&lt;p&gt;這聽起來很麻煩，但用過就會像變心的女朋友一樣，回～不～去～啦～～～&lt;/p&gt;
+&lt;h1 id=&#34;工作環境設置&#34;&gt;工作環境設置&lt;/h1&gt;
+&lt;p&gt;接下來講到工作環境設置。&lt;/p&gt;
+&lt;p&gt;因為在學習網頁前後端開發，會用到 &lt;a href=&#34;http://www.oracle.com/technetwork/java/javase/downloads/index.html&#34;&gt;Java JDK&lt;/a&gt;、&lt;a href=&#34;https://www.eclipse.org/downloads/packages/eclipse-ide-java-developers/oxygen1a&#34;&gt;Eclipse&lt;/a&gt;、&lt;a href=&#34;http://brackets.io/&#34;&gt;Brackets&lt;/a&gt; 等等，也會寫一些筆記存到 &lt;a href=&#34;https://evernote.com/&#34;&gt;Evernote&lt;/a&gt;，或例如這篇的靜態部落格文章。&lt;/p&gt;
+&lt;p&gt;但我常常會交替在 MBP 跟 PC 上進行開發或筆記的工作，要怎樣保持 MBP、PC，甚至手機上都能同步到最新進度，對初學者的我，是花了一番心思。&lt;/p&gt;
+&lt;h2 id=&#34;開發同步&#34;&gt;開發同步&lt;/h2&gt;
+&lt;p&gt;首先講純開發的部分，比較簡單，前面提到的開發軟體或環境一樣都可以利用 Homebrew 或 Caskroom 下載安裝。&lt;/p&gt;
+&lt;p&gt;接著就是利用 &lt;a href=&#34;https://www.sourcetreeapp.com/&#34;&gt;Sourcetree&lt;/a&gt; 跟 &lt;a href=&#34;https://github.com/&#34;&gt;GitHub&lt;/a&gt; 來做 Git 版本管理同步。&lt;/p&gt;
+&lt;p&gt;所有專案、檔案，都透過 Sourcetree push 到 GitHub 的 repositories。然後每個裝置要編輯開發前，都先 pull Github 上的最新進度，這樣就可以簡單的保持各裝置開發進度相同。&lt;/p&gt;
+&lt;p&gt;當然，使用 Sourcetree 會需要一些 Git 觀念。有關 Git 的簡單觀念及操作，可以參考我寫的 &lt;a href=&#34;https://idontwannarock.github.io/tech_blog/2017/09/git_and_github_basic/&#34;&gt;這一篇文章&lt;/a&gt;。&lt;/p&gt;
+&lt;h2 id=&#34;筆記同步&#34;&gt;筆記同步&lt;/h2&gt;
+&lt;p&gt;這部分比較麻煩一點，因為我習慣統一用 Markdown 語法寫筆記跟部落格，這樣規格統一，筆記跟部落格文章可以很方便地互相轉換。&lt;/p&gt;
+&lt;p&gt;Markdown 簡介跟語法可以參考我的 &lt;a href=&#34;https://idontwannarock.github.io/tech_blog/2017/10/markdown_syntax/&#34;&gt;這一篇文章&lt;/a&gt;。&lt;/p&gt;
+&lt;p&gt;而我的筆記都習慣收在 Evernote，這樣可以隨時利用 Evernote 的分類以及搜尋功能，並且手機上也可以看。但要將 Markdown 筆記轉成 Evernote 讀得懂的格式並上傳到 Evernote 並不是很容易。&lt;/p&gt;
+&lt;p&gt;之前是選擇用 Sublime Text 加上開源的 Plug-in 來轉換並上傳，但最近 Evernote 將 developer token 的功能停止之後，這個方法就不能再使用了。&lt;/p&gt;
+&lt;p&gt;於是我換到 &lt;a href=&#34;https://marxi.co/&#34;&gt;Marxico&lt;/a&gt;，其實算是相當方便，只是要收費，但在找不到更好的替換工具之下，也只能忍痛花下去。但好處就是我只要寫好 Markdown 筆記，就可以很方便的上傳 Evernote，也可以匯出 Markdown、HTML，甚至是 PDF 檔。&lt;/p&gt;
+&lt;p&gt;另一方面部落格就真的很麻煩了，我原本只有 PC 的時候，就是寫 Markdown 草稿，然後用靜態部落格產生器 Hugo 轉換並生成部落格，再 Host 到 GitHub Pages 來部署我的靜態部落格，可以參考我 &lt;a href=&#34;https://idontwannarock.github.io/tech_blog/2017/09/hugo_practice_2/&#34;&gt;這一篇&lt;/a&gt;。&lt;/p&gt;
+&lt;p&gt;但這個方法的問題就是無法多部裝置間同步，因為 push 到 GitHub 的只有 Hugo 生成的 &lt;code&gt;public&lt;/code&gt; 資料夾，而不是整個包含 layout 跟 Markdown 原稿的完整資料夾，所以換一部裝置就要用很麻煩的方式另外傳送整個資料夾。&lt;/p&gt;
+&lt;p&gt;於是我嘗試了別的方法。&lt;/p&gt;
+&lt;h3 id=&#34;github-pages&#34;&gt;GitHub Pages&lt;/h3&gt;
+&lt;p&gt;在講解我的方法之前，要講一下 GitHub Pages 提供的託管靜態網頁服務分成兩種形式：&lt;strong&gt;個人或組織主頁(User or Organization Page)&lt;/strong&gt; 以及 &lt;strong&gt;專案主頁(Project Page)&lt;/strong&gt;。&lt;/p&gt;
+&lt;p&gt;差別在於個人主頁就是 &lt;strong&gt;一個 GitHub帳號只會有一個個人主頁方式的靜態網頁&lt;/strong&gt;，網址會是 &lt;code&gt;https://&amp;lt;GitHub帳號&amp;gt;.github.io&lt;/code&gt;；而 &lt;strong&gt;一個 GitHub帳號則可以有數個專案主頁&lt;/strong&gt;，網址原則上應該就是 &lt;code&gt;https://&amp;lt;GitHub帳號&amp;gt;.github.io/Repo名稱&lt;/code&gt; 這樣。&lt;/p&gt;
+&lt;p&gt;當然，只要是專案主頁方式，網頁的網址就可以透過在 Repo 根目錄生成 CNAME 檔案，並記錄申請的域名來替換，這邊不多說。&lt;/p&gt;
+&lt;h3 id=&#34;部署-hugo-產生的靜態網頁到-github-pages&#34;&gt;部署 Hugo 產生的靜態網頁到 GitHub Pages&lt;/h3&gt;
+&lt;p&gt;我之前裡選擇的方式是專案主頁，因為我想保留個人主頁做我個人的履歷主頁，放置我的資訊跟 Porfolio 之類的，所以 Blog 就不能用個人主頁的方式部署在 GitHub Pages。&lt;/p&gt;
+&lt;p&gt;這便順便記錄一下，個人主頁其實部署方式跟專案主頁沒有太大差別，主要的差別在於個人主頁的 Repo 名稱必須取為 &lt;code&gt;&amp;lt;GitHub帳號&amp;gt;.github.io&lt;/code&gt;，也就是跟個人主頁的網址相同；而專案主頁的 Repo 名稱則沒有限定。&lt;/p&gt;
+&lt;p&gt;而 GitHub Pages 的部署方式有三種，如同 &lt;a href=&#34;https://help.github.com/articles/configuring-a-publishing-source-for-github-pages/&#34;&gt;官網說明&lt;/a&gt;。&lt;/p&gt;
+&lt;h4 id=&#34;default-source-settings&#34;&gt;Default Source Settings&lt;/h4&gt;
+&lt;p&gt;第一種參考官網說明 &lt;a href=&#34;https://help.github.com/articles/configuring-a-publishing-source-for-github-pages/#default-source-settings-for-repositories-without-the-username-naming-scheme&#34;&gt;這一段&lt;/a&gt;。&lt;/p&gt;
+&lt;p&gt;就是我之前用的方式，在 &lt;a href=&#34;https://idontwannarock.github.io/tech_blog/2017/09/hugo_practice_2/&#34;&gt;這一篇&lt;/a&gt; 裡有說明。&lt;/p&gt;
+&lt;p&gt;簡單來說，就是將 Hugo 預設產生的 &lt;code&gt;public&lt;/code&gt; 資料夾，直接 push 到 GitHub 的 Repo，GitHub 預設會直接讀取 Repo 中的檔案生成靜態網站。&lt;/p&gt;
+&lt;h4 id=&#34;publish-from-a-docs-folder-on-master-branch&#34;&gt;Publish From a &lt;code&gt;docs&lt;/code&gt; Folder on &lt;code&gt;master&lt;/code&gt; Branch&lt;/h4&gt;
+&lt;p&gt;第二種要做比較多設定，參考官網 &lt;a href=&#34;https://help.github.com/articles/configuring-a-publishing-source-for-github-pages/#publishing-your-github-pages-site-from-a-docs-folder-on-your-master-branch&#34;&gt;這段&lt;/a&gt;。&lt;/p&gt;
+&lt;p&gt;因為 GitHub Pages 有提供另一種部署方式，就是它可以選擇讀取 Repo 的 &lt;code&gt;docs&lt;/code&gt; 資料夾內檔案來生成靜態網站，而不是第一種方式直接讀取 Repo 根目錄裡的檔案。&lt;/p&gt;
+&lt;p&gt;所以我們先將 Hugo 資料夾中的 &lt;code&gt;config.toml&lt;/code&gt; 檔案用文字編輯器打開，在開頭加入以下這一行：&lt;/p&gt;
+&lt;pre tabindex=&#34;0&#34;&gt;&lt;code&gt;publishDir = &amp;quot;docs&amp;quot;
+&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;這是因為 Hugo 預設生成靜態網頁的檔案會存在 &lt;code&gt;public&lt;/code&gt; 資料夾，而這一行參數就是告訴 Hugo 將生成的靜態網頁檔案改存在 &lt;code&gt;docs&lt;/code&gt; 資料夾。&lt;/p&gt;
+&lt;p&gt;然後一樣將整個 Hugo 資料夾 push 到 GitHub 上，然後開啟瀏覽器進入那個 GitHub Repo，選擇 Repo 名稱底下那排最右邊的 Settings，然後往下拉到倒數第二個區塊 GitHub Pages，在 source 那邊的下拉選單選擇 &lt;code&gt;master branch/docs folder&lt;/code&gt;，然後點擊 &lt;code&gt;save&lt;/code&gt; 就完成部署了。&lt;/p&gt;
+&lt;p&gt;這個時候 source 上方應該會出現一行綠色底的文字，註明生成的網址，點進去就是實際生成的靜態網站。&lt;/p&gt;
+&lt;p&gt;往後寫新的文章就可以不用更動任何設置，直接用 Hugo 指令生成後 push 到 GitHub 上就好。&lt;/p&gt;
+&lt;p&gt;然後不同裝置要保持同步也很簡單，就直接將整個 Repo 從 GitHub 上 pull 或 clone 下來，因為所有的設定檔案、layout、Markdown 原稿都已經存在 GitHub 上。&lt;/p&gt;
+&lt;h4 id=&#34;publish-from-master-or-gh-pages-branch&#34;&gt;Publish from &lt;code&gt;master&lt;/code&gt; or &lt;code&gt;gh-pages&lt;/code&gt; Branch&lt;/h4&gt;
+&lt;p&gt;第三種方式就難了，可以參考官網 &lt;a href=&#34;https://help.github.com/articles/configuring-a-publishing-source-for-github-pages/#enabling-github-pages-to-publish-your-site-from-master-or-gh-pages&#34;&gt;這段&lt;/a&gt; 了解概念。&lt;/p&gt;
+&lt;p&gt;這種方式要對 Git 有比較深入的了解，我也還沒全部弄懂 Git 部分的操作過程。&lt;/p&gt;
+&lt;p&gt;但原理似乎大概是這樣，但 &lt;strong&gt;我不是非常確定&lt;/strong&gt;：&lt;/p&gt;
+&lt;p&gt;同樣利用 Hugo 預設生成靜態網頁檔案到 &lt;code&gt;public&lt;/code&gt; 資料夾，然後利用 Git branch 的功能，產生一個 &lt;code&gt;gh-pages&lt;/code&gt; 的分支版本，所以在 local，也就是操作的電腦上就會有 &lt;code&gt;master&lt;/code&gt; 跟 &lt;code&gt;gh-pages&lt;/code&gt; 兩個不同版本的檔案紀錄。&lt;/p&gt;
+&lt;p&gt;在 &lt;code&gt;master&lt;/code&gt; 這個分支上利用 gitignore 屏蔽掉 &lt;code&gt;public&lt;/code&gt; 資料夾，然後將其他所有檔案 staging -&amp;gt; commit -&amp;gt; push 到 GitHub Repo 的 &lt;code&gt;master&lt;/code&gt; 分支。&lt;/p&gt;
+&lt;p&gt;再切換到 &lt;code&gt;gh-pages&lt;/code&gt; 這個分支上，將除了 &lt;code&gt;public&lt;/code&gt; 資料夾以外的所有檔案都用 gitignore 屏蔽掉，然後一樣將 &lt;code&gt;public&lt;/code&gt; 資料夾 staging -&amp;gt; commit -&amp;gt; push 到 GitHub Repo 的 &lt;code&gt;gh-pages&lt;/code&gt; 分支。&lt;/p&gt;
+&lt;p&gt;這時候 GitHub 的 Repo 上就同樣有 &lt;code&gt;master&lt;/code&gt; 跟 &lt;code&gt;gh-pages&lt;/code&gt; 兩個不同版本的紀錄。&lt;/p&gt;
+&lt;p&gt;然後開啟瀏覽器進入 GitHub Repo，同樣選擇 Repo 名稱底下那排最右邊的 Settings，然後在 GitHub Pages 區塊的 source 下拉選單裡選擇 &lt;code&gt;gh-pages branch&lt;/code&gt;，然後點擊 &lt;code&gt;save&lt;/code&gt; 就完成了。&lt;/p&gt;
+- https://idontwannarock.github.io/tech_blog/2017/11/mbp_setup_2017/ - This website by Howard Wang is licensed under a Creative Common Attribution-ShareAlike 4.0 International License.</description>
+        </item>
+    
+    
+    
+        <item>
+        <title>Markdown 語法</title>
+        <link>https://idontwannarock.github.io/tech_blog/2017/10/markdown_syntax/</link>
+        <pubDate>Sun, 22 Oct 2017 15:42:04 +0800</pubDate>
+        
+        <guid>https://idontwannarock.github.io/tech_blog/2017/10/markdown_syntax/</guid>
+        <description>Howard Tech Note https://idontwannarock.github.io/tech_blog/2017/10/markdown_syntax/ -&lt;h1 id=&#34;markdown-特色&#34;&gt;Markdown 特色&lt;/h1&gt;
+&lt;h2 id=&#34;易編寫&#34;&gt;易編寫&lt;/h2&gt;
+&lt;p&gt;相對於 HTML 需要注意各種 tag、屬性、特殊字元，Markdown 是更容易編寫的方式，雖然無法像 HTML 那樣可以直接透過各種屬性，甚至 CSS 來達到各種效果，但純粹以書寫來說，Markdown 的功能已經相當夠用。&lt;/p&gt;
+&lt;h2 id=&#34;轉換-html&#34;&gt;轉換 HTML&lt;/h2&gt;
+&lt;p&gt;不過如果有需要的話，Markdown 可以用各種方式轉換成 HTML，以方便我們發布成網頁或部落格文章，網路上有相當多的程式可以達到這點；相對之下，從 HTML 轉換回 Markdown 就沒這麼方便了，主要原因就是 HTML 有相當多屬性等並不被 Markdown 支援，所以有轉換回 Markdown 的困難。&lt;/p&gt;
+&lt;p&gt;但還是有補救的辦法，在編寫 Markdown 文件的時候，其實還是可以使用 HTML 語法的，我使用過的轉換器都可以讀取 HTML 語法，並正常顯示以及轉換，所以真的有什麼 Markdown 找不到的 HTML 功能，就直接寫 HTML 吧！當然這就需要對 HTML 語法有更多認識了。&lt;/p&gt;
+&lt;h2 id=&#34;編寫視覺&#34;&gt;編寫／視覺&lt;/h2&gt;
+&lt;p&gt;跟 HTML 一樣，在編寫 Markdown 的時候呈現的畫面，跟實際呈現的畫面其實是不一樣的。&lt;/p&gt;
+&lt;p&gt;例如我們編寫 Markdown 如下：&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#e7e9db;background-color:#2f1e2e;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-md&#34; data-lang=&#34;md&#34;&gt;&lt;span style=&#34;color:#815ba4&#34;&gt;-&lt;/span&gt; ***This*** is a [&lt;span style=&#34;color:#5bc4bf&#34;&gt;sample&lt;/span&gt;](&lt;span style=&#34;color:#06b6ef&#34;&gt;http://example.com/ &amp;#34;example.com&amp;#34;&lt;/span&gt;).
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;實際呈現的畫面其實是這樣的：&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;em&gt;&lt;strong&gt;This&lt;/strong&gt;&lt;/em&gt; is a &lt;a href=&#34;http://example.com/&#34; title=&#34;example.com&#34;&gt;sample&lt;/a&gt;.&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/blockquote&gt;
+&lt;p&gt;所以在編寫 Markdown 的時候，最好找個可以隨時觀看實際畫面的編輯器來確認實際畫面。&lt;/p&gt;
+&lt;h1 id=&#34;區塊元素&#34;&gt;區塊元素&lt;/h1&gt;
+&lt;h2 id=&#34;換行&#34;&gt;換行&lt;/h2&gt;
+&lt;p&gt;原則上按 Enter 鍵就是換行。&lt;/p&gt;
+&lt;p&gt;要注意的是有些轉換器會要求不同的換行字元，例如有些會要求在行尾加上兩個空白，再按 Enter 鍵，才代表換行；也有些會要求兩個空白加一個 tab 鍵等等，所以建議要找可以即時顯示畫面的編輯器，隨時確認實際畫面。&lt;/p&gt;
+&lt;h2 id=&#34;分段&#34;&gt;分段&lt;/h2&gt;
+&lt;p&gt;Markdown 是以空白行來分段，原則上就是該行只有一個 Enter 就換行。&lt;/p&gt;
+&lt;p&gt;同樣的，要注意有些編輯器會要求不同的特殊字元來代表空白行。&lt;/p&gt;
+&lt;h2 id=&#34;標題&#34;&gt;標題&lt;/h2&gt;
+&lt;p&gt;Markdown 支援 Setext 以及 atx 兩種形式的標題。一般都用 atx 語法，標題的階層較多，語法也比較好記。&lt;/p&gt;
+&lt;h3 id=&#34;setex-形式&#34;&gt;Setex 形式&lt;/h3&gt;
+&lt;p&gt;以底線的方式來表示標題，只有兩種如下：&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#e7e9db;background-color:#2f1e2e;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-md&#34; data-lang=&#34;md&#34;&gt;This is an H1
+=============
+This is an H2
+-------------
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;實際顯示就會變成這樣：&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;h1 id=&#34;this-is-an-h1&#34;&gt;This is an H1&lt;/h1&gt;
+&lt;h2 id=&#34;this-is-an-h2&#34;&gt;This is an H2&lt;/h2&gt;
+&lt;/blockquote&gt;
+&lt;h3 id=&#34;atx-形式&#34;&gt;atx 形式&lt;/h3&gt;
+&lt;p&gt;在標題前面加上 1 到 6 個 &lt;code&gt;#&lt;/code&gt;，剛好對應到 HTML 的 &lt;code&gt;h1&lt;/code&gt; 到 &lt;code&gt;h6&lt;/code&gt;，如：&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#e7e9db;background-color:#2f1e2e;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-md&#34; data-lang=&#34;md&#34;&gt;&lt;span style=&#34;font-weight:bold&#34;&gt;# This is an H1
+&lt;/span&gt;&lt;span style=&#34;font-weight:bold&#34;&gt;&lt;/span&gt;&lt;span style=&#34;color:#5bc4bf;font-weight:bold&#34;&gt;## This is an H2
+&lt;/span&gt;&lt;span style=&#34;color:#5bc4bf;font-weight:bold&#34;&gt;### This is an H3
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;實際呈現：&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;h1 id=&#34;this-is-an-h1-1&#34;&gt;This is an H1&lt;/h1&gt;
+&lt;h2 id=&#34;this-is-an-h2-1&#34;&gt;This is an H2&lt;/h2&gt;
+&lt;h3 id=&#34;this-is-an-h3&#34;&gt;This is an H3&lt;/h3&gt;
+&lt;/blockquote&gt;
+&lt;p&gt;若你寫完有考慮轉為 HTML 發布為網頁或部落格，確切使用標題是個好習慣。一是轉換完不用再花心思調整，只需要考慮 CSS 或 Javascript 做美化就好；二是良好的標題設定跟 SEO 優化有關。&lt;/p&gt;
+&lt;h2 id=&#34;清單&#34;&gt;清單&lt;/h2&gt;
+&lt;p&gt;與 HTML 相同，也分為有序清單及無序清單。&lt;/p&gt;
+&lt;h3 id=&#34;有序清單&#34;&gt;有序清單&lt;/h3&gt;
+&lt;p&gt;使用一個數字，加一個英文句點 &lt;code&gt;.&lt;/code&gt;，再空一格。&lt;/p&gt;
+&lt;p&gt;注意 &lt;strong&gt;數字並不會影響實際畫面的排序&lt;/strong&gt;，例如：&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#e7e9db;background-color:#2f1e2e;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-md&#34; data-lang=&#34;md&#34;&gt;&lt;span style=&#34;color:#815ba4&#34;&gt;1.&lt;/span&gt;    First item
+&lt;span style=&#34;color:#815ba4&#34;&gt;2.&lt;/span&gt;    Second item
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;實際上 Markdown 會自動排序：&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;ol start=&#34;9527&#34;&gt;
+&lt;li&gt;First item&lt;/li&gt;
+&lt;li&gt;Second item&lt;/li&gt;
+&lt;/ol&gt;
+&lt;/blockquote&gt;
+&lt;p&gt;但建議還是照正常順序編排啦，自己編寫看得比較清楚，而且也不清楚什麼時候 Markdown 就改成一定要照順序排序（攤手）。&lt;/p&gt;
+&lt;h3 id=&#34;無序清單&#34;&gt;無序清單&lt;/h3&gt;
+&lt;p&gt;使用 &lt;code&gt;*&lt;/code&gt;、&lt;code&gt;+&lt;/code&gt; 或 &lt;code&gt;-&lt;/code&gt; 做無序清單的標記。例如：&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#e7e9db;background-color:#2f1e2e;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-md&#34; data-lang=&#34;md&#34;&gt;&lt;span style=&#34;color:#815ba4&#34;&gt;*&lt;/span&gt; First item
+&lt;span style=&#34;color:#815ba4&#34;&gt;*&lt;/span&gt; Second item
+&lt;span style=&#34;color:#815ba4&#34;&gt;*&lt;/span&gt; Third item
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;會顯示成：&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;ul&gt;
+&lt;li&gt;First item&lt;/li&gt;
+&lt;li&gt;Second item&lt;/li&gt;
+&lt;li&gt;Third item&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/blockquote&gt;
+&lt;h3 id=&#34;巢狀清單&#34;&gt;巢狀清單&lt;/h3&gt;
+&lt;p&gt;不論是有序還是無序清單，都可以使用縮排 tab 鍵來做出巢狀的清單。例如：&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#e7e9db;background-color:#2f1e2e;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-md&#34; data-lang=&#34;md&#34;&gt;&lt;span style=&#34;color:#815ba4&#34;&gt;*&lt;/span&gt; First item
+	&lt;span style=&#34;color:#815ba4&#34;&gt;*&lt;/span&gt; Second item
+		&lt;span style=&#34;color:#815ba4&#34;&gt;*&lt;/span&gt; Third item
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;會顯示成：&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;ul&gt;
+&lt;li&gt;First item
+&lt;ul&gt;
+&lt;li&gt;Second item
+&lt;ul&gt;
+&lt;li&gt;Third item&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/blockquote&gt;
+&lt;h2 id=&#34;區塊引言&#34;&gt;區塊引言&lt;/h2&gt;
+&lt;p&gt;使用 &lt;code&gt;&amp;gt;&lt;/code&gt; 來標記區塊引言。例如：&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#e7e9db;background-color:#2f1e2e;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-md&#34; data-lang=&#34;md&#34;&gt;&lt;span style=&#34;color:#815ba4&#34;&gt;&amp;gt; &lt;/span&gt;&lt;span style=&#34;font-style:italic&#34;&gt;This is a blockquote paragraph.
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;就會顯示成：&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;p&gt;This is a blockquote paragraph.&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;p&gt;區塊引言也可以巢狀分層，例如：&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#e7e9db;background-color:#2f1e2e;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-md&#34; data-lang=&#34;md&#34;&gt;&lt;span style=&#34;color:#815ba4&#34;&gt;&amp;gt; &lt;/span&gt;&lt;span style=&#34;font-style:italic&#34;&gt;This is a blockquote sentence 1.
+&lt;/span&gt;&lt;span style=&#34;font-style:italic&#34;&gt;&lt;/span&gt;&lt;span style=&#34;color:#815ba4&#34;&gt;
+&lt;/span&gt;&lt;span style=&#34;color:#815ba4&#34;&gt;&amp;gt; &lt;/span&gt;&lt;span style=&#34;font-style:italic&#34;&gt;&amp;gt; This is a blockquote sentence 2.
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;會顯示成：&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;p&gt;This is a blockquote sentence 1.&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;blockquote&gt;
+&lt;blockquote&gt;
+&lt;p&gt;This is a blockquote sentence 2.&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;/blockquote&gt;
+&lt;p&gt;區塊引言也可以只在一個「段落」的第一行加入 &lt;code&gt;&amp;gt;&lt;/code&gt; 標記區塊，記得「段落」是要以「空白行」做為區隔。&lt;/p&gt;
+&lt;p&gt;另外區塊內也支援 Markdown 語法。例如：&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#e7e9db;background-color:#2f1e2e;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-md&#34; data-lang=&#34;md&#34;&gt;&lt;span style=&#34;color:#815ba4&#34;&gt;&amp;gt; &lt;/span&gt;&lt;span style=&#34;font-style:italic&#34;&gt;*This* is a blockquote paragraph 1 sentence 1.
+&lt;/span&gt;&lt;span style=&#34;font-style:italic&#34;&gt;&lt;/span&gt;**This** is a blockquote paragraph 1 &lt;span style=&#34;font-style:italic&#34;&gt;**&lt;/span&gt;*sentence 2***.
+This is a blockquote paragraph 1 sentence 3.
+&lt;span style=&#34;color:#815ba4&#34;&gt;
+&lt;/span&gt;&lt;span style=&#34;color:#815ba4&#34;&gt;&amp;gt; &lt;/span&gt;&lt;span style=&#34;font-style:italic&#34;&gt;&amp;gt; - [ ] This is a blockquote paragraph 2 sentence 1.
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;會顯示成：&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;p&gt;&lt;em&gt;This&lt;/em&gt; is a blockquote paragraph 1 sentence 1.&lt;br&gt;
+&lt;strong&gt;This&lt;/strong&gt; is a blockquote paragraph 1 &lt;em&gt;&lt;strong&gt;sentence 2&lt;/strong&gt;&lt;/em&gt;.&lt;br&gt;
+This is a blockquote paragraph 1 sentence 3.&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;blockquote&gt;
+&lt;blockquote&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;input disabled=&#34;&#34; type=&#34;checkbox&#34;&gt; This is a blockquote paragraph 2 sentence 2.&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/blockquote&gt;
+&lt;/blockquote&gt;
+&lt;p&gt;但注意區塊引言內常常會自動加上斜體屬性，所以強調的三種狀態在區塊引言內其實只會剩粗體一種。&lt;/p&gt;
+&lt;h2 id=&#34;程式碼區塊&#34;&gt;程式碼區塊&lt;/h2&gt;
+&lt;p&gt;在程式碼區塊內，Markdown 語法並不會被轉換，所以可以如實呈現實際寫的 Markdown 語法內容。若是其他種程式語言的程式碼，則會有限度的辨識，並標記出有支援的語法，這部分目前有很多擴充，容後再敘。&lt;/p&gt;
+&lt;p&gt;當然以 Markdown 語法要做程式碼區塊，有幾種辦法，一是用 &lt;!-- raw HTML omitted --&gt;```&lt;!-- raw HTML omitted --&gt; 將整段程式碼包起來，一是在開頭用縮排 tab鍵來做標記，直到沒有縮排的一行空白行為止。&lt;/p&gt;
+&lt;p&gt;例如：&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;```
+This is a code block.
+```
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;呈現起來會是這樣：&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;pre tabindex=&#34;0&#34;&gt;&lt;code&gt;This is a code block.
+&lt;/code&gt;&lt;/pre&gt;&lt;/blockquote&gt;
+&lt;h2 id=&#34;分隔線&#34;&gt;分隔線&lt;/h2&gt;
+&lt;p&gt;在同一行用三個以上的 &lt;code&gt;*&lt;/code&gt;、&lt;code&gt;-&lt;/code&gt; 或 &lt;code&gt;_&lt;/code&gt; 可以組成一個分隔線，同一行不可以有其他的文字或標記，但在三個 &lt;code&gt;*&lt;/code&gt;、&lt;code&gt;-&lt;/code&gt; 或 &lt;code&gt;_&lt;/code&gt;中間可以插入空白。&lt;/p&gt;
+&lt;p&gt;以下幾種方式都可以組成分隔線：&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#e7e9db;background-color:#2f1e2e;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-md&#34; data-lang=&#34;md&#34;&gt;&lt;span style=&#34;color:#815ba4&#34;&gt;-&lt;/span&gt; - -  
+&lt;span style=&#34;color:#815ba4&#34;&gt;*&lt;/span&gt; * *  
+______ &lt;span style=&#34;font-weight:bold&#34;&gt;______&lt;/span&gt; &lt;span style=&#34;font-weight:bold&#34;&gt;______&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;都會顯示成同一種分隔線：&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;hr&gt;
+&lt;/blockquote&gt;
+&lt;h1 id=&#34;區段元素&#34;&gt;區段元素&lt;/h1&gt;
+&lt;h2 id=&#34;連結&#34;&gt;連結&lt;/h2&gt;
+&lt;p&gt;Markdown 的連結有兩種方式，一是行內，一是參考。兩種都是用 &lt;code&gt;[]&lt;/code&gt; 來標記要形成超連結的文字。&lt;/p&gt;
+&lt;h3 id=&#34;行內連結&#34;&gt;行內連結&lt;/h3&gt;
+&lt;p&gt;行內連結是用 &lt;code&gt;[]&lt;/code&gt; 將文字包起來後，再加上 &lt;code&gt;()&lt;/code&gt;，並在小括號內加上連結網址即可。若想幫連結加上標題，也就是滑鼠移動到連結文字上會顯示的標題，在小括號內的連結網址後，空一格，用 &lt;code&gt;&amp;quot;&lt;/code&gt; 將標題文字包起來即可。&lt;/p&gt;
+&lt;p&gt;例如：&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#e7e9db;background-color:#2f1e2e;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-md&#34; data-lang=&#34;md&#34;&gt;This is a [&lt;span style=&#34;color:#5bc4bf&#34;&gt;sample&lt;/span&gt;](&lt;span style=&#34;color:#06b6ef&#34;&gt;http://example.com/ &amp;#34;example.com&amp;#34;&lt;/span&gt;).
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;就會呈現為：&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;p&gt;This is a &lt;a href=&#34;http://example.com/&#34; title=&#34;example.com&#34;&gt;sample&lt;/a&gt;.&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;h3 id=&#34;參考連結&#34;&gt;參考連結&lt;/h3&gt;
+&lt;p&gt;若你的文章內有多處要連結到同一個網址連結，則用參考連結是較好的方式。&lt;/p&gt;
+&lt;p&gt;參考連結一樣是用 &lt;code&gt;[]&lt;/code&gt; 將文字包起來，後面再用一次 &lt;code&gt;[]&lt;/code&gt; 將用來辨識連結的標籤包起來。例如：&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#e7e9db;background-color:#2f1e2e;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-md&#34; data-lang=&#34;md&#34;&gt;Let me [Google][0] that for you.
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;同樣會呈現為：&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;p&gt;Let me &lt;a href=&#34;http://www.google.com/&#34; title=&#34;Google&#34;&gt;Google&lt;/a&gt; that for you.&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;p&gt;然後在文件的任意處，對，「任意處」，放上標籤內的連結內容定義，例如：&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#e7e9db;background-color:#2f1e2e;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-md&#34; data-lang=&#34;md&#34;&gt;[0]: http://www.google.com/ &amp;#34;Google&amp;#34;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;但很抱歉，這個參考連結的內容定義並不會實際呈現出來，想檢查正確與否，就是直接點超連結的文字來測試。&lt;/p&gt;
+&lt;p&gt;而連結的內容定義，有一定的語法，所以有以下幾點需要注意：&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;code&gt;[]&lt;/code&gt; 內輸入連結的辨識標籤，可以是字母、數字、空白和標點符號，但並無大小寫區分&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;[]&lt;/code&gt; 後必須接一個 &lt;code&gt;:&lt;/code&gt;，再接著一個以上的空白或縮排 tab&lt;/li&gt;
+&lt;li&gt;空白或縮排 tab 後再接連結網址，可以選擇用 &lt;code&gt;&amp;lt;&amp;gt;&lt;/code&gt; 將網址包起來，但非必要&lt;/li&gt;
+&lt;li&gt;網址後面可以選擇性地加上連結標題，也就是滑鼠游標移到超連結文字上後會顯示的標題，須用 &lt;code&gt;&#39;&#39;&lt;/code&gt;、&lt;code&gt;&amp;quot;&amp;quot;&lt;/code&gt; 或 &lt;code&gt;()&lt;/code&gt; 包住標題&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2 id=&#34;強調&#34;&gt;強調&lt;/h2&gt;
+&lt;p&gt;將想要強調的文字用 &lt;code&gt;*&lt;/code&gt; 或 &lt;code&gt;_&lt;/code&gt; 包起來，就可以呈現三種強調的方式。例如：&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#e7e9db;background-color:#2f1e2e;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-md&#34; data-lang=&#34;md&#34;&gt;***粗斜體***  
+&lt;span style=&#34;font-weight:bold&#34;&gt;__粗體__&lt;/span&gt;  
+&lt;span style=&#34;font-style:italic&#34;&gt;*斜體*&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;會呈現如下：&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;p&gt;&lt;em&gt;&lt;strong&gt;粗斜體&lt;/strong&gt;&lt;/em&gt;&lt;br&gt;
+&lt;strong&gt;粗體&lt;/strong&gt;&lt;br&gt;
+&lt;em&gt;斜體&lt;/em&gt;&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;h2 id=&#34;程式碼&#34;&gt;程式碼&lt;/h2&gt;
+&lt;p&gt;這邊跟程式碼區塊的區別，是只用來標記一小段行內程式碼，直接用 &lt;!-- raw HTML omitted --&gt;`&lt;!-- raw HTML omitted --&gt; 將程式碼包起來即可。例如：&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#e7e9db;background-color:#2f1e2e;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-md&#34; data-lang=&#34;md&#34;&gt;&lt;span style=&#34;color:#48b685&#34;&gt;`This is a code.`&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;就會顯示為：&lt;/p&gt;
+&lt;p&gt;&lt;code&gt;This is a code.&lt;/code&gt;&lt;/p&gt;
+&lt;p&gt;若程式碼內有需要用到 &lt;code&gt;`&lt;/code&gt; 這個符號，可以用多個 &lt;code&gt;`&lt;/code&gt; 符號來包住程式碼以作區別，例如：&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#e7e9db;background-color:#2f1e2e;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-md&#34; data-lang=&#34;md&#34;&gt;A single backtick in a code span: `` &lt;span style=&#34;color:#48b685&#34;&gt;` ``  
+&lt;/span&gt;&lt;span style=&#34;color:#48b685&#34;&gt;A bakctick-delimited string in a code span: `` `&lt;/span&gt;foo` ``
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;就會顯示為：&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;p&gt;A single backtick in a code span: &lt;code&gt;`&lt;/code&gt;&lt;br&gt;
+A bakctick-delimited string in a code span: &lt;code&gt;`foo`&lt;/code&gt;&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;h2 id=&#34;圖片&#34;&gt;圖片&lt;/h2&gt;
+&lt;p&gt;插入圖片的 Markdown 語法跟連結非常相似，幾乎只差在需要在開頭加上一個 &lt;code&gt;!&lt;/code&gt; 符號。例如：&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#e7e9db;background-color:#2f1e2e;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-md&#34; data-lang=&#34;md&#34;&gt;![&lt;span style=&#34;color:#5bc4bf&#34;&gt;Markdown logo&lt;/span&gt;](&lt;span style=&#34;color:#06b6ef&#34;&gt;https://upload.wikimedia.org/wikipedia/commons/thumb/4/48/Markdown-mark.svg/208px-Markdown-mark.svg.png &amp;#34;Markdown&amp;#34;&lt;/span&gt;)
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;就會顯示出圖片：&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;p&gt;&lt;img src=&#34;https://upload.wikimedia.org/wikipedia/commons/thumb/4/48/Markdown-mark.svg/208px-Markdown-mark.svg.png&#34; alt=&#34;Markdown logo&#34; title=&#34;Markdown&#34;&gt;&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;p&gt;行內圖片的語法注意如下：&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;須以一個 &lt;code&gt;!&lt;/code&gt; 開頭&lt;/li&gt;
+&lt;li&gt;接著以 &lt;code&gt;[]&lt;/code&gt; 加入替代文字，也就是圖片路徑、網址失效的時候顯示的文字&lt;/li&gt;
+&lt;li&gt;再以 &lt;code&gt;()&lt;/code&gt; 加入圖片路徑或網址&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;()&lt;/code&gt; 內的網址後面，只可以 &lt;code&gt;&#39;&#39;&lt;/code&gt; 或 &lt;code&gt;&amp;quot;&amp;quot;&lt;/code&gt; 包住可以選擇加上的標題&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;參考圖片的語法則像這樣：&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#e7e9db;background-color:#2f1e2e;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-md&#34; data-lang=&#34;md&#34;&gt;![Evernote logo][1]
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;參考的定義方式則與連結的參考內容定義方式一模一樣：&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#e7e9db;background-color:#2f1e2e;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-md&#34; data-lang=&#34;md&#34;&gt;[1]: https://upload.wikimedia.org/wikipedia/commons/a/a4/Evernote_Icon.png &amp;#34;Evernote&amp;#34;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;同樣可以顯示出圖片：&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;p&gt;&lt;img src=&#34;https://upload.wikimedia.org/wikipedia/commons/a/a4/Evernote_Icon.png&#34; alt=&#34;Evernote logo&#34; title=&#34;Evernote&#34;&gt;&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;h1 id=&#34;其他&#34;&gt;其他&lt;/h1&gt;
+&lt;h2 id=&#34;自動連結&#34;&gt;自動連結&lt;/h2&gt;
+&lt;p&gt;Markdown 也支援比較簡短的連結形式，可以用來表達連結網址及信箱，同時也能有超連結功能，只需要用 &lt;code&gt;&amp;lt;&amp;gt;&lt;/code&gt; 包住網址即可。例如：&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#e7e9db;background-color:#2f1e2e;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-md&#34; data-lang=&#34;md&#34;&gt;&amp;lt;&lt;span style=&#34;color:#5bc4bf&#34;&gt;http:&lt;/span&gt;&lt;span style=&#34;color:#ef6155&#34;&gt;//&lt;/span&gt;&lt;span style=&#34;color:#06b6ef&#34;&gt;example&lt;/span&gt;&lt;span style=&#34;color:#ef6155&#34;&gt;.&lt;/span&gt;&lt;span style=&#34;color:#06b6ef&#34;&gt;com&lt;/span&gt;/&amp;gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;就可以顯示為：&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;p&gt;&lt;a href=&#34;http://example.com/&#34;&gt;http://example.com/&lt;/a&gt;&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;h2 id=&#34;跳脫字元&#34;&gt;跳脫字元&lt;/h2&gt;
+&lt;p&gt;前面講了很多 Markdown 的語法，使用很多符號來達成指定功能的標記，那如果只是需要在文章中加入那些符號，但並不想使用相關的功能，就需要在該符號前面加上 &lt;code&gt;\&lt;/code&gt; 這個符號，以達成跳脫字元的功能。&lt;/p&gt;
+&lt;p&gt;例如：&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#e7e9db;background-color:#2f1e2e;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-md&#34; data-lang=&#34;md&#34;&gt;If I want to \*\*emphasize\*\* something without making it &lt;span style=&#34;font-weight:bold&#34;&gt;**bold**&lt;/span&gt;.
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;就會顯示為：&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;p&gt;If I want to **emphasize** something without making it &lt;strong&gt;bold&lt;/strong&gt;.&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;p&gt;以下是 Markdown 支援能在前面加上 &lt;code&gt;\&lt;/code&gt; 以形成跳脫字元的符號：&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;p&gt;&lt;code&gt;\&lt;/code&gt; 反斜線&lt;br&gt;
+&lt;code&gt;`&lt;/code&gt; 反引號&lt;br&gt;
+&lt;code&gt;*&lt;/code&gt; 星號&lt;br&gt;
+&lt;code&gt;_&lt;/code&gt; 底線&lt;br&gt;
+&lt;code&gt;{}&lt;/code&gt; 大括號&lt;br&gt;
+&lt;code&gt;[]&lt;/code&gt; 中括號&lt;br&gt;
+&lt;code&gt;()&lt;/code&gt; 小括號&lt;br&gt;
+&lt;code&gt;#&lt;/code&gt; 井字號&lt;br&gt;
+&lt;code&gt;+&lt;/code&gt; 加號&lt;br&gt;
+&lt;code&gt;-&lt;/code&gt; 減號&lt;br&gt;
+&lt;code&gt;.&lt;/code&gt; 英文句點&lt;br&gt;
+&lt;code&gt;!&lt;/code&gt; 驚嘆號&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;h2 id=&#34;特殊功能&#34;&gt;特殊功能&lt;/h2&gt;
+&lt;p&gt;前面都是介紹 Markdown 原生支援的語法，其實有很多通用的寫法也能適用在 Markdown 當中。這邊列出我找到的一些語法，但請注意使用的編輯器或轉換器的支援度。&lt;/p&gt;
+&lt;h3 id=&#34;checkbox&#34;&gt;Checkbox&lt;/h3&gt;
+&lt;p&gt;語法是先用一個 &lt;code&gt;-&lt;/code&gt;，一個空格，再加上 &lt;code&gt;[ ]&lt;/code&gt;，空格後再加上敘述。注意 &lt;code&gt;[ ]&lt;/code&gt; 當中必須有一個空格。若需要顯示的 checkbox 已經勾選，請將 &lt;code&gt;[ ]&lt;/code&gt; 當中的空格替換成 &lt;code&gt;x&lt;/code&gt; 或 &lt;code&gt;X&lt;/code&gt;。&lt;/p&gt;
+&lt;p&gt;例如：&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#e7e9db;background-color:#2f1e2e;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-md&#34; data-lang=&#34;md&#34;&gt;&lt;span style=&#34;color:#815ba4&#34;&gt;- [ ]&lt;/span&gt; First box
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;就會顯示為：&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;input disabled=&#34;&#34; type=&#34;checkbox&#34;&gt; First box&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/blockquote&gt;
+&lt;h3 id=&#34;table&#34;&gt;Table&lt;/h3&gt;
+&lt;p&gt;Markdown 也支援做表格，基本上需要三個部分，標題列、設定列、內容表格。基本上都是用 &lt;code&gt;|&lt;/code&gt; 做為分隔符號。&lt;/p&gt;
+&lt;p&gt;例如：&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#e7e9db;background-color:#2f1e2e;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-md&#34; data-lang=&#34;md&#34;&gt;No.|Pokemon|神奇寶貝
+:---:|:---|---:
+1|Bulbasaur|妙蛙種子
+2|Ivysaur|妙蛙草
+3|Venusaur|妙蛙花
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;會顯示為：&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;table&gt;
+&lt;thead&gt;
+&lt;tr&gt;
+&lt;th style=&#34;text-align:center&#34;&gt;No.&lt;/th&gt;
+&lt;th style=&#34;text-align:left&#34;&gt;Pokemon&lt;/th&gt;
+&lt;th style=&#34;text-align:right&#34;&gt;神奇寶貝&lt;/th&gt;
+&lt;/tr&gt;
+&lt;/thead&gt;
+&lt;tbody&gt;
+&lt;tr&gt;
+&lt;td style=&#34;text-align:center&#34;&gt;1&lt;/td&gt;
+&lt;td style=&#34;text-align:left&#34;&gt;Bulbasaur&lt;/td&gt;
+&lt;td style=&#34;text-align:right&#34;&gt;妙蛙種子&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td style=&#34;text-align:center&#34;&gt;2&lt;/td&gt;
+&lt;td style=&#34;text-align:left&#34;&gt;Ivysaur&lt;/td&gt;
+&lt;td style=&#34;text-align:right&#34;&gt;妙蛙草&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td style=&#34;text-align:center&#34;&gt;3&lt;/td&gt;
+&lt;td style=&#34;text-align:left&#34;&gt;Venusaur&lt;/td&gt;
+&lt;td style=&#34;text-align:right&#34;&gt;妙蛙花&lt;/td&gt;
+&lt;/tr&gt;
+&lt;/tbody&gt;
+&lt;/table&gt;
+&lt;/blockquote&gt;
+&lt;p&gt;在畫表格的時候，有幾項注意事項：&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;左邊界跟右邊界的框線非必要&lt;/li&gt;
+&lt;li&gt;標題列必須每欄都填入欄位名稱&lt;/li&gt;
+&lt;li&gt;第二列設定列，每一欄都必須填入至少一個 &lt;code&gt;-&lt;/code&gt; 符號，並用 &lt;code&gt;:&lt;/code&gt; 設定對齊方式。預設是靠左對齊；&lt;code&gt;:-&lt;/code&gt; 也代表靠左對齊；&lt;code&gt;-:&lt;/code&gt; 代表靠右對齊；&lt;code&gt;:-:&lt;/code&gt; 則代表置中&lt;/li&gt;
+&lt;li&gt;內容表格必須至少一列&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2 id=&#34;支援程式碼&#34;&gt;支援程式碼&lt;/h2&gt;
+&lt;p&gt;這邊特指的是程式碼區塊。&lt;/p&gt;
+&lt;p&gt;其實大家應該注意到前面的程式碼區塊的文字有各種顏色，其實就是 Markdown 在做辨識程式語言的工作，並試圖將跟辨識出來的語言的關鍵字做顏色標記。&lt;/p&gt;
+&lt;p&gt;如果記錄在程式碼區塊的程式碼有確切的語言，不仿試用以下的辦法，讓 Markdown 能更好的辨認程式碼，並更好地標記。&lt;/p&gt;
+&lt;p&gt;首先必須使用三個 &lt;code&gt;`&lt;/code&gt; 來前後包住程式碼區塊，然後在第一排 &lt;code&gt;`&lt;/code&gt; 的後面加上程式語言名稱。&lt;/p&gt;
+&lt;p&gt;例如：&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#e7e9db;background-color:#2f1e2e;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-md&#34; data-lang=&#34;md&#34;&gt;	```java  
+	public static void main(String[] args) {  
+		System.out.println(&amp;#34;Hello World!&amp;#34;);  
+	}  
+	```
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;就可以讓 Markdown 辨識如下：&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#e7e9db;background-color:#2f1e2e;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-java&#34; data-lang=&#34;java&#34;&gt;&lt;span style=&#34;color:#815ba4&#34;&gt;public&lt;/span&gt; &lt;span style=&#34;color:#815ba4&#34;&gt;static&lt;/span&gt; &lt;span style=&#34;color:#fec418&#34;&gt;void&lt;/span&gt; &lt;span style=&#34;color:#06b6ef&#34;&gt;main&lt;/span&gt;&lt;span style=&#34;color:#5bc4bf&#34;&gt;(&lt;/span&gt;String&lt;span style=&#34;color:#5bc4bf&#34;&gt;[]&lt;/span&gt; args&lt;span style=&#34;color:#5bc4bf&#34;&gt;)&lt;/span&gt; &lt;span style=&#34;color:#5bc4bf&#34;&gt;{&lt;/span&gt;
+	System&lt;span style=&#34;color:#5bc4bf&#34;&gt;.&lt;/span&gt;&lt;span style=&#34;color:#06b6ef&#34;&gt;out&lt;/span&gt;&lt;span style=&#34;color:#5bc4bf&#34;&gt;.&lt;/span&gt;&lt;span style=&#34;color:#06b6ef&#34;&gt;println&lt;/span&gt;&lt;span style=&#34;color:#5bc4bf&#34;&gt;(&lt;/span&gt;&lt;span style=&#34;color:#48b685&#34;&gt;&amp;#34;Hello World!&amp;#34;&lt;/span&gt;&lt;span style=&#34;color:#5bc4bf&#34;&gt;);&lt;/span&gt;
+&lt;span style=&#34;color:#5bc4bf&#34;&gt;}&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;另外，利用這個辨識的功能，還能延伸為繪製一些簡單的圖表，如流程圖。&lt;/p&gt;
+&lt;p&gt;詳細語法請上網搜尋 &lt;code&gt;markdown&lt;/code&gt; 加 &lt;code&gt;flow&lt;/code&gt;。這邊僅舉例：&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;```flow
+st=&amp;gt;start
+op=&amp;gt;operation: operation
+con=&amp;gt;condition: condition
+e=&amp;gt;end
+
+st-&amp;gt;op(right)-&amp;gt;con
+con(yes)-&amp;gt;e
+con(no)-&amp;gt;op
+```
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;Markdown 辨識後，會自動繪圖如下：&lt;/p&gt;
+&lt;pre tabindex=&#34;0&#34;&gt;&lt;code class=&#34;language-flow&#34; data-lang=&#34;flow&#34;&gt;st=&amp;gt;start  
+op=&amp;gt;operation: operation  
+con=&amp;gt;condition: yes or no?  
+e=&amp;gt;end  
+
+st-&amp;gt;op(right)-&amp;gt;con  
+con(yes)-&amp;gt;e  
+con(no)-&amp;gt;op  
+&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;（很顯然 Hugo 提供的轉換器並不支援這種擴充的繪圖功能）&lt;/p&gt;
+- https://idontwannarock.github.io/tech_blog/2017/10/markdown_syntax/ - This website by Howard Wang is licensed under a Creative Common Attribution-ShareAlike 4.0 International License.</description>
+        </item>
+    
+    
+    
+        <item>
+        <title>整數溢位 Integer Overflow</title>
+        <link>https://idontwannarock.github.io/tech_blog/2017/10/integer_overflow/</link>
+        <pubDate>Sun, 01 Oct 2017 07:04:47 +0800</pubDate>
+        
+        <guid>https://idontwannarock.github.io/tech_blog/2017/10/integer_overflow/</guid>
+        <description>Howard Tech Note https://idontwannarock.github.io/tech_blog/2017/10/integer_overflow/ -&lt;p&gt;這是我查到一些資料後的理解，希望能多一點對整數溢位後為何會正負循環的了解。&lt;/p&gt;
+&lt;h1 id=&#34;數字系統&#34;&gt;數字系統&lt;/h1&gt;
+&lt;p&gt;首先要了解的是數字系統，因為一般電腦是採用二進制 (Binary) 來作數字計算，而不是我們習慣的十進制 (Decimal)。&lt;/p&gt;
+&lt;p&gt;我們一般人都是用十進制，十進制就是用 &lt;code&gt;0、1、2、3、4、5、6、7、8、9&lt;/code&gt; 十個數字來表達，一個位數就有十種狀態，從 0 開始往上累積，超過 9 就進一位。&lt;/p&gt;
+&lt;p&gt;而二進制是什麼呢？二進制就是用 &lt;code&gt;0、1&lt;/code&gt; 兩個數字來表達，一個位數就只有兩種狀態表達，從 0 開始往上累積，超過 1 就進一位。&lt;/p&gt;
+&lt;p&gt;以十進制來說，&lt;code&gt;13&lt;/code&gt; 這個數字其實應該寫成 &lt;code&gt;1*10^1 + 3*10^0&lt;/code&gt; 這樣。&lt;code&gt;10^0&lt;/code&gt; 是 &lt;code&gt;1&lt;/code&gt;，也就是代表個位數，乘以幾就是這個位數累積到幾，超過 &lt;code&gt;9&lt;/code&gt; 就進一位到 &lt;code&gt;10^1&lt;/code&gt; 這一位，也就是十位數；再累積超過 &lt;code&gt;9&lt;/code&gt;，就進位到 &lt;code&gt;10^2&lt;/code&gt; 百位數，以此類推。&lt;/p&gt;
+&lt;p&gt;那二進制怎麼表達呢？例如有一個二進制的數字長這樣 &lt;code&gt;1101&lt;/code&gt;，如同十進制，我們可以表達成 &lt;code&gt;1*2^3 + 1*2^2 + 0*2^1 + 1*2^0&lt;/code&gt;。這樣公式算完的答案其實就是十進制的 &lt;code&gt;13&lt;/code&gt;，大家可以算一下試試看。其實其他如八進制、十六進制也是相同原理，只不過超過十進制的進制系統，因為阿拉伯數字無法在單一位數表達 &lt;code&gt;10&lt;/code&gt; 以上的數字大小，所以會配合英文字母 &lt;code&gt;A、B、C、D&lt;/code&gt; 等等。&lt;/p&gt;
+&lt;p&gt;另外複習一下國小（國中？）數學，小數點的部分，以我們常用的十進制來說，小數點後第一位是 &lt;code&gt;10^-1&lt;/code&gt;、第二位是 &lt;code&gt;10^-2&lt;/code&gt;，以此類推；相對的二進制也是一樣規則，小數點後第一位是 &lt;code&gt;2^-1&lt;/code&gt;、第二位是 &lt;code&gt;2^-2&lt;/code&gt; 這樣。&lt;/p&gt;
+&lt;h1 id=&#34;電腦基本運算方式&#34;&gt;電腦基本運算方式&lt;/h1&gt;
+&lt;p&gt;前面說到一般電腦是用二進制運算，這是什麼意思？&lt;/p&gt;
+&lt;p&gt;舉個例子，今天假設一台電腦，我們拉了第一條電線在裡面，一條電線怎麼表達不同的狀態呢？對，就是通電，有通電是一種狀態，沒通電是一種狀態。當然比較實際的作法是透過電壓，高電壓是一種狀態，低電壓是一種狀態，這樣來表達兩種狀態。&lt;/p&gt;
+&lt;p&gt;因此一條電線就能表達兩種狀態，剛好符合二進制只用 &lt;code&gt;0、1&lt;/code&gt; 兩個數字來表達所有數字的狀態，而這樣能表達兩種狀態（1 或 0）的一條電線就是 1 bit。順便講一下因為某些原因，8 bits 被規定為 1 byte。bit 就是我們常聽到的位元，byte 就是我們更常聽到的位元組。&lt;/p&gt;
+&lt;p&gt;那 1 bit 可以表達兩種狀態，以二進制來說就是可以表達 0 跟 1；那 2 bits 呢？是四種；那 3 bits 呢？是六種？錯，是八種。&lt;/p&gt;
+&lt;p&gt;我們用列舉的方式說明，3 bits 意思是有三條電線各自有 0 跟 1 兩種狀態，因此我們可以列出有下列八種狀況：&lt;/p&gt;
+&lt;table&gt;
+&lt;thead&gt;
+&lt;tr&gt;
+&lt;th style=&#34;text-align:center&#34;&gt;狀況&lt;/th&gt;
+&lt;th style=&#34;text-align:center&#34;&gt;第一條電線&lt;/th&gt;
+&lt;th style=&#34;text-align:center&#34;&gt;第二條電線&lt;/th&gt;
+&lt;th style=&#34;text-align:center&#34;&gt;第三條電線&lt;/th&gt;
+&lt;/tr&gt;
+&lt;/thead&gt;
+&lt;tbody&gt;
+&lt;tr&gt;
+&lt;td style=&#34;text-align:center&#34;&gt;一&lt;/td&gt;
+&lt;td style=&#34;text-align:center&#34;&gt;0&lt;/td&gt;
+&lt;td style=&#34;text-align:center&#34;&gt;0&lt;/td&gt;
+&lt;td style=&#34;text-align:center&#34;&gt;0&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td style=&#34;text-align:center&#34;&gt;二&lt;/td&gt;
+&lt;td style=&#34;text-align:center&#34;&gt;0&lt;/td&gt;
+&lt;td style=&#34;text-align:center&#34;&gt;0&lt;/td&gt;
+&lt;td style=&#34;text-align:center&#34;&gt;1&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td style=&#34;text-align:center&#34;&gt;三&lt;/td&gt;
+&lt;td style=&#34;text-align:center&#34;&gt;0&lt;/td&gt;
+&lt;td style=&#34;text-align:center&#34;&gt;1&lt;/td&gt;
+&lt;td style=&#34;text-align:center&#34;&gt;0&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td style=&#34;text-align:center&#34;&gt;四&lt;/td&gt;
+&lt;td style=&#34;text-align:center&#34;&gt;0&lt;/td&gt;
+&lt;td style=&#34;text-align:center&#34;&gt;1&lt;/td&gt;
+&lt;td style=&#34;text-align:center&#34;&gt;1&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td style=&#34;text-align:center&#34;&gt;五&lt;/td&gt;
+&lt;td style=&#34;text-align:center&#34;&gt;1&lt;/td&gt;
+&lt;td style=&#34;text-align:center&#34;&gt;0&lt;/td&gt;
+&lt;td style=&#34;text-align:center&#34;&gt;0&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td style=&#34;text-align:center&#34;&gt;六&lt;/td&gt;
+&lt;td style=&#34;text-align:center&#34;&gt;1&lt;/td&gt;
+&lt;td style=&#34;text-align:center&#34;&gt;0&lt;/td&gt;
+&lt;td style=&#34;text-align:center&#34;&gt;1&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td style=&#34;text-align:center&#34;&gt;七&lt;/td&gt;
+&lt;td style=&#34;text-align:center&#34;&gt;1&lt;/td&gt;
+&lt;td style=&#34;text-align:center&#34;&gt;1&lt;/td&gt;
+&lt;td style=&#34;text-align:center&#34;&gt;0&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td style=&#34;text-align:center&#34;&gt;八&lt;/td&gt;
+&lt;td style=&#34;text-align:center&#34;&gt;1&lt;/td&gt;
+&lt;td style=&#34;text-align:center&#34;&gt;1&lt;/td&gt;
+&lt;td style=&#34;text-align:center&#34;&gt;1&lt;/td&gt;
+&lt;/tr&gt;
+&lt;/tbody&gt;
+&lt;/table&gt;
+&lt;p&gt;簡略來說就是其實是有 2*2*2=8，也就是 2&lt;!-- raw HTML omitted --&gt;3&lt;!-- raw HTML omitted --&gt; 種狀況；以此類推，n bit（n 條電線）就有 2&lt;!-- raw HTML omitted --&gt;n&lt;!-- raw HTML omitted --&gt; 種狀況。&lt;/p&gt;
+&lt;p&gt;那 1 byte 可以表達幾種狀況？&lt;/p&gt;
+&lt;p&gt;前面說過 1 byte = 1 bit，所以 1 byte 就可以表達 2&lt;!-- raw HTML omitted --&gt;8&lt;!-- raw HTML omitted --&gt; = 256 種狀況。&lt;/p&gt;
+&lt;p&gt;前面也講過二進制怎麼換算十進制，也就代表了二進制的每一種狀況都對應到一個十進制的數字，至於對應到的是哪一個，就是用前面教過的換算方法換算。&lt;/p&gt;
+&lt;p&gt;因此，1 byte 可以表達 256 種狀況，每一種狀況剛好表達了一個二進制數字；再以二進制對應十進制來考慮，也就是 1 byte 可以表達從 0  開始，最多到 255 的各種十進制數字。&lt;/p&gt;
+&lt;h1 id=&#34;資料型態&#34;&gt;資料型態&lt;/h1&gt;
+&lt;p&gt;到這邊可能就會有人問，那負數呢？&lt;/p&gt;
+&lt;p&gt;沒錯，講到這邊我們都只處理了正整數（包括 0），還沒講到負整數。講負整數之前，順便先講一下資料型態。&lt;/p&gt;
+&lt;p&gt;一般電腦要存這些數字，也是以這樣 1 個 byte、1 個 byte 的存，就想像記憶體或硬碟裡面就是一大堆小格子，每個小格子裡面通常就是 8 條線，也就是 8 bits，因此一個小格子就是 1 byte，也就是一個小格子就能存 256 種不同的狀態，以正整數來說，就是能存 0-255 這個範圍內的任何一個數字。&lt;/p&gt;
+&lt;p&gt;但 0-255 這樣的範圍很顯然太小了啊，儲存喝一杯可樂、吃一頓麥當勞的價格可能還可以，但要是我去麥當勞想點個六塊炸雞餐台幣 288 元怎麼辦？&lt;/p&gt;
+&lt;p&gt;對，就只好用兩個小格子 2 bytes 來存啊，兩個 256 加一起總可以了吧？&lt;/p&gt;
+&lt;p&gt;這句話只對了一半。&lt;/p&gt;
+&lt;p&gt;的確是要用 2 bytes 來存，但請記住 2 bytes 是有 2&lt;!-- raw HTML omitted --&gt;8&lt;!-- raw HTML omitted --&gt;*2&lt;!-- raw HTML omitted --&gt;8&lt;!-- raw HTML omitted --&gt; = 2&lt;!-- raw HTML omitted --&gt;16&lt;!-- raw HTML omitted --&gt; = 65,536 種狀況，而不是 256+256=512 種狀況唷！就跟 2 bits = 2*2 種狀況一樣，2 bytes 也是 2&lt;!-- raw HTML omitted --&gt;8&lt;!-- raw HTML omitted --&gt;*2&lt;!-- raw HTML omitted --&gt;8&lt;!-- raw HTML omitted --&gt; 種狀況唷！至於有指數的數字相乘則指數相加這件事，請翻數學課本或上網谷哥。&lt;/p&gt;
+&lt;p&gt;接著，我們已經知道 2 bytes 有 65536 種狀態，以正整數來說就是 2 bytes 就可以存 0-65535 這個範圍內任一整數，但某些狀況下，這個數字可能也不夠大怎麼辦？&lt;/p&gt;
+&lt;p&gt;就只好多用幾個 byte 啊，至於要用幾個 byte 才夠，大家的意見就不太一樣了。&lt;/p&gt;
+&lt;p&gt;舉例來說，在 Java 裡面，對於整數就有分成 Byte、Short、Integer、Long 四種資料型態，名稱不重要，重要的是 Java 規定 Byte 型態整數佔 1 Byte、Short 佔 2 Bytes、Integer 佔 4 Bytes、Long 佔 8 Bytes。&lt;/p&gt;
+&lt;h1 id=&#34;整數儲存方式&#34;&gt;整數儲存方式&lt;/h1&gt;
+&lt;p&gt;以 Byte 這個整數型態來舉例，儲存 &lt;code&gt;1&lt;/code&gt; 這個正整數就是先轉成二進制，也就是 &lt;code&gt;0000 0001&lt;/code&gt; 來存進 Byte 的八位元空間，大概可以表達成這樣：&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;p&gt;|0|0|0|0|0|0|0|1|&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;p&gt;八個位元，剛好一個位元存一個二進位數字。接著就可以來考慮負整數該怎麼辦了。&lt;/p&gt;
+&lt;p&gt;一般來說，不論是 Byte、Short、Integer 還是 Long，都是用最左邊的那一個位元來儲存正負號，&lt;code&gt;0&lt;/code&gt; 是正號，&lt;code&gt;1&lt;/code&gt; 是負號。所以如果是 &lt;code&gt;-1&lt;/code&gt; 就要表達成這樣：&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;p&gt;|1|0|0|0|0|0|0|1|&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;h1 id=&#34;1s-補數&#34;&gt;1&amp;rsquo;s 補數&lt;/h1&gt;
+&lt;p&gt;但是，這樣表達會有另外一個問題。&lt;/p&gt;
+&lt;p&gt;用最左邊的位元來儲存正負號，所以實際上八位元的空間只能儲存 2&lt;!-- raw HTML omitted --&gt;15&lt;!-- raw HTML omitted --&gt; 種狀況，而我們現在已經考慮到負整數，所以範圍就會變成 -2&lt;!-- raw HTML omitted --&gt;15&lt;!-- raw HTML omitted --&gt;~2&lt;!-- raw HTML omitted --&gt;15&lt;!-- raw HTML omitted --&gt;-1 這個範圍，那個扣掉的 1 是因為通常都把 &lt;code&gt;0&lt;/code&gt; 算在正整數這邊，所以正整數的那邊就要扣掉 1。&lt;/p&gt;
+&lt;p&gt;這邊就產生一個問題，照前面的邏輯，&lt;code&gt;0&lt;/code&gt; 換成八位元的二進制應該表達為 &lt;code&gt;0000 0000&lt;/code&gt;，那 &lt;code&gt;1000 0000&lt;/code&gt; 豈不是 &lt;code&gt;-0&lt;/code&gt;？？&lt;/p&gt;
+&lt;p&gt;有人想到解決的辦法，就是取補數。&lt;/p&gt;
+&lt;p&gt;補數是什麼呢？&lt;/p&gt;
+&lt;p&gt;我覺得比較簡單的講法就是兩個加起來會剛好開始進位的數字，互相之間就是補數，譬如在十進制中 &lt;code&gt;1&lt;/code&gt; 跟 &lt;code&gt;9&lt;/code&gt; 互為補數、&lt;code&gt;23&lt;/code&gt; 跟 &lt;code&gt;77&lt;/code&gt; 互為補數這樣。&lt;/p&gt;
+&lt;p&gt;但是電腦是二進制啊，二進制補數怎麼算？二進制補數最簡單了，就是把 &lt;code&gt;0&lt;/code&gt; 跟 &lt;code&gt;1&lt;/code&gt; 通通反過來就好，譬如 &lt;code&gt;1001&lt;/code&gt; 翻成 &lt;code&gt;0110&lt;/code&gt; 就變成補數啦，不信可以自己加加看是不是剛好會進位。&lt;/p&gt;
+&lt;p&gt;然後我們就可以利用補數來表達負整數的部分，所以像是 &lt;code&gt;0110&lt;/code&gt; 換算成十進制是 &lt;code&gt;6&lt;/code&gt;，而 &lt;code&gt;-6&lt;/code&gt; 就利用補數法表達為 &lt;code&gt;1001&lt;/code&gt;，剛好連最左邊正負號的欄位都同時翻轉成正確的正負號，是不是很方便呢？&lt;/p&gt;
+&lt;p&gt;這個方法就被稱作 1&amp;rsquo;s 補數法，但要注意，是對二進制取補數來表達十進制的負整數，而不是對十進制取補數。&lt;/p&gt;
+&lt;h1 id=&#34;2s-補數&#34;&gt;2&amp;rsquo;s 補數&lt;/h1&gt;
+&lt;p&gt;但是仔細想想，這樣還是沒有解決 &lt;code&gt;-0&lt;/code&gt;，的問題啊，只是原本 &lt;code&gt;-0&lt;/code&gt; 表達成 &lt;code&gt;1000&lt;/code&gt;，現在 &lt;code&gt;0&lt;/code&gt; 變成用 &lt;code&gt;1111&lt;/code&gt; 來表達而已啊？&lt;/p&gt;
+&lt;p&gt;所以為了徹底解決這個問題，於是就有了所謂的 2&amp;rsquo;s 補數法來彌補這個問題。&lt;/p&gt;
+&lt;p&gt;2&amp;rsquo;s 補數法就是針對 1&amp;rsquo;s 補數法會從 &lt;code&gt;-0&lt;/code&gt; 開始排列而做的調整，原理就是利用 1&amp;rsquo;s 補數法將正整數的二進制取補數變成負整數的二進制後，對二進制加一來代表原本 1&amp;rsquo;s 補數法代表的十進制數字。&lt;/p&gt;
+&lt;p&gt;一樣用十進制的 &lt;code&gt;6&lt;/code&gt; 來當例子，十進制的 &lt;code&gt;6&lt;/code&gt; 換成二進制變成 &lt;code&gt;0110&lt;/code&gt;，而 &lt;code&gt;-6&lt;/code&gt; 就是取 1&amp;rsquo;s 補數變成 &lt;code&gt;1001&lt;/code&gt;，然後對 &lt;code&gt;1001&lt;/code&gt; 加一，也就是 &lt;code&gt;1010&lt;/code&gt; 才代表原本 1&amp;rsquo;s 補數所代表的 &lt;code&gt;-6&lt;/code&gt;。&lt;/p&gt;
+&lt;p&gt;如果我們看四個位元的整數組合，可以表列如下，讓大家直觀明白 2&amp;rsquo;s 補數法的對應關係。&lt;/p&gt;
+&lt;table&gt;
+&lt;thead&gt;
+&lt;tr&gt;
+&lt;th style=&#34;text-align:center&#34;&gt;一般十進制正整數&lt;/th&gt;
+&lt;th style=&#34;text-align:center&#34;&gt;對應二進制&lt;/th&gt;
+&lt;th style=&#34;text-align:center&#34;&gt;1&amp;rsquo;s補數法&lt;/th&gt;
+&lt;th style=&#34;text-align:center&#34;&gt;2&amp;rsquo;s補數法&lt;/th&gt;
+&lt;/tr&gt;
+&lt;/thead&gt;
+&lt;tbody&gt;
+&lt;tr&gt;
+&lt;td style=&#34;text-align:center&#34;&gt;0&lt;/td&gt;
+&lt;td style=&#34;text-align:center&#34;&gt;0000&lt;/td&gt;
+&lt;td style=&#34;text-align:center&#34;&gt;+0&lt;/td&gt;
+&lt;td style=&#34;text-align:center&#34;&gt;+0&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td style=&#34;text-align:center&#34;&gt;1&lt;/td&gt;
+&lt;td style=&#34;text-align:center&#34;&gt;0001&lt;/td&gt;
+&lt;td style=&#34;text-align:center&#34;&gt;+1&lt;/td&gt;
+&lt;td style=&#34;text-align:center&#34;&gt;+1&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td style=&#34;text-align:center&#34;&gt;2&lt;/td&gt;
+&lt;td style=&#34;text-align:center&#34;&gt;0010&lt;/td&gt;
+&lt;td style=&#34;text-align:center&#34;&gt;+2&lt;/td&gt;
+&lt;td style=&#34;text-align:center&#34;&gt;+2&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td style=&#34;text-align:center&#34;&gt;3&lt;/td&gt;
+&lt;td style=&#34;text-align:center&#34;&gt;0011&lt;/td&gt;
+&lt;td style=&#34;text-align:center&#34;&gt;+3&lt;/td&gt;
+&lt;td style=&#34;text-align:center&#34;&gt;+3&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td style=&#34;text-align:center&#34;&gt;4&lt;/td&gt;
+&lt;td style=&#34;text-align:center&#34;&gt;0100&lt;/td&gt;
+&lt;td style=&#34;text-align:center&#34;&gt;+4&lt;/td&gt;
+&lt;td style=&#34;text-align:center&#34;&gt;+4&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td style=&#34;text-align:center&#34;&gt;5&lt;/td&gt;
+&lt;td style=&#34;text-align:center&#34;&gt;0101&lt;/td&gt;
+&lt;td style=&#34;text-align:center&#34;&gt;+5&lt;/td&gt;
+&lt;td style=&#34;text-align:center&#34;&gt;+5&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td style=&#34;text-align:center&#34;&gt;6&lt;/td&gt;
+&lt;td style=&#34;text-align:center&#34;&gt;0110&lt;/td&gt;
+&lt;td style=&#34;text-align:center&#34;&gt;+6&lt;/td&gt;
+&lt;td style=&#34;text-align:center&#34;&gt;+6&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td style=&#34;text-align:center&#34;&gt;7&lt;/td&gt;
+&lt;td style=&#34;text-align:center&#34;&gt;0111&lt;/td&gt;
+&lt;td style=&#34;text-align:center&#34;&gt;+7&lt;/td&gt;
+&lt;td style=&#34;text-align:center&#34;&gt;+7&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td style=&#34;text-align:center&#34;&gt;8&lt;/td&gt;
+&lt;td style=&#34;text-align:center&#34;&gt;1000&lt;/td&gt;
+&lt;td style=&#34;text-align:center&#34;&gt;-7&lt;/td&gt;
+&lt;td style=&#34;text-align:center&#34;&gt;-8&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td style=&#34;text-align:center&#34;&gt;9&lt;/td&gt;
+&lt;td style=&#34;text-align:center&#34;&gt;1001&lt;/td&gt;
+&lt;td style=&#34;text-align:center&#34;&gt;-6&lt;/td&gt;
+&lt;td style=&#34;text-align:center&#34;&gt;-7&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td style=&#34;text-align:center&#34;&gt;10&lt;/td&gt;
+&lt;td style=&#34;text-align:center&#34;&gt;1010&lt;/td&gt;
+&lt;td style=&#34;text-align:center&#34;&gt;-5&lt;/td&gt;
+&lt;td style=&#34;text-align:center&#34;&gt;-6&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td style=&#34;text-align:center&#34;&gt;11&lt;/td&gt;
+&lt;td style=&#34;text-align:center&#34;&gt;1011&lt;/td&gt;
+&lt;td style=&#34;text-align:center&#34;&gt;-4&lt;/td&gt;
+&lt;td style=&#34;text-align:center&#34;&gt;-5&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td style=&#34;text-align:center&#34;&gt;12&lt;/td&gt;
+&lt;td style=&#34;text-align:center&#34;&gt;1100&lt;/td&gt;
+&lt;td style=&#34;text-align:center&#34;&gt;-3&lt;/td&gt;
+&lt;td style=&#34;text-align:center&#34;&gt;-4&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td style=&#34;text-align:center&#34;&gt;13&lt;/td&gt;
+&lt;td style=&#34;text-align:center&#34;&gt;1101&lt;/td&gt;
+&lt;td style=&#34;text-align:center&#34;&gt;-2&lt;/td&gt;
+&lt;td style=&#34;text-align:center&#34;&gt;-3&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td style=&#34;text-align:center&#34;&gt;14&lt;/td&gt;
+&lt;td style=&#34;text-align:center&#34;&gt;1110&lt;/td&gt;
+&lt;td style=&#34;text-align:center&#34;&gt;-1&lt;/td&gt;
+&lt;td style=&#34;text-align:center&#34;&gt;-2&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td style=&#34;text-align:center&#34;&gt;15&lt;/td&gt;
+&lt;td style=&#34;text-align:center&#34;&gt;1111&lt;/td&gt;
+&lt;td style=&#34;text-align:center&#34;&gt;-0&lt;/td&gt;
+&lt;td style=&#34;text-align:center&#34;&gt;-1&lt;/td&gt;
+&lt;/tr&gt;
+&lt;/tbody&gt;
+&lt;/table&gt;
+&lt;p&gt;所以 2&amp;rsquo;s 補數法其實只是針對 1&amp;rsquo;s 補數法的負整數部分調整其對應的十進制數字。&lt;/p&gt;
+&lt;h1 id=&#34;整數溢位-integer-overflow&#34;&gt;整數溢位 Integer Overflow&lt;/h1&gt;
+&lt;p&gt;終於要講到溢位了，yeah~&lt;/p&gt;
+&lt;p&gt;所謂整數溢位就是超過整數資料型態能儲存的範圍，例如剛才提的例子是用 4bits 來儲存整數，所以有 2&lt;!-- raw HTML omitted --&gt;4&lt;!-- raw HTML omitted --&gt; 也就是 16 種狀況，對應到利用 2&amp;rsquo;s 補數法調整過的十進制整數範圍就是 -2&lt;!-- raw HTML omitted --&gt;3&lt;!-- raw HTML omitted --&gt;~2&lt;!-- raw HTML omitted --&gt;3&lt;!-- raw HTML omitted --&gt;-1，也就是 -8~+7。&lt;/p&gt;
+&lt;p&gt;那如果我利用這樣 4bits 的整數變數儲存正整數 &lt;code&gt;7&lt;/code&gt;，但是變數在參與運算的時候不小心又加了一怎麼辦？這就會超出這個整數變數能儲存的範圍，那實際這個變數裡面的整數會怎麼樣？會變成 &lt;code&gt;-8&lt;/code&gt;。&lt;/p&gt;
+&lt;p&gt;為什麼？我們來算算看。&lt;/p&gt;
+&lt;p&gt;&lt;code&gt;+7&lt;/code&gt; 對應的二進制是 &lt;code&gt;0111&lt;/code&gt;，不小心再加了一會變多少？用二進制運算就是 &lt;code&gt;1000&lt;/code&gt;。然後讓我們看一下上面的表格，&lt;code&gt;1000&lt;/code&gt; 對應的 2&amp;rsquo;s 補數法那格是多少？就是 &lt;code&gt;-8&lt;/code&gt;。&lt;/p&gt;
+&lt;p&gt;反過來說，&lt;code&gt;-8&lt;/code&gt; 對應的二進制是 &lt;code&gt;1000&lt;/code&gt;，不小心又多減了一，&lt;code&gt;1000&lt;/code&gt; 減一就變成 &lt;code&gt;0111&lt;/code&gt;，那 &lt;code&gt;0111&lt;/code&gt; 對應的十進制數字是多少？就是 &lt;code&gt;+7&lt;/code&gt;。&lt;/p&gt;
+&lt;p&gt;其實整數溢位會正反循環的道理就在這邊，不知道這樣講我十年後看不看得懂&amp;hellip;&amp;hellip;orz&lt;/p&gt;
+- https://idontwannarock.github.io/tech_blog/2017/10/integer_overflow/ - This website by Howard Wang is licensed under a Creative Common Attribution-ShareAlike 4.0 International License.</description>
+        </item>
+    
+    
+  </channel>
+</rss> 

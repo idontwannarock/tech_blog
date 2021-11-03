@@ -1,0 +1,1241 @@
+<!DOCTYPE html>
+<html><head>
+<title>實作簡單登入會員系統 (1)</title>
+
+
+
+
+<meta charset="utf-8">
+<meta name="X-UA-Compatible" content="IE=edge">
+<meta name="google-site-verification" content="">
+<meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" name="viewport">
+<meta content="telephone=no" name="format-detection">
+<meta name="description" content="100 個練習計畫：第六個練習第一部分">
+<meta name="renderer" content="webkit">
+<meta name="theme-color" content="#ffffff">
+
+
+
+
+
+
+
+
+
+
+
+<script type="application/javascript">
+var doNotTrack = false;
+if (!doNotTrack) {
+	(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+	(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+	m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+	})(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+	ga('create', 'UA-106499565-1', 'auto');
+	
+	ga('send', 'pageview');
+}
+</script>
+
+
+<link type="text/css" rel="stylesheet" href="https://idontwannarock.github.io/tech_blog/vendor/css/bootstrap.min.css">
+
+
+  
+
+
+
+
+
+
+<link rel="stylesheet" href="https://idontwannarock.github.io/tech_blog/scss/journal.min.3f72a5fc8f5b5dd732a4b476aced0eece2156958d9d414316494ddb10593ddf7.css" integrity="sha256-P3Kl/I9bXdcypLR2rO0O7OIVaVjZ1BQxZJTdsQWT3fc=" media="screen">
+
+
+
+<link rel="stylesheet" href="https://idontwannarock.github.io/tech_blog/scss/dark-mode.min.f7c2efa7183435a6bd1842f91c541481c7a5137b5991629a870f24e4a516ad4b.css" integrity="sha256-98Lvpxg0Naa9GEL5HFQUgcelE3tZkWKahw8k5KUWrUs=" media="screen">
+
+
+<script src="https://idontwannarock.github.io/tech_blog/vendor/js/loadCSS.js"></script>
+<script>
+  loadCSS("https://fonts.googleapis.com/css?family=Fira+Mono|Material+Icons");
+</script>
+
+
+
+
+
+
+  <script src="https://idontwannarock.github.io/tech_blog/js/toc.js"></script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</head>
+<body>
+    	<div id="app"><div id="sideContainer" class="side-container">
+    
+    <a class="a-block nav-head false" href="https://idontwannarock.github.io/tech_blog/">
+    
+        <div class="nav-title">
+            Howard Tech Note
+        </div>
+        
+        <div class="nav-subtitle">
+            Share * Record * Program
+        </div>
+        
+    </a>
+
+    <div class="nav-link-list">
+        
+        
+            
+            
+            
+            
+            
+            <a class="a-block nav-link-item false" href="https://idontwannarock.github.io/tech_blog/posts">
+                Archive
+            </a>
+            
+        
+            
+            
+            
+            
+            
+            <a class="a-block nav-link-item false" href="https://idontwannarock.github.io/tech_blog/categories">
+                Categories
+            </a>
+            
+        
+            
+            
+            
+            
+            
+            <a class="a-block nav-link-item false" href="https://idontwannarock.github.io/tech_blog/tags">
+                Tags
+            </a>
+            
+        
+            
+            
+            
+            
+            
+            <a class="a-block nav-link-item false" href="https://idontwannarock.github.io/tech_blog/works">
+                My Works
+            </a>
+            
+        
+            
+            
+            
+            
+            
+            <a class="a-block nav-link-item false" href="https://idontwannarock.github.io/tech_blog/about">
+                About
+            </a>
+            
+        
+    </div>
+
+    
+
+    <div class="nav-footer">
+        
+Hugo Theme <a href="https://github.com/amazingrise/hugo-theme-diary">Diary</a> by <a href="https://amazingrise.net">Rise</a>
+<br>
+Ported from <a href="https://mak1t0.cc/" target="_blank" rel="noreferrer noopener">Makito</a>'s <a href="https://github.com/SumiMakito/hexo-theme-journal/" target="_blank" rel="noreferrer noopener">Journal.</a> <br>
+<br>
+
+&copy;
+	
+	This website by Howard Wang is licensed under a Creative Common Attribution-ShareAlike 4.0 International License.
+	
+
+    </div>
+    
+</div><div id="extraContainer" class="extra-container">
+    
+    
+    <div class="toc animated-visibility" :class="{ invisible: scrollY <= 140 }">
+
+
+	<div class="toc-content">
+	
+		
+		
+		
+		<center>- CATALOG -</center>
+		
+		
+		<ul>
+			
+				
+				
+					
+						
+						
+						
+						
+						
+							<li>
+								<a href="#%e5%ad%b8%e7%bf%92%e7%9b%ae%e6%a8%99" onclick="onNavClick(`#學習目標-nav`)" id="學習目標-nav">
+									學習目標
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+						
+							<li>
+								<a href="#%e5%ad%b8%e7%bf%92%e5%85%a7%e5%ae%b9" onclick="onNavClick(`#學習內容-nav`)" id="學習內容-nav">
+									學習內容
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+							
+								
+									<ul>
+								
+							
+						
+						
+							<li>
+								<a href="#%e6%a7%8b%e6%80%9d" onclick="onNavClick(`#構思-nav`)" id="構思-nav">
+									構思
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+						
+							<li>
+								<a href="#%e7%89%88%e9%9d%a2%e8%a8%ad%e5%ae%9a" onclick="onNavClick(`#版面設定-nav`)" id="版面設定-nav">
+									版面設定
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+						
+							<li>
+								<a href="#%e5%88%87%e6%8f%9b%e5%8a%9f%e8%83%bd" onclick="onNavClick(`#切換功能-nav`)" id="切換功能-nav">
+									切換功能
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+						
+							<li>
+								<a href="#%e8%a8%ad%e7%bd%ae%e8%b3%87%e6%96%99%e5%ba%ab" onclick="onNavClick(`#設置資料庫-nav`)" id="設置資料庫-nav">
+									設置資料庫
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+						
+							<li>
+								<a href="#%e9%80%a3%e6%8e%a5%e8%b3%87%e6%96%99%e5%ba%ab" onclick="onNavClick(`#連接資料庫-nav`)" id="連接資料庫-nav">
+									連接資料庫
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+						
+							<li>
+								<a href="#%e8%a8%ad%e8%a8%88%e7%b5%90%e6%a7%8b" onclick="onNavClick(`#設計結構-nav`)" id="設計結構-nav">
+									設計結構
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+						
+							<li>
+								<a href="#ajax-%e5%82%b3%e8%b3%87%e6%96%99" onclick="onNavClick(`#ajax-傳資料-nav`)" id="ajax-傳資料-nav">
+									ajax 傳資料
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+						
+							<li>
+								<a href="#login-%e9%a9%97%e8%ad%89%e5%8a%9f%e8%83%bd" onclick="onNavClick(`#login-驗證功能-nav`)" id="login-驗證功能-nav">
+									Login 驗證功能
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+						
+							<li>
+								<a href="#php-%e8%aa%9e%e6%b3%95%e8%b7%9f%e5%87%bd%e6%95%b8%e5%ba%ab" onclick="onNavClick(`#php-語法跟函數庫-nav`)" id="php-語法跟函數庫-nav">
+									PHP 語法跟函數庫
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+						
+							<li>
+								<a href="#sign-up-%e5%8a%9f%e8%83%bd" onclick="onNavClick(`#sign-up-功能-nav`)" id="sign-up-功能-nav">
+									Sign Up 功能
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+						
+							<li>
+								<a href="#login-%e5%8a%9f%e8%83%bd---cookie--session" onclick="onNavClick(`#login-功能---cookie--session-nav`)" id="login-功能---cookie--session-nav">
+									Login 功能 -&gt; cookie | session
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+						
+							<li>
+								<a href="#%e7%99%bb%e5%85%a5%e7%8b%80%e6%85%8b%e8%a1%a8%e7%a4%ba" onclick="onNavClick(`#登入狀態表示-nav`)" id="登入狀態表示-nav">
+									登入狀態表示
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+						
+							<li>
+								<a href="#sql-injection-%e5%8f%8a-xss-%e7%b0%a1%e5%96%ae%e9%98%b2%e7%af%84" onclick="onNavClick(`#sql-injection-及-xss-簡單防範-nav`)" id="sql-injection-及-xss-簡單防範-nav">
+									SQL Injection 及 XSS 簡單防範
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+						
+							<li>
+								<a href="#%e5%84%b2%e5%ad%98%e5%af%86%e7%a2%bc---hash-%e5%8f%8a-salting" onclick="onNavClick(`#儲存密碼---hash-及-salting-nav`)" id="儲存密碼---hash-及-salting-nav">
+									儲存密碼 - hash 及 salting
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+							
+								</ul>
+							
+						
+						
+						
+							<li>
+								<a href="#%e6%84%9f%e6%83%b3" onclick="onNavClick(`#感想-nav`)" id="感想-nav">
+									感想
+								</a>
+							</li>
+						
+						
+					
+				
+			
+		</ul>
+	</div>
+
+</div>
+    
+    <div class="pagination">
+        <a id="globalBackToTop" class="pagination-action animated-visibility" href="#top" :class="{ invisible: scrollY == 0 }">
+            <i class="material-icons pagination-action-icon">
+                keyboard_arrow_up
+            </i>
+        </a>
+        
+        <a type="button" class="pagination-action" id="darkModeToggleButton">
+            <span class="material-icons pagination-action-icon" id="darkModeToggleIcon">
+                dark_mode
+            </span>
+        </a>
+        
+        
+    </div>
+</div>
+<div class="single-column-drawer-container" id="drawer"
+     v-bind:class="{ 'single-column-drawer-container-active': isDrawerOpen }">
+    <div class="drawer-content">
+        <div class="drawer-menu">
+            
+            
+            
+                
+                
+                
+                
+                
+                <a class="a-block drawer-menu-item false" href="https://idontwannarock.github.io/tech_blog/posts">
+                    Archive
+                </a>
+                
+            
+                
+                
+                
+                
+                
+                <a class="a-block drawer-menu-item false" href="https://idontwannarock.github.io/tech_blog/categories">
+                    Categories
+                </a>
+                
+            
+                
+                
+                
+                
+                
+                <a class="a-block drawer-menu-item false" href="https://idontwannarock.github.io/tech_blog/tags">
+                    Tags
+                </a>
+                
+            
+                
+                
+                
+                
+                
+                <a class="a-block drawer-menu-item false" href="https://idontwannarock.github.io/tech_blog/works">
+                    My Works
+                </a>
+                
+            
+                
+                
+                
+                
+                
+                <a class="a-block drawer-menu-item false" href="https://idontwannarock.github.io/tech_blog/about">
+                    About
+                </a>
+                
+            
+            
+            <div class="toc">
+
+
+	<div class="toc-content">
+	
+		
+		
+		
+		<center>- CATALOG -</center>
+		
+		
+		<ul>
+			
+				
+				
+					
+						
+						
+						
+						
+						
+							<li>
+								<a href="#%e5%ad%b8%e7%bf%92%e7%9b%ae%e6%a8%99" onclick="onNavClick(`#學習目標-nav`)" id="學習目標-nav">
+									學習目標
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+						
+							<li>
+								<a href="#%e5%ad%b8%e7%bf%92%e5%85%a7%e5%ae%b9" onclick="onNavClick(`#學習內容-nav`)" id="學習內容-nav">
+									學習內容
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+							
+								
+									<ul>
+								
+							
+						
+						
+							<li>
+								<a href="#%e6%a7%8b%e6%80%9d" onclick="onNavClick(`#構思-nav`)" id="構思-nav">
+									構思
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+						
+							<li>
+								<a href="#%e7%89%88%e9%9d%a2%e8%a8%ad%e5%ae%9a" onclick="onNavClick(`#版面設定-nav`)" id="版面設定-nav">
+									版面設定
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+						
+							<li>
+								<a href="#%e5%88%87%e6%8f%9b%e5%8a%9f%e8%83%bd" onclick="onNavClick(`#切換功能-nav`)" id="切換功能-nav">
+									切換功能
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+						
+							<li>
+								<a href="#%e8%a8%ad%e7%bd%ae%e8%b3%87%e6%96%99%e5%ba%ab" onclick="onNavClick(`#設置資料庫-nav`)" id="設置資料庫-nav">
+									設置資料庫
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+						
+							<li>
+								<a href="#%e9%80%a3%e6%8e%a5%e8%b3%87%e6%96%99%e5%ba%ab" onclick="onNavClick(`#連接資料庫-nav`)" id="連接資料庫-nav">
+									連接資料庫
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+						
+							<li>
+								<a href="#%e8%a8%ad%e8%a8%88%e7%b5%90%e6%a7%8b" onclick="onNavClick(`#設計結構-nav`)" id="設計結構-nav">
+									設計結構
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+						
+							<li>
+								<a href="#ajax-%e5%82%b3%e8%b3%87%e6%96%99" onclick="onNavClick(`#ajax-傳資料-nav`)" id="ajax-傳資料-nav">
+									ajax 傳資料
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+						
+							<li>
+								<a href="#login-%e9%a9%97%e8%ad%89%e5%8a%9f%e8%83%bd" onclick="onNavClick(`#login-驗證功能-nav`)" id="login-驗證功能-nav">
+									Login 驗證功能
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+						
+							<li>
+								<a href="#php-%e8%aa%9e%e6%b3%95%e8%b7%9f%e5%87%bd%e6%95%b8%e5%ba%ab" onclick="onNavClick(`#php-語法跟函數庫-nav`)" id="php-語法跟函數庫-nav">
+									PHP 語法跟函數庫
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+						
+							<li>
+								<a href="#sign-up-%e5%8a%9f%e8%83%bd" onclick="onNavClick(`#sign-up-功能-nav`)" id="sign-up-功能-nav">
+									Sign Up 功能
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+						
+							<li>
+								<a href="#login-%e5%8a%9f%e8%83%bd---cookie--session" onclick="onNavClick(`#login-功能---cookie--session-nav`)" id="login-功能---cookie--session-nav">
+									Login 功能 -&gt; cookie | session
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+						
+							<li>
+								<a href="#%e7%99%bb%e5%85%a5%e7%8b%80%e6%85%8b%e8%a1%a8%e7%a4%ba" onclick="onNavClick(`#登入狀態表示-nav`)" id="登入狀態表示-nav">
+									登入狀態表示
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+						
+							<li>
+								<a href="#sql-injection-%e5%8f%8a-xss-%e7%b0%a1%e5%96%ae%e9%98%b2%e7%af%84" onclick="onNavClick(`#sql-injection-及-xss-簡單防範-nav`)" id="sql-injection-及-xss-簡單防範-nav">
+									SQL Injection 及 XSS 簡單防範
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+						
+							<li>
+								<a href="#%e5%84%b2%e5%ad%98%e5%af%86%e7%a2%bc---hash-%e5%8f%8a-salting" onclick="onNavClick(`#儲存密碼---hash-及-salting-nav`)" id="儲存密碼---hash-及-salting-nav">
+									儲存密碼 - hash 及 salting
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+							
+								</ul>
+							
+						
+						
+						
+							<li>
+								<a href="#%e6%84%9f%e6%83%b3" onclick="onNavClick(`#感想-nav`)" id="感想-nav">
+									感想
+								</a>
+							</li>
+						
+						
+					
+				
+			
+		</ul>
+	</div>
+
+</div>
+            
+        </div>
+    </div>
+</div>
+<transition name="fade">
+    <div id="drawer-mask" v-bind:class="{ 'single-column-drawer-mask': mounted }" v-if="isDrawerOpen" v-on:click="toggleDrawer"></div>
+</transition>
+<nav id="navBar" class="navbar sticky-top navbar-light single-column-nav-container">
+    <div id="navBackground" class="nav-background"></div>
+    <div class="container container-narrow nav-content">
+        <button id="nav_dropdown_btn" class="nav-dropdown-toggle" type="button" v-on:click="toggleDrawer">
+            <i class="material-icons">
+                menu
+            </i>
+        </button>
+        <a id="navTitle" class="navbar-brand" href="https://idontwannarock.github.io/tech_blog/">
+            Howard Tech Note
+        </a>
+        
+        <button type="button" class="nav-darkmode-toggle" id="darkModeToggleButton2">
+            <i class="material-icons" id="darkModeToggleIcon2">
+                dark_mode
+            </i>
+        </button>
+        
+    </div>
+</nav>
+<div class="single-column-header-container" id="pageHead"
+     v-bind:style="{ transform: 'translateZ(0px) translateY('+.3*scrollY+'px)', opacity: 1-navOpacity }">
+    <a href="https://idontwannarock.github.io/tech_blog/">
+        <div class="single-column-header-title">Howard Tech Note</div>
+        
+        <div class="single-column-header-subtitle">Share * Record * Program</div>
+        
+
+    </a>
+</div>
+
+            <div id="content">
+                <div id="streamContainer" class="stream-container">
+
+    <div class="post-list-container post-list-container-shadow">
+        <div class="post">
+            
+            
+            
+                
+            
+
+            <div class="post-head-wrapper"
+                
+                    
+                    
+                    style="background-image: url('https://res.cloudinary.com/dcvgho2zc/image/upload/v1568962308/user-profile-symbol_vcbneb.png')"
+                    
+                
+            >
+                <div class="post-title">
+                    實作簡單登入會員系統 (1)
+                    
+                    <div class="post-subtitle">
+                        100 個練習計畫：第六個練習第一部分
+                    </div>
+                    
+                    <div class="post-meta">
+                        
+                        <time itemprop="datePublished">
+                            2017-09-11 07:11
+                        </time>
+                        
+
+                        
+                            <i class="material-icons" style="">folder</i>
+                                <a href="https://idontwannarock.github.io/tech_blog/categories/practice">practice</a>
+                                &nbsp;
+                        
+
+                        
+                            <i class="material-icons" style="">label</i>
+                            
+                                <a href="https://idontwannarock.github.io/tech_blog/tags/php">php</a>
+                                &nbsp;
+                            
+                                <a href="https://idontwannarock.github.io/tech_blog/tags/mysql">mysql</a>
+                                &nbsp;
+                            
+                                <a href="https://idontwannarock.github.io/tech_blog/tags/hash">hash</a>
+                                &nbsp;
+                            
+                        
+                        
+                    </div>
+                </div>
+            </div>
+            
+            <div class="post-body-wrapper">
+                
+                <div class="post-body" v-pre>
+                
+                    <blockquote>
+<p>這篇文章是初學的時候撰寫的，其中一些觀念並不正確，步驟也可能因為更新或觀念問題而不適用或者多餘，此篇文章僅為留做紀錄</p>
+</blockquote>
+<h1 id="學習目標">學習目標</h1>
+<ol>
+<li>實作簡單會員系統，有加入會員、登入、登出</li>
+<li>cookie</li>
+<li>防範 SQL Injection+XSS</li>
+<li>hash 密碼</li>
+</ol>
+<h1 id="學習內容">學習內容</h1>
+<h2 id="構思">構思</h2>
+<p>坦白說，我有自學過一點點前後端的 Udemy 網路課程，所以前端的部分，簡單的 HTML, CSS, Javascript, jQuery 我還可以，大概是不會寫也可以谷哥看別人怎麼寫的程度。後端也是學過簡單的 PHP 跟 MySQL 這樣。所以後面的說明很可能會省略很多基礎，而只記錄我不太會或不太熟的部分。</p>
+<p>關於會員系統，Udemy 課程的老師其實有教過這個部分，但當時似懂非懂，幾乎就是 copy 老師的程式碼，糊里糊塗就寫出來，PHP 跟 MySQL 的部分一片模糊，所以先來嘗試自己重新寫一遍，不行再來找找看網路教學。</p>
+<p>要寫登入登出的功能，我第一個想到就是要用 HTML 的 <code>form</code> 先做三個 <code>input</code> 跟一個 <code>button</code>，若要串接資料庫，應該還要再作一個 <code>button</code> 切換 Sign Up 跟 Login 畫面來作區別。預計應該要用 jQuery 控制切換 Sign Up/Login 的功能。</p>
+<p>然後後端邏輯應該就是先作 Sign Up/Login 資料的驗證部分，用 <code>ajax</code> 傳輸資料到後端，檢查輸入的 <code>username</code>、<code>email</code> 跟 <code>password</code> 是否空白、格式是否正確以及是否重複，用 <code>echo</code> 輸出錯誤提示訊息給前端。</p>
+<p>接著作 Sign Up 部分，接著剛剛驗證完資料正確後，檢查資料庫有無重複資料後，再把 <code>username</code>、<code>email</code> 跟 <code>password</code> 存進資料庫。</p>
+<p>最後再作 Login 部分，先用使用者輸入的 <code>username</code> 比對資料庫有無紀錄，再比對 <code>password</code>，最後輸出 Login 成功訊息。這邊會感覺會需要了解 <code>$_SESSION</code> 跟 <code>$_COOKIE</code> 怎麼運作，因為要幫 Sign Up/Login 成功的使用者加上 <code>$_SESSION</code> 或 <code>$_COOKIE</code>。</p>
+<p>接著作 SQL Injection 及 XSS 攻擊的防範。最後再將使用者 Sign Up 時輸入的 <code>password</code> 作 hash 處理。</p>
+<p>另外以下是以只架站在自己 Windows 電腦的 XAMPP 上為前提，XAMPP 架站簡單教學可以看我之前寫的這篇筆記：<a href="https://idontwannarock.github.io/tech_blog/2017/09/xampp_setup_and_php_practice/">XAMPP安裝設定及簡單 PHP練習</a>。</p>
+<p>還有就是如果想要讓自己寫完的作品可以讓別人看到，可能要自己先想辦法查做法，我自己都還搞不太清楚。（攤手）</p>
+<h2 id="版面設定">版面設定</h2>
+<p>所以就從寫個 <code>form</code>、三個 <code>input</code> 跟兩個按鈕開始好了。我猶豫了一下要不要用 Bootstrap，還是用好了，畢竟練習的重點在後端，畫面就直接套用現成的版就好。</p>
+<p>所以直接就貼上 Bootstrap 4 的 <a href="https://v4-alpha.getbootstrap.com/getting-started/introduction/#starter-template">Starter template</a>，因為後面要用 <code>ajax</code>，所以 jQeury 的版本記得從 slim 換成最起碼 min 的版本。然後直接用 Bootstrap 的 <a href="https://v4-alpha.getbootstrap.com/components/forms/#form-controls">Forms</a> 作模板。</p>
+<h2 id="切換功能">切換功能</h2>
+<p>接下來就是複習 jQuery 語法的時候，因為這邊用到的功能不難所以不多講。大概方向就是在 <code>click</code> 動作上建立一個判斷式，判斷目前是 Login 轉 Sign Up 要做什麼事；Sign Up 轉 Login 要做什麼事。這部分的 <code>script</code> 我是寫在 <code>body</code> 的最後。</p>
+<p>切換畫面有個小技巧記錄一下，作一個隱藏的 <code>input</code>，然後設定 <code>value=&quot;1&quot;</code>，這樣在用 jQuery 判斷的時候用這個值作判斷條件會比較簡單。不然只是純粹要切換畫面修改 CSS，應該用 <code>.toggleClass()</code> 就可以了。</p>
+<p>前端的部分大概就這樣，接下來開始練習後端部分。</p>
+<h2 id="設置資料庫">設置資料庫</h2>
+<p>先去 XAMPP 的 Control Panel 把 MySQL 打開，然後去瀏覽器輸入 <code>http://localhost:8080</code> 來進去 Apache Friend 頁面，點選右上角的 phpMyAdmin 進入資料庫管理的頁面。直接左邊點選 New 來建立一個新的資料庫，我設定資料庫名字為 <code>user</code>，新 table 名稱 <code>userData</code>，四欄分別是 <code>id</code>、<code>username</code>、<code>email</code> 跟 <code>password</code>，並設定 <code>id</code> 欄位為 Primary Key 以及 Auto Increment。</p>
+<p>設定 Primary Key 的目的是確保此欄位的每一筆資料都是獨一無二的；Auto Increment 則是讓資料庫自動遞增設定 <code>id</code>。</p>
+<h2 id="連接資料庫">連接資料庫</h2>
+<p>接下來就要用 PHP 的 mysqli 函數庫語法嘗試連接資料庫，我是用以下方法，並用 PHP 的 <code>print_r</code> 來顯示連結問題。</p>
+<div class="highlight"><pre tabindex="0" style="color:#e7e9db;background-color:#2f1e2e;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-php" data-lang="php"><span style="color:#ef6155">$link</span> <span style="color:#5bc4bf">=</span> <span style="color:#06b6ef">mysqli_connect</span>(<span style="color:#48b685">&#34;localhost:3306&#34;</span>, <span style="color:#48b685">&#34;root&#34;</span>, <span style="color:#48b685">&#34;&#34;</span>, <span style="color:#48b685">&#34;user&#34;</span>);  
+<span style="color:#815ba4">if</span>(<span style="color:#06b6ef">mysqli_connect_errno</span>()) {  
+    <span style="color:#06b6ef">print_r</span>(<span style="color:#06b6ef">mysqli_connect_error</span>());  
+    <span style="color:#815ba4">exit</span>();  
+}
+</code></pre></div><p>記錄一下 <a href="http://php.net/manual/en/function.mysqli-connect.php"><code>mysqli_connect</code></a> 的語法是 <code>(host, username, password, dbname)</code>。這邊因為是本機，所以 <code>host</code> 就是 <code>localhost:3306</code>，3306 是 XAMPP 預設給 MySQL 的 port，如果你有調整，這邊就要相應的更改；本機上的 <code>username</code> 就是 <code>root</code>，不確定可以到 phpMyAdmin 的首頁看；<code>password</code> 預設應該就是沒有，如果有設定（我還真不知道怎麼設定）這邊就要改；最後 <code>dbname</code> 是剛剛設定的 <code>user</code>。</p>
+<p><code>mysqli</code> 是 PHP 的 MySQL 函數庫增強版，功能更強，安全性更好；所以之前的 <code>mysql</code> 已經漸漸淘汰不用。</p>
+<p>接著則是用 <code>mysqli_connect_errno()</code> 來判斷連接是否有錯誤，若有錯誤則用 <code>print_r</code> 來顯示 <code>mysqli_connect_error()</code> 的錯誤訊息。</p>
+<p><a href="http://php.net/manual/en/mysqli.connect-errno.php"><code>mysqli_connect_errno()</code></a> 是回傳最近一次連接的錯誤「代碼」；<a href="http://php.net/manual/en/mysqli.connect-error.php"><code>mysqli_connect_error()</code></a> 則是回傳最近一次連接的錯誤「訊息」。</p>
+<p>最後則用 <code>exit()</code> 來停止繼續執行 script（官方文件側面證明 PHP 是 script？XD）。括號裡面可以填上停止執行同時要顯示的訊息，若裡面填上 integer（0-254 之間），則會被用來當錯誤代碼而且不會顯示出來。功能跟 <code>die()</code> 是一樣的。</p>
+<h2 id="設計結構">設計結構</h2>
+<p>再來先講一下設計的檔案結構。</p>
+<p>因為我在 Udemy 上的課最後的作業是把常用的 function 單獨存成一個 <code>function.php</code> 的檔案，然後把會跟 <code>index.php</code> 直接互動的部分放在 <code>action.php</code> 並且在開頭就 <code>include(&quot;function.php&quot;);</code> 這樣來操作。</p>
+<p>據說這叫 MVC 啦，我也不是很懂，但覺得這樣分開蠻清楚的，就這樣作吧~</p>
+<h2 id="ajax-傳資料">ajax 傳資料</h2>
+<p>接著要寫 <code>ajax</code> 傳資料的功能。</p>
+<p>在前面切換 Login/Signup 按鈕的後面，我是先寫這樣來測試 <code>ajax</code> 功能是否正常傳送我要傳送的資料：</p>
+<pre tabindex="0"><code class="language-jquery" data-lang="jquery">$.ajax({  
+    type: &quot;POST&quot;,  
+    url: &quot;action.php?action=loginSignup&quot;,  
+    data: 
+        &quot;username=&quot; + $(&quot;#username&quot;).val()
+        + &quot;&amp;email=&quot; + $(&quot;#email&quot;).val()
+        + &quot;&amp;password=&quot; + $(&quot;#password&quot;).val()
+        + &quot;&amp;loginActive=&quot; + $(&quot;#loginActive&quot;).val(),  
+    success: function() {  
+        alert(&quot;username=&quot; + $(&quot;#username&quot;).val()
+        + &quot;&amp;email=&quot; + $(&quot;#email&quot;).val()
+        + &quot;&amp;password=&quot; + $(&quot;#password&quot;).val()
+        + &quot;&amp;loginActive=&quot; + $(&quot;#loginActive&quot;).val());  
+    }  
+})
+</code></pre><p>這邊其實是設定用 <code>POST</code> 傳送 <code>data</code> 內的訊息，但也同時用 <code>GET</code> 的方式傳送一個 <code>action=loginSignup</code> 的訊息來說明要作 Login/Signup 的動作，讓後端執行 <code>action.php</code> 的時候，知道要做哪個動作，我在 <code>action.php</code> 內也會相應的寫上判斷 <code>$_GET['action'] == &quot;loginSignup&quot;</code> 的條件。這算是為未來可以把這個功能套用到別的地方使用的功能標記方法。</p>
+<p>順便記錄一下 <code>GET</code> 跟 <code>POST</code> 的差別。<code>GET</code> 會把要傳送到 server 的資訊以明碼的方式放在 URL 網址後面，長度有限制；<code>POST</code> 則是將資料放在 http request 裡面，是隱藏的，相對沒有長度限制。這兩種都是 http 協定中定義的跟伺服器互動的方式。我覺得這篇講得蠻簡單明白：<a href="http://happycoder.org/2017/07/02/golang101-tutorial-web-basic/">Go Web 程式設計入門教學：Web 基礎</a></p>
+<p>如果按了 Submit 按鈕有跳出 <code>alert</code> 顯示 <code>data</code> 的內容，就表示作對了。</p>
+<h2 id="login-驗證功能">Login 驗證功能</h2>
+<p>這時候先到 <code>index.php</code> 表格上方增加一個隱藏的 <code>div</code>，<code>id</code> 設為 <code>loginAlert</code>。</p>
+<p>接著到 <code>ajax</code> 的 <code>success</code> 改成以下：</p>
+<div class="highlight"><pre tabindex="0" style="color:#e7e9db;background-color:#2f1e2e;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-javascript" data-lang="javascript"><span style="color:#06b6ef">success</span><span style="color:#5bc4bf">:</span> <span style="color:#815ba4">function</span>(<span style="color:#06b6ef">result</span>) {  
+    <span style="color:#815ba4">if</span> (<span style="color:#06b6ef">result</span>) {
+        <span style="color:#06b6ef">$</span>(<span style="color:#48b685">&#34;#loginAlert&#34;</span>).<span style="color:#06b6ef">html</span>(<span style="color:#06b6ef">result</span>).<span style="color:#06b6ef">show</span>();
+    }  
+}
+</code></pre></div><p>用意是先把所有 <code>action.php</code> 回傳的東西，傳到 <code>id</code> 為 <code>loginAlert</code> 的這個 <code>div</code> 並顯示出來。</p>
+<p>接著到 <code>action.php</code> 用各種判斷式判斷 <code>username</code>、<code>email</code> 跟 <code>password</code> 是否空白或符合格式，若不符合，就儲存一段顯示錯誤的話進另外設定的變數 <code>$error</code>，到最後判斷 <code>$error</code> 是否空白，若否則 <code>echo $error;</code> 並 <code>exit();</code>，也就是把 <code>$error</code> 裡面的錯誤訊息傳回 <code>ajax</code> 之後，停止繼續執行 <code>action.php</code>。</p>
+<p>這邊需要一些判斷式觀念，記錄一下基礎：</p>
+<ol>
+<li><code>if</code> 是判斷 <code>()</code> 內的條件是否為真後，執行 <code>{}</code> 內的內容。</li>
+<li><code>if...else</code> 是判斷 <code>()</code> 內的條件是否為真後，執行 <code>if</code> 接著的 <code>{}</code> 內容；不為真則執行 <code>else</code> 接著的 <code>{}</code> 內容。</li>
+<li><code>if...else if</code> 是先判斷 <code>if</code> 後 <code>()</code> 的條件，為真則執行接著的 <code>{}</code> 內容；不為真，則再開始判斷 <code>else if</code> 接著的 <code>()</code> 內條件，為真則執行接著的 <code>{}</code> 內容。最後還可以再接 <code>else</code>，作用為當 <code>if</code> 跟 <code>else if</code> 判斷式 <strong>皆</strong> 不為真的時候，執行接著的 <code>{}</code> 內容，此為 optional。</li>
+<li>需要多條件判斷有兩種方案，一是在 <code>if</code> 判斷式中用 <code>and</code>、<code>or</code> 這種聯立條件的方式，但這種是 <strong>同時</strong> 判斷多條件；若需要 <strong>依序</strong> 判斷多條件，則採用 <code>if...else if</code> 的方式。</li>
+</ol>
+<p>但想像是美好的，現實是骨感的，一執行立刻就碰到問題：alert 區塊一閃而逝，好像畫面重新刷新，所以 alert 區塊又重新回到隱藏的狀態。這邊很顯然是 Submit 按鈕的問題，剛好作個筆記，要記得把 Submit 按鈕的 <code>type</code> 改成 <code>button</code>，若是維持原來的 <code>submit</code>，每次按下去就會刷新畫面，<code>ajax</code> 帶動的效果就都跑掉了。</p>
+<p>對了，還要記得去 XAMPP Control Panel 把 MySQL 也打開，不然也會悲劇 XD</p>
+<h2 id="php-語法跟函數庫">PHP 語法跟函數庫</h2>
+<p>接著要先學習一些 PHP 跟 SQL 的寫法，語法可以到 <a href="https://www.w3schools.com/default.asp">w3schools</a> 或 <a href="http://php.net/manual/en/index.php">PHP 官網</a> 查詢。先記錄幾個用到的：</p>
+<ul>
+<li><a href="https://www.w3schools.com/sql/default.asp">SQL</a>
+<ol>
+<li><a href="https://www.w3schools.com/sql/sql_where.asp"><code>SELECT 範圍 FROM table 名稱 WHERE 判斷式</code></a>：這個功能是按照<code>判斷式</code>回傳指定 table 裡面的資料。<code>範圍</code>就是要選取的欄位，全選就填上 <code>*</code>。</li>
+<li><a href="https://www.w3schools.com/sql/sql_insert.asp"><code>INSERT INTO table名稱 (</code>欄位一<code>, </code>欄位二<code>, ...) VALUES ('欄位一資料', '欄位二資料', ...)</code></a>：在指定 table 裡面增加資料。</li>
+<li><a href="https://www.w3schools.com/sql/sql_update.asp"><code>UPDATE table名稱 SET 範圍 WHERE 判斷式</code></a>：依照<code>判斷式</code>更新指定 table 裡面指定欄位的指定資料。</li>
+<li><code>LIMIT</code>：是 MySQL 特有的子句，通常接在 <code>SELECT</code> 句子的最後面，用來限制回傳的資料筆數。功能類似 <code>TOP</code> 跟 <code>ROWNUM</code>。</li>
+</ol>
+</li>
+<li>PHP 各種 <a href="http://php.net/manual/en/reserved.variables.php">預設變數</a>、<a href="http://php.net/manual/en/ref.var.php">變數控制函數</a>、<a href="http://php.net/manual/en/book.mysqli.php"><code>mysqli</code> 函式庫</a>
+<ol>
+<li><a href="http://php.net/manual/en/mysqli.query.php"><code>mysqli_query($link, $query)</code></a>：對資料庫執行一次動作。<code>$link</code> 通常是要事先用 <code>mysqli_connect</code> 設定好連結的資料庫；<code>$query</code> 通常代表用 SQL 指令設定好要執行的動作。</li>
+<li><a href="http://php.net/manual/en/mysqli-result.num-rows.php"><code>mysqli_num_rows</code></a>：讓資料庫回傳查詢到的資料筆數。</li>
+<li><a href="http://php.net/manual/en/mysqli-result.fetch-assoc.php"><code>mysqli_fetch_assoc($result)</code></a>：獲取某指定資料同列（同 Primary Key）的所有資料，<code>$result</code> 代表要參照的資料。</li>
+<li><a href="http://php.net/manual/en/mysqli.insert-id.php"><code>mysqli_insert_id($link)</code></a>：取得前一次對資料庫執行動作（通常是 <code>INSERT</code>）而自動產生的 <code>id</code>，<code>id</code> 欄位須具備 Auto Increment 屬性。</li>
+</ol>
+</li>
+</ul>
+<p>我其實沒有正規的拿一本 PHP 或 SQL 的書來念，基本上都是上前面提到的 <a href="https://www.w3schools.com/default.asp">w3schools</a> 跟 <a href="http://php.net/manual/en/index.php">PHP 官網</a> 這兩個網站查各種功能怎麼用，所以也許觀念不見得非常正確。</p>
+<p>另外有關於 mysqli 函數庫的部分，他支援兩種表達方法：object-oriented 跟 procedural。我這邊都是用 procedural。</p>
+<h2 id="sign-up-功能">Sign Up 功能</h2>
+<p>再來準備寫 Sign Up 加入會員的功能，這邊就要牽扯到把會員資料記錄進資料庫的部分。記得要把這些功能寫在 <code>action.php</code> 的 <code>echo $error; exit();</code>這個部分的後面，否則會變成前面判斷輸入資料有問題還繼續執行寫入資料的問題。</p>
+<p>首先要加入會員，都要先判斷剛填好的 <code>username</code> 跟 <code>email</code> 是否有跟資料庫內的重複。我是用 <code>mysqli_num_rows</code> 來作判斷式，大於 0 就表示有資料這樣。然後用 <code>INSERT INTO</code> 來新增資料到資料庫。</p>
+<h2 id="login-功能---cookie--session">Login 功能 -&gt; cookie | session</h2>
+<p>然後登入會員是用 <code>mysqli_fetch_assoc()</code> 來抓比對到的 <code>username</code> 同組資料，再跟 <code>POST</code> 裡的 <code>password</code> 比對。</p>
+<p>接下來就是要研究 session 跟 cookie 的差別以及用法。我查到這篇 <a href="http://blog.webgolds.com/view/353">[簡明] COOKIE 與 SESSION 的基本原理</a> 寫得蠻清楚的。</p>
+<p>我最後選擇用 cookie，因為感覺比較像是目前普遍的做法，加入會員後不用每次進入網站都要重新登入，但設定每次登入只維持登入狀態一個月。</p>
+<p>這裡同樣列出用到的 PHP 語法：</p>
+<ol>
+<li><a href="https://www.w3schools.com/php/php_cookies.asp"><code>setcookie('變數名稱', '變數值', '保存時間')</code></a>：建立 cookie，保存時間是以秒為單位；如果要強制消滅 cookie，就把保存時間設定為負數</li>
+<li><code>time()</code>：目前時間。這裡是用來結合 <code>setcookie</code> 的保存時間使用</li>
+</ol>
+<p>我的作法是結合前面的判斷式，在判斷出可以加入會員以及可以登入那邊加上 <code>setcookie</code>，並原則上設定 30 天 (<code>time()+60*60*24*30</code>，並 <code>echo &quot;1&quot;;</code>) 來回傳一個 <code>1</code> 跟 <code>ajax</code> 表達目前是已經登入的狀態。</p>
+<p>然後回到 <code>index.php</code> 的 <code>ajax</code> 那邊，將原來長這樣的：</p>
+<div class="highlight"><pre tabindex="0" style="color:#e7e9db;background-color:#2f1e2e;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-javascript" data-lang="javascript"><span style="color:#06b6ef">success</span><span style="color:#5bc4bf">:</span> <span style="color:#815ba4">function</span>(<span style="color:#06b6ef">result</span>) {  
+    <span style="color:#815ba4">if</span> (<span style="color:#06b6ef">result</span>) {
+        <span style="color:#06b6ef">$</span>(<span style="color:#48b685">&#34;#loginAlert&#34;</span>).<span style="color:#06b6ef">html</span>(<span style="color:#06b6ef">result</span>).<span style="color:#06b6ef">show</span>();
+    }  
+}
+</code></pre></div><p>改成這樣：</p>
+<div class="highlight"><pre tabindex="0" style="color:#e7e9db;background-color:#2f1e2e;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-javascript" data-lang="javascript"><span style="color:#06b6ef">success</span><span style="color:#5bc4bf">:</span> <span style="color:#815ba4">function</span>(<span style="color:#06b6ef">result</span>) {  
+    <span style="color:#815ba4">if</span> (<span style="color:#06b6ef">result</span>) {
+        window.<span style="color:#06b6ef">location</span>.<span style="color:#06b6ef">assign</span>(<span style="color:#48b685">&#34;http://localhost:8080/login-signup/&#34;</span>);
+    } <span style="color:#815ba4">else</span> {
+        <span style="color:#06b6ef">$</span>(<span style="color:#48b685">&#34;#loginAlert&#34;</span>).<span style="color:#06b6ef">html</span>(<span style="color:#06b6ef">result</span>).<span style="color:#06b6ef">show</span>();
+    }  
+}
+</code></pre></div><p>這裡的 <a href="https://www.w3schools.com/jsref/met_loc_assign.asp"><code>location.assign</code></a> 是讓首頁重跑一遍，回到原始狀態，但已經建立好的 cookie 不會消失，所以還是登入的狀態。所以後面的網址要填上最初始首頁的完整網址。這樣做可以把 GET 放在網址列後面的資訊消除。</p>
+<h2 id="登入狀態表示">登入狀態表示</h2>
+<p>接著要回到 <code>index.php</code> 的表格那邊作一些調整。讓 client 端在載入網頁的時候先判斷有無 cookie 存在，若有就顯示 &ldquo;You have successfully logged in!&quot;，若無則顯示原本的表格。若你有另外作 Logout 按鈕，作法類似。</p>
+<p>我這邊還有參考 w3schools 用 <a href="https://www.w3schools.com/js/js_cookies.asp">Javascript 設定跟尋找 cookie 的方法</a>。</p>
+<p>作出來的作品可以參考這裡：</p>
+<ul>
+<li><a href="http://idontwannarock-com.stackstaging.com/project/login-signup/">作品網站 Sign Up Login Function</a></li>
+<li><a href="https://github.com/idontwannarock/Tiny-Projects-and-Functions/tree/master/login-signup">我放在 Github 的原始碼</a></li>
+</ul>
+<p>當然，為了放在託管 server 跟資料庫給大家直接試驗網頁，實際路徑跟資料庫等等會跟上面敘述的有差別。</p>
+<h2 id="sql-injection-及-xss-簡單防範">SQL Injection 及 XSS 簡單防範</h2>
+<p>我在網路上參考了這兩個網站來理解 SQL Injection 跟 XSS。</p>
+<ul>
+<li><a href="https://pcrookie.com/?p=1950">你知道什麼是「SQL Injection」(SQL 攻擊)嗎？</a></li>
+<li><a href="https://www.hkitblog.com/?p=23318">甚麼是 XSS？簡介黑客常用攻擊技倆</a></li>
+</ul>
+<p>就我的粗淺的了解，SQL Injection 跟 XSS 都是 client 端的攻擊手法，最常見的攻擊方法都是透過一個網頁中的輸入欄位（在我們這個作品當中就是各個 <code>input</code> 位置），來植入一些惡意的代碼，讓後來的瀏覽者或使用者碰到一些惡意的狀況、資料被偷取、被植入木馬等等。</p>
+<p>而同樣就我理解到的簡單防範方法，就是先處理 <code>input</code> 傳過來的資料，轉換到我們需要的資料型態，來避免一些特殊符號如 <code>&gt;/&lt;^&amp;$#@</code> 等等。</p>
+<p>我這邊用到的是 PHP mysqli 函式庫的 <code>mysqli_real_escape_string($link, $data)</code>，要注意的是這個函式必須填上代表連線到資料庫的 <code>$link</code>，<code>$data</code> 則是要轉換成字串 (string) 的資料。<code>mysqli_real_escape_string</code> 這個函式會將定義的特殊符號作轉換來避免一些 SQL Injection 跟 XSS 的狀況。我是將所有會要跟資料庫作互動的 <code>$_POST</code> 都作處理。</p>
+<p>請注意這個並不是一個完善的防範方法，只是作一個簡單的防範。</p>
+<h2 id="儲存密碼---hash-及-salting">儲存密碼 - hash 及 salting</h2>
+<p>基本上如同胡立大大所說：「一個正常的網站是不會知道使用者的密碼是什麼的。」</p>
+<p>就我的理解，一般來說如同這樣的會員功能，網站在接收到使用者傳輸的密碼的同時，就會進行密碼加密。</p>
+<p>而早期通常會以 hash 的方式，例如 <code>md5</code> 加密，然後就存進系統。基本上就是把密碼通過 md5 設定的某種轉換模式，轉成一長串字串，一個字串只會對應一個密碼，而這種加密方式很難反向破解；所以最簡單的破解手法是建立常見的密碼 - 字串轉換表來對應，所以才會常常看到各種網站在加入會員的時候讓大家設定字母與數字混雜，而且不能是常用的密碼，來避免被駭客找到對應的字串作破解。</p>
+<p>但這種方式比較大的問題是使用者常常記不得自己設定的密碼，所以後來又產生一種 salting 的作法，也就是在 hash 以前，在密碼的前面或後面加入一些基於特定規則或亂數產生的字串，用來增加密碼長度，或利用亂數來增加破解難度。</p>
+<p>我是採取 <a href="http://php.net/manual/en/function.password-hash.php"><code>password_hash</code></a> 的作法，這個 PHP 的函數本身就有包括 salting，所以直接寫這樣來 hash：</p>
+<div class="highlight"><pre tabindex="0" style="color:#e7e9db;background-color:#2f1e2e;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-php" data-lang="php"><span style="color:#06b6ef">password_hash</span>(<span style="color:#ef6155">$_POST</span>[<span style="color:#48b685">&#39;password&#39;</span>], <span style="color:#06b6ef">PASSWORD_DEFAULT</span>)
+</code></pre></div><p>但有件事要記得，用 <a href="http://php.net/manual/en/function.password-hash.php"><code>password_hash</code></a> 函數來 hash 的話，Login 時就要用 <a href="http://php.net/manual/en/function.password-verify.php"><code>password_verify</code></a> 函數來作判斷式來比對 <code>password</code>。艾租以~</p>
+<h1 id="感想">感想</h1>
+<p>恭喜我作完這個簡單的功能，結果就是用網路查了一堆功能跟說明，倒是沒有直接搜尋 PHP 登入怎麼做，不知道這樣算不算自己作？XD</p>
+<p>就先這樣吧，之後再來加上忘記密碼重設的部分~</p>
+<p>再次附上作品網站跟 Github 原始碼網址：</p>
+<ul>
+<li><a href="http://idontwannarock-com.stackstaging.com/project/login-signup/">作品網站 Sign Up Login Function</a></li>
+<li><a href="https://github.com/idontwannarock/Tiny-Projects-and-Functions/tree/master/login-signup">我放在 Github 的原始碼</a></li>
+</ul>
+
+                    
+                    <HR width="100%" id="EOF">
+		    <p style="color:#777;">Last modified on 2017-09-11</p>
+                    
+                </div>
+            </div>
+            
+            
+            <nav class="post-pagination">
+
+                
+                <a class="newer-posts" href="https://idontwannarock.github.io/tech_blog/2017/09/git_and_github_basic/">
+			Next<br>Git 及 GitHub 基礎認識
+                </a>
+                
+                
+                
+                <a class="older-posts" href="https://idontwannarock.github.io/tech_blog/2017/09/xampp_setup_and_php_practice/">
+			Previous<br>XAMPP 安裝設定及簡單 PHP 練習
+                </a>
+                
+            </nav>
+            <div class="post-comment-wrapper">
+                
+
+
+
+
+
+
+
+
+
+
+            </div>
+        </div>
+    </div>
+
+
+                    </div>
+            </div><div id="single-column-footer">
+Hugo Theme <a href="https://github.com/amazingrise/hugo-theme-diary">Diary</a> by <a href="https://amazingrise.net">Rise</a>
+<br>
+Ported from <a href="https://mak1t0.cc/" target="_blank" rel="noreferrer noopener">Makito</a>'s <a href="https://github.com/SumiMakito/hexo-theme-journal/" target="_blank" rel="noreferrer noopener">Journal.</a> <br>
+<br>
+
+&copy;
+	
+	This website by Howard Wang is licensed under a Creative Common Attribution-ShareAlike 4.0 International License.
+	
+</div>
+            </div>
+    
+    <script src="https://idontwannarock.github.io/tech_blog/js/journal.js"></script>
+    </body>
+</html>

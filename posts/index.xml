@@ -1,0 +1,326 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Posts on Howard Tech Note</title>
+    <link>https://idontwannarock.github.io/tech_blog/posts/</link>
+    <description>Recent content in Posts on Howard Tech Note</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-us</language>
+    <copyright>This website by Howard Wang is licensed under a Creative Common Attribution-ShareAlike 4.0 International License.</copyright>
+    <lastBuildDate>Thu, 19 Sep 2019 15:53:36 +0800</lastBuildDate><atom:link href="https://idontwannarock.github.io/tech_blog/posts/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Spring Boot 實作 API 版本控制</title>
+      <link>https://idontwannarock.github.io/tech_blog/2019/09/spring_api_version_with_swagger_security/</link>
+      <pubDate>Thu, 19 Sep 2019 15:53:36 +0800</pubDate>
+      
+      <guid>https://idontwannarock.github.io/tech_blog/2019/09/spring_api_version_with_swagger_security/</guid>
+      <description>本文目的是為了探討在 Spring Boot Web 專案中，實作 API 版本控制，並兼容 Swagger 及 Spring Security 的解決方式
+需要有 Spring Boot、Spring MVC、Spring Security 及 Swagger 的基礎概念會比較好理解
+API 版本控制 常見的 API 版本控制方式有三種: URI, header, content-type
+考量到 RESTful API 其中的一個好處是方便快取，使用 header 跟 content-type 的方式則可能無法正確的快取以及達成 idempotent，所以我個人採用的是在 URI 中加入版本號的方式
+再來因為有時候面對的專案有數量眾多的 handler，導致每次修改版本號都要手動修改每一支 handler 對應的 uri，這樣既麻煩又不潮，所以一定要研究一下怎麼在 Spring Boot 專案中利用註解的方式自動幫 handler 對應的 uri 自動插入版本號
+Tech Stack 專案採用的是 Spring Boot 2.0 架構，Java 1.8 版本
+有關 Maven 依賴如下:
+ org.springframework.boot:spring-boot-starter-web:2.1.x org.springframework.boot:spring-boot-starter-security:2.1.x io.springfox:springfox-swagger2:2.9.2 io.springfox:springfox-swagger-ui:2.9.2  這邊強調要採用 Spring Boot 主要是因為想要利用 Spring Boot auto configuration 的功能，也因為想要利用這個功能，所以過程才會這麼曲折&amp;hellip;</description>
+    </item>
+    
+    <item>
+      <title>Spring Security 整合 RBAC</title>
+      <link>https://idontwannarock.github.io/tech_blog/2019/05/spring_security_rbac/</link>
+      <pubDate>Thu, 30 May 2019 15:33:07 +0800</pubDate>
+      
+      <guid>https://idontwannarock.github.io/tech_blog/2019/05/spring_security_rbac/</guid>
+      <description>目前比較主流的 Role-based Access Control, RBAC 算是比較成熟且彈性的權限架構，若要在 Spring Security 實作 RBAC 並搭配 JWT 或 OAuth 2.0，大概要探討兩個問題
+ 是否值得為了減少查詢資料源的次數，而將角色或權限直接置入 JWT 或 Authorization Server 回傳的 token 是否採取 Spring Security 原生只使用最細粒度的權限來進行存取控制  關於第一個問題，目前的思考點大概就是考量系統的併發度跟使用者總數
+如果需要高併發，那自然希望盡量減少查詢資料的次數或資料量，盡量避免同時大量消耗 DB 資源；相反的，如果不需要高併發，那每次驗證都重新取得角色及權限資料也沒關係
+使用者數量的考量也是類似，如果每次查詢的成本太高，則盡量減少查詢的次數
+而第二個問題，則是要考量實際的業務場景
+如果角色跟權限很大量且複雜，或可能要考慮角色分層甚至使用者群組，或不同 Domain 有不同的權限邏輯，則可能用 Spring Security 原生方式會不敷使用，相對如果角色權限結構簡單，則直接使用原生方式可能成本較低
+所以以下探討主要專注於使用 Spring Security 提供的自訂空間來實作較為複雜的存取控制
+Spring Security 權限架構 首先要探討 Spring Security 原生提供的權限架構
+ GrantedAuthority: 可以將每個 GrantedAuthority 想成是個別的 privilege，所以在 Spring Security 中，authority 就是 privilege 的概念 Role: 在 Spring Security 中為了保持彈性，Role 可以當作 Authority 也可以當作一組 Authority 的組合  Role as Authority: 直接把 Role 當成一種 Authority 的情況，就是將 Role 當作一個有 ROLE_ 前綴的字串，這種情況下 Role 跟 Authority 就只是語意上的差別 Role as Container: Role 可以包含一組 Authority，Spring Security 在這個概念上沒有提供太多指引說明，需要自行實作     Granted Authority Versus Role in Spring Security</description>
+    </item>
+    
+    <item>
+      <title>Github Flow 簡介</title>
+      <link>https://idontwannarock.github.io/tech_blog/2019/05/github_flow_intro/</link>
+      <pubDate>Wed, 29 May 2019 10:52:45 +0800</pubDate>
+      
+      <guid>https://idontwannarock.github.io/tech_blog/2019/05/github_flow_intro/</guid>
+      <description>Understanding the GitHub flow
+GitHub flow 只有一條原則：
+ 在 master 的任何 commit 永遠都是可以被部署的
+ 所以所有要做開發的 branch 都直接從 master 分支出去，不論是 feature 或 fix
+開發的每個 commit 都要寫清楚 message，註明該 commit 做的變動以及理由等等
+當開發到一定階段後，就可以對 master 開 Pull Request, PR，這在 GitHub flow 很重要
+如果是用 Fork &amp;amp; Pull 模式，PR 就是用來通知專案維護者關於你希望他們考慮的變更；如果是用 Shared Repository 模式，則 PR 就像是用來開一個討論空間，在 merge 到 master 之前來做 code review 或針對特定變更的討論
+ Fork &amp;amp; Pull 模式就是需要先 fork 後再 pull 到本機做開發，完成並 push 後，開 PR 要求合併到主專案
+Shared Repository 模式則是直接可以對主專案開 branch 做開發</description>
+    </item>
+    
+    <item>
+      <title>Hugo 入門教學</title>
+      <link>https://idontwannarock.github.io/tech_blog/2019/05/hugo_tutorial/</link>
+      <pubDate>Tue, 07 May 2019 16:03:07 +0800</pubDate>
+      
+      <guid>https://idontwannarock.github.io/tech_blog/2019/05/hugo_tutorial/</guid>
+      <description>我個人在建立部落格的路上碰到了很多問題：
+ Wordpress 要花錢，雖然好像不多，但作為一個沒有人看的部落格，這樣還要花錢就是不爽 沒有網路無法寫文章，就算寫了純文字的內容，等有網路後貼到 Wordpress 的編輯器還要重新設定字體大小等等 沒辦法在自己的電腦或電腦們很方便的做備份，而且我只是個簡單的男人簡單的部落格，不需要備份一堆只有 Wordpress 能用的東西好嗎 不能用工程師宅宅必備命令列工具裝潮，假裝駭客任務 最重要的，身為一個工程師宅宅，用 Wordpress 寫部落格說得出口嗎？很顯然可以，但要付錢我就不想用  如果你對以上絕大多數的問題都有切身之痛，那可以考慮繼續閱讀下去，否則建議還是直接使用 Wordpress 或 Wix 吧
+Hugo 與靜態網站 唉唷，還繼續，那大概不是 M 就是工程師宅宅相關種，那靜態網站不用講了，Hugo 自己研究就好啦，本篇結束
+不能醬喔？那好吧
+Hugo 是一種 Static Site Generator, SSG 靜態網站產生器，靜態網站簡單來說就是有固定內容的網站，所謂的固定內容就是 HTML 這種瀏覽器可以直接開啟的網頁檔案，配合 CSS, Javascript 做美化，這些檔案只要沒有被修改過，每次打開都會產生固定的內容，所以稱為靜態網站
+而基於後面會提到 Hugo 這個工具的特性，它很適合用來產生部落格，使用者只需要撰寫 Markdown 這種純文字檔案作為每篇文章的內容，就可以透過 Hugo 快速的建立或修改網站，而不必每次都要修改相對應的 HTML 甚至 CSS 及 Javascript 檔案
+Hugo 作為一個世界範圍內前三熱門的 SSG 工具，它還有很多熱心工程師宅宅幫他寫了很多佈景主題讓使用者可以直接套用來產生網站，所以使用者只需要把文章內容寫成 Markdown 這種純文字檔案，就可以直接用 Hugo 將文章按照佈景主題產生出美美的網站了
+這樣誰看的到？ 不過這樣產生出來的網站有一個關鍵的問題，這些檔案只放在你電腦裡，沒人看得到，除了你自己
+所以我們需要「把它放到網路上」
+一般要做到「把它放到網路上」並且「誰都看得見」，其實要做很多事情，例如租用網路空間、買域名、部署網站等等，Wordpress 的好處就在這，它提供一條龍的服務幫你做到底
+但現在沒有 Wordpress 而且要堅持不花錢的懶惰工程師宅宅原則，所以我們要走另一條路，使用 Git 跟 GitHub</description>
+    </item>
+    
+    <item>
+      <title>AOP 及 Spring AOP 簡述</title>
+      <link>https://idontwannarock.github.io/tech_blog/2018/04/aop_and_spring_aop_basic/</link>
+      <pubDate>Tue, 10 Apr 2018 13:22:52 +0800</pubDate>
+      
+      <guid>https://idontwannarock.github.io/tech_blog/2018/04/aop_and_spring_aop_basic/</guid>
+      <description>這篇文章是初學的時候撰寫的，其中一些觀念並不正確，步驟也可能因為更新或觀念問題而不適用或者多餘，此篇文章僅為留做紀錄
+  AOP(Aspect-Oriented Programming) 是一種基於 OOP(Object-Oriented Programming) 的改進 AOP 是基於動態代理 (Dynamic Proxy) 這種 design pattern AOP 主要的設計對象是切面 (Aspect)，而切面是用來模組化橫切關注點 (Cross-Cutting Concern) 切面需要定義公共功能，但可以明確定義功能在哪裡或以什麼方式應用，而不必修改受影響的類別。如此切面關注點就可以被模組化到特殊的類別 (切面) 裡面  優點  交易相關的邏輯位於同一位置，便於維護與升級 業務邏輯更簡潔，只包含核心業務代碼  術語及概念  Cross-Cutting Concern 橫切關注點：橫跨應用系統多個流程、模組的功能，例如日誌 (Logging)、安全 (Security) 檢查、交易 (Transaction) 等動作，在許多流程的多個位置都需要執行，這種動作就被稱為橫切關注點 Aspect 切面：橫切關注點被模組化後的一種特殊物件；還未模組化前是橫切關注點，抽取後成為一組一組的切面；另一方面來說代理會將一個一個切面重組為橫切關注點 Advice 通知：切面必須要完成的工作或行為，也就是切面的實作內容。切面裡面的各個方法即是一個、一個的通知 Target 目標：被通知的物件，也就是要被橫切的業務邏輯類別 Proxy 代理：向目標物件通知之後創建的對象。容器會建立一個代理，依照設定去縫合 (weave) 切面到應用程式中 JoinPoint 連接點：程序執行的某個特定位置或時機。例如某個類別的某個方法呼叫前、呼叫後、拋出異常後等等。  連接點由兩個因素決定：以方法表示的程式執行點、相對執行點表示的方位。例如 A 類別的 a() 方法執行前的 JoinPoint 連接點決定要素為：執行點 A#a()，方位為執行前的位置 概念類比：JoinPoint 連接點相當於資料庫的紀錄，切面相當於查詢條件   Pointcut 切面定義：每個類別都有多個連接點，類別的所有方法某種程度上都可以想成是 JoinPoint 連接點。AOP通過切面定位到特定的連接點  Spring AOP  AspectJ：Java 社群最完整、最廣為人知的 AOP 實作 Spring 2.</description>
+    </item>
+    
+    <item>
+      <title>Java 字串判定</title>
+      <link>https://idontwannarock.github.io/tech_blog/2018/02/java_string_check/</link>
+      <pubDate>Tue, 06 Feb 2018 14:09:25 +0800</pubDate>
+      
+      <guid>https://idontwannarock.github.io/tech_blog/2018/02/java_string_check/</guid>
+      <description>因為開始做專題，開始要作資料檢查，首先會要碰到的就是最基本的檢查是否有輸入資料，也就是要檢查字串，記錄一下 Java 當中有關字串檢查的東西。
+去除字串空白 這主要分兩個部分，一是去掉頭尾空白，一是去掉字串中間空白。
+去掉頭尾空白就用 .trim()，去掉字串中間空白則可以用 .replaceAll(&amp;quot; &amp;quot;, &amp;quot;&amp;quot;) 的方式簡單完成。
+但用 replaceAll() 方法有個小小的問題，就是萬一碰到的是空白字元，例如 \t、\r 這種就會有困難，所以必須要用正規表示式來去除，例如：
+String str = &amp;#34;\t&amp;#34;; str.replaceAll(&amp;#34;\\s+&amp;#34;, &amp;#34;&amp;#34;); 檢查空值 接著如果要檢查字串是否有東西，要分成檢查兩種狀態，null 或空字串。
+這邊有幾個方法檢查這個部分，但要注意它們實際功能上的區別。
+.length == 0 這個是 Java 最原始的功能，基本上就是檢查字串長度是否為 0，回傳值型態為 boolean。
+.isEmpty() 這個方法是 Java 6.0 之後推出用來取代 .length() == 0 的方法。isEmpty() 其實也是在檢查字串長度是否為 0，回傳值型態一樣為 boolean。
+.equals(&amp;quot;&amp;quot;) 這個功能是用字串的比對功能，比對是否為空字串，結果應該會跟前兩個方法相同。
+!= null 前面幾個方法都有一個共同的問題：萬一字串為 null，全都來不及檢查就會跳 NullPointerException。
+所以必須要用這個方式檢查是否為 Null，再檢查是否為空字串，也就是要寫成類似下面這樣：
+String string; if (string != null &amp;amp;&amp;amp; string.isEmpty()) { // things to do when string is neither null nor blank; } &amp;quot;&amp;quot;.</description>
+    </item>
+    
+    <item>
+      <title>Java 樂透抽取算法初探</title>
+      <link>https://idontwannarock.github.io/tech_blog/2017/11/java_lottery_algorithm_basic/</link>
+      <pubDate>Wed, 15 Nov 2017 14:26:17 +0800</pubDate>
+      
+      <guid>https://idontwannarock.github.io/tech_blog/2017/11/java_lottery_algorithm_basic/</guid>
+      <description>因為做到這個經典練習演算法的題目，雖然是非常入門級的，也是讓我想了很久，覺得都做了這麼久，不記錄下來也是蠻可惜。
+題目 請隨機從正整數 1-42當中隨機抽出 6個數字，不用排序，但不可重複。
+解法 樂透這個題目主要可以練習的有三個地方，隨機、迴圈，還有就是如何確保數字不重複。
+ 以 Java 來說，隨機就是使用 java.lang.Math 類別裡的靜態方法 random()，但要注意Math.random() 之後產生的是大於等於 0、小於 1，也就是 0 &amp;lt;= Math.random() &amp;lt; 1 的 double 型態浮點常數。
+因此，以這題來說，還要記得利用 (int) 轉換型態成整數型態的常數。
+另外，若不放心浮點數轉換為整數後的值，可以利用一樣是 Math 類別裡的靜態方法 floor() 或 ceiling() 來取無條件進位或無條件捨去後的整數值。 而產生指定範圍內的亂數的公式為 Math.random() * 範圍個數 + 初值
+ 然後因為已經確定要抽出的數目，所以可以使用元素個數不能變動的陣列，當然也可以用可以變動個數的 Collection 或其子介面去解決。關鍵就在於不可重複。
+這篇只討論陣列的解法。
+暴力解：重複檢查 最簡單的寫法肯定就是暴力解：每抽出一個數字就存到結果陣列，然後每抽一次，就跟陣列裡每個數字都比對一次，一有重複就重抽。
+// 設定存儲樂透數字陣列 int[] randomArray = new int[6]; // 執行抽取樂透數字的動作 6次 for (int i = 0; i &amp;lt; randomArray.length; i++) { // 先將亂數出來的數字存入陣列第 i個位置  randomArray[i] = (int)(Math.</description>
+    </item>
+    
+    <item>
+      <title>Macbook Pro 的設置 2017 版</title>
+      <link>https://idontwannarock.github.io/tech_blog/2017/11/mbp_setup_2017/</link>
+      <pubDate>Fri, 03 Nov 2017 09:05:02 +0800</pubDate>
+      
+      <guid>https://idontwannarock.github.io/tech_blog/2017/11/mbp_setup_2017/</guid>
+      <description>這篇文章是初學的時候撰寫的，其中一些觀念並不正確，步驟也可能因為更新或觀念問題而不適用或者多餘，此篇文章僅為留做紀錄
+ 一直以來都是 PC 人，從來沒用過任何 Apple 或 Linux 的相關產品，剛好有買筆電的需求，想趁機接觸一下不同的作業系統生態，而且久聞 Apple 筆電品質很好，就添購了 Macbook Pro 來當我人生第一台筆電。
+剛拿到筆電總是需要一些設置，盡量讓 PC 跟 MBP 之間資訊同步以及應用軟體上相通或相容，以達到同步並簡化作業環境的目標，提高生產效率。
+於是跟朋友詢問以及上網稍作了解後，有了以下的設置。
+軟體環境設置 因為是要習慣 Unix-based 的作業環境，所以我並沒有特別強求各方面都要設置到跟 Windows 環境類似，所以操作模式上並沒有更動。
+但安裝的軟體上就有些考量，希望能達到集中管理，這就不得不提每個 MacOS 都應該必備的 Homebrew。
+安裝 Homebrew Homebrew 是一套開源的 MacOS 系統的軟體套件管理系統，用來簡化 MacOS 系統上的軟體安裝、卸載等過程，是用 MacOS 內建的 Ruby 語言寫成。
+但 Homebrew 在安裝前需要先安裝 Xcode，似乎是因為 Xcode 會一併安裝一些常用的 command line。
+還好 Xcode 也是免費軟體，可以直接透過 App Store 下載，要注意檔案蠻大的，下載安裝的過程會要花一點時間。
+Xcode 安裝好之後，就打開「終端機」，輸入下面這行來下載安裝 Homebrew：
+$ ruby -e &amp;#34;$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install)&amp;#34; 注意第一個 $ 是開啟終端機就會顯示在你可以打字的那一行的開頭，不用重複輸入。
+讓他自動跑完之後，就可以開始使用 brew 指令來操作啦！</description>
+    </item>
+    
+    <item>
+      <title>Markdown 語法</title>
+      <link>https://idontwannarock.github.io/tech_blog/2017/10/markdown_syntax/</link>
+      <pubDate>Sun, 22 Oct 2017 15:42:04 +0800</pubDate>
+      
+      <guid>https://idontwannarock.github.io/tech_blog/2017/10/markdown_syntax/</guid>
+      <description>Markdown 特色 易編寫 相對於 HTML 需要注意各種 tag、屬性、特殊字元，Markdown 是更容易編寫的方式，雖然無法像 HTML 那樣可以直接透過各種屬性，甚至 CSS 來達到各種效果，但純粹以書寫來說，Markdown 的功能已經相當夠用。
+轉換 HTML 不過如果有需要的話，Markdown 可以用各種方式轉換成 HTML，以方便我們發布成網頁或部落格文章，網路上有相當多的程式可以達到這點；相對之下，從 HTML 轉換回 Markdown 就沒這麼方便了，主要原因就是 HTML 有相當多屬性等並不被 Markdown 支援，所以有轉換回 Markdown 的困難。
+但還是有補救的辦法，在編寫 Markdown 文件的時候，其實還是可以使用 HTML 語法的，我使用過的轉換器都可以讀取 HTML 語法，並正常顯示以及轉換，所以真的有什麼 Markdown 找不到的 HTML 功能，就直接寫 HTML 吧！當然這就需要對 HTML 語法有更多認識了。
+編寫／視覺 跟 HTML 一樣，在編寫 Markdown 的時候呈現的畫面，跟實際呈現的畫面其實是不一樣的。
+例如我們編寫 Markdown 如下：
+- ***This*** is a [sample](http://example.com/ &amp;#34;example.com&amp;#34;). 實際呈現的畫面其實是這樣的：
+  This is a sample.   所以在編寫 Markdown 的時候，最好找個可以隨時觀看實際畫面的編輯器來確認實際畫面。</description>
+    </item>
+    
+    <item>
+      <title>整數溢位 Integer Overflow</title>
+      <link>https://idontwannarock.github.io/tech_blog/2017/10/integer_overflow/</link>
+      <pubDate>Sun, 01 Oct 2017 07:04:47 +0800</pubDate>
+      
+      <guid>https://idontwannarock.github.io/tech_blog/2017/10/integer_overflow/</guid>
+      <description>這是我查到一些資料後的理解，希望能多一點對整數溢位後為何會正負循環的了解。
+數字系統 首先要了解的是數字系統，因為一般電腦是採用二進制 (Binary) 來作數字計算，而不是我們習慣的十進制 (Decimal)。
+我們一般人都是用十進制，十進制就是用 0、1、2、3、4、5、6、7、8、9 十個數字來表達，一個位數就有十種狀態，從 0 開始往上累積，超過 9 就進一位。
+而二進制是什麼呢？二進制就是用 0、1 兩個數字來表達，一個位數就只有兩種狀態表達，從 0 開始往上累積，超過 1 就進一位。
+以十進制來說，13 這個數字其實應該寫成 1*10^1 + 3*10^0 這樣。10^0 是 1，也就是代表個位數，乘以幾就是這個位數累積到幾，超過 9 就進一位到 10^1 這一位，也就是十位數；再累積超過 9，就進位到 10^2 百位數，以此類推。
+那二進制怎麼表達呢？例如有一個二進制的數字長這樣 1101，如同十進制，我們可以表達成 1*2^3 + 1*2^2 + 0*2^1 + 1*2^0。這樣公式算完的答案其實就是十進制的 13，大家可以算一下試試看。其實其他如八進制、十六進制也是相同原理，只不過超過十進制的進制系統，因為阿拉伯數字無法在單一位數表達 10 以上的數字大小，所以會配合英文字母 A、B、C、D 等等。
+另外複習一下國小（國中？）數學，小數點的部分，以我們常用的十進制來說，小數點後第一位是 10^-1、第二位是 10^-2，以此類推；相對的二進制也是一樣規則，小數點後第一位是 2^-1、第二位是 2^-2 這樣。
+電腦基本運算方式 前面說到一般電腦是用二進制運算，這是什麼意思？
+舉個例子，今天假設一台電腦，我們拉了第一條電線在裡面，一條電線怎麼表達不同的狀態呢？對，就是通電，有通電是一種狀態，沒通電是一種狀態。當然比較實際的作法是透過電壓，高電壓是一種狀態，低電壓是一種狀態，這樣來表達兩種狀態。
+因此一條電線就能表達兩種狀態，剛好符合二進制只用 0、1 兩個數字來表達所有數字的狀態，而這樣能表達兩種狀態（1 或 0）的一條電線就是 1 bit。順便講一下因為某些原因，8 bits 被規定為 1 byte。bit 就是我們常聽到的位元，byte 就是我們更常聽到的位元組。</description>
+    </item>
+    
+    <item>
+      <title>4th Practice: Twitter Clone</title>
+      <link>https://idontwannarock.github.io/tech_blog/2017/09/twitter_clone/</link>
+      <pubDate>Fri, 15 Sep 2017 10:27:28 +0800</pubDate>
+      
+      <guid>https://idontwannarock.github.io/tech_blog/2017/09/twitter_clone/</guid>
+      <description>第四個目標 練習 PHP、MySQL 跟 MVC，因為 Bootstrap 很方便，所以 HTML 跟 CSS 就這樣吧！廠廠~
+ 作品：史上最簡陋 Twitter 參考：這參考太多了，只能說各種參考 orz 原始碼：可以參考 我的Github  還是要先講一下，這並不是我憑空寫出來的作品，是跟著 Udemy 網路課程教學作出來的。
+遇到困難 對自己智商產生質疑 真的是這樣，之所以這麼廢的東西還能作這麼久，事後檢討的結果，絕大多數時間都浪費在因為智商太低產生的各種製造障礙，簡稱製障問題上。
+譬如說出現什麼 404 或 500 錯誤訊息，花了三個多小時觀看 stackoverflow 上高手討論，最後發現是 PHP 某一行少加了一個 ;，當天直接氣到作不下去之類的…
+debug 作這個真心受教了，要馬每一步都先作測試，要馬就要會查 bug，人生就是要接受 bug 的出現，沒 bug 絕對是陰德值爆滿。
+所以我目前領悟到的順序是：
+ 先查 code 有沒有漏加什麼 ; 或 ,或者哪裡括號沒關好，這些出現的頻率超乎你想像，即使有 autocomplete 功能也是一樣 再來用 Chrome 的 Inspect 或 Firefox 的 Inspector 來查錯誤訊息，運氣好就會跟你說你程式碼哪一行有問題 還找不到，先不要急著 google，先查 Log！先查 Log！先查 Log！很重要，所以講三次。通常 Log 也會跟你講執行到哪一行有問題 最後真的都不行，再拿錯誤訊息去拜 google 大神  以上是我的切身之痛，其他的難點在這兩個困難底下，都已經不再重要…喔不是啦，還是補充一個。</description>
+    </item>
+    
+    <item>
+      <title>3rd Practice: Click Click Ben</title>
+      <link>https://idontwannarock.github.io/tech_blog/2017/09/click_click_ben/</link>
+      <pubDate>Fri, 15 Sep 2017 10:11:46 +0800</pubDate>
+      
+      <guid>https://idontwannarock.github.io/tech_blog/2017/09/click_click_ben/</guid>
+      <description>第三個目標 練習 JavaScript 跟 random() 函數。
+ 作品：Click Click Ben 參考：大帥哥 Ben Hsieh ~  遇到困難 帥哥阿 Ben 照片太難挑 這是我製作這個作品中碰到最大的困難！太多太帥了，我無法選擇！！我的媽！！！誰來救救我！！！！
+照片亂數出現位置及亂數間隔時間 其實這個問題我之前就有學過，所以這邊大概紀錄一下作法。
+先用 JavaScript 的 Math.random() 來亂數產生 0-1 的浮點數，然後為了適應各種大小的視窗，要乘上 document.documentElement.clientHeight 或 document.documentElement.clientWidth 來亂數產生要往右或往下多少 px 的數字。
+然後用 document.getElementById(&amp;quot;id&amp;quot;).style.top 或 document.getElementById(&amp;quot;id&amp;quot;).style.left 來設定位置。
+亂數間隔時間則用 setTimeout() 來作，記得括號的兩個參數要用逗點分隔，第一個參數是暫停後要執行的程式，第二個是暫停的時間，單位是千分之一秒。
+控制照片出現或消失 原本想都用 JavaScript 控制，但發現直接寫好所有 HTML+CSS 後，用 display: block; 跟 display: none; 來控制最方便。
+控制次數 這也沒什麼好說的，只是做個記錄。
+最基礎的做法就是設一個變數，然後用 if 判斷來控制次數。
+控制次數感覺可以用 for 或 while loop 來寫，但中間要卡一個按的功能，不知道能不能行？</description>
+    </item>
+    
+    <item>
+      <title>2nd Practice: Retina Morning Post</title>
+      <link>https://idontwannarock.github.io/tech_blog/2017/09/retina_morning_post/</link>
+      <pubDate>Fri, 15 Sep 2017 09:44:03 +0800</pubDate>
+      
+      <guid>https://idontwannarock.github.io/tech_blog/2017/09/retina_morning_post/</guid>
+      <description>第二個目標 練習報紙排版。
+ 作品：視網膜早報 參考：視網膜 Retina FB圖片  遇到困難 分散對齊 首先遇到的問題就是要讓文字分散對齊，原本以為用 text-align: justify; 可以解決，結果才發現這只能用在超過一行的文字上哭哭。
+然後查到一個 jQuery 解法如下，我大概理解原理，但細節還待研究。簡單來說就是算每個字元平均要佔該 div 多少 width 來作分散對齊。
+$.fn.strech_text = function(){ var elmt = $(this), cont_width = elmt.width(), txt = elmt.html(), one_line = $(&amp;#39;&amp;#39; + txt + &amp;#39;&amp;#39;), nb_char = elmt.text().length, spacing = cont_width/nb_char, txt_width; elmt.html(one_line); txt_width = one_line.width(); if (txt_width &amp;lt; cont_width){ var char_width = txt_width/nb_char, ltr_spacing = spacing - char_width + (spacing - char_width)/nb_char; one_line.css({&amp;#39;letter-spacing&amp;#39;: ltr_spacing}); } else { one_line.</description>
+    </item>
+    
+    <item>
+      <title>1st Practice: Click Click Boom</title>
+      <link>https://idontwannarock.github.io/tech_blog/2017/09/click_click_boom/</link>
+      <pubDate>Fri, 15 Sep 2017 07:36:23 +0800</pubDate>
+      
+      <guid>https://idontwannarock.github.io/tech_blog/2017/09/click_click_boom/</guid>
+      <description>第一個目標 寫個簡單作品來練習 HTML 跟 CSS
+ 作品：Click Click Boom  黑白版本 粉紅大理石版本 黑色大理石版本    遇到困難 置中 左右置中很容易，但上下置中就麻煩了，還要隨瀏覽器視窗大小變動就更麻煩。
+最後在 stackoverflow 查到一種解法，就是先設定 position: absolute;，然後 top、bottom、left、right 都設 0，再用 margin: 0; 來自動對齊。
+套框 因為想要使用 HTML+CSS 作套框而不是用畫去背圖的方式，這真的殺死很多腦筋，內部框跟文字怎麼排都無法置中，對，又是無法上下置中，用 text-align 只能左右置中，vertical-align 完全不理我。
+最後又是 stackoverflow 查到解法，要用 CSS3 的新 property，display: flex; 來解，然後設定 align-item: center; 跟 justify-content: center; 來上下左右置中，但當然衍伸出下個問題。
+相容 瀏覽器太多種，新舊版本對 HTML5 或 CSS3 相容度又不一致，真的會搞死，實務上難道也是只能靠經驗？或出問題再來修改嗎？還是有更合理的作法？
+最後是上 w3schools 一項一項 property 查相容再加相容敘述 -webkit- 或 -moz- 來解決。
+iOS相容 這個真的超哭，我整個都做完了，就只有在 iOS 裝置上，按鈕按不下去！</description>
+    </item>
+    
+    <item>
+      <title>Git 及 GitHub 基礎認識</title>
+      <link>https://idontwannarock.github.io/tech_blog/2017/09/git_and_github_basic/</link>
+      <pubDate>Thu, 14 Sep 2017 07:13:01 +0800</pubDate>
+      
+      <guid>https://idontwannarock.github.io/tech_blog/2017/09/git_and_github_basic/</guid>
+      <description>這篇文章是初學的時候撰寫的，其中一些觀念並不正確，步驟也可能因為更新或觀念問題而不適用或者多餘，此篇文章僅為留做紀錄
+ 學習目標 因為 Git 指令一直出問題，今天就來搞清楚 Git 跟 GitHub 的各種問題吧！
+學習內容 Git 跟 GitHub 是什麼 Git Wiki 則說 Git 是一種分散式版本控制軟體。
+詳細的說明可以參考 Git Documentation，有中文版，不過只有前幾個主題有翻譯。
+GitHub Wiki上說，GitHub 是一個透過 Git 進行版本控制的軟體原始碼代管服務，簡單來說就是可以放各種 Code 的地方，但其實也可以放一些文件跟圖片等，好像沒有空間限制，只是有單一檔案大小 1GB 的軟性限制。
+Git 觀念 這裡我們來先解釋一下 Git版本控制的觀念，我覺得 寫點科普 寫的這兩篇寫得非常平易近人而且完整，推薦給大家！
+ GIT新手入門教學 – PART 1 GIT新手入門教學 – PART 2  我的理解是譬如有一份作業需要大家一起作，大家先把原始的作業文件 (origin) 放在小組長那邊 (remote)，然後各自 copy 一份回家 (local) 寫自己要做的部分，然後拿回去給小組長，由小組長決定誰的作業寫得好，可以成為新一代的原始作業文件 (master)；或某人提交的作業寫得不完整，但寫過地那部分很好，就跟原始作業合併 (merge) 成一份新一代的原始作業文件。大家也可以 copy 別人寫的作業回去修改 (pull)，反正最後由小組長決定哪個版本的作業寫得最好，就可以成為新一代的原始作業文件這樣。
+而大家 copy 回家寫的作業也有三個階段，假如我在電腦上打作業，分成三個資料夾，一個是 Working Directory、一個是 Staging Area、一個是 Repository。</description>
+    </item>
+    
+    <item>
+      <title>實作簡單登入會員系統 (1)</title>
+      <link>https://idontwannarock.github.io/tech_blog/2017/09/login_signup_function_1/</link>
+      <pubDate>Mon, 11 Sep 2017 07:11:59 +0800</pubDate>
+      
+      <guid>https://idontwannarock.github.io/tech_blog/2017/09/login_signup_function_1/</guid>
+      <description>這篇文章是初學的時候撰寫的，其中一些觀念並不正確，步驟也可能因為更新或觀念問題而不適用或者多餘，此篇文章僅為留做紀錄
+ 學習目標  實作簡單會員系統，有加入會員、登入、登出 cookie 防範 SQL Injection+XSS hash 密碼  學習內容 構思 坦白說，我有自學過一點點前後端的 Udemy 網路課程，所以前端的部分，簡單的 HTML, CSS, Javascript, jQuery 我還可以，大概是不會寫也可以谷哥看別人怎麼寫的程度。後端也是學過簡單的 PHP 跟 MySQL 這樣。所以後面的說明很可能會省略很多基礎，而只記錄我不太會或不太熟的部分。
+關於會員系統，Udemy 課程的老師其實有教過這個部分，但當時似懂非懂，幾乎就是 copy 老師的程式碼，糊里糊塗就寫出來，PHP 跟 MySQL 的部分一片模糊，所以先來嘗試自己重新寫一遍，不行再來找找看網路教學。
+要寫登入登出的功能，我第一個想到就是要用 HTML 的 form 先做三個 input 跟一個 button，若要串接資料庫，應該還要再作一個 button 切換 Sign Up 跟 Login 畫面來作區別。預計應該要用 jQuery 控制切換 Sign Up/Login 的功能。
+然後後端邏輯應該就是先作 Sign Up/Login 資料的驗證部分，用 ajax 傳輸資料到後端，檢查輸入的 username、email 跟 password 是否空白、格式是否正確以及是否重複，用 echo 輸出錯誤提示訊息給前端。
+接著作 Sign Up 部分，接著剛剛驗證完資料正確後，檢查資料庫有無重複資料後，再把 username、email 跟 password 存進資料庫。</description>
+    </item>
+    
+    <item>
+      <title>XAMPP 安裝設定及簡單 PHP 練習</title>
+      <link>https://idontwannarock.github.io/tech_blog/2017/09/xampp_setup_and_php_practice/</link>
+      <pubDate>Sun, 10 Sep 2017 07:39:23 +0800</pubDate>
+      
+      <guid>https://idontwannarock.github.io/tech_blog/2017/09/xampp_setup_and_php_practice/</guid>
+      <description>這篇文章是初學的時候撰寫的，其中一些觀念並不正確，步驟也可能因為更新或觀念問題而不適用或者多餘，此篇文章僅為留做紀錄
+ 源起 之前提到的胡立大大在 Slack 群組裡發布了他擬的教學實驗計畫大綱，大概分為以下四段：
+ 網頁後端相關（Session, Database, Server） 網頁前端相關（HTML, JavaScript, CSS, jQuery） 程式解題相關（帶大家做一些 ACM 一二星題或是基本演算法資料結構） 資訊安全相關（SQL Injection, CSRF, XSS）  裡面還有一堆細項，總之就從頭開始練習，第一項就是「在自己的電腦上成功運行 PHP」，還有給提示可以用 XAMPP 架環境，然後用 PHP 寫 hello world，那就來試試看吧。
+學習目標 學習用 XAMPP 建構環境，並用 PHP 寫一句 hello world。
+學習內容 什麼是 XAMPP XAMPP官網 的解釋是一個 PHP 開發環境，是一個 Apache 的發行版本，包含了 MariaDB、PHP 和 Perl。
+完全看不懂，先來查一下名詞。
+PHP 我大概知道，是一種後端的語言，理論上可以配合各種 SQL 語言跟資料庫作溝通，然後再跟前端連結作輸出。至於 PHP 到底算不算程式語言這種問題就跳過。
+Apache 則是久聞其名但不知其詳。谷哥上的資料看起來是一種網頁伺服器，但伺服器是什麼？我沒念過計概，我也不知道計概教不教這個，總之就是沒概念，只好再查。
+運氣很好，又找到這篇 [WDC] 淺談 Web Server 及 Application Server （上），終於有點概念，這邊說的 server 就是提供 web 服務的伺服器，而不是實體的機器。所以 Apache 就是提供 web 功能的伺服器程式。依照這個脈絡，所謂的 PHP 開發環境，應該是 XAMPP 提供可以運行 PHP 功能的 Apache 伺服器環境，也包括可以運行 MariaDB 跟 Perl。</description>
+    </item>
+    
+    <item>
+      <title>Hugo 練習 (2)</title>
+      <link>https://idontwannarock.github.io/tech_blog/2017/09/hugo_practice_2/</link>
+      <pubDate>Sat, 09 Sep 2017 15:22:03 +0800</pubDate>
+      
+      <guid>https://idontwannarock.github.io/tech_blog/2017/09/hugo_practice_2/</guid>
+      <description>這篇文章是初學的時候撰寫的，其中一些觀念並不正確，步驟也可能因為更新或觀念問題而不適用或者多餘，此篇文章僅為留做紀錄
+ 學習目標 學習怎麼使用 Hugo 架設網頁在 Github Pages。
+學習內容 環境設定 我並非本科，所以以下作法全都是從各官網跟谷哥研究而來。先說明我只會用 Windows，而且是 Win10，所以想用 MacOS 或 Linux 的可以左轉出去自己上官網跟谷哥研究。
+環境設定這邊需要作幾件事，設定 Hugo，設定 Git，新增 Github 帳號，跟設定 SSH，除了設定 SSH 要最後作以外，其他順序無所謂。
+Hugo 環境設定 如同上一篇所述，Hugo 雖然是 Go 語言寫的，但現在的版本並不用安裝 Go，只要到 這個網址 下載最新版本，找地方解壓縮，然後將解壓縮後的 exe 檔路徑設定到 Path 環境變數裡面就可以了。
+比較完整的流程應該是先創建 Hugo 目錄，例如 C:\Hugo，然後建兩個子資料夾 bin 和 Sites。下載 Hugo 最新版本的 zip 檔，解壓縮到 bin 資料夾裡面，若 exe 檔檔名不是 hugo.exe 就改成 hugo.exe。
+然後要設定 Path 環境變數，厲害的人可以直接用 cmd 設定，就不講了。來講我這種菜鳥的方法，右鍵點開始鍵（就是狀態列 Windows 圖案的那個鈕），選「系統」，然後選右上方的「系統資訊」，跳出來視窗後，選左邊的「進階系統設定」，再跳出一個視窗後，選「進階」頁面下方的「環境變數(N)&amp;hellip;」，會再跳出一個視窗分成上下兩區塊，在上方的使用者變數區塊，變數那一欄找到 Path 後，連點兩下又會跳出一個新視窗，這次直接按右邊的「新增(N)」，然後填上剛剛 hugo.exe 的路徑，例如 C:\Hugo\bin，最後再一路按確定以及關閉視窗出去。
+然後為了確定是否有設定成功，請再右鍵點一次開始鍵，選「Windows PowerShell(系統管理員)(A)」來打開 PowerShell，然後直接輸入 hugo version 後按 Enter 鍵，如果有顯示出版本資訊，那就是設定成功。</description>
+    </item>
+    
+    <item>
+      <title>Hugo 練習 (1)</title>
+      <link>https://idontwannarock.github.io/tech_blog/2017/09/hugo_practice_1/</link>
+      <pubDate>Sat, 09 Sep 2017 00:17:31 +0800</pubDate>
+      
+      <guid>https://idontwannarock.github.io/tech_blog/2017/09/hugo_practice_1/</guid>
+      <description>這篇文章是初學的時候撰寫的，其中一些觀念並不正確，步驟也可能因為更新或觀念問題而不適用或者多餘，此篇文章僅為留做紀錄
+ 源起 2017 年 9 月 7 日在 ptt Soft_Job 版看到胡立大大 po 文準備作一個計劃-建立 Slack 群組來幫助大家練習討論一些網頁相關的東西，而我需要多作一些練習，並且最好能有人詢問或討論所以加入。
+而 9 月 8 日胡立大大就回信了，基本上就是解釋他想建立一個開放的群組，群組裡沒有老師，他擔任類似助教的腳色，會固定提出練習的題目，解答一些疑問跟提供一些資源這樣。
+其中胡立大大有提到希望大家能養成自學、解決問題以及歸納知識的習慣，我覺得很有道理很重要，所以剛好他也有提到希望大家學習「怎麼用靜態部落格產生系統」，可以練習怎麼使用靜態部落格產生系統、Git 的基本操作以及 Github 的相關知識。
+所以，就來吧！
+學習目標 學習怎麼用靜態部落格產生系統 Hugo，並且把部落格架在 Github Pages 上面。
+學習內容 什麼是靜態、動態 就我看網路多種說法，歸納的概念大概是部落格或網站本身顯示不需要重複跟 server 端交流的就算靜態，反之就算動態；最近因為 SEO 的興起，還有一種偽靜態。
+什麼是靜態部落格 (網頁) 產生系統 Static Site Generator 在網路上找到 這篇文章，講得蠻清楚的。
+在講什麼是靜態部落格（網頁）產生系統 Static Site Generator(SSG) 之前，應該講一下內容管理系統 Content Management System(CMS)，例如 Wordpress。
+CMS 的理念是讓作者不用擔心部落格，也就是網頁輸出的各種技術問題，只需要選擇喜歡的模板 template，就可以使用 CMS 提供的文字編輯器寫作，節省很多技術上的麻煩，相信有用過 Wordpress 都能理解。
+但相對之下 CMS 就有一些壞處，例如只能使用 CMS 提供的編輯功能（不然還是要會網頁或程式知識去作修改）、因為很多動態功能所以伺服器工作比較重可能影響效能、可能因為某些軟體或功能升級或資料庫出問題而導致網頁也出問題。
+而 SSG 算是在 CMS 跟完全自己 coding 寫網頁架部落格的中間，比較知名的有 Jekyll 跟 Hugo，或胡立提到的 Hexo。</description>
+    </item>
+    
+  </channel>
+</rss>

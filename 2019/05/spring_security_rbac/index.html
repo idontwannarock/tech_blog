@@ -1,0 +1,607 @@
+<!DOCTYPE html>
+<html><head>
+<title>Spring Security 整合 RBAC</title>
+
+
+
+
+<meta charset="utf-8">
+<meta name="X-UA-Compatible" content="IE=edge">
+<meta name="google-site-verification" content="">
+<meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" name="viewport">
+<meta content="telephone=no" name="format-detection">
+<meta name="description" content="探討如何利用 Spring Security 提供的自訂方式整合 RBAC">
+<meta name="renderer" content="webkit">
+<meta name="theme-color" content="#ffffff">
+
+
+
+
+
+
+
+
+
+
+
+<script type="application/javascript">
+var doNotTrack = false;
+if (!doNotTrack) {
+	(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+	(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+	m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+	})(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+	ga('create', 'UA-106499565-1', 'auto');
+	
+	ga('send', 'pageview');
+}
+</script>
+
+
+<link type="text/css" rel="stylesheet" href="https://idontwannarock.github.io/tech_blog/vendor/css/bootstrap.min.css">
+
+
+  
+
+
+
+
+
+
+<link rel="stylesheet" href="https://idontwannarock.github.io/tech_blog/scss/journal.min.3f72a5fc8f5b5dd732a4b476aced0eece2156958d9d414316494ddb10593ddf7.css" integrity="sha256-P3Kl/I9bXdcypLR2rO0O7OIVaVjZ1BQxZJTdsQWT3fc=" media="screen">
+
+
+
+<link rel="stylesheet" href="https://idontwannarock.github.io/tech_blog/scss/dark-mode.min.f7c2efa7183435a6bd1842f91c541481c7a5137b5991629a870f24e4a516ad4b.css" integrity="sha256-98Lvpxg0Naa9GEL5HFQUgcelE3tZkWKahw8k5KUWrUs=" media="screen">
+
+
+<script src="https://idontwannarock.github.io/tech_blog/vendor/js/loadCSS.js"></script>
+<script>
+  loadCSS("https://fonts.googleapis.com/css?family=Fira+Mono|Material+Icons");
+</script>
+
+
+
+
+
+
+  <script src="https://idontwannarock.github.io/tech_blog/js/toc.js"></script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</head>
+<body>
+    	<div id="app"><div id="sideContainer" class="side-container">
+    
+    <a class="a-block nav-head false" href="https://idontwannarock.github.io/tech_blog/">
+    
+        <div class="nav-title">
+            Howard Tech Note
+        </div>
+        
+        <div class="nav-subtitle">
+            Share * Record * Program
+        </div>
+        
+    </a>
+
+    <div class="nav-link-list">
+        
+        
+            
+            
+            
+            
+            
+            <a class="a-block nav-link-item false" href="https://idontwannarock.github.io/tech_blog/posts">
+                Archive
+            </a>
+            
+        
+            
+            
+            
+            
+            
+            <a class="a-block nav-link-item false" href="https://idontwannarock.github.io/tech_blog/categories">
+                Categories
+            </a>
+            
+        
+            
+            
+            
+            
+            
+            <a class="a-block nav-link-item false" href="https://idontwannarock.github.io/tech_blog/tags">
+                Tags
+            </a>
+            
+        
+            
+            
+            
+            
+            
+            <a class="a-block nav-link-item false" href="https://idontwannarock.github.io/tech_blog/works">
+                My Works
+            </a>
+            
+        
+            
+            
+            
+            
+            
+            <a class="a-block nav-link-item false" href="https://idontwannarock.github.io/tech_blog/about">
+                About
+            </a>
+            
+        
+    </div>
+
+    
+
+    <div class="nav-footer">
+        
+Hugo Theme <a href="https://github.com/amazingrise/hugo-theme-diary">Diary</a> by <a href="https://amazingrise.net">Rise</a>
+<br>
+Ported from <a href="https://mak1t0.cc/" target="_blank" rel="noreferrer noopener">Makito</a>'s <a href="https://github.com/SumiMakito/hexo-theme-journal/" target="_blank" rel="noreferrer noopener">Journal.</a> <br>
+<br>
+
+&copy;
+	
+	This website by Howard Wang is licensed under a Creative Common Attribution-ShareAlike 4.0 International License.
+	
+
+    </div>
+    
+</div><div id="extraContainer" class="extra-container">
+    
+    
+    <div class="toc animated-visibility" :class="{ invisible: scrollY <= 140 }">
+
+
+	<div class="toc-content">
+	
+		
+		
+		
+		<center>- CATALOG -</center>
+		
+		
+		<ul>
+			
+				
+				
+					
+						
+						
+						
+						
+						
+							<li>
+								<a href="#spring-security-%e6%ac%8a%e9%99%90%e6%9e%b6%e6%a7%8b" onclick="onNavClick(`#spring-security-權限架構-nav`)" id="spring-security-權限架構-nav">
+									Spring Security 權限架構
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+							
+								
+									<ul>
+								
+							
+						
+						
+							<li>
+								<a href="#userdetailsservice" onclick="onNavClick(`#userdetailsservice-nav`)" id="userdetailsservice-nav">
+									UserDetailsService
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+						
+							<li>
+								<a href="#accessdecisionvoter-%e5%8f%8a-accessdecisionmanager" onclick="onNavClick(`#accessdecisionvoter-及-accessdecisionmanager-nav`)" id="accessdecisionvoter-及-accessdecisionmanager-nav">
+									AccessDecisionVoter 及 AccessDecisionManager
+								</a>
+							</li>
+						
+						
+					
+				
+			
+		</ul>
+	</div>
+
+</div>
+    
+    <div class="pagination">
+        <a id="globalBackToTop" class="pagination-action animated-visibility" href="#top" :class="{ invisible: scrollY == 0 }">
+            <i class="material-icons pagination-action-icon">
+                keyboard_arrow_up
+            </i>
+        </a>
+        
+        <a type="button" class="pagination-action" id="darkModeToggleButton">
+            <span class="material-icons pagination-action-icon" id="darkModeToggleIcon">
+                dark_mode
+            </span>
+        </a>
+        
+        
+    </div>
+</div>
+<div class="single-column-drawer-container" id="drawer"
+     v-bind:class="{ 'single-column-drawer-container-active': isDrawerOpen }">
+    <div class="drawer-content">
+        <div class="drawer-menu">
+            
+            
+            
+                
+                
+                
+                
+                
+                <a class="a-block drawer-menu-item false" href="https://idontwannarock.github.io/tech_blog/posts">
+                    Archive
+                </a>
+                
+            
+                
+                
+                
+                
+                
+                <a class="a-block drawer-menu-item false" href="https://idontwannarock.github.io/tech_blog/categories">
+                    Categories
+                </a>
+                
+            
+                
+                
+                
+                
+                
+                <a class="a-block drawer-menu-item false" href="https://idontwannarock.github.io/tech_blog/tags">
+                    Tags
+                </a>
+                
+            
+                
+                
+                
+                
+                
+                <a class="a-block drawer-menu-item false" href="https://idontwannarock.github.io/tech_blog/works">
+                    My Works
+                </a>
+                
+            
+                
+                
+                
+                
+                
+                <a class="a-block drawer-menu-item false" href="https://idontwannarock.github.io/tech_blog/about">
+                    About
+                </a>
+                
+            
+            
+            <div class="toc">
+
+
+	<div class="toc-content">
+	
+		
+		
+		
+		<center>- CATALOG -</center>
+		
+		
+		<ul>
+			
+				
+				
+					
+						
+						
+						
+						
+						
+							<li>
+								<a href="#spring-security-%e6%ac%8a%e9%99%90%e6%9e%b6%e6%a7%8b" onclick="onNavClick(`#spring-security-權限架構-nav`)" id="spring-security-權限架構-nav">
+									Spring Security 權限架構
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+							
+								
+									<ul>
+								
+							
+						
+						
+							<li>
+								<a href="#userdetailsservice" onclick="onNavClick(`#userdetailsservice-nav`)" id="userdetailsservice-nav">
+									UserDetailsService
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+						
+							<li>
+								<a href="#accessdecisionvoter-%e5%8f%8a-accessdecisionmanager" onclick="onNavClick(`#accessdecisionvoter-及-accessdecisionmanager-nav`)" id="accessdecisionvoter-及-accessdecisionmanager-nav">
+									AccessDecisionVoter 及 AccessDecisionManager
+								</a>
+							</li>
+						
+						
+					
+				
+			
+		</ul>
+	</div>
+
+</div>
+            
+        </div>
+    </div>
+</div>
+<transition name="fade">
+    <div id="drawer-mask" v-bind:class="{ 'single-column-drawer-mask': mounted }" v-if="isDrawerOpen" v-on:click="toggleDrawer"></div>
+</transition>
+<nav id="navBar" class="navbar sticky-top navbar-light single-column-nav-container">
+    <div id="navBackground" class="nav-background"></div>
+    <div class="container container-narrow nav-content">
+        <button id="nav_dropdown_btn" class="nav-dropdown-toggle" type="button" v-on:click="toggleDrawer">
+            <i class="material-icons">
+                menu
+            </i>
+        </button>
+        <a id="navTitle" class="navbar-brand" href="https://idontwannarock.github.io/tech_blog/">
+            Howard Tech Note
+        </a>
+        
+        <button type="button" class="nav-darkmode-toggle" id="darkModeToggleButton2">
+            <i class="material-icons" id="darkModeToggleIcon2">
+                dark_mode
+            </i>
+        </button>
+        
+    </div>
+</nav>
+<div class="single-column-header-container" id="pageHead"
+     v-bind:style="{ transform: 'translateZ(0px) translateY('+.3*scrollY+'px)', opacity: 1-navOpacity }">
+    <a href="https://idontwannarock.github.io/tech_blog/">
+        <div class="single-column-header-title">Howard Tech Note</div>
+        
+        <div class="single-column-header-subtitle">Share * Record * Program</div>
+        
+
+    </a>
+</div>
+
+            <div id="content">
+                <div id="streamContainer" class="stream-container">
+
+    <div class="post-list-container post-list-container-shadow">
+        <div class="post">
+            
+            
+            
+                
+            
+
+            <div class="post-head-wrapper"
+                
+                    
+                    
+                    style="background-image: url('https://res.cloudinary.com/dcvgho2zc/image/upload/v1568907350/spring-security-icon_qahaqz.png')"
+                    
+                
+            >
+                <div class="post-title">
+                    Spring Security 整合 RBAC
+                    
+                    <div class="post-subtitle">
+                        探討如何利用 Spring Security 提供的自訂方式整合 RBAC
+                    </div>
+                    
+                    <div class="post-meta">
+                        
+                        <time itemprop="datePublished">
+                            2019-05-30 15:33
+                        </time>
+                        
+
+                        
+                            <i class="material-icons" style="">folder</i>
+                                <a href="https://idontwannarock.github.io/tech_blog/categories/concept">concept</a>
+                                &nbsp;
+                        
+
+                        
+                            <i class="material-icons" style="">label</i>
+                            
+                                <a href="https://idontwannarock.github.io/tech_blog/tags/java">java</a>
+                                &nbsp;
+                            
+                                <a href="https://idontwannarock.github.io/tech_blog/tags/spring-security">spring-security</a>
+                                &nbsp;
+                            
+                                <a href="https://idontwannarock.github.io/tech_blog/tags/rbac">rbac</a>
+                                &nbsp;
+                            
+                        
+                        
+                    </div>
+                </div>
+            </div>
+            
+            <div class="post-body-wrapper">
+                
+                <div class="post-body" v-pre>
+                
+                    <p>目前比較主流的 <a href="https://en.wikipedia.org/wiki/Role-based_access_control">Role-based Access Control, RBAC</a> 算是比較成熟且彈性的權限架構，若要在 Spring Security 實作 RBAC 並搭配 JWT 或 OAuth 2.0，大概要探討兩個問題</p>
+<ol>
+<li>是否值得為了減少查詢資料源的次數，而將角色或權限直接置入 JWT 或 Authorization Server 回傳的 token</li>
+<li>是否採取 Spring Security 原生只使用最細粒度的權限來進行存取控制</li>
+</ol>
+<p>關於第一個問題，目前的思考點大概就是考量系統的併發度跟使用者總數</p>
+<p>如果需要高併發，那自然希望盡量減少查詢資料的次數或資料量，盡量避免同時大量消耗 DB 資源；相反的，如果不需要高併發，那每次驗證都重新取得角色及權限資料也沒關係</p>
+<p>使用者數量的考量也是類似，如果每次查詢的成本太高，則盡量減少查詢的次數</p>
+<p>而第二個問題，則是要考量實際的業務場景</p>
+<p>如果角色跟權限很大量且複雜，或可能要考慮角色分層甚至使用者群組，或不同 Domain 有不同的權限邏輯，則可能用 Spring Security 原生方式會不敷使用，相對如果角色權限結構簡單，則直接使用原生方式可能成本較低</p>
+<p>所以以下探討主要專注於使用 Spring Security 提供的自訂空間來實作較為複雜的存取控制</p>
+<h1 id="spring-security-權限架構">Spring Security 權限架構</h1>
+<p>首先要探討 Spring Security 原生提供的權限架構</p>
+<ul>
+<li>GrantedAuthority: 可以將每個 GrantedAuthority 想成是個別的 privilege，所以在 Spring Security 中，authority 就是 privilege 的概念</li>
+<li>Role: 在 Spring Security 中為了保持彈性，Role 可以當作 Authority 也可以當作一組 Authority 的組合
+<ul>
+<li>Role as Authority: 直接把 Role 當成一種 Authority 的情況，就是將 Role 當作一個有 ROLE_ 前綴的字串，這種情況下 Role 跟 Authority 就只是語意上的差別</li>
+<li>Role as Container: Role 可以包含一組 Authority，Spring Security 在這個概念上沒有提供太多指引說明，需要自行實作</li>
+</ul>
+</li>
+</ul>
+<blockquote>
+<p><a href="https://www.baeldung.com/spring-security-granted-authority-vs-role">Granted Authority Versus Role in Spring Security</a></p>
+</blockquote>
+<p>所以概念上 Spring Security 的 Role 比較像是有特別命名方式 (ROLE_ 前綴) 的一種 Authority，因此在預設中，<code>hasAuthority('ROLE_ADMIN')</code> 跟 <code>hasRole('ADMIN')</code> 是一樣的</p>
+<p>在 Spring Security 中 Role as Authority 最明顯的例子就是 SimpleGrantedAuthority，建構子直接吃 role 字串，<code>getAuthority()</code> 方法也直接吐回 role 字串屬性</p>
+<p>因此，如果要建立 Role 跟 Authority 分離的權限架構，首先要確認的是在設定 access control 時，<code>hasRole()</code> 跟 <code>hasAuthority()</code> 兩個方法到底是用什麼機制、從哪裡取得</p>
+<p>Spring Security 的整體架構分成驗證跟存取控制兩個部分，由於驗證部分會由 API 搭配 JWT 做掉大部分，甚至未來整合 OAuth 2.0，所以需要探討的只有如何在驗證過程將使用者資料及權限放入 SecurityContext 中讓後續的存取控制使用，並且存取控制部分如何依照使用者資料及權限進行控制</p>
+<h2 id="userdetailsservice"><code>UserDetailsService</code></h2>
+<p>要在驗證過程將使用者資料及權限放入 SecurityContext 中，最簡單就是實作 <code>UserDetailsService</code> 的 <code>loadUserByUsername</code> 方法，然後將自訂的 <code>UserDetailsService</code> 提供給 <code>AuthenticationManager</code> 即可</p>
+<p>這部分主要還是要考慮繼承 <code>UserDetails</code> 物件後，如何設定權限部分以及該將什麼樣的資料放入 Authentication 的 authorities 中</p>
+<h2 id="accessdecisionvoter-及-accessdecisionmanager"><code>AccessDecisionVoter</code> 及 <code>AccessDecisionManager</code></h2>
+<p>而存取控制的邏輯部分就要實作 <code>AccessDecisionVoter</code> 的 <code>vote</code> 方法</p>
+<p>voter 可以選擇回傳三種決策:</p>
+<ul>
+<li><code>ACCESS_GRANTED</code>: 通過</li>
+<li><code>ACCESS_DENIED</code>: 否決</li>
+<li><code>ACCESS_ABSTAIN</code>: 棄權</li>
+</ul>
+<p>實作完 voter 後，要將 voter 加入 <code>AccessDecisionManager</code>，而 <code>AccessDecisionManager</code> 預設有三種決策策略</p>
+<ul>
+<li><code>AffirmativeBased</code>: 任何 voter 回傳通過即可</li>
+<li><code>ConsensusBased</code>: 通過數大於否決數，忽略棄權</li>
+<li><code>UnanimousBased</code>: 所有 voter 通過或棄權，也就是不能有任何否決</li>
+</ul>
+<blockquote>
+<p><a href="https://www.baeldung.com/spring-security-custom-voter">Custom AccessDecisionVoters in Spring Security</a></p>
+</blockquote>
+<p>這部分就只能基於實際業務邏輯做考量</p>
+
+                    
+                    <HR width="100%" id="EOF">
+		    <p style="color:#777;">Last modified on 2019-05-30</p>
+                    
+                </div>
+            </div>
+            
+            
+            <nav class="post-pagination">
+
+                
+                <a class="newer-posts" href="https://idontwannarock.github.io/tech_blog/2019/09/spring_api_version_with_swagger_security/">
+			Next<br>Spring Boot 實作 API 版本控制
+                </a>
+                
+                
+                
+                <a class="older-posts" href="https://idontwannarock.github.io/tech_blog/2019/05/github_flow_intro/">
+			Previous<br>Github Flow 簡介
+                </a>
+                
+            </nav>
+            <div class="post-comment-wrapper">
+                
+
+
+
+
+
+
+
+
+
+
+            </div>
+        </div>
+    </div>
+
+
+                    </div>
+            </div><div id="single-column-footer">
+Hugo Theme <a href="https://github.com/amazingrise/hugo-theme-diary">Diary</a> by <a href="https://amazingrise.net">Rise</a>
+<br>
+Ported from <a href="https://mak1t0.cc/" target="_blank" rel="noreferrer noopener">Makito</a>'s <a href="https://github.com/SumiMakito/hexo-theme-journal/" target="_blank" rel="noreferrer noopener">Journal.</a> <br>
+<br>
+
+&copy;
+	
+	This website by Howard Wang is licensed under a Creative Common Attribution-ShareAlike 4.0 International License.
+	
+</div>
+            </div>
+    
+    <script src="https://idontwannarock.github.io/tech_blog/js/journal.js"></script>
+    </body>
+</html>
