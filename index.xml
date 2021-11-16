@@ -6,9 +6,175 @@
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
     <copyright>This website by Howard Wang is licensed under a Creative Common Attribution-ShareAlike 4.0 International License.</copyright>
-    <lastBuildDate>Wed, 03 Nov 2021 16:29:03 +0800</lastBuildDate>
+    <lastBuildDate>Tue, 16 Nov 2021 11:58:47 +0800</lastBuildDate>
     
         <atom:link href="https://idontwannarock.github.io/tech_blog/index.xml" rel="self" type="application/rss+xml" />
+    
+    
+    
+        <item>
+        <title>Sql Server 備份方式</title>
+        <link>https://idontwannarock.github.io/tech_blog/2021/11/sql_server_backup/</link>
+        <pubDate>Tue, 16 Nov 2021 11:58:47 +0800</pubDate>
+        
+        <guid>https://idontwannarock.github.io/tech_blog/2021/11/sql_server_backup/</guid>
+        <description>Howard Tech Note https://idontwannarock.github.io/tech_blog/2021/11/sql_server_backup/ -&lt;p&gt;最近工作上碰到需要對 Sql Server 做 snapshot 的場合，所以就順便來研究一下怎麼對 Sql Server 做備份&lt;/p&gt;
+&lt;p&gt;按照過去的經驗，我第一個想法就是找 Sql Server 有沒有類似 mysqldump 或 pg_dump 的工具可以直接將 schema 及 data 導出成 SQL 檔，這樣方便閱讀也方便各種場景下重建資料庫，尤其是在資料庫的 table 數量及資料量並不算大的前提下&lt;/p&gt;
+&lt;p&gt;結果，我太天真了，Microsoft 怎麼可能這麼好用 (誤)，人家就是要走自己的路！&lt;/p&gt;
+&lt;h2 id=&#34;備份檔案格式&#34;&gt;備份檔案格式&lt;/h2&gt;
+&lt;p&gt;Sql Server 備份出來的檔案格式有以下幾種&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;bak: schema + data + log + file，適合做定時備份，因為他會保持包含 index 在內的資料以維持 single point of time 的 transactionally consistent&lt;/li&gt;
+&lt;li&gt;DACPAC: schema，適合建立測試環境或比對各環境版本；但也支持下參數加上 data 的備份。實際上是 xml 的壓縮檔&lt;/li&gt;
+&lt;li&gt;BACPAC: schema + data，適合轉移或 archive db。schema 部分與 DACPAC 相同，只是加上用 BCP 匯出資料&lt;/li&gt;
+&lt;li&gt;sql&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2 id=&#34;備份工具&#34;&gt;備份工具&lt;/h2&gt;
+&lt;p&gt;主要有以下幾種備份工具&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;a href=&#34;https://docs.microsoft.com/en-us/sql/tools/sqlcmd-utility?view=sql-server-ver15&#34;&gt;SqlCmd (官方)&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;https://docs.microsoft.com/en-us/sql/tools/bcp-utility?view=sql-server-ver15&#34;&gt;BCP (官方)&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;https://docs.microsoft.com/en-us/sql/relational-databases/server-management-objects-smo/getting-started-in-smo?view=sql-server-ver15&#34;&gt;SMO (官方)&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;https://docs.microsoft.com/en-us/sql/tools/sqlpackage/sqlpackage?view=sql-server-ver15&#34;&gt;SqlPackage.exe (官方)&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;https://dbatools.io/&#34;&gt;dbatools&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;https://github.com/Microsoft/mssql-scripter&#34;&gt;mssql-scripter&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h3 id=&#34;sqlcmd-官方&#34;&gt;SqlCmd (官方)&lt;/h3&gt;
+&lt;p&gt;需要安裝 Sql Server 或 Microsoft Command Line Utility。若 powershell 要使用，還需要安裝 SqlServer 模組&lt;/p&gt;
+&lt;p&gt;只能產生出 bak 檔，可包含 schema 及 data，但本身並不包含建立 database&lt;/p&gt;
+&lt;h3 id=&#34;bcp-官方&#34;&gt;BCP (官方)&lt;/h3&gt;
+&lt;p&gt;針對同步大量資料的工具，不支援同步 schema&lt;/p&gt;
+&lt;h3 id=&#34;smo-官方&#34;&gt;SMO (官方)&lt;/h3&gt;
+&lt;p&gt;這已經算是要寫程式來控制備份機制了，除了可以用 powershell 來寫以外，其實也可以直接寫 c# 專案來使用這個 library 做備份工作&lt;/p&gt;
+&lt;p&gt;只要有安裝過 Sql Server 後就會內附該有的 dll&lt;/p&gt;
+&lt;p&gt;會產生 schema 及 data 的 sql script，但我沒找到產生建立 database 部分的選項可以做設定&lt;/p&gt;
+&lt;p&gt;可以參考這篇 &lt;a href=&#34;https://www.red-gate.com/simple-talk/databases/sql-server/database-administration-sql-server/automated-script-generation-with-powershell-and-smo/&#34;&gt;Automated Script-generation with Powershell and SMO&lt;/a&gt; 來撰寫 powershell 檔&lt;/p&gt;
+&lt;h3 id=&#34;sqlpackageexe-官方&#34;&gt;SqlPackage.exe (官方)&lt;/h3&gt;
+&lt;p&gt;可以不需要安裝 sql server，是獨立的程式，而且跨平台&lt;/p&gt;
+&lt;p&gt;可以選擇 extract (產出 DACPAC) 或 export (產出 BACPAC)&lt;/p&gt;
+&lt;p&gt;dacpac 只是壓縮檔，解開後，schema 的部分都是 xml，data 就是用 bcp 輸出的檔案。bacpac 也是一樣&lt;/p&gt;
+&lt;p&gt;不過 SqlPackage 有幾個問題&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;Extract dacpac 也可以包含 data (&lt;code&gt;ExtractAllTableData=&#39;True&#39;&lt;/code&gt;)，而且還可以設定是否要 verify (&lt;code&gt;VerifyExtraction=&#39;False&#39;&lt;/code&gt;)，這樣 Export bacpac 不知道要拿來幹嘛&lt;/li&gt;
+&lt;li&gt;還有 Export 不能關閉 verify (&lt;code&gt;VerifyExtraction=&#39;False&#39;&lt;/code&gt;)，會出現以下警告，所以甚至像是在 store procedure 內有用到別的 database 的狀況也會被拒絕&lt;/li&gt;
+&lt;/ul&gt;
+&lt;blockquote&gt;
+&lt;p&gt;*** &amp;lsquo;VerifyExtraction&amp;rsquo; is not a valid argument for the &amp;lsquo;Export&amp;rsquo; action.&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;h3 id=&#34;dbatools&#34;&gt;dbatools&lt;/h3&gt;
+&lt;p&gt;這是一個第三方套件，功能多到看不完，但官方文件雖然列的一堆功能，但使用者要怎麼使用坦白說我覺得不是很友善&lt;/p&gt;
+&lt;h3 id=&#34;mssql-scripter&#34;&gt;mssql-scripter&lt;/h3&gt;
+&lt;p&gt;需要安裝並設定好 Python 的環境變數，然後用 pip 安裝&lt;/p&gt;
+&lt;p&gt;可以產生 schema 及 data 的 sql script&lt;/p&gt;
+&lt;p&gt;對本地安裝的 Sql Server 操作沒問題，但我拿它來對 docker container 中的 mssql 操作會報權限問題&lt;/p&gt;
+&lt;h2 id=&#34;結論&#34;&gt;結論&lt;/h2&gt;
+&lt;p&gt;因為考慮到資料庫 table 以及非 log 資料並不多，所以最後選擇用 powershell 操作 smo 的方式產出 sql 檔的方式做 snapshot&lt;/p&gt;
+&lt;p&gt;以下是我參考這篇 &lt;a href=&#34;https://www.red-gate.com/simple-talk/databases/sql-server/database-administration-sql-server/automated-script-generation-with-powershell-and-smo/&#34;&gt;Automated Script-generation with Powershell and SMO&lt;/a&gt; 撰寫的 powershell 檔&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#e7e9db;background-color:#2f1e2e;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-powershell&#34; data-lang=&#34;powershell&#34;&gt;&lt;span style=&#34;color:#815ba4&#34;&gt;param&lt;/span&gt;(&lt;span style=&#34;color:#ef6155&#34;&gt;$datasource&lt;/span&gt;, &lt;span style=&#34;color:#ef6155&#34;&gt;$username&lt;/span&gt;, &lt;span style=&#34;color:#ef6155&#34;&gt;$password&lt;/span&gt;, &lt;span style=&#34;color:#ef6155&#34;&gt;$backupPath&lt;/span&gt;)
+
+&lt;span style=&#34;color:#776e71&#34;&gt;# set &amp;#34;Option Explicit&amp;#34; to catch subtle errors&lt;/span&gt;
+set-psdebug -strict
+
+&lt;span style=&#34;color:#776e71&#34;&gt;# you can opt to stagger on, bleeding, if an error occurs&lt;/span&gt;
+&lt;span style=&#34;color:#ef6155&#34;&gt;$ErrorActionPreference&lt;/span&gt; = &lt;span style=&#34;color:#48b685&#34;&gt;&amp;#34;stop&amp;#34;&lt;/span&gt;
+
+&lt;span style=&#34;color:#776e71&#34;&gt;# create backup directory if not exist&lt;/span&gt;
+New-Item -ItemType Directory -Force -Path &lt;span style=&#34;color:#ef6155&#34;&gt;$backupPath&lt;/span&gt; | Out-Null
+cd &lt;span style=&#34;color:#ef6155&#34;&gt;$backupPath&lt;/span&gt;
+
+&lt;span style=&#34;color:#776e71&#34;&gt;# get current date in yyyyMMdd format&lt;/span&gt;
+&lt;span style=&#34;color:#ef6155&#34;&gt;$currentDate&lt;/span&gt; = Get-Date -format yyyyMMdd
+Write-Output &lt;span style=&#34;color:#48b685&#34;&gt;&amp;#34;Current Date = $currentDate&amp;#34;&lt;/span&gt;
+
+&lt;span style=&#34;color:#776e71&#34;&gt;# get the latest backup directory&lt;/span&gt;
+Get-ChildItem -Directory -Path . | Sort-Object CreationTime -Descending | Select-Object -First 1 -ExpandProperty Name -OutVariable latestDir | Out-Null
+Write-Output &lt;span style=&#34;color:#48b685&#34;&gt;&amp;#34;Latest Backup Directory = $latestDir&amp;#34;&lt;/span&gt;
+
+&lt;span style=&#34;color:#776e71&#34;&gt;# get the latest version of today&amp;#39;s backups&lt;/span&gt;
+&lt;span style=&#34;color:#ef6155&#34;&gt;$currentVersion&lt;/span&gt; = 0
+&lt;span style=&#34;color:#815ba4&#34;&gt;if&lt;/span&gt; (&lt;span style=&#34;color:#ef6155&#34;&gt;$latestDir&lt;/span&gt; &lt;span style=&#34;color:#5bc4bf&#34;&gt;-Match&lt;/span&gt; &lt;span style=&#34;color:#ef6155&#34;&gt;$currentDate&lt;/span&gt;)
+{
+    &lt;span style=&#34;color:#ef6155&#34;&gt;$currentVersion&lt;/span&gt; = &lt;span style=&#34;color:#ef6155&#34;&gt;$latestDir&lt;/span&gt;.Substring(&lt;span style=&#34;color:#ef6155&#34;&gt;$currentDate&lt;/span&gt;.Length + 1)
+}
+Write-Output &lt;span style=&#34;color:#48b685&#34;&gt;&amp;#34;Current Version = $currentVersion&amp;#34;&lt;/span&gt;
+
+&lt;span style=&#34;color:#776e71&#34;&gt;# create directory for the next version of backup&lt;/span&gt;
+&lt;span style=&#34;color:#ef6155&#34;&gt;$nextVersion&lt;/span&gt; = &lt;span style=&#34;color:#ef6155&#34;&gt;[int]&lt;/span&gt;&lt;span style=&#34;color:#ef6155&#34;&gt;$currentVersion&lt;/span&gt; + 1
+Write-Output &lt;span style=&#34;color:#48b685&#34;&gt;&amp;#34;Next Version = $nextVersion&amp;#34;&lt;/span&gt;
+&lt;span style=&#34;color:#ef6155&#34;&gt;$nextVersionDir&lt;/span&gt; = &lt;span style=&#34;color:#48b685&#34;&gt;&amp;#34;&lt;/span&gt;$(&lt;span style=&#34;color:#ef6155&#34;&gt;$backupPath&lt;/span&gt;)&lt;span style=&#34;color:#48b685&#34;&gt;\&lt;/span&gt;$(&lt;span style=&#34;color:#ef6155&#34;&gt;$currentDate&lt;/span&gt;)&lt;span style=&#34;color:#48b685&#34;&gt;_&lt;/span&gt;$(&lt;span style=&#34;color:#ef6155&#34;&gt;$nextVersion&lt;/span&gt;)&lt;span style=&#34;color:#48b685&#34;&gt;&amp;#34;&lt;/span&gt;
+New-Item -ItemType Directory -Force -Path &lt;span style=&#34;color:#ef6155&#34;&gt;$nextVersionDir&lt;/span&gt; | Out-Null
+
+&lt;span style=&#34;color:#776e71&#34;&gt;# load SMO assembly&lt;/span&gt;
+&lt;span style=&#34;color:#ef6155&#34;&gt;$msPrefix&lt;/span&gt; = &lt;span style=&#34;color:#48b685&#34;&gt;&amp;#39;Microsoft.SqlServer&amp;#39;&lt;/span&gt;
+&lt;span style=&#34;color:#ef6155&#34;&gt;[System.Reflection.Assembly]&lt;/span&gt;::LoadWithPartialName(&lt;span style=&#34;color:#48b685&#34;&gt;&amp;#34;$msPrefix.SMO&amp;#34;&lt;/span&gt;) | out-null
+&lt;span style=&#34;color:#ef6155&#34;&gt;[System.Reflection.Assembly]&lt;/span&gt;::LoadWithPartialName(&lt;span style=&#34;color:#48b685&#34;&gt;&amp;#34;$msPrefix.SMOExtended&amp;#34;&lt;/span&gt;) | out-null
+&lt;span style=&#34;color:#ef6155&#34;&gt;$smoPrefix&lt;/span&gt; = &lt;span style=&#34;color:#48b685&#34;&gt;&amp;#34;$msPrefix.Management.Smo&amp;#34;&lt;/span&gt;
+
+&lt;span style=&#34;color:#776e71&#34;&gt;# set connection&lt;/span&gt;
+&lt;span style=&#34;color:#ef6155&#34;&gt;$server&lt;/span&gt; = New-Object (&lt;span style=&#34;color:#48b685&#34;&gt;&amp;#34;$smoPrefix.Server&amp;#34;&lt;/span&gt;) &lt;span style=&#34;color:#ef6155&#34;&gt;$datasource&lt;/span&gt;
+&lt;span style=&#34;color:#ef6155&#34;&gt;$server&lt;/span&gt;.ConnectionContext.LoginSecure = &lt;span style=&#34;color:#ef6155&#34;&gt;$false&lt;/span&gt;
+&lt;span style=&#34;color:#ef6155&#34;&gt;$server&lt;/span&gt;.ConnectionContext.set_Login(&lt;span style=&#34;color:#ef6155&#34;&gt;$username&lt;/span&gt;)
+&lt;span style=&#34;color:#ef6155&#34;&gt;$server&lt;/span&gt;.ConnectionContext.set_Password(&lt;span style=&#34;color:#ef6155&#34;&gt;$password&lt;/span&gt;)
+
+&lt;span style=&#34;color:#776e71&#34;&gt;# check connection&lt;/span&gt;
+&lt;span style=&#34;color:#815ba4&#34;&gt;if&lt;/span&gt; (&lt;span style=&#34;color:#ef6155&#34;&gt;$server&lt;/span&gt;.Version &lt;span style=&#34;color:#5bc4bf&#34;&gt;-eq&lt;/span&gt; &lt;span style=&#34;color:#ef6155&#34;&gt;$null&lt;/span&gt; ) {&lt;span style=&#34;color:#815ba4&#34;&gt;Throw&lt;/span&gt; &lt;span style=&#34;color:#48b685&#34;&gt;&amp;#34;Can&amp;#39;t find the instance $datasource&amp;#34;&lt;/span&gt;}
+
+&lt;span style=&#34;color:#776e71&#34;&gt;# loop through databases names to do back up&lt;/span&gt;
+&lt;span style=&#34;color:#815ba4&#34;&gt;foreach&lt;/span&gt; (&lt;span style=&#34;color:#ef6155&#34;&gt;$database&lt;/span&gt; &lt;span style=&#34;color:#815ba4&#34;&gt;in&lt;/span&gt; &lt;span style=&#34;color:#ef6155&#34;&gt;$server&lt;/span&gt;.databases)
+{
+    &lt;span style=&#34;color:#776e71&#34;&gt;# skip system databases&lt;/span&gt;
+    &lt;span style=&#34;color:#815ba4&#34;&gt;if&lt;/span&gt; (&lt;span style=&#34;color:#ef6155&#34;&gt;$database&lt;/span&gt;.Name -in &lt;span style=&#34;color:#48b685&#34;&gt;&amp;#39;Master&amp;#39;&lt;/span&gt;,&lt;span style=&#34;color:#48b685&#34;&gt;&amp;#39;Model&amp;#39;&lt;/span&gt;,&lt;span style=&#34;color:#48b685&#34;&gt;&amp;#39;MSDB&amp;#39;&lt;/span&gt;,&lt;span style=&#34;color:#48b685&#34;&gt;&amp;#39;TempDB&amp;#39;&lt;/span&gt;,&lt;span style=&#34;color:#48b685&#34;&gt;&amp;#39;SSISDB&amp;#39;&lt;/span&gt;,&lt;span style=&#34;color:#48b685&#34;&gt;&amp;#39;distribution&amp;#39;&lt;/span&gt;,&lt;span style=&#34;color:#48b685&#34;&gt;&amp;#39;ReportServer&amp;#39;&lt;/span&gt;,&lt;span style=&#34;color:#48b685&#34;&gt;&amp;#39;ReportServerTempDB&amp;#39;&lt;/span&gt;) {&lt;span style=&#34;color:#815ba4&#34;&gt;continue&lt;/span&gt;}
+
+    &lt;span style=&#34;color:#776e71&#34;&gt;# skip offline databases&lt;/span&gt;
+    &lt;span style=&#34;color:#815ba4&#34;&gt;if&lt;/span&gt; (&lt;span style=&#34;color:#ef6155&#34;&gt;$database&lt;/span&gt;.Status &lt;span style=&#34;color:#5bc4bf&#34;&gt;-ne&lt;/span&gt; &lt;span style=&#34;color:#48b685&#34;&gt;&amp;#39;Normal&amp;#39;&lt;/span&gt;) {
+        Write-Output (&lt;span style=&#34;color:#48b685&#34;&gt;&amp;#34;Skipping Offline: {0}&amp;#34;&lt;/span&gt; &lt;span style=&#34;color:#5bc4bf&#34;&gt;-f&lt;/span&gt; &lt;span style=&#34;color:#ef6155&#34;&gt;$database&lt;/span&gt;.Name)
+        &lt;span style=&#34;color:#815ba4&#34;&gt;continue&lt;/span&gt;
+    }
+
+    &lt;span style=&#34;color:#ef6155&#34;&gt;$backupFile&lt;/span&gt; = &lt;span style=&#34;color:#48b685&#34;&gt;&amp;#34;&lt;/span&gt;$(&lt;span style=&#34;color:#ef6155&#34;&gt;$nextVersionDir&lt;/span&gt;)&lt;span style=&#34;color:#48b685&#34;&gt;\&lt;/span&gt;$(&lt;span style=&#34;color:#ef6155&#34;&gt;$database&lt;/span&gt;.Name)&lt;span style=&#34;color:#48b685&#34;&gt;.sql&amp;#34;&lt;/span&gt;
+    Write-Output &lt;span style=&#34;color:#48b685&#34;&gt;&amp;#34;Start to back up &lt;/span&gt;$(&lt;span style=&#34;color:#ef6155&#34;&gt;$database&lt;/span&gt;.Name)&lt;span style=&#34;color:#48b685&#34;&gt;&amp;#34;&lt;/span&gt;
+
+    &lt;span style=&#34;color:#776e71&#34;&gt;# manually add create database sql statement at the beginning of the sql file&lt;/span&gt;
+    New-Item &lt;span style=&#34;color:#ef6155&#34;&gt;$backupFile&lt;/span&gt; -ItemType File | Out-Null
+    Add-Content &lt;span style=&#34;color:#ef6155&#34;&gt;$backupFile&lt;/span&gt; &lt;span style=&#34;color:#48b685&#34;&gt;&amp;#34;USE [master]&amp;#34;&lt;/span&gt;
+    Add-Content &lt;span style=&#34;color:#ef6155&#34;&gt;$backupFile&lt;/span&gt; &lt;span style=&#34;color:#48b685&#34;&gt;&amp;#34;GO&amp;#34;&lt;/span&gt;
+    Add-Content &lt;span style=&#34;color:#ef6155&#34;&gt;$backupFile&lt;/span&gt; &lt;span style=&#34;color:#48b685&#34;&gt;&amp;#34;Drop Database if exists [&lt;/span&gt;$(&lt;span style=&#34;color:#ef6155&#34;&gt;$database&lt;/span&gt;.Name)&lt;span style=&#34;color:#48b685&#34;&gt;];&amp;#34;&lt;/span&gt;
+    Add-Content &lt;span style=&#34;color:#ef6155&#34;&gt;$backupFile&lt;/span&gt; &lt;span style=&#34;color:#48b685&#34;&gt;&amp;#34;GO&amp;#34;&lt;/span&gt;
+    Add-Content &lt;span style=&#34;color:#ef6155&#34;&gt;$backupFile&lt;/span&gt; &lt;span style=&#34;color:#48b685&#34;&gt;&amp;#34;USE [master]&amp;#34;&lt;/span&gt;
+    Add-Content &lt;span style=&#34;color:#ef6155&#34;&gt;$backupFile&lt;/span&gt; &lt;span style=&#34;color:#48b685&#34;&gt;&amp;#34;GO&amp;#34;&lt;/span&gt;
+    Add-Content &lt;span style=&#34;color:#ef6155&#34;&gt;$backupFile&lt;/span&gt; &lt;span style=&#34;color:#48b685&#34;&gt;&amp;#34;CREATE DATABASE [&lt;/span&gt;$(&lt;span style=&#34;color:#ef6155&#34;&gt;$database&lt;/span&gt;.Name)&lt;span style=&#34;color:#48b685&#34;&gt;]&amp;#34;&lt;/span&gt;
+    Add-Content &lt;span style=&#34;color:#ef6155&#34;&gt;$backupFile&lt;/span&gt; &lt;span style=&#34;color:#48b685&#34;&gt;&amp;#34;GO&amp;#34;&lt;/span&gt;
+    Add-Content &lt;span style=&#34;color:#ef6155&#34;&gt;$backupFile&lt;/span&gt; &lt;span style=&#34;color:#48b685&#34;&gt;&amp;#34;USE [&lt;/span&gt;$(&lt;span style=&#34;color:#ef6155&#34;&gt;$database&lt;/span&gt;.Name)&lt;span style=&#34;color:#48b685&#34;&gt;]&amp;#34;&lt;/span&gt;
+    Add-Content &lt;span style=&#34;color:#ef6155&#34;&gt;$backupFile&lt;/span&gt; &lt;span style=&#34;color:#48b685&#34;&gt;&amp;#34;GO&amp;#34;&lt;/span&gt;
+    Add-Content &lt;span style=&#34;color:#ef6155&#34;&gt;$backupFile&lt;/span&gt; &lt;span style=&#34;color:#48b685&#34;&gt;&amp;#34;&amp;#34;&lt;/span&gt;
+
+    &lt;span style=&#34;color:#776e71&#34;&gt;# set export configuration&lt;/span&gt;
+    &lt;span style=&#34;color:#ef6155&#34;&gt;$transfer&lt;/span&gt; = New-Object (&lt;span style=&#34;color:#48b685&#34;&gt;&amp;#34;$smoPrefix.Transfer&amp;#34;&lt;/span&gt;) &lt;span style=&#34;color:#ef6155&#34;&gt;$database&lt;/span&gt;
+    &lt;span style=&#34;color:#ef6155&#34;&gt;$transfer&lt;/span&gt;.Options.ScriptSchema = &lt;span style=&#34;color:#ef6155&#34;&gt;$true&lt;/span&gt;
+    &lt;span style=&#34;color:#ef6155&#34;&gt;$transfer&lt;/span&gt;.Options.ScriptData = &lt;span style=&#34;color:#ef6155&#34;&gt;$true&lt;/span&gt;
+    &lt;span style=&#34;color:#ef6155&#34;&gt;$transfer&lt;/span&gt;.Options.ScriptBatchTerminator = &lt;span style=&#34;color:#ef6155&#34;&gt;$true&lt;/span&gt;
+    &lt;span style=&#34;color:#ef6155&#34;&gt;$transfer&lt;/span&gt;.Options.ToFileOnly = &lt;span style=&#34;color:#ef6155&#34;&gt;$true&lt;/span&gt;
+    &lt;span style=&#34;color:#ef6155&#34;&gt;$transfer&lt;/span&gt;.Options.AppendToFile = &lt;span style=&#34;color:#ef6155&#34;&gt;$true&lt;/span&gt;
+    &lt;span style=&#34;color:#ef6155&#34;&gt;$transfer&lt;/span&gt;.Options.Encoding = New-Object (&lt;span style=&#34;color:#48b685&#34;&gt;&amp;#34;System.Text.UTF8Encoding&amp;#34;&lt;/span&gt;)
+    &lt;span style=&#34;color:#ef6155&#34;&gt;$transfer&lt;/span&gt;.Options.AllowSystemObjects = &lt;span style=&#34;color:#ef6155&#34;&gt;$false&lt;/span&gt;
+    &lt;span style=&#34;color:#ef6155&#34;&gt;$transfer&lt;/span&gt;.Options.Permissions = &lt;span style=&#34;color:#ef6155&#34;&gt;$true&lt;/span&gt;
+    &lt;span style=&#34;color:#ef6155&#34;&gt;$transfer&lt;/span&gt;.Options.SchemaQualify = &lt;span style=&#34;color:#ef6155&#34;&gt;$true&lt;/span&gt;
+    &lt;span style=&#34;color:#ef6155&#34;&gt;$transfer&lt;/span&gt;.Options.ExtendedProperties = &lt;span style=&#34;color:#ef6155&#34;&gt;$true&lt;/span&gt;
+    &lt;span style=&#34;color:#ef6155&#34;&gt;$transfer&lt;/span&gt;.Options.DRIAll = &lt;span style=&#34;color:#ef6155&#34;&gt;$true&lt;/span&gt;
+    &lt;span style=&#34;color:#ef6155&#34;&gt;$transfer&lt;/span&gt;.Options.Indexes = &lt;span style=&#34;color:#ef6155&#34;&gt;$true&lt;/span&gt;
+    &lt;span style=&#34;color:#ef6155&#34;&gt;$transfer&lt;/span&gt;.Options.Triggers = &lt;span style=&#34;color:#ef6155&#34;&gt;$true&lt;/span&gt;
+    &lt;span style=&#34;color:#ef6155&#34;&gt;$transfer&lt;/span&gt;.Options.IncludeHeaders = &lt;span style=&#34;color:#ef6155&#34;&gt;$true&lt;/span&gt;
+    &lt;span style=&#34;color:#ef6155&#34;&gt;$transfer&lt;/span&gt;.Options.IncludeIfNotExists = &lt;span style=&#34;color:#ef6155&#34;&gt;$true&lt;/span&gt;
+    &lt;span style=&#34;color:#ef6155&#34;&gt;$transfer&lt;/span&gt;.Options.Filename = &lt;span style=&#34;color:#48b685&#34;&gt;&amp;#34;$backupFile&amp;#34;&lt;/span&gt;
+    &lt;span style=&#34;color:#ef6155&#34;&gt;$transfer&lt;/span&gt;.Options.EnforceScriptingOptions = &lt;span style=&#34;color:#ef6155&#34;&gt;$true&lt;/span&gt;
+
+    &lt;span style=&#34;color:#776e71&#34;&gt;# start scripting&lt;/span&gt;
+    &lt;span style=&#34;color:#ef6155&#34;&gt;$transfer&lt;/span&gt;.EnumScriptTransfer()
+
+    Write-Output &lt;span style=&#34;color:#48b685&#34;&gt;&amp;#34;Finished backing up $databaseName to $backupFile&amp;#34;&lt;/span&gt;
+}
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;- https://idontwannarock.github.io/tech_blog/2021/11/sql_server_backup/ - This website by Howard Wang is licensed under a Creative Common Attribution-ShareAlike 4.0 International License.</description>
+        </item>
     
     
     
@@ -919,376 +1085,6 @@ str&lt;span style=&#34;color:#5bc4bf&#34;&gt;.&lt;/span&gt;&lt;span style=&#34;c
 &lt;p&gt;這時候 GitHub 的 Repo 上就同樣有 &lt;code&gt;master&lt;/code&gt; 跟 &lt;code&gt;gh-pages&lt;/code&gt; 兩個不同版本的紀錄。&lt;/p&gt;
 &lt;p&gt;然後開啟瀏覽器進入 GitHub Repo，同樣選擇 Repo 名稱底下那排最右邊的 Settings，然後在 GitHub Pages 區塊的 source 下拉選單裡選擇 &lt;code&gt;gh-pages branch&lt;/code&gt;，然後點擊 &lt;code&gt;save&lt;/code&gt; 就完成了。&lt;/p&gt;
 - https://idontwannarock.github.io/tech_blog/2017/11/mbp_setup_2017/ - This website by Howard Wang is licensed under a Creative Common Attribution-ShareAlike 4.0 International License.</description>
-        </item>
-    
-    
-    
-        <item>
-        <title>Markdown 語法</title>
-        <link>https://idontwannarock.github.io/tech_blog/2017/10/markdown_syntax/</link>
-        <pubDate>Sun, 22 Oct 2017 15:42:04 +0800</pubDate>
-        
-        <guid>https://idontwannarock.github.io/tech_blog/2017/10/markdown_syntax/</guid>
-        <description>Howard Tech Note https://idontwannarock.github.io/tech_blog/2017/10/markdown_syntax/ -&lt;h1 id=&#34;markdown-特色&#34;&gt;Markdown 特色&lt;/h1&gt;
-&lt;h2 id=&#34;易編寫&#34;&gt;易編寫&lt;/h2&gt;
-&lt;p&gt;相對於 HTML 需要注意各種 tag、屬性、特殊字元，Markdown 是更容易編寫的方式，雖然無法像 HTML 那樣可以直接透過各種屬性，甚至 CSS 來達到各種效果，但純粹以書寫來說，Markdown 的功能已經相當夠用。&lt;/p&gt;
-&lt;h2 id=&#34;轉換-html&#34;&gt;轉換 HTML&lt;/h2&gt;
-&lt;p&gt;不過如果有需要的話，Markdown 可以用各種方式轉換成 HTML，以方便我們發布成網頁或部落格文章，網路上有相當多的程式可以達到這點；相對之下，從 HTML 轉換回 Markdown 就沒這麼方便了，主要原因就是 HTML 有相當多屬性等並不被 Markdown 支援，所以有轉換回 Markdown 的困難。&lt;/p&gt;
-&lt;p&gt;但還是有補救的辦法，在編寫 Markdown 文件的時候，其實還是可以使用 HTML 語法的，我使用過的轉換器都可以讀取 HTML 語法，並正常顯示以及轉換，所以真的有什麼 Markdown 找不到的 HTML 功能，就直接寫 HTML 吧！當然這就需要對 HTML 語法有更多認識了。&lt;/p&gt;
-&lt;h2 id=&#34;編寫視覺&#34;&gt;編寫／視覺&lt;/h2&gt;
-&lt;p&gt;跟 HTML 一樣，在編寫 Markdown 的時候呈現的畫面，跟實際呈現的畫面其實是不一樣的。&lt;/p&gt;
-&lt;p&gt;例如我們編寫 Markdown 如下：&lt;/p&gt;
-&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#e7e9db;background-color:#2f1e2e;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-md&#34; data-lang=&#34;md&#34;&gt;&lt;span style=&#34;color:#815ba4&#34;&gt;-&lt;/span&gt; ***This*** is a [&lt;span style=&#34;color:#5bc4bf&#34;&gt;sample&lt;/span&gt;](&lt;span style=&#34;color:#06b6ef&#34;&gt;http://example.com/ &amp;#34;example.com&amp;#34;&lt;/span&gt;).
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;實際呈現的畫面其實是這樣的：&lt;/p&gt;
-&lt;blockquote&gt;
-&lt;ul&gt;
-&lt;li&gt;&lt;em&gt;&lt;strong&gt;This&lt;/strong&gt;&lt;/em&gt; is a &lt;a href=&#34;http://example.com/&#34; title=&#34;example.com&#34;&gt;sample&lt;/a&gt;.&lt;/li&gt;
-&lt;/ul&gt;
-&lt;/blockquote&gt;
-&lt;p&gt;所以在編寫 Markdown 的時候，最好找個可以隨時觀看實際畫面的編輯器來確認實際畫面。&lt;/p&gt;
-&lt;h1 id=&#34;區塊元素&#34;&gt;區塊元素&lt;/h1&gt;
-&lt;h2 id=&#34;換行&#34;&gt;換行&lt;/h2&gt;
-&lt;p&gt;原則上按 Enter 鍵就是換行。&lt;/p&gt;
-&lt;p&gt;要注意的是有些轉換器會要求不同的換行字元，例如有些會要求在行尾加上兩個空白，再按 Enter 鍵，才代表換行；也有些會要求兩個空白加一個 tab 鍵等等，所以建議要找可以即時顯示畫面的編輯器，隨時確認實際畫面。&lt;/p&gt;
-&lt;h2 id=&#34;分段&#34;&gt;分段&lt;/h2&gt;
-&lt;p&gt;Markdown 是以空白行來分段，原則上就是該行只有一個 Enter 就換行。&lt;/p&gt;
-&lt;p&gt;同樣的，要注意有些編輯器會要求不同的特殊字元來代表空白行。&lt;/p&gt;
-&lt;h2 id=&#34;標題&#34;&gt;標題&lt;/h2&gt;
-&lt;p&gt;Markdown 支援 Setext 以及 atx 兩種形式的標題。一般都用 atx 語法，標題的階層較多，語法也比較好記。&lt;/p&gt;
-&lt;h3 id=&#34;setex-形式&#34;&gt;Setex 形式&lt;/h3&gt;
-&lt;p&gt;以底線的方式來表示標題，只有兩種如下：&lt;/p&gt;
-&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#e7e9db;background-color:#2f1e2e;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-md&#34; data-lang=&#34;md&#34;&gt;This is an H1
-=============
-This is an H2
--------------
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;實際顯示就會變成這樣：&lt;/p&gt;
-&lt;blockquote&gt;
-&lt;h1 id=&#34;this-is-an-h1&#34;&gt;This is an H1&lt;/h1&gt;
-&lt;h2 id=&#34;this-is-an-h2&#34;&gt;This is an H2&lt;/h2&gt;
-&lt;/blockquote&gt;
-&lt;h3 id=&#34;atx-形式&#34;&gt;atx 形式&lt;/h3&gt;
-&lt;p&gt;在標題前面加上 1 到 6 個 &lt;code&gt;#&lt;/code&gt;，剛好對應到 HTML 的 &lt;code&gt;h1&lt;/code&gt; 到 &lt;code&gt;h6&lt;/code&gt;，如：&lt;/p&gt;
-&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#e7e9db;background-color:#2f1e2e;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-md&#34; data-lang=&#34;md&#34;&gt;&lt;span style=&#34;font-weight:bold&#34;&gt;# This is an H1
-&lt;/span&gt;&lt;span style=&#34;font-weight:bold&#34;&gt;&lt;/span&gt;&lt;span style=&#34;color:#5bc4bf;font-weight:bold&#34;&gt;## This is an H2
-&lt;/span&gt;&lt;span style=&#34;color:#5bc4bf;font-weight:bold&#34;&gt;### This is an H3
-&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;實際呈現：&lt;/p&gt;
-&lt;blockquote&gt;
-&lt;h1 id=&#34;this-is-an-h1-1&#34;&gt;This is an H1&lt;/h1&gt;
-&lt;h2 id=&#34;this-is-an-h2-1&#34;&gt;This is an H2&lt;/h2&gt;
-&lt;h3 id=&#34;this-is-an-h3&#34;&gt;This is an H3&lt;/h3&gt;
-&lt;/blockquote&gt;
-&lt;p&gt;若你寫完有考慮轉為 HTML 發布為網頁或部落格，確切使用標題是個好習慣。一是轉換完不用再花心思調整，只需要考慮 CSS 或 Javascript 做美化就好；二是良好的標題設定跟 SEO 優化有關。&lt;/p&gt;
-&lt;h2 id=&#34;清單&#34;&gt;清單&lt;/h2&gt;
-&lt;p&gt;與 HTML 相同，也分為有序清單及無序清單。&lt;/p&gt;
-&lt;h3 id=&#34;有序清單&#34;&gt;有序清單&lt;/h3&gt;
-&lt;p&gt;使用一個數字，加一個英文句點 &lt;code&gt;.&lt;/code&gt;，再空一格。&lt;/p&gt;
-&lt;p&gt;注意 &lt;strong&gt;數字並不會影響實際畫面的排序&lt;/strong&gt;，例如：&lt;/p&gt;
-&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#e7e9db;background-color:#2f1e2e;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-md&#34; data-lang=&#34;md&#34;&gt;&lt;span style=&#34;color:#815ba4&#34;&gt;1.&lt;/span&gt;    First item
-&lt;span style=&#34;color:#815ba4&#34;&gt;2.&lt;/span&gt;    Second item
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;實際上 Markdown 會自動排序：&lt;/p&gt;
-&lt;blockquote&gt;
-&lt;ol start=&#34;9527&#34;&gt;
-&lt;li&gt;First item&lt;/li&gt;
-&lt;li&gt;Second item&lt;/li&gt;
-&lt;/ol&gt;
-&lt;/blockquote&gt;
-&lt;p&gt;但建議還是照正常順序編排啦，自己編寫看得比較清楚，而且也不清楚什麼時候 Markdown 就改成一定要照順序排序（攤手）。&lt;/p&gt;
-&lt;h3 id=&#34;無序清單&#34;&gt;無序清單&lt;/h3&gt;
-&lt;p&gt;使用 &lt;code&gt;*&lt;/code&gt;、&lt;code&gt;+&lt;/code&gt; 或 &lt;code&gt;-&lt;/code&gt; 做無序清單的標記。例如：&lt;/p&gt;
-&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#e7e9db;background-color:#2f1e2e;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-md&#34; data-lang=&#34;md&#34;&gt;&lt;span style=&#34;color:#815ba4&#34;&gt;*&lt;/span&gt; First item
-&lt;span style=&#34;color:#815ba4&#34;&gt;*&lt;/span&gt; Second item
-&lt;span style=&#34;color:#815ba4&#34;&gt;*&lt;/span&gt; Third item
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;會顯示成：&lt;/p&gt;
-&lt;blockquote&gt;
-&lt;ul&gt;
-&lt;li&gt;First item&lt;/li&gt;
-&lt;li&gt;Second item&lt;/li&gt;
-&lt;li&gt;Third item&lt;/li&gt;
-&lt;/ul&gt;
-&lt;/blockquote&gt;
-&lt;h3 id=&#34;巢狀清單&#34;&gt;巢狀清單&lt;/h3&gt;
-&lt;p&gt;不論是有序還是無序清單，都可以使用縮排 tab 鍵來做出巢狀的清單。例如：&lt;/p&gt;
-&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#e7e9db;background-color:#2f1e2e;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-md&#34; data-lang=&#34;md&#34;&gt;&lt;span style=&#34;color:#815ba4&#34;&gt;*&lt;/span&gt; First item
-	&lt;span style=&#34;color:#815ba4&#34;&gt;*&lt;/span&gt; Second item
-		&lt;span style=&#34;color:#815ba4&#34;&gt;*&lt;/span&gt; Third item
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;會顯示成：&lt;/p&gt;
-&lt;blockquote&gt;
-&lt;ul&gt;
-&lt;li&gt;First item
-&lt;ul&gt;
-&lt;li&gt;Second item
-&lt;ul&gt;
-&lt;li&gt;Third item&lt;/li&gt;
-&lt;/ul&gt;
-&lt;/li&gt;
-&lt;/ul&gt;
-&lt;/li&gt;
-&lt;/ul&gt;
-&lt;/blockquote&gt;
-&lt;h2 id=&#34;區塊引言&#34;&gt;區塊引言&lt;/h2&gt;
-&lt;p&gt;使用 &lt;code&gt;&amp;gt;&lt;/code&gt; 來標記區塊引言。例如：&lt;/p&gt;
-&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#e7e9db;background-color:#2f1e2e;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-md&#34; data-lang=&#34;md&#34;&gt;&lt;span style=&#34;color:#815ba4&#34;&gt;&amp;gt; &lt;/span&gt;&lt;span style=&#34;font-style:italic&#34;&gt;This is a blockquote paragraph.
-&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;就會顯示成：&lt;/p&gt;
-&lt;blockquote&gt;
-&lt;p&gt;This is a blockquote paragraph.&lt;/p&gt;
-&lt;/blockquote&gt;
-&lt;p&gt;區塊引言也可以巢狀分層，例如：&lt;/p&gt;
-&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#e7e9db;background-color:#2f1e2e;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-md&#34; data-lang=&#34;md&#34;&gt;&lt;span style=&#34;color:#815ba4&#34;&gt;&amp;gt; &lt;/span&gt;&lt;span style=&#34;font-style:italic&#34;&gt;This is a blockquote sentence 1.
-&lt;/span&gt;&lt;span style=&#34;font-style:italic&#34;&gt;&lt;/span&gt;&lt;span style=&#34;color:#815ba4&#34;&gt;
-&lt;/span&gt;&lt;span style=&#34;color:#815ba4&#34;&gt;&amp;gt; &lt;/span&gt;&lt;span style=&#34;font-style:italic&#34;&gt;&amp;gt; This is a blockquote sentence 2.
-&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;會顯示成：&lt;/p&gt;
-&lt;blockquote&gt;
-&lt;p&gt;This is a blockquote sentence 1.&lt;/p&gt;
-&lt;/blockquote&gt;
-&lt;blockquote&gt;
-&lt;blockquote&gt;
-&lt;p&gt;This is a blockquote sentence 2.&lt;/p&gt;
-&lt;/blockquote&gt;
-&lt;/blockquote&gt;
-&lt;p&gt;區塊引言也可以只在一個「段落」的第一行加入 &lt;code&gt;&amp;gt;&lt;/code&gt; 標記區塊，記得「段落」是要以「空白行」做為區隔。&lt;/p&gt;
-&lt;p&gt;另外區塊內也支援 Markdown 語法。例如：&lt;/p&gt;
-&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#e7e9db;background-color:#2f1e2e;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-md&#34; data-lang=&#34;md&#34;&gt;&lt;span style=&#34;color:#815ba4&#34;&gt;&amp;gt; &lt;/span&gt;&lt;span style=&#34;font-style:italic&#34;&gt;*This* is a blockquote paragraph 1 sentence 1.
-&lt;/span&gt;&lt;span style=&#34;font-style:italic&#34;&gt;&lt;/span&gt;**This** is a blockquote paragraph 1 &lt;span style=&#34;font-style:italic&#34;&gt;**&lt;/span&gt;*sentence 2***.
-This is a blockquote paragraph 1 sentence 3.
-&lt;span style=&#34;color:#815ba4&#34;&gt;
-&lt;/span&gt;&lt;span style=&#34;color:#815ba4&#34;&gt;&amp;gt; &lt;/span&gt;&lt;span style=&#34;font-style:italic&#34;&gt;&amp;gt; - [ ] This is a blockquote paragraph 2 sentence 1.
-&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;會顯示成：&lt;/p&gt;
-&lt;blockquote&gt;
-&lt;p&gt;&lt;em&gt;This&lt;/em&gt; is a blockquote paragraph 1 sentence 1.&lt;br&gt;
-&lt;strong&gt;This&lt;/strong&gt; is a blockquote paragraph 1 &lt;em&gt;&lt;strong&gt;sentence 2&lt;/strong&gt;&lt;/em&gt;.&lt;br&gt;
-This is a blockquote paragraph 1 sentence 3.&lt;/p&gt;
-&lt;/blockquote&gt;
-&lt;blockquote&gt;
-&lt;blockquote&gt;
-&lt;ul&gt;
-&lt;li&gt;&lt;input disabled=&#34;&#34; type=&#34;checkbox&#34;&gt; This is a blockquote paragraph 2 sentence 2.&lt;/li&gt;
-&lt;/ul&gt;
-&lt;/blockquote&gt;
-&lt;/blockquote&gt;
-&lt;p&gt;但注意區塊引言內常常會自動加上斜體屬性，所以強調的三種狀態在區塊引言內其實只會剩粗體一種。&lt;/p&gt;
-&lt;h2 id=&#34;程式碼區塊&#34;&gt;程式碼區塊&lt;/h2&gt;
-&lt;p&gt;在程式碼區塊內，Markdown 語法並不會被轉換，所以可以如實呈現實際寫的 Markdown 語法內容。若是其他種程式語言的程式碼，則會有限度的辨識，並標記出有支援的語法，這部分目前有很多擴充，容後再敘。&lt;/p&gt;
-&lt;p&gt;當然以 Markdown 語法要做程式碼區塊，有幾種辦法，一是用 &lt;!-- raw HTML omitted --&gt;```&lt;!-- raw HTML omitted --&gt; 將整段程式碼包起來，一是在開頭用縮排 tab鍵來做標記，直到沒有縮排的一行空白行為止。&lt;/p&gt;
-&lt;p&gt;例如：&lt;/p&gt;
-&lt;pre&gt;&lt;code&gt;```
-This is a code block.
-```
-&lt;/code&gt;&lt;/pre&gt;
-&lt;p&gt;呈現起來會是這樣：&lt;/p&gt;
-&lt;blockquote&gt;
-&lt;pre tabindex=&#34;0&#34;&gt;&lt;code&gt;This is a code block.
-&lt;/code&gt;&lt;/pre&gt;&lt;/blockquote&gt;
-&lt;h2 id=&#34;分隔線&#34;&gt;分隔線&lt;/h2&gt;
-&lt;p&gt;在同一行用三個以上的 &lt;code&gt;*&lt;/code&gt;、&lt;code&gt;-&lt;/code&gt; 或 &lt;code&gt;_&lt;/code&gt; 可以組成一個分隔線，同一行不可以有其他的文字或標記，但在三個 &lt;code&gt;*&lt;/code&gt;、&lt;code&gt;-&lt;/code&gt; 或 &lt;code&gt;_&lt;/code&gt;中間可以插入空白。&lt;/p&gt;
-&lt;p&gt;以下幾種方式都可以組成分隔線：&lt;/p&gt;
-&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#e7e9db;background-color:#2f1e2e;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-md&#34; data-lang=&#34;md&#34;&gt;&lt;span style=&#34;color:#815ba4&#34;&gt;-&lt;/span&gt; - -  
-&lt;span style=&#34;color:#815ba4&#34;&gt;*&lt;/span&gt; * *  
-______ &lt;span style=&#34;font-weight:bold&#34;&gt;______&lt;/span&gt; &lt;span style=&#34;font-weight:bold&#34;&gt;______&lt;/span&gt;
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;都會顯示成同一種分隔線：&lt;/p&gt;
-&lt;blockquote&gt;
-&lt;hr&gt;
-&lt;/blockquote&gt;
-&lt;h1 id=&#34;區段元素&#34;&gt;區段元素&lt;/h1&gt;
-&lt;h2 id=&#34;連結&#34;&gt;連結&lt;/h2&gt;
-&lt;p&gt;Markdown 的連結有兩種方式，一是行內，一是參考。兩種都是用 &lt;code&gt;[]&lt;/code&gt; 來標記要形成超連結的文字。&lt;/p&gt;
-&lt;h3 id=&#34;行內連結&#34;&gt;行內連結&lt;/h3&gt;
-&lt;p&gt;行內連結是用 &lt;code&gt;[]&lt;/code&gt; 將文字包起來後，再加上 &lt;code&gt;()&lt;/code&gt;，並在小括號內加上連結網址即可。若想幫連結加上標題，也就是滑鼠移動到連結文字上會顯示的標題，在小括號內的連結網址後，空一格，用 &lt;code&gt;&amp;quot;&lt;/code&gt; 將標題文字包起來即可。&lt;/p&gt;
-&lt;p&gt;例如：&lt;/p&gt;
-&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#e7e9db;background-color:#2f1e2e;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-md&#34; data-lang=&#34;md&#34;&gt;This is a [&lt;span style=&#34;color:#5bc4bf&#34;&gt;sample&lt;/span&gt;](&lt;span style=&#34;color:#06b6ef&#34;&gt;http://example.com/ &amp;#34;example.com&amp;#34;&lt;/span&gt;).
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;就會呈現為：&lt;/p&gt;
-&lt;blockquote&gt;
-&lt;p&gt;This is a &lt;a href=&#34;http://example.com/&#34; title=&#34;example.com&#34;&gt;sample&lt;/a&gt;.&lt;/p&gt;
-&lt;/blockquote&gt;
-&lt;h3 id=&#34;參考連結&#34;&gt;參考連結&lt;/h3&gt;
-&lt;p&gt;若你的文章內有多處要連結到同一個網址連結，則用參考連結是較好的方式。&lt;/p&gt;
-&lt;p&gt;參考連結一樣是用 &lt;code&gt;[]&lt;/code&gt; 將文字包起來，後面再用一次 &lt;code&gt;[]&lt;/code&gt; 將用來辨識連結的標籤包起來。例如：&lt;/p&gt;
-&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#e7e9db;background-color:#2f1e2e;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-md&#34; data-lang=&#34;md&#34;&gt;Let me [Google][0] that for you.
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;同樣會呈現為：&lt;/p&gt;
-&lt;blockquote&gt;
-&lt;p&gt;Let me &lt;a href=&#34;http://www.google.com/&#34; title=&#34;Google&#34;&gt;Google&lt;/a&gt; that for you.&lt;/p&gt;
-&lt;/blockquote&gt;
-&lt;p&gt;然後在文件的任意處，對，「任意處」，放上標籤內的連結內容定義，例如：&lt;/p&gt;
-&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#e7e9db;background-color:#2f1e2e;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-md&#34; data-lang=&#34;md&#34;&gt;[0]: http://www.google.com/ &amp;#34;Google&amp;#34;
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;但很抱歉，這個參考連結的內容定義並不會實際呈現出來，想檢查正確與否，就是直接點超連結的文字來測試。&lt;/p&gt;
-&lt;p&gt;而連結的內容定義，有一定的語法，所以有以下幾點需要注意：&lt;/p&gt;
-&lt;ul&gt;
-&lt;li&gt;&lt;code&gt;[]&lt;/code&gt; 內輸入連結的辨識標籤，可以是字母、數字、空白和標點符號，但並無大小寫區分&lt;/li&gt;
-&lt;li&gt;&lt;code&gt;[]&lt;/code&gt; 後必須接一個 &lt;code&gt;:&lt;/code&gt;，再接著一個以上的空白或縮排 tab&lt;/li&gt;
-&lt;li&gt;空白或縮排 tab 後再接連結網址，可以選擇用 &lt;code&gt;&amp;lt;&amp;gt;&lt;/code&gt; 將網址包起來，但非必要&lt;/li&gt;
-&lt;li&gt;網址後面可以選擇性地加上連結標題，也就是滑鼠游標移到超連結文字上後會顯示的標題，須用 &lt;code&gt;&#39;&#39;&lt;/code&gt;、&lt;code&gt;&amp;quot;&amp;quot;&lt;/code&gt; 或 &lt;code&gt;()&lt;/code&gt; 包住標題&lt;/li&gt;
-&lt;/ul&gt;
-&lt;h2 id=&#34;強調&#34;&gt;強調&lt;/h2&gt;
-&lt;p&gt;將想要強調的文字用 &lt;code&gt;*&lt;/code&gt; 或 &lt;code&gt;_&lt;/code&gt; 包起來，就可以呈現三種強調的方式。例如：&lt;/p&gt;
-&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#e7e9db;background-color:#2f1e2e;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-md&#34; data-lang=&#34;md&#34;&gt;***粗斜體***  
-&lt;span style=&#34;font-weight:bold&#34;&gt;__粗體__&lt;/span&gt;  
-&lt;span style=&#34;font-style:italic&#34;&gt;*斜體*&lt;/span&gt;
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;會呈現如下：&lt;/p&gt;
-&lt;blockquote&gt;
-&lt;p&gt;&lt;em&gt;&lt;strong&gt;粗斜體&lt;/strong&gt;&lt;/em&gt;&lt;br&gt;
-&lt;strong&gt;粗體&lt;/strong&gt;&lt;br&gt;
-&lt;em&gt;斜體&lt;/em&gt;&lt;/p&gt;
-&lt;/blockquote&gt;
-&lt;h2 id=&#34;程式碼&#34;&gt;程式碼&lt;/h2&gt;
-&lt;p&gt;這邊跟程式碼區塊的區別，是只用來標記一小段行內程式碼，直接用 &lt;!-- raw HTML omitted --&gt;`&lt;!-- raw HTML omitted --&gt; 將程式碼包起來即可。例如：&lt;/p&gt;
-&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#e7e9db;background-color:#2f1e2e;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-md&#34; data-lang=&#34;md&#34;&gt;&lt;span style=&#34;color:#48b685&#34;&gt;`This is a code.`&lt;/span&gt;
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;就會顯示為：&lt;/p&gt;
-&lt;p&gt;&lt;code&gt;This is a code.&lt;/code&gt;&lt;/p&gt;
-&lt;p&gt;若程式碼內有需要用到 &lt;code&gt;`&lt;/code&gt; 這個符號，可以用多個 &lt;code&gt;`&lt;/code&gt; 符號來包住程式碼以作區別，例如：&lt;/p&gt;
-&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#e7e9db;background-color:#2f1e2e;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-md&#34; data-lang=&#34;md&#34;&gt;A single backtick in a code span: `` &lt;span style=&#34;color:#48b685&#34;&gt;` ``  
-&lt;/span&gt;&lt;span style=&#34;color:#48b685&#34;&gt;A bakctick-delimited string in a code span: `` `&lt;/span&gt;foo` ``
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;就會顯示為：&lt;/p&gt;
-&lt;blockquote&gt;
-&lt;p&gt;A single backtick in a code span: &lt;code&gt;`&lt;/code&gt;&lt;br&gt;
-A bakctick-delimited string in a code span: &lt;code&gt;`foo`&lt;/code&gt;&lt;/p&gt;
-&lt;/blockquote&gt;
-&lt;h2 id=&#34;圖片&#34;&gt;圖片&lt;/h2&gt;
-&lt;p&gt;插入圖片的 Markdown 語法跟連結非常相似，幾乎只差在需要在開頭加上一個 &lt;code&gt;!&lt;/code&gt; 符號。例如：&lt;/p&gt;
-&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#e7e9db;background-color:#2f1e2e;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-md&#34; data-lang=&#34;md&#34;&gt;![&lt;span style=&#34;color:#5bc4bf&#34;&gt;Markdown logo&lt;/span&gt;](&lt;span style=&#34;color:#06b6ef&#34;&gt;https://upload.wikimedia.org/wikipedia/commons/thumb/4/48/Markdown-mark.svg/208px-Markdown-mark.svg.png &amp;#34;Markdown&amp;#34;&lt;/span&gt;)
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;就會顯示出圖片：&lt;/p&gt;
-&lt;blockquote&gt;
-&lt;p&gt;&lt;img src=&#34;https://upload.wikimedia.org/wikipedia/commons/thumb/4/48/Markdown-mark.svg/208px-Markdown-mark.svg.png&#34; alt=&#34;Markdown logo&#34; title=&#34;Markdown&#34;&gt;&lt;/p&gt;
-&lt;/blockquote&gt;
-&lt;p&gt;行內圖片的語法注意如下：&lt;/p&gt;
-&lt;ul&gt;
-&lt;li&gt;須以一個 &lt;code&gt;!&lt;/code&gt; 開頭&lt;/li&gt;
-&lt;li&gt;接著以 &lt;code&gt;[]&lt;/code&gt; 加入替代文字，也就是圖片路徑、網址失效的時候顯示的文字&lt;/li&gt;
-&lt;li&gt;再以 &lt;code&gt;()&lt;/code&gt; 加入圖片路徑或網址&lt;/li&gt;
-&lt;li&gt;&lt;code&gt;()&lt;/code&gt; 內的網址後面，只可以 &lt;code&gt;&#39;&#39;&lt;/code&gt; 或 &lt;code&gt;&amp;quot;&amp;quot;&lt;/code&gt; 包住可以選擇加上的標題&lt;/li&gt;
-&lt;/ul&gt;
-&lt;p&gt;參考圖片的語法則像這樣：&lt;/p&gt;
-&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#e7e9db;background-color:#2f1e2e;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-md&#34; data-lang=&#34;md&#34;&gt;![Evernote logo][1]
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;參考的定義方式則與連結的參考內容定義方式一模一樣：&lt;/p&gt;
-&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#e7e9db;background-color:#2f1e2e;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-md&#34; data-lang=&#34;md&#34;&gt;[1]: https://upload.wikimedia.org/wikipedia/commons/a/a4/Evernote_Icon.png &amp;#34;Evernote&amp;#34;
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;同樣可以顯示出圖片：&lt;/p&gt;
-&lt;blockquote&gt;
-&lt;p&gt;&lt;img src=&#34;https://upload.wikimedia.org/wikipedia/commons/a/a4/Evernote_Icon.png&#34; alt=&#34;Evernote logo&#34; title=&#34;Evernote&#34;&gt;&lt;/p&gt;
-&lt;/blockquote&gt;
-&lt;h1 id=&#34;其他&#34;&gt;其他&lt;/h1&gt;
-&lt;h2 id=&#34;自動連結&#34;&gt;自動連結&lt;/h2&gt;
-&lt;p&gt;Markdown 也支援比較簡短的連結形式，可以用來表達連結網址及信箱，同時也能有超連結功能，只需要用 &lt;code&gt;&amp;lt;&amp;gt;&lt;/code&gt; 包住網址即可。例如：&lt;/p&gt;
-&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#e7e9db;background-color:#2f1e2e;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-md&#34; data-lang=&#34;md&#34;&gt;&amp;lt;&lt;span style=&#34;color:#5bc4bf&#34;&gt;http:&lt;/span&gt;&lt;span style=&#34;color:#ef6155&#34;&gt;//&lt;/span&gt;&lt;span style=&#34;color:#06b6ef&#34;&gt;example&lt;/span&gt;&lt;span style=&#34;color:#ef6155&#34;&gt;.&lt;/span&gt;&lt;span style=&#34;color:#06b6ef&#34;&gt;com&lt;/span&gt;/&amp;gt;
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;就可以顯示為：&lt;/p&gt;
-&lt;blockquote&gt;
-&lt;p&gt;&lt;a href=&#34;http://example.com/&#34;&gt;http://example.com/&lt;/a&gt;&lt;/p&gt;
-&lt;/blockquote&gt;
-&lt;h2 id=&#34;跳脫字元&#34;&gt;跳脫字元&lt;/h2&gt;
-&lt;p&gt;前面講了很多 Markdown 的語法，使用很多符號來達成指定功能的標記，那如果只是需要在文章中加入那些符號，但並不想使用相關的功能，就需要在該符號前面加上 &lt;code&gt;\&lt;/code&gt; 這個符號，以達成跳脫字元的功能。&lt;/p&gt;
-&lt;p&gt;例如：&lt;/p&gt;
-&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#e7e9db;background-color:#2f1e2e;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-md&#34; data-lang=&#34;md&#34;&gt;If I want to \*\*emphasize\*\* something without making it &lt;span style=&#34;font-weight:bold&#34;&gt;**bold**&lt;/span&gt;.
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;就會顯示為：&lt;/p&gt;
-&lt;blockquote&gt;
-&lt;p&gt;If I want to **emphasize** something without making it &lt;strong&gt;bold&lt;/strong&gt;.&lt;/p&gt;
-&lt;/blockquote&gt;
-&lt;p&gt;以下是 Markdown 支援能在前面加上 &lt;code&gt;\&lt;/code&gt; 以形成跳脫字元的符號：&lt;/p&gt;
-&lt;blockquote&gt;
-&lt;p&gt;&lt;code&gt;\&lt;/code&gt; 反斜線&lt;br&gt;
-&lt;code&gt;`&lt;/code&gt; 反引號&lt;br&gt;
-&lt;code&gt;*&lt;/code&gt; 星號&lt;br&gt;
-&lt;code&gt;_&lt;/code&gt; 底線&lt;br&gt;
-&lt;code&gt;{}&lt;/code&gt; 大括號&lt;br&gt;
-&lt;code&gt;[]&lt;/code&gt; 中括號&lt;br&gt;
-&lt;code&gt;()&lt;/code&gt; 小括號&lt;br&gt;
-&lt;code&gt;#&lt;/code&gt; 井字號&lt;br&gt;
-&lt;code&gt;+&lt;/code&gt; 加號&lt;br&gt;
-&lt;code&gt;-&lt;/code&gt; 減號&lt;br&gt;
-&lt;code&gt;.&lt;/code&gt; 英文句點&lt;br&gt;
-&lt;code&gt;!&lt;/code&gt; 驚嘆號&lt;/p&gt;
-&lt;/blockquote&gt;
-&lt;h2 id=&#34;特殊功能&#34;&gt;特殊功能&lt;/h2&gt;
-&lt;p&gt;前面都是介紹 Markdown 原生支援的語法，其實有很多通用的寫法也能適用在 Markdown 當中。這邊列出我找到的一些語法，但請注意使用的編輯器或轉換器的支援度。&lt;/p&gt;
-&lt;h3 id=&#34;checkbox&#34;&gt;Checkbox&lt;/h3&gt;
-&lt;p&gt;語法是先用一個 &lt;code&gt;-&lt;/code&gt;，一個空格，再加上 &lt;code&gt;[ ]&lt;/code&gt;，空格後再加上敘述。注意 &lt;code&gt;[ ]&lt;/code&gt; 當中必須有一個空格。若需要顯示的 checkbox 已經勾選，請將 &lt;code&gt;[ ]&lt;/code&gt; 當中的空格替換成 &lt;code&gt;x&lt;/code&gt; 或 &lt;code&gt;X&lt;/code&gt;。&lt;/p&gt;
-&lt;p&gt;例如：&lt;/p&gt;
-&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#e7e9db;background-color:#2f1e2e;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-md&#34; data-lang=&#34;md&#34;&gt;&lt;span style=&#34;color:#815ba4&#34;&gt;- [ ]&lt;/span&gt; First box
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;就會顯示為：&lt;/p&gt;
-&lt;blockquote&gt;
-&lt;ul&gt;
-&lt;li&gt;&lt;input disabled=&#34;&#34; type=&#34;checkbox&#34;&gt; First box&lt;/li&gt;
-&lt;/ul&gt;
-&lt;/blockquote&gt;
-&lt;h3 id=&#34;table&#34;&gt;Table&lt;/h3&gt;
-&lt;p&gt;Markdown 也支援做表格，基本上需要三個部分，標題列、設定列、內容表格。基本上都是用 &lt;code&gt;|&lt;/code&gt; 做為分隔符號。&lt;/p&gt;
-&lt;p&gt;例如：&lt;/p&gt;
-&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#e7e9db;background-color:#2f1e2e;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-md&#34; data-lang=&#34;md&#34;&gt;No.|Pokemon|神奇寶貝
-:---:|:---|---:
-1|Bulbasaur|妙蛙種子
-2|Ivysaur|妙蛙草
-3|Venusaur|妙蛙花
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;會顯示為：&lt;/p&gt;
-&lt;blockquote&gt;
-&lt;table&gt;
-&lt;thead&gt;
-&lt;tr&gt;
-&lt;th style=&#34;text-align:center&#34;&gt;No.&lt;/th&gt;
-&lt;th style=&#34;text-align:left&#34;&gt;Pokemon&lt;/th&gt;
-&lt;th style=&#34;text-align:right&#34;&gt;神奇寶貝&lt;/th&gt;
-&lt;/tr&gt;
-&lt;/thead&gt;
-&lt;tbody&gt;
-&lt;tr&gt;
-&lt;td style=&#34;text-align:center&#34;&gt;1&lt;/td&gt;
-&lt;td style=&#34;text-align:left&#34;&gt;Bulbasaur&lt;/td&gt;
-&lt;td style=&#34;text-align:right&#34;&gt;妙蛙種子&lt;/td&gt;
-&lt;/tr&gt;
-&lt;tr&gt;
-&lt;td style=&#34;text-align:center&#34;&gt;2&lt;/td&gt;
-&lt;td style=&#34;text-align:left&#34;&gt;Ivysaur&lt;/td&gt;
-&lt;td style=&#34;text-align:right&#34;&gt;妙蛙草&lt;/td&gt;
-&lt;/tr&gt;
-&lt;tr&gt;
-&lt;td style=&#34;text-align:center&#34;&gt;3&lt;/td&gt;
-&lt;td style=&#34;text-align:left&#34;&gt;Venusaur&lt;/td&gt;
-&lt;td style=&#34;text-align:right&#34;&gt;妙蛙花&lt;/td&gt;
-&lt;/tr&gt;
-&lt;/tbody&gt;
-&lt;/table&gt;
-&lt;/blockquote&gt;
-&lt;p&gt;在畫表格的時候，有幾項注意事項：&lt;/p&gt;
-&lt;ul&gt;
-&lt;li&gt;左邊界跟右邊界的框線非必要&lt;/li&gt;
-&lt;li&gt;標題列必須每欄都填入欄位名稱&lt;/li&gt;
-&lt;li&gt;第二列設定列，每一欄都必須填入至少一個 &lt;code&gt;-&lt;/code&gt; 符號，並用 &lt;code&gt;:&lt;/code&gt; 設定對齊方式。預設是靠左對齊；&lt;code&gt;:-&lt;/code&gt; 也代表靠左對齊；&lt;code&gt;-:&lt;/code&gt; 代表靠右對齊；&lt;code&gt;:-:&lt;/code&gt; 則代表置中&lt;/li&gt;
-&lt;li&gt;內容表格必須至少一列&lt;/li&gt;
-&lt;/ul&gt;
-&lt;h2 id=&#34;支援程式碼&#34;&gt;支援程式碼&lt;/h2&gt;
-&lt;p&gt;這邊特指的是程式碼區塊。&lt;/p&gt;
-&lt;p&gt;其實大家應該注意到前面的程式碼區塊的文字有各種顏色，其實就是 Markdown 在做辨識程式語言的工作，並試圖將跟辨識出來的語言的關鍵字做顏色標記。&lt;/p&gt;
-&lt;p&gt;如果記錄在程式碼區塊的程式碼有確切的語言，不仿試用以下的辦法，讓 Markdown 能更好的辨認程式碼，並更好地標記。&lt;/p&gt;
-&lt;p&gt;首先必須使用三個 &lt;code&gt;`&lt;/code&gt; 來前後包住程式碼區塊，然後在第一排 &lt;code&gt;`&lt;/code&gt; 的後面加上程式語言名稱。&lt;/p&gt;
-&lt;p&gt;例如：&lt;/p&gt;
-&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#e7e9db;background-color:#2f1e2e;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-md&#34; data-lang=&#34;md&#34;&gt;	```java  
-	public static void main(String[] args) {  
-		System.out.println(&amp;#34;Hello World!&amp;#34;);  
-	}  
-	```
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;就可以讓 Markdown 辨識如下：&lt;/p&gt;
-&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#e7e9db;background-color:#2f1e2e;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-java&#34; data-lang=&#34;java&#34;&gt;&lt;span style=&#34;color:#815ba4&#34;&gt;public&lt;/span&gt; &lt;span style=&#34;color:#815ba4&#34;&gt;static&lt;/span&gt; &lt;span style=&#34;color:#fec418&#34;&gt;void&lt;/span&gt; &lt;span style=&#34;color:#06b6ef&#34;&gt;main&lt;/span&gt;&lt;span style=&#34;color:#5bc4bf&#34;&gt;(&lt;/span&gt;String&lt;span style=&#34;color:#5bc4bf&#34;&gt;[]&lt;/span&gt; args&lt;span style=&#34;color:#5bc4bf&#34;&gt;)&lt;/span&gt; &lt;span style=&#34;color:#5bc4bf&#34;&gt;{&lt;/span&gt;
-	System&lt;span style=&#34;color:#5bc4bf&#34;&gt;.&lt;/span&gt;&lt;span style=&#34;color:#06b6ef&#34;&gt;out&lt;/span&gt;&lt;span style=&#34;color:#5bc4bf&#34;&gt;.&lt;/span&gt;&lt;span style=&#34;color:#06b6ef&#34;&gt;println&lt;/span&gt;&lt;span style=&#34;color:#5bc4bf&#34;&gt;(&lt;/span&gt;&lt;span style=&#34;color:#48b685&#34;&gt;&amp;#34;Hello World!&amp;#34;&lt;/span&gt;&lt;span style=&#34;color:#5bc4bf&#34;&gt;);&lt;/span&gt;
-&lt;span style=&#34;color:#5bc4bf&#34;&gt;}&lt;/span&gt;
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;另外，利用這個辨識的功能，還能延伸為繪製一些簡單的圖表，如流程圖。&lt;/p&gt;
-&lt;p&gt;詳細語法請上網搜尋 &lt;code&gt;markdown&lt;/code&gt; 加 &lt;code&gt;flow&lt;/code&gt;。這邊僅舉例：&lt;/p&gt;
-&lt;pre&gt;&lt;code&gt;```flow
-st=&amp;gt;start
-op=&amp;gt;operation: operation
-con=&amp;gt;condition: condition
-e=&amp;gt;end
-
-st-&amp;gt;op(right)-&amp;gt;con
-con(yes)-&amp;gt;e
-con(no)-&amp;gt;op
-```
-&lt;/code&gt;&lt;/pre&gt;
-&lt;p&gt;Markdown 辨識後，會自動繪圖如下：&lt;/p&gt;
-&lt;pre tabindex=&#34;0&#34;&gt;&lt;code class=&#34;language-flow&#34; data-lang=&#34;flow&#34;&gt;st=&amp;gt;start  
-op=&amp;gt;operation: operation  
-con=&amp;gt;condition: yes or no?  
-e=&amp;gt;end  
-
-st-&amp;gt;op(right)-&amp;gt;con  
-con(yes)-&amp;gt;e  
-con(no)-&amp;gt;op  
-&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;（很顯然 Hugo 提供的轉換器並不支援這種擴充的繪圖功能）&lt;/p&gt;
-- https://idontwannarock.github.io/tech_blog/2017/10/markdown_syntax/ - This website by Howard Wang is licensed under a Creative Common Attribution-ShareAlike 4.0 International License.</description>
         </item>
     
     

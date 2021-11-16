@@ -7,7 +7,25 @@
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
     <copyright>This website by Howard Wang is licensed under a Creative Common Attribution-ShareAlike 4.0 International License.</copyright>
-    <lastBuildDate>Wed, 03 Nov 2021 16:29:03 +0800</lastBuildDate><atom:link href="https://idontwannarock.github.io/tech_blog/tags/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Tue, 16 Nov 2021 11:58:47 +0800</lastBuildDate><atom:link href="https://idontwannarock.github.io/tech_blog/tags/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>database</title>
+      <link>https://idontwannarock.github.io/tech_blog/tags/database/</link>
+      <pubDate>Tue, 16 Nov 2021 11:58:47 +0800</pubDate>
+      
+      <guid>https://idontwannarock.github.io/tech_blog/tags/database/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>sql-server</title>
+      <link>https://idontwannarock.github.io/tech_blog/tags/sql-server/</link>
+      <pubDate>Tue, 16 Nov 2021 11:58:47 +0800</pubDate>
+      
+      <guid>https://idontwannarock.github.io/tech_blog/tags/sql-server/</guid>
+      <description></description>
+    </item>
+    
     <item>
       <title>git</title>
       <link>https://idontwannarock.github.io/tech_blog/tags/git/</link>
