@@ -5,7 +5,7 @@ date: 2017-09-09T00:17:31+08:00
 description: "釐清 Hugo 與 GitHub Pages 概念"
 tags: ["hugo", "github-pages", "markdown", "ssg"]
 categories: application
-featured_image: "https://res.cloudinary.com/dcvgho2zc/image/upload/v1568903691/hugo-logo_zjncdo.png"
+featured_image: "https://res.cloudinary.com/dcvgho2zc/image/upload/v1568903691/Tech%20Blog/hugo-logo_zjncdo.png"
 draft: false
 comment: true
 ---

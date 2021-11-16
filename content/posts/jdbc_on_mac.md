@@ -5,7 +5,7 @@ date: 2017-11-23T14:48:17+08:00
 description: "紀錄在 MacOS 上安裝 JDBC 過程"
 tags: ["java", "jdbc", "macos"]
 categories: application
-featured_image: "https://res.cloudinary.com/dcvgho2zc/image/upload/v1568962040/database-application-software_nbgmjh.png"
+featured_image: "https://res.cloudinary.com/dcvgho2zc/image/upload/v1568962040/Tech%20Blog/database-application-software_nbgmjh.png"
 draft: true
 comment: true
 ---

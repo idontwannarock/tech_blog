@@ -5,7 +5,7 @@ date: 2017-11-15T14:26:17+08:00
 description: "初步探討樂透抽取演算法及 Java 中的隨機"
 tags: ["java", "algorithm"]
 categories: concept
-featured_image: "https://res.cloudinary.com/dcvgho2zc/image/upload/v1568906236/javase-logo_jayzns.png"
+featured_image: "https://res.cloudinary.com/dcvgho2zc/image/upload/v1568906236/Tech%20Blog/javase-logo_jayzns.png"
 draft: false
 comment: true
 ---

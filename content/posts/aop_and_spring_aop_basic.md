@@ -5,7 +5,7 @@ date: 2018-04-10T13:22:52+08:00
 description: "探討 AOP 概念及 Spring AOP 應用"
 tags: ["java", "spring", "aop"]
 categories: concept
-featured_image: "https://res.cloudinary.com/dcvgho2zc/image/upload/v1568953103/aop-icon_ffdmul.png"
+featured_image: "https://res.cloudinary.com/dcvgho2zc/image/upload/v1568953103/Tech%20Blog/aop-icon_ffdmul.png"
 draft: false
 comment: true
 ---

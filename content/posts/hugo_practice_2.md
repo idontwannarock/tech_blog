@@ -5,7 +5,7 @@ date: 2017-09-09T15:22:03+08:00
 description: "練習操作 Hugo 生成靜態網站，並透過 git 及 ssh 部署到 GitHub Pages"
 tags: ["hugo", "git", "git-bash", "github-pages", "ssh"]
 categories: application
-featured_image: "https://res.cloudinary.com/dcvgho2zc/image/upload/v1568903691/hugo-logo_zjncdo.png"
+featured_image: "https://res.cloudinary.com/dcvgho2zc/image/upload/v1568903691/Tech%20Blog/hugo-logo_zjncdo.png"
 draft: false
 comment: true
 ---

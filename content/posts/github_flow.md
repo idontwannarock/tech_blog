@@ -5,7 +5,7 @@ date: 2019-05-29T10:52:45+08:00
 description: "依照官方說明簡述 GitHub flow"
 tags: ["github-flow"]
 categories: concept
-featured_image: "https://res.cloudinary.com/dcvgho2zc/image/upload/v1568960688/git-branching_ivvwjs.png"
+featured_image: "https://res.cloudinary.com/dcvgho2zc/image/upload/v1559100843/Tech%20Blog/github-flow-cover_dlhcbl.png"
 draft: false
 comment: true
 ---

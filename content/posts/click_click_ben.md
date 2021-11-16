@@ -5,7 +5,7 @@ date: 2017-09-15T10:11:46+08:00
 description: "100 個練習計畫：第三個練習"
 tags: ["javascript"]
 categories: practice
-featured_image: "https://res.cloudinary.com/dcvgho2zc/image/upload/v1505442040/3rd-practice-cover_zigtzi.jpg"
+featured_image: "https://res.cloudinary.com/dcvgho2zc/image/upload/v1505442040/Tech%20Blog/3rd-practice-cover_zigtzi.jpg"
 draft: false
 comment: true
 ---

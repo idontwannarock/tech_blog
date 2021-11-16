@@ -5,7 +5,7 @@ date: 2017-09-15T07:36:23+08:00
 description: "100 個練習計畫：第一個練習"
 tags: ["html", "css", "javascript"]
 categories: practice
-featured_image: "https://res.cloudinary.com/dcvgho2zc/image/upload/v1505435536/1st-practice-cover-1024x550_mdnblw.jpg"
+featured_image: "https://res.cloudinary.com/dcvgho2zc/image/upload/v1505435536/Tech%20Blog/1st-practice-cover-1024x550_mdnblw.jpg"
 draft: false
 comment: true
 ---

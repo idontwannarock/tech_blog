@@ -5,7 +5,7 @@ date: 2017-11-03T09:05:02+08:00
 description: "紀錄 2017 年我在 MBP 上的設定"
 tags: ["mac", "brew", "cask", "zsh", "oh-my-zsh"]
 categories: application
-featured_image: "https://res.cloudinary.com/dcvgho2zc/image/upload/v1568963009/apple-logo_d6c5a7.png"
+featured_image: "https://res.cloudinary.com/dcvgho2zc/image/upload/v1568963009/Tech%20Blog/apple-logo_d6c5a7.png"
 draft: false
 comment: true
 ---

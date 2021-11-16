@@ -5,7 +5,7 @@ date: 2017-09-19T00:23:29+08:00
 description: "100 個練習計畫：第六個練習第二部分"
 tags: ["php", "mysql", "ajax"]
 categories: practice
-featured_image: "https://res.cloudinary.com/dcvgho2zc/image/upload/v1568962308/user-profile-symbol_vcbneb.png"
+featured_image: "https://res.cloudinary.com/dcvgho2zc/image/upload/v1568962308/Tech%20Blog/user-profile-symbol_vcbneb.png"
 draft: true
 comment: true
 ---

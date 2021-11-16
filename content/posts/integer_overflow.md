@@ -5,7 +5,7 @@ date: 2017-10-01T07:04:47+08:00
 description: "從電腦的數字系統開始，討論電腦如何儲存整數，並探討為何會產生整數溢位"
 tags: ["binary", "integer", "overflow"]
 categories: concept
-featured_image: "https://res.cloudinary.com/dcvgho2zc/image/upload/v1568961579/binary-number_nctg0k.png"
+featured_image: "https://res.cloudinary.com/dcvgho2zc/image/upload/v1568961579/Tech%20Blog/binary-number_nctg0k.png"
 draft: false
 comment: true
 ---

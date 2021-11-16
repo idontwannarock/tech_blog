@@ -5,7 +5,7 @@ date: 2017-09-10T07:39:23+08:00
 description: "100 個練習計畫：第五個練習"
 tags: ["xampp", "apache", "php"]
 categories: application
-featured_image: "https://res.cloudinary.com/dcvgho2zc/image/upload/v1568963649/xampp-logo_qgagal.png"
+featured_image: "https://res.cloudinary.com/dcvgho2zc/image/upload/v1568963649/Tech%20Blog/xampp-logo_qgagal.png"
 draft: false
 comment: true
 ---

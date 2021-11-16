@@ -5,7 +5,7 @@ date: 2019-05-07T16:03:07+08:00
 description: "介紹 Hugo 及基本使用"
 tags: ["hugo", "git", "github", "github-pages"]
 categories: application
-featured_image: "https://res.cloudinary.com/dcvgho2zc/image/upload/v1568903691/hugo-logo_zjncdo.png"
+featured_image: "https://res.cloudinary.com/dcvgho2zc/image/upload/v1568903691/Tech%20Blog/hugo-logo_zjncdo.png"
 draft: false
 comment: true
 ---

@@ -5,7 +5,7 @@ date: 2019-05-30T15:33:07+08:00
 description: "探討如何利用 Spring Security 提供的自訂方式整合 RBAC"
 tags: ["java", "spring-security", "rbac"]
 categories: concept
-featured_image: "https://res.cloudinary.com/dcvgho2zc/image/upload/v1568907350/spring-security-icon_qahaqz.png"
+featured_image: "https://res.cloudinary.com/dcvgho2zc/image/upload/v1568907350/Tech%20Blog/spring-security-icon_qahaqz.png"
 draft: false
 comment: true
 ---

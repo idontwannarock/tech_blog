@@ -5,7 +5,7 @@ slug: "hugo_semi_auto_deploy"
 description: "將手動部署 Hugo 到 GitHub Pages 轉為半自動"
 tags: ["hugo", "git", "github", "github-pages"]
 categories: application
-featured_image: "https://res.cloudinary.com/dcvgho2zc/image/upload/v1568903691/hugo-logo_zjncdo.png"
+featured_image: "https://res.cloudinary.com/dcvgho2zc/image/upload/v1568903691/Tech%20Blog/hugo-logo_zjncdo.png"
 draft: false
 comment: true
 enableLaTeX: false

@@ -5,7 +5,7 @@ date: 2017-11-18T15:44:37+08:00
 description: "紀錄 Java 中有關時間的物件及方法"
 tags: ["java", "date"]
 categories: concept
-featured_image: "https://res.cloudinary.com/dcvgho2zc/image/upload/v1568906236/javase-logo_jayzns.png"
+featured_image: "https://res.cloudinary.com/dcvgho2zc/image/upload/v1568906236/Tech%20Blog/javase-logo_jayzns.png"
 draft: true
 comment: true
 ---

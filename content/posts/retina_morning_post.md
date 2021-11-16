@@ -5,7 +5,7 @@ date: 2017-09-15T09:44:03+08:00
 description: "100 個練習計畫：第二個練習"
 tags: ["html", "css", "javascript"]
 categories: practice
-featured_image: "https://res.cloudinary.com/dcvgho2zc/image/upload/v1505440548/2nd-practice-cover_pyfetr.jpg"
+featured_image: "https://res.cloudinary.com/dcvgho2zc/image/upload/v1505440548/Tech%20Blog/2nd-practice-cover_pyfetr.jpg"
 draft: false
 comment: true
 ---

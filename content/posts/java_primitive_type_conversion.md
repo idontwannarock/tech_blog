@@ -5,7 +5,7 @@ date: 2018-02-09T10:00:29+08:00
 description: "探討 Java 的基本型態間的轉換方式"
 tags: ["java", "primitive-type"]
 categories: concept
-featured_image: "https://res.cloudinary.com/dcvgho2zc/image/upload/v1568906236/javase-logo_jayzns.png"
+featured_image: "https://res.cloudinary.com/dcvgho2zc/image/upload/v1568906236/Tech%20Blog/javase-logo_jayzns.png"
 draft: true
 comment: true
 ---

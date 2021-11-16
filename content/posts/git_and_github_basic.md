@@ -5,7 +5,7 @@ date: 2017-09-14T07:13:01+08:00
 description: "介紹 Git 概念及基礎指令，並用 SSH 同步到 GitHub"
 tags: ["git", "github", "ssh", "git-bash", "win10", "macos"]
 categories: application
-featured_image: "https://res.cloudinary.com/dcvgho2zc/image/upload/v1568902624/git-logo_xbrhxo.png"
+featured_image: "https://res.cloudinary.com/dcvgho2zc/image/upload/v1568902624/Tech%20Blog/git-logo_xbrhxo.png"
 draft: false
 comment: true
 ---
