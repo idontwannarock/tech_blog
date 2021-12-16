@@ -7,7 +7,25 @@
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
     <copyright>This website by Howard Wang is licensed under a Creative Common Attribution-ShareAlike 4.0 International License.</copyright>
-    <lastBuildDate>Tue, 16 Nov 2021 11:58:47 +0800</lastBuildDate><atom:link href="https://idontwannarock.github.io/tech_blog/tags/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Thu, 16 Dec 2021 15:32:25 +0800</lastBuildDate><atom:link href="https://idontwannarock.github.io/tech_blog/tags/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>batch</title>
+      <link>https://idontwannarock.github.io/tech_blog/tags/batch/</link>
+      <pubDate>Thu, 16 Dec 2021 15:32:25 +0800</pubDate>
+      
+      <guid>https://idontwannarock.github.io/tech_blog/tags/batch/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>compression</title>
+      <link>https://idontwannarock.github.io/tech_blog/tags/compression/</link>
+      <pubDate>Thu, 16 Dec 2021 15:32:25 +0800</pubDate>
+      
+      <guid>https://idontwannarock.github.io/tech_blog/tags/compression/</guid>
+      <description></description>
+    </item>
+    
     <item>
       <title>database</title>
       <link>https://idontwannarock.github.io/tech_blog/tags/database/</link>

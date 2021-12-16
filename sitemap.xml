@@ -2,28 +2,40 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
   xmlns:xhtml="http://www.w3.org/1999/xhtml">
   <url>
+    <loc>https://idontwannarock.github.io/tech_blog/tags/batch/</loc>
+    <lastmod>2021-12-16T15:32:25+08:00</lastmod>
+  </url><url>
+    <loc>https://idontwannarock.github.io/tech_blog/categories/</loc>
+    <lastmod>2021-12-16T15:32:25+08:00</lastmod>
+  </url><url>
+    <loc>https://idontwannarock.github.io/tech_blog/tags/compression/</loc>
+    <lastmod>2021-12-16T15:32:25+08:00</lastmod>
+  </url><url>
+    <loc>https://idontwannarock.github.io/tech_blog/</loc>
+    <lastmod>2021-12-16T15:32:25+08:00</lastmod>
+  </url><url>
+    <loc>https://idontwannarock.github.io/tech_blog/categories/implementation/</loc>
+    <lastmod>2021-12-16T15:32:25+08:00</lastmod>
+  </url><url>
+    <loc>https://idontwannarock.github.io/tech_blog/posts/</loc>
+    <lastmod>2021-12-16T15:32:25+08:00</lastmod>
+  </url><url>
+    <loc>https://idontwannarock.github.io/tech_blog/tags/</loc>
+    <lastmod>2021-12-16T15:32:25+08:00</lastmod>
+  </url><url>
+    <loc>https://idontwannarock.github.io/tech_blog/2021/12/zip_in_batch_script/</loc>
+    <lastmod>2021-12-16T15:32:25+08:00</lastmod>
+  </url><url>
     <loc>https://idontwannarock.github.io/tech_blog/categories/application/</loc>
     <lastmod>2021-11-16T11:58:47+08:00</lastmod>
   </url><url>
-    <loc>https://idontwannarock.github.io/tech_blog/categories/</loc>
-    <lastmod>2021-11-16T11:58:47+08:00</lastmod>
-  </url><url>
     <loc>https://idontwannarock.github.io/tech_blog/tags/database/</loc>
-    <lastmod>2021-11-16T11:58:47+08:00</lastmod>
-  </url><url>
-    <loc>https://idontwannarock.github.io/tech_blog/</loc>
-    <lastmod>2021-11-16T11:58:47+08:00</lastmod>
-  </url><url>
-    <loc>https://idontwannarock.github.io/tech_blog/posts/</loc>
     <lastmod>2021-11-16T11:58:47+08:00</lastmod>
   </url><url>
     <loc>https://idontwannarock.github.io/tech_blog/2021/11/sql_server_backup/</loc>
     <lastmod>2021-11-16T11:58:47+08:00</lastmod>
   </url><url>
     <loc>https://idontwannarock.github.io/tech_blog/tags/sql-server/</loc>
-    <lastmod>2021-11-16T11:58:47+08:00</lastmod>
-  </url><url>
-    <loc>https://idontwannarock.github.io/tech_blog/tags/</loc>
     <lastmod>2021-11-16T11:58:47+08:00</lastmod>
   </url><url>
     <loc>https://idontwannarock.github.io/tech_blog/tags/git/</loc>

@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <html><head>
-<title>Posts</title>
+<title>在 Batch Script 壓縮檔案</title>
 
 
 
@@ -10,7 +10,7 @@
 <meta name="google-site-verification" content="">
 <meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" name="viewport">
 <meta content="telephone=no" name="format-detection">
-<meta name="description" content="">
+<meta name="description" content="紀錄如何在 Batch Script 中壓縮檔案">
 <meta name="renderer" content="webkit">
 <meta name="theme-color" content="#ffffff">
 
@@ -65,11 +65,15 @@ if (!doNotTrack) {
 
 
 
+  <script src="https://idontwannarock.github.io/tech_blog/js/toc.js"></script>
 
 
 
 
 
+
+
+<script src="https://cdn.jsdelivr.net/npm/vue-disqus@3/dist/vue-disqus.js"></script>
 
 
 
@@ -168,6 +172,84 @@ Ported from <a href="https://mak1t0.cc/" target="_blank" rel="noreferrer noopene
 </div><div id="extraContainer" class="extra-container">
     
     
+    <div class="toc animated-visibility" :class="{ invisible: scrollY <= 140 }">
+
+
+	<div class="toc-content">
+	
+		
+		
+		
+		<center>- CATALOG -</center>
+		
+		
+		<ul>
+			
+				
+				
+					
+						
+						
+						
+						
+							
+								
+									<ul>
+								
+							
+						
+						
+							<li>
+								<a href="#tar" onclick="onNavClick(`#tar-nav`)" id="tar-nav">
+									Tar
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+						
+							<li>
+								<a href="#microsoftpowershellarchive-module" onclick="onNavClick(`#microsoftpowershellarchive-module-nav`)" id="microsoftpowershellarchive-module-nav">
+									Microsoft.Powershell.Archive Module
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+						
+							<li>
+								<a href="#%e5%8f%83%e8%80%83%e9%80%a3%e7%b5%90" onclick="onNavClick(`#參考連結-nav`)" id="參考連結-nav">
+									參考連結
+								</a>
+							</li>
+						
+						
+					
+				
+			
+		</ul>
+	</div>
+
+</div>
+    
     <div class="pagination">
         <a id="globalBackToTop" class="pagination-action animated-visibility" href="#top" :class="{ invisible: scrollY == 0 }">
             <i class="material-icons pagination-action-icon">
@@ -180,24 +262,6 @@ Ported from <a href="https://mak1t0.cc/" target="_blank" rel="noreferrer noopene
                 dark_mode
             </span>
         </a>
-        
-        
-        
-            <div class="pagination-indicator">
-                <span style="text-align: center">
-                    3<br><div style="display: inline-block; transform: rotate(-28deg)">-</div><br>3
-                </span>
-            </div>
-            
-            
-            <a class="pagination-action" href="https://idontwannarock.github.io/tech_blog/posts/page/2/">
-                <i class="material-icons pagination-action-icon">
-                    chevron_left
-                </i>
-            </a>
-            
-
-            
         
         
     </div>
@@ -260,6 +324,84 @@ Ported from <a href="https://mak1t0.cc/" target="_blank" rel="noreferrer noopene
                 
             
             
+            <div class="toc">
+
+
+	<div class="toc-content">
+	
+		
+		
+		
+		<center>- CATALOG -</center>
+		
+		
+		<ul>
+			
+				
+				
+					
+						
+						
+						
+						
+							
+								
+									<ul>
+								
+							
+						
+						
+							<li>
+								<a href="#tar" onclick="onNavClick(`#tar-nav`)" id="tar-nav">
+									Tar
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+						
+							<li>
+								<a href="#microsoftpowershellarchive-module" onclick="onNavClick(`#microsoftpowershellarchive-module-nav`)" id="microsoftpowershellarchive-module-nav">
+									Microsoft.Powershell.Archive Module
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+						
+							<li>
+								<a href="#%e5%8f%83%e8%80%83%e9%80%a3%e7%b5%90" onclick="onNavClick(`#參考連結-nav`)" id="參考連結-nav">
+									參考連結
+								</a>
+							</li>
+						
+						
+					
+				
+			
+		</ul>
+	</div>
+
+</div>
+            
         </div>
     </div>
 </div>
@@ -301,95 +443,131 @@ Ported from <a href="https://mak1t0.cc/" target="_blank" rel="noreferrer noopene
                 <div id="streamContainer" class="stream-container">
 
     <div class="post-list-container post-list-container-shadow">
-        
-            <a class="a-block">
-                <div class="post-item-wrapper post-item-wrapper-no-hover">
-                    <div class="post-item post-item-no-gaps">
-                        <div class="post-item-info-wrapper">
-                            <div class="post-item-title post-item-title-small year">
-                                2017
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </a>
+        <div class="post">
             
-            <a href="https://idontwannarock.github.io/tech_blog/2017/09/hugo_practice_2/" class="a-block">
-                <div class="post-item-wrapper">
-                    <div class="post-item post-item-no-gaps">
-                        <div class="post-item-info-wrapper">
-                            <div class="post-item-title">
-                                Hugo 練習 (2)
-                            </div>
-                            <div class="post-item-meta">
-    2017-09-09
-    &emsp;
-    
-    
-    
-    &emsp;
-    
-</div>
+            
+            
+                
+            
 
-                        </div>
+            <div class="post-head-wrapper"
+                
+                    
+                    
+                    style="background-image: url('https://res.cloudinary.com/dcvgho2zc/image/upload/v1639640493/Tech%20Blog/batch-file.webp')"
+                    
+                
+            >
+                <div class="post-title">
+                    在 Batch Script 壓縮檔案
+                    
+                    <div class="post-subtitle">
+                        紀錄如何在 Batch Script 中壓縮檔案
                     </div>
-                </div>
-            </a>
-            
-            <a href="https://idontwannarock.github.io/tech_blog/2017/09/hugo_practice_1/" class="a-block">
-                <div class="post-item-wrapper">
-                    <div class="post-item post-item-no-gaps">
-                        <div class="post-item-info-wrapper">
-                            <div class="post-item-title">
-                                Hugo 練習 (1)
-                            </div>
-                            <div class="post-item-meta">
-    2017-09-09
-    &emsp;
-    
-    
-    
-    &emsp;
-    
-</div>
+                    
+                    <div class="post-meta">
+                        
+                        <time itemprop="datePublished">
+                            2021-12-16 15:32
+                        </time>
+                        
 
-                        </div>
+                        
+                            <i class="material-icons" style="">folder</i>
+                                <a href="https://idontwannarock.github.io/tech_blog/categories/implementation">implementation</a>
+                                &nbsp;
+                        
+
+                        
+                            <i class="material-icons" style="">label</i>
+                            
+                                <a href="https://idontwannarock.github.io/tech_blog/tags/batch">batch</a>
+                                &nbsp;
+                            
+                                <a href="https://idontwannarock.github.io/tech_blog/tags/compression">compression</a>
+                                &nbsp;
+                            
+                        
+                        
                     </div>
                 </div>
-            </a>
+            </div>
             
-        
+            <div class="post-body-wrapper">
+                
+                <div class="post-body" v-pre>
+                
+                    <p>因為目前公司沒有專職 SRE 或 DevOps 幫忙做 CI/CD，身為小小後端工程師只好自己想辦法，偏偏目前用到的 tech stack 包括 .net framework，所以必須跟 Windows 環境的 batch file 打交道來替代習慣的 shell 檔，其中有個步驟必須要壓縮/解壓縮資料夾</p>
+<h2 id="tar">Tar</h2>
+<p>研究了一下，很興奮的發現 tar 在 command prompt 跟 powershell 都可以用，那代表我在 batch 檔裡面使用沒問題ＲＲＲ</p>
+<p>所以可以這樣用</p>
+<div class="highlight"><pre tabindex="0" style="color:#e7e9db;background-color:#2f1e2e;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-batch" data-lang="batch">:<span style="color:#776e71">: zip</span>
+tar -cvzf <span style="color:#48b685">&#34;path and name to archive.tar&#34;</span> <span style="color:#48b685">&#34;path to folder to compress&#34;</span>
+
+:<span style="color:#776e71">: unzip</span>
+tar -xvzf <span style="color:#48b685">&#34;path and name to archive.tar&#34;</span>
+</code></pre></div><h2 id="microsoftpowershellarchive-module">Microsoft.Powershell.Archive Module</h2>
+<p>很可惜，這個方法有一個小小的問題</p>
+<p>tar 基本上是從 Windows 10 或 Windows Server 2019 才開始支援，很不巧，我手上有個環境是 Windows Server 2016&hellip;</p>
+<p>基於可以用原生就絕不多安裝東西的自虐原則，好險又找到了另一個方法，powershell 有個 archive 的模組可以用！</p>
+<div class="highlight"><pre tabindex="0" style="color:#e7e9db;background-color:#2f1e2e;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-powershell" data-lang="powershell"><span style="color:#776e71"># zip</span>
+Compress-Archive -Path <span style="color:#48b685">&#34;path to folder to compress&#34;</span> -DestinationPath <span style="color:#48b685">&#34;path and name to archive.zip&#34;</span>
+
+<span style="color:#776e71"># unzip</span>
+Expand-Archive -Path <span style="color:#48b685">&#34;path and name to archive.zip&#34;</span> -DestinationPath <span style="color:#48b685">&#34;path to unzip archive.zip&#34;</span>
+</code></pre></div><h2 id="參考連結">參考連結</h2>
+<ul>
+<li><a href="https://techcommunity.microsoft.com/t5/containers/tar-and-curl-come-to-windows/ba-p/382409">Tar and Curl Come to Windows!</a></li>
+<li><a href="https://docs.microsoft.com/zh-tw/powershell/module/microsoft.powershell.archive/?view=powershell-7.2&amp;viewFallbackFrom=powershell-5.0">Microsoft.PowerShell.Archive</a></li>
+</ul>
+
+                    
+                    <HR width="100%" id="EOF">
+		    <p style="color:#777;">Last modified on 2021-12-16</p>
+                    
+                </div>
+            </div>
+            
+            
+            <nav class="post-pagination">
+
+                
+                <a class="newer-posts">
+			Next<br>No newer posts.
+                </a>
+                
+                
+                
+                <a class="older-posts" href="https://idontwannarock.github.io/tech_blog/2021/11/sql_server_backup/">
+			Previous<br>Sql Server 備份方式
+                </a>
+                
+            </nav>
+            <div class="post-comment-wrapper">
+                
+<div class="comments">
+    <vue-disqus shortname="howard-tech-blog"></vue-disqus>
+</div>
+<noscript><noscript>Please activate JavaScript to view comments.</noscript></noscript>
+<a href="https://disqus.com/" class="dsq-brlink">Comments powered by <span class="logo-disqus">Disqus</span></a>
+
+
+
+
+
+
+
+
+
+
+
+            </div>
+        </div>
     </div>
 
 
-
                     </div>
-            </div>
-
-<div class="pagination">
-    
-    <a class="pagination-action" href="https://idontwannarock.github.io/tech_blog/posts/page/2/" style="opacity:1">
-    
-        <i class="material-icons pagination-action-icon">
-            chevron_left
-        </i>
-    </a>
-
-        <div class="pagination-indicator">
-            <span>3/3</span>
-        </div>
-
-        
-            <a class="pagination-action" style="opacity:0">
-        
-                <i class="material-icons pagination-action-icon">
-                    chevron_right
-                </i>
-            </a>
-</div>
-
-
-<div id="single-column-footer">
+            </div><div id="single-column-footer">
 Hugo Theme <a href="https://github.com/amazingrise/hugo-theme-diary">Diary</a> by <a href="https://amazingrise.net">Rise</a>
 <br>
 Ported from <a href="https://mak1t0.cc/" target="_blank" rel="noreferrer noopener">Makito</a>'s <a href="https://github.com/SumiMakito/hexo-theme-journal/" target="_blank" rel="noreferrer noopener">Journal.</a> <br>
