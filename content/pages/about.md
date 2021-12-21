@@ -10,11 +10,23 @@ display_in_list: false
 draft: false
 ---
 
-從自學 PHP 到北科上課學習 Java 入門，從事軟體工程師工作一年有餘，目前主要工作內容為 Java 網路應用開發及 SAP BPM 系統維護
+從自學 PHP 到北科上課學習 Java 入門，從事軟體工程師三年有餘，目前主要工作內容為網路應用開發
 
-過去接觸過的技術包括 Java, Servlet/JSP, JUnit, Mockito, Hibernate, MyBatis, MySQL, Oracle, MongoDB, Spring, Spring MVC, Spring AOP, Spring Boot, Spring Data JPA, Spring Security, Spring Cloud, Zuul, Netflix OSS, Git, SVN, Jenkins, Docker...等
+過去接觸過的技術包括
 
-最熟練的是 Java 及 Spring 全家桶，Git Flow 或 GitHub Flow 版控，JUnit 及 Mockito 做單元測試及整合測試，Jenkins 搭配 GitHub Hook 做 CI/CD
+語言: Java, JavaScript, C#, Lua
+
+框架: Spring, .Net Framework, NodeJS
+
+資料庫: MySQL, Oracle, MongoDB, PostgresSQL, Sql Server, Redis, Elasticsearch
+
+測試: JUnit, Mockito, NUnit
+
+CI/CD: Git, GitHub, GitLab, Jenkins
+
+其他: Docker, Docker Compose, Kafka, Zabbix
+
+最熟練的是 Java 及 Spring 全家桶，Git Flow 或 GitHub Flow 版控，JUnit 及 Mockito 做單元測試及整合測試，Jenkins 搭配 GitHub/GitLab WebHook 做 CI/CD，同時也能利用 shell script、batch script 或 powershell script 搭配 docker-compose 達成基礎的 Infrastructure as Code
 
 未來主要朝向後端工程繼續開發者的道路，希望能以軟工能力為自己、家庭及社會做出貢獻
 
