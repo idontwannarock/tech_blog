@@ -25,17 +25,17 @@ HTTP 在 Transport Layer 採用 TCP 連線來通訊，而 TCP 要在 client/serv
 
 而且 TCP 為了避免網路阻塞，有慢啟動 (**slow start**) 的控制，所以同樣連線的傳輸速率會依照演算法隨著時間而增加直到出現遺失包、達到慢啟動閾值（ssthresh）、或者接收方的接收窗口進行限制為止
 
-大量建立連線的動作在高延遲的場景下影響明顯，慢啟動則對大檔案請求影響較大。這兩點主要都是連線不能複用所造成
+大量建立連線的動作在高延遲的網路環境下對效率影響明顯，慢啟動則對大檔案請求影響較大。這兩點主要都是連線不能複用所造成
 
-為了克服連線不能複用的問題，當時有些伺服器跟瀏覽器有實作 **keep-alive** 機制如圖，但必須在 header 中帶上 `Connection: Keep-Alive`
+為了克服連線不能複用的問題，當時有些伺服器跟瀏覽器有實作 **keep-alive** 機制如圖，但必須自行在 header 中帶上 `Connection: Keep-Alive`
 
 ![Multiple Connection vs Persistent Conneciton](https://res.cloudinary.com/dcvgho2zc/image/upload/v1639979286/Tech%20Blog/persistent-connection.jpg)
 
 ## 進化到 HTTP/1.1
 
-HTTP/1.1 開始預設支援持久連線 (**keep-alive**)，允許在同一條 TCP 連線上多次進行請求/回應，雖然還是必須保持收到回應後才能發出下一次請求的順序，但仍然降低了大量建立連線的效能損耗
+HTTP/1.1 開始預設就支援持久連線 (**keep-alive**) 機制，允許在同一條 TCP 連線上多次進行 request/response，雖然還是必須保持收到 response 後才能發出下一次 request 的順序，但仍然降低了大量建立連線的效能損耗
 
-除此之外 HTTP/1.1 還設計了 **pipelining** 機制，讓同一條 TCP 連線中，client 端可以在還未收到上次請求的回應時，就發出下一次請求，但 server 端仍然必須按照接收到 client 端請求的順序返回回應，但仍然有機會進一步降低多請求的反應時間
+除此之外 HTTP/1.1 還設計了 **pipelining** 機制，讓同一條 TCP 連線中，client 端可以在還未收到上次 request 的 response 時，就發出下一次 request，但 server 端仍然必須按照接收到 client 端 request 的順序返回 response，但仍然有機會進一步降低多請求的反應時間
 
 ![HTTP pipelining](https://res.cloudinary.com/dcvgho2zc/image/upload/c_scale,h_309/v1639969180/Tech%20Blog/pipelining.png)
 
@@ -97,7 +97,7 @@ HTTP/1.1 固然是一個劃時代的結晶，直到今日還是瀏覽器主要�
 
 接下來， **為什麼要切分訊息？** 是為了提升連線的傳輸利用率
 
-HTTP/1.x 的時候傳輸訊息雖然也可以被切成 chunk 來傳輸，但因為沒有 stream 或 message 的概念，所以不等同一 request/response 所有的 chunk 傳送完畢，是不能傳送下一個，否則無法識別該 chunk 屬於哪一個 request/reponse
+HTTP/1.x 的時候傳輸訊息雖然也可以被切成 chunk 來傳輸，但因為沒有 stream 的概念，所以不等同一 request/response 所有的 chunk 傳送完畢，是不能傳送下一個，否則無法識別該 chunk 屬於哪一個 request/reponse
 
 而在 HTTP/2 因為傳輸訊息都被切成 frame 並且可以識別屬於哪一個 stream，所以可以交錯且雙向的發出，也就引出下一個特性
 
@@ -142,27 +142,27 @@ HTTP/1.x 的時候傳輸訊息雖然也可以被切成 chunk 來傳輸，但因�
 
 #### Server Push
 
-為了達成 server 端主動推送訊息給 client 端，一直以來都有各種嘗試來達成類似的效果，包括 Ajax Polling, Long Polling, Server Sent Event(SSE) 等等，但實際上沒有任何一個真正能做到兩端主動推送訊息給對方 (bidirectional unsolicited response)，**包括 HTTP/2 也沒有達成**
+為了達成 server 端主動推送訊息給 client 端，一直以來都有各種嘗試來達成類似的效果，包括 Ajax Polling, Long Polling, Server Sent Event(SSE) 等等，但實際上沒有任何一個方式真正能做到兩端主動推送訊息給對方 (bidirectional unsolicited response)，**包括 HTTP/2 也沒有達成**
 
-> - Ajex Polling 就是在 client 端設 timer 輪詢，已達到近似 server 端有準備好的資料就可以隨時推送到 client 端的效果
-> - Long Polling 則是可以維持 request 直到 server 端準備好後送出 response，client 端再立刻發出 request 等待下一次 server 端得 response，已達成類似 server 端隨時推送 response 的效果
-> - SSE 則是利用 HTTP octet stream 讓 server 端多次針對同一個 request 回覆 response，來達成類似 server 主動 push 的效果
+> - Ajax Polling 就是在 client 端設 timer 輪詢，以達到近似 server 端有準備好的資料就可以隨時推送到 client 端的效果
+> - Long Polling 則是可以維持 request 直到 server 端準備好後送出 response，client 端再立刻發出 request 等待下一次 server 端的 response，以達成類似 server 端隨時推送 response 的效果
+> - SSE 則是利用 HTTP octet stream 讓 server 端可以多次針對同一個 request 回覆 response，來達成類似 server 主動 push 的效果
 
 實際上 HTTP/2 的 server push 效果就等同 SSE，讓 server 端可以針對一個 request 進行多次的 response
 
-由於不像 SSE 會占用一整個 TCP connection，HTTP/2 的一個 request 的 context 只占用一個虛擬的 stream，而不影響其他 stream，所以並不會阻塞其他 request/response，所以在許多情況下，這樣的 server push 已經跟真正不依賴 client request 來進行主動 server push 的效果相差無幾
+由於不像 SSE 會占用一整個 TCP connection，HTTP/2 的一個 request 的 context 只占用一個虛擬的 stream，而不影響其他 stream，所以並不會阻塞其他 request/response，所以在許多應用情況下，這樣的 server push 已經跟真正不依賴 client request 而進行主動 server push 的效果相差無幾
 
 ![HTTP/2 Server Push](https://res.cloudinary.com/dcvgho2zc/image/upload/v1639994509/Tech%20Blog/server-push.webp)
 
 ### HTTP/2 Problem
 
-HTTP/2 就如同曾經的 HTTP/1.1 一樣，繼承了前一代的優點，但又更進一步優化了效能，同樣也少不了一些問題，有些爭議在協議協商階段就已浮現，例如強制 TLS 加密跟 HOL Blocking 問題
+HTTP/2 就如同曾經的 HTTP/1.1 一樣，繼承了前一代的優點，並更進一步優化了效能，但同樣也少不了一些問題，有些爭議在協商階段就已浮現，例如有關加密跟 HOL Blocking 等問題
 
 #### Mandate TLS Encryption
 
-其實在協商過程就已經針對這代協議是否要強制 TLS 加密有過爭議，因為有些應用場景實際上不需要使用加密連線，或加密連線在效能上有所損耗，甚至有些場景不適合使用 TLS 加密方式，例如在許多小型裝置上的通訊，並不適合使用 TLS 加密，因為 TLS 憑證需要定時更新，而小型裝置更新不便且數量眾多，因此並不適合使用該加密方式
+其實在協商過程就已經針對這代協定是否要強制 TLS 加密有過爭論，因為加密連線畢竟在效能上有所損耗，而有些應用場景並不需要使用加密連線，甚至有些場景不適合使用 TLS 加密方式，例如在許多小型裝置上的通訊，並不適合使用 TLS 加密，因為 TLS 憑證需要定時更新，而小型裝置更新不便且數量眾多，因此並不適合使用該加密方式
 
-因此實際上最終 HTTP/2 的協議並沒有強制要求實作加密
+因此實際上最終 HTTP/2 的協定並沒有強制要求實作 TLS 加密
 
 BUT，又是這個 BUT
 
@@ -170,15 +170,17 @@ BUT，又是這個 BUT
 
 #### Opportunistic Encryption
 
-另外還有被批評未能支援機會性加密 (opportunistic encryption)，類似 SMTP 常用的 STARTTLS，主要用來防禦被動監聽 (passive monitoring)。
+另外還有被批評未能支援機會性加密 (opportunistic encryption)，類似 SMTP 常用的 STARTTLS，主要用來防禦被動監聽 (passive monitoring)
 
-機會性加密不像 TLS 加密涉及到身分認證、金鑰管理並需要進行事先組態，否則無法開始安全通訊，因此變成要馬「完全安全」要馬「完全不安全」；機會性加密則不進行身分驗證，在建立連接時，如果對方也支援加密連接時才開始進行加密，如果加密請求失敗，則退回到明文
+> 被動監聽就是利用複製網路流量來取得通訊訊息的手法，例如 wireshark 擷取封包。但其實被動監聽並不一定都用來攻擊，也常被用做 trouble shooting 的手段
+
+機會性加密不像 TLS 加密涉及到身分認證、金鑰管理並需要事先設定組態，否則無法開始安全通訊，因此變成要馬「完全安全」要馬「完全不安全」；機會性加密則不進行身分驗證，在建立連接時，如果對方也支援加密連接時才開始進行加密請求，如果加密請求失敗，則退回到明文
 
 雖然機會性加密無法防禦主動攻擊 (例如中間人攻擊)，也不能替代完整的加密方案，但其主要用意就是在條件允許時就盡可能使用加密通訊
 
-> 被動監聽就是利用複製網路流量來取得通訊訊息的手法，例如 wireshark 擷取封包。但其實被動監聽並不一定都用來攻擊，也常被使用做 trouble shooting 的手段
+> 中間人攻擊就是類似同時對 client 偽造 server、對 server 偽造 client，並交換其所收到的資料，使兩端都認為它們正通過一個私密的連接與對方直接對話
 
-因為 IETF 制定的 RFC 7528 Best Current Practive 188 中指出，被動監聽應被當作一種攻擊，而 IETF 制定的標準應採取抵禦被動監聽的手段，因此被批評 HTTP/2 違反 IETF 自身制定的準則
+並且因為 IETF 制定的 RFC 7528 Best Current Practive 188 中指出，被動監聽應被當作一種攻擊，而 IETF 制定的標準應採取抵禦被動監聽的手段，因此 HTTP/2 也被批評違反 IETF 自身制定的準則
 
 #### TCP HOL Blocking
 
@@ -188,11 +190,11 @@ TCP 作為一個 Transport Layer 的協定，其特點就是可靠的傳輸，�
 
 ![TCP HOL Blocking](https://res.cloudinary.com/dcvgho2zc/image/upload/v1640057331/Tech%20Blog/tcp-hol-blocking.png)
 
-而因為 HTTP/2 仍然是基於 TCP 的協定，所以同樣受到 TCP HOL Blocking 問題的影響，即使在單一 TCP connection 用上 multiplexing，但仍可能因為少量的 packet loss 而導致整個 TCP connection 的所有 stream 被阻塞
+而因為 HTTP/2 仍然是基於 TCP 的協定，所以同樣受到 TCP HOL Blocking 問題的影響，即使在單一 TCP connection 用上 multiplexing，但仍可能因為 packet loss 而導致整條 TCP connection 的所有 stream 被阻塞
 
 ## What's Next?
 
-對於 TCP HOL Blocking 問題的處理，因為 TCP 已經是廣泛使用的協議，要直接對 TCP 做修改影響太大，所以就產生 QUIC (Quick UDP Internet Connections) 這個也是 Transport Layer 的協議直接避開 TCP HOL Blocking 問題，並且更適合在現今移動端的環境使用
+對於 TCP HOL Blocking 問題的處理，因為 TCP 已經是廣泛使用的協定，要直接對 TCP 做修改影響太大，所以就產生 QUIC (Quick UDP Internet Connections) 這個也是 Transport Layer 的協定直接避開 TCP HOL Blocking 問題，並且更適合在現今移動端的環境使用
 
 QUIC 從名稱就看的出來是基於 UDP 這個同樣也是 Transport Layer 協定而制定出來協定，它的主要目標就在提供幾乎等同於 TCP 的可靠性，但同時減少延遲
 
@@ -200,11 +202,11 @@ QUIC 從名稱就看的出來是基於 UDP 這個同樣也是 Transport Layer �
 
 ![QUIC HTTPS handshake](https://res.cloudinary.com/dcvgho2zc/image/upload/v1640057493/Tech%20Blog/quic-https-handshake.gif)
 
-接著使用 UDP 傳輸，但在 QUIC 層級控制資料遺失恢復，因為 QUIC 會在兩端建立多個連接，所以在修復單一 stream 時仍可以自由處理其他資料，所以即使單一請求發生錯誤也不會影響到其他錯誤
+接著使用 UDP 傳輸，但為了達成接近 TCP 的可靠性，選擇在 QUIC 層級進行資料糾錯恢復的控制，QUIC 在修復單一 stream 時仍可以自由處理其他資料，所以即使單一請求發生錯誤也不會影響到其他請求
 
-QUIC 還有一個目標是提高切換網路期間的效能，這點在移動端環境非常重要，例如我們手機常常在 wifi 跟行動網路之間切換，如果在 TCP 上發生了，首先需要等待現有連接一個一個逾時，然後再根據需要重新建立，這中間的延遲就高了。而 QUIC 會包含一個連接識別碼，用來標識 client/server 之間的連接，而不論 IP 位址，如此只需要傳送一個包含此識別碼的 packet 即可重新建立連接
+QUIC 還有一個目標是提高切換網路期間的效能，這點在移動端環境非常重要，例如我們手機常常在 WiFi 跟行動網路之間切換，如果在 TCP 上發生了，首先需要等待現有連接一個一個逾時，然後再根據需要重新建立，這中間的延遲就高了。而 QUIC 會包含一個連接識別碼 Connection ID，用來標識 client/server 之間的連接，而不論 IP 位址，如此只需要傳送一個包含此 Connection ID 的 packet 即可重新建立連接
 
-因為有著許多的優點更符合現今的網路環境，所以 HTTP-over-QUIC 也已被正式提出要求更名為 HTTP/3，雖然還只是 draft，但已經被超過七成的瀏覽器所支援或實作，包括 Chrome, Edge, Firefox, Safari 等
+因為有著這些更符合現今網路環境的優點，所以 HTTP-over-QUIC 也已被正式提出要求更名為 HTTP/3，雖然仍還只是 Internet Draft，但已經被超過七成的瀏覽器所支援或實作，包括 Chrome, Edge, Firefox, Safari 14 等
 
 HTTP/3 同樣在語意上繼承 HTTP/2，不過 HTTP/2 並不能直接與 QUIC 兼容，因為 HTTP/2 在 Application Layer 的 frame 與 QUIC 在 Transport Layer 切分的 packet 不能直接映射，而且 QUIC 已經在 Transport Layer 處理了 multiplexing，所以不需要 HTTP/2 在 Application Layer 再處理一次
 
