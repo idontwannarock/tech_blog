@@ -7,7 +7,16 @@
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
     <copyright>This website by Howard Wang is licensed under a Creative Common Attribution-ShareAlike 4.0 International License.</copyright>
-    <lastBuildDate>Thu, 16 Dec 2021 15:32:25 +0800</lastBuildDate><atom:link href="https://idontwannarock.github.io/tech_blog/categories/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Tue, 21 Dec 2021 09:06:29 +0800</lastBuildDate><atom:link href="https://idontwannarock.github.io/tech_blog/categories/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>concept</title>
+      <link>https://idontwannarock.github.io/tech_blog/categories/concept/</link>
+      <pubDate>Tue, 21 Dec 2021 09:06:29 +0800</pubDate>
+      
+      <guid>https://idontwannarock.github.io/tech_blog/categories/concept/</guid>
+      <description></description>
+    </item>
+    
     <item>
       <title>implementation</title>
       <link>https://idontwannarock.github.io/tech_blog/categories/implementation/</link>
@@ -23,15 +32,6 @@
       <pubDate>Tue, 16 Nov 2021 11:58:47 +0800</pubDate>
       
       <guid>https://idontwannarock.github.io/tech_blog/categories/application/</guid>
-      <description></description>
-    </item>
-    
-    <item>
-      <title>concept</title>
-      <link>https://idontwannarock.github.io/tech_blog/categories/concept/</link>
-      <pubDate>Thu, 30 May 2019 15:33:07 +0800</pubDate>
-      
-      <guid>https://idontwannarock.github.io/tech_blog/categories/concept/</guid>
       <description></description>
     </item>
     

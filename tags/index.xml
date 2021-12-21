@@ -7,7 +7,61 @@
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
     <copyright>This website by Howard Wang is licensed under a Creative Common Attribution-ShareAlike 4.0 International License.</copyright>
-    <lastBuildDate>Thu, 16 Dec 2021 15:32:25 +0800</lastBuildDate><atom:link href="https://idontwannarock.github.io/tech_blog/tags/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Tue, 21 Dec 2021 09:06:29 +0800</lastBuildDate><atom:link href="https://idontwannarock.github.io/tech_blog/tags/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>http</title>
+      <link>https://idontwannarock.github.io/tech_blog/tags/http/</link>
+      <pubDate>Tue, 21 Dec 2021 09:06:29 +0800</pubDate>
+      
+      <guid>https://idontwannarock.github.io/tech_blog/tags/http/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>http2</title>
+      <link>https://idontwannarock.github.io/tech_blog/tags/http2/</link>
+      <pubDate>Tue, 21 Dec 2021 09:06:29 +0800</pubDate>
+      
+      <guid>https://idontwannarock.github.io/tech_blog/tags/http2/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>http3</title>
+      <link>https://idontwannarock.github.io/tech_blog/tags/http3/</link>
+      <pubDate>Tue, 21 Dec 2021 09:06:29 +0800</pubDate>
+      
+      <guid>https://idontwannarock.github.io/tech_blog/tags/http3/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>quic</title>
+      <link>https://idontwannarock.github.io/tech_blog/tags/quic/</link>
+      <pubDate>Tue, 21 Dec 2021 09:06:29 +0800</pubDate>
+      
+      <guid>https://idontwannarock.github.io/tech_blog/tags/quic/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>tcp</title>
+      <link>https://idontwannarock.github.io/tech_blog/tags/tcp/</link>
+      <pubDate>Tue, 21 Dec 2021 09:06:29 +0800</pubDate>
+      
+      <guid>https://idontwannarock.github.io/tech_blog/tags/tcp/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>udp</title>
+      <link>https://idontwannarock.github.io/tech_blog/tags/udp/</link>
+      <pubDate>Tue, 21 Dec 2021 09:06:29 +0800</pubDate>
+      
+      <guid>https://idontwannarock.github.io/tech_blog/tags/udp/</guid>
+      <description></description>
+    </item>
+    
     <item>
       <title>batch</title>
       <link>https://idontwannarock.github.io/tech_blog/tags/batch/</link>

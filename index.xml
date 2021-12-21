@@ -6,9 +6,158 @@
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
     <copyright>This website by Howard Wang is licensed under a Creative Common Attribution-ShareAlike 4.0 International License.</copyright>
-    <lastBuildDate>Thu, 16 Dec 2021 15:32:25 +0800</lastBuildDate>
+    <lastBuildDate>Tue, 21 Dec 2021 09:06:29 +0800</lastBuildDate>
     
         <atom:link href="https://idontwannarock.github.io/tech_blog/index.xml" rel="self" type="application/rss+xml" />
+    
+    
+    
+        <item>
+        <title>HTTP/2 介紹</title>
+        <link>https://idontwannarock.github.io/tech_blog/2021/12/http2/</link>
+        <pubDate>Tue, 21 Dec 2021 09:06:29 +0800</pubDate>
+        
+        <guid>https://idontwannarock.github.io/tech_blog/2021/12/http2/</guid>
+        <description>Howard Tech Note https://idontwannarock.github.io/tech_blog/2021/12/http2/ -&lt;p&gt;從 2015 年 RFC 7540 正式發表後，至今 HTTP/2 已經被絕大多數主流瀏覽器所支援，並且是正當紅的 gRPC 的基礎，在研究 gPRC 之前，先來釐清一下 HTTP/2 的概念&lt;/p&gt;
+&lt;h2 id=&#34;從遠古-http10-開始&#34;&gt;從遠古 HTTP/1.0 開始&lt;/h2&gt;
+&lt;p&gt;HTTP 是定義在 OSI 模型第七層 Application Layer 網路協議，HTTP/1.0 採取先進先出 (first-in first-out, FIFO) 策略，每次請求/回應都是有序的，必須等到請求收到對應回應後，才能進行下一次請求&lt;/p&gt;
+&lt;p&gt;HTTP 在 Transport Layer 採用 TCP 連線來通訊，而 TCP 要在 client/server 之間建立連線，是靠著三向交握 (three-way handshake) 來完成；而傳輸完成要斷線時則要做四次握手 (four-way handshake)。如果還有 TLS，那握手的來回通訊次數 (round-trip time, RTT) 就更多次了&lt;/p&gt;
+&lt;p&gt;而在最初的 HTTP/1.0 的年代，硬體普遍效能都不高，為了提高系統的效率，所以 HTTP/1.0 規定 client/server 只能保持短暫的連線，所以 client 每次請求最少都要經過三向交握建立 TCP 連線，而 server 完成該請求的處理後也必須立刻進行四次握手斷開連線&lt;/p&gt;
+&lt;p&gt;這樣的作法節省了 server 端的效能，但這同樣也會造成一些其他效能上的問題，例如當網頁元素越來越多的時候，即使每個元素都不大，但 client/server 每個元素都還是要重新建立連線，不但費時，而且同樣會影響 client/server 的效能&lt;/p&gt;
+&lt;p&gt;而且 TCP 為了避免網路阻塞，有慢啟動 (&lt;strong&gt;slow start&lt;/strong&gt;) 的控制，所以同樣連線的傳輸速率會依照演算法隨著時間而增加直到出現遺失包、達到慢啟動閾值（ssthresh）、或者接收方的接收窗口進行限制為止&lt;/p&gt;
+&lt;p&gt;大量建立連線的動作在高延遲的場景下影響明顯，慢啟動則對大檔案請求影響較大。這兩點主要都是連線不能複用所造成&lt;/p&gt;
+&lt;p&gt;為了克服連線不能複用的問題，當時有些伺服器跟瀏覽器有實作 &lt;strong&gt;keep-alive&lt;/strong&gt; 機制如圖，但必須在 header 中帶上 &lt;code&gt;Connection: Keep-Alive&lt;/code&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://res.cloudinary.com/dcvgho2zc/image/upload/v1639979286/Tech%20Blog/persistent-connection.jpg&#34; alt=&#34;Multiple Connection vs Persistent Conneciton&#34;&gt;&lt;/p&gt;
+&lt;h2 id=&#34;進化到-http11&#34;&gt;進化到 HTTP/1.1&lt;/h2&gt;
+&lt;p&gt;HTTP/1.1 開始預設支援持久連線 (&lt;strong&gt;keep-alive&lt;/strong&gt;)，允許在同一條 TCP 連線上多次進行請求/回應，雖然還是必須保持收到回應後才能發出下一次請求的順序，但仍然降低了大量建立連線的效能損耗&lt;/p&gt;
+&lt;p&gt;除此之外 HTTP/1.1 還設計了 &lt;strong&gt;pipelining&lt;/strong&gt; 機制，讓同一條 TCP 連線中，client 端可以在還未收到上次請求的回應時，就發出下一次請求，但 server 端仍然必須按照接收到 client 端請求的順序返回回應，但仍然有機會進一步降低多請求的反應時間&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://res.cloudinary.com/dcvgho2zc/image/upload/c_scale,h_309/v1639969180/Tech%20Blog/pipelining.png&#34; alt=&#34;HTTP pipelining&#34;&gt;&lt;/p&gt;
+&lt;p&gt;HTTP/1.1 在繼承了 HTTP/1.0 的優點的同時，也很好的解決了 TCP 連線不能複用的問題&lt;/p&gt;
+&lt;p&gt;BUT，人生就是這個 BUT&lt;/p&gt;
+&lt;p&gt;即使有了 keep-alive 跟 pipelining 的機制，HTTP/1.1 仍然有 &lt;strong&gt;Head-of-line Blocking&lt;/strong&gt; (HOL Blocking) 問題&lt;/p&gt;
+&lt;p&gt;因為 pipelining 要求在同一個 TCP 連線中&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;前一個 request 發送成功後 client 才能發出下一個&lt;/li&gt;
+&lt;li&gt;前一個 response 被 client 收到後 server 才能發出下一個 response&lt;/li&gt;
+&lt;li&gt;每個 response 也必須依序處理&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;因此當連線網路不穩定時，request 或 response 容易傳送失敗，造成在同一條 TCP 連線上的後續 request 或 response 被阻塞；或者某一個 request 或 response 內容較大，也會造成連線被阻塞，這就是 HTTP/1.x 的 HOL Blocking 問題&lt;/p&gt;
+&lt;p&gt;另外這種機制還容易造成瀏覽器實作上的 bug，尤其是當連線中間還有代理存在時更容易出錯&lt;/p&gt;
+&lt;p&gt;也是因為這個問題，現今大部分瀏覽器並不支援 pipeline 機制，或預設被關閉，例如 Chrome 曾經支援但現已停止、Mozilla 預設關閉、IE11 不支援等等&lt;/p&gt;
+&lt;p&gt;另外，HTTP/1.1 的 HOL Blocking 問題是 Application Layer 層的問題，不是 Transport Layer 因為 TCP congestion control 造成的 HOL Blocking 問題&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;p&gt;TCP 的 HOL Blocking 是指因為一個 packet 遺失，導致後續的 packet 必須等到該 packet 重新傳輸並接收到後才能繼續傳送的問題&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;h2 id=&#34;終於要講到-http2&#34;&gt;終於要講到 HTTP/2&lt;/h2&gt;
+&lt;p&gt;HTTP/1.1 固然是一個劃時代的結晶，直到今日還是瀏覽器主要使用的通訊協議之一，但在大環境的變化以致對於通訊協議的需求也有變化的今日，還是有它的侷限在&lt;/p&gt;
+&lt;p&gt;於是經過許多人的努力，HTTP/2 誕生了&lt;/p&gt;
+&lt;p&gt;在維持 HTTP/1.1 語意上不變的前提，HTTP/2 主要有以下特點&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;Binary protocol&lt;/li&gt;
+&lt;li&gt;Multiplexing&lt;/li&gt;
+&lt;li&gt;Stream prioritization&lt;/li&gt;
+&lt;li&gt;Header compression&lt;/li&gt;
+&lt;li&gt;Server push&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;基本上，HTTP/2 出現的目的就是為了解決 HTTP/1.x 的效能問題&lt;/p&gt;
+&lt;h3 id=&#34;http2-new-feature&#34;&gt;HTTP/2 New Feature&lt;/h3&gt;
+&lt;h4 id=&#34;binary-protocol&#34;&gt;Binary Protocol&lt;/h4&gt;
+&lt;p&gt;首先 HTTP/2 改變了 HTTP/1.x 的傳輸機制，在 Application Layer 跟 Session Layer 或 Transport Layer 間插入 Binary Framing Layer 如下圖&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://res.cloudinary.com/dcvgho2zc/image/upload/v1639984557/Tech%20Blog/binary-framing.png&#34; alt=&#34;Binary Framing Layer&#34;&gt;&lt;/p&gt;
+&lt;p&gt;更白話一點就是將封包結構從文本格式改為二進制格式，並且將所有傳輸訊息分隔為更小的 message 跟 frame 在 stream 裡面傳輸&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;frame 則是所有傳輸訊息 (包含 header) 切分後的最小單位。每個 frame 都會帶有一種 data，所以要馬是 header frame 要馬是 payload frame。另外每一個 frame 都會帶有 frame header 來標識其所屬的 stream&lt;/li&gt;
+&lt;li&gt;message 就是一系列完整的 frame 對應邏輯上的 request 或 response&lt;/li&gt;
+&lt;li&gt;stream 就是在一個 TCP connection 中雙向且抽象的 bytes flow。一個 TCP connection 可以有任意數量的 stream&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;首先 &lt;strong&gt;為什麼要改成二進制？&lt;/strong&gt; 是為了提升解析訊息的速度&lt;/p&gt;
+&lt;p&gt;在 HTTP/1.x 的時代，光解析訊息就有四種方法，但在 HTTP/2，因為訊息都是 binary 所以只需要一種方法就可以通用的解析所有訊息&lt;/p&gt;
+&lt;p&gt;接下來， &lt;strong&gt;為什麼要切分訊息？&lt;/strong&gt; 是為了提升連線的傳輸利用率&lt;/p&gt;
+&lt;p&gt;HTTP/1.x 的時候傳輸訊息雖然也可以被切成 chunk 來傳輸，但因為沒有 stream 或 message 的概念，所以不等同一 request/response 所有的 chunk 傳送完畢，是不能傳送下一個，否則無法識別該 chunk 屬於哪一個 request/reponse&lt;/p&gt;
+&lt;p&gt;而在 HTTP/2 因為傳輸訊息都被切成 frame 並且可以識別屬於哪一個 stream，所以可以交錯且雙向的發出，也就引出下一個特性&lt;/p&gt;
+&lt;h4 id=&#34;multiplexing&#34;&gt;Multiplexing&lt;/h4&gt;
+&lt;p&gt;基於 Binary Protocol 的機制，HTTP/2 允許 client 透過同一個 TCP connection 同步發送多個 request 給 server，而 server 也能透過同一個 TCP connection 同步回傳，減少額外的 RTT，並且因為每個 frame 都能識別屬於哪一個 stream，所以不需要依照收到的順序回覆，而可以交錯的回傳 frame，client 端會依照 frame 本身攜帶的 stream header 組裝相關的 frame&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;p&gt;multiplexing 多路複用通常表示在一個頻道上傳輸多路訊號或資料流的過程和技術&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;p&gt;以 stream 的角度來看，因為每條 stream 在同一時間只會容納一個 request 以及對應的一系列 response，所以 stream 並不能達成 multiplexing&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://res.cloudinary.com/dcvgho2zc/image/upload/v1639989101/Tech%20Blog/stream.png&#34; alt=&#34;HTTP/2 Stream&#34;&gt;&lt;/p&gt;
+&lt;p&gt;但 TCP connection 實際上可以容納多條 stream，所以同一條 TCP connection 是可以達成 multiplexing 的&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://res.cloudinary.com/dcvgho2zc/image/upload/v1639989278/Tech%20Blog/multiplexing.png&#34; alt=&#34;HTTP/2 Multiplexing&#34;&gt;&lt;/p&gt;
+&lt;p&gt;也就是說 HTTP/2 並不需要在同一 TCP connection 上等待前一個 request 或 response 完成，就可以發送下一個 request 或 response，因此解決了 HTTP/1.x 的 HOL Blocking 問題，並且也因此真正達到只需要在 client/server 之間建立一條 TCP connection 即可完成所有通訊，也大幅降低 server 端為了對不同 client 維持多條連線的效能損耗&lt;/p&gt;
+&lt;h4 id=&#34;stream-prioritization&#34;&gt;Stream Prioritization&lt;/h4&gt;
+&lt;p&gt;即使 HTTP/2 已經透過 multiplexing 大大提升連線傳輸效率，但在現今網頁可能動輒上百個不同的元素需要分別下載的環境下，但畢竟頻寬還是有限的，而且 TCP 連線初始的 slow start 仍然存在，意味著除非有 cache，否則網頁剛載入的速度仍然是有限的，而不見得網頁每一個元素都有立即下載的急迫性，或者有些元素下載是有相依性的&lt;/p&gt;
+&lt;p&gt;所以 HTTP/2 提供在 stream 標記相依關係 (dependency) 及權重 (weight) 的機制，之後 HTTP/2 會自行處理以滿足條件&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://res.cloudinary.com/dcvgho2zc/image/upload/v1639990493/Tech%20Blog/stream-prioritization.png&#34; alt=&#34;Stream Prioritization&#34;&gt;&lt;/p&gt;
+&lt;h4 id=&#34;header-compression&#34;&gt;Header Compression&lt;/h4&gt;
+&lt;p&gt;另外在 HTTP/1.1 中，因為要支援許多擴充功能，所以在 header 中加了許多特性，造成傳輸上的 overhead&lt;/p&gt;
+&lt;p&gt;但在實際應用上，例如同一個網頁的 request 雖然很多，但 header 可能都長得 87 趴像，但是每次都還是要傳輸一樣的 header 就造成重複浪費&lt;/p&gt;
+&lt;p&gt;所以在 HTTP/2 中就針對 header 採用 HPACK 演算法做壓縮，原理大致上就是&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;將 header 區分靜態字典 (static table) 及動態字典 (dynamic table)&lt;/li&gt;
+&lt;li&gt;static table 就是一些常見的 header 表&lt;/li&gt;
+&lt;li&gt;dynamic table 則是依據 FIFO 原則動態添加內容的表&lt;/li&gt;
+&lt;li&gt;client/server 都支援依據 RFC 7541 的 Appedix B 所列的霍夫曼編碼表 (Huffman Code) 來對 header 進行編碼&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;&lt;img src=&#34;https://res.cloudinary.com/dcvgho2zc/image/upload/v1639991899/Tech%20Blog/hpack.png&#34; alt=&#34;HPACK Header Compression&#34;&gt;&lt;/p&gt;
+&lt;h4 id=&#34;server-push&#34;&gt;Server Push&lt;/h4&gt;
+&lt;p&gt;為了達成 server 端主動推送訊息給 client 端，一直以來都有各種嘗試來達成類似的效果，包括 Ajax Polling, Long Polling, Server Sent Event(SSE) 等等，但實際上沒有任何一個真正能做到兩端主動推送訊息給對方 (bidirectional unsolicited response)，&lt;strong&gt;包括 HTTP/2 也沒有達成&lt;/strong&gt;&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;ul&gt;
+&lt;li&gt;Ajex Polling 就是在 client 端設 timer 輪詢，已達到近似 server 端有準備好的資料就可以隨時推送到 client 端的效果&lt;/li&gt;
+&lt;li&gt;Long Polling 則是可以維持 request 直到 server 端準備好後送出 response，client 端再立刻發出 request 等待下一次 server 端得 response，已達成類似 server 端隨時推送 response 的效果&lt;/li&gt;
+&lt;li&gt;SSE 則是利用 HTTP octet stream 讓 server 端多次針對同一個 request 回覆 response，來達成類似 server 主動 push 的效果&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/blockquote&gt;
+&lt;p&gt;實際上 HTTP/2 的 server push 效果就等同 SSE，讓 server 端可以針對一個 request 進行多次的 response&lt;/p&gt;
+&lt;p&gt;由於不像 SSE 會占用一整個 TCP connection，HTTP/2 的一個 request 的 context 只占用一個虛擬的 stream，而不影響其他 stream，所以並不會阻塞其他 request/response，所以在許多情況下，這樣的 server push 已經跟真正不依賴 client request 來進行主動 server push 的效果相差無幾&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://res.cloudinary.com/dcvgho2zc/image/upload/v1639994509/Tech%20Blog/server-push.webp&#34; alt=&#34;HTTP/2 Server Push&#34;&gt;&lt;/p&gt;
+&lt;h3 id=&#34;http2-problem&#34;&gt;HTTP/2 Problem&lt;/h3&gt;
+&lt;p&gt;HTTP/2 就如同曾經的 HTTP/1.1 一樣，繼承了前一代的優點，但又更進一步優化了效能，同樣也少不了一些問題，有些爭議在協議協商階段就已浮現，例如強制 TLS 加密跟 HOL Blocking 問題&lt;/p&gt;
+&lt;h4 id=&#34;mandate-tls-encryption&#34;&gt;Mandate TLS Encryption&lt;/h4&gt;
+&lt;p&gt;其實在協商過程就已經針對這代協議是否要強制 TLS 加密有過爭議，因為有些應用場景實際上不需要使用加密連線，或加密連線在效能上有所損耗，甚至有些場景不適合使用 TLS 加密方式，例如在許多小型裝置上的通訊，並不適合使用 TLS 加密，因為 TLS 憑證需要定時更新，而小型裝置更新不便且數量眾多，因此並不適合使用該加密方式&lt;/p&gt;
+&lt;p&gt;因此實際上最終 HTTP/2 的協議並沒有強制要求實作加密&lt;/p&gt;
+&lt;p&gt;BUT，又是這個 BUT&lt;/p&gt;
+&lt;p&gt;其實許多主流瀏覽器實際上都只實作了基於 TLS 的 HTTP/2，因而成為事實上 (de facto) 的標準&lt;/p&gt;
+&lt;h4 id=&#34;opportunistic-encryption&#34;&gt;Opportunistic Encryption&lt;/h4&gt;
+&lt;p&gt;另外還有被批評未能支援機會性加密 (opportunistic encryption)，類似 SMTP 常用的 STARTTLS，主要用來防禦被動監聽 (passive monitoring)。&lt;/p&gt;
+&lt;p&gt;機會性加密不像 TLS 加密涉及到身分認證、金鑰管理並需要進行事先組態，否則無法開始安全通訊，因此變成要馬「完全安全」要馬「完全不安全」；機會性加密則不進行身分驗證，在建立連接時，如果對方也支援加密連接時才開始進行加密，如果加密請求失敗，則退回到明文&lt;/p&gt;
+&lt;p&gt;雖然機會性加密無法防禦主動攻擊 (例如中間人攻擊)，也不能替代完整的加密方案，但其主要用意就是在條件允許時就盡可能使用加密通訊&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;p&gt;被動監聽就是利用複製網路流量來取得通訊訊息的手法，例如 wireshark 擷取封包。但其實被動監聽並不一定都用來攻擊，也常被使用做 trouble shooting 的手段&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;p&gt;因為 IETF 制定的 RFC 7528 Best Current Practive 188 中指出，被動監聽應被當作一種攻擊，而 IETF 制定的標準應採取抵禦被動監聽的手段，因此被批評 HTTP/2 違反 IETF 自身制定的準則&lt;/p&gt;
+&lt;h4 id=&#34;tcp-hol-blocking&#34;&gt;TCP HOL Blocking&lt;/h4&gt;
+&lt;p&gt;前面有提到 HTTP/2 解決了 Application Layer 的 HOL Blocking 問題，但並沒有處理 Transport Layer 的 TCP Blocking 問題&lt;/p&gt;
+&lt;p&gt;TCP 作為一個 Transport Layer 的協定，其特點就是可靠的傳輸，而且同樣也是有序的，所以在一系列有序的 packet 傳輸過程中，只要其中一個 packet 因為某種原因傳輸失敗需要重新傳輸或尚未收到，就會導致後續 packet 只能等待前面的 packet 完成傳輸，而形成 TCP HOL Blocking 問題&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://res.cloudinary.com/dcvgho2zc/image/upload/v1640057331/Tech%20Blog/tcp-hol-blocking.png&#34; alt=&#34;TCP HOL Blocking&#34;&gt;&lt;/p&gt;
+&lt;p&gt;而因為 HTTP/2 仍然是基於 TCP 的協定，所以同樣受到 TCP HOL Blocking 問題的影響，即使在單一 TCP connection 用上 multiplexing，但仍可能因為少量的 packet loss 而導致整個 TCP connection 的所有 stream 被阻塞&lt;/p&gt;
+&lt;h2 id=&#34;whats-next&#34;&gt;What&amp;rsquo;s Next?&lt;/h2&gt;
+&lt;p&gt;對於 TCP HOL Blocking 問題的處理，因為 TCP 已經是廣泛使用的協議，要直接對 TCP 做修改影響太大，所以就產生 QUIC (Quick UDP Internet Connections) 這個也是 Transport Layer 的協議直接避開 TCP HOL Blocking 問題，並且更適合在現今移動端的環境使用&lt;/p&gt;
+&lt;p&gt;QUIC 從名稱就看的出來是基於 UDP 這個同樣也是 Transport Layer 協定而制定出來協定，它的主要目標就在提供幾乎等同於 TCP 的可靠性，但同時減少延遲&lt;/p&gt;
+&lt;p&gt;首先是簡化建立連線期間的握手，將多個步驟整合，這就大大降低了建立連線的成本&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://res.cloudinary.com/dcvgho2zc/image/upload/v1640057493/Tech%20Blog/quic-https-handshake.gif&#34; alt=&#34;QUIC HTTPS handshake&#34;&gt;&lt;/p&gt;
+&lt;p&gt;接著使用 UDP 傳輸，但在 QUIC 層級控制資料遺失恢復，因為 QUIC 會在兩端建立多個連接，所以在修復單一 stream 時仍可以自由處理其他資料，所以即使單一請求發生錯誤也不會影響到其他錯誤&lt;/p&gt;
+&lt;p&gt;QUIC 還有一個目標是提高切換網路期間的效能，這點在移動端環境非常重要，例如我們手機常常在 wifi 跟行動網路之間切換，如果在 TCP 上發生了，首先需要等待現有連接一個一個逾時，然後再根據需要重新建立，這中間的延遲就高了。而 QUIC 會包含一個連接識別碼，用來標識 client/server 之間的連接，而不論 IP 位址，如此只需要傳送一個包含此識別碼的 packet 即可重新建立連接&lt;/p&gt;
+&lt;p&gt;因為有著許多的優點更符合現今的網路環境，所以 HTTP-over-QUIC 也已被正式提出要求更名為 HTTP/3，雖然還只是 draft，但已經被超過七成的瀏覽器所支援或實作，包括 Chrome, Edge, Firefox, Safari 等&lt;/p&gt;
+&lt;p&gt;HTTP/3 同樣在語意上繼承 HTTP/2，不過 HTTP/2 並不能直接與 QUIC 兼容，因為 HTTP/2 在 Application Layer 的 frame 與 QUIC 在 Transport Layer 切分的 packet 不能直接映射，而且 QUIC 已經在 Transport Layer 處理了 multiplexing，所以不需要 HTTP/2 在 Application Layer 再處理一次&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://res.cloudinary.com/dcvgho2zc/image/upload/v1640057950/Tech%20Blog/TCP-vs-QUIC-Basic-Diagram.png&#34; alt=&#34;TCP vs QUIC&#34;&gt;&lt;/p&gt;
+&lt;h2 id=&#34;參考連結&#34;&gt;參考連結&lt;/h2&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;a href=&#34;https://en.wikipedia.org/wiki/HTTP/2&#34;&gt;HTTP/2 Wiki&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;https://codertw.com/%E7%A8%8B%E5%BC%8F%E8%AA%9E%E8%A8%80/496897/&#34;&gt;HTTP／1.0／1.1／2.0的區別以及http和https的區別&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;https://en.wikipedia.org/wiki/TCP_congestion_control&#34;&gt;TCP congestion control&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;https://en.wikipedia.org/wiki/HTTP_pipelining&#34;&gt;HTTP pipelining&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;https://stackoverflow.com/a/40688337/7605040&#34;&gt;Why is pipelining disabled in modern browsers?&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;https://en.wikipedia.org/wiki/Head-of-line_blocking&#34;&gt;Head-of-line blocking&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;https://abhishekvrshny.medium.com/head-of-line-hol-blocking-in-http-1-and-http-2-50b24e9e3372&#34;&gt;Head-of-line (HOL) blocking in HTTP/1 and HTTP/2&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;https://sookocheff.com/post/networking/how-does-http-2-work/&#34;&gt;How Does HTTP/2 Work?&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;https://datatracker.ietf.org/doc/html/rfc7541&#34;&gt;RFC-7541&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;https://en.wikipedia.org/wiki/Best_current_practice&#34;&gt;Best current practice&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;https://en.wikipedia.org/wiki/HTTP/3&#34;&gt;HTTP/3 Wiki&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+- https://idontwannarock.github.io/tech_blog/2021/12/http2/ - This website by Howard Wang is licensed under a Creative Common Attribution-ShareAlike 4.0 International License.</description>
+        </item>
     
     
     
@@ -891,102 +1040,6 @@ str&lt;span style=&#34;color:#5bc4bf&#34;&gt;.&lt;/span&gt;&lt;span style=&#34;c
 &lt;p&gt;雖然最後一個方法最簡短，但其實可讀性不見得比較優秀；而倒數第二個方法雖然比較囉唆，但整體上可讀性比較好。&lt;/p&gt;
 &lt;p&gt;所以要用哪種方法還是要看簡潔跟可讀性怎麼取捨。&lt;/p&gt;
 - https://idontwannarock.github.io/tech_blog/2018/02/java_string_check/ - This website by Howard Wang is licensed under a Creative Common Attribution-ShareAlike 4.0 International License.</description>
-        </item>
-    
-    
-    
-        <item>
-        <title>Java 樂透抽取算法初探</title>
-        <link>https://idontwannarock.github.io/tech_blog/2017/11/java_lottery_algorithm_basic/</link>
-        <pubDate>Wed, 15 Nov 2017 14:26:17 +0800</pubDate>
-        
-        <guid>https://idontwannarock.github.io/tech_blog/2017/11/java_lottery_algorithm_basic/</guid>
-        <description>Howard Tech Note https://idontwannarock.github.io/tech_blog/2017/11/java_lottery_algorithm_basic/ -&lt;p&gt;因為做到這個經典練習演算法的題目，雖然是非常入門級的，也是讓我想了很久，覺得都做了這麼久，不記錄下來也是蠻可惜。&lt;/p&gt;
-&lt;h1 id=&#34;題目&#34;&gt;題目&lt;/h1&gt;
-&lt;p&gt;請隨機從正整數 1-42當中隨機抽出 6個數字，不用排序，但不可重複。&lt;/p&gt;
-&lt;h1 id=&#34;解法&#34;&gt;解法&lt;/h1&gt;
-&lt;p&gt;樂透這個題目主要可以練習的有三個地方，隨機、迴圈，還有就是如何確保數字不重複。&lt;/p&gt;
-&lt;blockquote&gt;
-&lt;p&gt;以 Java 來說，隨機就是使用 &lt;code&gt;java.lang.Math&lt;/code&gt; 類別裡的靜態方法 &lt;code&gt;random()&lt;/code&gt;，但要注意&lt;code&gt;Math.random()&lt;/code&gt; 之後產生的是大於等於 0、小於 1，也就是 &lt;code&gt;0 &amp;lt;= Math.random() &amp;lt; 1&lt;/code&gt; 的 &lt;code&gt;double&lt;/code&gt; 型態浮點常數。&lt;br&gt;
-因此，以這題來說，還要記得利用 &lt;code&gt;(int)&lt;/code&gt; 轉換型態成整數型態的常數。&lt;br&gt;
-另外，若不放心浮點數轉換為整數後的值，可以利用一樣是 &lt;code&gt;Math&lt;/code&gt; 類別裡的靜態方法 &lt;code&gt;floor()&lt;/code&gt; 或 &lt;code&gt;ceiling()&lt;/code&gt; 來取無條件進位或無條件捨去後的整數值。
-而產生指定範圍內的亂數的公式為 &lt;code&gt;Math.random() * 範圍個數 + 初值&lt;/code&gt;&lt;/p&gt;
-&lt;/blockquote&gt;
-&lt;p&gt;然後因為已經確定要抽出的數目，所以可以使用元素個數不能變動的陣列，當然也可以用可以變動個數的 &lt;code&gt;Collection&lt;/code&gt; 或其子介面去解決。關鍵就在於不可重複。&lt;/p&gt;
-&lt;p&gt;這篇只討論陣列的解法。&lt;/p&gt;
-&lt;h2 id=&#34;暴力解重複檢查&#34;&gt;暴力解：重複檢查&lt;/h2&gt;
-&lt;p&gt;最簡單的寫法肯定就是暴力解：每抽出一個數字就存到結果陣列，然後每抽一次，就跟陣列裡每個數字都比對一次，一有重複就重抽。&lt;/p&gt;
-&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#e7e9db;background-color:#2f1e2e;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-java&#34; data-lang=&#34;java&#34;&gt;&lt;span style=&#34;color:#776e71&#34;&gt;// 設定存儲樂透數字陣列
-&lt;/span&gt;&lt;span style=&#34;color:#776e71&#34;&gt;&lt;/span&gt;&lt;span style=&#34;color:#fec418&#34;&gt;int&lt;/span&gt;&lt;span style=&#34;color:#5bc4bf&#34;&gt;[]&lt;/span&gt; randomArray &lt;span style=&#34;color:#5bc4bf&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color:#815ba4&#34;&gt;new&lt;/span&gt; &lt;span style=&#34;color:#fec418&#34;&gt;int&lt;/span&gt;&lt;span style=&#34;color:#5bc4bf&#34;&gt;[&lt;/span&gt;6&lt;span style=&#34;color:#5bc4bf&#34;&gt;];&lt;/span&gt;
-
-&lt;span style=&#34;color:#776e71&#34;&gt;// 執行抽取樂透數字的動作 6次
-&lt;/span&gt;&lt;span style=&#34;color:#776e71&#34;&gt;&lt;/span&gt;&lt;span style=&#34;color:#815ba4&#34;&gt;for&lt;/span&gt; &lt;span style=&#34;color:#5bc4bf&#34;&gt;(&lt;/span&gt;&lt;span style=&#34;color:#fec418&#34;&gt;int&lt;/span&gt; i &lt;span style=&#34;color:#5bc4bf&#34;&gt;=&lt;/span&gt; 0&lt;span style=&#34;color:#5bc4bf&#34;&gt;;&lt;/span&gt; i &lt;span style=&#34;color:#5bc4bf&#34;&gt;&amp;lt;&lt;/span&gt; randomArray&lt;span style=&#34;color:#5bc4bf&#34;&gt;.&lt;/span&gt;&lt;span style=&#34;color:#06b6ef&#34;&gt;length&lt;/span&gt;&lt;span style=&#34;color:#5bc4bf&#34;&gt;;&lt;/span&gt; i&lt;span style=&#34;color:#5bc4bf&#34;&gt;++)&lt;/span&gt; &lt;span style=&#34;color:#5bc4bf&#34;&gt;{&lt;/span&gt;
-    &lt;span style=&#34;color:#776e71&#34;&gt;// 先將亂數出來的數字存入陣列第 i個位置
-&lt;/span&gt;&lt;span style=&#34;color:#776e71&#34;&gt;&lt;/span&gt;     randomArray&lt;span style=&#34;color:#5bc4bf&#34;&gt;[&lt;/span&gt;i&lt;span style=&#34;color:#5bc4bf&#34;&gt;]&lt;/span&gt; &lt;span style=&#34;color:#5bc4bf&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color:#5bc4bf&#34;&gt;(&lt;/span&gt;&lt;span style=&#34;color:#fec418&#34;&gt;int&lt;/span&gt;&lt;span style=&#34;color:#5bc4bf&#34;&gt;)(&lt;/span&gt;Math&lt;span style=&#34;color:#5bc4bf&#34;&gt;.&lt;/span&gt;&lt;span style=&#34;color:#06b6ef&#34;&gt;random&lt;/span&gt;&lt;span style=&#34;color:#5bc4bf&#34;&gt;()&lt;/span&gt; &lt;span style=&#34;color:#5bc4bf&#34;&gt;*&lt;/span&gt; 42&lt;span style=&#34;color:#5bc4bf&#34;&gt;)&lt;/span&gt; &lt;span style=&#34;color:#5bc4bf&#34;&gt;+&lt;/span&gt; 1&lt;span style=&#34;color:#5bc4bf&#34;&gt;;&lt;/span&gt;
-    &lt;span style=&#34;color:#776e71&#34;&gt;// 接著執行檢查迴圈
-&lt;/span&gt;&lt;span style=&#34;color:#776e71&#34;&gt;&lt;/span&gt;    &lt;span style=&#34;color:#815ba4&#34;&gt;for&lt;/span&gt; &lt;span style=&#34;color:#5bc4bf&#34;&gt;(&lt;/span&gt;&lt;span style=&#34;color:#fec418&#34;&gt;int&lt;/span&gt; j &lt;span style=&#34;color:#5bc4bf&#34;&gt;=&lt;/span&gt; 0&lt;span style=&#34;color:#5bc4bf&#34;&gt;;&lt;/span&gt; j &lt;span style=&#34;color:#5bc4bf&#34;&gt;&amp;lt;&lt;/span&gt; i&lt;span style=&#34;color:#5bc4bf&#34;&gt;;&lt;/span&gt; j&lt;span style=&#34;color:#5bc4bf&#34;&gt;++)&lt;/span&gt; &lt;span style=&#34;color:#5bc4bf&#34;&gt;{&lt;/span&gt;
-        &lt;span style=&#34;color:#776e71&#34;&gt;// 輪流跟陣列中目前存在的其他元素比對
-&lt;/span&gt;&lt;span style=&#34;color:#776e71&#34;&gt;&lt;/span&gt;        &lt;span style=&#34;color:#815ba4&#34;&gt;if&lt;/span&gt; &lt;span style=&#34;color:#5bc4bf&#34;&gt;(&lt;/span&gt;randomArray&lt;span style=&#34;color:#5bc4bf&#34;&gt;[&lt;/span&gt;i&lt;span style=&#34;color:#5bc4bf&#34;&gt;]&lt;/span&gt; &lt;span style=&#34;color:#5bc4bf&#34;&gt;==&lt;/span&gt; randomArray&lt;span style=&#34;color:#5bc4bf&#34;&gt;[&lt;/span&gt;j&lt;span style=&#34;color:#5bc4bf&#34;&gt;])&lt;/span&gt; &lt;span style=&#34;color:#5bc4bf&#34;&gt;{&lt;/span&gt;
-            &lt;span style=&#34;color:#776e71&#34;&gt;// 如果有找到重複數字，就將計數器 i減 1，然後重抽
-&lt;/span&gt;&lt;span style=&#34;color:#776e71&#34;&gt;&lt;/span&gt;            i&lt;span style=&#34;color:#5bc4bf&#34;&gt;--;&lt;/span&gt;
-            &lt;span style=&#34;color:#776e71&#34;&gt;// 注意這邊 break是跳出 if外面一層的 for迴圈
-&lt;/span&gt;&lt;span style=&#34;color:#776e71&#34;&gt;&lt;/span&gt;            &lt;span style=&#34;color:#815ba4&#34;&gt;break&lt;/span&gt;&lt;span style=&#34;color:#5bc4bf&#34;&gt;;&lt;/span&gt;
-        &lt;span style=&#34;color:#5bc4bf&#34;&gt;}&lt;/span&gt;
-    &lt;span style=&#34;color:#5bc4bf&#34;&gt;}&lt;/span&gt;
-&lt;span style=&#34;color:#5bc4bf&#34;&gt;}&lt;/span&gt;
-
-&lt;span style=&#34;color:#776e71&#34;&gt;// 印出樂透數字陣列中的數字，列印陣列也要用迴圈，這邊是用新版寫法
-&lt;/span&gt;&lt;span style=&#34;color:#776e71&#34;&gt;&lt;/span&gt;&lt;span style=&#34;color:#815ba4&#34;&gt;for&lt;/span&gt; &lt;span style=&#34;color:#5bc4bf&#34;&gt;(&lt;/span&gt;&lt;span style=&#34;color:#fec418&#34;&gt;int&lt;/span&gt; num &lt;span style=&#34;color:#5bc4bf&#34;&gt;:&lt;/span&gt; randomArray&lt;span style=&#34;color:#5bc4bf&#34;&gt;)&lt;/span&gt; &lt;span style=&#34;color:#5bc4bf&#34;&gt;{&lt;/span&gt;
-    System&lt;span style=&#34;color:#5bc4bf&#34;&gt;.&lt;/span&gt;&lt;span style=&#34;color:#06b6ef&#34;&gt;out&lt;/span&gt;&lt;span style=&#34;color:#5bc4bf&#34;&gt;.&lt;/span&gt;&lt;span style=&#34;color:#06b6ef&#34;&gt;print&lt;/span&gt;&lt;span style=&#34;color:#5bc4bf&#34;&gt;(&lt;/span&gt;num &lt;span style=&#34;color:#5bc4bf&#34;&gt;+&lt;/span&gt; &lt;span style=&#34;color:#48b685&#34;&gt;&amp;#34; &amp;#34;&lt;/span&gt;&lt;span style=&#34;color:#5bc4bf&#34;&gt;);&lt;/span&gt;
-&lt;span style=&#34;color:#5bc4bf&#34;&gt;}&lt;/span&gt;
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h2 id=&#34;fisher-yates-shuffle&#34;&gt;Fisher-Yates shuffle&lt;/h2&gt;
-&lt;p&gt;能解決問題的方法就是好方法，但暴力解有一個問題，因為要檢查已存入陣列的其他元素，所以抽到越後面就要檢查越多次，現在只有 42 個數字抽 6 個，萬一是從一百億中抽一百萬個不重複數字，那該檢查多久？&lt;/p&gt;
-&lt;p&gt;所以就有一個經典的演算法來解決這個問題，是兩位統計學家 Ronald Fisher 爵士以及 Frank Yates 於 1938 年提出的。&lt;/p&gt;
-&lt;p&gt;原始的演算法是為了解決一個問題：如何產生一串無重複數字的亂數數列。&lt;/p&gt;
-&lt;p&gt;這個算法其實已經經過很多改良，它的概念是這樣：&lt;/p&gt;
-&lt;ol&gt;
-&lt;li&gt;先產生一串固定個數且照數值大小排列的字串&lt;/li&gt;
-&lt;li&gt;然後隨機從數列中抽出一個數字&lt;/li&gt;
-&lt;li&gt;將這個數字從原始數列中刪除&lt;/li&gt;
-&lt;li&gt;將這個數字寫道另外一個數列的頭或尾&lt;/li&gt;
-&lt;li&gt;重複步驟 2-4 直到所有數字都從原始數列刪除，並且都依照寫到另外一個數列中後停止&lt;/li&gt;
-&lt;/ol&gt;
-&lt;p&gt;這個算法的目的就很好地確保了每次隨機抽取數字肯定不會重複，因為之前的數字都已經從要抽取數字的數列中刪除了。&lt;/p&gt;
-&lt;p&gt;而且因為不用每次都檢查，所以可以大幅提升效率。&lt;/p&gt;
-&lt;p&gt;我們利用這個算法不會抽取到重複數字的特性，可以延伸出解法如下：&lt;/p&gt;
-&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#e7e9db;background-color:#2f1e2e;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-java&#34; data-lang=&#34;java&#34;&gt;&lt;span style=&#34;color:#776e71&#34;&gt;// 設定要抽取個數
-&lt;/span&gt;&lt;span style=&#34;color:#776e71&#34;&gt;&lt;/span&gt;&lt;span style=&#34;color:#fec418&#34;&gt;int&lt;/span&gt; picks &lt;span style=&#34;color:#5bc4bf&#34;&gt;=&lt;/span&gt; 6&lt;span style=&#34;color:#5bc4bf&#34;&gt;;&lt;/span&gt;
-&lt;span style=&#34;color:#776e71&#34;&gt;// 設定樂透數字範圍起始數字及結束數字
-&lt;/span&gt;&lt;span style=&#34;color:#776e71&#34;&gt;&lt;/span&gt;&lt;span style=&#34;color:#fec418&#34;&gt;int&lt;/span&gt; startNumber &lt;span style=&#34;color:#5bc4bf&#34;&gt;=&lt;/span&gt; 1&lt;span style=&#34;color:#5bc4bf&#34;&gt;,&lt;/span&gt; endNumber &lt;span style=&#34;color:#5bc4bf&#34;&gt;=&lt;/span&gt; 42&lt;span style=&#34;color:#5bc4bf&#34;&gt;;&lt;/span&gt;
-&lt;span style=&#34;color:#776e71&#34;&gt;// 設定儲存數字的陣列
-&lt;/span&gt;&lt;span style=&#34;color:#776e71&#34;&gt;&lt;/span&gt;&lt;span style=&#34;color:#fec418&#34;&gt;int&lt;/span&gt;&lt;span style=&#34;color:#5bc4bf&#34;&gt;[]&lt;/span&gt; randomArray &lt;span style=&#34;color:#5bc4bf&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color:#815ba4&#34;&gt;new&lt;/span&gt; &lt;span style=&#34;color:#fec418&#34;&gt;int&lt;/span&gt;&lt;span style=&#34;color:#5bc4bf&#34;&gt;[&lt;/span&gt;endNumber &lt;span style=&#34;color:#5bc4bf&#34;&gt;-&lt;/span&gt; startNumber &lt;span style=&#34;color:#5bc4bf&#34;&gt;+&lt;/span&gt; 1&lt;span style=&#34;color:#5bc4bf&#34;&gt;];&lt;/span&gt;
-&lt;span style=&#34;color:#776e71&#34;&gt;// 產生按照數值大小排序好的數列
-&lt;/span&gt;&lt;span style=&#34;color:#776e71&#34;&gt;&lt;/span&gt;&lt;span style=&#34;color:#815ba4&#34;&gt;for&lt;/span&gt; &lt;span style=&#34;color:#5bc4bf&#34;&gt;(&lt;/span&gt;&lt;span style=&#34;color:#fec418&#34;&gt;int&lt;/span&gt; i &lt;span style=&#34;color:#5bc4bf&#34;&gt;=&lt;/span&gt; startNumber&lt;span style=&#34;color:#5bc4bf&#34;&gt;;&lt;/span&gt; i &lt;span style=&#34;color:#5bc4bf&#34;&gt;&amp;lt;=&lt;/span&gt; endNumber&lt;span style=&#34;color:#5bc4bf&#34;&gt;;&lt;/span&gt; i&lt;span style=&#34;color:#5bc4bf&#34;&gt;++)&lt;/span&gt; &lt;span style=&#34;color:#5bc4bf&#34;&gt;{&lt;/span&gt;
-    randomArray&lt;span style=&#34;color:#5bc4bf&#34;&gt;[&lt;/span&gt;i&lt;span style=&#34;color:#5bc4bf&#34;&gt;]&lt;/span&gt; &lt;span style=&#34;color:#5bc4bf&#34;&gt;=&lt;/span&gt; i&lt;span style=&#34;color:#5bc4bf&#34;&gt;;&lt;/span&gt;
-&lt;span style=&#34;color:#5bc4bf&#34;&gt;}&lt;/span&gt;
-
-&lt;span style=&#34;color:#776e71&#34;&gt;// 開始亂數程序，但我們不用將整個數列都亂數shuffle，只需要做我們要抽取個數，也就是 6次
-&lt;/span&gt;&lt;span style=&#34;color:#776e71&#34;&gt;&lt;/span&gt;&lt;span style=&#34;color:#815ba4&#34;&gt;for&lt;/span&gt; &lt;span style=&#34;color:#5bc4bf&#34;&gt;(&lt;/span&gt;&lt;span style=&#34;color:#fec418&#34;&gt;int&lt;/span&gt; j &lt;span style=&#34;color:#5bc4bf&#34;&gt;=&lt;/span&gt; 0&lt;span style=&#34;color:#5bc4bf&#34;&gt;;&lt;/span&gt; j &lt;span style=&#34;color:#5bc4bf&#34;&gt;&amp;lt;&lt;/span&gt; picks&lt;span style=&#34;color:#5bc4bf&#34;&gt;;&lt;/span&gt; j&lt;span style=&#34;color:#5bc4bf&#34;&gt;++)&lt;/span&gt; &lt;span style=&#34;color:#5bc4bf&#34;&gt;{&lt;/span&gt;
-    &lt;span style=&#34;color:#776e71&#34;&gt;// 先設定一個暫存亂數數字的變數 randomIndex，這是要用來當指標指向陣列元素用的
-&lt;/span&gt;&lt;span style=&#34;color:#776e71&#34;&gt;&lt;/span&gt;    &lt;span style=&#34;color:#fec418&#34;&gt;int&lt;/span&gt; randomIndex &lt;span style=&#34;color:#5bc4bf&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color:#5bc4bf&#34;&gt;(&lt;/span&gt;&lt;span style=&#34;color:#fec418&#34;&gt;int&lt;/span&gt;&lt;span style=&#34;color:#5bc4bf&#34;&gt;)(&lt;/span&gt;Math&lt;span style=&#34;color:#5bc4bf&#34;&gt;.&lt;/span&gt;&lt;span style=&#34;color:#06b6ef&#34;&gt;random&lt;/span&gt;&lt;span style=&#34;color:#5bc4bf&#34;&gt;()&lt;/span&gt; &lt;span style=&#34;color:#5bc4bf&#34;&gt;*&lt;/span&gt; &lt;span style=&#34;color:#5bc4bf&#34;&gt;(&lt;/span&gt;endNumber &lt;span style=&#34;color:#5bc4bf&#34;&gt;-&lt;/span&gt; startNumber &lt;span style=&#34;color:#5bc4bf&#34;&gt;+&lt;/span&gt; 1&lt;span style=&#34;color:#5bc4bf&#34;&gt;))&lt;/span&gt; &lt;span style=&#34;color:#5bc4bf&#34;&gt;+&lt;/span&gt; 1&lt;span style=&#34;color:#5bc4bf&#34;&gt;;&lt;/span&gt;
-    &lt;span style=&#34;color:#776e71&#34;&gt;// 然後再設定一個暫存數字的變數 temp，暫存陣列中指標 randomIndex對應的數字
-&lt;/span&gt;&lt;span style=&#34;color:#776e71&#34;&gt;&lt;/span&gt;    &lt;span style=&#34;color:#fec418&#34;&gt;int&lt;/span&gt; temp &lt;span style=&#34;color:#5bc4bf&#34;&gt;=&lt;/span&gt; randomArray&lt;span style=&#34;color:#5bc4bf&#34;&gt;[&lt;/span&gt;randomIndex&lt;span style=&#34;color:#5bc4bf&#34;&gt;];&lt;/span&gt;
-    &lt;span style=&#34;color:#776e71&#34;&gt;// 將 randomArray[randomIndex]跟第 j個元素對調位置
-&lt;/span&gt;&lt;span style=&#34;color:#776e71&#34;&gt;&lt;/span&gt;    randomArray&lt;span style=&#34;color:#5bc4bf&#34;&gt;[&lt;/span&gt;randomIndex&lt;span style=&#34;color:#5bc4bf&#34;&gt;]&lt;/span&gt; &lt;span style=&#34;color:#5bc4bf&#34;&gt;=&lt;/span&gt; randomArray&lt;span style=&#34;color:#5bc4bf&#34;&gt;[&lt;/span&gt;j&lt;span style=&#34;color:#5bc4bf&#34;&gt;];&lt;/span&gt;
-    randomArray&lt;span style=&#34;color:#5bc4bf&#34;&gt;[&lt;/span&gt;j&lt;span style=&#34;color:#5bc4bf&#34;&gt;]&lt;/span&gt; &lt;span style=&#34;color:#5bc4bf&#34;&gt;=&lt;/span&gt; temp&lt;span style=&#34;color:#5bc4bf&#34;&gt;;&lt;/span&gt;
-&lt;span style=&#34;color:#5bc4bf&#34;&gt;}&lt;/span&gt;
-
-&lt;span style=&#34;color:#776e71&#34;&gt;// 印出樂透數字陣列中的數字
-&lt;/span&gt;&lt;span style=&#34;color:#776e71&#34;&gt;&lt;/span&gt;&lt;span style=&#34;color:#815ba4&#34;&gt;for&lt;/span&gt; &lt;span style=&#34;color:#5bc4bf&#34;&gt;(&lt;/span&gt;&lt;span style=&#34;color:#fec418&#34;&gt;int&lt;/span&gt; k &lt;span style=&#34;color:#5bc4bf&#34;&gt;=&lt;/span&gt; 0&lt;span style=&#34;color:#5bc4bf&#34;&gt;;&lt;/span&gt; k &lt;span style=&#34;color:#5bc4bf&#34;&gt;&amp;lt;&lt;/span&gt; picks&lt;span style=&#34;color:#5bc4bf&#34;&gt;;&lt;/span&gt; k&lt;span style=&#34;color:#5bc4bf&#34;&gt;++)&lt;/span&gt; &lt;span style=&#34;color:#5bc4bf&#34;&gt;{&lt;/span&gt;
-    System&lt;span style=&#34;color:#5bc4bf&#34;&gt;.&lt;/span&gt;&lt;span style=&#34;color:#06b6ef&#34;&gt;out&lt;/span&gt;&lt;span style=&#34;color:#5bc4bf&#34;&gt;.&lt;/span&gt;&lt;span style=&#34;color:#06b6ef&#34;&gt;print&lt;/span&gt;&lt;span style=&#34;color:#5bc4bf&#34;&gt;(&lt;/span&gt;num &lt;span style=&#34;color:#5bc4bf&#34;&gt;+&lt;/span&gt; &lt;span style=&#34;color:#48b685&#34;&gt;&amp;#34; &amp;#34;&lt;/span&gt;&lt;span style=&#34;color:#5bc4bf&#34;&gt;);&lt;/span&gt;
-&lt;span style=&#34;color:#5bc4bf&#34;&gt;}&lt;/span&gt;
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;我有特別設定要樂透的數字個數，以及抽取範圍的起始及終止值，以便將來更動這三個參數就可以做各種不同範圍個數的樂透，甚至也可以利用 &lt;code&gt;java.util.Scanner&lt;/code&gt; 的功能讓使用者能直接用鍵盤輸入這三個參數，不過那就不在這個題目要討論的重點。&lt;/p&gt;
-&lt;h1 id=&#34;限制&#34;&gt;限制&lt;/h1&gt;
-&lt;p&gt;其實這些解法最大的問題都不在於算法本身，而是 Java 提供的 &lt;code&gt;random()&lt;/code&gt; 方法是不是真正的隨機，其實這也可以寫一個程式來檢驗，我們將這個程式跑個幾千、幾萬，甚至幾百萬次之後，每一個數字抽到的次數是不是趨於相等。&lt;/p&gt;
-&lt;p&gt;就我現在粗淺的理解，基本上還沒有能產生真正隨機數字的演算法；或者說，能用演算法產生的隨機數字都不是真正的隨機，只是趨近於隨機。&lt;/p&gt;
-&lt;p&gt;畢竟只要提到演算，就代表有一定規則，而透過一定規則產生出來的東西就無法稱為真正的隨機。&lt;/p&gt;
-&lt;p&gt;而 Java 提供的 &lt;code&gt;random()&lt;/code&gt; 方法則是透過線性同餘公式產生的偽隨機數，詳細可以參考 &lt;a href=&#34;https://zh.wikipedia.org/wiki/%E7%B7%9A%E6%80%A7%E5%90%8C%E9%A4%98%E6%96%B9%E6%B3%95&#34;&gt;維基&lt;/a&gt;。&lt;/p&gt;
-- https://idontwannarock.github.io/tech_blog/2017/11/java_lottery_algorithm_basic/ - This website by Howard Wang is licensed under a Creative Common Attribution-ShareAlike 4.0 International License.</description>
         </item>
     
     

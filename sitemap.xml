@@ -2,25 +2,49 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
   xmlns:xhtml="http://www.w3.org/1999/xhtml">
   <url>
-    <loc>https://idontwannarock.github.io/tech_blog/tags/batch/</loc>
-    <lastmod>2021-12-16T15:32:25+08:00</lastmod>
-  </url><url>
     <loc>https://idontwannarock.github.io/tech_blog/categories/</loc>
+    <lastmod>2021-12-21T09:06:29+08:00</lastmod>
+  </url><url>
+    <loc>https://idontwannarock.github.io/tech_blog/categories/concept/</loc>
+    <lastmod>2021-12-21T09:06:29+08:00</lastmod>
+  </url><url>
+    <loc>https://idontwannarock.github.io/tech_blog/</loc>
+    <lastmod>2021-12-21T09:06:29+08:00</lastmod>
+  </url><url>
+    <loc>https://idontwannarock.github.io/tech_blog/tags/http/</loc>
+    <lastmod>2021-12-21T09:06:29+08:00</lastmod>
+  </url><url>
+    <loc>https://idontwannarock.github.io/tech_blog/2021/12/http2/</loc>
+    <lastmod>2021-12-21T09:06:29+08:00</lastmod>
+  </url><url>
+    <loc>https://idontwannarock.github.io/tech_blog/tags/http2/</loc>
+    <lastmod>2021-12-21T09:06:29+08:00</lastmod>
+  </url><url>
+    <loc>https://idontwannarock.github.io/tech_blog/tags/http3/</loc>
+    <lastmod>2021-12-21T09:06:29+08:00</lastmod>
+  </url><url>
+    <loc>https://idontwannarock.github.io/tech_blog/posts/</loc>
+    <lastmod>2021-12-21T09:06:29+08:00</lastmod>
+  </url><url>
+    <loc>https://idontwannarock.github.io/tech_blog/tags/quic/</loc>
+    <lastmod>2021-12-21T09:06:29+08:00</lastmod>
+  </url><url>
+    <loc>https://idontwannarock.github.io/tech_blog/tags/</loc>
+    <lastmod>2021-12-21T09:06:29+08:00</lastmod>
+  </url><url>
+    <loc>https://idontwannarock.github.io/tech_blog/tags/tcp/</loc>
+    <lastmod>2021-12-21T09:06:29+08:00</lastmod>
+  </url><url>
+    <loc>https://idontwannarock.github.io/tech_blog/tags/udp/</loc>
+    <lastmod>2021-12-21T09:06:29+08:00</lastmod>
+  </url><url>
+    <loc>https://idontwannarock.github.io/tech_blog/tags/batch/</loc>
     <lastmod>2021-12-16T15:32:25+08:00</lastmod>
   </url><url>
     <loc>https://idontwannarock.github.io/tech_blog/tags/compression/</loc>
     <lastmod>2021-12-16T15:32:25+08:00</lastmod>
   </url><url>
-    <loc>https://idontwannarock.github.io/tech_blog/</loc>
-    <lastmod>2021-12-16T15:32:25+08:00</lastmod>
-  </url><url>
     <loc>https://idontwannarock.github.io/tech_blog/categories/implementation/</loc>
-    <lastmod>2021-12-16T15:32:25+08:00</lastmod>
-  </url><url>
-    <loc>https://idontwannarock.github.io/tech_blog/posts/</loc>
-    <lastmod>2021-12-16T15:32:25+08:00</lastmod>
-  </url><url>
-    <loc>https://idontwannarock.github.io/tech_blog/tags/</loc>
     <lastmod>2021-12-16T15:32:25+08:00</lastmod>
   </url><url>
     <loc>https://idontwannarock.github.io/tech_blog/2021/12/zip_in_batch_script/</loc>
@@ -70,9 +94,6 @@
   </url><url>
     <loc>https://idontwannarock.github.io/tech_blog/tags/swagger/</loc>
     <lastmod>2019-09-19T15:53:36+08:00</lastmod>
-  </url><url>
-    <loc>https://idontwannarock.github.io/tech_blog/categories/concept/</loc>
-    <lastmod>2019-05-30T15:33:07+08:00</lastmod>
   </url><url>
     <loc>https://idontwannarock.github.io/tech_blog/tags/rbac/</loc>
     <lastmod>2019-05-30T15:33:07+08:00</lastmod>
