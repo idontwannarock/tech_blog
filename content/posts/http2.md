@@ -136,21 +136,21 @@ HTTP/1.x 的時候傳輸訊息雖然也可以被切成 chunk 來傳輸，但因�
 - 將 header 區分靜態字典 (static table) 及動態字典 (dynamic table)
 - static table 就是一些常見的 header 表
 - dynamic table 則是依據 FIFO 原則動態添加內容的表
-- client/server 都支援依據 RFC 7541 的 Appedix B 所列的霍夫曼編碼表 (Huffman Code) 來對 header 進行編碼
+- client/server 都支援依據 RFC 7541 的 Appendix B 所列的霍夫曼編碼表 (Huffman Code) 來對 header 進行編碼
 
 ![HPACK Header Compression](https://res.cloudinary.com/dcvgho2zc/image/upload/v1639991899/Tech%20Blog/hpack.png)
 
 #### Server Push
 
-為了達成 server 端主動推送訊息給 client 端，一直以來都有各種嘗試來達成類似的效果，包括 Ajax Polling, Long Polling, Server Sent Event(SSE) 等等，但實際上沒有任何一個方式真正能做到兩端主動推送訊息給對方 (bidirectional unsolicited response)，**包括 HTTP/2 也沒有達成**
+為了達成 server 端主動推送訊息給 client 端，一直以來都有各種嘗試在 HTTP 上達成類似的效果，包括 Ajax Polling, Long Polling, Server Sent Event(SSE) 等等，但實際上除了 WebSocket 有利用到 HTTP 建立連線這種沾到邊的協定以外，其他透過 HTTP 的傳送訊息的方式都不能真正做到兩端不經請求主動推送訊息給對方 (bidirectional unsolicited message)，**包括 HTTP/2 也沒有達成**
 
-> - Ajax Polling 就是在 client 端設 timer 輪詢，以達到近似 server 端有準備好的資料就可以隨時推送到 client 端的效果
-> - Long Polling 則是可以維持 request 直到 server 端準備好後送出 response，client 端再立刻發出 request 等待下一次 server 端的 response，以達成類似 server 端隨時推送 response 的效果
-> - SSE 則是利用 HTTP octet stream 讓 server 端可以多次針對同一個 request 回覆 response，來達成類似 server 主動 push 的效果
+> - Ajax Polling 是在 client 端設 timer 輪詢，以達到近似 server 端有準備好的資料就可以隨時推送到 client 端的效果
+> - Long Polling 則是維持 request 直到 server 端準備好後送出 response，client 端收到後再立刻發出 request 等待下一次 server 端的 response，以達成類似 server 端隨時推送 response 的效果
+> - SSE 則是利用 HTTP octet stream 讓 server 端可以多次針對同一個 request 連續回覆 response，來達成類似 server 端主動 push 的效果
 
-實際上 HTTP/2 的 server push 效果就等同 SSE，讓 server 端可以針對一個 request 進行多次的 response
+實際上 HTTP/2 的 server push 在效果上等同 SSE，讓 server 端可以針對一個 request 進行多次的 response
 
-由於不像 SSE 會占用一整個 TCP connection，HTTP/2 的一個 request 的 context 只占用一個虛擬的 stream，而不影響其他 stream，所以並不會阻塞其他 request/response，所以在許多應用情況下，這樣的 server push 已經跟真正不依賴 client request 而進行主動 server push 的效果相差無幾
+由於不像 SSE 會占用一整個 TCP connection，HTTP/2 的一個 request 的 context 只佔用一個 stream，而不影響其他 stream，所以並不會阻塞其他 request/response，所以在許多應用情況下，這樣的 server push 已經跟真正不依賴 client request 而進行主動 server push 的效果相差無幾
 
 ![HTTP/2 Server Push](https://res.cloudinary.com/dcvgho2zc/image/upload/v1639994509/Tech%20Blog/server-push.webp)
 
@@ -224,4 +224,6 @@ HTTP/3 同樣在語意上繼承 HTTP/2，不過 HTTP/2 並不能直接與 QUIC �
 - [How Does HTTP/2 Work?](https://sookocheff.com/post/networking/how-does-http-2-work/)
 - [RFC-7541](https://datatracker.ietf.org/doc/html/rfc7541)
 - [Best current practice](https://en.wikipedia.org/wiki/Best_current_practice)
+- [HTTP/2 Server Push](https://en.wikipedia.org/wiki/HTTP/2_Server_Push)
 - [HTTP/3 Wiki](https://en.wikipedia.org/wiki/HTTP/3)
+- [HTTP/2 in Action](https://livebook.manning.com/book/http2-in-action)
