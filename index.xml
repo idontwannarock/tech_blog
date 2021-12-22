@@ -97,20 +97,20 @@
 &lt;li&gt;將 header 區分靜態字典 (static table) 及動態字典 (dynamic table)&lt;/li&gt;
 &lt;li&gt;static table 就是一些常見的 header 表&lt;/li&gt;
 &lt;li&gt;dynamic table 則是依據 FIFO 原則動態添加內容的表&lt;/li&gt;
-&lt;li&gt;client/server 都支援依據 RFC 7541 的 Appedix B 所列的霍夫曼編碼表 (Huffman Code) 來對 header 進行編碼&lt;/li&gt;
+&lt;li&gt;client/server 都支援依據 RFC 7541 的 Appendix B 所列的霍夫曼編碼表 (Huffman Code) 來對 header 進行編碼&lt;/li&gt;
 &lt;/ul&gt;
 &lt;p&gt;&lt;img src=&#34;https://res.cloudinary.com/dcvgho2zc/image/upload/v1639991899/Tech%20Blog/hpack.png&#34; alt=&#34;HPACK Header Compression&#34;&gt;&lt;/p&gt;
 &lt;h4 id=&#34;server-push&#34;&gt;Server Push&lt;/h4&gt;
-&lt;p&gt;為了達成 server 端主動推送訊息給 client 端，一直以來都有各種嘗試來達成類似的效果，包括 Ajax Polling, Long Polling, Server Sent Event(SSE) 等等，但實際上沒有任何一個方式真正能做到兩端主動推送訊息給對方 (bidirectional unsolicited response)，&lt;strong&gt;包括 HTTP/2 也沒有達成&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;為了達成 server 端主動推送訊息給 client 端，一直以來都有各種嘗試在 HTTP 上達成類似的效果，包括 Ajax Polling, Long Polling, Server Sent Event(SSE) 等等，但實際上除了 WebSocket 有利用到 HTTP 建立連線這種沾到邊的協定以外，其他透過 HTTP 的傳送訊息的方式都不能真正做到兩端不經請求主動推送訊息給對方 (bidirectional unsolicited message)，&lt;strong&gt;包括 HTTP/2 也沒有達成&lt;/strong&gt;&lt;/p&gt;
 &lt;blockquote&gt;
 &lt;ul&gt;
-&lt;li&gt;Ajax Polling 就是在 client 端設 timer 輪詢，以達到近似 server 端有準備好的資料就可以隨時推送到 client 端的效果&lt;/li&gt;
-&lt;li&gt;Long Polling 則是可以維持 request 直到 server 端準備好後送出 response，client 端再立刻發出 request 等待下一次 server 端的 response，以達成類似 server 端隨時推送 response 的效果&lt;/li&gt;
-&lt;li&gt;SSE 則是利用 HTTP octet stream 讓 server 端可以多次針對同一個 request 回覆 response，來達成類似 server 主動 push 的效果&lt;/li&gt;
+&lt;li&gt;Ajax Polling 是在 client 端設 timer 輪詢，以達到近似 server 端有準備好的資料就可以隨時推送到 client 端的效果&lt;/li&gt;
+&lt;li&gt;Long Polling 則是維持 request 直到 server 端準備好後送出 response，client 端收到後再立刻發出 request 等待下一次 server 端的 response，以達成類似 server 端隨時推送 response 的效果&lt;/li&gt;
+&lt;li&gt;SSE 則是利用 HTTP octet stream 讓 server 端可以多次針對同一個 request 連續回覆 response，來達成類似 server 端主動 push 的效果&lt;/li&gt;
 &lt;/ul&gt;
 &lt;/blockquote&gt;
-&lt;p&gt;實際上 HTTP/2 的 server push 效果就等同 SSE，讓 server 端可以針對一個 request 進行多次的 response&lt;/p&gt;
-&lt;p&gt;由於不像 SSE 會占用一整個 TCP connection，HTTP/2 的一個 request 的 context 只占用一個虛擬的 stream，而不影響其他 stream，所以並不會阻塞其他 request/response，所以在許多應用情況下，這樣的 server push 已經跟真正不依賴 client request 而進行主動 server push 的效果相差無幾&lt;/p&gt;
+&lt;p&gt;實際上 HTTP/2 的 server push 在效果上等同 SSE，讓 server 端可以針對一個 request 進行多次的 response&lt;/p&gt;
+&lt;p&gt;由於不像 SSE 會占用一整個 TCP connection，HTTP/2 的一個 request 的 context 只佔用一個 stream，而不影響其他 stream，所以並不會阻塞其他 request/response，所以在許多應用情況下，這樣的 server push 已經跟真正不依賴 client request 而進行主動 server push 的效果相差無幾&lt;/p&gt;
 &lt;p&gt;&lt;img src=&#34;https://res.cloudinary.com/dcvgho2zc/image/upload/v1639994509/Tech%20Blog/server-push.webp&#34; alt=&#34;HTTP/2 Server Push&#34;&gt;&lt;/p&gt;
 &lt;h3 id=&#34;http2-problem&#34;&gt;HTTP/2 Problem&lt;/h3&gt;
 &lt;p&gt;HTTP/2 就如同曾經的 HTTP/1.1 一樣，繼承了前一代的優點，並更進一步優化了效能，但同樣也少不了一些問題，有些爭議在協商階段就已浮現，例如有關加密跟 HOL Blocking 等問題&lt;/p&gt;
@@ -157,7 +157,9 @@
 &lt;li&gt;&lt;a href=&#34;https://sookocheff.com/post/networking/how-does-http-2-work/&#34;&gt;How Does HTTP/2 Work?&lt;/a&gt;&lt;/li&gt;
 &lt;li&gt;&lt;a href=&#34;https://datatracker.ietf.org/doc/html/rfc7541&#34;&gt;RFC-7541&lt;/a&gt;&lt;/li&gt;
 &lt;li&gt;&lt;a href=&#34;https://en.wikipedia.org/wiki/Best_current_practice&#34;&gt;Best current practice&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;https://en.wikipedia.org/wiki/HTTP/2_Server_Push&#34;&gt;HTTP/2 Server Push&lt;/a&gt;&lt;/li&gt;
 &lt;li&gt;&lt;a href=&#34;https://en.wikipedia.org/wiki/HTTP/3&#34;&gt;HTTP/3 Wiki&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;https://livebook.manning.com/book/http2-in-action&#34;&gt;HTTP/2 in Action&lt;/a&gt;&lt;/li&gt;
 &lt;/ul&gt;
 - https://idontwannarock.github.io/tech_blog/2021/12/http2/ - This website by Howard Wang is licensed under a Creative Common Attribution-ShareAlike 4.0 International License.</description>
         </item>
