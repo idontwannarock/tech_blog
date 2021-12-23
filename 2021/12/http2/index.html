@@ -1003,7 +1003,7 @@ Ported from <a href="https://mak1t0.cc/" target="_blank" rel="noreferrer noopene
 <p>HTTP 在 Transport Layer 採用 TCP 連線來通訊，而 TCP 要在 client/server 之間建立連線，是靠著三向交握 (three-way handshake) 來完成；而傳輸完成要斷線時則要做四次握手 (four-way handshake)。如果還有 TLS，那握手的來回通訊次數 (round-trip time, RTT) 就更多次了</p>
 <p>而在最初的 HTTP/1.0 的年代，硬體普遍效能都不高，為了提高系統的效率，所以 HTTP/1.0 規定 client/server 只能保持短暫的連線，所以 client 每次請求最少都要經過三向交握建立 TCP 連線，而 server 完成該請求的處理後也必須立刻進行四次握手斷開連線</p>
 <p>這樣的作法節省了 server 端的效能，但這同樣也會造成一些其他效能上的問題，例如當網頁元素越來越多的時候，即使每個元素都不大，但 client/server 每個元素都還是要重新建立連線，不但費時，而且同樣會影響 client/server 的效能</p>
-<p>而且 TCP 為了避免網路阻塞，有慢啟動 (<strong>slow start</strong>) 的控制，所以同樣連線的傳輸速率會依照演算法隨著時間而增加直到出現遺失包、達到慢啟動閾值（ssthresh）、或者接收方的接收窗口進行限制為止</p>
+<p>而且 TCP 為了避免網路阻塞，有慢啟動 (<strong>slow start</strong>) 的控制，所以同樣連線的傳輸速率會依照演算法隨著時間而增加直到出現遺失包、達到慢啟動閾值 (ssthresh)、或者接收方的接收窗口進行限制為止</p>
 <p>大量建立連線的動作在高延遲的網路環境下對效率影響明顯，慢啟動則對大檔案請求影響較大。這兩點主要都是連線不能複用所造成</p>
 <p>為了克服連線不能複用的問題，當時有些伺服器跟瀏覽器有實作 <strong>keep-alive</strong> 機制如圖，但必須自行在 header 中帶上 <code>Connection: Keep-Alive</code></p>
 <p><img src="https://res.cloudinary.com/dcvgho2zc/image/upload/v1639979286/Tech%20Blog/persistent-connection.jpg" alt="Multiple Connection vs Persistent Conneciton"></p>
@@ -1045,7 +1045,7 @@ Ported from <a href="https://mak1t0.cc/" target="_blank" rel="noreferrer noopene
 <p><img src="https://res.cloudinary.com/dcvgho2zc/image/upload/v1639984557/Tech%20Blog/binary-framing.png" alt="Binary Framing Layer"></p>
 <p>更白話一點就是將封包結構從文本格式改為二進制格式，並且將所有傳輸訊息分隔為更小的 message 跟 frame 在 stream 裡面傳輸</p>
 <ul>
-<li>frame 則是所有傳輸訊息 (包含 header) 切分後的最小單位。每個 frame 都會帶有一種 data，所以要馬是 header frame 要馬是 payload frame。另外每一個 frame 都會帶有 frame header 來標識其所屬的 stream</li>
+<li>frame 則是所有傳輸訊息 (包含 header) 切分後的最小單位。每個 frame 都會帶有一種 data，所以要馬是 HEADER frame 要馬是 DATA frame。另外每一個 frame 都會帶有 frame header 來標識其所屬的 stream</li>
 <li>message 就是一系列完整的 frame 對應邏輯上的 request 或 response</li>
 <li>stream 就是在一個 TCP connection 中雙向且抽象的 bytes flow。一個 TCP connection 可以有任意數量的 stream</li>
 </ul>
@@ -1085,7 +1085,7 @@ Ported from <a href="https://mak1t0.cc/" target="_blank" rel="noreferrer noopene
 <ul>
 <li>Ajax Polling 是在 client 端設 timer 輪詢，以達到近似 server 端有準備好的資料就可以隨時推送到 client 端的效果</li>
 <li>Long Polling 則是維持 request 直到 server 端準備好後送出 response，client 端收到後再立刻發出 request 等待下一次 server 端的 response，以達成類似 server 端隨時推送 response 的效果</li>
-<li>SSE 則是利用 HTTP octet stream 讓 server 端可以多次針對同一個 request 連續回覆 response，來達成類似 server 端主動 push 的效果</li>
+<li>SSE 則是利用 HTTP event-stream 讓 server 端可以針對同一個 request 多次回覆 response，來達成類似 server 端主動 push 的效果</li>
 </ul>
 </blockquote>
 <p>實際上 HTTP/2 的 server push 在效果上等同 SSE，讓 server 端可以針對一個 request 進行多次的 response</p>
