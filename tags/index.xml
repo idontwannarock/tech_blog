@@ -7,22 +7,31 @@
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
     <copyright>This website by Howard Wang is licensed under a Creative Common Attribution-ShareAlike 4.0 International License.</copyright>
-    <lastBuildDate>Tue, 21 Dec 2021 09:06:29 +0800</lastBuildDate><atom:link href="https://idontwannarock.github.io/tech_blog/tags/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Fri, 24 Dec 2021 16:44:31 +0800</lastBuildDate><atom:link href="https://idontwannarock.github.io/tech_blog/tags/index.xml" rel="self" type="application/rss+xml" />
     <item>
-      <title>http</title>
-      <link>https://idontwannarock.github.io/tech_blog/tags/http/</link>
-      <pubDate>Tue, 21 Dec 2021 09:06:29 +0800</pubDate>
+      <title>grpc</title>
+      <link>https://idontwannarock.github.io/tech_blog/tags/grpc/</link>
+      <pubDate>Fri, 24 Dec 2021 16:44:31 +0800</pubDate>
       
-      <guid>https://idontwannarock.github.io/tech_blog/tags/http/</guid>
+      <guid>https://idontwannarock.github.io/tech_blog/tags/grpc/</guid>
       <description></description>
     </item>
     
     <item>
       <title>http2</title>
       <link>https://idontwannarock.github.io/tech_blog/tags/http2/</link>
-      <pubDate>Tue, 21 Dec 2021 09:06:29 +0800</pubDate>
+      <pubDate>Fri, 24 Dec 2021 16:44:31 +0800</pubDate>
       
       <guid>https://idontwannarock.github.io/tech_blog/tags/http2/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>http</title>
+      <link>https://idontwannarock.github.io/tech_blog/tags/http/</link>
+      <pubDate>Tue, 21 Dec 2021 09:06:29 +0800</pubDate>
+      
+      <guid>https://idontwannarock.github.io/tech_blog/tags/http/</guid>
       <description></description>
     </item>
     

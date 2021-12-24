@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <html><head>
-<title>HTTP/2 介紹</title>
+<title>gRPC 系列 - HTTP/2 概念</title>
 
 
 
@@ -947,7 +947,7 @@ Ported from <a href="https://mak1t0.cc/" target="_blank" rel="noreferrer noopene
                 
             >
                 <div class="post-title">
-                    HTTP/2 介紹
+                    gRPC 系列 - HTTP/2 概念
                     
                     <div class="post-subtitle">
                         釐清 HTTP/2 概念
@@ -998,6 +998,13 @@ Ported from <a href="https://mak1t0.cc/" target="_blank" rel="noreferrer noopene
                 <div class="post-body" v-pre>
                 
                     <p>從 2015 年 RFC 7540 正式發表後，至今 HTTP/2 已經被絕大多數主流瀏覽器所支援，並且是正當紅的 gRPC 的基礎，在研究 gPRC 之前，先來釐清一下 HTTP/2 的概念</p>
+<p>這篇應該是 gRPC 系列文章的第一篇:</p>
+<ol>
+<li><a href="https://idontwannarock.github.io/tech_blog/2021/12/http2/">gRPC 系列 - HTTP/2 概念</a></li>
+<li>gRPC 系列 - gRPC 概念</li>
+<li>gRPC 系列 - HTTP Server Push 技術</li>
+</ol>
+<p>先說，我其實只想研究我想研究的部分，所以不見得會把 gRPC 所有相關的研究一遍</p>
 <h2 id="從遠古-http10-開始">從遠古 HTTP/1.0 開始</h2>
 <p>HTTP 是定義在 OSI 模型第七層 Application Layer 網路協議，HTTP/1.0 採取先進先出 (first-in first-out, FIFO) 策略，每次請求/回應都是有序的，必須等到請求收到對應回應後，才能進行下一次請求</p>
 <p>HTTP 在 Transport Layer 採用 TCP 連線來通訊，而 TCP 要在 client/server 之間建立連線，是靠著三向交握 (three-way handshake) 來完成；而傳輸完成要斷線時則要做四次握手 (four-way handshake)。如果還有 TLS，那握手的來回通訊次數 (round-trip time, RTT) 就更多次了</p>
@@ -1046,8 +1053,8 @@ Ported from <a href="https://mak1t0.cc/" target="_blank" rel="noreferrer noopene
 <p>更白話一點就是將封包結構從文本格式改為二進制格式，並且將所有傳輸訊息分隔為更小的 message 跟 frame 在 stream 裡面傳輸</p>
 <ul>
 <li>frame 則是所有傳輸訊息 (包含 header) 切分後的最小單位。每個 frame 都會帶有一種 data，所以要馬是 HEADER frame 要馬是 DATA frame。另外每一個 frame 都會帶有 frame header 來標識其所屬的 stream</li>
-<li>message 就是一系列完整的 frame 對應邏輯上的 request 或 response</li>
-<li>stream 就是在一個 TCP connection 中雙向且抽象的 bytes flow。一個 TCP connection 可以有任意數量的 stream</li>
+<li>message 就是一系列的 frame 組合成，對應邏輯上的 request 或 response</li>
+<li>stream 就是在一個 TCP connection 中雙向且抽象的 bytes flow，一個 stream 可以傳遞一個或多個 message。一個 TCP connection 可以有任意數量的 stream</li>
 </ul>
 <p>首先 <strong>為什麼要改成二進制？</strong> 是為了提升解析訊息的速度</p>
 <p>在 HTTP/1.x 的時代，光解析訊息就有四種方法，但在 HTTP/2，因為訊息都是 binary 所以只需要一種方法就可以通用的解析所有訊息</p>
@@ -1152,8 +1159,8 @@ Ported from <a href="https://mak1t0.cc/" target="_blank" rel="noreferrer noopene
             <nav class="post-pagination">
 
                 
-                <a class="newer-posts">
-			Next<br>No newer posts.
+                <a class="newer-posts" href="https://idontwannarock.github.io/tech_blog/2021/12/grpc/">
+			Next<br>gRPC 系列 - gRPC 概念
                 </a>
                 
                 

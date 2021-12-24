@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <html><head>
-<title>在 Batch Script 壓縮檔案</title>
+<title>gRPC 系列 - gRPC 概念</title>
 
 
 
@@ -10,7 +10,7 @@
 <meta name="google-site-verification" content="">
 <meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" name="viewport">
 <meta content="telephone=no" name="format-detection">
-<meta name="description" content="紀錄如何在 Batch Script 中壓縮檔案">
+<meta name="description" content="釐清 gRPC 概念">
 <meta name="renderer" content="webkit">
 <meta name="theme-color" content="#ffffff">
 
@@ -200,8 +200,32 @@ Ported from <a href="https://mak1t0.cc/" target="_blank" rel="noreferrer noopene
 						
 						
 							<li>
-								<a href="#tar" onclick="onNavClick(`#tar-nav`)" id="tar-nav">
-									Tar
+								<a href="#%e6%a6%82%e5%bf%b5" onclick="onNavClick(`#概念-nav`)" id="概念-nav">
+									概念
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+							
+								
+									<ul>
+								
+							
+						
+						
+							<li>
+								<a href="#%e4%bd%bf%e7%94%a8-grpc-api" onclick="onNavClick(`#使用-grpc-api-nav`)" id="使用-grpc-api-nav">
+									使用 gRPC API
 								</a>
 							</li>
 						
@@ -218,8 +242,8 @@ Ported from <a href="https://mak1t0.cc/" target="_blank" rel="noreferrer noopene
 						
 						
 							<li>
-								<a href="#microsoftpowershellarchive-module" onclick="onNavClick(`#microsoftpowershellarchive-module-nav`)" id="microsoftpowershellarchive-module-nav">
-									Microsoft.Powershell.Archive Module
+								<a href="#%e5%90%8c%e6%ad%a5-vs-%e9%9d%9e%e5%90%8c%e6%ad%a5" onclick="onNavClick(`#同步-vs-非同步-nav`)" id="同步-vs-非同步-nav">
+									同步 vs 非同步
 								</a>
 							</li>
 						
@@ -232,6 +256,126 @@ Ported from <a href="https://mak1t0.cc/" target="_blank" rel="noreferrer noopene
 					
 						
 						
+						
+						
+						
+							<li>
+								<a href="#%e5%9b%9b%e7%a8%ae%e9%a1%9e%e5%9e%8b%e7%9a%84-service" onclick="onNavClick(`#四種類型的-service-nav`)" id="四種類型的-service-nav">
+									四種類型的 Service
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+						
+							<li>
+								<a href="#rpc-%e7%94%9f%e5%91%bd%e9%80%b1%e6%9c%9f" onclick="onNavClick(`#rpc-生命週期-nav`)" id="rpc-生命週期-nav">
+									RPC 生命週期
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+							
+								
+									<ul>
+								
+							
+						
+						
+							<li>
+								<a href="#unary-rpc" onclick="onNavClick(`#unary-rpc-nav`)" id="unary-rpc-nav">
+									Unary RPC
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+						
+							<li>
+								<a href="#server-streaming-rpc" onclick="onNavClick(`#server-streaming-rpc-nav`)" id="server-streaming-rpc-nav">
+									Server streaming RPC
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+						
+							<li>
+								<a href="#client-streaming-rpc" onclick="onNavClick(`#client-streaming-rpc-nav`)" id="client-streaming-rpc-nav">
+									Client streaming RPC
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+						
+							<li>
+								<a href="#bidirectional-streaming-rpc" onclick="onNavClick(`#bidirectional-streaming-rpc-nav`)" id="bidirectional-streaming-rpc-nav">
+									Bidirectional streaming RPC
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+							
+								</ul>
+							
+								</ul>
+							
 						
 						
 						
@@ -352,8 +496,32 @@ Ported from <a href="https://mak1t0.cc/" target="_blank" rel="noreferrer noopene
 						
 						
 							<li>
-								<a href="#tar" onclick="onNavClick(`#tar-nav`)" id="tar-nav">
-									Tar
+								<a href="#%e6%a6%82%e5%bf%b5" onclick="onNavClick(`#概念-nav`)" id="概念-nav">
+									概念
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+							
+								
+									<ul>
+								
+							
+						
+						
+							<li>
+								<a href="#%e4%bd%bf%e7%94%a8-grpc-api" onclick="onNavClick(`#使用-grpc-api-nav`)" id="使用-grpc-api-nav">
+									使用 gRPC API
 								</a>
 							</li>
 						
@@ -370,8 +538,8 @@ Ported from <a href="https://mak1t0.cc/" target="_blank" rel="noreferrer noopene
 						
 						
 							<li>
-								<a href="#microsoftpowershellarchive-module" onclick="onNavClick(`#microsoftpowershellarchive-module-nav`)" id="microsoftpowershellarchive-module-nav">
-									Microsoft.Powershell.Archive Module
+								<a href="#%e5%90%8c%e6%ad%a5-vs-%e9%9d%9e%e5%90%8c%e6%ad%a5" onclick="onNavClick(`#同步-vs-非同步-nav`)" id="同步-vs-非同步-nav">
+									同步 vs 非同步
 								</a>
 							</li>
 						
@@ -384,6 +552,126 @@ Ported from <a href="https://mak1t0.cc/" target="_blank" rel="noreferrer noopene
 					
 						
 						
+						
+						
+						
+							<li>
+								<a href="#%e5%9b%9b%e7%a8%ae%e9%a1%9e%e5%9e%8b%e7%9a%84-service" onclick="onNavClick(`#四種類型的-service-nav`)" id="四種類型的-service-nav">
+									四種類型的 Service
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+						
+							<li>
+								<a href="#rpc-%e7%94%9f%e5%91%bd%e9%80%b1%e6%9c%9f" onclick="onNavClick(`#rpc-生命週期-nav`)" id="rpc-生命週期-nav">
+									RPC 生命週期
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+							
+								
+									<ul>
+								
+							
+						
+						
+							<li>
+								<a href="#unary-rpc" onclick="onNavClick(`#unary-rpc-nav`)" id="unary-rpc-nav">
+									Unary RPC
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+						
+							<li>
+								<a href="#server-streaming-rpc" onclick="onNavClick(`#server-streaming-rpc-nav`)" id="server-streaming-rpc-nav">
+									Server streaming RPC
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+						
+							<li>
+								<a href="#client-streaming-rpc" onclick="onNavClick(`#client-streaming-rpc-nav`)" id="client-streaming-rpc-nav">
+									Client streaming RPC
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+						
+							<li>
+								<a href="#bidirectional-streaming-rpc" onclick="onNavClick(`#bidirectional-streaming-rpc-nav`)" id="bidirectional-streaming-rpc-nav">
+									Bidirectional streaming RPC
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+							
+								</ul>
+							
+								</ul>
+							
 						
 						
 						
@@ -454,37 +742,37 @@ Ported from <a href="https://mak1t0.cc/" target="_blank" rel="noreferrer noopene
                 
                     
                     
-                    style="background-image: url('https://res.cloudinary.com/dcvgho2zc/image/upload/v1639640493/Tech%20Blog/batch-file.webp')"
+                    style="background-image: url('https://res.cloudinary.com/dcvgho2zc/image/upload/c_scale,h_315/v1640335954/Tech%20Blog/grpc-icon.png')"
                     
                 
             >
                 <div class="post-title">
-                    在 Batch Script 壓縮檔案
+                    gRPC 系列 - gRPC 概念
                     
                     <div class="post-subtitle">
-                        紀錄如何在 Batch Script 中壓縮檔案
+                        釐清 gRPC 概念
                     </div>
                     
                     <div class="post-meta">
                         
                         <time itemprop="datePublished">
-                            2021-12-16 15:32
+                            2021-12-24 16:44
                         </time>
                         
 
                         
                             <i class="material-icons" style="">folder</i>
-                                <a href="https://idontwannarock.github.io/tech_blog/categories/implementation">implementation</a>
+                                <a href="https://idontwannarock.github.io/tech_blog/categories/concept">concept</a>
                                 &nbsp;
                         
 
                         
                             <i class="material-icons" style="">label</i>
                             
-                                <a href="https://idontwannarock.github.io/tech_blog/tags/batch">batch</a>
+                                <a href="https://idontwannarock.github.io/tech_blog/tags/grpc">grpc</a>
                                 &nbsp;
                             
-                                <a href="https://idontwannarock.github.io/tech_blog/tags/compression">compression</a>
+                                <a href="https://idontwannarock.github.io/tech_blog/tags/http2">http2</a>
                                 &nbsp;
                             
                         
@@ -497,33 +785,66 @@ Ported from <a href="https://mak1t0.cc/" target="_blank" rel="noreferrer noopene
                 
                 <div class="post-body" v-pre>
                 
-                    <p>因為目前公司沒有專職 SRE 或 DevOps 幫忙做 CI/CD，身為小小後端工程師只好自己想辦法，偏偏目前用到的 tech stack 包括 .net framework，所以必須跟 Windows 環境的 batch file 打交道來替代習慣的 shell 檔，其中有個步驟必須要壓縮/解壓縮資料夾</p>
-<h2 id="tar">Tar</h2>
-<p>研究了一下，很興奮的發現 tar 在 command prompt 跟 powershell 都可以用，那代表我在 batch 檔裡面使用沒問題ＲＲＲ</p>
-<p>所以可以這樣用</p>
-<div class="highlight"><pre tabindex="0" style="color:#e7e9db;background-color:#2f1e2e;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-batch" data-lang="batch">:<span style="color:#776e71">: zip</span>
-tar -cvzf <span style="color:#48b685">&#34;path and name to archive.tar&#34;</span> <span style="color:#48b685">&#34;path to folder to compress&#34;</span>
-
-:<span style="color:#776e71">: unzip</span>
-tar -xvzf <span style="color:#48b685">&#34;path and name to archive.tar&#34;</span>
-</code></pre></div><h2 id="microsoftpowershellarchive-module">Microsoft.Powershell.Archive Module</h2>
-<p>很可惜，這個方法有一個小小的問題</p>
-<p>tar 基本上是從 Windows 10 或 Windows Server 2019 才開始支援，很不巧，我手上有個環境是 Windows Server 2016&hellip;</p>
-<p>基於可以用原生就絕不多安裝東西的自虐原則，好險又找到了另一個方法，powershell 有個 archive 的模組可以用！</p>
-<div class="highlight"><pre tabindex="0" style="color:#e7e9db;background-color:#2f1e2e;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-powershell" data-lang="powershell"><span style="color:#776e71"># zip</span>
-Compress-Archive -Path <span style="color:#48b685">&#34;path to folder to compress&#34;</span> -DestinationPath <span style="color:#48b685">&#34;path and name to archive.zip&#34;</span>
-
-<span style="color:#776e71"># unzip</span>
-Expand-Archive -Path <span style="color:#48b685">&#34;path and name to archive.zip&#34;</span> -DestinationPath <span style="color:#48b685">&#34;path to unzip archive.zip&#34;</span>
-</code></pre></div><h2 id="參考連結">參考連結</h2>
+                    <p>在上一篇大略了解 HTTP/2 的概念後，就可以來了解 gRPC 的運作概念了</p>
+<p>嗄？你說 gRPC 的另外一個支柱 Protocol Buffer (ProtoBuf)？這個我暫時沒打算要理解它的演算法細節，大概知道他是一種跨平台、跨語言的「可擴展的序列化資料結構」，就是類似 XML 或是 JSON 那樣的資料結構，只是設計的體積更小、傳輸更快，我暫時理解到這邊就夠了</p>
+<p>gRPC 系列:</p>
+<ol>
+<li><a href="https://idontwannarock.github.io/tech_blog/2021/12/http2/">gRPC 系列 - HTTP/2 概念</a></li>
+<li>gRPC 系列 - gRPC 概念</li>
+<li>gRPC 系列 - HTTP Server Push 技術</li>
+</ol>
+<h2 id="概念">概念</h2>
+<p>gRPC 原本是 Google 內部的 RPC 系統，後來開源後，近年成為很熱門的 RPC 系統，採用 HTTP/2 做傳輸，ProtoBuf 作為介面描述語言 (interface description language)，提供身分驗證 (authentication)、雙向串流 (bidirectional streaming)、流量控制 (flow control)、阻塞或非阻塞綁定 (blocking or nonblocking binding)、取消 (cancellation) 及逾時 (timeouts) 等特性</p>
+<blockquote>
+<p>RPC Remote Procedure Call 遠端程序呼叫指服務之間互相溝通就如同呼叫本地程式一般，不須關注呼叫互動的細節。例如以前的 CORBA, Java RMI 等</p>
+</blockquote>
+<h3 id="使用-grpc-api">使用 gRPC API</h3>
+<p>主要是透過 .proto 檔定義 service 結構，再透過 ProtoBuf compiler 的幫助產生各語言的 client/server 端代碼</p>
 <ul>
-<li><a href="https://techcommunity.microsoft.com/t5/containers/tar-and-curl-come-to-windows/ba-p/382409">Tar and Curl Come to Windows!</a></li>
-<li><a href="https://docs.microsoft.com/zh-tw/powershell/module/microsoft.powershell.archive/?view=powershell-7.2&amp;viewFallbackFrom=powershell-5.0">Microsoft.PowerShell.Archive</a></li>
+<li>client 端會有一個本地物件 stub 實作 service 中相同的方法，讓 client 端可以直接呼叫該本地物件的方法，gRPC 會處理發出 request 以及從 server 端的 ProtoBuf response</li>
+<li>server 端會真正實作 service 中宣告的方法，並運行 gRPC server 來處理 client 端的呼叫，gRPC infra 會將 request 解碼，執行 service 方法，再將 service response 編碼</li>
+</ul>
+<p><img src="https://res.cloudinary.com/dcvgho2zc/image/upload/c_scale,h_304/v1640339739/Tech%20Blog/grpc-call.png" alt="gRPC 呼叫關係"></p>
+<p><em>Image from <a href="https://grpc.io/docs/what-is-grpc/introduction/">gRPC Official Documentation</a></em></p>
+<h3 id="同步-vs-非同步">同步 vs 非同步</h3>
+<p>同步 RPC 呼叫會阻塞直到獲得回應，這是最接近 RPC 希望模仿的 procedure call 的抽象，但從另一方面來說，網路天生就是非同步的，而且在很多場景下觸發不會阻塞當下 thread 的 RPC 是很有用的</p>
+<p>gRPC 在大部分語言的 API 都有同步及非同步的版本</p>
+<h3 id="四種類型的-service">四種類型的 Service</h3>
+<p>在 gRPC 中可以定義四種類型的 service</p>
+<blockquote>
+<p>就是定義在 ProtoBuf 的 .proto 檔</p>
+</blockquote>
+<ul>
+<li>Unary RPC: 如同一般 function call 一樣，client 端發出一個 request，server 收到後回覆一個 response</li>
+<li>Server streaming RPC: client 端發出一個 request 並取得一個 stream 來讀取 server 回傳的一系列 messages</li>
+<li>Client streaming RPC: client 端發出一系列 messages 給 server 並等待 server 完整讀取後回覆一個 response</li>
+<li>Bidirectional streaming RPC: 在 client 端呼叫 service 方法建立好跟 server 之間的 connection 後，兩端都可以以任意順序、時間發送一系列 messages 給對方</li>
+</ul>
+<h3 id="rpc-生命週期">RPC 生命週期</h3>
+<h4 id="unary-rpc">Unary RPC</h4>
+<p>這是最簡單的類型，client 發出單一的 request，然後 server 端回覆單一的 response</p>
+<ol>
+<li>client 呼叫 stub 方法，client 會立即發出 client 端的 metatdata 通知 server 端該方法被觸發</li>
+<li>server 端可以立即回覆自己的初始 metadata (metadata 必須在任何 response 之前傳送) 或等待 client 端的 request message。實際上哪個先發生要看應用</li>
+<li>一旦 server 端獲得 request message 後就開始執行該做的邏輯以產生 response，然後 response 就會連同 status details (status code 及可能的 status message) 及可能的隨附的 metadata 回覆給 client</li>
+<li>如果 response status 為 OK，client 就會取得 response，在 client 端結束整個呼叫</li>
+</ol>
+<h4 id="server-streaming-rpc">Server streaming RPC</h4>
+<p>基本跟 Unary RPC 類似，除了 server 端會對應 client 的 request 回覆一系列的 messages，在發送完所有 messages 後，server 端才會回覆 status details 及可選的 metadata 給 client</p>
+<h4 id="client-streaming-rpc">Client streaming RPC</h4>
+<p>基本也跟 Unary RPC 類似，除了 client 端會發送一系列的 messages，然後 server 端回覆單一的 response，通常會在 server 端接收到 client 端所有的 messages 之後，但並非必要</p>
+<h4 id="bidirectional-streaming-rpc">Bidirectional streaming RPC</h4>
+<p>與 Unary RPC 前兩個步驟相同，只是 client 端及 server 端都可以隨時以任意順序發送一系列的 message 給對方</p>
+<h2 id="參考連結">參考連結</h2>
+<ul>
+<li><a href="https://www.grpc.io/docs/what-is-grpc/core-concepts/">Core concepts, architecture and lifecycle</a></li>
+<li><a href="https://thenewstack.io/grpc-a-deep-dive-into-the-communication-pattern/">gRPC: A Deep Dive into the Communication Pattern</a></li>
+<li><a href="https://www.oreilly.com/library/view/grpc-up-and/9781492058328/">gRPC Up and Running</a></li>
 </ul>
 
                     
                     <HR width="100%" id="EOF">
-		    <p style="color:#777;">Last modified on 2021-12-16</p>
+		    <p style="color:#777;">Last modified on 2021-12-24</p>
                     
                 </div>
             </div>
@@ -532,14 +853,14 @@ Expand-Archive -Path <span style="color:#48b685">&#34;path and name to archive.z
             <nav class="post-pagination">
 
                 
-                <a class="newer-posts" href="https://idontwannarock.github.io/tech_blog/2021/12/http2/">
-			Next<br>gRPC 系列 - HTTP/2 概念
+                <a class="newer-posts">
+			Next<br>No newer posts.
                 </a>
                 
                 
                 
-                <a class="older-posts" href="https://idontwannarock.github.io/tech_blog/2021/11/sql_server_backup/">
-			Previous<br>Sql Server 備份方式
+                <a class="older-posts" href="https://idontwannarock.github.io/tech_blog/2021/12/http2/">
+			Previous<br>gRPC 系列 - HTTP/2 概念
                 </a>
                 
             </nav>

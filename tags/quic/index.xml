@@ -9,16 +9,16 @@
     <copyright>This website by Howard Wang is licensed under a Creative Common Attribution-ShareAlike 4.0 International License.</copyright>
     <lastBuildDate>Tue, 21 Dec 2021 09:06:29 +0800</lastBuildDate><atom:link href="https://idontwannarock.github.io/tech_blog/tags/quic/index.xml" rel="self" type="application/rss+xml" />
     <item>
-      <title>HTTP/2 介紹</title>
+      <title>gRPC 系列 - HTTP/2 概念</title>
       <link>https://idontwannarock.github.io/tech_blog/2021/12/http2/</link>
       <pubDate>Tue, 21 Dec 2021 09:06:29 +0800</pubDate>
       
       <guid>https://idontwannarock.github.io/tech_blog/2021/12/http2/</guid>
       <description>從 2015 年 RFC 7540 正式發表後，至今 HTTP/2 已經被絕大多數主流瀏覽器所支援，並且是正當紅的 gRPC 的基礎，在研究 gPRC 之前，先來釐清一下 HTTP/2 的概念
+這篇應該是 gRPC 系列文章的第一篇:
+ gRPC 系列 - HTTP/2 概念 gRPC 系列 - gRPC 概念 gRPC 系列 - HTTP Server Push 技術  先說，我其實只想研究我想研究的部分，所以不見得會把 gRPC 所有相關的研究一遍
 從遠古 HTTP/1.0 開始 HTTP 是定義在 OSI 模型第七層 Application Layer 網路協議，HTTP/1.0 採取先進先出 (first-in first-out, FIFO) 策略，每次請求/回應都是有序的，必須等到請求收到對應回應後，才能進行下一次請求
-HTTP 在 Transport Layer 採用 TCP 連線來通訊，而 TCP 要在 client/server 之間建立連線，是靠著三向交握 (three-way handshake) 來完成；而傳輸完成要斷線時則要做四次握手 (four-way handshake)。如果還有 TLS，那握手的來回通訊次數 (round-trip time, RTT) 就更多次了
-而在最初的 HTTP/1.0 的年代，硬體普遍效能都不高，為了提高系統的效率，所以 HTTP/1.0 規定 client/server 只能保持短暫的連線，所以 client 每次請求最少都要經過三向交握建立 TCP 連線，而 server 完成該請求的處理後也必須立刻進行四次握手斷開連線
-這樣的作法節省了 server 端的效能，但這同樣也會造成一些其他效能上的問題，例如當網頁元素越來越多的時候，即使每個元素都不大，但 client/server 每個元素都還是要重新建立連線，不但費時，而且同樣會影響 client/server 的效能</description>
+HTTP 在 Transport Layer 採用 TCP 連線來通訊，而 TCP 要在 client/server 之間建立連線，是靠著三向交握 (three-way handshake) 來完成；而傳輸完成要斷線時則要做四次握手 (four-way handshake)。如果還有 TLS，那握手的來回通訊次數 (round-trip time, RTT) 就更多次了</description>
     </item>
     
   </channel>
