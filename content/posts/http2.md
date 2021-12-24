@@ -13,7 +13,13 @@ enableLaTeX: false
 
 從 2015 年 RFC 7540 正式發表後，至今 HTTP/2 已經被絕大多數主流瀏覽器所支援，並且是正當紅的 gRPC 的基礎，在研究 gPRC 之前，先來釐清一下 HTTP/2 的概念
 
-這篇應該是 gRPC 系列文章的第一篇
+這篇應該是 gRPC 系列文章的第一篇:
+
+1. [gRPC 系列 - HTTP/2 概念](https://idontwannarock.github.io/tech_blog/2021/12/http2/)
+2. gRPC 系列 - gRPC 概念
+3. gRPC 系列 - HTTP Server Push 技術
+
+先說，我其實只想研究我想研究的部分，所以不見得會把 gRPC 所有相關的研究一遍
 
 ## 從遠古 HTTP/1.0 開始
 
