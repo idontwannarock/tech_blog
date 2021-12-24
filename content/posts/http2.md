@@ -1,5 +1,5 @@
 ---
-title: "HTTP/2 介紹"
+title: "gRPC 系列 - HTTP/2 概念"
 date: 2021-12-21T09:06:29+08:00
 slug: "http2"
 description: "釐清 HTTP/2 概念"
@@ -12,6 +12,8 @@ enableLaTeX: false
 ---
 
 從 2015 年 RFC 7540 正式發表後，至今 HTTP/2 已經被絕大多數主流瀏覽器所支援，並且是正當紅的 gRPC 的基礎，在研究 gPRC 之前，先來釐清一下 HTTP/2 的概念
+
+這篇應該是 gRPC 系列文章的第一篇
 
 ## 從遠古 HTTP/1.0 開始
 
@@ -88,8 +90,8 @@ HTTP/1.1 固然是一個劃時代的結晶，直到今日還是瀏覽器主要�
 更白話一點就是將封包結構從文本格式改為二進制格式，並且將所有傳輸訊息分隔為更小的 message 跟 frame 在 stream 裡面傳輸
 
 - frame 則是所有傳輸訊息 (包含 header) 切分後的最小單位。每個 frame 都會帶有一種 data，所以要馬是 HEADER frame 要馬是 DATA frame。另外每一個 frame 都會帶有 frame header 來標識其所屬的 stream
-- message 就是一系列完整的 frame 對應邏輯上的 request 或 response
-- stream 就是在一個 TCP connection 中雙向且抽象的 bytes flow。一個 TCP connection 可以有任意數量的 stream
+- message 就是一系列的 frame 組合成，對應邏輯上的 request 或 response
+- stream 就是在一個 TCP connection 中雙向且抽象的 bytes flow，一個 stream 可以傳遞一個或多個 message。一個 TCP connection 可以有任意數量的 stream
 
 首先 **為什麼要改成二進制？** 是為了提升解析訊息的速度
 
