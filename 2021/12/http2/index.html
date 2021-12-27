@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <html><head>
-<title>gRPC 系列 - HTTP/2 概念</title>
+<title>HTTP/2 系列 - HTTP/2 概念</title>
 
 
 
@@ -947,7 +947,7 @@ Ported from <a href="https://mak1t0.cc/" target="_blank" rel="noreferrer noopene
                 
             >
                 <div class="post-title">
-                    gRPC 系列 - HTTP/2 概念
+                    HTTP/2 系列 - HTTP/2 概念
                     
                     <div class="post-subtitle">
                         釐清 HTTP/2 概念
@@ -998,13 +998,12 @@ Ported from <a href="https://mak1t0.cc/" target="_blank" rel="noreferrer noopene
                 <div class="post-body" v-pre>
                 
                     <p>從 2015 年 RFC 7540 正式發表後，至今 HTTP/2 已經被絕大多數主流瀏覽器所支援，並且是正當紅的 gRPC 的基礎，在研究 gPRC 之前，先來釐清一下 HTTP/2 的概念</p>
-<p>這篇應該是 gRPC 系列文章的第一篇:</p>
+<p>這篇是 HTTP/2 系列文章的第一篇:</p>
 <ol>
-<li><a href="https://idontwannarock.github.io/tech_blog/2021/12/http2/">gRPC 系列 - HTTP/2 概念</a></li>
-<li>gRPC 系列 - gRPC 概念</li>
-<li>gRPC 系列 - HTTP Server Push 技術</li>
+<li>HTTP/2 系列 - HTTP/2 概念</li>
+<li><a href="https://idontwannarock.github.io/tech_blog/2021/12/http_server_push/">HTTP/2 系列 - HTTP Server Push 技術</a></li>
 </ol>
-<p>先說，我其實只想研究我想研究的部分，所以不見得會把 gRPC 所有相關的研究一遍</p>
+<p>不過，我其實只想研究我想研究的部分，所以不見得會把 HTTP/2 所有相關的內容都研究一遍</p>
 <h2 id="從遠古-http10-開始">從遠古 HTTP/1.0 開始</h2>
 <p>HTTP 是定義在 OSI 模型第七層 Application Layer 網路協議，HTTP/1.0 採取先進先出 (first-in first-out, FIFO) 策略，每次請求/回應都是有序的，必須等到請求收到對應回應後，才能進行下一次請求</p>
 <p>HTTP 在 Transport Layer 採用 TCP 連線來通訊，而 TCP 要在 client/server 之間建立連線，是靠著三向交握 (three-way handshake) 來完成；而傳輸完成要斷線時則要做四次握手 (four-way handshake)。如果還有 TLS，那握手的來回通訊次數 (round-trip time, RTT) 就更多次了</p>
@@ -1087,10 +1086,10 @@ Ported from <a href="https://mak1t0.cc/" target="_blank" rel="noreferrer noopene
 </ul>
 <p><img src="https://res.cloudinary.com/dcvgho2zc/image/upload/v1639991899/Tech%20Blog/hpack.png" alt="HPACK Header Compression"></p>
 <h4 id="server-push">Server Push</h4>
-<p>為了達成 server 端主動推送訊息給 client 端，一直以來都有各種嘗試在 HTTP 上達成類似的效果，包括 Ajax Polling, Long Polling, Server Sent Event(SSE) 等等，但實際上除了 WebSocket 有利用到 HTTP 建立連線這種沾到邊的協定以外，其他透過 HTTP 的傳送訊息的方式都不能真正做到兩端不經請求主動推送訊息給對方 (bidirectional unsolicited message)，<strong>包括 HTTP/2 也沒有達成</strong></p>
+<p>為了達成 server 端主動推送訊息給 client 端，一直以來都有各種嘗試在 HTTP 上達成類似的效果，包括 Polling, Long Polling, Server Sent Event(SSE) 等等，但實際上除了 WebSocket 有利用到 HTTP 建立連線這種沾到邊的協定以外，其他透過 HTTP 的傳送訊息的方式都不能真正做到兩端不經請求主動推送訊息給對方 (bidirectional unsolicited communication)，<strong>包括 HTTP/2 也沒有達成</strong></p>
 <blockquote>
 <ul>
-<li>Ajax Polling 是在 client 端設 timer 輪詢，以達到近似 server 端有準備好的資料就可以隨時推送到 client 端的效果</li>
+<li>Polling 是在 client 端設 timer 輪詢，以達到近似 server 端有準備好的資料就可以隨時推送到 client 端的效果</li>
 <li>Long Polling 則是維持 request 直到 server 端準備好後送出 response，client 端收到後再立刻發出 request 等待下一次 server 端的 response，以達成類似 server 端隨時推送 response 的效果</li>
 <li>SSE 則是利用 HTTP event-stream 讓 server 端可以針對同一個 request 多次回覆 response，來達成類似 server 端主動 push 的效果</li>
 </ul>
@@ -1159,8 +1158,8 @@ Ported from <a href="https://mak1t0.cc/" target="_blank" rel="noreferrer noopene
             <nav class="post-pagination">
 
                 
-                <a class="newer-posts" href="https://idontwannarock.github.io/tech_blog/2021/12/grpc/">
-			Next<br>gRPC 系列 - gRPC 概念
+                <a class="newer-posts">
+			Next<br>No newer posts.
                 </a>
                 
                 

@@ -6,93 +6,25 @@
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
     <copyright>This website by Howard Wang is licensed under a Creative Common Attribution-ShareAlike 4.0 International License.</copyright>
-    <lastBuildDate>Fri, 24 Dec 2021 16:44:31 +0800</lastBuildDate>
+    <lastBuildDate>Tue, 21 Dec 2021 09:06:29 +0800</lastBuildDate>
     
         <atom:link href="https://idontwannarock.github.io/tech_blog/index.xml" rel="self" type="application/rss+xml" />
     
     
     
         <item>
-        <title>gRPC 系列 - gRPC 概念</title>
-        <link>https://idontwannarock.github.io/tech_blog/2021/12/grpc/</link>
-        <pubDate>Fri, 24 Dec 2021 16:44:31 +0800</pubDate>
-        
-        <guid>https://idontwannarock.github.io/tech_blog/2021/12/grpc/</guid>
-        <description>Howard Tech Note https://idontwannarock.github.io/tech_blog/2021/12/grpc/ -&lt;p&gt;在上一篇大略了解 HTTP/2 的概念後，就可以來了解 gRPC 的運作概念了&lt;/p&gt;
-&lt;p&gt;嗄？你說 gRPC 的另外一個支柱 Protocol Buffer (ProtoBuf)？這個我暫時沒打算要理解它的演算法細節，大概知道他是一種跨平台、跨語言的「可擴展的序列化資料結構」，就是類似 XML 或是 JSON 那樣的資料結構，只是設計的體積更小、傳輸更快，我暫時理解到這邊就夠了&lt;/p&gt;
-&lt;p&gt;gRPC 系列:&lt;/p&gt;
-&lt;ol&gt;
-&lt;li&gt;&lt;a href=&#34;https://idontwannarock.github.io/tech_blog/2021/12/http2/&#34;&gt;gRPC 系列 - HTTP/2 概念&lt;/a&gt;&lt;/li&gt;
-&lt;li&gt;gRPC 系列 - gRPC 概念&lt;/li&gt;
-&lt;li&gt;gRPC 系列 - HTTP Server Push 技術&lt;/li&gt;
-&lt;/ol&gt;
-&lt;h2 id=&#34;概念&#34;&gt;概念&lt;/h2&gt;
-&lt;p&gt;gRPC 原本是 Google 內部的 RPC 系統，後來開源後，近年成為很熱門的 RPC 系統，採用 HTTP/2 做傳輸，ProtoBuf 作為介面描述語言 (interface description language)，提供身分驗證 (authentication)、雙向串流 (bidirectional streaming)、流量控制 (flow control)、阻塞或非阻塞綁定 (blocking or nonblocking binding)、取消 (cancellation) 及逾時 (timeouts) 等特性&lt;/p&gt;
-&lt;blockquote&gt;
-&lt;p&gt;RPC Remote Procedure Call 遠端程序呼叫指服務之間互相溝通就如同呼叫本地程式一般，不須關注呼叫互動的細節。例如以前的 CORBA, Java RMI 等&lt;/p&gt;
-&lt;/blockquote&gt;
-&lt;h3 id=&#34;使用-grpc-api&#34;&gt;使用 gRPC API&lt;/h3&gt;
-&lt;p&gt;主要是透過 .proto 檔定義 service 結構，再透過 ProtoBuf compiler 的幫助產生各語言的 client/server 端代碼&lt;/p&gt;
-&lt;ul&gt;
-&lt;li&gt;client 端會有一個本地物件 stub 實作 service 中相同的方法，讓 client 端可以直接呼叫該本地物件的方法，gRPC 會處理發出 request 以及從 server 端的 ProtoBuf response&lt;/li&gt;
-&lt;li&gt;server 端會真正實作 service 中宣告的方法，並運行 gRPC server 來處理 client 端的呼叫，gRPC infra 會將 request 解碼，執行 service 方法，再將 service response 編碼&lt;/li&gt;
-&lt;/ul&gt;
-&lt;p&gt;&lt;img src=&#34;https://res.cloudinary.com/dcvgho2zc/image/upload/c_scale,h_304/v1640339739/Tech%20Blog/grpc-call.png&#34; alt=&#34;gRPC 呼叫關係&#34;&gt;&lt;/p&gt;
-&lt;p&gt;&lt;em&gt;Image from &lt;a href=&#34;https://grpc.io/docs/what-is-grpc/introduction/&#34;&gt;gRPC Official Documentation&lt;/a&gt;&lt;/em&gt;&lt;/p&gt;
-&lt;h3 id=&#34;同步-vs-非同步&#34;&gt;同步 vs 非同步&lt;/h3&gt;
-&lt;p&gt;同步 RPC 呼叫會阻塞直到獲得回應，這是最接近 RPC 希望模仿的 procedure call 的抽象，但從另一方面來說，網路天生就是非同步的，而且在很多場景下觸發不會阻塞當下 thread 的 RPC 是很有用的&lt;/p&gt;
-&lt;p&gt;gRPC 在大部分語言的 API 都有同步及非同步的版本&lt;/p&gt;
-&lt;h3 id=&#34;四種類型的-service&#34;&gt;四種類型的 Service&lt;/h3&gt;
-&lt;p&gt;在 gRPC 中可以定義四種類型的 service&lt;/p&gt;
-&lt;blockquote&gt;
-&lt;p&gt;就是定義在 ProtoBuf 的 .proto 檔&lt;/p&gt;
-&lt;/blockquote&gt;
-&lt;ul&gt;
-&lt;li&gt;Unary RPC: 如同一般 function call 一樣，client 端發出一個 request，server 收到後回覆一個 response&lt;/li&gt;
-&lt;li&gt;Server streaming RPC: client 端發出一個 request 並取得一個 stream 來讀取 server 回傳的一系列 messages&lt;/li&gt;
-&lt;li&gt;Client streaming RPC: client 端發出一系列 messages 給 server 並等待 server 完整讀取後回覆一個 response&lt;/li&gt;
-&lt;li&gt;Bidirectional streaming RPC: 在 client 端呼叫 service 方法建立好跟 server 之間的 connection 後，兩端都可以以任意順序、時間發送一系列 messages 給對方&lt;/li&gt;
-&lt;/ul&gt;
-&lt;h3 id=&#34;rpc-生命週期&#34;&gt;RPC 生命週期&lt;/h3&gt;
-&lt;h4 id=&#34;unary-rpc&#34;&gt;Unary RPC&lt;/h4&gt;
-&lt;p&gt;這是最簡單的類型，client 發出單一的 request，然後 server 端回覆單一的 response&lt;/p&gt;
-&lt;ol&gt;
-&lt;li&gt;client 呼叫 stub 方法，client 會立即發出 client 端的 metatdata 通知 server 端該方法被觸發&lt;/li&gt;
-&lt;li&gt;server 端可以立即回覆自己的初始 metadata (metadata 必須在任何 response 之前傳送) 或等待 client 端的 request message。實際上哪個先發生要看應用&lt;/li&gt;
-&lt;li&gt;一旦 server 端獲得 request message 後就開始執行該做的邏輯以產生 response，然後 response 就會連同 status details (status code 及可能的 status message) 及可能的隨附的 metadata 回覆給 client&lt;/li&gt;
-&lt;li&gt;如果 response status 為 OK，client 就會取得 response，在 client 端結束整個呼叫&lt;/li&gt;
-&lt;/ol&gt;
-&lt;h4 id=&#34;server-streaming-rpc&#34;&gt;Server streaming RPC&lt;/h4&gt;
-&lt;p&gt;基本跟 Unary RPC 類似，除了 server 端會對應 client 的 request 回覆一系列的 messages，在發送完所有 messages 後，server 端才會回覆 status details 及可選的 metadata 給 client&lt;/p&gt;
-&lt;h4 id=&#34;client-streaming-rpc&#34;&gt;Client streaming RPC&lt;/h4&gt;
-&lt;p&gt;基本也跟 Unary RPC 類似，除了 client 端會發送一系列的 messages，然後 server 端回覆單一的 response，通常會在 server 端接收到 client 端所有的 messages 之後，但並非必要&lt;/p&gt;
-&lt;h4 id=&#34;bidirectional-streaming-rpc&#34;&gt;Bidirectional streaming RPC&lt;/h4&gt;
-&lt;p&gt;與 Unary RPC 前兩個步驟相同，只是 client 端及 server 端都可以隨時以任意順序發送一系列的 message 給對方&lt;/p&gt;
-&lt;h2 id=&#34;參考連結&#34;&gt;參考連結&lt;/h2&gt;
-&lt;ul&gt;
-&lt;li&gt;&lt;a href=&#34;https://www.grpc.io/docs/what-is-grpc/core-concepts/&#34;&gt;Core concepts, architecture and lifecycle&lt;/a&gt;&lt;/li&gt;
-&lt;li&gt;&lt;a href=&#34;https://thenewstack.io/grpc-a-deep-dive-into-the-communication-pattern/&#34;&gt;gRPC: A Deep Dive into the Communication Pattern&lt;/a&gt;&lt;/li&gt;
-&lt;li&gt;&lt;a href=&#34;https://www.oreilly.com/library/view/grpc-up-and/9781492058328/&#34;&gt;gRPC Up and Running&lt;/a&gt;&lt;/li&gt;
-&lt;/ul&gt;
-- https://idontwannarock.github.io/tech_blog/2021/12/grpc/ - This website by Howard Wang is licensed under a Creative Common Attribution-ShareAlike 4.0 International License.</description>
-        </item>
-    
-    
-    
-        <item>
-        <title>gRPC 系列 - HTTP/2 概念</title>
+        <title>HTTP/2 系列 - HTTP/2 概念</title>
         <link>https://idontwannarock.github.io/tech_blog/2021/12/http2/</link>
         <pubDate>Tue, 21 Dec 2021 09:06:29 +0800</pubDate>
         
         <guid>https://idontwannarock.github.io/tech_blog/2021/12/http2/</guid>
         <description>Howard Tech Note https://idontwannarock.github.io/tech_blog/2021/12/http2/ -&lt;p&gt;從 2015 年 RFC 7540 正式發表後，至今 HTTP/2 已經被絕大多數主流瀏覽器所支援，並且是正當紅的 gRPC 的基礎，在研究 gPRC 之前，先來釐清一下 HTTP/2 的概念&lt;/p&gt;
-&lt;p&gt;這篇應該是 gRPC 系列文章的第一篇:&lt;/p&gt;
+&lt;p&gt;這篇是 HTTP/2 系列文章的第一篇:&lt;/p&gt;
 &lt;ol&gt;
-&lt;li&gt;&lt;a href=&#34;https://idontwannarock.github.io/tech_blog/2021/12/http2/&#34;&gt;gRPC 系列 - HTTP/2 概念&lt;/a&gt;&lt;/li&gt;
-&lt;li&gt;gRPC 系列 - gRPC 概念&lt;/li&gt;
-&lt;li&gt;gRPC 系列 - HTTP Server Push 技術&lt;/li&gt;
+&lt;li&gt;HTTP/2 系列 - HTTP/2 概念&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;https://idontwannarock.github.io/tech_blog/2021/12/http_server_push/&#34;&gt;HTTP/2 系列 - HTTP Server Push 技術&lt;/a&gt;&lt;/li&gt;
 &lt;/ol&gt;
-&lt;p&gt;先說，我其實只想研究我想研究的部分，所以不見得會把 gRPC 所有相關的研究一遍&lt;/p&gt;
+&lt;p&gt;不過，我其實只想研究我想研究的部分，所以不見得會把 HTTP/2 所有相關的內容都研究一遍&lt;/p&gt;
 &lt;h2 id=&#34;從遠古-http10-開始&#34;&gt;從遠古 HTTP/1.0 開始&lt;/h2&gt;
 &lt;p&gt;HTTP 是定義在 OSI 模型第七層 Application Layer 網路協議，HTTP/1.0 採取先進先出 (first-in first-out, FIFO) 策略，每次請求/回應都是有序的，必須等到請求收到對應回應後，才能進行下一次請求&lt;/p&gt;
 &lt;p&gt;HTTP 在 Transport Layer 採用 TCP 連線來通訊，而 TCP 要在 client/server 之間建立連線，是靠著三向交握 (three-way handshake) 來完成；而傳輸完成要斷線時則要做四次握手 (four-way handshake)。如果還有 TLS，那握手的來回通訊次數 (round-trip time, RTT) 就更多次了&lt;/p&gt;
@@ -175,10 +107,10 @@
 &lt;/ul&gt;
 &lt;p&gt;&lt;img src=&#34;https://res.cloudinary.com/dcvgho2zc/image/upload/v1639991899/Tech%20Blog/hpack.png&#34; alt=&#34;HPACK Header Compression&#34;&gt;&lt;/p&gt;
 &lt;h4 id=&#34;server-push&#34;&gt;Server Push&lt;/h4&gt;
-&lt;p&gt;為了達成 server 端主動推送訊息給 client 端，一直以來都有各種嘗試在 HTTP 上達成類似的效果，包括 Ajax Polling, Long Polling, Server Sent Event(SSE) 等等，但實際上除了 WebSocket 有利用到 HTTP 建立連線這種沾到邊的協定以外，其他透過 HTTP 的傳送訊息的方式都不能真正做到兩端不經請求主動推送訊息給對方 (bidirectional unsolicited message)，&lt;strong&gt;包括 HTTP/2 也沒有達成&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;為了達成 server 端主動推送訊息給 client 端，一直以來都有各種嘗試在 HTTP 上達成類似的效果，包括 Polling, Long Polling, Server Sent Event(SSE) 等等，但實際上除了 WebSocket 有利用到 HTTP 建立連線這種沾到邊的協定以外，其他透過 HTTP 的傳送訊息的方式都不能真正做到兩端不經請求主動推送訊息給對方 (bidirectional unsolicited communication)，&lt;strong&gt;包括 HTTP/2 也沒有達成&lt;/strong&gt;&lt;/p&gt;
 &lt;blockquote&gt;
 &lt;ul&gt;
-&lt;li&gt;Ajax Polling 是在 client 端設 timer 輪詢，以達到近似 server 端有準備好的資料就可以隨時推送到 client 端的效果&lt;/li&gt;
+&lt;li&gt;Polling 是在 client 端設 timer 輪詢，以達到近似 server 端有準備好的資料就可以隨時推送到 client 端的效果&lt;/li&gt;
 &lt;li&gt;Long Polling 則是維持 request 直到 server 端準備好後送出 response，client 端收到後再立刻發出 request 等待下一次 server 端的 response，以達成類似 server 端隨時推送 response 的效果&lt;/li&gt;
 &lt;li&gt;SSE 則是利用 HTTP event-stream 讓 server 端可以針對同一個 request 多次回覆 response，來達成類似 server 端主動 push 的效果&lt;/li&gt;
 &lt;/ul&gt;
@@ -1074,6 +1006,51 @@ scoop install hugo
 &lt;li&gt;其中設定的元素跟屬性都跟註解相同&lt;/li&gt;
 &lt;/ul&gt;
 - https://idontwannarock.github.io/tech_blog/2018/04/aop_and_spring_aop_basic/ - This website by Howard Wang is licensed under a Creative Common Attribution-ShareAlike 4.0 International License.</description>
+        </item>
+    
+    
+    
+        <item>
+        <title>Java 字串判定</title>
+        <link>https://idontwannarock.github.io/tech_blog/2018/02/java_string_check/</link>
+        <pubDate>Tue, 06 Feb 2018 14:09:25 +0800</pubDate>
+        
+        <guid>https://idontwannarock.github.io/tech_blog/2018/02/java_string_check/</guid>
+        <description>Howard Tech Note https://idontwannarock.github.io/tech_blog/2018/02/java_string_check/ -&lt;p&gt;因為開始做專題，開始要作資料檢查，首先會要碰到的就是最基本的檢查是否有輸入資料，也就是要檢查字串，記錄一下 Java 當中有關字串檢查的東西。&lt;/p&gt;
+&lt;h1 id=&#34;去除字串空白&#34;&gt;去除字串空白&lt;/h1&gt;
+&lt;p&gt;這主要分兩個部分，一是去掉頭尾空白，一是去掉字串中間空白。&lt;/p&gt;
+&lt;p&gt;去掉頭尾空白就用 &lt;code&gt;.trim()&lt;/code&gt;，去掉字串中間空白則可以用 &lt;code&gt;.replaceAll(&amp;quot; &amp;quot;, &amp;quot;&amp;quot;)&lt;/code&gt; 的方式簡單完成。&lt;/p&gt;
+&lt;p&gt;但用 &lt;code&gt;replaceAll()&lt;/code&gt; 方法有個小小的問題，就是萬一碰到的是空白字元，例如 &lt;code&gt;\t&lt;/code&gt;、&lt;code&gt;\r&lt;/code&gt; 這種就會有困難，所以必須要用正規表示式來去除，例如：&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#e7e9db;background-color:#2f1e2e;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-java&#34; data-lang=&#34;java&#34;&gt;String str &lt;span style=&#34;color:#5bc4bf&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color:#48b685&#34;&gt;&amp;#34;\t&amp;#34;&lt;/span&gt;&lt;span style=&#34;color:#5bc4bf&#34;&gt;;&lt;/span&gt;
+str&lt;span style=&#34;color:#5bc4bf&#34;&gt;.&lt;/span&gt;&lt;span style=&#34;color:#06b6ef&#34;&gt;replaceAll&lt;/span&gt;&lt;span style=&#34;color:#5bc4bf&#34;&gt;(&lt;/span&gt;&lt;span style=&#34;color:#48b685&#34;&gt;&amp;#34;\\s+&amp;#34;&lt;/span&gt;&lt;span style=&#34;color:#5bc4bf&#34;&gt;,&lt;/span&gt; &lt;span style=&#34;color:#48b685&#34;&gt;&amp;#34;&amp;#34;&lt;/span&gt;&lt;span style=&#34;color:#5bc4bf&#34;&gt;);&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h1 id=&#34;檢查空值&#34;&gt;檢查空值&lt;/h1&gt;
+&lt;p&gt;接著如果要檢查字串是否有東西，要分成檢查兩種狀態，null 或空字串。&lt;/p&gt;
+&lt;p&gt;這邊有幾個方法檢查這個部分，但要注意它們實際功能上的區別。&lt;/p&gt;
+&lt;h2 id=&#34;length--0&#34;&gt;&lt;code&gt;.length == 0&lt;/code&gt;&lt;/h2&gt;
+&lt;p&gt;這個是 Java 最原始的功能，基本上就是檢查字串長度是否為 0，回傳值型態為 boolean。&lt;/p&gt;
+&lt;h2 id=&#34;isempty&#34;&gt;&lt;code&gt;.isEmpty()&lt;/code&gt;&lt;/h2&gt;
+&lt;p&gt;這個方法是 Java 6.0 之後推出用來取代 &lt;code&gt;.length() == 0&lt;/code&gt; 的方法。&lt;code&gt;isEmpty()&lt;/code&gt; 其實也是在檢查字串長度是否為 0，回傳值型態一樣為 boolean。&lt;/p&gt;
+&lt;h2 id=&#34;equals&#34;&gt;&lt;code&gt;.equals(&amp;quot;&amp;quot;)&lt;/code&gt;&lt;/h2&gt;
+&lt;p&gt;這個功能是用字串的比對功能，比對是否為空字串，結果應該會跟前兩個方法相同。&lt;/p&gt;
+&lt;h2 id=&#34;-null&#34;&gt;&lt;code&gt;!= null&lt;/code&gt;&lt;/h2&gt;
+&lt;p&gt;前面幾個方法都有一個共同的問題：萬一字串為 null，全都來不及檢查就會跳 NullPointerException。&lt;/p&gt;
+&lt;p&gt;所以必須要用這個方式檢查是否為 Null，再檢查是否為空字串，也就是要寫成類似下面這樣：&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#e7e9db;background-color:#2f1e2e;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-java&#34; data-lang=&#34;java&#34;&gt;String string&lt;span style=&#34;color:#5bc4bf&#34;&gt;;&lt;/span&gt;
+&lt;span style=&#34;color:#815ba4&#34;&gt;if&lt;/span&gt; &lt;span style=&#34;color:#5bc4bf&#34;&gt;(&lt;/span&gt;string &lt;span style=&#34;color:#5bc4bf&#34;&gt;!=&lt;/span&gt; &lt;span style=&#34;color:#815ba4&#34;&gt;null&lt;/span&gt; &lt;span style=&#34;color:#5bc4bf&#34;&gt;&amp;amp;&amp;amp;&lt;/span&gt; string&lt;span style=&#34;color:#5bc4bf&#34;&gt;.&lt;/span&gt;&lt;span style=&#34;color:#06b6ef&#34;&gt;isEmpty&lt;/span&gt;&lt;span style=&#34;color:#5bc4bf&#34;&gt;())&lt;/span&gt; &lt;span style=&#34;color:#5bc4bf&#34;&gt;{&lt;/span&gt;
+    &lt;span style=&#34;color:#776e71&#34;&gt;// things to do when string is neither null nor blank;
+&lt;/span&gt;&lt;span style=&#34;color:#776e71&#34;&gt;&lt;/span&gt;&lt;span style=&#34;color:#5bc4bf&#34;&gt;}&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h2 id=&#34;equalsstring&#34;&gt;&lt;code&gt;&amp;quot;&amp;quot;.equals(string)&lt;/code&gt;&lt;/h2&gt;
+&lt;p&gt;但有一個更簡短的方法 &lt;code&gt;&amp;quot;&amp;quot;.equals(string)&lt;/code&gt;。&lt;/p&gt;
+&lt;p&gt;因為用 String 本身的 &lt;code&gt;.equals()&lt;/code&gt; 方法，會先檢查括號內參數字串是否為 null，若是 null 就會直接回傳 &lt;code&gt;false&lt;/code&gt;；若參數字串不為 null，才會繼續檢查是否跟 &lt;code&gt;&amp;quot;&amp;quot;&lt;/code&gt; 空字串相等。&lt;/p&gt;
+&lt;p&gt;所以前一段的檢查式就可以縮短如下：&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#e7e9db;background-color:#2f1e2e;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-java&#34; data-lang=&#34;java&#34;&gt;String string&lt;span style=&#34;color:#5bc4bf&#34;&gt;;&lt;/span&gt;
+&lt;span style=&#34;color:#815ba4&#34;&gt;if&lt;/span&gt; &lt;span style=&#34;color:#5bc4bf&#34;&gt;(!&lt;/span&gt;&lt;span style=&#34;color:#48b685&#34;&gt;&amp;#34;&amp;#34;&lt;/span&gt;&lt;span style=&#34;color:#5bc4bf&#34;&gt;.&lt;/span&gt;&lt;span style=&#34;color:#06b6ef&#34;&gt;equals&lt;/span&gt;&lt;span style=&#34;color:#5bc4bf&#34;&gt;(&lt;/span&gt;string&lt;span style=&#34;color:#5bc4bf&#34;&gt;))&lt;/span&gt; &lt;span style=&#34;color:#5bc4bf&#34;&gt;{&lt;/span&gt;
+    &lt;span style=&#34;color:#776e71&#34;&gt;// things to do when string is neither null nor blank;
+&lt;/span&gt;&lt;span style=&#34;color:#776e71&#34;&gt;&lt;/span&gt;&lt;span style=&#34;color:#5bc4bf&#34;&gt;}&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h1 id=&#34;結語&#34;&gt;結語&lt;/h1&gt;
+&lt;p&gt;雖然最後一個方法最簡短，但其實可讀性不見得比較優秀；而倒數第二個方法雖然比較囉唆，但整體上可讀性比較好。&lt;/p&gt;
+&lt;p&gt;所以要用哪種方法還是要看簡潔跟可讀性怎麼取捨。&lt;/p&gt;
+- https://idontwannarock.github.io/tech_blog/2018/02/java_string_check/ - This website by Howard Wang is licensed under a Creative Common Attribution-ShareAlike 4.0 International License.</description>
         </item>
     
     
