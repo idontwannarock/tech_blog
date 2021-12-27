@@ -6,9 +6,300 @@
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
     <copyright>This website by Howard Wang is licensed under a Creative Common Attribution-ShareAlike 4.0 International License.</copyright>
-    <lastBuildDate>Tue, 21 Dec 2021 09:06:29 +0800</lastBuildDate>
+    <lastBuildDate>Mon, 27 Dec 2021 09:44:31 +0800</lastBuildDate>
     
         <atom:link href="https://idontwannarock.github.io/tech_blog/index.xml" rel="self" type="application/rss+xml" />
+    
+    
+    
+        <item>
+        <title>Git 及 GitHub 基礎認識</title>
+        <link>https://idontwannarock.github.io/tech_blog/2017/09/git_and_github_basic/</link>
+        <pubDate>Thu, 14 Sep 2017 07:13:01 +0800</pubDate>
+        
+        <guid>https://idontwannarock.github.io/tech_blog/2017/09/git_and_github_basic/</guid>
+        <description>Howard Tech Note https://idontwannarock.github.io/tech_blog/2017/09/git_and_github_basic/ -&lt;blockquote&gt;
+&lt;p&gt;這篇文章是初學的時候撰寫的，其中一些觀念並不正確，步驟也可能因為更新或觀念問題而不適用或者多餘，此篇文章僅為留做紀錄&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;h1 id=&#34;學習目標&#34;&gt;學習目標&lt;/h1&gt;
+&lt;p&gt;因為 Git 指令一直出問題，今天就來搞清楚 Git 跟 GitHub 的各種問題吧！&lt;/p&gt;
+&lt;h1 id=&#34;學習內容&#34;&gt;學習內容&lt;/h1&gt;
+&lt;h2 id=&#34;git-跟-github-是什麼&#34;&gt;Git 跟 GitHub 是什麼&lt;/h2&gt;
+&lt;p&gt;&lt;a href=&#34;https://zh.wikipedia.org/zh-tw/Git&#34;&gt;Git Wiki&lt;/a&gt; 則說 Git 是一種分散式版本控制軟體。&lt;/p&gt;
+&lt;p&gt;詳細的說明可以參考 &lt;a href=&#34;https://goo.gl/YzDiHy&#34;&gt;Git Documentation&lt;/a&gt;，有中文版，不過只有前幾個主題有翻譯。&lt;/p&gt;
+&lt;p&gt;&lt;a href=&#34;https://zh.wikipedia.org/zh-tw/GitHub&#34;&gt;GitHub Wiki&lt;/a&gt;上說，GitHub 是一個透過 Git 進行版本控制的軟體原始碼代管服務，簡單來說就是可以放各種 Code 的地方，但其實也可以放一些文件跟圖片等，好像沒有空間限制，只是有單一檔案大小 1GB 的軟性限制。&lt;/p&gt;
+&lt;h3 id=&#34;git-觀念&#34;&gt;Git 觀念&lt;/h3&gt;
+&lt;p&gt;這裡我們來先解釋一下 Git版本控制的觀念，我覺得 &lt;a href=&#34;https://hellolynn.hpd.io/&#34;&gt;寫點科普&lt;/a&gt; 寫的這兩篇寫得非常平易近人而且完整，推薦給大家！&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;a href=&#34;https://hellolynn.hpd.io/2017/01/18/git%E6%96%B0%E6%89%8B%E5%85%A5%E9%96%80%E6%95%99%E5%AD%B8-part-1/&#34;&gt;GIT新手入門教學 – PART 1&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;https://hellolynn.hpd.io/2017/01/18/git%E6%96%B0%E6%89%8B%E5%85%A5%E9%96%80%E6%95%99%E5%AD%B8-part-2/&#34;&gt;GIT新手入門教學 – PART 2&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;我的理解是譬如有一份作業需要大家一起作，大家先把原始的作業文件 (origin) 放在小組長那邊 (remote)，然後各自 copy 一份回家 (local) 寫自己要做的部分，然後拿回去給小組長，由小組長決定誰的作業寫得好，可以成為新一代的原始作業文件 (master)；或某人提交的作業寫得不完整，但寫過地那部分很好，就跟原始作業合併 (merge) 成一份新一代的原始作業文件。大家也可以 copy 別人寫的作業回去修改 (pull)，反正最後由小組長決定哪個版本的作業寫得最好，就可以成為新一代的原始作業文件這樣。&lt;/p&gt;
+&lt;p&gt;而大家 copy 回家寫的作業也有三個階段，假如我在電腦上打作業，分成三個資料夾，一個是 Working Directory、一個是 Staging Area、一個是 Repository。&lt;/p&gt;
+&lt;p&gt;第一個資料夾就是放 copy 回家的作業，然後我可能亂打了一些、新增修改了一些，但交出去很丟臉的部分；第二個資料夾就是放某些我覺得可以的部分作業，先暫時存起來；最後一個資料夾就是放我確定要提交的作業版本。&lt;/p&gt;
+&lt;p&gt;所以我寫作業的流程就是這樣：&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;先 copy 一份 (pull) 原始作業文件 (origin) 回家 (local)&lt;/li&gt;
+&lt;li&gt;在 Working Directory 資料夾寫作業，找各種資料，新增刪減等等&lt;/li&gt;
+&lt;li&gt;將比較滿意的部分暫存 (add) 到 Staging Area 資料夾&lt;/li&gt;
+&lt;li&gt;當 Staging Area 資料夾有比較完整的作業版本後，再儲存 (commit) 到 Repository 資料夾中&lt;/li&gt;
+&lt;li&gt;最後將 Repository 資料夾中要繳交的作業交出去 (push) 給小組長 (remote)&lt;/li&gt;
+&lt;/ol&gt;
+&lt;h2 id=&#34;建立-github-帳號&#34;&gt;建立 GitHub 帳號&lt;/h2&gt;
+&lt;p&gt;接下來說明實際操作流程。&lt;/p&gt;
+&lt;p&gt;建議大家先到 &lt;a href=&#34;https://github.com/&#34;&gt;GitHub&lt;/a&gt; 建立自己的帳號，基本功能都是免費的，只有當你要發展私人專案，想要將 repositories 設定為 private 的時候會要收費的樣子。(更正：GitHub 已於 2019/1/7 開放免費無限量 private repo，可參見 &lt;a href=&#34;https://github.blog/2019-01-07-new-year-new-github/&#34;&gt;這篇聲明&lt;/a&gt;)&lt;/p&gt;
+&lt;p&gt;GitHub 帳號申請流程跟一般申請免費帳號一樣，就到首頁按下綠色的 Sign up for GitHub 按鈕之後，一路照指示填上資料跟選擇選項就可以了。然後 GitHub 會寄一封認證 email，請點 email 裡面的 Verify email address 那個連結來確認你的 email address。&lt;/p&gt;
+&lt;p&gt;接下來先作 Git 的環境設定，這樣之後就可以都在 Git Bash 操作各種指令，不用在 Git Bash 跟 PowerShell 視窗換來換去。如果是 Mac 用戶，則都可以用 MacOS 隨附的「終端機 Terminal」軟體，或安裝下載相同功能的 iTerm2 來操作 Git 指令。&lt;/p&gt;
+&lt;h2 id=&#34;git-環境設定&#34;&gt;Git 環境設定&lt;/h2&gt;
+&lt;p&gt;先說明我一般使用的是 Windows 10，兼有一台 Macbook Pro。但我是超級初心者，所以 Linux 我完全不會，抱歉。&lt;/p&gt;
+&lt;p&gt;先安裝 Git，這步驟很簡單。Windows 就到 &lt;a href=&#34;https://git-scm.com/&#34;&gt;Git官網&lt;/a&gt; 下載就好，而且一鍵安裝，這邊不需要多講；若是 MacOS 用戶，請利用 Homebrew 安裝 Git，安裝 Homebrew 跟 Git 的操作過程可以參考我的 &lt;a href=&#34;https://idontwannarock.github.io/tech_blog/2017/11/mbp_setup_2017/#安裝Homebrew&#34;&gt;這篇文章&lt;/a&gt;，然後可以直接跳到下一個主題：設定 Git 識別資料。&lt;/p&gt;
+&lt;p&gt;然後應該會在 Windows 按鈕（狀態列左邊 Windows 圖示的那顆）裡面的程式集多一個 Git 的資料夾，裡面有三個程式：Git Bash、Git CMD 跟 Git GUI。最常用的大概是 Git Bash，原則上都在這裡下各種 Git 指令；Git CMD 我不知道拿來幹嘛；Git GUI 是圖形介面，但設計的不太好用。&lt;/p&gt;
+&lt;p&gt;如果大家沒有要學太多 Git 指令，其實可以直接下載 &lt;a href=&#34;https://desktop.github.com/&#34;&gt;GitHub Desktop&lt;/a&gt; 或 &lt;a href=&#34;https://www.sourcetreeapp.com/&#34;&gt;Sourcetree&lt;/a&gt;，圖形化介面真的太好用，也不用記一堆 Git 指令。但今天沒有要教大家怎麼用 GitHub Desktop 跟 Sourcetree，或其實大家看完後面 Git 概念教學就大概會懂使用流程。&lt;/p&gt;
+&lt;h2 id=&#34;設定-git-識別資料&#34;&gt;設定 Git 識別資料&lt;/h2&gt;
+&lt;p&gt;安裝完 Git 之後，首先應該設定使用者名稱跟 email，應該要跟你之前申請 GitHub 帳號時的 username 及 email 相同。&lt;/p&gt;
+&lt;p&gt;以下步驟使用到的指令，基本上在 Windows 跟 MacOS 上是一樣的，只有一些地方會有所不懂，我會特別說明。&lt;/p&gt;
+&lt;p&gt;請打開 Git Bash，可能在桌面就有，或者開始按鈕裡的程式集 Git 資料夾裡面有，MacOS 請打開終端機，然後依序輸入以下兩行 Git 指令：&lt;/p&gt;
+&lt;pre tabindex=&#34;0&#34;&gt;&lt;code&gt;git config --global user.name &amp;quot;GitHub username&amp;quot;  
+git config --global user.email &amp;quot;GitHub email&amp;quot;
+&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;接著你可以輸入以下指令來檢查資訊是否有輸入正確。&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#e7e9db;background-color:#2f1e2e;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-bash&#34; data-lang=&#34;bash&#34;&gt;cat ~/.gitconfig
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h2 id=&#34;建立-ssh-key-並增加到-github&#34;&gt;建立 SSH Key 並增加到 GitHub&lt;/h2&gt;
+&lt;p&gt;SSH Key 就像一個鑰匙，每一台電腦、筆電都會生成一個獨一無二的 SSH Key，然後我們上自己的 GitHub 去登記這個鑰匙，這樣以後我們用電腦或筆電上傳東西到 GitHub 時，電腦或筆電就可以用這個鑰匙，以及前面設定的 Git 識別資料去開啟我們的 GitHub 帳號並把東西上傳上去。&lt;/p&gt;
+&lt;p&gt;就跟我們要去銀行存錢，要提供身分證 (Git 識別資料) 跟密碼 (SSH Key) 給銀行一樣。&lt;/p&gt;
+&lt;p&gt;要生成一個 SSH Key，一樣在之前打開的 Git Bash 或終端機輸入以下指令：&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#e7e9db;background-color:#2f1e2e;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-bash&#34; data-lang=&#34;bash&#34;&gt;ssh-keygen -t rsa -C &lt;span style=&#34;color:#48b685&#34;&gt;&amp;#34;GitHub帳號的 email&amp;#34;&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;會出現以下這行，設定儲存 SSH Key 的位置，使用預設的就好，所以直接按 Enter。&lt;/p&gt;
+&lt;pre tabindex=&#34;0&#34;&gt;&lt;code&gt;Enter file in which to save the key (/Users/使用者名稱/.ssh/id_rsa): [Press enter]
+&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;如果你以前有設定過 SSH Key，它會出現這行 &lt;code&gt;/Users/you/.ssh/id_rsa already exists. Overwrite (y/n)?&lt;/code&gt;，建議直接打 &lt;code&gt;yes&lt;/code&gt; 或 &lt;code&gt;y&lt;/code&gt; 來重新操作以確保正確。接著會出現以下這行來問你是不是要為 SSH Key 設定一個密碼，要就輸入，並且會需要再輸入一次作確認，不要就直接 Enter。&lt;/p&gt;
+&lt;pre tabindex=&#34;0&#34;&gt;&lt;code&gt;Enter passphrase (empty for no passphrase): [Type a passphrase]
+&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;然後他就會顯示一大段文字，表示 SSH Key 產生成功，接著我們把 SSH Key 加到 ssh-agent 來免除每次要連接登入 GitHub 都還要再輸入一次 SSH Key 的密碼。請先輸入以下指令：&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#e7e9db;background-color:#2f1e2e;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-bash&#34; data-lang=&#34;bash&#34;&gt;eval &lt;span style=&#34;color:#815ba4&#34;&gt;$(&lt;/span&gt;ssh-agent -s&lt;span style=&#34;color:#815ba4&#34;&gt;)&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;接著會出現這行 &lt;code&gt;Agent pid 8492&lt;/code&gt;，數字每個人都不一樣，這沒關係。接著輸入以下這行，可能會需要重新輸入一次 SSH Key 的密碼：&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#e7e9db;background-color:#2f1e2e;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-bash&#34; data-lang=&#34;bash&#34;&gt;ssh-add ~/.ssh/id_rsa
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;如果出現 &lt;code&gt;Identity added&lt;/code&gt; 這行字就表示成功了。&lt;/p&gt;
+&lt;p&gt;再來需要把 SSH Key 加入到自己的 GitHub 帳號。&lt;/p&gt;
+&lt;p&gt;首先在同樣的 Git Bash 畫面輸入以下這行，將 SSH Key 複製到剪貼簿裡面，就類似平常按 &lt;code&gt;Ctrl&lt;/code&gt;+&lt;code&gt;C&lt;/code&gt; 那樣複製。&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#e7e9db;background-color:#2f1e2e;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-bash&#34; data-lang=&#34;bash&#34;&gt;clip &amp;lt; ~/.ssh/id_rsa.pub
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;如果是 Mac 使用者，請到 &lt;code&gt;/使用者名稱/.ssh/&lt;/code&gt; 這個資料夾，若找不到請調整隱藏檔的設定，然後用文字編輯打開 &lt;code&gt;id_rsa.pub&lt;/code&gt; 這個檔案，講整個檔案內容複製起來。&lt;/p&gt;
+&lt;p&gt;然後用瀏覽器進入到你自己的 GitHub 帳號，點最右上角的三角形，選 Settings，然後選左邊列表的 SSH and GPG keys，點綠色的 New SSH key，然後在 Key 下面的欄位直接 &lt;code&gt;Ctrl&lt;/code&gt;+&lt;code&gt;V&lt;/code&gt; 或 &lt;code&gt;command&lt;/code&gt;+&lt;code&gt;V&lt;/code&gt; 把 SSH Key 貼上，在 Title 欄位輸入你之後能辨識這個 SSH Key 是代表哪一台電腦或筆電的名稱，最後點綠色的 Add SSH key 按鈕就添加完成啦！&lt;/p&gt;
+&lt;p&gt;然後作個小測試，在同樣的 Git Bash 或終端機輸入 &lt;code&gt;ssh -T git@github.com&lt;/code&gt;，可能會看到類似以下的一段文字：&lt;/p&gt;
+&lt;pre tabindex=&#34;0&#34;&gt;&lt;code&gt;The authenticity of host &#39;github.com (207.97.227.239)&#39; can&#39;t be established.  
+RSA key fingerprint is 16:27:ac:a5:76:28:2d:36:63:1b:56:4d:eb:df:a6:48.  
+Are you sure you want to continue connecting (yes/no)?
+&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;fingerprint 後面那一串長長的字每個人都不一樣，這也沒關係。輸入 &lt;code&gt;yes&lt;/code&gt; 後應該會跳出以下訊息：&lt;/p&gt;
+&lt;pre tabindex=&#34;0&#34;&gt;&lt;code&gt;Hi &amp;lt;username&amp;gt;! You&#39;ve successfully authenticated, but GitHub does not provide shell access.
+&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;這段文字中的 &lt;code&gt;&amp;lt;username&amp;gt;&lt;/code&gt; 是你 GitHub 設定的 username，這樣就代表成功啦！&lt;/p&gt;
+&lt;h2 id=&#34;建立-project-並上傳到-github&#34;&gt;建立 Project 並上傳到 GitHub&lt;/h2&gt;
+&lt;p&gt;接下來利用建立一個新專案來介紹一些 Git 的基本指令。&lt;/p&gt;
+&lt;p&gt;首先先到桌面或隨便一個資料夾，建立一個 test 資料夾，然後在資料夾裡面隨便新增一個文字檔案，&lt;del&gt;公堂之上假設一下&lt;/del&gt; 假設就叫 &lt;code&gt;first-post.md&lt;/code&gt; (md 檔案是 Markdown 語言的檔案，內容可以被 GitHub 直接讀取並且辨識)，接著請在 test 資料夾內的空白處點右鍵，選 Git Bash Here，就會打開 Git Bash，並預設路徑就是 test 資料夾。&lt;/p&gt;
+&lt;p&gt;如果是 MacOS 使用者，也請建立一個資料夾，並同樣新增一個 &lt;code&gt;first-post.md&lt;/code&gt; 文字檔案，請對該資料夾按一下右鍵或 &lt;code&gt;control&lt;/code&gt; 鍵出現選單，再按著 &lt;code&gt;option&lt;/code&gt; 鍵，會出現 &lt;code&gt;拷貝「資料夾名稱」作為路徑名稱&lt;/code&gt; 的選項，選擇之後就會複製資料夾路徑。然後開啟終端機輸入 &lt;code&gt;cd&lt;/code&gt;，然後空一格貼上剛才複製的路徑，以移動操作位置到該資料夾，很重要，請一定要做。&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#e7e9db;background-color:#2f1e2e;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-bash&#34; data-lang=&#34;bash&#34;&gt;cd &amp;lt;資料夾路徑&amp;gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;接著就要開始操作 Git 指令，如果覺得我講的不清楚，可以回去看寫點科普那兩篇文章的觀念跟操作。&lt;/p&gt;
+&lt;p&gt;這邊還是記錄一下我的作法。請大家，不論是 Windows 或 MacOS 使用者，都輸入以下命令：&lt;/p&gt;
+&lt;pre tabindex=&#34;0&#34;&gt;&lt;code&gt;git init
+&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;init 就是 initialize，這代表將這個資料夾變成一個 Repository，Git 就會開始記錄這個 Repo 裡面的所有改動跟版本。然後以下指令會新增全部 test 資料夾裡面的檔案到 staging 的狀態。&lt;/p&gt;
+&lt;pre tabindex=&#34;0&#34;&gt;&lt;code&gt;git add .
+&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;staging 好了之後，再用下面這個指令來 commit 到本機的 Repo，這些 commit 到 Repo 的東西才能被 push 到 GitHub上。&lt;/p&gt;
+&lt;pre tabindex=&#34;0&#34;&gt;&lt;code&gt;git commit -m &amp;quot;說明操作了什麼的一段文字&amp;quot;
+&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;這過程中隨時都可以用 &lt;code&gt;git status&lt;/code&gt; 指令來查看你處於哪個階段。&lt;/p&gt;
+&lt;p&gt;最後要 push 到 GitHub 之前，請先到 GitHub 上建立一個名稱為 test 的 Repository，建立好之後，請點中間 SSH 那個按鈕，後面會生成該 Repo 的 SSH url，把那個網址複製下來。若建立 Repo 的時候有勾 README 選項，則按右邊綠色 Clone or download 按鈕，點藍色 Use SSH 連結切換到 Clone with SSH，再複製 url。&lt;/p&gt;
+&lt;p&gt;最後一樣到剛才的 Git Bash 或終端機裡面輸入以下命令，我們要將 commit push 到 GitHub 上。過程中可能會要輸入 SSH 密碼。&lt;/p&gt;
+&lt;pre tabindex=&#34;0&#34;&gt;&lt;code&gt;git remote add origin git@github.com:GitHub使用者名稱/test.git  
+git push origin master
+&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;第一句是要為這個專案加上 GitHub 上面 Repo 的位置，後面要 push，Git 才知道要 push 到哪裡。第二句話就是把已經 commit 的版本 push 到 GitHub 對應 Repo 的 master 分支上。master 也就是主要版本。&lt;/p&gt;
+&lt;p&gt;這樣就完成建立一個新 Project 並上傳到 GitHub 啦！&lt;/p&gt;
+&lt;h2 id=&#34;push-修改過的-project-到-github&#34;&gt;push 修改過的 Project 到 GitHub&lt;/h2&gt;
+&lt;p&gt;最後，如果之後要修改剛建立的那個 Project 資料夾裡的任何內容，想要再把變更 push 到 GitHub 上，請在 test 資料夾打開 Git Bash，或終端機照前面說明移動位置到該資料夾下，輸入以下指令：&lt;/p&gt;
+&lt;pre tabindex=&#34;0&#34;&gt;&lt;code&gt;git add .  
+git commit -m &amp;quot;說明文字&amp;quot;  
+git push origin master
+&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;就很簡單的搞定啦！&lt;/p&gt;
+&lt;p&gt;至於 branch 那種東西，等我搞懂再來新增吧。今天先這樣~~&lt;/p&gt;
+- https://idontwannarock.github.io/tech_blog/2017/09/git_and_github_basic/ - This website by Howard Wang is licensed under a Creative Common Attribution-ShareAlike 4.0 International License.</description>
+        </item>
+    
+    
+    
+        <item>
+        <title>實作簡單登入會員系統 (1)</title>
+        <link>https://idontwannarock.github.io/tech_blog/2017/09/login_signup_function_1/</link>
+        <pubDate>Mon, 11 Sep 2017 07:11:59 +0800</pubDate>
+        
+        <guid>https://idontwannarock.github.io/tech_blog/2017/09/login_signup_function_1/</guid>
+        <description>Howard Tech Note https://idontwannarock.github.io/tech_blog/2017/09/login_signup_function_1/ -&lt;blockquote&gt;
+&lt;p&gt;這篇文章是初學的時候撰寫的，其中一些觀念並不正確，步驟也可能因為更新或觀念問題而不適用或者多餘，此篇文章僅為留做紀錄&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;h1 id=&#34;學習目標&#34;&gt;學習目標&lt;/h1&gt;
+&lt;ol&gt;
+&lt;li&gt;實作簡單會員系統，有加入會員、登入、登出&lt;/li&gt;
+&lt;li&gt;cookie&lt;/li&gt;
+&lt;li&gt;防範 SQL Injection+XSS&lt;/li&gt;
+&lt;li&gt;hash 密碼&lt;/li&gt;
+&lt;/ol&gt;
+&lt;h1 id=&#34;學習內容&#34;&gt;學習內容&lt;/h1&gt;
+&lt;h2 id=&#34;構思&#34;&gt;構思&lt;/h2&gt;
+&lt;p&gt;坦白說，我有自學過一點點前後端的 Udemy 網路課程，所以前端的部分，簡單的 HTML, CSS, Javascript, jQuery 我還可以，大概是不會寫也可以谷哥看別人怎麼寫的程度。後端也是學過簡單的 PHP 跟 MySQL 這樣。所以後面的說明很可能會省略很多基礎，而只記錄我不太會或不太熟的部分。&lt;/p&gt;
+&lt;p&gt;關於會員系統，Udemy 課程的老師其實有教過這個部分，但當時似懂非懂，幾乎就是 copy 老師的程式碼，糊里糊塗就寫出來，PHP 跟 MySQL 的部分一片模糊，所以先來嘗試自己重新寫一遍，不行再來找找看網路教學。&lt;/p&gt;
+&lt;p&gt;要寫登入登出的功能，我第一個想到就是要用 HTML 的 &lt;code&gt;form&lt;/code&gt; 先做三個 &lt;code&gt;input&lt;/code&gt; 跟一個 &lt;code&gt;button&lt;/code&gt;，若要串接資料庫，應該還要再作一個 &lt;code&gt;button&lt;/code&gt; 切換 Sign Up 跟 Login 畫面來作區別。預計應該要用 jQuery 控制切換 Sign Up/Login 的功能。&lt;/p&gt;
+&lt;p&gt;然後後端邏輯應該就是先作 Sign Up/Login 資料的驗證部分，用 &lt;code&gt;ajax&lt;/code&gt; 傳輸資料到後端，檢查輸入的 &lt;code&gt;username&lt;/code&gt;、&lt;code&gt;email&lt;/code&gt; 跟 &lt;code&gt;password&lt;/code&gt; 是否空白、格式是否正確以及是否重複，用 &lt;code&gt;echo&lt;/code&gt; 輸出錯誤提示訊息給前端。&lt;/p&gt;
+&lt;p&gt;接著作 Sign Up 部分，接著剛剛驗證完資料正確後，檢查資料庫有無重複資料後，再把 &lt;code&gt;username&lt;/code&gt;、&lt;code&gt;email&lt;/code&gt; 跟 &lt;code&gt;password&lt;/code&gt; 存進資料庫。&lt;/p&gt;
+&lt;p&gt;最後再作 Login 部分，先用使用者輸入的 &lt;code&gt;username&lt;/code&gt; 比對資料庫有無紀錄，再比對 &lt;code&gt;password&lt;/code&gt;，最後輸出 Login 成功訊息。這邊會感覺會需要了解 &lt;code&gt;$_SESSION&lt;/code&gt; 跟 &lt;code&gt;$_COOKIE&lt;/code&gt; 怎麼運作，因為要幫 Sign Up/Login 成功的使用者加上 &lt;code&gt;$_SESSION&lt;/code&gt; 或 &lt;code&gt;$_COOKIE&lt;/code&gt;。&lt;/p&gt;
+&lt;p&gt;接著作 SQL Injection 及 XSS 攻擊的防範。最後再將使用者 Sign Up 時輸入的 &lt;code&gt;password&lt;/code&gt; 作 hash 處理。&lt;/p&gt;
+&lt;p&gt;另外以下是以只架站在自己 Windows 電腦的 XAMPP 上為前提，XAMPP 架站簡單教學可以看我之前寫的這篇筆記：&lt;a href=&#34;https://idontwannarock.github.io/tech_blog/2017/09/xampp_setup_and_php_practice/&#34;&gt;XAMPP安裝設定及簡單 PHP練習&lt;/a&gt;。&lt;/p&gt;
+&lt;p&gt;還有就是如果想要讓自己寫完的作品可以讓別人看到，可能要自己先想辦法查做法，我自己都還搞不太清楚。（攤手）&lt;/p&gt;
+&lt;h2 id=&#34;版面設定&#34;&gt;版面設定&lt;/h2&gt;
+&lt;p&gt;所以就從寫個 &lt;code&gt;form&lt;/code&gt;、三個 &lt;code&gt;input&lt;/code&gt; 跟兩個按鈕開始好了。我猶豫了一下要不要用 Bootstrap，還是用好了，畢竟練習的重點在後端，畫面就直接套用現成的版就好。&lt;/p&gt;
+&lt;p&gt;所以直接就貼上 Bootstrap 4 的 &lt;a href=&#34;https://v4-alpha.getbootstrap.com/getting-started/introduction/#starter-template&#34;&gt;Starter template&lt;/a&gt;，因為後面要用 &lt;code&gt;ajax&lt;/code&gt;，所以 jQeury 的版本記得從 slim 換成最起碼 min 的版本。然後直接用 Bootstrap 的 &lt;a href=&#34;https://v4-alpha.getbootstrap.com/components/forms/#form-controls&#34;&gt;Forms&lt;/a&gt; 作模板。&lt;/p&gt;
+&lt;h2 id=&#34;切換功能&#34;&gt;切換功能&lt;/h2&gt;
+&lt;p&gt;接下來就是複習 jQuery 語法的時候，因為這邊用到的功能不難所以不多講。大概方向就是在 &lt;code&gt;click&lt;/code&gt; 動作上建立一個判斷式，判斷目前是 Login 轉 Sign Up 要做什麼事；Sign Up 轉 Login 要做什麼事。這部分的 &lt;code&gt;script&lt;/code&gt; 我是寫在 &lt;code&gt;body&lt;/code&gt; 的最後。&lt;/p&gt;
+&lt;p&gt;切換畫面有個小技巧記錄一下，作一個隱藏的 &lt;code&gt;input&lt;/code&gt;，然後設定 &lt;code&gt;value=&amp;quot;1&amp;quot;&lt;/code&gt;，這樣在用 jQuery 判斷的時候用這個值作判斷條件會比較簡單。不然只是純粹要切換畫面修改 CSS，應該用 &lt;code&gt;.toggleClass()&lt;/code&gt; 就可以了。&lt;/p&gt;
+&lt;p&gt;前端的部分大概就這樣，接下來開始練習後端部分。&lt;/p&gt;
+&lt;h2 id=&#34;設置資料庫&#34;&gt;設置資料庫&lt;/h2&gt;
+&lt;p&gt;先去 XAMPP 的 Control Panel 把 MySQL 打開，然後去瀏覽器輸入 &lt;code&gt;http://localhost:8080&lt;/code&gt; 來進去 Apache Friend 頁面，點選右上角的 phpMyAdmin 進入資料庫管理的頁面。直接左邊點選 New 來建立一個新的資料庫，我設定資料庫名字為 &lt;code&gt;user&lt;/code&gt;，新 table 名稱 &lt;code&gt;userData&lt;/code&gt;，四欄分別是 &lt;code&gt;id&lt;/code&gt;、&lt;code&gt;username&lt;/code&gt;、&lt;code&gt;email&lt;/code&gt; 跟 &lt;code&gt;password&lt;/code&gt;，並設定 &lt;code&gt;id&lt;/code&gt; 欄位為 Primary Key 以及 Auto Increment。&lt;/p&gt;
+&lt;p&gt;設定 Primary Key 的目的是確保此欄位的每一筆資料都是獨一無二的；Auto Increment 則是讓資料庫自動遞增設定 &lt;code&gt;id&lt;/code&gt;。&lt;/p&gt;
+&lt;h2 id=&#34;連接資料庫&#34;&gt;連接資料庫&lt;/h2&gt;
+&lt;p&gt;接下來就要用 PHP 的 mysqli 函數庫語法嘗試連接資料庫，我是用以下方法，並用 PHP 的 &lt;code&gt;print_r&lt;/code&gt; 來顯示連結問題。&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#e7e9db;background-color:#2f1e2e;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-php&#34; data-lang=&#34;php&#34;&gt;&lt;span style=&#34;color:#ef6155&#34;&gt;$link&lt;/span&gt; &lt;span style=&#34;color:#5bc4bf&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color:#06b6ef&#34;&gt;mysqli_connect&lt;/span&gt;(&lt;span style=&#34;color:#48b685&#34;&gt;&amp;#34;localhost:3306&amp;#34;&lt;/span&gt;, &lt;span style=&#34;color:#48b685&#34;&gt;&amp;#34;root&amp;#34;&lt;/span&gt;, &lt;span style=&#34;color:#48b685&#34;&gt;&amp;#34;&amp;#34;&lt;/span&gt;, &lt;span style=&#34;color:#48b685&#34;&gt;&amp;#34;user&amp;#34;&lt;/span&gt;);  
+&lt;span style=&#34;color:#815ba4&#34;&gt;if&lt;/span&gt;(&lt;span style=&#34;color:#06b6ef&#34;&gt;mysqli_connect_errno&lt;/span&gt;()) {  
+    &lt;span style=&#34;color:#06b6ef&#34;&gt;print_r&lt;/span&gt;(&lt;span style=&#34;color:#06b6ef&#34;&gt;mysqli_connect_error&lt;/span&gt;());  
+    &lt;span style=&#34;color:#815ba4&#34;&gt;exit&lt;/span&gt;();  
+}
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;記錄一下 &lt;a href=&#34;http://php.net/manual/en/function.mysqli-connect.php&#34;&gt;&lt;code&gt;mysqli_connect&lt;/code&gt;&lt;/a&gt; 的語法是 &lt;code&gt;(host, username, password, dbname)&lt;/code&gt;。這邊因為是本機，所以 &lt;code&gt;host&lt;/code&gt; 就是 &lt;code&gt;localhost:3306&lt;/code&gt;，3306 是 XAMPP 預設給 MySQL 的 port，如果你有調整，這邊就要相應的更改；本機上的 &lt;code&gt;username&lt;/code&gt; 就是 &lt;code&gt;root&lt;/code&gt;，不確定可以到 phpMyAdmin 的首頁看；&lt;code&gt;password&lt;/code&gt; 預設應該就是沒有，如果有設定（我還真不知道怎麼設定）這邊就要改；最後 &lt;code&gt;dbname&lt;/code&gt; 是剛剛設定的 &lt;code&gt;user&lt;/code&gt;。&lt;/p&gt;
+&lt;p&gt;&lt;code&gt;mysqli&lt;/code&gt; 是 PHP 的 MySQL 函數庫增強版，功能更強，安全性更好；所以之前的 &lt;code&gt;mysql&lt;/code&gt; 已經漸漸淘汰不用。&lt;/p&gt;
+&lt;p&gt;接著則是用 &lt;code&gt;mysqli_connect_errno()&lt;/code&gt; 來判斷連接是否有錯誤，若有錯誤則用 &lt;code&gt;print_r&lt;/code&gt; 來顯示 &lt;code&gt;mysqli_connect_error()&lt;/code&gt; 的錯誤訊息。&lt;/p&gt;
+&lt;p&gt;&lt;a href=&#34;http://php.net/manual/en/mysqli.connect-errno.php&#34;&gt;&lt;code&gt;mysqli_connect_errno()&lt;/code&gt;&lt;/a&gt; 是回傳最近一次連接的錯誤「代碼」；&lt;a href=&#34;http://php.net/manual/en/mysqli.connect-error.php&#34;&gt;&lt;code&gt;mysqli_connect_error()&lt;/code&gt;&lt;/a&gt; 則是回傳最近一次連接的錯誤「訊息」。&lt;/p&gt;
+&lt;p&gt;最後則用 &lt;code&gt;exit()&lt;/code&gt; 來停止繼續執行 script（官方文件側面證明 PHP 是 script？XD）。括號裡面可以填上停止執行同時要顯示的訊息，若裡面填上 integer（0-254 之間），則會被用來當錯誤代碼而且不會顯示出來。功能跟 &lt;code&gt;die()&lt;/code&gt; 是一樣的。&lt;/p&gt;
+&lt;h2 id=&#34;設計結構&#34;&gt;設計結構&lt;/h2&gt;
+&lt;p&gt;再來先講一下設計的檔案結構。&lt;/p&gt;
+&lt;p&gt;因為我在 Udemy 上的課最後的作業是把常用的 function 單獨存成一個 &lt;code&gt;function.php&lt;/code&gt; 的檔案，然後把會跟 &lt;code&gt;index.php&lt;/code&gt; 直接互動的部分放在 &lt;code&gt;action.php&lt;/code&gt; 並且在開頭就 &lt;code&gt;include(&amp;quot;function.php&amp;quot;);&lt;/code&gt; 這樣來操作。&lt;/p&gt;
+&lt;p&gt;據說這叫 MVC 啦，我也不是很懂，但覺得這樣分開蠻清楚的，就這樣作吧~&lt;/p&gt;
+&lt;h2 id=&#34;ajax-傳資料&#34;&gt;ajax 傳資料&lt;/h2&gt;
+&lt;p&gt;接著要寫 &lt;code&gt;ajax&lt;/code&gt; 傳資料的功能。&lt;/p&gt;
+&lt;p&gt;在前面切換 Login/Signup 按鈕的後面，我是先寫這樣來測試 &lt;code&gt;ajax&lt;/code&gt; 功能是否正常傳送我要傳送的資料：&lt;/p&gt;
+&lt;pre tabindex=&#34;0&#34;&gt;&lt;code class=&#34;language-jquery&#34; data-lang=&#34;jquery&#34;&gt;$.ajax({  
+    type: &amp;quot;POST&amp;quot;,  
+    url: &amp;quot;action.php?action=loginSignup&amp;quot;,  
+    data: 
+        &amp;quot;username=&amp;quot; + $(&amp;quot;#username&amp;quot;).val()
+        + &amp;quot;&amp;amp;email=&amp;quot; + $(&amp;quot;#email&amp;quot;).val()
+        + &amp;quot;&amp;amp;password=&amp;quot; + $(&amp;quot;#password&amp;quot;).val()
+        + &amp;quot;&amp;amp;loginActive=&amp;quot; + $(&amp;quot;#loginActive&amp;quot;).val(),  
+    success: function() {  
+        alert(&amp;quot;username=&amp;quot; + $(&amp;quot;#username&amp;quot;).val()
+        + &amp;quot;&amp;amp;email=&amp;quot; + $(&amp;quot;#email&amp;quot;).val()
+        + &amp;quot;&amp;amp;password=&amp;quot; + $(&amp;quot;#password&amp;quot;).val()
+        + &amp;quot;&amp;amp;loginActive=&amp;quot; + $(&amp;quot;#loginActive&amp;quot;).val());  
+    }  
+})
+&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;這邊其實是設定用 &lt;code&gt;POST&lt;/code&gt; 傳送 &lt;code&gt;data&lt;/code&gt; 內的訊息，但也同時用 &lt;code&gt;GET&lt;/code&gt; 的方式傳送一個 &lt;code&gt;action=loginSignup&lt;/code&gt; 的訊息來說明要作 Login/Signup 的動作，讓後端執行 &lt;code&gt;action.php&lt;/code&gt; 的時候，知道要做哪個動作，我在 &lt;code&gt;action.php&lt;/code&gt; 內也會相應的寫上判斷 &lt;code&gt;$_GET[&#39;action&#39;] == &amp;quot;loginSignup&amp;quot;&lt;/code&gt; 的條件。這算是為未來可以把這個功能套用到別的地方使用的功能標記方法。&lt;/p&gt;
+&lt;p&gt;順便記錄一下 &lt;code&gt;GET&lt;/code&gt; 跟 &lt;code&gt;POST&lt;/code&gt; 的差別。&lt;code&gt;GET&lt;/code&gt; 會把要傳送到 server 的資訊以明碼的方式放在 URL 網址後面，長度有限制；&lt;code&gt;POST&lt;/code&gt; 則是將資料放在 http request 裡面，是隱藏的，相對沒有長度限制。這兩種都是 http 協定中定義的跟伺服器互動的方式。我覺得這篇講得蠻簡單明白：&lt;a href=&#34;http://happycoder.org/2017/07/02/golang101-tutorial-web-basic/&#34;&gt;Go Web 程式設計入門教學：Web 基礎&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;如果按了 Submit 按鈕有跳出 &lt;code&gt;alert&lt;/code&gt; 顯示 &lt;code&gt;data&lt;/code&gt; 的內容，就表示作對了。&lt;/p&gt;
+&lt;h2 id=&#34;login-驗證功能&#34;&gt;Login 驗證功能&lt;/h2&gt;
+&lt;p&gt;這時候先到 &lt;code&gt;index.php&lt;/code&gt; 表格上方增加一個隱藏的 &lt;code&gt;div&lt;/code&gt;，&lt;code&gt;id&lt;/code&gt; 設為 &lt;code&gt;loginAlert&lt;/code&gt;。&lt;/p&gt;
+&lt;p&gt;接著到 &lt;code&gt;ajax&lt;/code&gt; 的 &lt;code&gt;success&lt;/code&gt; 改成以下：&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#e7e9db;background-color:#2f1e2e;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-javascript&#34; data-lang=&#34;javascript&#34;&gt;&lt;span style=&#34;color:#06b6ef&#34;&gt;success&lt;/span&gt;&lt;span style=&#34;color:#5bc4bf&#34;&gt;:&lt;/span&gt; &lt;span style=&#34;color:#815ba4&#34;&gt;function&lt;/span&gt;(&lt;span style=&#34;color:#06b6ef&#34;&gt;result&lt;/span&gt;) {  
+    &lt;span style=&#34;color:#815ba4&#34;&gt;if&lt;/span&gt; (&lt;span style=&#34;color:#06b6ef&#34;&gt;result&lt;/span&gt;) {
+        &lt;span style=&#34;color:#06b6ef&#34;&gt;$&lt;/span&gt;(&lt;span style=&#34;color:#48b685&#34;&gt;&amp;#34;#loginAlert&amp;#34;&lt;/span&gt;).&lt;span style=&#34;color:#06b6ef&#34;&gt;html&lt;/span&gt;(&lt;span style=&#34;color:#06b6ef&#34;&gt;result&lt;/span&gt;).&lt;span style=&#34;color:#06b6ef&#34;&gt;show&lt;/span&gt;();
+    }  
+}
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;用意是先把所有 &lt;code&gt;action.php&lt;/code&gt; 回傳的東西，傳到 &lt;code&gt;id&lt;/code&gt; 為 &lt;code&gt;loginAlert&lt;/code&gt; 的這個 &lt;code&gt;div&lt;/code&gt; 並顯示出來。&lt;/p&gt;
+&lt;p&gt;接著到 &lt;code&gt;action.php&lt;/code&gt; 用各種判斷式判斷 &lt;code&gt;username&lt;/code&gt;、&lt;code&gt;email&lt;/code&gt; 跟 &lt;code&gt;password&lt;/code&gt; 是否空白或符合格式，若不符合，就儲存一段顯示錯誤的話進另外設定的變數 &lt;code&gt;$error&lt;/code&gt;，到最後判斷 &lt;code&gt;$error&lt;/code&gt; 是否空白，若否則 &lt;code&gt;echo $error;&lt;/code&gt; 並 &lt;code&gt;exit();&lt;/code&gt;，也就是把 &lt;code&gt;$error&lt;/code&gt; 裡面的錯誤訊息傳回 &lt;code&gt;ajax&lt;/code&gt; 之後，停止繼續執行 &lt;code&gt;action.php&lt;/code&gt;。&lt;/p&gt;
+&lt;p&gt;這邊需要一些判斷式觀念，記錄一下基礎：&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;&lt;code&gt;if&lt;/code&gt; 是判斷 &lt;code&gt;()&lt;/code&gt; 內的條件是否為真後，執行 &lt;code&gt;{}&lt;/code&gt; 內的內容。&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;if...else&lt;/code&gt; 是判斷 &lt;code&gt;()&lt;/code&gt; 內的條件是否為真後，執行 &lt;code&gt;if&lt;/code&gt; 接著的 &lt;code&gt;{}&lt;/code&gt; 內容；不為真則執行 &lt;code&gt;else&lt;/code&gt; 接著的 &lt;code&gt;{}&lt;/code&gt; 內容。&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;if...else if&lt;/code&gt; 是先判斷 &lt;code&gt;if&lt;/code&gt; 後 &lt;code&gt;()&lt;/code&gt; 的條件，為真則執行接著的 &lt;code&gt;{}&lt;/code&gt; 內容；不為真，則再開始判斷 &lt;code&gt;else if&lt;/code&gt; 接著的 &lt;code&gt;()&lt;/code&gt; 內條件，為真則執行接著的 &lt;code&gt;{}&lt;/code&gt; 內容。最後還可以再接 &lt;code&gt;else&lt;/code&gt;，作用為當 &lt;code&gt;if&lt;/code&gt; 跟 &lt;code&gt;else if&lt;/code&gt; 判斷式 &lt;strong&gt;皆&lt;/strong&gt; 不為真的時候，執行接著的 &lt;code&gt;{}&lt;/code&gt; 內容，此為 optional。&lt;/li&gt;
+&lt;li&gt;需要多條件判斷有兩種方案，一是在 &lt;code&gt;if&lt;/code&gt; 判斷式中用 &lt;code&gt;and&lt;/code&gt;、&lt;code&gt;or&lt;/code&gt; 這種聯立條件的方式，但這種是 &lt;strong&gt;同時&lt;/strong&gt; 判斷多條件；若需要 &lt;strong&gt;依序&lt;/strong&gt; 判斷多條件，則採用 &lt;code&gt;if...else if&lt;/code&gt; 的方式。&lt;/li&gt;
+&lt;/ol&gt;
+&lt;p&gt;但想像是美好的，現實是骨感的，一執行立刻就碰到問題：alert 區塊一閃而逝，好像畫面重新刷新，所以 alert 區塊又重新回到隱藏的狀態。這邊很顯然是 Submit 按鈕的問題，剛好作個筆記，要記得把 Submit 按鈕的 &lt;code&gt;type&lt;/code&gt; 改成 &lt;code&gt;button&lt;/code&gt;，若是維持原來的 &lt;code&gt;submit&lt;/code&gt;，每次按下去就會刷新畫面，&lt;code&gt;ajax&lt;/code&gt; 帶動的效果就都跑掉了。&lt;/p&gt;
+&lt;p&gt;對了，還要記得去 XAMPP Control Panel 把 MySQL 也打開，不然也會悲劇 XD&lt;/p&gt;
+&lt;h2 id=&#34;php-語法跟函數庫&#34;&gt;PHP 語法跟函數庫&lt;/h2&gt;
+&lt;p&gt;接著要先學習一些 PHP 跟 SQL 的寫法，語法可以到 &lt;a href=&#34;https://www.w3schools.com/default.asp&#34;&gt;w3schools&lt;/a&gt; 或 &lt;a href=&#34;http://php.net/manual/en/index.php&#34;&gt;PHP 官網&lt;/a&gt; 查詢。先記錄幾個用到的：&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;a href=&#34;https://www.w3schools.com/sql/default.asp&#34;&gt;SQL&lt;/a&gt;
+&lt;ol&gt;
+&lt;li&gt;&lt;a href=&#34;https://www.w3schools.com/sql/sql_where.asp&#34;&gt;&lt;code&gt;SELECT 範圍 FROM table 名稱 WHERE 判斷式&lt;/code&gt;&lt;/a&gt;：這個功能是按照&lt;code&gt;判斷式&lt;/code&gt;回傳指定 table 裡面的資料。&lt;code&gt;範圍&lt;/code&gt;就是要選取的欄位，全選就填上 &lt;code&gt;*&lt;/code&gt;。&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;https://www.w3schools.com/sql/sql_insert.asp&#34;&gt;&lt;code&gt;INSERT INTO table名稱 (&lt;/code&gt;欄位一&lt;code&gt;, &lt;/code&gt;欄位二&lt;code&gt;, ...) VALUES (&#39;欄位一資料&#39;, &#39;欄位二資料&#39;, ...)&lt;/code&gt;&lt;/a&gt;：在指定 table 裡面增加資料。&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;https://www.w3schools.com/sql/sql_update.asp&#34;&gt;&lt;code&gt;UPDATE table名稱 SET 範圍 WHERE 判斷式&lt;/code&gt;&lt;/a&gt;：依照&lt;code&gt;判斷式&lt;/code&gt;更新指定 table 裡面指定欄位的指定資料。&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;LIMIT&lt;/code&gt;：是 MySQL 特有的子句，通常接在 &lt;code&gt;SELECT&lt;/code&gt; 句子的最後面，用來限制回傳的資料筆數。功能類似 &lt;code&gt;TOP&lt;/code&gt; 跟 &lt;code&gt;ROWNUM&lt;/code&gt;。&lt;/li&gt;
+&lt;/ol&gt;
+&lt;/li&gt;
+&lt;li&gt;PHP 各種 &lt;a href=&#34;http://php.net/manual/en/reserved.variables.php&#34;&gt;預設變數&lt;/a&gt;、&lt;a href=&#34;http://php.net/manual/en/ref.var.php&#34;&gt;變數控制函數&lt;/a&gt;、&lt;a href=&#34;http://php.net/manual/en/book.mysqli.php&#34;&gt;&lt;code&gt;mysqli&lt;/code&gt; 函式庫&lt;/a&gt;
+&lt;ol&gt;
+&lt;li&gt;&lt;a href=&#34;http://php.net/manual/en/mysqli.query.php&#34;&gt;&lt;code&gt;mysqli_query($link, $query)&lt;/code&gt;&lt;/a&gt;：對資料庫執行一次動作。&lt;code&gt;$link&lt;/code&gt; 通常是要事先用 &lt;code&gt;mysqli_connect&lt;/code&gt; 設定好連結的資料庫；&lt;code&gt;$query&lt;/code&gt; 通常代表用 SQL 指令設定好要執行的動作。&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;http://php.net/manual/en/mysqli-result.num-rows.php&#34;&gt;&lt;code&gt;mysqli_num_rows&lt;/code&gt;&lt;/a&gt;：讓資料庫回傳查詢到的資料筆數。&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;http://php.net/manual/en/mysqli-result.fetch-assoc.php&#34;&gt;&lt;code&gt;mysqli_fetch_assoc($result)&lt;/code&gt;&lt;/a&gt;：獲取某指定資料同列（同 Primary Key）的所有資料，&lt;code&gt;$result&lt;/code&gt; 代表要參照的資料。&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;http://php.net/manual/en/mysqli.insert-id.php&#34;&gt;&lt;code&gt;mysqli_insert_id($link)&lt;/code&gt;&lt;/a&gt;：取得前一次對資料庫執行動作（通常是 &lt;code&gt;INSERT&lt;/code&gt;）而自動產生的 &lt;code&gt;id&lt;/code&gt;，&lt;code&gt;id&lt;/code&gt; 欄位須具備 Auto Increment 屬性。&lt;/li&gt;
+&lt;/ol&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;我其實沒有正規的拿一本 PHP 或 SQL 的書來念，基本上都是上前面提到的 &lt;a href=&#34;https://www.w3schools.com/default.asp&#34;&gt;w3schools&lt;/a&gt; 跟 &lt;a href=&#34;http://php.net/manual/en/index.php&#34;&gt;PHP 官網&lt;/a&gt; 這兩個網站查各種功能怎麼用，所以也許觀念不見得非常正確。&lt;/p&gt;
+&lt;p&gt;另外有關於 mysqli 函數庫的部分，他支援兩種表達方法：object-oriented 跟 procedural。我這邊都是用 procedural。&lt;/p&gt;
+&lt;h2 id=&#34;sign-up-功能&#34;&gt;Sign Up 功能&lt;/h2&gt;
+&lt;p&gt;再來準備寫 Sign Up 加入會員的功能，這邊就要牽扯到把會員資料記錄進資料庫的部分。記得要把這些功能寫在 &lt;code&gt;action.php&lt;/code&gt; 的 &lt;code&gt;echo $error; exit();&lt;/code&gt;這個部分的後面，否則會變成前面判斷輸入資料有問題還繼續執行寫入資料的問題。&lt;/p&gt;
+&lt;p&gt;首先要加入會員，都要先判斷剛填好的 &lt;code&gt;username&lt;/code&gt; 跟 &lt;code&gt;email&lt;/code&gt; 是否有跟資料庫內的重複。我是用 &lt;code&gt;mysqli_num_rows&lt;/code&gt; 來作判斷式，大於 0 就表示有資料這樣。然後用 &lt;code&gt;INSERT INTO&lt;/code&gt; 來新增資料到資料庫。&lt;/p&gt;
+&lt;h2 id=&#34;login-功能---cookie--session&#34;&gt;Login 功能 -&amp;gt; cookie | session&lt;/h2&gt;
+&lt;p&gt;然後登入會員是用 &lt;code&gt;mysqli_fetch_assoc()&lt;/code&gt; 來抓比對到的 &lt;code&gt;username&lt;/code&gt; 同組資料，再跟 &lt;code&gt;POST&lt;/code&gt; 裡的 &lt;code&gt;password&lt;/code&gt; 比對。&lt;/p&gt;
+&lt;p&gt;接下來就是要研究 session 跟 cookie 的差別以及用法。我查到這篇 &lt;a href=&#34;http://blog.webgolds.com/view/353&#34;&gt;[簡明] COOKIE 與 SESSION 的基本原理&lt;/a&gt; 寫得蠻清楚的。&lt;/p&gt;
+&lt;p&gt;我最後選擇用 cookie，因為感覺比較像是目前普遍的做法，加入會員後不用每次進入網站都要重新登入，但設定每次登入只維持登入狀態一個月。&lt;/p&gt;
+&lt;p&gt;這裡同樣列出用到的 PHP 語法：&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;&lt;a href=&#34;https://www.w3schools.com/php/php_cookies.asp&#34;&gt;&lt;code&gt;setcookie(&#39;變數名稱&#39;, &#39;變數值&#39;, &#39;保存時間&#39;)&lt;/code&gt;&lt;/a&gt;：建立 cookie，保存時間是以秒為單位；如果要強制消滅 cookie，就把保存時間設定為負數&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;time()&lt;/code&gt;：目前時間。這裡是用來結合 &lt;code&gt;setcookie&lt;/code&gt; 的保存時間使用&lt;/li&gt;
+&lt;/ol&gt;
+&lt;p&gt;我的作法是結合前面的判斷式，在判斷出可以加入會員以及可以登入那邊加上 &lt;code&gt;setcookie&lt;/code&gt;，並原則上設定 30 天 (&lt;code&gt;time()+60*60*24*30&lt;/code&gt;，並 &lt;code&gt;echo &amp;quot;1&amp;quot;;&lt;/code&gt;) 來回傳一個 &lt;code&gt;1&lt;/code&gt; 跟 &lt;code&gt;ajax&lt;/code&gt; 表達目前是已經登入的狀態。&lt;/p&gt;
+&lt;p&gt;然後回到 &lt;code&gt;index.php&lt;/code&gt; 的 &lt;code&gt;ajax&lt;/code&gt; 那邊，將原來長這樣的：&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#e7e9db;background-color:#2f1e2e;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-javascript&#34; data-lang=&#34;javascript&#34;&gt;&lt;span style=&#34;color:#06b6ef&#34;&gt;success&lt;/span&gt;&lt;span style=&#34;color:#5bc4bf&#34;&gt;:&lt;/span&gt; &lt;span style=&#34;color:#815ba4&#34;&gt;function&lt;/span&gt;(&lt;span style=&#34;color:#06b6ef&#34;&gt;result&lt;/span&gt;) {  
+    &lt;span style=&#34;color:#815ba4&#34;&gt;if&lt;/span&gt; (&lt;span style=&#34;color:#06b6ef&#34;&gt;result&lt;/span&gt;) {
+        &lt;span style=&#34;color:#06b6ef&#34;&gt;$&lt;/span&gt;(&lt;span style=&#34;color:#48b685&#34;&gt;&amp;#34;#loginAlert&amp;#34;&lt;/span&gt;).&lt;span style=&#34;color:#06b6ef&#34;&gt;html&lt;/span&gt;(&lt;span style=&#34;color:#06b6ef&#34;&gt;result&lt;/span&gt;).&lt;span style=&#34;color:#06b6ef&#34;&gt;show&lt;/span&gt;();
+    }  
+}
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;改成這樣：&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#e7e9db;background-color:#2f1e2e;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-javascript&#34; data-lang=&#34;javascript&#34;&gt;&lt;span style=&#34;color:#06b6ef&#34;&gt;success&lt;/span&gt;&lt;span style=&#34;color:#5bc4bf&#34;&gt;:&lt;/span&gt; &lt;span style=&#34;color:#815ba4&#34;&gt;function&lt;/span&gt;(&lt;span style=&#34;color:#06b6ef&#34;&gt;result&lt;/span&gt;) {  
+    &lt;span style=&#34;color:#815ba4&#34;&gt;if&lt;/span&gt; (&lt;span style=&#34;color:#06b6ef&#34;&gt;result&lt;/span&gt;) {
+        window.&lt;span style=&#34;color:#06b6ef&#34;&gt;location&lt;/span&gt;.&lt;span style=&#34;color:#06b6ef&#34;&gt;assign&lt;/span&gt;(&lt;span style=&#34;color:#48b685&#34;&gt;&amp;#34;http://localhost:8080/login-signup/&amp;#34;&lt;/span&gt;);
+    } &lt;span style=&#34;color:#815ba4&#34;&gt;else&lt;/span&gt; {
+        &lt;span style=&#34;color:#06b6ef&#34;&gt;$&lt;/span&gt;(&lt;span style=&#34;color:#48b685&#34;&gt;&amp;#34;#loginAlert&amp;#34;&lt;/span&gt;).&lt;span style=&#34;color:#06b6ef&#34;&gt;html&lt;/span&gt;(&lt;span style=&#34;color:#06b6ef&#34;&gt;result&lt;/span&gt;).&lt;span style=&#34;color:#06b6ef&#34;&gt;show&lt;/span&gt;();
+    }  
+}
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;這裡的 &lt;a href=&#34;https://www.w3schools.com/jsref/met_loc_assign.asp&#34;&gt;&lt;code&gt;location.assign&lt;/code&gt;&lt;/a&gt; 是讓首頁重跑一遍，回到原始狀態，但已經建立好的 cookie 不會消失，所以還是登入的狀態。所以後面的網址要填上最初始首頁的完整網址。這樣做可以把 GET 放在網址列後面的資訊消除。&lt;/p&gt;
+&lt;h2 id=&#34;登入狀態表示&#34;&gt;登入狀態表示&lt;/h2&gt;
+&lt;p&gt;接著要回到 &lt;code&gt;index.php&lt;/code&gt; 的表格那邊作一些調整。讓 client 端在載入網頁的時候先判斷有無 cookie 存在，若有就顯示 &amp;ldquo;You have successfully logged in!&amp;quot;，若無則顯示原本的表格。若你有另外作 Logout 按鈕，作法類似。&lt;/p&gt;
+&lt;p&gt;我這邊還有參考 w3schools 用 &lt;a href=&#34;https://www.w3schools.com/js/js_cookies.asp&#34;&gt;Javascript 設定跟尋找 cookie 的方法&lt;/a&gt;。&lt;/p&gt;
+&lt;p&gt;作出來的作品可以參考這裡：&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;a href=&#34;http://idontwannarock-com.stackstaging.com/project/login-signup/&#34;&gt;作品網站 Sign Up Login Function&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;https://github.com/idontwannarock/Tiny-Projects-and-Functions/tree/master/login-signup&#34;&gt;我放在 Github 的原始碼&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;當然，為了放在託管 server 跟資料庫給大家直接試驗網頁，實際路徑跟資料庫等等會跟上面敘述的有差別。&lt;/p&gt;
+&lt;h2 id=&#34;sql-injection-及-xss-簡單防範&#34;&gt;SQL Injection 及 XSS 簡單防範&lt;/h2&gt;
+&lt;p&gt;我在網路上參考了這兩個網站來理解 SQL Injection 跟 XSS。&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;a href=&#34;https://pcrookie.com/?p=1950&#34;&gt;你知道什麼是「SQL Injection」(SQL 攻擊)嗎？&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;https://www.hkitblog.com/?p=23318&#34;&gt;甚麼是 XSS？簡介黑客常用攻擊技倆&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;就我的粗淺的了解，SQL Injection 跟 XSS 都是 client 端的攻擊手法，最常見的攻擊方法都是透過一個網頁中的輸入欄位（在我們這個作品當中就是各個 &lt;code&gt;input&lt;/code&gt; 位置），來植入一些惡意的代碼，讓後來的瀏覽者或使用者碰到一些惡意的狀況、資料被偷取、被植入木馬等等。&lt;/p&gt;
+&lt;p&gt;而同樣就我理解到的簡單防範方法，就是先處理 &lt;code&gt;input&lt;/code&gt; 傳過來的資料，轉換到我們需要的資料型態，來避免一些特殊符號如 &lt;code&gt;&amp;gt;/&amp;lt;^&amp;amp;$#@&lt;/code&gt; 等等。&lt;/p&gt;
+&lt;p&gt;我這邊用到的是 PHP mysqli 函式庫的 &lt;code&gt;mysqli_real_escape_string($link, $data)&lt;/code&gt;，要注意的是這個函式必須填上代表連線到資料庫的 &lt;code&gt;$link&lt;/code&gt;，&lt;code&gt;$data&lt;/code&gt; 則是要轉換成字串 (string) 的資料。&lt;code&gt;mysqli_real_escape_string&lt;/code&gt; 這個函式會將定義的特殊符號作轉換來避免一些 SQL Injection 跟 XSS 的狀況。我是將所有會要跟資料庫作互動的 &lt;code&gt;$_POST&lt;/code&gt; 都作處理。&lt;/p&gt;
+&lt;p&gt;請注意這個並不是一個完善的防範方法，只是作一個簡單的防範。&lt;/p&gt;
+&lt;h2 id=&#34;儲存密碼---hash-及-salting&#34;&gt;儲存密碼 - hash 及 salting&lt;/h2&gt;
+&lt;p&gt;基本上如同胡立大大所說：「一個正常的網站是不會知道使用者的密碼是什麼的。」&lt;/p&gt;
+&lt;p&gt;就我的理解，一般來說如同這樣的會員功能，網站在接收到使用者傳輸的密碼的同時，就會進行密碼加密。&lt;/p&gt;
+&lt;p&gt;而早期通常會以 hash 的方式，例如 &lt;code&gt;md5&lt;/code&gt; 加密，然後就存進系統。基本上就是把密碼通過 md5 設定的某種轉換模式，轉成一長串字串，一個字串只會對應一個密碼，而這種加密方式很難反向破解；所以最簡單的破解手法是建立常見的密碼 - 字串轉換表來對應，所以才會常常看到各種網站在加入會員的時候讓大家設定字母與數字混雜，而且不能是常用的密碼，來避免被駭客找到對應的字串作破解。&lt;/p&gt;
+&lt;p&gt;但這種方式比較大的問題是使用者常常記不得自己設定的密碼，所以後來又產生一種 salting 的作法，也就是在 hash 以前，在密碼的前面或後面加入一些基於特定規則或亂數產生的字串，用來增加密碼長度，或利用亂數來增加破解難度。&lt;/p&gt;
+&lt;p&gt;我是採取 &lt;a href=&#34;http://php.net/manual/en/function.password-hash.php&#34;&gt;&lt;code&gt;password_hash&lt;/code&gt;&lt;/a&gt; 的作法，這個 PHP 的函數本身就有包括 salting，所以直接寫這樣來 hash：&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#e7e9db;background-color:#2f1e2e;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-php&#34; data-lang=&#34;php&#34;&gt;&lt;span style=&#34;color:#06b6ef&#34;&gt;password_hash&lt;/span&gt;(&lt;span style=&#34;color:#ef6155&#34;&gt;$_POST&lt;/span&gt;[&lt;span style=&#34;color:#48b685&#34;&gt;&amp;#39;password&amp;#39;&lt;/span&gt;], &lt;span style=&#34;color:#06b6ef&#34;&gt;PASSWORD_DEFAULT&lt;/span&gt;)
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;但有件事要記得，用 &lt;a href=&#34;http://php.net/manual/en/function.password-hash.php&#34;&gt;&lt;code&gt;password_hash&lt;/code&gt;&lt;/a&gt; 函數來 hash 的話，Login 時就要用 &lt;a href=&#34;http://php.net/manual/en/function.password-verify.php&#34;&gt;&lt;code&gt;password_verify&lt;/code&gt;&lt;/a&gt; 函數來作判斷式來比對 &lt;code&gt;password&lt;/code&gt;。艾租以~&lt;/p&gt;
+&lt;h1 id=&#34;感想&#34;&gt;感想&lt;/h1&gt;
+&lt;p&gt;恭喜我作完這個簡單的功能，結果就是用網路查了一堆功能跟說明，倒是沒有直接搜尋 PHP 登入怎麼做，不知道這樣算不算自己作？XD&lt;/p&gt;
+&lt;p&gt;就先這樣吧，之後再來加上忘記密碼重設的部分~&lt;/p&gt;
+&lt;p&gt;再次附上作品網站跟 Github 原始碼網址：&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;a href=&#34;http://idontwannarock-com.stackstaging.com/project/login-signup/&#34;&gt;作品網站 Sign Up Login Function&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;https://github.com/idontwannarock/Tiny-Projects-and-Functions/tree/master/login-signup&#34;&gt;我放在 Github 的原始碼&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+- https://idontwannarock.github.io/tech_blog/2017/09/login_signup_function_1/ - This website by Howard Wang is licensed under a Creative Common Attribution-ShareAlike 4.0 International License.</description>
+        </item>
     
     
     

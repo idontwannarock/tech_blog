@@ -7,22 +7,76 @@
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
     <copyright>This website by Howard Wang is licensed under a Creative Common Attribution-ShareAlike 4.0 International License.</copyright>
-    <lastBuildDate>Tue, 21 Dec 2021 09:06:29 +0800</lastBuildDate><atom:link href="https://idontwannarock.github.io/tech_blog/tags/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Mon, 27 Dec 2021 09:44:31 +0800</lastBuildDate><atom:link href="https://idontwannarock.github.io/tech_blog/tags/index.xml" rel="self" type="application/rss+xml" />
     <item>
-      <title>http</title>
-      <link>https://idontwannarock.github.io/tech_blog/tags/http/</link>
-      <pubDate>Tue, 21 Dec 2021 09:06:29 +0800</pubDate>
+      <title>grpc</title>
+      <link>https://idontwannarock.github.io/tech_blog/tags/grpc/</link>
+      <pubDate>Mon, 27 Dec 2021 09:44:31 +0800</pubDate>
       
-      <guid>https://idontwannarock.github.io/tech_blog/tags/http/</guid>
+      <guid>https://idontwannarock.github.io/tech_blog/tags/grpc/</guid>
       <description></description>
     </item>
     
     <item>
       <title>http2</title>
       <link>https://idontwannarock.github.io/tech_blog/tags/http2/</link>
-      <pubDate>Tue, 21 Dec 2021 09:06:29 +0800</pubDate>
+      <pubDate>Mon, 27 Dec 2021 09:44:31 +0800</pubDate>
       
       <guid>https://idontwannarock.github.io/tech_blog/tags/http2/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>http</title>
+      <link>https://idontwannarock.github.io/tech_blog/tags/http/</link>
+      <pubDate>Fri, 24 Dec 2021 15:49:27 +0800</pubDate>
+      
+      <guid>https://idontwannarock.github.io/tech_blog/tags/http/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>long polling</title>
+      <link>https://idontwannarock.github.io/tech_blog/tags/long-polling/</link>
+      <pubDate>Fri, 24 Dec 2021 15:49:27 +0800</pubDate>
+      
+      <guid>https://idontwannarock.github.io/tech_blog/tags/long-polling/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>server push</title>
+      <link>https://idontwannarock.github.io/tech_blog/tags/server-push/</link>
+      <pubDate>Fri, 24 Dec 2021 15:49:27 +0800</pubDate>
+      
+      <guid>https://idontwannarock.github.io/tech_blog/tags/server-push/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>server sent event</title>
+      <link>https://idontwannarock.github.io/tech_blog/tags/server-sent-event/</link>
+      <pubDate>Fri, 24 Dec 2021 15:49:27 +0800</pubDate>
+      
+      <guid>https://idontwannarock.github.io/tech_blog/tags/server-sent-event/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>sse</title>
+      <link>https://idontwannarock.github.io/tech_blog/tags/sse/</link>
+      <pubDate>Fri, 24 Dec 2021 15:49:27 +0800</pubDate>
+      
+      <guid>https://idontwannarock.github.io/tech_blog/tags/sse/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>websocket</title>
+      <link>https://idontwannarock.github.io/tech_blog/tags/websocket/</link>
+      <pubDate>Fri, 24 Dec 2021 15:49:27 +0800</pubDate>
+      
+      <guid>https://idontwannarock.github.io/tech_blog/tags/websocket/</guid>
       <description></description>
     </item>
     
