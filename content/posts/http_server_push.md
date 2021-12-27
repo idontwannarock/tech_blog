@@ -6,14 +6,14 @@ description: "探討建構在 HTTP 協定上的 Server Push 技術"
 tags: ["http", "server push", "long polling", "server sent event", "sse", "http2", "websocket"]
 categories: concept
 featured_image: "https://res.cloudinary.com/dcvgho2zc/image/upload/c_scale,h_304/v1640335304/Tech%20Blog/http2_server_push.png"
-draft: true
+draft: false
 comment: true
 enableLaTeX: false
 ---
 
-這篇預計是 gRPC 系列的最後一篇，之前在系列前面已經釐清了 gRPC 跟其立基的 HTTP/2 的概念了，其中我比較有興趣的就是 gRPC 的 server push 新特性，這邊就繼續來了解一下吧~
+這篇預計是 HTTP/2 系列的最後一篇，之前在系列前面已經釐清了 HTTP/2 的概念了，其中我比較有興趣的就是 HTTP/2 的 server push 新特性，這邊就繼續來了解一下吧~
 
-gRPC 系列:
+HTTP/2 系列:
 
 1. [HTTP/2 系列 - HTTP/2 概念](https://idontwannarock.github.io/tech_blog/2021/12/http2/)
 2. HTTP/2 系列 - HTTP Server Push 技術
