@@ -38,6 +38,8 @@ HTTP 在 Transport Layer 採用 TCP 連線來通訊，而 TCP 要在 client/serv
 
 ![Multiple Connection vs Persistent Conneciton](https://res.cloudinary.com/dcvgho2zc/image/upload/v1639979286/Tech%20Blog/persistent-connection.jpg)
 
+*Image from [Wiki](https://en.wikipedia.org/wiki/HTTP_persistent_connection)*
+
 ## 進化到 HTTP/1.1
 
 HTTP/1.1 開始預設就支援持久連線 (**keep-alive**) 機制，允許在同一條 TCP 連線上多次進行 request/response，雖然還是必須保持收到 response 後才能發出下一次 request 的順序，但仍然降低了大量建立連線的效能損耗
@@ -45,6 +47,8 @@ HTTP/1.1 開始預設就支援持久連線 (**keep-alive**) 機制，允許在�
 除此之外 HTTP/1.1 還設計了 **pipelining** 機制，讓同一條 TCP 連線中，client 端可以在還未收到上次 request 的 response 時，就發出下一次 request，但 server 端仍然必須按照接收到 client 端 request 的順序返回 response，但仍然有機會進一步降低多請求的反應時間
 
 ![HTTP pipelining](https://res.cloudinary.com/dcvgho2zc/image/upload/c_scale,h_309/v1639969180/Tech%20Blog/pipelining.png)
+
+*Image from [Head-of-line (HOL) blocking in HTTP/1 and HTTP/2](https://abhishekvrshny.medium.com/head-of-line-hol-blocking-in-http-1-and-http-2-50b24e9e3372)*
 
 HTTP/1.1 在繼承了 HTTP/1.0 的優點的同時，也很好的解決了 TCP 連線不能複用的問題
 
@@ -92,6 +96,8 @@ HTTP/1.1 固然是一個劃時代的結晶，直到今日還是瀏覽器主要�
 
 ![Binary Framing Layer](https://res.cloudinary.com/dcvgho2zc/image/upload/v1639984557/Tech%20Blog/binary-framing.png)
 
+*Image from [grpc.io](https://grpc.io/docs/what-is-grpc/introduction/)*
+
 更白話一點就是將封包結構從文本格式改為二進制格式，並且將所有傳輸訊息分隔為更小的 message 跟 frame 在 stream 裡面傳輸
 
 - frame 則是所有傳輸訊息 (包含 header) 切分後的最小單位。每個 frame 都會帶有一種 data，所以要馬是 HEADER frame 要馬是 DATA frame。另外每一個 frame 都會帶有 frame header 來標識其所屬的 stream
@@ -118,9 +124,13 @@ HTTP/1.x 的時候傳輸訊息雖然也可以被切成 chunk 來傳輸，但因�
 
 ![HTTP/2 Stream](https://res.cloudinary.com/dcvgho2zc/image/upload/v1639989101/Tech%20Blog/stream.png)
 
+*Image from [How Does HTTP/2 Work?](https://sookocheff.com/post/networking/how-does-http-2-work/)*
+
 但 TCP connection 實際上可以容納多條 stream，所以同一條 TCP connection 是可以達成 multiplexing 的
 
 ![HTTP/2 Multiplexing](https://res.cloudinary.com/dcvgho2zc/image/upload/v1639989278/Tech%20Blog/multiplexing.png)
+
+*Image from [How is HTTP/1.1 different from HTTP/2?](https://freecontent.manning.com/mental-model-graphic-how-is-http-1-1-different-from-http-2/)*
 
 也就是說 HTTP/2 並不需要在同一 TCP connection 上等待前一個 request 或 response 完成，就可以發送下一個 request 或 response，因此解決了 HTTP/1.x 的 HOL Blocking 問題，並且也因此真正達到只需要在 client/server 之間建立一條 TCP connection 即可完成所有通訊，也大幅降低 server 端為了對不同 client 維持多條連線的效能損耗
 
@@ -131,6 +141,8 @@ HTTP/1.x 的時候傳輸訊息雖然也可以被切成 chunk 來傳輸，但因�
 所以 HTTP/2 提供在 stream 標記相依關係 (dependency) 及權重 (weight) 的機制，之後 HTTP/2 會自行處理以滿足條件
 
 ![Stream Prioritization](https://res.cloudinary.com/dcvgho2zc/image/upload/v1639990493/Tech%20Blog/stream-prioritization.png)
+
+Image from [Http2特性——Binary framing layer--push---HPACK](https://www.twblogs.net/a/5eec25f11f92b2f1a17cc4aa)
 
 #### Header Compression
 
@@ -147,6 +159,8 @@ HTTP/1.x 的時候傳輸訊息雖然也可以被切成 chunk 來傳輸，但因�
 
 ![HPACK Header Compression](https://res.cloudinary.com/dcvgho2zc/image/upload/v1639991899/Tech%20Blog/hpack.png)
 
+*Image from [为 HTTP/2 头压缩专门设计的 HPACK](https://www.cnblogs.com/ghj1976/p/4586529.html)*
+
 #### Server Push
 
 為了達成 server 端主動推送訊息給 client 端，一直以來都有各種嘗試在 HTTP 上達成類似的效果，包括 Polling, Long Polling, Server Sent Event(SSE) 等等，但實際上除了 WebSocket 有利用到 HTTP 建立連線這種沾到邊的協定以外，其他透過 HTTP 的傳送訊息的方式都不能真正做到兩端不經請求主動推送訊息給對方 (bidirectional unsolicited communication)，**包括 HTTP/2 也沒有達成**
@@ -160,6 +174,8 @@ HTTP/1.x 的時候傳輸訊息雖然也可以被切成 chunk 來傳輸，但因�
 由於不像 SSE 會占用一整個 TCP connection，HTTP/2 的一個 request 的 context 只佔用一個 stream，而不影響其他 stream，所以並不會阻塞其他 request/response，所以在許多應用情況下，這樣的 server push 已經跟真正不依賴 client request 而進行主動 server push 的效果相差無幾
 
 ![HTTP/2 Server Push](https://res.cloudinary.com/dcvgho2zc/image/upload/v1639994509/Tech%20Blog/server-push.webp)
+
+*Image from [High Performance with HTTP / 2 PUSH](https://www.medianova.com/en-blog/high-performance-with-http-2-push/)*
 
 ### HTTP/2 Problem
 
@@ -197,6 +213,8 @@ TCP 作為一個 Transport Layer 的協定，其特點就是可靠的傳輸，�
 
 ![TCP HOL Blocking](https://res.cloudinary.com/dcvgho2zc/image/upload/v1640057331/Tech%20Blog/tcp-hol-blocking.png)
 
+*Image from [HTTP/3 deep dive](https://medium.com/ably-realtime/http-3-deep-dive-9318f7d6834d)*
+
 而因為 HTTP/2 仍然是基於 TCP 的協定，所以同樣受到 TCP HOL Blocking 問題的影響，即使在單一 TCP connection 用上 multiplexing，但仍可能因為 packet loss 而導致整條 TCP connection 的所有 stream 被阻塞
 
 ## What's Next?
@@ -209,6 +227,8 @@ QUIC 從名稱就看的出來是基於 UDP 這個同樣也是 Transport Layer �
 
 ![QUIC HTTPS handshake](https://res.cloudinary.com/dcvgho2zc/image/upload/v1640057493/Tech%20Blog/quic-https-handshake.gif)
 
+*Image from [Google Cloud](https://cloud.google.com/blog/products/gcp/introducing-quic-support-https-load-balancing)*
+
 接著使用 UDP 傳輸，但為了達成接近 TCP 的可靠性，選擇在 QUIC 層級進行資料糾錯恢復的控制，QUIC 在修復單一 stream 時仍可以自由處理其他資料，所以即使單一請求發生錯誤也不會影響到其他請求
 
 QUIC 還有一個目標是提高切換網路期間的效能，這點在移動端環境非常重要，例如我們手機常常在 WiFi 跟行動網路之間切換，如果在 TCP 上發生了，首先需要等待現有連接一個一個逾時，然後再根據需要重新建立，這中間的延遲就高了。而 QUIC 會包含一個連接識別碼 Connection ID，用來標識 client/server 之間的連接，而不論 IP 位址，如此只需要傳送一個包含此 Connection ID 的 packet 即可重新建立連接
@@ -218,6 +238,8 @@ QUIC 還有一個目標是提高切換網路期間的效能，這點在移動端
 HTTP/3 同樣在語意上繼承 HTTP/2，不過 HTTP/2 並不能直接與 QUIC 兼容，因為 HTTP/2 在 Application Layer 的 frame 與 QUIC 在 Transport Layer 切分的 packet 不能直接映射，而且 QUIC 已經在 Transport Layer 處理了 multiplexing，所以不需要 HTTP/2 在 Application Layer 再處理一次
 
 ![TCP vs QUIC](https://res.cloudinary.com/dcvgho2zc/image/upload/v1640057950/Tech%20Blog/TCP-vs-QUIC-Basic-Diagram.png)
+
+*Image from [Google’s QUIC protocol: moving the web from TCP to UDP](https://ma.ttias.be/googles-quic-protocol-moving-web-tcp-udp/)*
 
 ## 參考連結
 
