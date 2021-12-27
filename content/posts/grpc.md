@@ -1,6 +1,6 @@
 ---
 title: "gRPC 概念"
-date: 2021-12-27T16:44:31+08:00
+date: 2021-12-27T09:44:31+08:00
 slug: "grpc"
 description: "釐清 gRPC 概念"
 tags: ["grpc", "http2"]
@@ -51,6 +51,10 @@ gRPC 在大部分語言的 API 都有同步及非同步的版本
 - Server streaming RPC: client 端發出一個 request 並取得一個 stream 來讀取 server 回傳的一系列 messages
 - Client streaming RPC: client 端發出一系列 messages 給 server 並等待 server 完整讀取後回覆一個 response
 - Bidirectional streaming RPC: 在 client 端呼叫 service 方法建立好跟 server 之間的 connection 後，兩端都可以以任意順序、時間發送一系列 messages 給對方
+
+![gRPC Service Types](https://res.cloudinary.com/dcvgho2zc/image/upload/v1640589690/Tech%20Blog/grpc-calls.png)
+
+*Image from [Knoldus](https://blog.knoldus.com/unary-streaming-via-grpc/)*
 
 ### RPC 生命週期
 
