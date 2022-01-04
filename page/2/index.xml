@@ -6,9 +6,135 @@
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
     <copyright>This website by Howard Wang is licensed under a Creative Common Attribution-ShareAlike 4.0 International License.</copyright>
-    <lastBuildDate>Mon, 27 Dec 2021 09:44:31 +0800</lastBuildDate>
+    <lastBuildDate>Tue, 04 Jan 2022 15:36:17 +0800</lastBuildDate>
     
         <atom:link href="https://idontwannarock.github.io/tech_blog/index.xml" rel="self" type="application/rss+xml" />
+    
+    
+    
+        <item>
+        <title>Hugo 入門教學</title>
+        <link>https://idontwannarock.github.io/tech_blog/2019/05/hugo_tutorial/</link>
+        <pubDate>Tue, 07 May 2019 16:03:07 +0800</pubDate>
+        
+        <guid>https://idontwannarock.github.io/tech_blog/2019/05/hugo_tutorial/</guid>
+        <description>Howard Tech Note https://idontwannarock.github.io/tech_blog/2019/05/hugo_tutorial/ -&lt;p&gt;我個人在建立部落格的路上碰到了很多問題：&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;Wordpress 要花錢，雖然好像不多，但作為一個沒有人看的部落格，這樣還要花錢就是不爽&lt;/li&gt;
+&lt;li&gt;沒有網路無法寫文章，就算寫了純文字的內容，等有網路後貼到 Wordpress 的編輯器還要重新設定字體大小等等&lt;/li&gt;
+&lt;li&gt;沒辦法在自己的電腦或電腦們很方便的做備份，而且我只是個&lt;!-- raw HTML omitted --&gt;&lt;del&gt;簡單的男人&lt;/del&gt;&lt;!-- raw HTML omitted --&gt;簡單的部落格，不需要備份一堆只有 Wordpress 能用的東西好嗎&lt;/li&gt;
+&lt;li&gt;不能用工程師宅宅必備命令列工具裝潮，假裝駭客任務&lt;/li&gt;
+&lt;li&gt;最重要的，身為一個工程師宅宅，用 Wordpress 寫部落格說得出口嗎？很顯然可以，但要付錢我就不想用&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;如果你對以上絕大多數的問題都有切身之痛，那可以考慮繼續閱讀下去，否則建議還是直接使用 Wordpress 或 Wix 吧&lt;/p&gt;
+&lt;h1 id=&#34;hugo-與靜態網站&#34;&gt;Hugo 與靜態網站&lt;/h1&gt;
+&lt;p&gt;唉唷，還繼續，那大概不是 M 就是工程師宅宅相關種，那靜態網站不用講了，Hugo 自己研究就好啦，本篇結束&lt;/p&gt;
+&lt;p&gt;&lt;!-- raw HTML omitted --&gt;&lt;!-- raw HTML omitted --&gt;&lt;!-- raw HTML omitted --&gt;&lt;!-- raw HTML omitted --&gt;&lt;!-- raw HTML omitted --&gt;&lt;!-- raw HTML omitted --&gt;&lt;!-- raw HTML omitted --&gt;&lt;!-- raw HTML omitted --&gt;&lt;!-- raw HTML omitted --&gt;&lt;!-- raw HTML omitted --&gt;&lt;!-- raw HTML omitted --&gt;&lt;!-- raw HTML omitted --&gt;&lt;!-- raw HTML omitted --&gt;&lt;!-- raw HTML omitted --&gt;&lt;!-- raw HTML omitted --&gt;&lt;/p&gt;
+&lt;p&gt;不能醬喔？那好吧&lt;/p&gt;
+&lt;p&gt;Hugo 是一種 Static Site Generator, SSG 靜態網站產生器，靜態網站簡單來說就是有固定內容的網站，所謂的固定內容就是 HTML 這種瀏覽器可以直接開啟的網頁檔案，配合 CSS, Javascript 做美化，這些檔案只要沒有被修改過，每次打開都會產生固定的內容，所以稱為靜態網站&lt;/p&gt;
+&lt;p&gt;而基於後面會提到 Hugo 這個工具的特性，它很適合用來產生部落格，使用者只需要撰寫 Markdown 這種純文字檔案作為每篇文章的內容，就可以透過 Hugo 快速的建立或修改網站，而不必每次都要修改相對應的 HTML 甚至 CSS 及 Javascript 檔案&lt;/p&gt;
+&lt;p&gt;Hugo 作為一個世界範圍內前三熱門的 SSG 工具，它還有很多熱心工程師宅宅幫他寫了很多佈景主題讓使用者可以直接套用來產生網站，所以使用者只需要把文章內容寫成 Markdown 這種純文字檔案，就可以直接用 Hugo 將文章按照佈景主題產生出美美的網站了&lt;/p&gt;
+&lt;h1 id=&#34;這樣誰看的到&#34;&gt;這樣誰看的到？&lt;/h1&gt;
+&lt;p&gt;不過這樣產生出來的網站有一個關鍵的問題，這些檔案只放在你電腦裡，沒人看得到，除了你自己&lt;/p&gt;
+&lt;p&gt;所以我們需要「把它放到網路上」&lt;/p&gt;
+&lt;p&gt;一般要做到「把它放到網路上」並且「誰都看得見」，其實要做很多事情，例如租用網路空間、買域名、部署網站等等，Wordpress 的好處就在這，它提供一條龍的服務幫你做到底&lt;/p&gt;
+&lt;p&gt;但現在沒有 Wordpress 而且要堅持不花錢的懶惰工程師宅宅原則，所以我們要走另一條路，使用 Git 跟 GitHub&lt;/p&gt;
+&lt;h1 id=&#34;gitgithub-與-github-pages&#34;&gt;Git、GitHub 與 GitHub Pages&lt;/h1&gt;
+&lt;p&gt;Git 是一種版本控制工具，簡單來說就是可以保存每次改動檔案的紀錄的工具，所以要做修改或要放棄修改，也不會因為存了檔或沒存檔就整個完蛋&lt;/p&gt;
+&lt;p&gt;GitHub 可以理解為一個全世界最多工程師宅宅在用的&lt;!-- raw HTML omitted --&gt;&lt;del&gt;交友網站&lt;/del&gt;&lt;!-- raw HTML omitted --&gt;免費空間，只不過它原生就支援 Git 可以對你放在這個免費空間的檔案做版本控制，也可以直接跟你電腦上的 Git 做同步&lt;/p&gt;
+&lt;p&gt;GitHub 有幾個好處，裝潮、幾乎無限空間、免費，對，免費，免費就贏 Wordpress 了&lt;/p&gt;
+&lt;p&gt;GitHub 還有一個方便的功能，就是它可以根據你放在空間中的靜態檔案自動建立一個靜態網站，還自帶域名，不用付錢給 Wordpress、GoDaddy 或中華電信，也就是我們要用的 GitHub Pages&lt;/p&gt;
+&lt;h1 id=&#34;安裝-hugo&#34;&gt;安裝 Hugo&lt;/h1&gt;
+&lt;p&gt;坐而言不如起而行，沒有能不能只有行不行，高雄發大財！&lt;/p&gt;
+&lt;p&gt;首先有關安裝 Hugo，順帶說明一下 Hugo 雖然是用 Go 寫得，但跟其他也很紅的 SSG 如 Jekyll 要裝 Ruby 或 Hexo 要裝 Node.js 跟 NPM 不同，它不用安裝 Go，所以可以直接裝 Hugo 就好&lt;/p&gt;
+&lt;p&gt;當然安裝 Hugo 有幾種方式，&lt;a href=&#34;https://gohugo.io/getting-started/installing&#34;&gt;官方說明&lt;/a&gt;中說可以直接下載 Binary 檔然後自己設定變數，MacOS 系統推薦用 Homebrew 做安裝，Windows 系統推薦用 Chocolatey 或 Scoop&lt;/p&gt;
+&lt;p&gt;我是推薦用 Homebrew 或 Chocolatey 這種管理工具，這樣你就不用自己設定變數，安裝跟解安裝都很方便，要升級也很方便&lt;/p&gt;
+&lt;p&gt;Hugo 的操作都在命令列執行，所以MacOS 請打開 Terminal 終端機或 iTerm2 這種命令列工具，Windows 開 Powershell，輸入以下命令做安裝&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#e7e9db;background-color:#2f1e2e;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-bash&#34; data-lang=&#34;bash&#34;&gt;// MacOs
+brew install hugo
+
+// Windows
+choco install hugo
+// or
+scoop install hugo
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;裝完之後，輸入以下命令檢查有沒有裝好&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#e7e9db;background-color:#2f1e2e;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-bash&#34; data-lang=&#34;bash&#34;&gt;hugo version
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;應該會出現類似以下這行訊息，有出現就 ok 啦&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;p&gt;Hugo Static Site Generator v0.55.5-A83256B9 windows/amd64 BuildDate: 2019-05-02T13:04:07Z&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;h1 id=&#34;建立新網站&#34;&gt;建立新網站&lt;/h1&gt;
+&lt;p&gt;一樣在命令列工具輸入命令就可以產生一個基本的靜態網站&lt;/p&gt;
+&lt;p&gt;但記得要先移動到你要建立這網站檔案的目錄底下，MacOS 幾乎都是用 &lt;code&gt;cd &amp;lt;目錄名稱&amp;gt;&lt;/code&gt; 就可以，Windows 比較麻煩要先確定是在哪一個磁碟機， &lt;code&gt;&amp;lt;磁碟機編號&amp;gt;:&lt;/code&gt; 可以移動到該磁碟機，例如 &lt;code&gt;C:&lt;/code&gt; 就是移到 C 槽，然後再用 &lt;code&gt;cd &amp;lt;目錄名稱&amp;gt;&lt;/code&gt; 移動到目的地的目錄&lt;/p&gt;
+&lt;p&gt;要回到上一層資料夾則用 &lt;code&gt;cd..&lt;/code&gt;&lt;/p&gt;
+&lt;p&gt;移動的過程中，如果你不清楚目前資料夾底下有哪些資料夾跟檔案，或不知道資料夾完整名稱，可以簡單用 &lt;code&gt;ls&lt;/code&gt; 命令來列出資料夾跟檔案名稱列表&lt;/p&gt;
+&lt;p&gt;如果要建立資料夾，可用以下命令&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#e7e9db;background-color:#2f1e2e;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-bash&#34; data-lang=&#34;bash&#34;&gt;mkdir &amp;lt;資料夾名稱&amp;gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;移動到目的地資料夾後，再輸入以下命令&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#e7e9db;background-color:#2f1e2e;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-bash&#34; data-lang=&#34;bash&#34;&gt;hugo new site &amp;lt;網站名稱&amp;gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;Hugo 預設會直接用你給的網站名稱，假設就叫 test，在當前目錄底下建立 test 資料夾，並將網站生成在該資料夾中&lt;/p&gt;
+&lt;h1 id=&#34;安裝佈景主題&#34;&gt;安裝佈景主題&lt;/h1&gt;
+&lt;p&gt;再來講一下不是必須但可以浪費很多生命的安裝佈景主題&lt;/p&gt;
+&lt;p&gt;有兩種做法，簡單跟裝逼&lt;/p&gt;
+&lt;p&gt;先講簡單&lt;/p&gt;
+&lt;p&gt;就是到 &lt;a href=&#34;https://themes.gohugo.io/&#34;&gt;Hugo Themes&lt;/a&gt; 這個網站選一個主題，以下都以 &lt;a href=&#34;https://themes.gohugo.io/aether/&#34;&gt;aether&lt;/a&gt; 來舉例，不要問為什麼，問了就不簡單了&lt;/p&gt;
+&lt;p&gt;首先要先下載主題包，所以點 &lt;a href=&#34;https://themes.gohugo.io/aether/&#34;&gt;aether&lt;/a&gt; 網頁中的 Download 按鈕；再點綠色的 Clone or download 按鈕，然後點 Download ZIP 下載壓縮檔&lt;/p&gt;
+&lt;p&gt;然後在剛建立的 Hugo 網站 test 資料夾中建立一個 themes 資料夾，然後將主題包解壓縮到 themes 資料夾，應該會產生一個 aether-master 資料夾，裡面是一堆不知道在幹嘛的檔案&lt;/p&gt;
+&lt;p&gt;不要緊張，先回到 test 資料夾，打開那個唯一的檔案 config.toml，這是個純文字檔，所以看你是要用筆記本、WordPad 或隨便什麼文字編輯器打開都可以&lt;/p&gt;
+&lt;p&gt;裡面目前大概只有這樣&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#e7e9db;background-color:#2f1e2e;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-toml&#34; data-lang=&#34;toml&#34;&gt;&lt;span style=&#34;color:#06b6ef&#34;&gt;baseURL&lt;/span&gt; = &lt;span style=&#34;color:#48b685&#34;&gt;&amp;#34;http://example.org/&amp;#34;&lt;/span&gt;
+&lt;span style=&#34;color:#06b6ef&#34;&gt;languageCode&lt;/span&gt; = &lt;span style=&#34;color:#48b685&#34;&gt;&amp;#34;en-us&amp;#34;&lt;/span&gt;
+&lt;span style=&#34;color:#06b6ef&#34;&gt;title&lt;/span&gt; = &lt;span style=&#34;color:#48b685&#34;&gt;&amp;#34;My New Hugo Site&amp;#34;&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;但我們應該起碼要將它填到這樣&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#e7e9db;background-color:#2f1e2e;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-toml&#34; data-lang=&#34;toml&#34;&gt;&lt;span style=&#34;color:#06b6ef&#34;&gt;baseURL&lt;/span&gt; = &lt;span style=&#34;color:#48b685&#34;&gt;&amp;#34;https://yourwebsitenamegoeshere.com/&amp;#34;&lt;/span&gt;
+&lt;span style=&#34;color:#06b6ef&#34;&gt;languageCode&lt;/span&gt; = &lt;span style=&#34;color:#48b685&#34;&gt;&amp;#34;The language code for the language the website is written in&amp;#34;&lt;/span&gt;
+&lt;span style=&#34;color:#06b6ef&#34;&gt;title&lt;/span&gt; = &lt;span style=&#34;color:#48b685&#34;&gt;&amp;#34;The website title that is used in each page title, displayed in the browser tab and search results&amp;#34;&lt;/span&gt;
+&lt;span style=&#34;color:#06b6ef&#34;&gt;theme&lt;/span&gt; = &lt;span style=&#34;color:#48b685&#34;&gt;&amp;#34;aether&amp;#34;&lt;/span&gt;
+&lt;span style=&#34;color:#06b6ef&#34;&gt;googleAnalytics&lt;/span&gt; = &lt;span style=&#34;color:#48b685&#34;&gt;&amp;#34;Your google analytics tracking ID - optional&amp;#34;&lt;/span&gt;
+&lt;span style=&#34;color:#06b6ef&#34;&gt;disqusShortname&lt;/span&gt; = &lt;span style=&#34;color:#48b685&#34;&gt;&amp;#34;Your shortname for Disqus - optional&amp;#34;&lt;/span&gt;
+
+[&lt;span style=&#34;color:#06b6ef&#34;&gt;params&lt;/span&gt;]
+&lt;span style=&#34;color:#06b6ef&#34;&gt;brand&lt;/span&gt; = &lt;span style=&#34;color:#48b685&#34;&gt;&amp;#34;The name that is displayed in the top left of the website, consider it the website name&amp;#34;&lt;/span&gt;
+&lt;span style=&#34;color:#06b6ef&#34;&gt;description&lt;/span&gt; = &lt;span style=&#34;color:#48b685&#34;&gt;&amp;#34;The website&amp;#39;s description&amp;#34;&lt;/span&gt;
+&lt;span style=&#34;color:#06b6ef&#34;&gt;homeimg&lt;/span&gt; = &lt;span style=&#34;color:#48b685&#34;&gt;&amp;#34;URL to the image used for the home button at the bottom of each post - optional&amp;#34;&lt;/span&gt;
+&lt;span style=&#34;color:#06b6ef&#34;&gt;bgimg&lt;/span&gt; = &lt;span style=&#34;color:#48b685&#34;&gt;&amp;#34;URL to the image used for the page background - optional&amp;#34;&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;其中有 &lt;code&gt;- optional&lt;/code&gt; 的選項都不是必填，像是 googleAnalytics 跟 disqusShortname；如果不想填，就在該行最左邊加一個 &lt;code&gt;#&lt;/code&gt;&lt;/p&gt;
+&lt;p&gt;簡單的大概是降&lt;/p&gt;
+&lt;p&gt;裝逼的做法首先你電腦要裝好 Git，什麼？你不會，那你裝什麼逼？&lt;/p&gt;
+&lt;p&gt;總之一樣到 &lt;a href=&#34;https://themes.gohugo.io/aether/&#34;&gt;aether&lt;/a&gt; 主題的 &lt;a href=&#34;https://github.com/josephhutch/aether&#34;&gt;GitHub Repo 頁面&lt;/a&gt; 請流利的使用 Git 指令將這個主題用 &lt;code&gt;git submodule&lt;/code&gt; 的方式加到 test 資料夾下的 themes 資料夾&lt;/p&gt;
+&lt;p&gt;然後一樣針對 config.toml 檔案做設定&lt;/p&gt;
+&lt;p&gt;安裝佈景主題的流程就降&lt;/p&gt;
+&lt;h1 id=&#34;新增文章&#34;&gt;新增文章&lt;/h1&gt;
+&lt;p&gt;使用以下命令，可以生成一篇新的 Markdown 檔，裡面就可以撰寫你的部落格文章內容，但要記得利用 Markdown 語法，各種方便啊&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#e7e9db;background-color:#2f1e2e;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-bash&#34; data-lang=&#34;bash&#34;&gt;hugo new post/&amp;lt;文章檔案名稱&amp;gt;.md
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;注意 &lt;code&gt;post/&lt;/code&gt; 不能省略，這是 aether 這個主題預設會掃描文章內容的資料夾，如果你放錯位置，那文章就白寫了好嗎&lt;/p&gt;
+&lt;h1 id=&#34;測試網站&#34;&gt;測試網站&lt;/h1&gt;
+&lt;p&gt;裝好主題也寫好文章以後，想看一下網站實際上長怎樣，就在命令列輸入以下命令&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#e7e9db;background-color:#2f1e2e;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-bash&#34; data-lang=&#34;bash&#34;&gt;hugo server -D
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;然後隨便開一個瀏覽器，在網址列輸入 &lt;code&gt;http://localhost:1313/&lt;/code&gt; 就可以看到成果啦&lt;/p&gt;
+&lt;p&gt;測試完畢就按 Ctrl + C 結束&lt;/p&gt;
+&lt;h1 id=&#34;生成網站&#34;&gt;生成網站&lt;/h1&gt;
+&lt;p&gt;剛才只是在自己的電腦上模擬生成的網站，但實際上真正可以讓瀏覽器直接開啟的靜態網站並沒有永久生成，在你按下 Ctrl + C 或關掉命令列工具的同時，它就死了哭哭&lt;/p&gt;
+&lt;p&gt;所以現在要來真正的生成靜態網站的檔案，其實就是在 test 資料夾輸入 &lt;code&gt;hugo&lt;/code&gt;，Hugo 就會自動在 test 資料夾底下建立 public 資料夾，並在 public 資料夾依照 config.toml 裡選擇的 theme 生成靜態網站，而這步驟生成的靜態網站內容，其實就跟上一步你在測試網站看到的內容一模一樣&lt;/p&gt;
+&lt;p&gt;不信你可以用瀏覽器打開 public 資料夾中的 index.html 檔案就知道了&lt;/p&gt;
+&lt;h1 id=&#34;github-pages&#34;&gt;GitHub Pages&lt;/h1&gt;
+&lt;p&gt;最後我們來解決「把它放到網路上」這個問題&lt;/p&gt;
+&lt;p&gt;前面說了要用 GitHub Pages，但並不是說這個世界上只有 GitHub Pages 才有這種免費的功能啊，只是這邊用它舉例，你也可以自己玩玩看 GitLab Pages，基本上是一樣的概念，但還自帶 CI/CD 功能，CI/CD 是什麼請點 &lt;a href=&#34;http://bfy.tw/BJQS&#34;&gt;這裡&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;請先自己到 GitHub 申請個帳號，免費；然後新增一個 Repository，名字隨意，或可以取得跟你網站資料夾一樣的名字方便你之後辨識&lt;/p&gt;
+&lt;p&gt;不會申請或開 repo？不會自己 google 啊？申請免費帳號這種事情還要我教？&lt;/p&gt;
+&lt;p&gt;接著我們要把網站搬到新建的 repo 中，這邊也有簡單跟裝逼兩種做法&lt;/p&gt;
+&lt;p&gt;一樣先講簡單&lt;/p&gt;
+&lt;p&gt;請進入剛生成靜態網站檔案的 public 資料夾，然後全選，用拖曳的方式直接拉到新建 repo 的頁面當中，它就會自己上傳了，就這麼簡單&lt;/p&gt;
+&lt;p&gt;但記得之後每新增一篇文章就要做一次 &lt;a href=&#34;#%E7%94%9F%E6%88%90%E7%B6%B2%E7%AB%99&#34;&gt;生成網站&lt;/a&gt; 這段的內容，然後再將 public 資料夾裡面的東西整個上傳到 GitHub repo 中&lt;/p&gt;
+&lt;p&gt;接著點 Settings，往下拉到倒數第二個區塊 GitHub Pages，然後點第一個下拉選單選 master branch，應該就會出現你的網站網址，如此就大功告成啦！可喜可賀可喜可賀&lt;/p&gt;
+&lt;p&gt;最後講一下裝逼做法&lt;/p&gt;
+&lt;p&gt;為了適應到不同電腦都能同步作業，而且不會變動到部落格基本設定的目的，我們會希望把整個 test 資料夾上傳&lt;/p&gt;
+&lt;p&gt;所以要先在 config.toml 裡面新增一行 &lt;code&gt;publishDir = &amp;quot;docs&amp;quot;&lt;/code&gt; 讓生成靜態網站的資料夾從 public 改為 docs&lt;/p&gt;
+&lt;p&gt;然後用 &lt;code&gt;git add .&lt;/code&gt;、&lt;code&gt;git commit -m &amp;quot;&amp;lt;commit message&amp;gt;&amp;quot;&lt;/code&gt;、&lt;code&gt;git push&lt;/code&gt; 的組合技把整個 test 資料夾 push 到指定的 repo master branch&lt;/p&gt;
+&lt;p&gt;最後到 Settings 的 GitHub Pages 區塊，下拉選單選 master branch /docs folder，如此 GitHub 就會自動讀取 docs 資料夾中的靜態網站資料&lt;/p&gt;
+&lt;p&gt;什麼？你跟我說不會 Git？再說一次，那你裝什麼逼？&lt;/p&gt;
+- https://idontwannarock.github.io/tech_blog/2019/05/hugo_tutorial/ - This website by Howard Wang is licensed under a Creative Common Attribution-ShareAlike 4.0 International License.</description>
+        </item>
     
     
     
@@ -1134,45 +1260,6 @@ con(no)-&amp;gt;op
 &lt;h1 id=&#34;感想&#34;&gt;感想&lt;/h1&gt;
 &lt;p&gt;切版真的麻煩，而且我還沒做適應手機大小的版本，不過考慮到這是舊報紙版型，沒有也很正常對吧？（其實只是懶）&lt;/p&gt;
 - https://idontwannarock.github.io/tech_blog/2017/09/retina_morning_post/ - This website by Howard Wang is licensed under a Creative Common Attribution-ShareAlike 4.0 International License.</description>
-        </item>
-    
-    
-    
-        <item>
-        <title>1st Practice: Click Click Boom</title>
-        <link>https://idontwannarock.github.io/tech_blog/2017/09/click_click_boom/</link>
-        <pubDate>Fri, 15 Sep 2017 07:36:23 +0800</pubDate>
-        
-        <guid>https://idontwannarock.github.io/tech_blog/2017/09/click_click_boom/</guid>
-        <description>Howard Tech Note https://idontwannarock.github.io/tech_blog/2017/09/click_click_boom/ -&lt;h1 id=&#34;第一個目標&#34;&gt;第一個目標&lt;/h1&gt;
-&lt;p&gt;寫個簡單作品來練習 HTML 跟 CSS&lt;/p&gt;
-&lt;ul&gt;
-&lt;li&gt;作品：Click Click Boom
-&lt;ul&gt;
-&lt;li&gt;&lt;a href=&#34;https://goo.gl/vPtbzB&#34;&gt;黑白版本&lt;/a&gt;&lt;/li&gt;
-&lt;li&gt;&lt;a href=&#34;https://goo.gl/CfT2Ro&#34;&gt;粉紅大理石版本&lt;/a&gt;&lt;/li&gt;
-&lt;li&gt;&lt;a href=&#34;https://goo.gl/NVdhAk&#34;&gt;黑色大理石版本&lt;/a&gt;&lt;/li&gt;
-&lt;/ul&gt;
-&lt;/li&gt;
-&lt;/ul&gt;
-&lt;h1 id=&#34;遇到困難&#34;&gt;遇到困難&lt;/h1&gt;
-&lt;h2 id=&#34;置中&#34;&gt;置中&lt;/h2&gt;
-&lt;p&gt;左右置中很容易，但上下置中就麻煩了，還要隨瀏覽器視窗大小變動就更麻煩。&lt;/p&gt;
-&lt;p&gt;最後在 stackoverflow 查到一種解法，就是先設定 &lt;code&gt;position: absolute;&lt;/code&gt;，然後 &lt;code&gt;top&lt;/code&gt;、&lt;code&gt;bottom&lt;/code&gt;、&lt;code&gt;left&lt;/code&gt;、&lt;code&gt;right&lt;/code&gt; 都設 &lt;code&gt;0&lt;/code&gt;，再用 &lt;code&gt;margin: 0;&lt;/code&gt; 來自動對齊。&lt;/p&gt;
-&lt;h2 id=&#34;套框&#34;&gt;套框&lt;/h2&gt;
-&lt;p&gt;因為想要使用 HTML+CSS 作套框而不是用畫去背圖的方式，這真的殺死很多腦筋，內部框跟文字怎麼排都無法置中，對，又是無法上下置中，用 &lt;code&gt;text-align&lt;/code&gt; 只能左右置中，&lt;code&gt;vertical-align&lt;/code&gt; 完全不理我。&lt;/p&gt;
-&lt;p&gt;最後又是 stackoverflow 查到解法，要用 CSS3 的新 property，&lt;code&gt;display: flex;&lt;/code&gt; 來解，然後設定 &lt;code&gt;align-item: center;&lt;/code&gt; 跟 &lt;code&gt;justify-content: center;&lt;/code&gt; 來上下左右置中，但當然衍伸出下個問題。&lt;/p&gt;
-&lt;h2 id=&#34;相容&#34;&gt;相容&lt;/h2&gt;
-&lt;p&gt;瀏覽器太多種，新舊版本對 HTML5 或 CSS3 相容度又不一致，真的會搞死，實務上難道也是只能靠經驗？或出問題再來修改嗎？還是有更合理的作法？&lt;/p&gt;
-&lt;p&gt;最後是上 &lt;a href=&#34;https://www.w3schools.com/&#34;&gt;w3schools&lt;/a&gt; 一項一項 property 查相容再加相容敘述 &lt;code&gt;-webkit-&lt;/code&gt; 或 &lt;code&gt;-moz-&lt;/code&gt; 來解決。&lt;/p&gt;
-&lt;h2 id=&#34;ios相容&#34;&gt;iOS相容&lt;/h2&gt;
-&lt;p&gt;這個真的超哭，我整個都做完了，就只有在 iOS 裝置上，按鈕按不下去！&lt;/p&gt;
-&lt;p&gt;我先是想說應該是 &lt;code&gt;transform&lt;/code&gt; 可能不相容，所以一樣查了 w3schools 加上相容敘述，結果還是不行！&lt;/p&gt;
-&lt;p&gt;以我的智商真的想不出來惹，最後只能跟阿混求救，大神就是大神，瞬間幫我找出答案，因為 &lt;code&gt;Pseudo class active&lt;/code&gt; 跟 iOS 不相容……&lt;/p&gt;
-&lt;p&gt;當然阿混很好心的幫我查好解法，結果是要用 JavaScript 來解，這跟我只想練習 HTML+CSS 本意不符，但找了一下好像真的沒有更好的解法，所以最後還是用了這個解法。&lt;/p&gt;
-&lt;h1 id=&#34;感想&#34;&gt;感想&lt;/h1&gt;
-&lt;p&gt;工程師真的很辛苦，但也很爽。能親手做出成品很有成就感！後續再來想要加什麼功能會更舒壓 XD&lt;/p&gt;
-- https://idontwannarock.github.io/tech_blog/2017/09/click_click_boom/ - This website by Howard Wang is licensed under a Creative Common Attribution-ShareAlike 4.0 International License.</description>
         </item>
     
     

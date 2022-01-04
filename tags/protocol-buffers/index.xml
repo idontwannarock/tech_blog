@@ -1,13 +1,13 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
-    <title>implementation on Howard Tech Note</title>
-    <link>https://idontwannarock.github.io/tech_blog/categories/implementation/</link>
-    <description>Recent content in implementation on Howard Tech Note</description>
+    <title>protocol buffers on Howard Tech Note</title>
+    <link>https://idontwannarock.github.io/tech_blog/tags/protocol-buffers/</link>
+    <description>Recent content in protocol buffers on Howard Tech Note</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
     <copyright>This website by Howard Wang is licensed under a Creative Common Attribution-ShareAlike 4.0 International License.</copyright>
-    <lastBuildDate>Tue, 04 Jan 2022 15:36:17 +0800</lastBuildDate><atom:link href="https://idontwannarock.github.io/tech_blog/categories/implementation/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Tue, 04 Jan 2022 15:36:17 +0800</lastBuildDate><atom:link href="https://idontwannarock.github.io/tech_blog/tags/protocol-buffers/index.xml" rel="self" type="application/rss+xml" />
     <item>
       <title>ProtoBuf FlatBuf Benchmark in Java</title>
       <link>https://idontwannarock.github.io/tech_blog/2022/01/protobuf_flatbuf_java/</link>
@@ -22,20 +22,6 @@ Google 官方支援了許多語言的工具用來轉換 IDL 為代碼，但其�
 不過沒關係，我工作上的專案目前並不是一定要使用 gRPC，我完全可以利用其他傳輸協定例如 HTTP, WebSocket 或甚至 Socket 來傳輸資料，我只需要一種能夠讓各語系通用的資料格式，並且盡可能有官方長期支援即可
 Benchmark 方法 雖然剛好 FlatBuf 都符合我的需求，但 FlatBuf 使用的人似乎還不多，雖然官方文件上說 Facebook 已經將 FlatBuf 使用在 Android App 上，不過總是沒有自己親身試驗來的準，也一併試驗開發的困難度
 所以乾脆來做 ProtoBuf 跟 FlatBuf 的 benchmark 來比較一下各自序列化的速度以及記憶體大致用量</description>
-    </item>
-    
-    <item>
-      <title>在 Batch Script 壓縮檔案</title>
-      <link>https://idontwannarock.github.io/tech_blog/2021/12/zip_in_batch_script/</link>
-      <pubDate>Thu, 16 Dec 2021 15:32:25 +0800</pubDate>
-      
-      <guid>https://idontwannarock.github.io/tech_blog/2021/12/zip_in_batch_script/</guid>
-      <description>因為目前公司沒有專職 SRE 或 DevOps 幫忙做 CI/CD，身為小小後端工程師只好自己想辦法，偏偏目前用到的 tech stack 包括 .net framework，所以必須跟 Windows 環境的 batch file 打交道來替代習慣的 shell 檔，其中有個步驟必須要壓縮/解壓縮資料夾
-Tar 研究了一下，很興奮的發現 tar 在 command prompt 跟 powershell 都可以用，那代表我在 batch 檔裡面使用沒問題ＲＲＲ
-所以可以這樣用
-:: zip tar -cvzf &amp;#34;path and name to archive.tar&amp;#34; &amp;#34;path to folder to compress&amp;#34; :: unzip tar -xvzf &amp;#34;path and name to archive.tar&amp;#34; Microsoft.Powershell.Archive Module 很可惜，這個方法有一個小小的問題
-tar 基本上是從 Windows 10 或 Windows Server 2019 才開始支援，很不巧，我手上有個環境是 Windows Server 2016&amp;hellip;
-基於可以用原生就絕不多安裝東西的自虐原則，好險又找到了另一個方法，powershell 有個 archive 的模組可以用！</description>
     </item>
     
   </channel>

@@ -7,7 +7,43 @@
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
     <copyright>This website by Howard Wang is licensed under a Creative Common Attribution-ShareAlike 4.0 International License.</copyright>
-    <lastBuildDate>Mon, 27 Dec 2021 09:44:31 +0800</lastBuildDate><atom:link href="https://idontwannarock.github.io/tech_blog/tags/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Tue, 04 Jan 2022 15:36:17 +0800</lastBuildDate><atom:link href="https://idontwannarock.github.io/tech_blog/tags/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>flat buffers</title>
+      <link>https://idontwannarock.github.io/tech_blog/tags/flat-buffers/</link>
+      <pubDate>Tue, 04 Jan 2022 15:36:17 +0800</pubDate>
+      
+      <guid>https://idontwannarock.github.io/tech_blog/tags/flat-buffers/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>flatbuf</title>
+      <link>https://idontwannarock.github.io/tech_blog/tags/flatbuf/</link>
+      <pubDate>Tue, 04 Jan 2022 15:36:17 +0800</pubDate>
+      
+      <guid>https://idontwannarock.github.io/tech_blog/tags/flatbuf/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>protobuf</title>
+      <link>https://idontwannarock.github.io/tech_blog/tags/protobuf/</link>
+      <pubDate>Tue, 04 Jan 2022 15:36:17 +0800</pubDate>
+      
+      <guid>https://idontwannarock.github.io/tech_blog/tags/protobuf/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>protocol buffers</title>
+      <link>https://idontwannarock.github.io/tech_blog/tags/protocol-buffers/</link>
+      <pubDate>Tue, 04 Jan 2022 15:36:17 +0800</pubDate>
+      
+      <guid>https://idontwannarock.github.io/tech_blog/tags/protocol-buffers/</guid>
+      <description></description>
+    </item>
+    
     <item>
       <title>grpc</title>
       <link>https://idontwannarock.github.io/tech_blog/tags/grpc/</link>
