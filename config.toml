@@ -54,3 +54,6 @@ weight = 4
 url = "/about"
 name = "About"
 weight = 5
+url = "/index.xml"
+name = "RSS Feed"
+weight = 6
