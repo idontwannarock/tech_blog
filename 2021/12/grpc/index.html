@@ -914,11 +914,25 @@ Ported from <a href="https://mak1t0.cc/" target="_blank" rel="noreferrer noopene
             </nav>
             <div class="post-comment-wrapper">
                 
-<div class="comments">
-    <vue-disqus shortname="howard-tech-blog"></vue-disqus>
-</div>
-<noscript><noscript>Please activate JavaScript to view comments.</noscript></noscript>
-<a href="https://disqus.com/" class="dsq-brlink">Comments powered by <span class="logo-disqus">Disqus</span></a>
+<div id="disqus_thread"></div>
+<script>
+    
+
+    var disqus_config = function () {
+        
+        this.page.url = 'https:\/\/idontwannarock.github.io\/tech_blog\/2021\/12\/grpc\/';  
+        
+        
+        this.page.identifier = 'https:\/\/idontwannarock.github.io\/tech_blog\/2021\/12\/grpc\/'; 
+    };
+    (function() {
+        var d = document, s = d.createElement('script');
+        s.src = 'https://howard-tech-blog.disqus.com/embed.js';
+        s.setAttribute('data-timestamp', +new Date());
+        (d.head || d.body).appendChild(s);
+    })();
+</script>
+<noscript> Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript" rel="nofollow"> comments powered by Disqus.  </a> </noscript>
 
 
 
