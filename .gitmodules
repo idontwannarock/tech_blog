@@ -1,3 +1,6 @@
 [submodule "themes/diary"]
 	path = themes/diary
 	url = https://github.com/AmazingRise/hugo-theme-diary.git
+[submodule "themes/diary-fork"]
+	path = themes/diary-fork
+	url = git@github.com:idontwannarock/hugo-theme-diary.git
