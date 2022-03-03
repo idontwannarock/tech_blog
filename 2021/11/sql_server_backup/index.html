@@ -1,0 +1,963 @@
+<!DOCTYPE html>
+<html><head>
+<title>Sql Server 備份方式</title>
+
+
+
+
+<meta charset="utf-8">
+<meta name="X-UA-Compatible" content="IE=edge">
+<meta name="google-site-verification" content="">
+<meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" name="viewport">
+<meta content="telephone=no" name="format-detection">
+<meta name="description" content="">
+<meta name="renderer" content="webkit">
+<meta name="theme-color" content="#ffffff">
+
+
+
+
+
+
+
+
+
+
+
+<script type="application/javascript">
+var doNotTrack = false;
+if (!doNotTrack) {
+	(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+	(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+	m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+	})(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+	ga('create', 'UA-106499565-1', 'auto');
+	
+	ga('send', 'pageview');
+}
+</script>
+
+
+<link type="text/css" rel="stylesheet" href="https://idontwannarock.github.io/tech_blog/vendor/css/bootstrap.min.css">
+
+
+  
+
+
+
+
+
+
+<link rel="stylesheet" href="https://idontwannarock.github.io/tech_blog/scss/journal.min.f4a8de07567a2d29619e0711662ef6251e3e59b642079f99490f654abf89a3c4.css" integrity="sha256-9KjeB1Z6LSlhngcRZi72JR4&#43;WbZCB5&#43;ZSQ9lSr&#43;Jo8Q=" media="screen">
+
+
+
+<link rel="stylesheet" href="https://idontwannarock.github.io/tech_blog/scss/dark-mode.min.eeb8040aa9333250b7fec770f950bfe8ba9b18a5eeeaf2dfef61d84d3956f625.css" integrity="sha256-7rgECqkzMlC3/sdw&#43;VC/6LqbGKXu6vLf72HYTTlW9iU=" media="screen">
+
+
+<script src="https://idontwannarock.github.io/tech_blog/vendor/js/loadCSS.js"></script>
+<script>
+  loadCSS("https://fonts.googleapis.com/css?family=Fira+Mono|Material+Icons");
+</script>
+
+
+
+
+
+
+  <script src="https://idontwannarock.github.io/tech_blog/js/toc.js"></script>
+
+
+
+
+
+
+
+<script src="https://cdn.jsdelivr.net/npm/vue-disqus@3/dist/vue-disqus.js"></script>
+
+
+
+
+
+
+
+
+</head>
+<body>
+    	<div id="app"><div id="sideContainer" class="side-container">
+    
+    <a class="a-block nav-head false" href="https://idontwannarock.github.io/tech_blog/">
+    
+        <div class="nav-title">
+            Howard Tech Note
+        </div>
+        
+        <div class="nav-subtitle">
+            Share * Record * Program
+        </div>
+        
+    </a>
+
+    <div class="nav-link-list">
+        
+        
+            
+            
+            
+            
+            
+            <a class="a-block nav-link-item false" href="https://idontwannarock.github.io/tech_blog/posts">
+                Archive
+            </a>
+            
+        
+            
+            
+            
+            
+            
+            <a class="a-block nav-link-item false" href="https://idontwannarock.github.io/tech_blog/categories">
+                Categories
+            </a>
+            
+        
+            
+            
+            
+            
+            
+            <a class="a-block nav-link-item false" href="https://idontwannarock.github.io/tech_blog/tags">
+                Tags
+            </a>
+            
+        
+            
+            
+            
+            
+            
+            <a class="a-block nav-link-item false" href="https://idontwannarock.github.io/tech_blog/about">
+                About
+            </a>
+            
+        
+            
+            
+            
+            
+            
+            <a class="a-block nav-link-item false" href="https://idontwannarock.github.io/tech_blog/index.xml">
+                RSS Feed
+            </a>
+            
+        
+    </div>
+
+    
+
+    <div class="nav-footer">
+        
+Hugo Theme <a href="https://github.com/amazingrise/hugo-theme-diary">Diary</a> by <a href="https://amazingrise.net">Rise</a>
+<br>
+Ported from <a href="https://mak1t0.cc/" target="_blank" rel="noreferrer noopener">Makito</a>'s <a href="https://github.com/SumiMakito/hexo-theme-journal/" target="_blank" rel="noreferrer noopener">Journal.</a> <br>
+<br>
+
+&copy;
+	
+	This website by Howard Wang is licensed under a Creative Common Attribution-ShareAlike 4.0 International License.
+	
+
+    </div>
+    
+</div><div id="extraContainer" class="extra-container">
+    
+    
+    <div class="toc animated-visibility" :class="{ invisible: scrollY <= 140 }">
+
+
+	<div class="toc-content">
+	
+		
+		
+		
+		<center>- CATALOG -</center>
+		
+		
+		<ul>
+			
+				
+				
+					
+						
+						
+						
+						
+							
+								
+									<ul>
+								
+							
+						
+						
+							<li>
+								<a href="#%e5%82%99%e4%bb%bd%e6%aa%94%e6%a1%88%e6%a0%bc%e5%bc%8f" onclick="onNavClick(`#備份檔案格式-nav`)" id="備份檔案格式-nav">
+									備份檔案格式
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+						
+							<li>
+								<a href="#%e5%82%99%e4%bb%bd%e5%b7%a5%e5%85%b7" onclick="onNavClick(`#備份工具-nav`)" id="備份工具-nav">
+									備份工具
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+							
+								
+									<ul>
+								
+							
+						
+						
+							<li>
+								<a href="#sqlcmd-%e5%ae%98%e6%96%b9" onclick="onNavClick(`#sqlcmd-官方-nav`)" id="sqlcmd-官方-nav">
+									SqlCmd (官方)
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+						
+							<li>
+								<a href="#bcp-%e5%ae%98%e6%96%b9" onclick="onNavClick(`#bcp-官方-nav`)" id="bcp-官方-nav">
+									BCP (官方)
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+						
+							<li>
+								<a href="#smo-%e5%ae%98%e6%96%b9" onclick="onNavClick(`#smo-官方-nav`)" id="smo-官方-nav">
+									SMO (官方)
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+						
+							<li>
+								<a href="#sqlpackageexe-%e5%ae%98%e6%96%b9" onclick="onNavClick(`#sqlpackageexe-官方-nav`)" id="sqlpackageexe-官方-nav">
+									SqlPackage.exe (官方)
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+						
+							<li>
+								<a href="#dbatools" onclick="onNavClick(`#dbatools-nav`)" id="dbatools-nav">
+									dbatools
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+						
+							<li>
+								<a href="#mssql-scripter" onclick="onNavClick(`#mssql-scripter-nav`)" id="mssql-scripter-nav">
+									mssql-scripter
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+							
+								</ul>
+							
+						
+						
+						
+							<li>
+								<a href="#%e7%b5%90%e8%ab%96" onclick="onNavClick(`#結論-nav`)" id="結論-nav">
+									結論
+								</a>
+							</li>
+						
+						
+					
+				
+			
+		</ul>
+	</div>
+
+</div>
+    
+    <div class="pagination">
+        <a id="globalBackToTop" class="pagination-action animated-visibility" href="#top" :class="{ invisible: scrollY == 0 }">
+            <i class="material-icons pagination-action-icon">
+                keyboard_arrow_up
+            </i>
+        </a>
+        
+        <a type="button" class="pagination-action" id="darkModeToggleButton">
+            <span class="material-icons pagination-action-icon" id="darkModeToggleIcon">
+                dark_mode
+            </span>
+        </a>
+        
+        
+    </div>
+</div>
+<div class="single-column-drawer-container" id="drawer"
+     v-bind:class="{ 'single-column-drawer-container-active': isDrawerOpen }">
+    <div class="drawer-content">
+        <div class="drawer-menu">
+            
+            
+            
+                
+                
+                
+                
+                
+                <a class="a-block drawer-menu-item false" href="https://idontwannarock.github.io/tech_blog/posts">
+                    Archive
+                </a>
+                
+            
+                
+                
+                
+                
+                
+                <a class="a-block drawer-menu-item false" href="https://idontwannarock.github.io/tech_blog/categories">
+                    Categories
+                </a>
+                
+            
+                
+                
+                
+                
+                
+                <a class="a-block drawer-menu-item false" href="https://idontwannarock.github.io/tech_blog/tags">
+                    Tags
+                </a>
+                
+            
+                
+                
+                
+                
+                
+                <a class="a-block drawer-menu-item false" href="https://idontwannarock.github.io/tech_blog/about">
+                    About
+                </a>
+                
+            
+                
+                
+                
+                
+                
+                <a class="a-block drawer-menu-item false" href="https://idontwannarock.github.io/tech_blog/index.xml">
+                    RSS Feed
+                </a>
+                
+            
+            
+            <div class="toc">
+
+
+	<div class="toc-content">
+	
+		
+		
+		
+		<center>- CATALOG -</center>
+		
+		
+		<ul>
+			
+				
+				
+					
+						
+						
+						
+						
+							
+								
+									<ul>
+								
+							
+						
+						
+							<li>
+								<a href="#%e5%82%99%e4%bb%bd%e6%aa%94%e6%a1%88%e6%a0%bc%e5%bc%8f" onclick="onNavClick(`#備份檔案格式-nav`)" id="備份檔案格式-nav">
+									備份檔案格式
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+						
+							<li>
+								<a href="#%e5%82%99%e4%bb%bd%e5%b7%a5%e5%85%b7" onclick="onNavClick(`#備份工具-nav`)" id="備份工具-nav">
+									備份工具
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+							
+								
+									<ul>
+								
+							
+						
+						
+							<li>
+								<a href="#sqlcmd-%e5%ae%98%e6%96%b9" onclick="onNavClick(`#sqlcmd-官方-nav`)" id="sqlcmd-官方-nav">
+									SqlCmd (官方)
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+						
+							<li>
+								<a href="#bcp-%e5%ae%98%e6%96%b9" onclick="onNavClick(`#bcp-官方-nav`)" id="bcp-官方-nav">
+									BCP (官方)
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+						
+							<li>
+								<a href="#smo-%e5%ae%98%e6%96%b9" onclick="onNavClick(`#smo-官方-nav`)" id="smo-官方-nav">
+									SMO (官方)
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+						
+							<li>
+								<a href="#sqlpackageexe-%e5%ae%98%e6%96%b9" onclick="onNavClick(`#sqlpackageexe-官方-nav`)" id="sqlpackageexe-官方-nav">
+									SqlPackage.exe (官方)
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+						
+							<li>
+								<a href="#dbatools" onclick="onNavClick(`#dbatools-nav`)" id="dbatools-nav">
+									dbatools
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+						
+							<li>
+								<a href="#mssql-scripter" onclick="onNavClick(`#mssql-scripter-nav`)" id="mssql-scripter-nav">
+									mssql-scripter
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+							
+								</ul>
+							
+						
+						
+						
+							<li>
+								<a href="#%e7%b5%90%e8%ab%96" onclick="onNavClick(`#結論-nav`)" id="結論-nav">
+									結論
+								</a>
+							</li>
+						
+						
+					
+				
+			
+		</ul>
+	</div>
+
+</div>
+            
+        </div>
+    </div>
+</div>
+<transition name="fade">
+    <div id="drawer-mask" v-bind:class="{ 'single-column-drawer-mask': mounted }" v-if="isDrawerOpen" v-on:click="toggleDrawer"></div>
+</transition>
+<nav id="navBar" class="navbar sticky-top navbar-light single-column-nav-container">
+    <div id="navBackground" class="nav-background"></div>
+    <div class="container container-narrow nav-content">
+        <button id="nav_dropdown_btn" class="nav-dropdown-toggle" type="button" v-on:click="toggleDrawer">
+            <i class="material-icons">
+                menu
+            </i>
+        </button>
+        <a id="navTitle" class="navbar-brand" href="https://idontwannarock.github.io/tech_blog/">
+            Howard Tech Note
+        </a>
+        
+        <button type="button" class="nav-darkmode-toggle" id="darkModeToggleButton2">
+            <i class="material-icons" id="darkModeToggleIcon2">
+                dark_mode
+            </i>
+        </button>
+        
+    </div>
+</nav>
+<div class="single-column-header-container" id="pageHead"
+     v-bind:style="{ transform: 'translateZ(0px) translateY('+.3*scrollY+'px)', opacity: 1-navOpacity }">
+    <a href="https://idontwannarock.github.io/tech_blog/">
+        <div class="single-column-header-title">Howard Tech Note</div>
+        
+        <div class="single-column-header-subtitle">Share * Record * Program</div>
+        
+
+    </a>
+</div>
+
+            <div id="content">
+                <div id="streamContainer" class="stream-container">
+
+    <div class="post-list-container post-list-container-shadow">
+        <div class="post">
+            
+            
+            
+                
+            
+
+            <div class="post-head-wrapper"
+                
+                    
+                    
+                    style="background-image: url('https://res.cloudinary.com/dcvgho2zc/image/upload/v1637045622/Tech%20Blog/ms-sql-banner.jpg')"
+                    
+                
+            >
+                <div class="post-title">
+                    Sql Server 備份方式
+                    
+                    <div class="post-meta">
+                        
+                        <time itemprop="datePublished">
+                            2021-11-16 11:58
+                        </time>
+                        
+
+                        
+                            <i class="material-icons" style="">folder</i>
+                                <a href="https://idontwannarock.github.io/tech_blog/categories/application">application</a>
+                                &nbsp;
+                        
+
+                        
+                            <i class="material-icons" style="">label</i>
+                            
+                                <a href="https://idontwannarock.github.io/tech_blog/tags/sql-server">sql-server</a>
+                                &nbsp;
+                            
+                                <a href="https://idontwannarock.github.io/tech_blog/tags/database">database</a>
+                                &nbsp;
+                            
+                        
+                        
+                    </div>
+                </div>
+            </div>
+            
+            <div class="post-body-wrapper">
+                
+                <div class="post-body" v-pre>
+                
+                    <p>最近工作上碰到需要對 Sql Server 做 snapshot 的場合，所以就順便來研究一下怎麼對 Sql Server 做備份</p>
+<p>按照過去的經驗，我第一個想法就是找 Sql Server 有沒有類似 mysqldump 或 pg_dump 的工具可以直接將 schema 及 data 導出成 SQL 檔，這樣方便閱讀也方便各種場景下重建資料庫，尤其是在資料庫的 table 數量及資料量並不算大的前提下</p>
+<p>結果，我太天真了，Microsoft 怎麼可能這麼好用 (誤)，人家就是要走自己的路！</p>
+<h2 id="備份檔案格式">備份檔案格式</h2>
+<p>Sql Server 備份出來的檔案格式有以下幾種</p>
+<ul>
+<li>bak: schema + data + log + file，適合做定時備份，因為他會保持包含 index 在內的資料以維持 single point of time 的 transactionally consistent</li>
+<li>DACPAC: schema，適合建立測試環境或比對各環境版本；但也支持下參數加上 data 的備份。實際上是 xml 的壓縮檔</li>
+<li>BACPAC: schema + data，適合轉移或 archive db。schema 部分與 DACPAC 相同，只是加上用 BCP 匯出資料</li>
+<li>sql</li>
+</ul>
+<h2 id="備份工具">備份工具</h2>
+<p>主要有以下幾種備份工具</p>
+<ul>
+<li><a href="https://docs.microsoft.com/en-us/sql/tools/sqlcmd-utility?view=sql-server-ver15">SqlCmd (官方)</a></li>
+<li><a href="https://docs.microsoft.com/en-us/sql/tools/bcp-utility?view=sql-server-ver15">BCP (官方)</a></li>
+<li><a href="https://docs.microsoft.com/en-us/sql/relational-databases/server-management-objects-smo/getting-started-in-smo?view=sql-server-ver15">SMO (官方)</a></li>
+<li><a href="https://docs.microsoft.com/en-us/sql/tools/sqlpackage/sqlpackage?view=sql-server-ver15">SqlPackage.exe (官方)</a></li>
+<li><a href="https://dbatools.io/">dbatools</a></li>
+<li><a href="https://github.com/Microsoft/mssql-scripter">mssql-scripter</a></li>
+</ul>
+<h3 id="sqlcmd-官方">SqlCmd (官方)</h3>
+<p>需要安裝 Sql Server 或 Microsoft Command Line Utility。若 powershell 要使用，還需要安裝 SqlServer 模組</p>
+<p>只能產生出 bak 檔，可包含 schema 及 data，但本身並不包含建立 database</p>
+<h3 id="bcp-官方">BCP (官方)</h3>
+<p>針對同步大量資料的工具，不支援同步 schema</p>
+<h3 id="smo-官方">SMO (官方)</h3>
+<p>這已經算是要寫程式來控制備份機制了，除了可以用 powershell 來寫以外，其實也可以直接寫 c# 專案來使用這個 library 做備份工作</p>
+<p>只要有安裝過 Sql Server 後就會內附該有的 dll</p>
+<p>會產生 schema 及 data 的 sql script，但我沒找到產生建立 database 部分的選項可以做設定</p>
+<p>可以參考這篇 <a href="https://www.red-gate.com/simple-talk/databases/sql-server/database-administration-sql-server/automated-script-generation-with-powershell-and-smo/">Automated Script-generation with Powershell and SMO</a> 來撰寫 powershell 檔</p>
+<h3 id="sqlpackageexe-官方">SqlPackage.exe (官方)</h3>
+<p>可以不需要安裝 sql server，是獨立的程式，而且跨平台</p>
+<p>可以選擇 extract (產出 DACPAC) 或 export (產出 BACPAC)</p>
+<p>dacpac 只是壓縮檔，解開後，schema 的部分都是 xml，data 就是用 bcp 輸出的檔案。bacpac 也是一樣</p>
+<p>不過 SqlPackage 有幾個問題</p>
+<ul>
+<li>Extract dacpac 也可以包含 data (<code>ExtractAllTableData='True'</code>)，而且還可以設定是否要 verify (<code>VerifyExtraction='False'</code>)，這樣 Export bacpac 不知道要拿來幹嘛</li>
+<li>還有 Export 不能關閉 verify (<code>VerifyExtraction='False'</code>)，會出現以下警告，所以甚至像是在 store procedure 內有用到別的 database 的狀況也會被拒絕</li>
+</ul>
+<blockquote>
+<p>*** &lsquo;VerifyExtraction&rsquo; is not a valid argument for the &lsquo;Export&rsquo; action.</p>
+</blockquote>
+<h3 id="dbatools">dbatools</h3>
+<p>這是一個第三方套件，功能多到看不完，但官方文件雖然列的一堆功能，但使用者要怎麼使用坦白說我覺得不是很友善</p>
+<h3 id="mssql-scripter">mssql-scripter</h3>
+<p>需要安裝並設定好 Python 的環境變數，然後用 pip 安裝</p>
+<p>可以產生 schema 及 data 的 sql script</p>
+<p>對本地安裝的 Sql Server 操作沒問題，但我拿它來對 docker container 中的 mssql 操作會報權限問題</p>
+<h2 id="結論">結論</h2>
+<p>因為考慮到資料庫 table 以及非 log 資料並不多，所以最後選擇用 powershell 操作 smo 的方式產出 sql 檔的方式做 snapshot</p>
+<p>以下是我參考這篇 <a href="https://www.red-gate.com/simple-talk/databases/sql-server/database-administration-sql-server/automated-script-generation-with-powershell-and-smo/">Automated Script-generation with Powershell and SMO</a> 撰寫的 powershell 檔</p>
+<div class="highlight"><pre tabindex="0" style="color:#e7e9db;background-color:#2f1e2e;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-powershell" data-lang="powershell"><span style="display:flex;"><span><span style="color:#815ba4">param</span>(<span style="color:#ef6155">$datasource</span>, <span style="color:#ef6155">$username</span>, <span style="color:#ef6155">$password</span>, <span style="color:#ef6155">$backupPath</span>)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#776e71"># set &#34;Option Explicit&#34; to catch subtle errors</span>
+</span></span><span style="display:flex;"><span>set-psdebug -strict
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#776e71"># you can opt to stagger on, bleeding, if an error occurs</span>
+</span></span><span style="display:flex;"><span><span style="color:#ef6155">$ErrorActionPreference</span> = <span style="color:#48b685">&#34;stop&#34;</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#776e71"># create backup directory if not exist</span>
+</span></span><span style="display:flex;"><span>New-Item -ItemType Directory -Force -Path <span style="color:#ef6155">$backupPath</span> | Out-Null
+</span></span><span style="display:flex;"><span>cd <span style="color:#ef6155">$backupPath</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#776e71"># get current date in yyyyMMdd format</span>
+</span></span><span style="display:flex;"><span><span style="color:#ef6155">$currentDate</span> = Get-Date -format yyyyMMdd
+</span></span><span style="display:flex;"><span>Write-Output <span style="color:#48b685">&#34;Current Date = $currentDate&#34;</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#776e71"># get the latest backup directory</span>
+</span></span><span style="display:flex;"><span>Get-ChildItem -Directory -Path . | Sort-Object CreationTime -Descending | Select-Object -First 1 -ExpandProperty Name -OutVariable latestDir | Out-Null
+</span></span><span style="display:flex;"><span>Write-Output <span style="color:#48b685">&#34;Latest Backup Directory = $latestDir&#34;</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#776e71"># get the latest version of today&#39;s backups</span>
+</span></span><span style="display:flex;"><span><span style="color:#ef6155">$currentVersion</span> = 0
+</span></span><span style="display:flex;"><span><span style="color:#815ba4">if</span> (<span style="color:#ef6155">$latestDir</span> <span style="color:#5bc4bf">-Match</span> <span style="color:#ef6155">$currentDate</span>)
+</span></span><span style="display:flex;"><span>{
+</span></span><span style="display:flex;"><span>    <span style="color:#ef6155">$currentVersion</span> = <span style="color:#ef6155">$latestDir</span>.Substring(<span style="color:#ef6155">$currentDate</span>.Length + 1)
+</span></span><span style="display:flex;"><span>}
+</span></span><span style="display:flex;"><span>Write-Output <span style="color:#48b685">&#34;Current Version = $currentVersion&#34;</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#776e71"># create directory for the next version of backup</span>
+</span></span><span style="display:flex;"><span><span style="color:#ef6155">$nextVersion</span> = <span style="color:#ef6155">[int]</span><span style="color:#ef6155">$currentVersion</span> + 1
+</span></span><span style="display:flex;"><span>Write-Output <span style="color:#48b685">&#34;Next Version = $nextVersion&#34;</span>
+</span></span><span style="display:flex;"><span><span style="color:#ef6155">$nextVersionDir</span> = <span style="color:#48b685">&#34;</span>$(<span style="color:#ef6155">$backupPath</span>)<span style="color:#48b685">\</span>$(<span style="color:#ef6155">$currentDate</span>)<span style="color:#48b685">_</span>$(<span style="color:#ef6155">$nextVersion</span>)<span style="color:#48b685">&#34;</span>
+</span></span><span style="display:flex;"><span>New-Item -ItemType Directory -Force -Path <span style="color:#ef6155">$nextVersionDir</span> | Out-Null
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#776e71"># load SMO assembly</span>
+</span></span><span style="display:flex;"><span><span style="color:#ef6155">$msPrefix</span> = <span style="color:#48b685">&#39;Microsoft.SqlServer&#39;</span>
+</span></span><span style="display:flex;"><span><span style="color:#ef6155">[System.Reflection.Assembly]</span>::LoadWithPartialName(<span style="color:#48b685">&#34;$msPrefix.SMO&#34;</span>) | out-null
+</span></span><span style="display:flex;"><span><span style="color:#ef6155">[System.Reflection.Assembly]</span>::LoadWithPartialName(<span style="color:#48b685">&#34;$msPrefix.SMOExtended&#34;</span>) | out-null
+</span></span><span style="display:flex;"><span><span style="color:#ef6155">$smoPrefix</span> = <span style="color:#48b685">&#34;$msPrefix.Management.Smo&#34;</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#776e71"># set connection</span>
+</span></span><span style="display:flex;"><span><span style="color:#ef6155">$server</span> = New-Object (<span style="color:#48b685">&#34;$smoPrefix.Server&#34;</span>) <span style="color:#ef6155">$datasource</span>
+</span></span><span style="display:flex;"><span><span style="color:#ef6155">$server</span>.ConnectionContext.LoginSecure = <span style="color:#ef6155">$false</span>
+</span></span><span style="display:flex;"><span><span style="color:#ef6155">$server</span>.ConnectionContext.set_Login(<span style="color:#ef6155">$username</span>)
+</span></span><span style="display:flex;"><span><span style="color:#ef6155">$server</span>.ConnectionContext.set_Password(<span style="color:#ef6155">$password</span>)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#776e71"># check connection</span>
+</span></span><span style="display:flex;"><span><span style="color:#815ba4">if</span> (<span style="color:#ef6155">$server</span>.Version <span style="color:#5bc4bf">-eq</span> <span style="color:#ef6155">$null</span> ) {<span style="color:#815ba4">Throw</span> <span style="color:#48b685">&#34;Can&#39;t find the instance $datasource&#34;</span>}
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#776e71"># loop through databases names to do back up</span>
+</span></span><span style="display:flex;"><span><span style="color:#815ba4">foreach</span> (<span style="color:#ef6155">$database</span> <span style="color:#815ba4">in</span> <span style="color:#ef6155">$server</span>.databases)
+</span></span><span style="display:flex;"><span>{
+</span></span><span style="display:flex;"><span>    <span style="color:#776e71"># skip system databases</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#815ba4">if</span> (<span style="color:#ef6155">$database</span>.Name -in <span style="color:#48b685">&#39;Master&#39;</span>,<span style="color:#48b685">&#39;Model&#39;</span>,<span style="color:#48b685">&#39;MSDB&#39;</span>,<span style="color:#48b685">&#39;TempDB&#39;</span>,<span style="color:#48b685">&#39;SSISDB&#39;</span>,<span style="color:#48b685">&#39;distribution&#39;</span>,<span style="color:#48b685">&#39;ReportServer&#39;</span>,<span style="color:#48b685">&#39;ReportServerTempDB&#39;</span>) {<span style="color:#815ba4">continue</span>}
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#776e71"># skip offline databases</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#815ba4">if</span> (<span style="color:#ef6155">$database</span>.Status <span style="color:#5bc4bf">-ne</span> <span style="color:#48b685">&#39;Normal&#39;</span>) {
+</span></span><span style="display:flex;"><span>        Write-Output (<span style="color:#48b685">&#34;Skipping Offline: {0}&#34;</span> <span style="color:#5bc4bf">-f</span> <span style="color:#ef6155">$database</span>.Name)
+</span></span><span style="display:flex;"><span>        <span style="color:#815ba4">continue</span>
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#ef6155">$backupFile</span> = <span style="color:#48b685">&#34;</span>$(<span style="color:#ef6155">$nextVersionDir</span>)<span style="color:#48b685">\</span>$(<span style="color:#ef6155">$database</span>.Name)<span style="color:#48b685">.sql&#34;</span>
+</span></span><span style="display:flex;"><span>    Write-Output <span style="color:#48b685">&#34;Start to back up </span>$(<span style="color:#ef6155">$database</span>.Name)<span style="color:#48b685">&#34;</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#776e71"># manually add create database sql statement at the beginning of the sql file</span>
+</span></span><span style="display:flex;"><span>    New-Item <span style="color:#ef6155">$backupFile</span> -ItemType File | Out-Null
+</span></span><span style="display:flex;"><span>    Add-Content <span style="color:#ef6155">$backupFile</span> <span style="color:#48b685">&#34;USE [master]&#34;</span>
+</span></span><span style="display:flex;"><span>    Add-Content <span style="color:#ef6155">$backupFile</span> <span style="color:#48b685">&#34;GO&#34;</span>
+</span></span><span style="display:flex;"><span>    Add-Content <span style="color:#ef6155">$backupFile</span> <span style="color:#48b685">&#34;Drop Database if exists [</span>$(<span style="color:#ef6155">$database</span>.Name)<span style="color:#48b685">];&#34;</span>
+</span></span><span style="display:flex;"><span>    Add-Content <span style="color:#ef6155">$backupFile</span> <span style="color:#48b685">&#34;GO&#34;</span>
+</span></span><span style="display:flex;"><span>    Add-Content <span style="color:#ef6155">$backupFile</span> <span style="color:#48b685">&#34;USE [master]&#34;</span>
+</span></span><span style="display:flex;"><span>    Add-Content <span style="color:#ef6155">$backupFile</span> <span style="color:#48b685">&#34;GO&#34;</span>
+</span></span><span style="display:flex;"><span>    Add-Content <span style="color:#ef6155">$backupFile</span> <span style="color:#48b685">&#34;CREATE DATABASE [</span>$(<span style="color:#ef6155">$database</span>.Name)<span style="color:#48b685">]&#34;</span>
+</span></span><span style="display:flex;"><span>    Add-Content <span style="color:#ef6155">$backupFile</span> <span style="color:#48b685">&#34;GO&#34;</span>
+</span></span><span style="display:flex;"><span>    Add-Content <span style="color:#ef6155">$backupFile</span> <span style="color:#48b685">&#34;USE [</span>$(<span style="color:#ef6155">$database</span>.Name)<span style="color:#48b685">]&#34;</span>
+</span></span><span style="display:flex;"><span>    Add-Content <span style="color:#ef6155">$backupFile</span> <span style="color:#48b685">&#34;GO&#34;</span>
+</span></span><span style="display:flex;"><span>    Add-Content <span style="color:#ef6155">$backupFile</span> <span style="color:#48b685">&#34;&#34;</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#776e71"># set export configuration</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#ef6155">$transfer</span> = New-Object (<span style="color:#48b685">&#34;$smoPrefix.Transfer&#34;</span>) <span style="color:#ef6155">$database</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#ef6155">$transfer</span>.Options.ScriptSchema = <span style="color:#ef6155">$true</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#ef6155">$transfer</span>.Options.ScriptData = <span style="color:#ef6155">$true</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#ef6155">$transfer</span>.Options.ScriptBatchTerminator = <span style="color:#ef6155">$true</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#ef6155">$transfer</span>.Options.ToFileOnly = <span style="color:#ef6155">$true</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#ef6155">$transfer</span>.Options.AppendToFile = <span style="color:#ef6155">$true</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#ef6155">$transfer</span>.Options.Encoding = New-Object (<span style="color:#48b685">&#34;System.Text.UTF8Encoding&#34;</span>)
+</span></span><span style="display:flex;"><span>    <span style="color:#ef6155">$transfer</span>.Options.AllowSystemObjects = <span style="color:#ef6155">$false</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#ef6155">$transfer</span>.Options.Permissions = <span style="color:#ef6155">$true</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#ef6155">$transfer</span>.Options.SchemaQualify = <span style="color:#ef6155">$true</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#ef6155">$transfer</span>.Options.ExtendedProperties = <span style="color:#ef6155">$true</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#ef6155">$transfer</span>.Options.DRIAll = <span style="color:#ef6155">$true</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#ef6155">$transfer</span>.Options.Indexes = <span style="color:#ef6155">$true</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#ef6155">$transfer</span>.Options.Triggers = <span style="color:#ef6155">$true</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#ef6155">$transfer</span>.Options.IncludeHeaders = <span style="color:#ef6155">$true</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#ef6155">$transfer</span>.Options.IncludeIfNotExists = <span style="color:#ef6155">$true</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#ef6155">$transfer</span>.Options.Filename = <span style="color:#48b685">&#34;$backupFile&#34;</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#ef6155">$transfer</span>.Options.EnforceScriptingOptions = <span style="color:#ef6155">$true</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#776e71"># start scripting</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#ef6155">$transfer</span>.EnumScriptTransfer()
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    Write-Output <span style="color:#48b685">&#34;Finished backing up $databaseName to $backupFile&#34;</span>
+</span></span><span style="display:flex;"><span>}
+</span></span></code></pre></div>
+                    
+                    <HR width="100%" id="EOF">
+		    <p style="color:#777;">Last modified on 2021-11-16</p>
+                    
+                </div>
+            </div>
+            
+            
+            <nav class="post-pagination">
+
+                
+                <a class="newer-posts" href="https://idontwannarock.github.io/tech_blog/2021/12/zip_in_batch_script/">
+			Next<br>在 Batch Script 壓縮檔案
+                </a>
+                
+                
+                
+                <a class="older-posts" href="https://idontwannarock.github.io/tech_blog/2021/11/hugo_semi_auto_deploy/">
+			Previous<br>Hugo 半自動部署
+                </a>
+                
+            </nav>
+            <div class="post-comment-wrapper">
+                
+<div id="disqus_thread"></div>
+<script>
+    
+
+    var disqus_config = function () {
+        
+        this.page.url = 'https:\/\/idontwannarock.github.io\/tech_blog\/2021\/11\/sql_server_backup\/';  
+        
+        
+        this.page.identifier = 'https:\/\/idontwannarock.github.io\/tech_blog\/2021\/11\/sql_server_backup\/'; 
+    };
+    (function() {
+        var d = document, s = d.createElement('script');
+        s.src = 'https://howard-tech-blog.disqus.com/embed.js';
+        s.setAttribute('data-timestamp', +new Date());
+        (d.head || d.body).appendChild(s);
+    })();
+</script>
+<noscript> Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript" rel="nofollow"> comments powered by Disqus.  </a> </noscript>
+
+
+
+
+
+
+
+
+
+
+
+            </div>
+        </div>
+    </div>
+
+
+                    </div>
+            </div><div id="single-column-footer">
+Hugo Theme <a href="https://github.com/amazingrise/hugo-theme-diary">Diary</a> by <a href="https://amazingrise.net">Rise</a>
+<br>
+Ported from <a href="https://mak1t0.cc/" target="_blank" rel="noreferrer noopener">Makito</a>'s <a href="https://github.com/SumiMakito/hexo-theme-journal/" target="_blank" rel="noreferrer noopener">Journal.</a> <br>
+<br>
+
+&copy;
+	
+	This website by Howard Wang is licensed under a Creative Common Attribution-ShareAlike 4.0 International License.
+	
+</div>
+            </div>
+    
+    <script src="https://idontwannarock.github.io/tech_blog/js/journal.js"></script>
+    </body>
+</html>

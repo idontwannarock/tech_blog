@@ -1,0 +1,801 @@
+<!DOCTYPE html>
+<html><head>
+<title>ProtoBuf FlatBuf Benchmark in Java</title>
+
+
+
+
+<meta charset="utf-8">
+<meta name="X-UA-Compatible" content="IE=edge">
+<meta name="google-site-verification" content="">
+<meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" name="viewport">
+<meta content="telephone=no" name="format-detection">
+<meta name="description" content="Benchmarking ProtoBuf and FlatBuf with Java">
+<meta name="renderer" content="webkit">
+<meta name="theme-color" content="#ffffff">
+
+
+
+
+
+
+
+
+
+
+
+<script type="application/javascript">
+var doNotTrack = false;
+if (!doNotTrack) {
+	(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+	(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+	m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+	})(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+	ga('create', 'UA-106499565-1', 'auto');
+	
+	ga('send', 'pageview');
+}
+</script>
+
+
+<link type="text/css" rel="stylesheet" href="https://idontwannarock.github.io/tech_blog/vendor/css/bootstrap.min.css">
+
+
+  
+
+
+
+
+
+
+<link rel="stylesheet" href="https://idontwannarock.github.io/tech_blog/scss/journal.min.f4a8de07567a2d29619e0711662ef6251e3e59b642079f99490f654abf89a3c4.css" integrity="sha256-9KjeB1Z6LSlhngcRZi72JR4&#43;WbZCB5&#43;ZSQ9lSr&#43;Jo8Q=" media="screen">
+
+
+
+<link rel="stylesheet" href="https://idontwannarock.github.io/tech_blog/scss/dark-mode.min.eeb8040aa9333250b7fec770f950bfe8ba9b18a5eeeaf2dfef61d84d3956f625.css" integrity="sha256-7rgECqkzMlC3/sdw&#43;VC/6LqbGKXu6vLf72HYTTlW9iU=" media="screen">
+
+
+<script src="https://idontwannarock.github.io/tech_blog/vendor/js/loadCSS.js"></script>
+<script>
+  loadCSS("https://fonts.googleapis.com/css?family=Fira+Mono|Material+Icons");
+</script>
+
+
+
+
+
+
+  <script src="https://idontwannarock.github.io/tech_blog/js/toc.js"></script>
+
+
+
+
+
+
+
+<script src="https://cdn.jsdelivr.net/npm/vue-disqus@3/dist/vue-disqus.js"></script>
+
+
+
+
+
+
+
+
+</head>
+<body>
+    	<div id="app"><div id="sideContainer" class="side-container">
+    
+    <a class="a-block nav-head false" href="https://idontwannarock.github.io/tech_blog/">
+    
+        <div class="nav-title">
+            Howard Tech Note
+        </div>
+        
+        <div class="nav-subtitle">
+            Share * Record * Program
+        </div>
+        
+    </a>
+
+    <div class="nav-link-list">
+        
+        
+            
+            
+            
+            
+            
+            <a class="a-block nav-link-item false" href="https://idontwannarock.github.io/tech_blog/posts">
+                Archive
+            </a>
+            
+        
+            
+            
+            
+            
+            
+            <a class="a-block nav-link-item false" href="https://idontwannarock.github.io/tech_blog/categories">
+                Categories
+            </a>
+            
+        
+            
+            
+            
+            
+            
+            <a class="a-block nav-link-item false" href="https://idontwannarock.github.io/tech_blog/tags">
+                Tags
+            </a>
+            
+        
+            
+            
+            
+            
+            
+            <a class="a-block nav-link-item false" href="https://idontwannarock.github.io/tech_blog/about">
+                About
+            </a>
+            
+        
+            
+            
+            
+            
+            
+            <a class="a-block nav-link-item false" href="https://idontwannarock.github.io/tech_blog/index.xml">
+                RSS Feed
+            </a>
+            
+        
+    </div>
+
+    
+
+    <div class="nav-footer">
+        
+Hugo Theme <a href="https://github.com/amazingrise/hugo-theme-diary">Diary</a> by <a href="https://amazingrise.net">Rise</a>
+<br>
+Ported from <a href="https://mak1t0.cc/" target="_blank" rel="noreferrer noopener">Makito</a>'s <a href="https://github.com/SumiMakito/hexo-theme-journal/" target="_blank" rel="noreferrer noopener">Journal.</a> <br>
+<br>
+
+&copy;
+	
+	This website by Howard Wang is licensed under a Creative Common Attribution-ShareAlike 4.0 International License.
+	
+
+    </div>
+    
+</div><div id="extraContainer" class="extra-container">
+    
+    
+    <div class="toc animated-visibility" :class="{ invisible: scrollY <= 140 }">
+
+
+	<div class="toc-content">
+	
+		
+		
+		
+		<center>- CATALOG -</center>
+		
+		
+		<ul>
+			
+				
+				
+					
+						
+						
+						
+						
+							
+								
+									<ul>
+								
+							
+						
+						
+							<li>
+								<a href="#benchmark-%e6%96%b9%e6%b3%95" onclick="onNavClick(`#benchmark-方法-nav`)" id="benchmark-方法-nav">
+									Benchmark 方法
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+						
+							<li>
+								<a href="#benchmark-%e7%b5%90%e6%9e%9c" onclick="onNavClick(`#benchmark-結果-nav`)" id="benchmark-結果-nav">
+									Benchmark 結果
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+						
+							<li>
+								<a href="#%e7%b5%90%e8%ab%96" onclick="onNavClick(`#結論-nav`)" id="結論-nav">
+									結論
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+						
+							<li>
+								<a href="#%e5%8f%83%e8%80%83%e9%80%a3%e7%b5%90" onclick="onNavClick(`#參考連結-nav`)" id="參考連結-nav">
+									參考連結
+								</a>
+							</li>
+						
+						
+					
+				
+			
+		</ul>
+	</div>
+
+</div>
+    
+    <div class="pagination">
+        <a id="globalBackToTop" class="pagination-action animated-visibility" href="#top" :class="{ invisible: scrollY == 0 }">
+            <i class="material-icons pagination-action-icon">
+                keyboard_arrow_up
+            </i>
+        </a>
+        
+        <a type="button" class="pagination-action" id="darkModeToggleButton">
+            <span class="material-icons pagination-action-icon" id="darkModeToggleIcon">
+                dark_mode
+            </span>
+        </a>
+        
+        
+    </div>
+</div>
+<div class="single-column-drawer-container" id="drawer"
+     v-bind:class="{ 'single-column-drawer-container-active': isDrawerOpen }">
+    <div class="drawer-content">
+        <div class="drawer-menu">
+            
+            
+            
+                
+                
+                
+                
+                
+                <a class="a-block drawer-menu-item false" href="https://idontwannarock.github.io/tech_blog/posts">
+                    Archive
+                </a>
+                
+            
+                
+                
+                
+                
+                
+                <a class="a-block drawer-menu-item false" href="https://idontwannarock.github.io/tech_blog/categories">
+                    Categories
+                </a>
+                
+            
+                
+                
+                
+                
+                
+                <a class="a-block drawer-menu-item false" href="https://idontwannarock.github.io/tech_blog/tags">
+                    Tags
+                </a>
+                
+            
+                
+                
+                
+                
+                
+                <a class="a-block drawer-menu-item false" href="https://idontwannarock.github.io/tech_blog/about">
+                    About
+                </a>
+                
+            
+                
+                
+                
+                
+                
+                <a class="a-block drawer-menu-item false" href="https://idontwannarock.github.io/tech_blog/index.xml">
+                    RSS Feed
+                </a>
+                
+            
+            
+            <div class="toc">
+
+
+	<div class="toc-content">
+	
+		
+		
+		
+		<center>- CATALOG -</center>
+		
+		
+		<ul>
+			
+				
+				
+					
+						
+						
+						
+						
+							
+								
+									<ul>
+								
+							
+						
+						
+							<li>
+								<a href="#benchmark-%e6%96%b9%e6%b3%95" onclick="onNavClick(`#benchmark-方法-nav`)" id="benchmark-方法-nav">
+									Benchmark 方法
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+						
+							<li>
+								<a href="#benchmark-%e7%b5%90%e6%9e%9c" onclick="onNavClick(`#benchmark-結果-nav`)" id="benchmark-結果-nav">
+									Benchmark 結果
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+						
+							<li>
+								<a href="#%e7%b5%90%e8%ab%96" onclick="onNavClick(`#結論-nav`)" id="結論-nav">
+									結論
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+						
+							<li>
+								<a href="#%e5%8f%83%e8%80%83%e9%80%a3%e7%b5%90" onclick="onNavClick(`#參考連結-nav`)" id="參考連結-nav">
+									參考連結
+								</a>
+							</li>
+						
+						
+					
+				
+			
+		</ul>
+	</div>
+
+</div>
+            
+        </div>
+    </div>
+</div>
+<transition name="fade">
+    <div id="drawer-mask" v-bind:class="{ 'single-column-drawer-mask': mounted }" v-if="isDrawerOpen" v-on:click="toggleDrawer"></div>
+</transition>
+<nav id="navBar" class="navbar sticky-top navbar-light single-column-nav-container">
+    <div id="navBackground" class="nav-background"></div>
+    <div class="container container-narrow nav-content">
+        <button id="nav_dropdown_btn" class="nav-dropdown-toggle" type="button" v-on:click="toggleDrawer">
+            <i class="material-icons">
+                menu
+            </i>
+        </button>
+        <a id="navTitle" class="navbar-brand" href="https://idontwannarock.github.io/tech_blog/">
+            Howard Tech Note
+        </a>
+        
+        <button type="button" class="nav-darkmode-toggle" id="darkModeToggleButton2">
+            <i class="material-icons" id="darkModeToggleIcon2">
+                dark_mode
+            </i>
+        </button>
+        
+    </div>
+</nav>
+<div class="single-column-header-container" id="pageHead"
+     v-bind:style="{ transform: 'translateZ(0px) translateY('+.3*scrollY+'px)', opacity: 1-navOpacity }">
+    <a href="https://idontwannarock.github.io/tech_blog/">
+        <div class="single-column-header-title">Howard Tech Note</div>
+        
+        <div class="single-column-header-subtitle">Share * Record * Program</div>
+        
+
+    </a>
+</div>
+
+            <div id="content">
+                <div id="streamContainer" class="stream-container">
+
+    <div class="post-list-container post-list-container-shadow">
+        <div class="post">
+            
+            
+            
+                
+            
+
+            <div class="post-head-wrapper"
+                
+                    
+                    
+                    style="background-image: url('https://res.cloudinary.com/dcvgho2zc/image/upload/v1641282508/Tech%20Blog/protobuf.png')"
+                    
+                
+            >
+                <div class="post-title">
+                    ProtoBuf FlatBuf Benchmark in Java
+                    
+                    <div class="post-subtitle">
+                        Benchmarking ProtoBuf and FlatBuf with Java
+                    </div>
+                    
+                    <div class="post-meta">
+                        
+                        <time itemprop="datePublished">
+                            2022-01-04 15:36
+                        </time>
+                        
+
+                        
+                            <i class="material-icons" style="">folder</i>
+                                <a href="https://idontwannarock.github.io/tech_blog/categories/implementation">implementation</a>
+                                &nbsp;
+                        
+
+                        
+                            <i class="material-icons" style="">label</i>
+                            
+                                <a href="https://idontwannarock.github.io/tech_blog/tags/protobuf">protobuf</a>
+                                &nbsp;
+                            
+                                <a href="https://idontwannarock.github.io/tech_blog/tags/protocol-buffers">protocol buffers</a>
+                                &nbsp;
+                            
+                                <a href="https://idontwannarock.github.io/tech_blog/tags/flatbuf">flatbuf</a>
+                                &nbsp;
+                            
+                                <a href="https://idontwannarock.github.io/tech_blog/tags/flat-buffers">flat buffers</a>
+                                &nbsp;
+                            
+                        
+                        
+                    </div>
+                </div>
+            </div>
+            
+            <div class="post-body-wrapper">
+                
+                <div class="post-body" v-pre>
+                
+                    <p>繼續之前研究的 gRPC，除了 HTTP/2 以外，另外一個支柱就是 Protocol Buffers (ProtoBuf)</p>
+<p>ProtoBuf 是一種二進制的序列化資料格式，透過介面描述語言 (Interface description language, IDL) 來描述資料結構，再利用工具依據 IDL 產生程式碼，這些程式碼可以用來生成或解析代表這些資料結構的位元組流</p>
+<p>ProtoBuf 是 Google 原本用來內部使用的資料格式，但現在已開源，加上被 gRPC 原生支援，現在已經是重要的序列化 library</p>
+<p>Google 官方支援了許多語言的工具用來轉換 IDL 為代碼，但其中很不巧的不包含我目前工作上避不開的 Lua 或 TypeScript，所以我又另外找到同樣也是 Google 推出的 FlatBuffers (FlatBuf)，同樣也是二進制的序列化 library，但官方支援的語系就很多了，正好也包括 Lua 及 TypeScript</p>
+<p>雖然 Google 官方已經在努力讓 FlatBuf 也被 gRPC 支援，但目前官方文件上還只有 C++ 的版本，並沒有我日常使用的語言</p>
+<p>不過沒關係，我工作上的專案目前並不是一定要使用 gRPC，我完全可以利用其他傳輸協定例如 HTTP, WebSocket 或甚至 Socket 來傳輸資料，我只需要一種能夠讓各語系通用的資料格式，並且盡可能有官方長期支援即可</p>
+<h2 id="benchmark-方法">Benchmark 方法</h2>
+<p>雖然剛好 FlatBuf 都符合我的需求，但 FlatBuf 使用的人似乎還不多，雖然官方文件上說 Facebook 已經將 FlatBuf 使用在 Android App 上，不過總是沒有自己親身試驗來的準，也一併試驗開發的困難度</p>
+<p>所以乾脆來做 ProtoBuf 跟 FlatBuf 的 benchmark 來比較一下各自序列化的速度以及記憶體大致用量</p>
+<p>因為要順帶試驗開發的困難度，所以只要是各自有支援的資料格式，我都盡量加入測試的資料結構當中，以下為我用來建立測資的 Java 物件</p>
+<div class="highlight"><pre tabindex="0" style="color:#e7e9db;background-color:#2f1e2e;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-java" data-lang="java"><span style="display:flex;"><span><span style="color:#5bc4bf">@Value</span>
+</span></span><span style="display:flex;"><span><span style="color:#5bc4bf">@Builder</span>
+</span></span><span style="display:flex;"><span><span style="color:#815ba4">public</span> <span style="color:#815ba4">class</span> <span style="color:#fec418">Passenger</span> <span style="color:#5bc4bf">{</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    Integer id<span style="color:#5bc4bf">;</span>
+</span></span><span style="display:flex;"><span>    String firstName<span style="color:#5bc4bf">;</span>
+</span></span><span style="display:flex;"><span>    String lastName<span style="color:#5bc4bf">;</span>
+</span></span><span style="display:flex;"><span>    Boolean isMale<span style="color:#5bc4bf">;</span>
+</span></span><span style="display:flex;"><span>    List<span style="color:#5bc4bf">&lt;</span>Belonging<span style="color:#5bc4bf">&gt;</span> belongings<span style="color:#5bc4bf">;</span>
+</span></span><span style="display:flex;"><span>    Ticket ticket<span style="color:#5bc4bf">;</span>
+</span></span><span style="display:flex;"><span><span style="color:#5bc4bf">}</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#5bc4bf">@Value</span>
+</span></span><span style="display:flex;"><span><span style="color:#5bc4bf">@Builder</span>
+</span></span><span style="display:flex;"><span><span style="color:#815ba4">public</span> <span style="color:#815ba4">class</span> <span style="color:#fec418">Belonging</span> <span style="color:#5bc4bf">{</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    Integer id<span style="color:#5bc4bf">;</span>
+</span></span><span style="display:flex;"><span>    BelongingType type<span style="color:#5bc4bf">;</span>
+</span></span><span style="display:flex;"><span>    Float weightInKilogram<span style="color:#5bc4bf">;</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#815ba4">public</span> <span style="color:#815ba4">enum</span> BelongingType <span style="color:#5bc4bf">{</span>
+</span></span><span style="display:flex;"><span>        SUITCASE<span style="color:#5bc4bf">,</span> BACKPACK
+</span></span><span style="display:flex;"><span>    <span style="color:#5bc4bf">}</span>
+</span></span><span style="display:flex;"><span><span style="color:#5bc4bf">}</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#5bc4bf">@Value</span>
+</span></span><span style="display:flex;"><span><span style="color:#5bc4bf">@Builder</span>
+</span></span><span style="display:flex;"><span><span style="color:#815ba4">public</span> <span style="color:#815ba4">class</span> <span style="color:#fec418">Ticket</span> <span style="color:#5bc4bf">{</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    Integer id<span style="color:#5bc4bf">;</span>
+</span></span><span style="display:flex;"><span>    Transportation transportation<span style="color:#5bc4bf">;</span>
+</span></span><span style="display:flex;"><span>    Currency currency<span style="color:#5bc4bf">;</span>
+</span></span><span style="display:flex;"><span>    BigDecimal price<span style="color:#5bc4bf">;</span>
+</span></span><span style="display:flex;"><span>    Location departure<span style="color:#5bc4bf">;</span>
+</span></span><span style="display:flex;"><span>    OffsetDateTime departureTime<span style="color:#5bc4bf">;</span>
+</span></span><span style="display:flex;"><span>    Location arrival<span style="color:#5bc4bf">;</span>
+</span></span><span style="display:flex;"><span>    OffsetDateTime arrivalTime<span style="color:#5bc4bf">;</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#815ba4">public</span> <span style="color:#815ba4">enum</span> Transportation <span style="color:#5bc4bf">{</span>
+</span></span><span style="display:flex;"><span>        AIRLINE<span style="color:#5bc4bf">,</span> TRAIN
+</span></span><span style="display:flex;"><span>    <span style="color:#5bc4bf">}</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#815ba4">public</span> <span style="color:#815ba4">enum</span> Currency <span style="color:#5bc4bf">{</span>
+</span></span><span style="display:flex;"><span>        USD<span style="color:#5bc4bf">,</span> NTD
+</span></span><span style="display:flex;"><span>    <span style="color:#5bc4bf">}</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#815ba4">public</span> <span style="color:#815ba4">enum</span> Location <span style="color:#5bc4bf">{</span>
+</span></span><span style="display:flex;"><span>        TPE<span style="color:#5bc4bf">,</span> TSA<span style="color:#5bc4bf">,</span> NRT<span style="color:#5bc4bf">,</span> LAX
+</span></span><span style="display:flex;"><span>    <span style="color:#5bc4bf">}</span>
+</span></span><span style="display:flex;"><span><span style="color:#5bc4bf">}</span>
+</span></span></code></pre></div><p>我也盡量將 Java 常用的資料型別加入其中來試驗各序列化 Library 的支援度</p>
+<p>以下是 ProtoBuf 對應的 .proto 檔</p>
+<div class="highlight"><pre tabindex="0" style="color:#e7e9db;background-color:#2f1e2e;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-proto" data-lang="proto"><span style="display:flex;"><span>syntax <span style="color:#5bc4bf">=</span> <span style="color:#48b685">&#34;proto3&#34;</span>;<span style="color:#ef6155">
+</span></span></span><span style="display:flex;"><span><span style="color:#ef6155">
+</span></span></span><span style="display:flex;"><span><span style="color:#ef6155"></span><span style="color:#5bc4bf">package</span> <span style="color:#fec418">protobuf</span>;<span style="color:#ef6155">
+</span></span></span><span style="display:flex;"><span><span style="color:#ef6155">
+</span></span></span><span style="display:flex;"><span><span style="color:#ef6155"></span><span style="color:#815ba4">option</span> java_multiple_files <span style="color:#5bc4bf">=</span> <span style="color:#815ba4">true</span>;<span style="color:#ef6155">
+</span></span></span><span style="display:flex;"><span><span style="color:#ef6155"></span><span style="color:#815ba4">option</span> java_package <span style="color:#5bc4bf">=</span> <span style="color:#48b685">&#34;org.example.serialization.benchmark.protobuf&#34;</span>;<span style="color:#ef6155">
+</span></span></span><span style="display:flex;"><span><span style="color:#ef6155"></span><span style="color:#815ba4">option</span> java_generate_equals_and_hash <span style="color:#5bc4bf">=</span> <span style="color:#815ba4">true</span>;<span style="color:#ef6155">
+</span></span></span><span style="display:flex;"><span><span style="color:#ef6155"></span><span style="color:#815ba4">option</span> java_string_check_utf8 <span style="color:#5bc4bf">=</span> <span style="color:#815ba4">true</span>;<span style="color:#ef6155">
+</span></span></span><span style="display:flex;"><span><span style="color:#ef6155"></span><span style="color:#815ba4">option</span> java_outer_classname <span style="color:#5bc4bf">=</span> <span style="color:#48b685">&#34;PassengerProto&#34;</span>;<span style="color:#ef6155">
+</span></span></span><span style="display:flex;"><span><span style="color:#ef6155">
+</span></span></span><span style="display:flex;"><span><span style="color:#ef6155"></span><span style="color:#815ba4">message</span> <span style="color:#fec418">ProtoPassenger</span> {<span style="color:#ef6155">
+</span></span></span><span style="display:flex;"><span><span style="color:#ef6155"></span>  <span style="color:#fec418">int32</span> id <span style="color:#5bc4bf">=</span> <span style="color:#f99b15">1</span>;<span style="color:#ef6155">
+</span></span></span><span style="display:flex;"><span><span style="color:#ef6155"></span>  <span style="color:#fec418">string</span> firstName <span style="color:#5bc4bf">=</span> <span style="color:#f99b15">2</span>;<span style="color:#ef6155">
+</span></span></span><span style="display:flex;"><span><span style="color:#ef6155"></span>  <span style="color:#fec418">string</span> lastName <span style="color:#5bc4bf">=</span> <span style="color:#f99b15">3</span>;<span style="color:#ef6155">
+</span></span></span><span style="display:flex;"><span><span style="color:#ef6155"></span>  <span style="color:#fec418">bool</span> isMale <span style="color:#5bc4bf">=</span> <span style="color:#f99b15">4</span>;<span style="color:#ef6155">
+</span></span></span><span style="display:flex;"><span><span style="color:#ef6155"></span>  ProtoTicket ticket <span style="color:#5bc4bf">=</span> <span style="color:#f99b15">5</span>;<span style="color:#ef6155">
+</span></span></span><span style="display:flex;"><span><span style="color:#ef6155"></span>  <span style="color:#815ba4">repeated</span> ProtoBelonging belongings <span style="color:#5bc4bf">=</span> <span style="color:#f99b15">6</span>;<span style="color:#ef6155">
+</span></span></span><span style="display:flex;"><span><span style="color:#ef6155"></span>}<span style="color:#ef6155">
+</span></span></span><span style="display:flex;"><span><span style="color:#ef6155">
+</span></span></span><span style="display:flex;"><span><span style="color:#ef6155"></span><span style="color:#815ba4">message</span> <span style="color:#fec418">ProtoBelonging</span> {<span style="color:#ef6155">
+</span></span></span><span style="display:flex;"><span><span style="color:#ef6155"></span>  <span style="color:#fec418">int32</span> id <span style="color:#5bc4bf">=</span> <span style="color:#f99b15">1</span>;<span style="color:#ef6155">
+</span></span></span><span style="display:flex;"><span><span style="color:#ef6155"></span>  BelongingType type <span style="color:#5bc4bf">=</span> <span style="color:#f99b15">2</span>;<span style="color:#ef6155">
+</span></span></span><span style="display:flex;"><span><span style="color:#ef6155"></span>  <span style="color:#fec418">float</span> weightInKilogram <span style="color:#5bc4bf">=</span> <span style="color:#f99b15">3</span>;<span style="color:#ef6155">
+</span></span></span><span style="display:flex;"><span><span style="color:#ef6155">
+</span></span></span><span style="display:flex;"><span><span style="color:#ef6155"></span>  <span style="color:#815ba4">enum</span> BelongingType {<span style="color:#ef6155">
+</span></span></span><span style="display:flex;"><span><span style="color:#ef6155"></span>    SUITCASE <span style="color:#5bc4bf">=</span> <span style="color:#f99b15">0</span>;<span style="color:#ef6155">
+</span></span></span><span style="display:flex;"><span><span style="color:#ef6155"></span>    BACKPACK <span style="color:#5bc4bf">=</span> <span style="color:#f99b15">1</span>;<span style="color:#ef6155">
+</span></span></span><span style="display:flex;"><span><span style="color:#ef6155"></span>  }<span style="color:#ef6155">
+</span></span></span><span style="display:flex;"><span><span style="color:#ef6155"></span>}<span style="color:#ef6155">
+</span></span></span><span style="display:flex;"><span><span style="color:#ef6155">
+</span></span></span><span style="display:flex;"><span><span style="color:#ef6155"></span><span style="color:#815ba4">message</span> <span style="color:#fec418">ProtoTicket</span> {<span style="color:#ef6155">
+</span></span></span><span style="display:flex;"><span><span style="color:#ef6155"></span>  <span style="color:#fec418">int32</span> id <span style="color:#5bc4bf">=</span> <span style="color:#f99b15">1</span>;<span style="color:#ef6155">
+</span></span></span><span style="display:flex;"><span><span style="color:#ef6155"></span>  Transportation transportation <span style="color:#5bc4bf">=</span> <span style="color:#f99b15">2</span>;<span style="color:#ef6155">
+</span></span></span><span style="display:flex;"><span><span style="color:#ef6155"></span>  Currency currency <span style="color:#5bc4bf">=</span> <span style="color:#f99b15">3</span>;<span style="color:#ef6155">
+</span></span></span><span style="display:flex;"><span><span style="color:#ef6155"></span>  <span style="color:#fec418">string</span> price <span style="color:#5bc4bf">=</span> <span style="color:#f99b15">4</span>;<span style="color:#ef6155">
+</span></span></span><span style="display:flex;"><span><span style="color:#ef6155"></span>  Location departure <span style="color:#5bc4bf">=</span> <span style="color:#f99b15">5</span>;<span style="color:#ef6155">
+</span></span></span><span style="display:flex;"><span><span style="color:#ef6155"></span>  <span style="color:#fec418">string</span> departureTime <span style="color:#5bc4bf">=</span> <span style="color:#f99b15">6</span>;<span style="color:#ef6155">
+</span></span></span><span style="display:flex;"><span><span style="color:#ef6155"></span>  Location arrival <span style="color:#5bc4bf">=</span> <span style="color:#f99b15">7</span>;<span style="color:#ef6155">
+</span></span></span><span style="display:flex;"><span><span style="color:#ef6155"></span>  <span style="color:#fec418">string</span> arrivalTime <span style="color:#5bc4bf">=</span> <span style="color:#f99b15">8</span>;<span style="color:#ef6155">
+</span></span></span><span style="display:flex;"><span><span style="color:#ef6155">
+</span></span></span><span style="display:flex;"><span><span style="color:#ef6155"></span>  <span style="color:#815ba4">enum</span> Transportation {<span style="color:#ef6155">
+</span></span></span><span style="display:flex;"><span><span style="color:#ef6155"></span>    AIRLINE <span style="color:#5bc4bf">=</span> <span style="color:#f99b15">0</span>;<span style="color:#ef6155">
+</span></span></span><span style="display:flex;"><span><span style="color:#ef6155"></span>    TRAIN <span style="color:#5bc4bf">=</span> <span style="color:#f99b15">1</span>;<span style="color:#ef6155">
+</span></span></span><span style="display:flex;"><span><span style="color:#ef6155"></span>  }<span style="color:#ef6155">
+</span></span></span><span style="display:flex;"><span><span style="color:#ef6155">
+</span></span></span><span style="display:flex;"><span><span style="color:#ef6155"></span>  <span style="color:#815ba4">enum</span> Currency {<span style="color:#ef6155">
+</span></span></span><span style="display:flex;"><span><span style="color:#ef6155"></span>    USD <span style="color:#5bc4bf">=</span> <span style="color:#f99b15">0</span>;<span style="color:#ef6155">
+</span></span></span><span style="display:flex;"><span><span style="color:#ef6155"></span>    NTD <span style="color:#5bc4bf">=</span> <span style="color:#f99b15">1</span>;<span style="color:#ef6155">
+</span></span></span><span style="display:flex;"><span><span style="color:#ef6155"></span>  }<span style="color:#ef6155">
+</span></span></span><span style="display:flex;"><span><span style="color:#ef6155">
+</span></span></span><span style="display:flex;"><span><span style="color:#ef6155"></span>  <span style="color:#815ba4">enum</span> Location {<span style="color:#ef6155">
+</span></span></span><span style="display:flex;"><span><span style="color:#ef6155"></span>    TPE <span style="color:#5bc4bf">=</span> <span style="color:#f99b15">0</span>;<span style="color:#ef6155">
+</span></span></span><span style="display:flex;"><span><span style="color:#ef6155"></span>    TSA <span style="color:#5bc4bf">=</span> <span style="color:#f99b15">1</span>;<span style="color:#ef6155">
+</span></span></span><span style="display:flex;"><span><span style="color:#ef6155"></span>    NRT <span style="color:#5bc4bf">=</span> <span style="color:#f99b15">2</span>;<span style="color:#ef6155">
+</span></span></span><span style="display:flex;"><span><span style="color:#ef6155"></span>    LAX <span style="color:#5bc4bf">=</span> <span style="color:#f99b15">3</span>;<span style="color:#ef6155">
+</span></span></span><span style="display:flex;"><span><span style="color:#ef6155"></span>  }<span style="color:#ef6155">
+</span></span></span><span style="display:flex;"><span><span style="color:#ef6155"></span>}<span style="color:#ef6155">
+</span></span></span></code></pre></div><p>接著是 FlatBuf 對應的 fbs 檔</p>
+<pre tabindex="0"><code class="language-fbs" data-lang="fbs">namespace org.example.serialization.benchmark.flatbuf;
+
+enum FlatBelongingType : ubyte {SUITCASE, BACKPACK}
+
+table FlatBelonging {
+    id:int;
+    type:FlatBelongingType;
+    weight_in_kilogram:float;
+}
+
+enum FlatTransportation : ubyte {AIRLINE, TRAIN}
+
+enum FlatCurrency : ubyte {USD, NTD}
+
+enum FlatLocation : ubyte {TPE, TSA, NRT, LAX}
+
+table FlatTicket {
+    id:int;
+    transportation:FlatTransportation;
+    currency:FlatCurrency;
+    price:string;
+    departure:FlatLocation;
+    departure_time:string;
+    arrival:FlatLocation;
+    arrival_time:string;
+}
+
+table FlatPassenger {
+    id:int;
+    first_name:string;
+    last_name:string;
+    is_male:bool;
+    ticket:FlatTicket;
+    belongings:[FlatBelonging];
+}
+
+root_type FlatPassenger;
+</code></pre><p>測試的過程大致上為將自動產生的 Passenger 物件 map 到各自的物件中並進行序列化 (serialization)，接著再進行反序列化 (deserialization) 並 map 回 Passenger 物件，最後會進行 assert 以確保反序列化回來的物件與一開始產生的一致</p>
+<p>之所以 mapping 階段也要計入，一是這樣貼近真實世界應用，二來 FlatBuf 並沒有單獨「反序列化」的過程，所以將 mapping 階段都一併計入比較公平</p>
+<p>然後就是將序列化反序列化的回合執行一百萬次，以避免有 warm up 問題</p>
+<h2 id="benchmark-結果">Benchmark 結果</h2>
+<p>直接上測試結果</p>
+<p><img src="https://res.cloudinary.com/dcvgho2zc/image/upload/v1641285735/Tech%20Blog/gson-protobuf-flatbuf-benchmark.png" alt="Gson, ProtoBuf, and FlatBuf Benchmark"></p>
+<p>從圖中可以得知其實 ProtoBuf 與 FlatBuf 在速度上其實差不多，頂多 ProtoBuf 在序列化上稍微快一點點，相對 FlatBuf 在反序列化上也稍微快一點點，但整體上相差不是很大</p>
+<p>不過在最大記憶體用量上，FlatBuf 完勝 ProtoBuf，以 FlatBuf 的特性而言這當然也是可預期的結果</p>
+<p>至於 Gson 嘛&hellip;全都墊底也是可預期的結果，畢竟 JSON 強項本來就不在效能上，可讀性、跨平台、廣泛支援度等才是它的主戰場</p>
+<h2 id="結論">結論</h2>
+<p>其實在撰寫的過程可以感受到 Gson 的程式碼撰寫絕對是最容易的，即使是 mapper 也幾乎不用額外多寫太多程式碼，portable 方面絕對是最強的，被廣泛使用還是有道理的</p>
+<p>而 ProtoBuf 也是相對成熟的 library，雖然也不需要寫太多額外的程式碼，但它支援的資料型別就少很多了，像是不支援日期相關型別或 <code>BigDecimal</code> 這種</p>
+<blockquote>
+<p>當然，JSON 其實原生支援的型別也不多，但成熟的 library 讓你不需要考慮資料型別問題，幾乎 Java 所有原生型別全都能夠順利序列化再反序列化；而 ProtoBuf 轉換的程式碼是由工具自動產生，所以有很多型別是不可能會自動產生的</p>
+</blockquote>
+<p>至於 FlatBuf 則是三者當中最不成熟的 library，沒辦法，這個專案 2014 才開始，不像 ProtoBuf 是從 2001 開始</p>
+<p>FlatBuf 在序列化上是相對最麻煩的一個，因為它其實在設定物件各 properties 的過程中就一併開始轉換二進制格式的機制；反序列化後的使用上倒是與其他 library 相同，可以直接從從物件取得 property，但受限於它原生支援的資料型別比 ProtoBuf 更少，所以不做 mapping 的話就更難使用一點</p>
+<p>最後，附上測試專案的程式碼以供參考</p>
+<p><a href="https://github.com/idontwannarock/serialization-lib-benchmark">Serialization Libraries Benchmark</a></p>
+<h2 id="參考連結">參考連結</h2>
+<ul>
+<li><a href="https://developers.google.com/protocol-buffers/">Protocol Buffers</a></li>
+<li><a href="https://en.wikipedia.org/wiki/Protocol_Buffers">Protocol Buffers Wiki</a></li>
+<li><a href="https://google.github.io/flatbuffers/index.html">FlatBuffers</a></li>
+<li><a href="https://en.wikipedia.org/wiki/FlatBuffers">FlatBuffers Wiki</a></li>
+</ul>
+
+                    
+                    <HR width="100%" id="EOF">
+		    <p style="color:#777;">Last modified on 2022-01-04</p>
+                    
+                </div>
+            </div>
+            
+            
+            <nav class="post-pagination">
+
+                
+                <a class="newer-posts">
+			Next<br>No newer posts.
+                </a>
+                
+                
+                
+                <a class="older-posts" href="https://idontwannarock.github.io/tech_blog/2021/12/grpc/">
+			Previous<br>gRPC 概念
+                </a>
+                
+            </nav>
+            <div class="post-comment-wrapper">
+                
+<div id="disqus_thread"></div>
+<script>
+    
+
+    var disqus_config = function () {
+        
+        this.page.url = 'https:\/\/idontwannarock.github.io\/tech_blog\/2022\/01\/protobuf_flatbuf_java\/';  
+        
+        
+        this.page.identifier = 'https:\/\/idontwannarock.github.io\/tech_blog\/2022\/01\/protobuf_flatbuf_java\/'; 
+    };
+    (function() {
+        var d = document, s = d.createElement('script');
+        s.src = 'https://howard-tech-blog.disqus.com/embed.js';
+        s.setAttribute('data-timestamp', +new Date());
+        (d.head || d.body).appendChild(s);
+    })();
+</script>
+<noscript> Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript" rel="nofollow"> comments powered by Disqus.  </a> </noscript>
+
+
+
+
+
+
+
+
+
+
+
+            </div>
+        </div>
+    </div>
+
+
+                    </div>
+            </div><div id="single-column-footer">
+Hugo Theme <a href="https://github.com/amazingrise/hugo-theme-diary">Diary</a> by <a href="https://amazingrise.net">Rise</a>
+<br>
+Ported from <a href="https://mak1t0.cc/" target="_blank" rel="noreferrer noopener">Makito</a>'s <a href="https://github.com/SumiMakito/hexo-theme-journal/" target="_blank" rel="noreferrer noopener">Journal.</a> <br>
+<br>
+
+&copy;
+	
+	This website by Howard Wang is licensed under a Creative Common Attribution-ShareAlike 4.0 International License.
+	
+</div>
+            </div>
+    
+    <script src="https://idontwannarock.github.io/tech_blog/js/journal.js"></script>
+    </body>
+</html>

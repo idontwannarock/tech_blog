@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>git on Howard Tech Note</title>
+    <link>https://idontwannarock.github.io/tech_blog/tags/git/</link>
+    <description>Recent content in git on Howard Tech Note</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-us</language>
+    <copyright>This website by Howard Wang is licensed under a Creative Common Attribution-ShareAlike 4.0 International License.</copyright>
+    <lastBuildDate>Wed, 03 Nov 2021 16:29:03 +0800</lastBuildDate><atom:link href="https://idontwannarock.github.io/tech_blog/tags/git/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Hugo 半自動部署</title>
+      <link>https://idontwannarock.github.io/tech_blog/2021/11/hugo_semi_auto_deploy/</link>
+      <pubDate>Wed, 03 Nov 2021 16:29:03 +0800</pubDate>
+      
+      <guid>https://idontwannarock.github.io/tech_blog/2021/11/hugo_semi_auto_deploy/</guid>
+      <description>這篇主要在講將以往所有手動的步驟，包括網站建置及發佈到 GitHub Pages 等，盡量調整為一個 script 來處理
+起因是因為種種因素，所以這個 Blog 停更了很久，其實也就是懶，還有之前沒有找到符合我要求的佈景主題。所以把手動的步驟減少，懶惰的理由就少了一個
+至於佈景主題我自己是有幾個要求:
+ 主要是給 Blog 用。這個要求是因為其實有很多佈景主題是給 Portfolio, Landing Page 等等使用的，所以首頁或 pages 的功能很強，文件都在講這些，但我都不需要 文章要在側邊自動生成 Table of Content。這個就是 Blog 的要求，很多佈景主題是沒有支援這個功能的 要有 Category 跟 Tag 的功能 風格簡單  這些要求看起來很基本，但不知道為什麼，就算只滿足 2、3 項的交集都極少。目前找到最符合要求的就是 Diary
+換 theme 的部分參考官網，沒什麼好說的
+主要講如何部署到 GitHub Pages 的部分
+部署到 GitHub Pages 以我的了解，主要有三種方式
+ 直接部署 資料夾部署 分支部署  直接部署 就是只單獨把建置 (hugo) 出來的 public 資料夾推到 GitHub main branch，然後在 repo 的 Pages 設定頁面指定 Source 為 main branch</description>
+    </item>
+    
+    <item>
+      <title>Hugo 入門教學</title>
+      <link>https://idontwannarock.github.io/tech_blog/2019/05/hugo_tutorial/</link>
+      <pubDate>Tue, 07 May 2019 16:03:07 +0800</pubDate>
+      
+      <guid>https://idontwannarock.github.io/tech_blog/2019/05/hugo_tutorial/</guid>
+      <description>我個人在建立部落格的路上碰到了很多問題：
+ Wordpress 要花錢，雖然好像不多，但作為一個沒有人看的部落格，這樣還要花錢就是不爽 沒有網路無法寫文章，就算寫了純文字的內容，等有網路後貼到 Wordpress 的編輯器還要重新設定字體大小等等 沒辦法在自己的電腦或電腦們很方便的做備份，而且我只是個簡單的男人簡單的部落格，不需要備份一堆只有 Wordpress 能用的東西好嗎 不能用工程師宅宅必備命令列工具裝潮，假裝駭客任務 最重要的，身為一個工程師宅宅，用 Wordpress 寫部落格說得出口嗎？很顯然可以，但要付錢我就不想用  如果你對以上絕大多數的問題都有切身之痛，那可以考慮繼續閱讀下去，否則建議還是直接使用 Wordpress 或 Wix 吧
+Hugo 與靜態網站 唉唷，還繼續，那大概不是 M 就是工程師宅宅相關種，那靜態網站不用講了，Hugo 自己研究就好啦，本篇結束
+不能醬喔？那好吧
+Hugo 是一種 Static Site Generator, SSG 靜態網站產生器，靜態網站簡單來說就是有固定內容的網站，所謂的固定內容就是 HTML 這種瀏覽器可以直接開啟的網頁檔案，配合 CSS, Javascript 做美化，這些檔案只要沒有被修改過，每次打開都會產生固定的內容，所以稱為靜態網站
+而基於後面會提到 Hugo 這個工具的特性，它很適合用來產生部落格，使用者只需要撰寫 Markdown 這種純文字檔案作為每篇文章的內容，就可以透過 Hugo 快速的建立或修改網站，而不必每次都要修改相對應的 HTML 甚至 CSS 及 Javascript 檔案
+Hugo 作為一個世界範圍內前三熱門的 SSG 工具，它還有很多熱心工程師宅宅幫他寫了很多佈景主題讓使用者可以直接套用來產生網站，所以使用者只需要把文章內容寫成 Markdown 這種純文字檔案，就可以直接用 Hugo 將文章按照佈景主題產生出美美的網站了
+這樣誰看的到？ 不過這樣產生出來的網站有一個關鍵的問題，這些檔案只放在你電腦裡，沒人看得到，除了你自己
+所以我們需要「把它放到網路上」
+一般要做到「把它放到網路上」並且「誰都看得見」，其實要做很多事情，例如租用網路空間、買域名、部署網站等等，Wordpress 的好處就在這，它提供一條龍的服務幫你做到底
+但現在沒有 Wordpress 而且要堅持不花錢的懶惰工程師宅宅原則，所以我們要走另一條路，使用 Git 跟 GitHub</description>
+    </item>
+    
+    <item>
+      <title>Git 及 GitHub 基礎認識</title>
+      <link>https://idontwannarock.github.io/tech_blog/2017/09/git_and_github_basic/</link>
+      <pubDate>Thu, 14 Sep 2017 07:13:01 +0800</pubDate>
+      
+      <guid>https://idontwannarock.github.io/tech_blog/2017/09/git_and_github_basic/</guid>
+      <description>這篇文章是初學的時候撰寫的，其中一些觀念並不正確，步驟也可能因為更新或觀念問題而不適用或者多餘，此篇文章僅為留做紀錄
+ 學習目標 因為 Git 指令一直出問題，今天就來搞清楚 Git 跟 GitHub 的各種問題吧！
+學習內容 Git 跟 GitHub 是什麼 Git Wiki 則說 Git 是一種分散式版本控制軟體。
+詳細的說明可以參考 Git Documentation，有中文版，不過只有前幾個主題有翻譯。
+GitHub Wiki上說，GitHub 是一個透過 Git 進行版本控制的軟體原始碼代管服務，簡單來說就是可以放各種 Code 的地方，但其實也可以放一些文件跟圖片等，好像沒有空間限制，只是有單一檔案大小 1GB 的軟性限制。
+Git 觀念 這裡我們來先解釋一下 Git版本控制的觀念，我覺得 寫點科普 寫的這兩篇寫得非常平易近人而且完整，推薦給大家！
+ GIT新手入門教學 – PART 1 GIT新手入門教學 – PART 2  我的理解是譬如有一份作業需要大家一起作，大家先把原始的作業文件 (origin) 放在小組長那邊 (remote)，然後各自 copy 一份回家 (local) 寫自己要做的部分，然後拿回去給小組長，由小組長決定誰的作業寫得好，可以成為新一代的原始作業文件 (master)；或某人提交的作業寫得不完整，但寫過地那部分很好，就跟原始作業合併 (merge) 成一份新一代的原始作業文件。大家也可以 copy 別人寫的作業回去修改 (pull)，反正最後由小組長決定哪個版本的作業寫得最好，就可以成為新一代的原始作業文件這樣。
+而大家 copy 回家寫的作業也有三個階段，假如我在電腦上打作業，分成三個資料夾，一個是 Working Directory、一個是 Staging Area、一個是 Repository。</description>
+    </item>
+    
+    <item>
+      <title>Hugo 練習 (2)</title>
+      <link>https://idontwannarock.github.io/tech_blog/2017/09/hugo_practice_2/</link>
+      <pubDate>Sat, 09 Sep 2017 15:22:03 +0800</pubDate>
+      
+      <guid>https://idontwannarock.github.io/tech_blog/2017/09/hugo_practice_2/</guid>
+      <description>這篇文章是初學的時候撰寫的，其中一些觀念並不正確，步驟也可能因為更新或觀念問題而不適用或者多餘，此篇文章僅為留做紀錄
+ 學習目標 學習怎麼使用 Hugo 架設網頁在 Github Pages。
+學習內容 環境設定 我並非本科，所以以下作法全都是從各官網跟谷哥研究而來。先說明我只會用 Windows，而且是 Win10，所以想用 MacOS 或 Linux 的可以左轉出去自己上官網跟谷哥研究。
+環境設定這邊需要作幾件事，設定 Hugo，設定 Git，新增 Github 帳號，跟設定 SSH，除了設定 SSH 要最後作以外，其他順序無所謂。
+Hugo 環境設定 如同上一篇所述，Hugo 雖然是 Go 語言寫的，但現在的版本並不用安裝 Go，只要到 這個網址 下載最新版本，找地方解壓縮，然後將解壓縮後的 exe 檔路徑設定到 Path 環境變數裡面就可以了。
+比較完整的流程應該是先創建 Hugo 目錄，例如 C:\Hugo，然後建兩個子資料夾 bin 和 Sites。下載 Hugo 最新版本的 zip 檔，解壓縮到 bin 資料夾裡面，若 exe 檔檔名不是 hugo.exe 就改成 hugo.exe。
+然後要設定 Path 環境變數，厲害的人可以直接用 cmd 設定，就不講了。來講我這種菜鳥的方法，右鍵點開始鍵（就是狀態列 Windows 圖案的那個鈕），選「系統」，然後選右上方的「系統資訊」，跳出來視窗後，選左邊的「進階系統設定」，再跳出一個視窗後，選「進階」頁面下方的「環境變數(N)&amp;hellip;」，會再跳出一個視窗分成上下兩區塊，在上方的使用者變數區塊，變數那一欄找到 Path 後，連點兩下又會跳出一個新視窗，這次直接按右邊的「新增(N)」，然後填上剛剛 hugo.exe 的路徑，例如 C:\Hugo\bin，最後再一路按確定以及關閉視窗出去。
+然後為了確定是否有設定成功，請再右鍵點一次開始鍵，選「Windows PowerShell(系統管理員)(A)」來打開 PowerShell，然後直接輸入 hugo version 後按 Enter 鍵，如果有顯示出版本資訊，那就是設定成功。</description>
+    </item>
+    
+  </channel>
+</rss>

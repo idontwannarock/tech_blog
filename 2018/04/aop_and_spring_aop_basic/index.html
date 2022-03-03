@@ -1,0 +1,919 @@
+<!DOCTYPE html>
+<html><head>
+<title>AOP 及 Spring AOP 簡述</title>
+
+
+
+
+<meta charset="utf-8">
+<meta name="X-UA-Compatible" content="IE=edge">
+<meta name="google-site-verification" content="">
+<meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" name="viewport">
+<meta content="telephone=no" name="format-detection">
+<meta name="description" content="探討 AOP 概念及 Spring AOP 應用">
+<meta name="renderer" content="webkit">
+<meta name="theme-color" content="#ffffff">
+
+
+
+
+
+
+
+
+
+
+
+<script type="application/javascript">
+var doNotTrack = false;
+if (!doNotTrack) {
+	(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+	(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+	m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+	})(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+	ga('create', 'UA-106499565-1', 'auto');
+	
+	ga('send', 'pageview');
+}
+</script>
+
+
+<link type="text/css" rel="stylesheet" href="https://idontwannarock.github.io/tech_blog/vendor/css/bootstrap.min.css">
+
+
+  
+
+
+
+
+
+
+<link rel="stylesheet" href="https://idontwannarock.github.io/tech_blog/scss/journal.min.f4a8de07567a2d29619e0711662ef6251e3e59b642079f99490f654abf89a3c4.css" integrity="sha256-9KjeB1Z6LSlhngcRZi72JR4&#43;WbZCB5&#43;ZSQ9lSr&#43;Jo8Q=" media="screen">
+
+
+
+<link rel="stylesheet" href="https://idontwannarock.github.io/tech_blog/scss/dark-mode.min.eeb8040aa9333250b7fec770f950bfe8ba9b18a5eeeaf2dfef61d84d3956f625.css" integrity="sha256-7rgECqkzMlC3/sdw&#43;VC/6LqbGKXu6vLf72HYTTlW9iU=" media="screen">
+
+
+<script src="https://idontwannarock.github.io/tech_blog/vendor/js/loadCSS.js"></script>
+<script>
+  loadCSS("https://fonts.googleapis.com/css?family=Fira+Mono|Material+Icons");
+</script>
+
+
+
+
+
+
+  <script src="https://idontwannarock.github.io/tech_blog/js/toc.js"></script>
+
+
+
+
+
+
+
+<script src="https://cdn.jsdelivr.net/npm/vue-disqus@3/dist/vue-disqus.js"></script>
+
+
+
+
+
+
+
+
+</head>
+<body>
+    	<div id="app"><div id="sideContainer" class="side-container">
+    
+    <a class="a-block nav-head false" href="https://idontwannarock.github.io/tech_blog/">
+    
+        <div class="nav-title">
+            Howard Tech Note
+        </div>
+        
+        <div class="nav-subtitle">
+            Share * Record * Program
+        </div>
+        
+    </a>
+
+    <div class="nav-link-list">
+        
+        
+            
+            
+            
+            
+            
+            <a class="a-block nav-link-item false" href="https://idontwannarock.github.io/tech_blog/posts">
+                Archive
+            </a>
+            
+        
+            
+            
+            
+            
+            
+            <a class="a-block nav-link-item false" href="https://idontwannarock.github.io/tech_blog/categories">
+                Categories
+            </a>
+            
+        
+            
+            
+            
+            
+            
+            <a class="a-block nav-link-item false" href="https://idontwannarock.github.io/tech_blog/tags">
+                Tags
+            </a>
+            
+        
+            
+            
+            
+            
+            
+            <a class="a-block nav-link-item false" href="https://idontwannarock.github.io/tech_blog/about">
+                About
+            </a>
+            
+        
+            
+            
+            
+            
+            
+            <a class="a-block nav-link-item false" href="https://idontwannarock.github.io/tech_blog/index.xml">
+                RSS Feed
+            </a>
+            
+        
+    </div>
+
+    
+
+    <div class="nav-footer">
+        
+Hugo Theme <a href="https://github.com/amazingrise/hugo-theme-diary">Diary</a> by <a href="https://amazingrise.net">Rise</a>
+<br>
+Ported from <a href="https://mak1t0.cc/" target="_blank" rel="noreferrer noopener">Makito</a>'s <a href="https://github.com/SumiMakito/hexo-theme-journal/" target="_blank" rel="noreferrer noopener">Journal.</a> <br>
+<br>
+
+&copy;
+	
+	This website by Howard Wang is licensed under a Creative Common Attribution-ShareAlike 4.0 International License.
+	
+
+    </div>
+    
+</div><div id="extraContainer" class="extra-container">
+    
+    
+    <div class="toc animated-visibility" :class="{ invisible: scrollY <= 140 }">
+
+
+	<div class="toc-content">
+	
+		
+		
+		
+		<center>- CATALOG -</center>
+		
+		
+		<ul>
+			
+				
+				
+					
+						
+						
+						
+						
+						
+							<li>
+								<a href="#%e5%84%aa%e9%bb%9e" onclick="onNavClick(`#優點-nav`)" id="優點-nav">
+									優點
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+						
+							<li>
+								<a href="#%e8%a1%93%e8%aa%9e%e5%8f%8a%e6%a6%82%e5%bf%b5" onclick="onNavClick(`#術語及概念-nav`)" id="術語及概念-nav">
+									術語及概念
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+						
+							<li>
+								<a href="#spring-aop" onclick="onNavClick(`#spring-aop-nav`)" id="spring-aop-nav">
+									Spring AOP
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+							
+								
+									<ul>
+								
+							
+						
+						
+							<li>
+								<a href="#dependencies" onclick="onNavClick(`#dependencies-nav`)" id="dependencies-nav">
+									Dependencies
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+							
+								
+									<ul>
+								
+							
+						
+						
+							<li>
+								<a href="#spring" onclick="onNavClick(`#spring-nav`)" id="spring-nav">
+									Spring
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+						
+							<li>
+								<a href="#spring-aop-1" onclick="onNavClick(`#spring-aop-1-nav`)" id="spring-aop-1-nav">
+									Spring AOP
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+							
+								</ul>
+							
+						
+						
+						
+							<li>
+								<a href="#%e8%a8%ad%e5%ae%9a" onclick="onNavClick(`#設定-nav`)" id="設定-nav">
+									設定
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+							
+								
+									<ul>
+								
+							
+						
+						
+							<li>
+								<a href="#%e5%9f%ba%e6%96%bc%e8%a8%bb%e8%a7%a3%e7%9a%84%e6%96%b9%e5%bc%8f" onclick="onNavClick(`#基於註解的方式-nav`)" id="基於註解的方式-nav">
+									基於註解的方式
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+						
+							<li>
+								<a href="#%e5%9f%ba%e6%96%bc-xml-%e6%96%87%e4%bb%b6%e7%9a%84%e6%96%b9%e5%bc%8f" onclick="onNavClick(`#基於-xml-文件的方式-nav`)" id="基於-xml-文件的方式-nav">
+									基於 XML 文件的方式
+								</a>
+							</li>
+						
+						
+					
+				
+			
+		</ul>
+	</div>
+
+</div>
+    
+    <div class="pagination">
+        <a id="globalBackToTop" class="pagination-action animated-visibility" href="#top" :class="{ invisible: scrollY == 0 }">
+            <i class="material-icons pagination-action-icon">
+                keyboard_arrow_up
+            </i>
+        </a>
+        
+        <a type="button" class="pagination-action" id="darkModeToggleButton">
+            <span class="material-icons pagination-action-icon" id="darkModeToggleIcon">
+                dark_mode
+            </span>
+        </a>
+        
+        
+    </div>
+</div>
+<div class="single-column-drawer-container" id="drawer"
+     v-bind:class="{ 'single-column-drawer-container-active': isDrawerOpen }">
+    <div class="drawer-content">
+        <div class="drawer-menu">
+            
+            
+            
+                
+                
+                
+                
+                
+                <a class="a-block drawer-menu-item false" href="https://idontwannarock.github.io/tech_blog/posts">
+                    Archive
+                </a>
+                
+            
+                
+                
+                
+                
+                
+                <a class="a-block drawer-menu-item false" href="https://idontwannarock.github.io/tech_blog/categories">
+                    Categories
+                </a>
+                
+            
+                
+                
+                
+                
+                
+                <a class="a-block drawer-menu-item false" href="https://idontwannarock.github.io/tech_blog/tags">
+                    Tags
+                </a>
+                
+            
+                
+                
+                
+                
+                
+                <a class="a-block drawer-menu-item false" href="https://idontwannarock.github.io/tech_blog/about">
+                    About
+                </a>
+                
+            
+                
+                
+                
+                
+                
+                <a class="a-block drawer-menu-item false" href="https://idontwannarock.github.io/tech_blog/index.xml">
+                    RSS Feed
+                </a>
+                
+            
+            
+            <div class="toc">
+
+
+	<div class="toc-content">
+	
+		
+		
+		
+		<center>- CATALOG -</center>
+		
+		
+		<ul>
+			
+				
+				
+					
+						
+						
+						
+						
+						
+							<li>
+								<a href="#%e5%84%aa%e9%bb%9e" onclick="onNavClick(`#優點-nav`)" id="優點-nav">
+									優點
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+						
+							<li>
+								<a href="#%e8%a1%93%e8%aa%9e%e5%8f%8a%e6%a6%82%e5%bf%b5" onclick="onNavClick(`#術語及概念-nav`)" id="術語及概念-nav">
+									術語及概念
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+						
+							<li>
+								<a href="#spring-aop" onclick="onNavClick(`#spring-aop-nav`)" id="spring-aop-nav">
+									Spring AOP
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+							
+								
+									<ul>
+								
+							
+						
+						
+							<li>
+								<a href="#dependencies" onclick="onNavClick(`#dependencies-nav`)" id="dependencies-nav">
+									Dependencies
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+							
+								
+									<ul>
+								
+							
+						
+						
+							<li>
+								<a href="#spring" onclick="onNavClick(`#spring-nav`)" id="spring-nav">
+									Spring
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+						
+							<li>
+								<a href="#spring-aop-1" onclick="onNavClick(`#spring-aop-1-nav`)" id="spring-aop-1-nav">
+									Spring AOP
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+							
+								</ul>
+							
+						
+						
+						
+							<li>
+								<a href="#%e8%a8%ad%e5%ae%9a" onclick="onNavClick(`#設定-nav`)" id="設定-nav">
+									設定
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+							
+								
+									<ul>
+								
+							
+						
+						
+							<li>
+								<a href="#%e5%9f%ba%e6%96%bc%e8%a8%bb%e8%a7%a3%e7%9a%84%e6%96%b9%e5%bc%8f" onclick="onNavClick(`#基於註解的方式-nav`)" id="基於註解的方式-nav">
+									基於註解的方式
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+						
+							<li>
+								<a href="#%e5%9f%ba%e6%96%bc-xml-%e6%96%87%e4%bb%b6%e7%9a%84%e6%96%b9%e5%bc%8f" onclick="onNavClick(`#基於-xml-文件的方式-nav`)" id="基於-xml-文件的方式-nav">
+									基於 XML 文件的方式
+								</a>
+							</li>
+						
+						
+					
+				
+			
+		</ul>
+	</div>
+
+</div>
+            
+        </div>
+    </div>
+</div>
+<transition name="fade">
+    <div id="drawer-mask" v-bind:class="{ 'single-column-drawer-mask': mounted }" v-if="isDrawerOpen" v-on:click="toggleDrawer"></div>
+</transition>
+<nav id="navBar" class="navbar sticky-top navbar-light single-column-nav-container">
+    <div id="navBackground" class="nav-background"></div>
+    <div class="container container-narrow nav-content">
+        <button id="nav_dropdown_btn" class="nav-dropdown-toggle" type="button" v-on:click="toggleDrawer">
+            <i class="material-icons">
+                menu
+            </i>
+        </button>
+        <a id="navTitle" class="navbar-brand" href="https://idontwannarock.github.io/tech_blog/">
+            Howard Tech Note
+        </a>
+        
+        <button type="button" class="nav-darkmode-toggle" id="darkModeToggleButton2">
+            <i class="material-icons" id="darkModeToggleIcon2">
+                dark_mode
+            </i>
+        </button>
+        
+    </div>
+</nav>
+<div class="single-column-header-container" id="pageHead"
+     v-bind:style="{ transform: 'translateZ(0px) translateY('+.3*scrollY+'px)', opacity: 1-navOpacity }">
+    <a href="https://idontwannarock.github.io/tech_blog/">
+        <div class="single-column-header-title">Howard Tech Note</div>
+        
+        <div class="single-column-header-subtitle">Share * Record * Program</div>
+        
+
+    </a>
+</div>
+
+            <div id="content">
+                <div id="streamContainer" class="stream-container">
+
+    <div class="post-list-container post-list-container-shadow">
+        <div class="post">
+            
+            
+            
+                
+            
+
+            <div class="post-head-wrapper"
+                
+                    
+                    
+                    style="background-image: url('https://res.cloudinary.com/dcvgho2zc/image/upload/v1568953103/Tech%20Blog/aop-icon_ffdmul.png')"
+                    
+                
+            >
+                <div class="post-title">
+                    AOP 及 Spring AOP 簡述
+                    
+                    <div class="post-subtitle">
+                        探討 AOP 概念及 Spring AOP 應用
+                    </div>
+                    
+                    <div class="post-meta">
+                        
+                        <time itemprop="datePublished">
+                            2018-04-10 13:22
+                        </time>
+                        
+
+                        
+                            <i class="material-icons" style="">folder</i>
+                                <a href="https://idontwannarock.github.io/tech_blog/categories/concept">concept</a>
+                                &nbsp;
+                        
+
+                        
+                            <i class="material-icons" style="">label</i>
+                            
+                                <a href="https://idontwannarock.github.io/tech_blog/tags/java">java</a>
+                                &nbsp;
+                            
+                                <a href="https://idontwannarock.github.io/tech_blog/tags/spring">spring</a>
+                                &nbsp;
+                            
+                                <a href="https://idontwannarock.github.io/tech_blog/tags/aop">aop</a>
+                                &nbsp;
+                            
+                        
+                        
+                    </div>
+                </div>
+            </div>
+            
+            <div class="post-body-wrapper">
+                
+                <div class="post-body" v-pre>
+                
+                    <blockquote>
+<p>這篇文章是初學的時候撰寫的，其中一些觀念並不正確，步驟也可能因為更新或觀念問題而不適用或者多餘，此篇文章僅為留做紀錄</p>
+</blockquote>
+<ul>
+<li>AOP(Aspect-Oriented Programming) 是一種基於 OOP(Object-Oriented Programming) 的改進</li>
+<li>AOP 是基於動態代理 (Dynamic Proxy) 這種 design pattern</li>
+<li>AOP 主要的設計對象是切面 (Aspect)，而切面是用來模組化橫切關注點 (Cross-Cutting Concern)</li>
+<li>切面需要定義公共功能，但可以明確定義功能在哪裡或以什麼方式應用，而不必修改受影響的類別。如此切面關注點就可以被模組化到特殊的類別 (切面) 裡面</li>
+</ul>
+<h1 id="優點">優點</h1>
+<ul>
+<li>交易相關的邏輯位於同一位置，便於維護與升級</li>
+<li>業務邏輯更簡潔，只包含核心業務代碼</li>
+</ul>
+<h1 id="術語及概念">術語及概念</h1>
+<ul>
+<li><strong>Cross-Cutting Concern 橫切關注點</strong>：橫跨應用系統多個流程、模組的功能，例如日誌 (Logging)、安全 (Security) 檢查、交易 (Transaction) 等動作，在許多流程的多個位置都需要執行，這種動作就被稱為橫切關注點</li>
+<li><strong>Aspect 切面</strong>：橫切關注點被模組化後的一種特殊物件；還未模組化前是橫切關注點，抽取後成為一組一組的切面；另一方面來說代理會將一個一個切面重組為橫切關注點</li>
+<li><strong>Advice 通知</strong>：切面必須要完成的工作或行為，也就是切面的實作內容。切面裡面的各個方法即是一個、一個的通知</li>
+<li><strong>Target 目標</strong>：被通知的物件，也就是要被橫切的業務邏輯類別</li>
+<li><strong>Proxy 代理</strong>：向目標物件通知之後創建的對象。容器會建立一個代理，依照設定去縫合 (weave) 切面到應用程式中</li>
+<li><strong>JoinPoint 連接點</strong>：程序執行的某個特定位置或時機。例如某個類別的某個方法呼叫前、呼叫後、拋出異常後等等。
+<ul>
+<li>連接點由兩個因素決定：<strong>以方法表示的程式執行點、相對執行點表示的方位</strong>。例如 A 類別的 a() 方法執行前的 JoinPoint 連接點決定要素為：執行點 A#a()，方位為執行前的位置</li>
+<li>概念類比：<strong>JoinPoint 連接點相當於資料庫的紀錄，切面相當於查詢條件</strong></li>
+</ul>
+</li>
+<li><strong>Pointcut 切面定義</strong>：每個類別都有多個連接點，<strong>類別的所有方法某種程度上都可以想成是 JoinPoint 連接點</strong>。AOP通過切面定位到特定的連接點</li>
+</ul>
+<h1 id="spring-aop">Spring AOP</h1>
+<ul>
+<li>AspectJ：Java 社群最完整、最廣為人知的 AOP 實作</li>
+<li>Spring 2.0 以上，可以使用基於 AspectJ 的 annotation 註解或基於 XML 設定的 AOP</li>
+</ul>
+<h2 id="dependencies">Dependencies</h2>
+<h3 id="spring">Spring</h3>
+<ul>
+<li>commons logging</li>
+<li>spring beans</li>
+<li>spring context</li>
+<li>spring core</li>
+<li>spring expression</li>
+</ul>
+<h3 id="spring-aop-1">Spring AOP</h3>
+<ul>
+<li>aopalliance</li>
+<li>aspectj weaver</li>
+<li>spring aop</li>
+<li>spring aspects</li>
+</ul>
+<p><strong>註：Spring 框架的版本可以更動，但須一致</strong></p>
+<h2 id="設定">設定</h2>
+<ul>
+<li>在 XML 文件中加入 aop namespace</li>
+</ul>
+<h3 id="基於註解的方式">基於註解的方式</h3>
+<ul>
+<li>在 XML 文件中加入以下設定：
+<ul>
+<li><code>&lt;aop:aspectj-autoproxy/&gt;</code></li>
+</ul>
+</li>
+<li>把橫切關注點的程式碼抽象到切面的類別中
+<ul>
+<li>切面首先是一個 IOC 中的 bean，所以要加上 <code>@Component</code> 註解</li>
+<li>切面還需要加入 <code>@Aspect</code> 註解</li>
+</ul>
+</li>
+<li>在類別中聲明各種通知：
+<ul>
+<li>聲明一個方法</li>
+<li>在方法前加入五種註解，並配合要通知的目標：
+<ul>
+<li><code>@Before</code>：執行點之前</li>
+<li><code>@After</code>：執行點之後，但無法取得回傳值</li>
+<li><code>@AfterReturning</code>：執行點之後，但可以取得回傳值，執行順序在 <code>@After</code> 之前</li>
+<li><code>@AfterThrowing</code>：執行出現異常後，可以取得異常資訊，執行順序在 <code>@After</code> 之前</li>
+<li><code>@Around</code>：執行點前、後、回傳值等全都包括，通常會配合 ProceedingJoinPoint 類別當參數使用</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>可以在通知方法中聲明一個類別為 JoinPoint 的參數，然後就可以藉此物件取出目標連接點的細節，例如方法名稱及其參數等</li>
+</ul>
+<h3 id="基於-xml-文件的方式">基於 XML 文件的方式</h3>
+<ul>
+<li>所有相關類別都不需要任何註解</li>
+<li>XML 文件中加入 aop 跟 beans namespace</li>
+<li>在 XML 文件中先設定好有關的 bean，包括目標類別及切面類別</li>
+<li>再於 XML 文件中在<code>&lt;aop:config&gt;&lt;/aop:config&gt;</code>元素內設定 AOP 有關設定</li>
+<li>其中設定的元素跟屬性都跟註解相同</li>
+</ul>
+
+                    
+                    <HR width="100%" id="EOF">
+		    <p style="color:#777;">Last modified on 2018-04-10</p>
+                    
+                </div>
+            </div>
+            
+            
+            <nav class="post-pagination">
+
+                
+                <a class="newer-posts" href="https://idontwannarock.github.io/tech_blog/2019/05/hugo_tutorial/">
+			Next<br>Hugo 入門教學
+                </a>
+                
+                
+                
+                <a class="older-posts" href="https://idontwannarock.github.io/tech_blog/2018/02/java_string_check/">
+			Previous<br>Java 字串判定
+                </a>
+                
+            </nav>
+            <div class="post-comment-wrapper">
+                
+<div id="disqus_thread"></div>
+<script>
+    
+
+    var disqus_config = function () {
+        
+        this.page.url = 'https:\/\/idontwannarock.github.io\/tech_blog\/2018\/04\/aop_and_spring_aop_basic\/';  
+        
+        
+        this.page.identifier = 'https:\/\/idontwannarock.github.io\/tech_blog\/2018\/04\/aop_and_spring_aop_basic\/'; 
+    };
+    (function() {
+        var d = document, s = d.createElement('script');
+        s.src = 'https://howard-tech-blog.disqus.com/embed.js';
+        s.setAttribute('data-timestamp', +new Date());
+        (d.head || d.body).appendChild(s);
+    })();
+</script>
+<noscript> Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript" rel="nofollow"> comments powered by Disqus.  </a> </noscript>
+
+
+
+
+
+
+
+
+
+
+
+            </div>
+        </div>
+    </div>
+
+
+                    </div>
+            </div><div id="single-column-footer">
+Hugo Theme <a href="https://github.com/amazingrise/hugo-theme-diary">Diary</a> by <a href="https://amazingrise.net">Rise</a>
+<br>
+Ported from <a href="https://mak1t0.cc/" target="_blank" rel="noreferrer noopener">Makito</a>'s <a href="https://github.com/SumiMakito/hexo-theme-journal/" target="_blank" rel="noreferrer noopener">Journal.</a> <br>
+<br>
+
+&copy;
+	
+	This website by Howard Wang is licensed under a Creative Common Attribution-ShareAlike 4.0 International License.
+	
+</div>
+            </div>
+    
+    <script src="https://idontwannarock.github.io/tech_blog/js/journal.js"></script>
+    </body>
+</html>

@@ -1,0 +1,759 @@
+<!DOCTYPE html>
+<html><head>
+<title>1st Practice: Click Click Boom</title>
+
+
+
+
+<meta charset="utf-8">
+<meta name="X-UA-Compatible" content="IE=edge">
+<meta name="google-site-verification" content="">
+<meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" name="viewport">
+<meta content="telephone=no" name="format-detection">
+<meta name="description" content="100 個練習計畫：第一個練習">
+<meta name="renderer" content="webkit">
+<meta name="theme-color" content="#ffffff">
+
+
+
+
+
+
+
+
+
+
+
+<script type="application/javascript">
+var doNotTrack = false;
+if (!doNotTrack) {
+	(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+	(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+	m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+	})(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+	ga('create', 'UA-106499565-1', 'auto');
+	
+	ga('send', 'pageview');
+}
+</script>
+
+
+<link type="text/css" rel="stylesheet" href="https://idontwannarock.github.io/tech_blog/vendor/css/bootstrap.min.css">
+
+
+  
+
+
+
+
+
+
+<link rel="stylesheet" href="https://idontwannarock.github.io/tech_blog/scss/journal.min.f4a8de07567a2d29619e0711662ef6251e3e59b642079f99490f654abf89a3c4.css" integrity="sha256-9KjeB1Z6LSlhngcRZi72JR4&#43;WbZCB5&#43;ZSQ9lSr&#43;Jo8Q=" media="screen">
+
+
+
+<link rel="stylesheet" href="https://idontwannarock.github.io/tech_blog/scss/dark-mode.min.eeb8040aa9333250b7fec770f950bfe8ba9b18a5eeeaf2dfef61d84d3956f625.css" integrity="sha256-7rgECqkzMlC3/sdw&#43;VC/6LqbGKXu6vLf72HYTTlW9iU=" media="screen">
+
+
+<script src="https://idontwannarock.github.io/tech_blog/vendor/js/loadCSS.js"></script>
+<script>
+  loadCSS("https://fonts.googleapis.com/css?family=Fira+Mono|Material+Icons");
+</script>
+
+
+
+
+
+
+  <script src="https://idontwannarock.github.io/tech_blog/js/toc.js"></script>
+
+
+
+
+
+
+
+<script src="https://cdn.jsdelivr.net/npm/vue-disqus@3/dist/vue-disqus.js"></script>
+
+
+
+
+
+
+
+
+</head>
+<body>
+    	<div id="app"><div id="sideContainer" class="side-container">
+    
+    <a class="a-block nav-head false" href="https://idontwannarock.github.io/tech_blog/">
+    
+        <div class="nav-title">
+            Howard Tech Note
+        </div>
+        
+        <div class="nav-subtitle">
+            Share * Record * Program
+        </div>
+        
+    </a>
+
+    <div class="nav-link-list">
+        
+        
+            
+            
+            
+            
+            
+            <a class="a-block nav-link-item false" href="https://idontwannarock.github.io/tech_blog/posts">
+                Archive
+            </a>
+            
+        
+            
+            
+            
+            
+            
+            <a class="a-block nav-link-item false" href="https://idontwannarock.github.io/tech_blog/categories">
+                Categories
+            </a>
+            
+        
+            
+            
+            
+            
+            
+            <a class="a-block nav-link-item false" href="https://idontwannarock.github.io/tech_blog/tags">
+                Tags
+            </a>
+            
+        
+            
+            
+            
+            
+            
+            <a class="a-block nav-link-item false" href="https://idontwannarock.github.io/tech_blog/about">
+                About
+            </a>
+            
+        
+            
+            
+            
+            
+            
+            <a class="a-block nav-link-item false" href="https://idontwannarock.github.io/tech_blog/index.xml">
+                RSS Feed
+            </a>
+            
+        
+    </div>
+
+    
+
+    <div class="nav-footer">
+        
+Hugo Theme <a href="https://github.com/amazingrise/hugo-theme-diary">Diary</a> by <a href="https://amazingrise.net">Rise</a>
+<br>
+Ported from <a href="https://mak1t0.cc/" target="_blank" rel="noreferrer noopener">Makito</a>'s <a href="https://github.com/SumiMakito/hexo-theme-journal/" target="_blank" rel="noreferrer noopener">Journal.</a> <br>
+<br>
+
+&copy;
+	
+	This website by Howard Wang is licensed under a Creative Common Attribution-ShareAlike 4.0 International License.
+	
+
+    </div>
+    
+</div><div id="extraContainer" class="extra-container">
+    
+    
+    <div class="toc animated-visibility" :class="{ invisible: scrollY <= 140 }">
+
+
+	<div class="toc-content">
+	
+		
+		
+		
+		<center>- CATALOG -</center>
+		
+		
+		<ul>
+			
+				
+				
+					
+						
+						
+						
+						
+						
+							<li>
+								<a href="#%e7%ac%ac%e4%b8%80%e5%80%8b%e7%9b%ae%e6%a8%99" onclick="onNavClick(`#第一個目標-nav`)" id="第一個目標-nav">
+									第一個目標
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+						
+							<li>
+								<a href="#%e9%81%87%e5%88%b0%e5%9b%b0%e9%9b%a3" onclick="onNavClick(`#遇到困難-nav`)" id="遇到困難-nav">
+									遇到困難
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+							
+								
+									<ul>
+								
+							
+						
+						
+							<li>
+								<a href="#%e7%bd%ae%e4%b8%ad" onclick="onNavClick(`#置中-nav`)" id="置中-nav">
+									置中
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+						
+							<li>
+								<a href="#%e5%a5%97%e6%a1%86" onclick="onNavClick(`#套框-nav`)" id="套框-nav">
+									套框
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+						
+							<li>
+								<a href="#%e7%9b%b8%e5%ae%b9" onclick="onNavClick(`#相容-nav`)" id="相容-nav">
+									相容
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+						
+							<li>
+								<a href="#ios%e7%9b%b8%e5%ae%b9" onclick="onNavClick(`#ios相容-nav`)" id="ios相容-nav">
+									iOS相容
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+							
+								</ul>
+							
+						
+						
+						
+							<li>
+								<a href="#%e6%84%9f%e6%83%b3" onclick="onNavClick(`#感想-nav`)" id="感想-nav">
+									感想
+								</a>
+							</li>
+						
+						
+					
+				
+			
+		</ul>
+	</div>
+
+</div>
+    
+    <div class="pagination">
+        <a id="globalBackToTop" class="pagination-action animated-visibility" href="#top" :class="{ invisible: scrollY == 0 }">
+            <i class="material-icons pagination-action-icon">
+                keyboard_arrow_up
+            </i>
+        </a>
+        
+        <a type="button" class="pagination-action" id="darkModeToggleButton">
+            <span class="material-icons pagination-action-icon" id="darkModeToggleIcon">
+                dark_mode
+            </span>
+        </a>
+        
+        
+    </div>
+</div>
+<div class="single-column-drawer-container" id="drawer"
+     v-bind:class="{ 'single-column-drawer-container-active': isDrawerOpen }">
+    <div class="drawer-content">
+        <div class="drawer-menu">
+            
+            
+            
+                
+                
+                
+                
+                
+                <a class="a-block drawer-menu-item false" href="https://idontwannarock.github.io/tech_blog/posts">
+                    Archive
+                </a>
+                
+            
+                
+                
+                
+                
+                
+                <a class="a-block drawer-menu-item false" href="https://idontwannarock.github.io/tech_blog/categories">
+                    Categories
+                </a>
+                
+            
+                
+                
+                
+                
+                
+                <a class="a-block drawer-menu-item false" href="https://idontwannarock.github.io/tech_blog/tags">
+                    Tags
+                </a>
+                
+            
+                
+                
+                
+                
+                
+                <a class="a-block drawer-menu-item false" href="https://idontwannarock.github.io/tech_blog/about">
+                    About
+                </a>
+                
+            
+                
+                
+                
+                
+                
+                <a class="a-block drawer-menu-item false" href="https://idontwannarock.github.io/tech_blog/index.xml">
+                    RSS Feed
+                </a>
+                
+            
+            
+            <div class="toc">
+
+
+	<div class="toc-content">
+	
+		
+		
+		
+		<center>- CATALOG -</center>
+		
+		
+		<ul>
+			
+				
+				
+					
+						
+						
+						
+						
+						
+							<li>
+								<a href="#%e7%ac%ac%e4%b8%80%e5%80%8b%e7%9b%ae%e6%a8%99" onclick="onNavClick(`#第一個目標-nav`)" id="第一個目標-nav">
+									第一個目標
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+						
+							<li>
+								<a href="#%e9%81%87%e5%88%b0%e5%9b%b0%e9%9b%a3" onclick="onNavClick(`#遇到困難-nav`)" id="遇到困難-nav">
+									遇到困難
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+							
+								
+									<ul>
+								
+							
+						
+						
+							<li>
+								<a href="#%e7%bd%ae%e4%b8%ad" onclick="onNavClick(`#置中-nav`)" id="置中-nav">
+									置中
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+						
+							<li>
+								<a href="#%e5%a5%97%e6%a1%86" onclick="onNavClick(`#套框-nav`)" id="套框-nav">
+									套框
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+						
+							<li>
+								<a href="#%e7%9b%b8%e5%ae%b9" onclick="onNavClick(`#相容-nav`)" id="相容-nav">
+									相容
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+						
+							<li>
+								<a href="#ios%e7%9b%b8%e5%ae%b9" onclick="onNavClick(`#ios相容-nav`)" id="ios相容-nav">
+									iOS相容
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+							
+								</ul>
+							
+						
+						
+						
+							<li>
+								<a href="#%e6%84%9f%e6%83%b3" onclick="onNavClick(`#感想-nav`)" id="感想-nav">
+									感想
+								</a>
+							</li>
+						
+						
+					
+				
+			
+		</ul>
+	</div>
+
+</div>
+            
+        </div>
+    </div>
+</div>
+<transition name="fade">
+    <div id="drawer-mask" v-bind:class="{ 'single-column-drawer-mask': mounted }" v-if="isDrawerOpen" v-on:click="toggleDrawer"></div>
+</transition>
+<nav id="navBar" class="navbar sticky-top navbar-light single-column-nav-container">
+    <div id="navBackground" class="nav-background"></div>
+    <div class="container container-narrow nav-content">
+        <button id="nav_dropdown_btn" class="nav-dropdown-toggle" type="button" v-on:click="toggleDrawer">
+            <i class="material-icons">
+                menu
+            </i>
+        </button>
+        <a id="navTitle" class="navbar-brand" href="https://idontwannarock.github.io/tech_blog/">
+            Howard Tech Note
+        </a>
+        
+        <button type="button" class="nav-darkmode-toggle" id="darkModeToggleButton2">
+            <i class="material-icons" id="darkModeToggleIcon2">
+                dark_mode
+            </i>
+        </button>
+        
+    </div>
+</nav>
+<div class="single-column-header-container" id="pageHead"
+     v-bind:style="{ transform: 'translateZ(0px) translateY('+.3*scrollY+'px)', opacity: 1-navOpacity }">
+    <a href="https://idontwannarock.github.io/tech_blog/">
+        <div class="single-column-header-title">Howard Tech Note</div>
+        
+        <div class="single-column-header-subtitle">Share * Record * Program</div>
+        
+
+    </a>
+</div>
+
+            <div id="content">
+                <div id="streamContainer" class="stream-container">
+
+    <div class="post-list-container post-list-container-shadow">
+        <div class="post">
+            
+            
+            
+                
+            
+
+            <div class="post-head-wrapper"
+                
+                    
+                    
+                    style="background-image: url('https://res.cloudinary.com/dcvgho2zc/image/upload/v1505435536/Tech%20Blog/1st-practice-cover-1024x550_mdnblw.jpg')"
+                    
+                
+            >
+                <div class="post-title">
+                    1st Practice: Click Click Boom
+                    
+                    <div class="post-subtitle">
+                        100 個練習計畫：第一個練習
+                    </div>
+                    
+                    <div class="post-meta">
+                        
+                        <time itemprop="datePublished">
+                            2017-09-15 07:36
+                        </time>
+                        
+
+                        
+                            <i class="material-icons" style="">folder</i>
+                                <a href="https://idontwannarock.github.io/tech_blog/categories/practice">practice</a>
+                                &nbsp;
+                        
+
+                        
+                            <i class="material-icons" style="">label</i>
+                            
+                                <a href="https://idontwannarock.github.io/tech_blog/tags/html">html</a>
+                                &nbsp;
+                            
+                                <a href="https://idontwannarock.github.io/tech_blog/tags/css">css</a>
+                                &nbsp;
+                            
+                                <a href="https://idontwannarock.github.io/tech_blog/tags/javascript">javascript</a>
+                                &nbsp;
+                            
+                        
+                        
+                    </div>
+                </div>
+            </div>
+            
+            <div class="post-body-wrapper">
+                
+                <div class="post-body" v-pre>
+                
+                    <h1 id="第一個目標">第一個目標</h1>
+<p>寫個簡單作品來練習 HTML 跟 CSS</p>
+<ul>
+<li>作品：Click Click Boom
+<ul>
+<li><a href="https://goo.gl/vPtbzB">黑白版本</a></li>
+<li><a href="https://goo.gl/CfT2Ro">粉紅大理石版本</a></li>
+<li><a href="https://goo.gl/NVdhAk">黑色大理石版本</a></li>
+</ul>
+</li>
+</ul>
+<h1 id="遇到困難">遇到困難</h1>
+<h2 id="置中">置中</h2>
+<p>左右置中很容易，但上下置中就麻煩了，還要隨瀏覽器視窗大小變動就更麻煩。</p>
+<p>最後在 stackoverflow 查到一種解法，就是先設定 <code>position: absolute;</code>，然後 <code>top</code>、<code>bottom</code>、<code>left</code>、<code>right</code> 都設 <code>0</code>，再用 <code>margin: 0;</code> 來自動對齊。</p>
+<h2 id="套框">套框</h2>
+<p>因為想要使用 HTML+CSS 作套框而不是用畫去背圖的方式，這真的殺死很多腦筋，內部框跟文字怎麼排都無法置中，對，又是無法上下置中，用 <code>text-align</code> 只能左右置中，<code>vertical-align</code> 完全不理我。</p>
+<p>最後又是 stackoverflow 查到解法，要用 CSS3 的新 property，<code>display: flex;</code> 來解，然後設定 <code>align-item: center;</code> 跟 <code>justify-content: center;</code> 來上下左右置中，但當然衍伸出下個問題。</p>
+<h2 id="相容">相容</h2>
+<p>瀏覽器太多種，新舊版本對 HTML5 或 CSS3 相容度又不一致，真的會搞死，實務上難道也是只能靠經驗？或出問題再來修改嗎？還是有更合理的作法？</p>
+<p>最後是上 <a href="https://www.w3schools.com/">w3schools</a> 一項一項 property 查相容再加相容敘述 <code>-webkit-</code> 或 <code>-moz-</code> 來解決。</p>
+<h2 id="ios相容">iOS相容</h2>
+<p>這個真的超哭，我整個都做完了，就只有在 iOS 裝置上，按鈕按不下去！</p>
+<p>我先是想說應該是 <code>transform</code> 可能不相容，所以一樣查了 w3schools 加上相容敘述，結果還是不行！</p>
+<p>以我的智商真的想不出來惹，最後只能跟阿混求救，大神就是大神，瞬間幫我找出答案，因為 <code>Pseudo class active</code> 跟 iOS 不相容……</p>
+<p>當然阿混很好心的幫我查好解法，結果是要用 JavaScript 來解，這跟我只想練習 HTML+CSS 本意不符，但找了一下好像真的沒有更好的解法，所以最後還是用了這個解法。</p>
+<h1 id="感想">感想</h1>
+<p>工程師真的很辛苦，但也很爽。能親手做出成品很有成就感！後續再來想要加什麼功能會更舒壓 XD</p>
+
+                    
+                    <HR width="100%" id="EOF">
+		    <p style="color:#777;">Last modified on 2017-09-15</p>
+                    
+                </div>
+            </div>
+            
+            
+            <nav class="post-pagination">
+
+                
+                <a class="newer-posts" href="https://idontwannarock.github.io/tech_blog/2017/09/retina_morning_post/">
+			Next<br>2nd Practice: Retina Morning Post
+                </a>
+                
+                
+                
+                <a class="older-posts" href="https://idontwannarock.github.io/tech_blog/2017/09/git_and_github_basic/">
+			Previous<br>Git 及 GitHub 基礎認識
+                </a>
+                
+            </nav>
+            <div class="post-comment-wrapper">
+                
+<div id="disqus_thread"></div>
+<script>
+    
+
+    var disqus_config = function () {
+        
+        this.page.url = 'https:\/\/idontwannarock.github.io\/tech_blog\/2017\/09\/click_click_boom\/';  
+        
+        
+        this.page.identifier = 'https:\/\/idontwannarock.github.io\/tech_blog\/2017\/09\/click_click_boom\/'; 
+    };
+    (function() {
+        var d = document, s = d.createElement('script');
+        s.src = 'https://howard-tech-blog.disqus.com/embed.js';
+        s.setAttribute('data-timestamp', +new Date());
+        (d.head || d.body).appendChild(s);
+    })();
+</script>
+<noscript> Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript" rel="nofollow"> comments powered by Disqus.  </a> </noscript>
+
+
+
+
+
+
+
+
+
+
+
+            </div>
+        </div>
+    </div>
+
+
+                    </div>
+            </div><div id="single-column-footer">
+Hugo Theme <a href="https://github.com/amazingrise/hugo-theme-diary">Diary</a> by <a href="https://amazingrise.net">Rise</a>
+<br>
+Ported from <a href="https://mak1t0.cc/" target="_blank" rel="noreferrer noopener">Makito</a>'s <a href="https://github.com/SumiMakito/hexo-theme-journal/" target="_blank" rel="noreferrer noopener">Journal.</a> <br>
+<br>
+
+&copy;
+	
+	This website by Howard Wang is licensed under a Creative Common Attribution-ShareAlike 4.0 International License.
+	
+</div>
+            </div>
+    
+    <script src="https://idontwannarock.github.io/tech_blog/js/journal.js"></script>
+    </body>
+</html>

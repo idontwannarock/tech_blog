@@ -1,0 +1,957 @@
+<!DOCTYPE html>
+<html><head>
+<title>Git 及 GitHub 基礎認識</title>
+
+
+
+
+<meta charset="utf-8">
+<meta name="X-UA-Compatible" content="IE=edge">
+<meta name="google-site-verification" content="">
+<meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" name="viewport">
+<meta content="telephone=no" name="format-detection">
+<meta name="description" content="介紹 Git 概念及基礎指令，並用 SSH 同步到 GitHub">
+<meta name="renderer" content="webkit">
+<meta name="theme-color" content="#ffffff">
+
+
+
+
+
+
+
+
+
+
+
+<script type="application/javascript">
+var doNotTrack = false;
+if (!doNotTrack) {
+	(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+	(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+	m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+	})(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+	ga('create', 'UA-106499565-1', 'auto');
+	
+	ga('send', 'pageview');
+}
+</script>
+
+
+<link type="text/css" rel="stylesheet" href="https://idontwannarock.github.io/tech_blog/vendor/css/bootstrap.min.css">
+
+
+  
+
+
+
+
+
+
+<link rel="stylesheet" href="https://idontwannarock.github.io/tech_blog/scss/journal.min.f4a8de07567a2d29619e0711662ef6251e3e59b642079f99490f654abf89a3c4.css" integrity="sha256-9KjeB1Z6LSlhngcRZi72JR4&#43;WbZCB5&#43;ZSQ9lSr&#43;Jo8Q=" media="screen">
+
+
+
+<link rel="stylesheet" href="https://idontwannarock.github.io/tech_blog/scss/dark-mode.min.eeb8040aa9333250b7fec770f950bfe8ba9b18a5eeeaf2dfef61d84d3956f625.css" integrity="sha256-7rgECqkzMlC3/sdw&#43;VC/6LqbGKXu6vLf72HYTTlW9iU=" media="screen">
+
+
+<script src="https://idontwannarock.github.io/tech_blog/vendor/js/loadCSS.js"></script>
+<script>
+  loadCSS("https://fonts.googleapis.com/css?family=Fira+Mono|Material+Icons");
+</script>
+
+
+
+
+
+
+  <script src="https://idontwannarock.github.io/tech_blog/js/toc.js"></script>
+
+
+
+
+
+
+
+<script src="https://cdn.jsdelivr.net/npm/vue-disqus@3/dist/vue-disqus.js"></script>
+
+
+
+
+
+
+
+
+</head>
+<body>
+    	<div id="app"><div id="sideContainer" class="side-container">
+    
+    <a class="a-block nav-head false" href="https://idontwannarock.github.io/tech_blog/">
+    
+        <div class="nav-title">
+            Howard Tech Note
+        </div>
+        
+        <div class="nav-subtitle">
+            Share * Record * Program
+        </div>
+        
+    </a>
+
+    <div class="nav-link-list">
+        
+        
+            
+            
+            
+            
+            
+            <a class="a-block nav-link-item false" href="https://idontwannarock.github.io/tech_blog/posts">
+                Archive
+            </a>
+            
+        
+            
+            
+            
+            
+            
+            <a class="a-block nav-link-item false" href="https://idontwannarock.github.io/tech_blog/categories">
+                Categories
+            </a>
+            
+        
+            
+            
+            
+            
+            
+            <a class="a-block nav-link-item false" href="https://idontwannarock.github.io/tech_blog/tags">
+                Tags
+            </a>
+            
+        
+            
+            
+            
+            
+            
+            <a class="a-block nav-link-item false" href="https://idontwannarock.github.io/tech_blog/about">
+                About
+            </a>
+            
+        
+            
+            
+            
+            
+            
+            <a class="a-block nav-link-item false" href="https://idontwannarock.github.io/tech_blog/index.xml">
+                RSS Feed
+            </a>
+            
+        
+    </div>
+
+    
+
+    <div class="nav-footer">
+        
+Hugo Theme <a href="https://github.com/amazingrise/hugo-theme-diary">Diary</a> by <a href="https://amazingrise.net">Rise</a>
+<br>
+Ported from <a href="https://mak1t0.cc/" target="_blank" rel="noreferrer noopener">Makito</a>'s <a href="https://github.com/SumiMakito/hexo-theme-journal/" target="_blank" rel="noreferrer noopener">Journal.</a> <br>
+<br>
+
+&copy;
+	
+	This website by Howard Wang is licensed under a Creative Common Attribution-ShareAlike 4.0 International License.
+	
+
+    </div>
+    
+</div><div id="extraContainer" class="extra-container">
+    
+    
+    <div class="toc animated-visibility" :class="{ invisible: scrollY <= 140 }">
+
+
+	<div class="toc-content">
+	
+		
+		
+		
+		<center>- CATALOG -</center>
+		
+		
+		<ul>
+			
+				
+				
+					
+						
+						
+						
+						
+						
+							<li>
+								<a href="#%e5%ad%b8%e7%bf%92%e7%9b%ae%e6%a8%99" onclick="onNavClick(`#學習目標-nav`)" id="學習目標-nav">
+									學習目標
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+						
+							<li>
+								<a href="#%e5%ad%b8%e7%bf%92%e5%85%a7%e5%ae%b9" onclick="onNavClick(`#學習內容-nav`)" id="學習內容-nav">
+									學習內容
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+							
+								
+									<ul>
+								
+							
+						
+						
+							<li>
+								<a href="#git-%e8%b7%9f-github-%e6%98%af%e4%bb%80%e9%ba%bc" onclick="onNavClick(`#git-跟-github-是什麼-nav`)" id="git-跟-github-是什麼-nav">
+									Git 跟 GitHub 是什麼
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+							
+								
+									<ul>
+								
+							
+						
+						
+							<li>
+								<a href="#git-%e8%a7%80%e5%bf%b5" onclick="onNavClick(`#git-觀念-nav`)" id="git-觀念-nav">
+									Git 觀念
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+							
+								</ul>
+							
+						
+						
+						
+							<li>
+								<a href="#%e5%bb%ba%e7%ab%8b-github-%e5%b8%b3%e8%99%9f" onclick="onNavClick(`#建立-github-帳號-nav`)" id="建立-github-帳號-nav">
+									建立 GitHub 帳號
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+						
+							<li>
+								<a href="#git-%e7%92%b0%e5%a2%83%e8%a8%ad%e5%ae%9a" onclick="onNavClick(`#git-環境設定-nav`)" id="git-環境設定-nav">
+									Git 環境設定
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+						
+							<li>
+								<a href="#%e8%a8%ad%e5%ae%9a-git-%e8%ad%98%e5%88%a5%e8%b3%87%e6%96%99" onclick="onNavClick(`#設定-git-識別資料-nav`)" id="設定-git-識別資料-nav">
+									設定 Git 識別資料
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+						
+							<li>
+								<a href="#%e5%bb%ba%e7%ab%8b-ssh-key-%e4%b8%a6%e5%a2%9e%e5%8a%a0%e5%88%b0-github" onclick="onNavClick(`#建立-ssh-key-並增加到-github-nav`)" id="建立-ssh-key-並增加到-github-nav">
+									建立 SSH Key 並增加到 GitHub
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+						
+							<li>
+								<a href="#%e5%bb%ba%e7%ab%8b-project-%e4%b8%a6%e4%b8%8a%e5%82%b3%e5%88%b0-github" onclick="onNavClick(`#建立-project-並上傳到-github-nav`)" id="建立-project-並上傳到-github-nav">
+									建立 Project 並上傳到 GitHub
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+						
+							<li>
+								<a href="#push-%e4%bf%ae%e6%94%b9%e9%81%8e%e7%9a%84-project-%e5%88%b0-github" onclick="onNavClick(`#push-修改過的-project-到-github-nav`)" id="push-修改過的-project-到-github-nav">
+									push 修改過的 Project 到 GitHub
+								</a>
+							</li>
+						
+						
+					
+				
+			
+		</ul>
+	</div>
+
+</div>
+    
+    <div class="pagination">
+        <a id="globalBackToTop" class="pagination-action animated-visibility" href="#top" :class="{ invisible: scrollY == 0 }">
+            <i class="material-icons pagination-action-icon">
+                keyboard_arrow_up
+            </i>
+        </a>
+        
+        <a type="button" class="pagination-action" id="darkModeToggleButton">
+            <span class="material-icons pagination-action-icon" id="darkModeToggleIcon">
+                dark_mode
+            </span>
+        </a>
+        
+        
+    </div>
+</div>
+<div class="single-column-drawer-container" id="drawer"
+     v-bind:class="{ 'single-column-drawer-container-active': isDrawerOpen }">
+    <div class="drawer-content">
+        <div class="drawer-menu">
+            
+            
+            
+                
+                
+                
+                
+                
+                <a class="a-block drawer-menu-item false" href="https://idontwannarock.github.io/tech_blog/posts">
+                    Archive
+                </a>
+                
+            
+                
+                
+                
+                
+                
+                <a class="a-block drawer-menu-item false" href="https://idontwannarock.github.io/tech_blog/categories">
+                    Categories
+                </a>
+                
+            
+                
+                
+                
+                
+                
+                <a class="a-block drawer-menu-item false" href="https://idontwannarock.github.io/tech_blog/tags">
+                    Tags
+                </a>
+                
+            
+                
+                
+                
+                
+                
+                <a class="a-block drawer-menu-item false" href="https://idontwannarock.github.io/tech_blog/about">
+                    About
+                </a>
+                
+            
+                
+                
+                
+                
+                
+                <a class="a-block drawer-menu-item false" href="https://idontwannarock.github.io/tech_blog/index.xml">
+                    RSS Feed
+                </a>
+                
+            
+            
+            <div class="toc">
+
+
+	<div class="toc-content">
+	
+		
+		
+		
+		<center>- CATALOG -</center>
+		
+		
+		<ul>
+			
+				
+				
+					
+						
+						
+						
+						
+						
+							<li>
+								<a href="#%e5%ad%b8%e7%bf%92%e7%9b%ae%e6%a8%99" onclick="onNavClick(`#學習目標-nav`)" id="學習目標-nav">
+									學習目標
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+						
+							<li>
+								<a href="#%e5%ad%b8%e7%bf%92%e5%85%a7%e5%ae%b9" onclick="onNavClick(`#學習內容-nav`)" id="學習內容-nav">
+									學習內容
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+							
+								
+									<ul>
+								
+							
+						
+						
+							<li>
+								<a href="#git-%e8%b7%9f-github-%e6%98%af%e4%bb%80%e9%ba%bc" onclick="onNavClick(`#git-跟-github-是什麼-nav`)" id="git-跟-github-是什麼-nav">
+									Git 跟 GitHub 是什麼
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+							
+								
+									<ul>
+								
+							
+						
+						
+							<li>
+								<a href="#git-%e8%a7%80%e5%bf%b5" onclick="onNavClick(`#git-觀念-nav`)" id="git-觀念-nav">
+									Git 觀念
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+							
+								</ul>
+							
+						
+						
+						
+							<li>
+								<a href="#%e5%bb%ba%e7%ab%8b-github-%e5%b8%b3%e8%99%9f" onclick="onNavClick(`#建立-github-帳號-nav`)" id="建立-github-帳號-nav">
+									建立 GitHub 帳號
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+						
+							<li>
+								<a href="#git-%e7%92%b0%e5%a2%83%e8%a8%ad%e5%ae%9a" onclick="onNavClick(`#git-環境設定-nav`)" id="git-環境設定-nav">
+									Git 環境設定
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+						
+							<li>
+								<a href="#%e8%a8%ad%e5%ae%9a-git-%e8%ad%98%e5%88%a5%e8%b3%87%e6%96%99" onclick="onNavClick(`#設定-git-識別資料-nav`)" id="設定-git-識別資料-nav">
+									設定 Git 識別資料
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+						
+							<li>
+								<a href="#%e5%bb%ba%e7%ab%8b-ssh-key-%e4%b8%a6%e5%a2%9e%e5%8a%a0%e5%88%b0-github" onclick="onNavClick(`#建立-ssh-key-並增加到-github-nav`)" id="建立-ssh-key-並增加到-github-nav">
+									建立 SSH Key 並增加到 GitHub
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+						
+							<li>
+								<a href="#%e5%bb%ba%e7%ab%8b-project-%e4%b8%a6%e4%b8%8a%e5%82%b3%e5%88%b0-github" onclick="onNavClick(`#建立-project-並上傳到-github-nav`)" id="建立-project-並上傳到-github-nav">
+									建立 Project 並上傳到 GitHub
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+						
+							<li>
+								<a href="#push-%e4%bf%ae%e6%94%b9%e9%81%8e%e7%9a%84-project-%e5%88%b0-github" onclick="onNavClick(`#push-修改過的-project-到-github-nav`)" id="push-修改過的-project-到-github-nav">
+									push 修改過的 Project 到 GitHub
+								</a>
+							</li>
+						
+						
+					
+				
+			
+		</ul>
+	</div>
+
+</div>
+            
+        </div>
+    </div>
+</div>
+<transition name="fade">
+    <div id="drawer-mask" v-bind:class="{ 'single-column-drawer-mask': mounted }" v-if="isDrawerOpen" v-on:click="toggleDrawer"></div>
+</transition>
+<nav id="navBar" class="navbar sticky-top navbar-light single-column-nav-container">
+    <div id="navBackground" class="nav-background"></div>
+    <div class="container container-narrow nav-content">
+        <button id="nav_dropdown_btn" class="nav-dropdown-toggle" type="button" v-on:click="toggleDrawer">
+            <i class="material-icons">
+                menu
+            </i>
+        </button>
+        <a id="navTitle" class="navbar-brand" href="https://idontwannarock.github.io/tech_blog/">
+            Howard Tech Note
+        </a>
+        
+        <button type="button" class="nav-darkmode-toggle" id="darkModeToggleButton2">
+            <i class="material-icons" id="darkModeToggleIcon2">
+                dark_mode
+            </i>
+        </button>
+        
+    </div>
+</nav>
+<div class="single-column-header-container" id="pageHead"
+     v-bind:style="{ transform: 'translateZ(0px) translateY('+.3*scrollY+'px)', opacity: 1-navOpacity }">
+    <a href="https://idontwannarock.github.io/tech_blog/">
+        <div class="single-column-header-title">Howard Tech Note</div>
+        
+        <div class="single-column-header-subtitle">Share * Record * Program</div>
+        
+
+    </a>
+</div>
+
+            <div id="content">
+                <div id="streamContainer" class="stream-container">
+
+    <div class="post-list-container post-list-container-shadow">
+        <div class="post">
+            
+            
+            
+                
+            
+
+            <div class="post-head-wrapper"
+                
+                    
+                    
+                    style="background-image: url('https://res.cloudinary.com/dcvgho2zc/image/upload/v1568902624/Tech%20Blog/git-logo_xbrhxo.png')"
+                    
+                
+            >
+                <div class="post-title">
+                    Git 及 GitHub 基礎認識
+                    
+                    <div class="post-subtitle">
+                        介紹 Git 概念及基礎指令，並用 SSH 同步到 GitHub
+                    </div>
+                    
+                    <div class="post-meta">
+                        
+                        <time itemprop="datePublished">
+                            2017-09-14 07:13
+                        </time>
+                        
+
+                        
+                            <i class="material-icons" style="">folder</i>
+                                <a href="https://idontwannarock.github.io/tech_blog/categories/application">application</a>
+                                &nbsp;
+                        
+
+                        
+                            <i class="material-icons" style="">label</i>
+                            
+                                <a href="https://idontwannarock.github.io/tech_blog/tags/git">git</a>
+                                &nbsp;
+                            
+                                <a href="https://idontwannarock.github.io/tech_blog/tags/github">github</a>
+                                &nbsp;
+                            
+                                <a href="https://idontwannarock.github.io/tech_blog/tags/ssh">ssh</a>
+                                &nbsp;
+                            
+                                <a href="https://idontwannarock.github.io/tech_blog/tags/git-bash">git-bash</a>
+                                &nbsp;
+                            
+                                <a href="https://idontwannarock.github.io/tech_blog/tags/win10">win10</a>
+                                &nbsp;
+                            
+                                <a href="https://idontwannarock.github.io/tech_blog/tags/macos">macos</a>
+                                &nbsp;
+                            
+                        
+                        
+                    </div>
+                </div>
+            </div>
+            
+            <div class="post-body-wrapper">
+                
+                <div class="post-body" v-pre>
+                
+                    <blockquote>
+<p>這篇文章是初學的時候撰寫的，其中一些觀念並不正確，步驟也可能因為更新或觀念問題而不適用或者多餘，此篇文章僅為留做紀錄</p>
+</blockquote>
+<h1 id="學習目標">學習目標</h1>
+<p>因為 Git 指令一直出問題，今天就來搞清楚 Git 跟 GitHub 的各種問題吧！</p>
+<h1 id="學習內容">學習內容</h1>
+<h2 id="git-跟-github-是什麼">Git 跟 GitHub 是什麼</h2>
+<p><a href="https://zh.wikipedia.org/zh-tw/Git">Git Wiki</a> 則說 Git 是一種分散式版本控制軟體。</p>
+<p>詳細的說明可以參考 <a href="https://goo.gl/YzDiHy">Git Documentation</a>，有中文版，不過只有前幾個主題有翻譯。</p>
+<p><a href="https://zh.wikipedia.org/zh-tw/GitHub">GitHub Wiki</a>上說，GitHub 是一個透過 Git 進行版本控制的軟體原始碼代管服務，簡單來說就是可以放各種 Code 的地方，但其實也可以放一些文件跟圖片等，好像沒有空間限制，只是有單一檔案大小 1GB 的軟性限制。</p>
+<h3 id="git-觀念">Git 觀念</h3>
+<p>這裡我們來先解釋一下 Git版本控制的觀念，我覺得 <a href="https://hellolynn.hpd.io/">寫點科普</a> 寫的這兩篇寫得非常平易近人而且完整，推薦給大家！</p>
+<ul>
+<li><a href="https://hellolynn.hpd.io/2017/01/18/git%E6%96%B0%E6%89%8B%E5%85%A5%E9%96%80%E6%95%99%E5%AD%B8-part-1/">GIT新手入門教學 – PART 1</a></li>
+<li><a href="https://hellolynn.hpd.io/2017/01/18/git%E6%96%B0%E6%89%8B%E5%85%A5%E9%96%80%E6%95%99%E5%AD%B8-part-2/">GIT新手入門教學 – PART 2</a></li>
+</ul>
+<p>我的理解是譬如有一份作業需要大家一起作，大家先把原始的作業文件 (origin) 放在小組長那邊 (remote)，然後各自 copy 一份回家 (local) 寫自己要做的部分，然後拿回去給小組長，由小組長決定誰的作業寫得好，可以成為新一代的原始作業文件 (master)；或某人提交的作業寫得不完整，但寫過地那部分很好，就跟原始作業合併 (merge) 成一份新一代的原始作業文件。大家也可以 copy 別人寫的作業回去修改 (pull)，反正最後由小組長決定哪個版本的作業寫得最好，就可以成為新一代的原始作業文件這樣。</p>
+<p>而大家 copy 回家寫的作業也有三個階段，假如我在電腦上打作業，分成三個資料夾，一個是 Working Directory、一個是 Staging Area、一個是 Repository。</p>
+<p>第一個資料夾就是放 copy 回家的作業，然後我可能亂打了一些、新增修改了一些，但交出去很丟臉的部分；第二個資料夾就是放某些我覺得可以的部分作業，先暫時存起來；最後一個資料夾就是放我確定要提交的作業版本。</p>
+<p>所以我寫作業的流程就是這樣：</p>
+<ol>
+<li>先 copy 一份 (pull) 原始作業文件 (origin) 回家 (local)</li>
+<li>在 Working Directory 資料夾寫作業，找各種資料，新增刪減等等</li>
+<li>將比較滿意的部分暫存 (add) 到 Staging Area 資料夾</li>
+<li>當 Staging Area 資料夾有比較完整的作業版本後，再儲存 (commit) 到 Repository 資料夾中</li>
+<li>最後將 Repository 資料夾中要繳交的作業交出去 (push) 給小組長 (remote)</li>
+</ol>
+<h2 id="建立-github-帳號">建立 GitHub 帳號</h2>
+<p>接下來說明實際操作流程。</p>
+<p>建議大家先到 <a href="https://github.com/">GitHub</a> 建立自己的帳號，基本功能都是免費的，只有當你要發展私人專案，想要將 repositories 設定為 private 的時候會要收費的樣子。(更正：GitHub 已於 2019/1/7 開放免費無限量 private repo，可參見 <a href="https://github.blog/2019-01-07-new-year-new-github/">這篇聲明</a>)</p>
+<p>GitHub 帳號申請流程跟一般申請免費帳號一樣，就到首頁按下綠色的 Sign up for GitHub 按鈕之後，一路照指示填上資料跟選擇選項就可以了。然後 GitHub 會寄一封認證 email，請點 email 裡面的 Verify email address 那個連結來確認你的 email address。</p>
+<p>接下來先作 Git 的環境設定，這樣之後就可以都在 Git Bash 操作各種指令，不用在 Git Bash 跟 PowerShell 視窗換來換去。如果是 Mac 用戶，則都可以用 MacOS 隨附的「終端機 Terminal」軟體，或安裝下載相同功能的 iTerm2 來操作 Git 指令。</p>
+<h2 id="git-環境設定">Git 環境設定</h2>
+<p>先說明我一般使用的是 Windows 10，兼有一台 Macbook Pro。但我是超級初心者，所以 Linux 我完全不會，抱歉。</p>
+<p>先安裝 Git，這步驟很簡單。Windows 就到 <a href="https://git-scm.com/">Git官網</a> 下載就好，而且一鍵安裝，這邊不需要多講；若是 MacOS 用戶，請利用 Homebrew 安裝 Git，安裝 Homebrew 跟 Git 的操作過程可以參考我的 <a href="https://idontwannarock.github.io/tech_blog/2017/11/mbp_setup_2017/#安裝Homebrew">這篇文章</a>，然後可以直接跳到下一個主題：設定 Git 識別資料。</p>
+<p>然後應該會在 Windows 按鈕（狀態列左邊 Windows 圖示的那顆）裡面的程式集多一個 Git 的資料夾，裡面有三個程式：Git Bash、Git CMD 跟 Git GUI。最常用的大概是 Git Bash，原則上都在這裡下各種 Git 指令；Git CMD 我不知道拿來幹嘛；Git GUI 是圖形介面，但設計的不太好用。</p>
+<p>如果大家沒有要學太多 Git 指令，其實可以直接下載 <a href="https://desktop.github.com/">GitHub Desktop</a> 或 <a href="https://www.sourcetreeapp.com/">Sourcetree</a>，圖形化介面真的太好用，也不用記一堆 Git 指令。但今天沒有要教大家怎麼用 GitHub Desktop 跟 Sourcetree，或其實大家看完後面 Git 概念教學就大概會懂使用流程。</p>
+<h2 id="設定-git-識別資料">設定 Git 識別資料</h2>
+<p>安裝完 Git 之後，首先應該設定使用者名稱跟 email，應該要跟你之前申請 GitHub 帳號時的 username 及 email 相同。</p>
+<p>以下步驟使用到的指令，基本上在 Windows 跟 MacOS 上是一樣的，只有一些地方會有所不懂，我會特別說明。</p>
+<p>請打開 Git Bash，可能在桌面就有，或者開始按鈕裡的程式集 Git 資料夾裡面有，MacOS 請打開終端機，然後依序輸入以下兩行 Git 指令：</p>
+<pre tabindex="0"><code>git config --global user.name &#34;GitHub username&#34;  
+git config --global user.email &#34;GitHub email&#34;
+</code></pre><p>接著你可以輸入以下指令來檢查資訊是否有輸入正確。</p>
+<div class="highlight"><pre tabindex="0" style="color:#e7e9db;background-color:#2f1e2e;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>cat ~/.gitconfig
+</span></span></code></pre></div><h2 id="建立-ssh-key-並增加到-github">建立 SSH Key 並增加到 GitHub</h2>
+<p>SSH Key 就像一個鑰匙，每一台電腦、筆電都會生成一個獨一無二的 SSH Key，然後我們上自己的 GitHub 去登記這個鑰匙，這樣以後我們用電腦或筆電上傳東西到 GitHub 時，電腦或筆電就可以用這個鑰匙，以及前面設定的 Git 識別資料去開啟我們的 GitHub 帳號並把東西上傳上去。</p>
+<p>就跟我們要去銀行存錢，要提供身分證 (Git 識別資料) 跟密碼 (SSH Key) 給銀行一樣。</p>
+<p>要生成一個 SSH Key，一樣在之前打開的 Git Bash 或終端機輸入以下指令：</p>
+<div class="highlight"><pre tabindex="0" style="color:#e7e9db;background-color:#2f1e2e;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>ssh-keygen -t rsa -C <span style="color:#48b685">&#34;GitHub帳號的 email&#34;</span>
+</span></span></code></pre></div><p>會出現以下這行，設定儲存 SSH Key 的位置，使用預設的就好，所以直接按 Enter。</p>
+<pre tabindex="0"><code>Enter file in which to save the key (/Users/使用者名稱/.ssh/id_rsa): [Press enter]
+</code></pre><p>如果你以前有設定過 SSH Key，它會出現這行 <code>/Users/you/.ssh/id_rsa already exists. Overwrite (y/n)?</code>，建議直接打 <code>yes</code> 或 <code>y</code> 來重新操作以確保正確。接著會出現以下這行來問你是不是要為 SSH Key 設定一個密碼，要就輸入，並且會需要再輸入一次作確認，不要就直接 Enter。</p>
+<pre tabindex="0"><code>Enter passphrase (empty for no passphrase): [Type a passphrase]
+</code></pre><p>然後他就會顯示一大段文字，表示 SSH Key 產生成功，接著我們把 SSH Key 加到 ssh-agent 來免除每次要連接登入 GitHub 都還要再輸入一次 SSH Key 的密碼。請先輸入以下指令：</p>
+<div class="highlight"><pre tabindex="0" style="color:#e7e9db;background-color:#2f1e2e;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>eval <span style="color:#815ba4">$(</span>ssh-agent -s<span style="color:#815ba4">)</span>
+</span></span></code></pre></div><p>接著會出現這行 <code>Agent pid 8492</code>，數字每個人都不一樣，這沒關係。接著輸入以下這行，可能會需要重新輸入一次 SSH Key 的密碼：</p>
+<div class="highlight"><pre tabindex="0" style="color:#e7e9db;background-color:#2f1e2e;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>ssh-add ~/.ssh/id_rsa
+</span></span></code></pre></div><p>如果出現 <code>Identity added</code> 這行字就表示成功了。</p>
+<p>再來需要把 SSH Key 加入到自己的 GitHub 帳號。</p>
+<p>首先在同樣的 Git Bash 畫面輸入以下這行，將 SSH Key 複製到剪貼簿裡面，就類似平常按 <code>Ctrl</code>+<code>C</code> 那樣複製。</p>
+<div class="highlight"><pre tabindex="0" style="color:#e7e9db;background-color:#2f1e2e;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>clip &lt; ~/.ssh/id_rsa.pub
+</span></span></code></pre></div><p>如果是 Mac 使用者，請到 <code>/使用者名稱/.ssh/</code> 這個資料夾，若找不到請調整隱藏檔的設定，然後用文字編輯打開 <code>id_rsa.pub</code> 這個檔案，講整個檔案內容複製起來。</p>
+<p>然後用瀏覽器進入到你自己的 GitHub 帳號，點最右上角的三角形，選 Settings，然後選左邊列表的 SSH and GPG keys，點綠色的 New SSH key，然後在 Key 下面的欄位直接 <code>Ctrl</code>+<code>V</code> 或 <code>command</code>+<code>V</code> 把 SSH Key 貼上，在 Title 欄位輸入你之後能辨識這個 SSH Key 是代表哪一台電腦或筆電的名稱，最後點綠色的 Add SSH key 按鈕就添加完成啦！</p>
+<p>然後作個小測試，在同樣的 Git Bash 或終端機輸入 <code>ssh -T git@github.com</code>，可能會看到類似以下的一段文字：</p>
+<pre tabindex="0"><code>The authenticity of host &#39;github.com (207.97.227.239)&#39; can&#39;t be established.  
+RSA key fingerprint is 16:27:ac:a5:76:28:2d:36:63:1b:56:4d:eb:df:a6:48.  
+Are you sure you want to continue connecting (yes/no)?
+</code></pre><p>fingerprint 後面那一串長長的字每個人都不一樣，這也沒關係。輸入 <code>yes</code> 後應該會跳出以下訊息：</p>
+<pre tabindex="0"><code>Hi &lt;username&gt;! You&#39;ve successfully authenticated, but GitHub does not provide shell access.
+</code></pre><p>這段文字中的 <code>&lt;username&gt;</code> 是你 GitHub 設定的 username，這樣就代表成功啦！</p>
+<h2 id="建立-project-並上傳到-github">建立 Project 並上傳到 GitHub</h2>
+<p>接下來利用建立一個新專案來介紹一些 Git 的基本指令。</p>
+<p>首先先到桌面或隨便一個資料夾，建立一個 test 資料夾，然後在資料夾裡面隨便新增一個文字檔案，<del>公堂之上假設一下</del> 假設就叫 <code>first-post.md</code> (md 檔案是 Markdown 語言的檔案，內容可以被 GitHub 直接讀取並且辨識)，接著請在 test 資料夾內的空白處點右鍵，選 Git Bash Here，就會打開 Git Bash，並預設路徑就是 test 資料夾。</p>
+<p>如果是 MacOS 使用者，也請建立一個資料夾，並同樣新增一個 <code>first-post.md</code> 文字檔案，請對該資料夾按一下右鍵或 <code>control</code> 鍵出現選單，再按著 <code>option</code> 鍵，會出現 <code>拷貝「資料夾名稱」作為路徑名稱</code> 的選項，選擇之後就會複製資料夾路徑。然後開啟終端機輸入 <code>cd</code>，然後空一格貼上剛才複製的路徑，以移動操作位置到該資料夾，很重要，請一定要做。</p>
+<div class="highlight"><pre tabindex="0" style="color:#e7e9db;background-color:#2f1e2e;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>cd &lt;資料夾路徑&gt;
+</span></span></code></pre></div><p>接著就要開始操作 Git 指令，如果覺得我講的不清楚，可以回去看寫點科普那兩篇文章的觀念跟操作。</p>
+<p>這邊還是記錄一下我的作法。請大家，不論是 Windows 或 MacOS 使用者，都輸入以下命令：</p>
+<pre tabindex="0"><code>git init
+</code></pre><p>init 就是 initialize，這代表將這個資料夾變成一個 Repository，Git 就會開始記錄這個 Repo 裡面的所有改動跟版本。然後以下指令會新增全部 test 資料夾裡面的檔案到 staging 的狀態。</p>
+<pre tabindex="0"><code>git add .
+</code></pre><p>staging 好了之後，再用下面這個指令來 commit 到本機的 Repo，這些 commit 到 Repo 的東西才能被 push 到 GitHub上。</p>
+<pre tabindex="0"><code>git commit -m &#34;說明操作了什麼的一段文字&#34;
+</code></pre><p>這過程中隨時都可以用 <code>git status</code> 指令來查看你處於哪個階段。</p>
+<p>最後要 push 到 GitHub 之前，請先到 GitHub 上建立一個名稱為 test 的 Repository，建立好之後，請點中間 SSH 那個按鈕，後面會生成該 Repo 的 SSH url，把那個網址複製下來。若建立 Repo 的時候有勾 README 選項，則按右邊綠色 Clone or download 按鈕，點藍色 Use SSH 連結切換到 Clone with SSH，再複製 url。</p>
+<p>最後一樣到剛才的 Git Bash 或終端機裡面輸入以下命令，我們要將 commit push 到 GitHub 上。過程中可能會要輸入 SSH 密碼。</p>
+<pre tabindex="0"><code>git remote add origin git@github.com:GitHub使用者名稱/test.git  
+git push origin master
+</code></pre><p>第一句是要為這個專案加上 GitHub 上面 Repo 的位置，後面要 push，Git 才知道要 push 到哪裡。第二句話就是把已經 commit 的版本 push 到 GitHub 對應 Repo 的 master 分支上。master 也就是主要版本。</p>
+<p>這樣就完成建立一個新 Project 並上傳到 GitHub 啦！</p>
+<h2 id="push-修改過的-project-到-github">push 修改過的 Project 到 GitHub</h2>
+<p>最後，如果之後要修改剛建立的那個 Project 資料夾裡的任何內容，想要再把變更 push 到 GitHub 上，請在 test 資料夾打開 Git Bash，或終端機照前面說明移動位置到該資料夾下，輸入以下指令：</p>
+<pre tabindex="0"><code>git add .  
+git commit -m &#34;說明文字&#34;  
+git push origin master
+</code></pre><p>就很簡單的搞定啦！</p>
+<p>至於 branch 那種東西，等我搞懂再來新增吧。今天先這樣~~</p>
+
+                    
+                    <HR width="100%" id="EOF">
+		    <p style="color:#777;">Last modified on 2017-09-14</p>
+                    
+                </div>
+            </div>
+            
+            
+            <nav class="post-pagination">
+
+                
+                <a class="newer-posts" href="https://idontwannarock.github.io/tech_blog/2017/09/click_click_boom/">
+			Next<br>1st Practice: Click Click Boom
+                </a>
+                
+                
+                
+                <a class="older-posts" href="https://idontwannarock.github.io/tech_blog/2017/09/login_signup_function_1/">
+			Previous<br>實作簡單登入會員系統 (1)
+                </a>
+                
+            </nav>
+            <div class="post-comment-wrapper">
+                
+<div id="disqus_thread"></div>
+<script>
+    
+
+    var disqus_config = function () {
+        
+        this.page.url = 'https:\/\/idontwannarock.github.io\/tech_blog\/2017\/09\/git_and_github_basic\/';  
+        
+        
+        this.page.identifier = 'https:\/\/idontwannarock.github.io\/tech_blog\/2017\/09\/git_and_github_basic\/'; 
+    };
+    (function() {
+        var d = document, s = d.createElement('script');
+        s.src = 'https://howard-tech-blog.disqus.com/embed.js';
+        s.setAttribute('data-timestamp', +new Date());
+        (d.head || d.body).appendChild(s);
+    })();
+</script>
+<noscript> Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript" rel="nofollow"> comments powered by Disqus.  </a> </noscript>
+
+
+
+
+
+
+
+
+
+
+
+            </div>
+        </div>
+    </div>
+
+
+                    </div>
+            </div><div id="single-column-footer">
+Hugo Theme <a href="https://github.com/amazingrise/hugo-theme-diary">Diary</a> by <a href="https://amazingrise.net">Rise</a>
+<br>
+Ported from <a href="https://mak1t0.cc/" target="_blank" rel="noreferrer noopener">Makito</a>'s <a href="https://github.com/SumiMakito/hexo-theme-journal/" target="_blank" rel="noreferrer noopener">Journal.</a> <br>
+<br>
+
+&copy;
+	
+	This website by Howard Wang is licensed under a Creative Common Attribution-ShareAlike 4.0 International License.
+	
+</div>
+            </div>
+    
+    <script src="https://idontwannarock.github.io/tech_blog/js/journal.js"></script>
+    </body>
+</html>

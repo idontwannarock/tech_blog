@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>rbac on Howard Tech Note</title>
+    <link>https://idontwannarock.github.io/tech_blog/tags/rbac/</link>
+    <description>Recent content in rbac on Howard Tech Note</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-us</language>
+    <copyright>This website by Howard Wang is licensed under a Creative Common Attribution-ShareAlike 4.0 International License.</copyright>
+    <lastBuildDate>Thu, 30 May 2019 15:33:07 +0800</lastBuildDate><atom:link href="https://idontwannarock.github.io/tech_blog/tags/rbac/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Spring Security 整合 RBAC</title>
+      <link>https://idontwannarock.github.io/tech_blog/2019/05/spring_security_rbac/</link>
+      <pubDate>Thu, 30 May 2019 15:33:07 +0800</pubDate>
+      
+      <guid>https://idontwannarock.github.io/tech_blog/2019/05/spring_security_rbac/</guid>
+      <description>目前比較主流的 Role-based Access Control, RBAC 算是比較成熟且彈性的權限架構，若要在 Spring Security 實作 RBAC 並搭配 JWT 或 OAuth 2.0，大概要探討兩個問題
+ 是否值得為了減少查詢資料源的次數，而將角色或權限直接置入 JWT 或 Authorization Server 回傳的 token 是否採取 Spring Security 原生只使用最細粒度的權限來進行存取控制  關於第一個問題，目前的思考點大概就是考量系統的併發度跟使用者總數
+如果需要高併發，那自然希望盡量減少查詢資料的次數或資料量，盡量避免同時大量消耗 DB 資源；相反的，如果不需要高併發，那每次驗證都重新取得角色及權限資料也沒關係
+使用者數量的考量也是類似，如果每次查詢的成本太高，則盡量減少查詢的次數
+而第二個問題，則是要考量實際的業務場景
+如果角色跟權限很大量且複雜，或可能要考慮角色分層甚至使用者群組，或不同 Domain 有不同的權限邏輯，則可能用 Spring Security 原生方式會不敷使用，相對如果角色權限結構簡單，則直接使用原生方式可能成本較低
+所以以下探討主要專注於使用 Spring Security 提供的自訂空間來實作較為複雜的存取控制
+Spring Security 權限架構 首先要探討 Spring Security 原生提供的權限架構
+ GrantedAuthority: 可以將每個 GrantedAuthority 想成是個別的 privilege，所以在 Spring Security 中，authority 就是 privilege 的概念 Role: 在 Spring Security 中為了保持彈性，Role 可以當作 Authority 也可以當作一組 Authority 的組合  Role as Authority: 直接把 Role 當成一種 Authority 的情況，就是將 Role 當作一個有 ROLE_ 前綴的字串，這種情況下 Role 跟 Authority 就只是語意上的差別 Role as Container: Role 可以包含一組 Authority，Spring Security 在這個概念上沒有提供太多指引說明，需要自行實作     Granted Authority Versus Role in Spring Security</description>
+    </item>
+    
+  </channel>
+</rss>
