@@ -5,7 +5,7 @@ title = "Howard Tech Note"
 copyright = "This website by Howard Wang is licensed under a Creative Common Attribution-ShareAlike 4.0 International License."
 license = "CC BY 4.0"
 licenseURL = "https://creativecommons.org/licenses/by-sa/4.0/"
-theme = "diary-fork"
+theme = "diary"
 canonifyURLs = true
 
 googleAnalytics = "UA-106499565-1"
