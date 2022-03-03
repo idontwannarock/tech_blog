@@ -46,14 +46,15 @@ weight = 2
 url = "/tags"
 name = "Tags"
 weight = 3
-[[menu.main]]
-url = "/works"
-name = "My Works"
-weight = 4
+#[[menu.main]]
+#url = "/works"
+#name = "My Works"
+#sweight = 4
 [[menu.main]]
 url = "/about"
 name = "About"
 weight = 5
+[[menu.main]]
 url = "/index.xml"
 name = "RSS Feed"
 weight = 6
