@@ -4,7 +4,7 @@ slug: "spring_api_version_with_swagger_security"
 date: 2019-09-19T15:53:36+08:00
 description: "在 Spring Boot Web 專案實作動態 API 版本控制，並能兼容 Swagger 及 Spring Security"
 tags: ["java", "spring-boot", "spring-security", "swagger", "api-versioning"]
-categories: application
+categories: "implementation"
 featured_image: "https://res.cloudinary.com/dcvgho2zc/image/upload/v1568911044/Tech%20Blog/icon-spring-framework_lskrrp.svg"
 draft: false
 comment: true
