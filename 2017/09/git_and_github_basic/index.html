@@ -38,7 +38,7 @@ if (!doNotTrack) {
 </script>
 
 
-<link type="text/css" rel="stylesheet" href="https://idontwannarock.github.io/tech_blog/vendor/css/bootstrap.min.css">
+
 
 
   
@@ -48,24 +48,24 @@ if (!doNotTrack) {
 
 
 
-<link rel="stylesheet" href="https://idontwannarock.github.io/tech_blog/scss/journal.min.f4a8de07567a2d29619e0711662ef6251e3e59b642079f99490f654abf89a3c4.css" integrity="sha256-9KjeB1Z6LSlhngcRZi72JR4&#43;WbZCB5&#43;ZSQ9lSr&#43;Jo8Q=" media="screen">
+<link rel="stylesheet" href="https://idontwannarock.github.io/tech_blog/scss/journal.min.c5d92f380bf10f6849c7ac487c7df2b22c081e0851e5339224f1ae29210b20d2.css" integrity="sha256-xdkvOAvxD2hJx6xIfH3ysiwIHghR5TOSJPGuKSELINI=" media="screen">
 
 
 
-<link rel="stylesheet" href="https://idontwannarock.github.io/tech_blog/scss/dark-mode.min.eeb8040aa9333250b7fec770f950bfe8ba9b18a5eeeaf2dfef61d84d3956f625.css" integrity="sha256-7rgECqkzMlC3/sdw&#43;VC/6LqbGKXu6vLf72HYTTlW9iU=" media="screen">
-
-
-<script src="https://idontwannarock.github.io/tech_blog/vendor/js/loadCSS.js"></script>
-<script>
-  loadCSS("https://fonts.googleapis.com/css?family=Fira+Mono|Material+Icons");
-</script>
+<link rel="stylesheet" href="https://idontwannarock.github.io/tech_blog/scss/dark-mode.min.9f8d8c2df9285089d141edd4a50cb7506c7948e6ab79a29968dced1bd0ab7d22.css" integrity="sha256-n42MLfkoUInRQe3UpQy3UGx5SOareaKZaNztG9CrfSI=" media="screen">
 
 
 
 
+      <script src="https://idontwannarock.github.io/tech_blog/js/toc.js"></script>
+    
+    <link type="text/css" rel="stylesheet" href="https://idontwannarock.github.io/tech_blog/vendor/css/bootstrap.min.css"><link rel="stylesheet"
+          href="https://fonts.googleapis.com/css?family=Material+Icons">
 
 
-  <script src="https://idontwannarock.github.io/tech_blog/js/toc.js"></script>
+
+
+
 
 
 
@@ -157,7 +157,7 @@ if (!doNotTrack) {
 
     <div class="nav-footer">
         
-Hugo Theme <a href="https://github.com/amazingrise/hugo-theme-diary">Diary</a> by <a href="https://amazingrise.net">Rise</a>
+Hugo Theme <a href="https://github.com/amazingrise/hugo-theme-diary">Diary</a> by <a href="https://risehere.net/">Rise</a>
 <br>
 Ported from <a href="https://mak1t0.cc/" target="_blank" rel="noreferrer noopener">Makito</a>'s <a href="https://github.com/SumiMakito/hexo-theme-journal/" target="_blank" rel="noreferrer noopener">Journal.</a> <br>
 <br>
@@ -825,24 +825,24 @@ Ported from <a href="https://mak1t0.cc/" target="_blank" rel="noreferrer noopene
 <pre tabindex="0"><code>git config --global user.name &#34;GitHub username&#34;  
 git config --global user.email &#34;GitHub email&#34;
 </code></pre><p>接著你可以輸入以下指令來檢查資訊是否有輸入正確。</p>
-<div class="highlight"><pre tabindex="0" style="color:#e7e9db;background-color:#2f1e2e;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>cat ~/.gitconfig
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>cat ~/.gitconfig
 </span></span></code></pre></div><h2 id="建立-ssh-key-並增加到-github">建立 SSH Key 並增加到 GitHub</h2>
 <p>SSH Key 就像一個鑰匙，每一台電腦、筆電都會生成一個獨一無二的 SSH Key，然後我們上自己的 GitHub 去登記這個鑰匙，這樣以後我們用電腦或筆電上傳東西到 GitHub 時，電腦或筆電就可以用這個鑰匙，以及前面設定的 Git 識別資料去開啟我們的 GitHub 帳號並把東西上傳上去。</p>
 <p>就跟我們要去銀行存錢，要提供身分證 (Git 識別資料) 跟密碼 (SSH Key) 給銀行一樣。</p>
 <p>要生成一個 SSH Key，一樣在之前打開的 Git Bash 或終端機輸入以下指令：</p>
-<div class="highlight"><pre tabindex="0" style="color:#e7e9db;background-color:#2f1e2e;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>ssh-keygen -t rsa -C <span style="color:#48b685">&#34;GitHub帳號的 email&#34;</span>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>ssh-keygen -t rsa -C <span style="color:#f1fa8c">&#34;GitHub帳號的 email&#34;</span>
 </span></span></code></pre></div><p>會出現以下這行，設定儲存 SSH Key 的位置，使用預設的就好，所以直接按 Enter。</p>
 <pre tabindex="0"><code>Enter file in which to save the key (/Users/使用者名稱/.ssh/id_rsa): [Press enter]
 </code></pre><p>如果你以前有設定過 SSH Key，它會出現這行 <code>/Users/you/.ssh/id_rsa already exists. Overwrite (y/n)?</code>，建議直接打 <code>yes</code> 或 <code>y</code> 來重新操作以確保正確。接著會出現以下這行來問你是不是要為 SSH Key 設定一個密碼，要就輸入，並且會需要再輸入一次作確認，不要就直接 Enter。</p>
 <pre tabindex="0"><code>Enter passphrase (empty for no passphrase): [Type a passphrase]
 </code></pre><p>然後他就會顯示一大段文字，表示 SSH Key 產生成功，接著我們把 SSH Key 加到 ssh-agent 來免除每次要連接登入 GitHub 都還要再輸入一次 SSH Key 的密碼。請先輸入以下指令：</p>
-<div class="highlight"><pre tabindex="0" style="color:#e7e9db;background-color:#2f1e2e;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>eval <span style="color:#815ba4">$(</span>ssh-agent -s<span style="color:#815ba4">)</span>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span><span style="color:#8be9fd;font-style:italic">eval</span> <span style="color:#ff79c6">$(</span>ssh-agent -s<span style="color:#ff79c6">)</span>
 </span></span></code></pre></div><p>接著會出現這行 <code>Agent pid 8492</code>，數字每個人都不一樣，這沒關係。接著輸入以下這行，可能會需要重新輸入一次 SSH Key 的密碼：</p>
-<div class="highlight"><pre tabindex="0" style="color:#e7e9db;background-color:#2f1e2e;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>ssh-add ~/.ssh/id_rsa
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>ssh-add ~/.ssh/id_rsa
 </span></span></code></pre></div><p>如果出現 <code>Identity added</code> 這行字就表示成功了。</p>
 <p>再來需要把 SSH Key 加入到自己的 GitHub 帳號。</p>
 <p>首先在同樣的 Git Bash 畫面輸入以下這行，將 SSH Key 複製到剪貼簿裡面，就類似平常按 <code>Ctrl</code>+<code>C</code> 那樣複製。</p>
-<div class="highlight"><pre tabindex="0" style="color:#e7e9db;background-color:#2f1e2e;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>clip &lt; ~/.ssh/id_rsa.pub
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>clip &lt; ~/.ssh/id_rsa.pub
 </span></span></code></pre></div><p>如果是 Mac 使用者，請到 <code>/使用者名稱/.ssh/</code> 這個資料夾，若找不到請調整隱藏檔的設定，然後用文字編輯打開 <code>id_rsa.pub</code> 這個檔案，講整個檔案內容複製起來。</p>
 <p>然後用瀏覽器進入到你自己的 GitHub 帳號，點最右上角的三角形，選 Settings，然後選左邊列表的 SSH and GPG keys，點綠色的 New SSH key，然後在 Key 下面的欄位直接 <code>Ctrl</code>+<code>V</code> 或 <code>command</code>+<code>V</code> 把 SSH Key 貼上，在 Title 欄位輸入你之後能辨識這個 SSH Key 是代表哪一台電腦或筆電的名稱，最後點綠色的 Add SSH key 按鈕就添加完成啦！</p>
 <p>然後作個小測試，在同樣的 Git Bash 或終端機輸入 <code>ssh -T git@github.com</code>，可能會看到類似以下的一段文字：</p>
@@ -856,7 +856,7 @@ Are you sure you want to continue connecting (yes/no)?
 <p>接下來利用建立一個新專案來介紹一些 Git 的基本指令。</p>
 <p>首先先到桌面或隨便一個資料夾，建立一個 test 資料夾，然後在資料夾裡面隨便新增一個文字檔案，<del>公堂之上假設一下</del> 假設就叫 <code>first-post.md</code> (md 檔案是 Markdown 語言的檔案，內容可以被 GitHub 直接讀取並且辨識)，接著請在 test 資料夾內的空白處點右鍵，選 Git Bash Here，就會打開 Git Bash，並預設路徑就是 test 資料夾。</p>
 <p>如果是 MacOS 使用者，也請建立一個資料夾，並同樣新增一個 <code>first-post.md</code> 文字檔案，請對該資料夾按一下右鍵或 <code>control</code> 鍵出現選單，再按著 <code>option</code> 鍵，會出現 <code>拷貝「資料夾名稱」作為路徑名稱</code> 的選項，選擇之後就會複製資料夾路徑。然後開啟終端機輸入 <code>cd</code>，然後空一格貼上剛才複製的路徑，以移動操作位置到該資料夾，很重要，請一定要做。</p>
-<div class="highlight"><pre tabindex="0" style="color:#e7e9db;background-color:#2f1e2e;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>cd &lt;資料夾路徑&gt;
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span><span style="color:#8be9fd;font-style:italic">cd</span> &lt;資料夾路徑&gt;
 </span></span></code></pre></div><p>接著就要開始操作 Git 指令，如果覺得我講的不清楚，可以回去看寫點科普那兩篇文章的觀念跟操作。</p>
 <p>這邊還是記錄一下我的作法。請大家，不論是 Windows 或 MacOS 使用者，都輸入以下命令：</p>
 <pre tabindex="0"><code>git init
@@ -909,10 +909,10 @@ git push origin master
 
     var disqus_config = function () {
         
-        this.page.url = 'https:\/\/idontwannarock.github.io\/tech_blog\/2017\/09\/git_and_github_basic\/';  
+        this.page.url = '\/2017\/09\/git_and_github_basic\/';  
         
         
-        this.page.identifier = 'https:\/\/idontwannarock.github.io\/tech_blog\/2017\/09\/git_and_github_basic\/'; 
+        this.page.identifier = '\/2017\/09\/git_and_github_basic\/'; 
     };
     (function() {
         var d = document, s = d.createElement('script');
@@ -940,7 +940,7 @@ git push origin master
 
                     </div>
             </div><div id="single-column-footer">
-Hugo Theme <a href="https://github.com/amazingrise/hugo-theme-diary">Diary</a> by <a href="https://amazingrise.net">Rise</a>
+Hugo Theme <a href="https://github.com/amazingrise/hugo-theme-diary">Diary</a> by <a href="https://risehere.net/">Rise</a>
 <br>
 Ported from <a href="https://mak1t0.cc/" target="_blank" rel="noreferrer noopener">Makito</a>'s <a href="https://github.com/SumiMakito/hexo-theme-journal/" target="_blank" rel="noreferrer noopener">Journal.</a> <br>
 <br>
@@ -952,6 +952,5 @@ Ported from <a href="https://mak1t0.cc/" target="_blank" rel="noreferrer noopene
 </div>
             </div>
     
-    <script src="https://idontwannarock.github.io/tech_blog/js/journal.js"></script>
-    </body>
+    <script src="https://idontwannarock.github.io/tech_blog/js/journal.js"></script></body>
 </html>

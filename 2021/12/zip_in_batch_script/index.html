@@ -38,7 +38,7 @@ if (!doNotTrack) {
 </script>
 
 
-<link type="text/css" rel="stylesheet" href="https://idontwannarock.github.io/tech_blog/vendor/css/bootstrap.min.css">
+
 
 
   
@@ -48,24 +48,24 @@ if (!doNotTrack) {
 
 
 
-<link rel="stylesheet" href="https://idontwannarock.github.io/tech_blog/scss/journal.min.f4a8de07567a2d29619e0711662ef6251e3e59b642079f99490f654abf89a3c4.css" integrity="sha256-9KjeB1Z6LSlhngcRZi72JR4&#43;WbZCB5&#43;ZSQ9lSr&#43;Jo8Q=" media="screen">
+<link rel="stylesheet" href="https://idontwannarock.github.io/tech_blog/scss/journal.min.c5d92f380bf10f6849c7ac487c7df2b22c081e0851e5339224f1ae29210b20d2.css" integrity="sha256-xdkvOAvxD2hJx6xIfH3ysiwIHghR5TOSJPGuKSELINI=" media="screen">
 
 
 
-<link rel="stylesheet" href="https://idontwannarock.github.io/tech_blog/scss/dark-mode.min.eeb8040aa9333250b7fec770f950bfe8ba9b18a5eeeaf2dfef61d84d3956f625.css" integrity="sha256-7rgECqkzMlC3/sdw&#43;VC/6LqbGKXu6vLf72HYTTlW9iU=" media="screen">
-
-
-<script src="https://idontwannarock.github.io/tech_blog/vendor/js/loadCSS.js"></script>
-<script>
-  loadCSS("https://fonts.googleapis.com/css?family=Fira+Mono|Material+Icons");
-</script>
+<link rel="stylesheet" href="https://idontwannarock.github.io/tech_blog/scss/dark-mode.min.9f8d8c2df9285089d141edd4a50cb7506c7948e6ab79a29968dced1bd0ab7d22.css" integrity="sha256-n42MLfkoUInRQe3UpQy3UGx5SOareaKZaNztG9CrfSI=" media="screen">
 
 
 
 
+      <script src="https://idontwannarock.github.io/tech_blog/js/toc.js"></script>
+    
+    <link type="text/css" rel="stylesheet" href="https://idontwannarock.github.io/tech_blog/vendor/css/bootstrap.min.css"><link rel="stylesheet"
+          href="https://fonts.googleapis.com/css?family=Material+Icons">
 
 
-  <script src="https://idontwannarock.github.io/tech_blog/js/toc.js"></script>
+
+
+
 
 
 
@@ -157,7 +157,7 @@ if (!doNotTrack) {
 
     <div class="nav-footer">
         
-Hugo Theme <a href="https://github.com/amazingrise/hugo-theme-diary">Diary</a> by <a href="https://amazingrise.net">Rise</a>
+Hugo Theme <a href="https://github.com/amazingrise/hugo-theme-diary">Diary</a> by <a href="https://risehere.net/">Rise</a>
 <br>
 Ported from <a href="https://mak1t0.cc/" target="_blank" rel="noreferrer noopener">Makito</a>'s <a href="https://github.com/SumiMakito/hexo-theme-journal/" target="_blank" rel="noreferrer noopener">Journal.</a> <br>
 <br>
@@ -501,20 +501,20 @@ Ported from <a href="https://mak1t0.cc/" target="_blank" rel="noreferrer noopene
 <h2 id="tar">Tar</h2>
 <p>研究了一下，很興奮的發現 tar 在 command prompt 跟 powershell 都可以用，那代表我在 batch 檔裡面使用沒問題ＲＲＲ</p>
 <p>所以可以這樣用</p>
-<div class="highlight"><pre tabindex="0" style="color:#e7e9db;background-color:#2f1e2e;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-batch" data-lang="batch"><span style="display:flex;"><span>:<span style="color:#776e71">: zip</span>
-</span></span><span style="display:flex;"><span>tar -cvzf <span style="color:#48b685">&#34;path and name to archive.tar&#34;</span> <span style="color:#48b685">&#34;path to folder to compress&#34;</span>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-batch" data-lang="batch"><span style="display:flex;"><span>:<span style="color:#6272a4">: zip</span>
+</span></span><span style="display:flex;"><span>tar -cvzf <span style="color:#f1fa8c">&#34;path and name to archive.tar&#34;</span> <span style="color:#f1fa8c">&#34;path to folder to compress&#34;</span>
 </span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span>:<span style="color:#776e71">: unzip</span>
-</span></span><span style="display:flex;"><span>tar -xvzf <span style="color:#48b685">&#34;path and name to archive.tar&#34;</span>
+</span></span><span style="display:flex;"><span>:<span style="color:#6272a4">: unzip</span>
+</span></span><span style="display:flex;"><span>tar -xvzf <span style="color:#f1fa8c">&#34;path and name to archive.tar&#34;</span>
 </span></span></code></pre></div><h2 id="microsoftpowershellarchive-module">Microsoft.Powershell.Archive Module</h2>
 <p>很可惜，這個方法有一個小小的問題</p>
 <p>tar 基本上是從 Windows 10 或 Windows Server 2019 才開始支援，很不巧，我手上有個環境是 Windows Server 2016&hellip;</p>
 <p>基於可以用原生就絕不多安裝東西的自虐原則，好險又找到了另一個方法，powershell 有個 archive 的模組可以用！</p>
-<div class="highlight"><pre tabindex="0" style="color:#e7e9db;background-color:#2f1e2e;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-powershell" data-lang="powershell"><span style="display:flex;"><span><span style="color:#776e71"># zip</span>
-</span></span><span style="display:flex;"><span>Compress-Archive -Path <span style="color:#48b685">&#34;path to folder to compress&#34;</span> -DestinationPath <span style="color:#48b685">&#34;path and name to archive.zip&#34;</span>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-powershell" data-lang="powershell"><span style="display:flex;"><span><span style="color:#6272a4"># zip</span>
+</span></span><span style="display:flex;"><span><span style="color:#8be9fd;font-style:italic">Compress-Archive</span> -Path <span style="color:#f1fa8c">&#34;path to folder to compress&#34;</span> -DestinationPath <span style="color:#f1fa8c">&#34;path and name to archive.zip&#34;</span>
 </span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span><span style="color:#776e71"># unzip</span>
-</span></span><span style="display:flex;"><span>Expand-Archive -Path <span style="color:#48b685">&#34;path and name to archive.zip&#34;</span> -DestinationPath <span style="color:#48b685">&#34;path to unzip archive.zip&#34;</span>
+</span></span><span style="display:flex;"><span><span style="color:#6272a4"># unzip</span>
+</span></span><span style="display:flex;"><span><span style="color:#8be9fd;font-style:italic">Expand-Archive</span> -Path <span style="color:#f1fa8c">&#34;path and name to archive.zip&#34;</span> -DestinationPath <span style="color:#f1fa8c">&#34;path to unzip archive.zip&#34;</span>
 </span></span></code></pre></div><h2 id="參考連結">參考連結</h2>
 <ul>
 <li><a href="https://techcommunity.microsoft.com/t5/containers/tar-and-curl-come-to-windows/ba-p/382409">Tar and Curl Come to Windows!</a></li>
@@ -551,10 +551,10 @@ Ported from <a href="https://mak1t0.cc/" target="_blank" rel="noreferrer noopene
 
     var disqus_config = function () {
         
-        this.page.url = 'https:\/\/idontwannarock.github.io\/tech_blog\/2021\/12\/zip_in_batch_script\/';  
+        this.page.url = '\/2021\/12\/zip_in_batch_script\/';  
         
         
-        this.page.identifier = 'https:\/\/idontwannarock.github.io\/tech_blog\/2021\/12\/zip_in_batch_script\/'; 
+        this.page.identifier = '\/2021\/12\/zip_in_batch_script\/'; 
     };
     (function() {
         var d = document, s = d.createElement('script');
@@ -582,7 +582,7 @@ Ported from <a href="https://mak1t0.cc/" target="_blank" rel="noreferrer noopene
 
                     </div>
             </div><div id="single-column-footer">
-Hugo Theme <a href="https://github.com/amazingrise/hugo-theme-diary">Diary</a> by <a href="https://amazingrise.net">Rise</a>
+Hugo Theme <a href="https://github.com/amazingrise/hugo-theme-diary">Diary</a> by <a href="https://risehere.net/">Rise</a>
 <br>
 Ported from <a href="https://mak1t0.cc/" target="_blank" rel="noreferrer noopener">Makito</a>'s <a href="https://github.com/SumiMakito/hexo-theme-journal/" target="_blank" rel="noreferrer noopener">Journal.</a> <br>
 <br>
@@ -594,6 +594,5 @@ Ported from <a href="https://mak1t0.cc/" target="_blank" rel="noreferrer noopene
 </div>
             </div>
     
-    <script src="https://idontwannarock.github.io/tech_blog/js/journal.js"></script>
-    </body>
+    <script src="https://idontwannarock.github.io/tech_blog/js/journal.js"></script></body>
 </html>

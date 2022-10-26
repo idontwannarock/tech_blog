@@ -1,3 +1,4 @@
+<?xml-stylesheet href="/rss.xsl" type="text/xsl"?>
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
     <title>Howard Tech Note</title>
@@ -81,7 +82,7 @@
 &lt;p&gt;當然安裝 Hugo 有幾種方式，&lt;a href=&#34;https://gohugo.io/getting-started/installing&#34;&gt;官方說明&lt;/a&gt;中說可以直接下載 Binary 檔然後自己設定變數，MacOS 系統推薦用 Homebrew 做安裝，Windows 系統推薦用 Chocolatey 或 Scoop&lt;/p&gt;
 &lt;p&gt;我是推薦用 Homebrew 或 Chocolatey 這種管理工具，這樣你就不用自己設定變數，安裝跟解安裝都很方便，要升級也很方便&lt;/p&gt;
 &lt;p&gt;Hugo 的操作都在命令列執行，所以MacOS 請打開 Terminal 終端機或 iTerm2 這種命令列工具，Windows 開 Powershell，輸入以下命令做安裝&lt;/p&gt;
-&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#e7e9db;background-color:#2f1e2e;-moz-tab-size:4;-o-tab-size:4;tab-size:4;&#34;&gt;&lt;code class=&#34;language-bash&#34; data-lang=&#34;bash&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;// MacOs
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;&#34;&gt;&lt;code class=&#34;language-bash&#34; data-lang=&#34;bash&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;// MacOs
 &lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;brew install hugo
 &lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;
 &lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;// Windows
@@ -89,7 +90,7 @@
 &lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;// or
 &lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;scoop install hugo
 &lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;裝完之後，輸入以下命令檢查有沒有裝好&lt;/p&gt;
-&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#e7e9db;background-color:#2f1e2e;-moz-tab-size:4;-o-tab-size:4;tab-size:4;&#34;&gt;&lt;code class=&#34;language-bash&#34; data-lang=&#34;bash&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;hugo version
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;&#34;&gt;&lt;code class=&#34;language-bash&#34; data-lang=&#34;bash&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;hugo version
 &lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;應該會出現類似以下這行訊息，有出現就 ok 啦&lt;/p&gt;
 &lt;blockquote&gt;
 &lt;p&gt;Hugo Static Site Generator v0.55.5-A83256B9 windows/amd64 BuildDate: 2019-05-02T13:04:07Z&lt;/p&gt;
@@ -100,9 +101,9 @@
 &lt;p&gt;要回到上一層資料夾則用 &lt;code&gt;cd..&lt;/code&gt;&lt;/p&gt;
 &lt;p&gt;移動的過程中，如果你不清楚目前資料夾底下有哪些資料夾跟檔案，或不知道資料夾完整名稱，可以簡單用 &lt;code&gt;ls&lt;/code&gt; 命令來列出資料夾跟檔案名稱列表&lt;/p&gt;
 &lt;p&gt;如果要建立資料夾，可用以下命令&lt;/p&gt;
-&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#e7e9db;background-color:#2f1e2e;-moz-tab-size:4;-o-tab-size:4;tab-size:4;&#34;&gt;&lt;code class=&#34;language-bash&#34; data-lang=&#34;bash&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;mkdir &amp;lt;資料夾名稱&amp;gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;&#34;&gt;&lt;code class=&#34;language-bash&#34; data-lang=&#34;bash&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;mkdir &amp;lt;資料夾名稱&amp;gt;
 &lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;移動到目的地資料夾後，再輸入以下命令&lt;/p&gt;
-&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#e7e9db;background-color:#2f1e2e;-moz-tab-size:4;-o-tab-size:4;tab-size:4;&#34;&gt;&lt;code class=&#34;language-bash&#34; data-lang=&#34;bash&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;hugo new site &amp;lt;網站名稱&amp;gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;&#34;&gt;&lt;code class=&#34;language-bash&#34; data-lang=&#34;bash&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;hugo new site &amp;lt;網站名稱&amp;gt;
 &lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;Hugo 預設會直接用你給的網站名稱，假設就叫 test，在當前目錄底下建立 test 資料夾，並將網站生成在該資料夾中&lt;/p&gt;
 &lt;h1 id=&#34;安裝佈景主題&#34;&gt;安裝佈景主題&lt;/h1&gt;
 &lt;p&gt;再來講一下不是必須但可以浪費很多生命的安裝佈景主題&lt;/p&gt;
@@ -113,22 +114,22 @@
 &lt;p&gt;然後在剛建立的 Hugo 網站 test 資料夾中建立一個 themes 資料夾，然後將主題包解壓縮到 themes 資料夾，應該會產生一個 aether-master 資料夾，裡面是一堆不知道在幹嘛的檔案&lt;/p&gt;
 &lt;p&gt;不要緊張，先回到 test 資料夾，打開那個唯一的檔案 config.toml，這是個純文字檔，所以看你是要用筆記本、WordPad 或隨便什麼文字編輯器打開都可以&lt;/p&gt;
 &lt;p&gt;裡面目前大概只有這樣&lt;/p&gt;
-&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#e7e9db;background-color:#2f1e2e;-moz-tab-size:4;-o-tab-size:4;tab-size:4;&#34;&gt;&lt;code class=&#34;language-toml&#34; data-lang=&#34;toml&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#06b6ef&#34;&gt;baseURL&lt;/span&gt; = &lt;span style=&#34;color:#48b685&#34;&gt;&amp;#34;http://example.org/&amp;#34;&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#06b6ef&#34;&gt;languageCode&lt;/span&gt; = &lt;span style=&#34;color:#48b685&#34;&gt;&amp;#34;en-us&amp;#34;&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#06b6ef&#34;&gt;title&lt;/span&gt; = &lt;span style=&#34;color:#48b685&#34;&gt;&amp;#34;My New Hugo Site&amp;#34;&lt;/span&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;&#34;&gt;&lt;code class=&#34;language-toml&#34; data-lang=&#34;toml&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;baseURL = &lt;span style=&#34;color:#f1fa8c&#34;&gt;&amp;#34;http://example.org/&amp;#34;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;languageCode = &lt;span style=&#34;color:#f1fa8c&#34;&gt;&amp;#34;en-us&amp;#34;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;title = &lt;span style=&#34;color:#f1fa8c&#34;&gt;&amp;#34;My New Hugo Site&amp;#34;&lt;/span&gt;
 &lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;但我們應該起碼要將它填到這樣&lt;/p&gt;
-&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#e7e9db;background-color:#2f1e2e;-moz-tab-size:4;-o-tab-size:4;tab-size:4;&#34;&gt;&lt;code class=&#34;language-toml&#34; data-lang=&#34;toml&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#06b6ef&#34;&gt;baseURL&lt;/span&gt; = &lt;span style=&#34;color:#48b685&#34;&gt;&amp;#34;https://yourwebsitenamegoeshere.com/&amp;#34;&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#06b6ef&#34;&gt;languageCode&lt;/span&gt; = &lt;span style=&#34;color:#48b685&#34;&gt;&amp;#34;The language code for the language the website is written in&amp;#34;&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#06b6ef&#34;&gt;title&lt;/span&gt; = &lt;span style=&#34;color:#48b685&#34;&gt;&amp;#34;The website title that is used in each page title, displayed in the browser tab and search results&amp;#34;&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#06b6ef&#34;&gt;theme&lt;/span&gt; = &lt;span style=&#34;color:#48b685&#34;&gt;&amp;#34;aether&amp;#34;&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#06b6ef&#34;&gt;googleAnalytics&lt;/span&gt; = &lt;span style=&#34;color:#48b685&#34;&gt;&amp;#34;Your google analytics tracking ID - optional&amp;#34;&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#06b6ef&#34;&gt;disqusShortname&lt;/span&gt; = &lt;span style=&#34;color:#48b685&#34;&gt;&amp;#34;Your shortname for Disqus - optional&amp;#34;&lt;/span&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;&#34;&gt;&lt;code class=&#34;language-toml&#34; data-lang=&#34;toml&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;baseURL = &lt;span style=&#34;color:#f1fa8c&#34;&gt;&amp;#34;https://yourwebsitenamegoeshere.com/&amp;#34;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;languageCode = &lt;span style=&#34;color:#f1fa8c&#34;&gt;&amp;#34;The language code for the language the website is written in&amp;#34;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;title = &lt;span style=&#34;color:#f1fa8c&#34;&gt;&amp;#34;The website title that is used in each page title, displayed in the browser tab and search results&amp;#34;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;theme = &lt;span style=&#34;color:#f1fa8c&#34;&gt;&amp;#34;aether&amp;#34;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;googleAnalytics = &lt;span style=&#34;color:#f1fa8c&#34;&gt;&amp;#34;Your google analytics tracking ID - optional&amp;#34;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;disqusShortname = &lt;span style=&#34;color:#f1fa8c&#34;&gt;&amp;#34;Your shortname for Disqus - optional&amp;#34;&lt;/span&gt;
 &lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;[&lt;span style=&#34;color:#06b6ef&#34;&gt;params&lt;/span&gt;]
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#06b6ef&#34;&gt;brand&lt;/span&gt; = &lt;span style=&#34;color:#48b685&#34;&gt;&amp;#34;The name that is displayed in the top left of the website, consider it the website name&amp;#34;&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#06b6ef&#34;&gt;description&lt;/span&gt; = &lt;span style=&#34;color:#48b685&#34;&gt;&amp;#34;The website&amp;#39;s description&amp;#34;&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#06b6ef&#34;&gt;homeimg&lt;/span&gt; = &lt;span style=&#34;color:#48b685&#34;&gt;&amp;#34;URL to the image used for the home button at the bottom of each post - optional&amp;#34;&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#06b6ef&#34;&gt;bgimg&lt;/span&gt; = &lt;span style=&#34;color:#48b685&#34;&gt;&amp;#34;URL to the image used for the page background - optional&amp;#34;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;[params]
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;brand = &lt;span style=&#34;color:#f1fa8c&#34;&gt;&amp;#34;The name that is displayed in the top left of the website, consider it the website name&amp;#34;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;description = &lt;span style=&#34;color:#f1fa8c&#34;&gt;&amp;#34;The website&amp;#39;s description&amp;#34;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;homeimg = &lt;span style=&#34;color:#f1fa8c&#34;&gt;&amp;#34;URL to the image used for the home button at the bottom of each post - optional&amp;#34;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;bgimg = &lt;span style=&#34;color:#f1fa8c&#34;&gt;&amp;#34;URL to the image used for the page background - optional&amp;#34;&lt;/span&gt;
 &lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;其中有 &lt;code&gt;- optional&lt;/code&gt; 的選項都不是必填，像是 googleAnalytics 跟 disqusShortname；如果不想填，就在該行最左邊加一個 &lt;code&gt;#&lt;/code&gt;&lt;/p&gt;
 &lt;p&gt;簡單的大概是降&lt;/p&gt;
 &lt;p&gt;裝逼的做法首先你電腦要裝好 Git，什麼？你不會，那你裝什麼逼？&lt;/p&gt;
@@ -137,11 +138,11 @@
 &lt;p&gt;安裝佈景主題的流程就降&lt;/p&gt;
 &lt;h1 id=&#34;新增文章&#34;&gt;新增文章&lt;/h1&gt;
 &lt;p&gt;使用以下命令，可以生成一篇新的 Markdown 檔，裡面就可以撰寫你的部落格文章內容，但要記得利用 Markdown 語法，各種方便啊&lt;/p&gt;
-&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#e7e9db;background-color:#2f1e2e;-moz-tab-size:4;-o-tab-size:4;tab-size:4;&#34;&gt;&lt;code class=&#34;language-bash&#34; data-lang=&#34;bash&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;hugo new post/&amp;lt;文章檔案名稱&amp;gt;.md
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;&#34;&gt;&lt;code class=&#34;language-bash&#34; data-lang=&#34;bash&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;hugo new post/&amp;lt;文章檔案名稱&amp;gt;.md
 &lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;注意 &lt;code&gt;post/&lt;/code&gt; 不能省略，這是 aether 這個主題預設會掃描文章內容的資料夾，如果你放錯位置，那文章就白寫了好嗎&lt;/p&gt;
 &lt;h1 id=&#34;測試網站&#34;&gt;測試網站&lt;/h1&gt;
 &lt;p&gt;裝好主題也寫好文章以後，想看一下網站實際上長怎樣，就在命令列輸入以下命令&lt;/p&gt;
-&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#e7e9db;background-color:#2f1e2e;-moz-tab-size:4;-o-tab-size:4;tab-size:4;&#34;&gt;&lt;code class=&#34;language-bash&#34; data-lang=&#34;bash&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;hugo server -D
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;&#34;&gt;&lt;code class=&#34;language-bash&#34; data-lang=&#34;bash&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;hugo server -D
 &lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;然後隨便開一個瀏覽器，在網址列輸入 &lt;code&gt;http://localhost:1313/&lt;/code&gt; 就可以看到成果啦&lt;/p&gt;
 &lt;p&gt;測試完畢就按 Ctrl + C 結束&lt;/p&gt;
 &lt;h1 id=&#34;生成網站&#34;&gt;生成網站&lt;/h1&gt;
@@ -283,8 +284,8 @@
 &lt;p&gt;這主要分兩個部分，一是去掉頭尾空白，一是去掉字串中間空白。&lt;/p&gt;
 &lt;p&gt;去掉頭尾空白就用 &lt;code&gt;.trim()&lt;/code&gt;，去掉字串中間空白則可以用 &lt;code&gt;.replaceAll(&amp;quot; &amp;quot;, &amp;quot;&amp;quot;)&lt;/code&gt; 的方式簡單完成。&lt;/p&gt;
 &lt;p&gt;但用 &lt;code&gt;replaceAll()&lt;/code&gt; 方法有個小小的問題，就是萬一碰到的是空白字元，例如 &lt;code&gt;\t&lt;/code&gt;、&lt;code&gt;\r&lt;/code&gt; 這種就會有困難，所以必須要用正規表示式來去除，例如：&lt;/p&gt;
-&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#e7e9db;background-color:#2f1e2e;-moz-tab-size:4;-o-tab-size:4;tab-size:4;&#34;&gt;&lt;code class=&#34;language-java&#34; data-lang=&#34;java&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;String str &lt;span style=&#34;color:#5bc4bf&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color:#48b685&#34;&gt;&amp;#34;\t&amp;#34;&lt;/span&gt;&lt;span style=&#34;color:#5bc4bf&#34;&gt;;&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;str&lt;span style=&#34;color:#5bc4bf&#34;&gt;.&lt;/span&gt;&lt;span style=&#34;color:#06b6ef&#34;&gt;replaceAll&lt;/span&gt;&lt;span style=&#34;color:#5bc4bf&#34;&gt;(&lt;/span&gt;&lt;span style=&#34;color:#48b685&#34;&gt;&amp;#34;\\s+&amp;#34;&lt;/span&gt;&lt;span style=&#34;color:#5bc4bf&#34;&gt;,&lt;/span&gt; &lt;span style=&#34;color:#48b685&#34;&gt;&amp;#34;&amp;#34;&lt;/span&gt;&lt;span style=&#34;color:#5bc4bf&#34;&gt;);&lt;/span&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;&#34;&gt;&lt;code class=&#34;language-java&#34; data-lang=&#34;java&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;String str &lt;span style=&#34;color:#ff79c6&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color:#f1fa8c&#34;&gt;&amp;#34;\t&amp;#34;&lt;/span&gt;&lt;span style=&#34;color:#ff79c6&#34;&gt;;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;str&lt;span style=&#34;color:#ff79c6&#34;&gt;.&lt;/span&gt;&lt;span style=&#34;color:#50fa7b&#34;&gt;replaceAll&lt;/span&gt;&lt;span style=&#34;color:#ff79c6&#34;&gt;(&lt;/span&gt;&lt;span style=&#34;color:#f1fa8c&#34;&gt;&amp;#34;\\s+&amp;#34;&lt;/span&gt;&lt;span style=&#34;color:#ff79c6&#34;&gt;,&lt;/span&gt; &lt;span style=&#34;color:#f1fa8c&#34;&gt;&amp;#34;&amp;#34;&lt;/span&gt;&lt;span style=&#34;color:#ff79c6&#34;&gt;);&lt;/span&gt;
 &lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h1 id=&#34;檢查空值&#34;&gt;檢查空值&lt;/h1&gt;
 &lt;p&gt;接著如果要檢查字串是否有東西，要分成檢查兩種狀態，null 或空字串。&lt;/p&gt;
 &lt;p&gt;這邊有幾個方法檢查這個部分，但要注意它們實際功能上的區別。&lt;/p&gt;
@@ -297,18 +298,18 @@
 &lt;h2 id=&#34;-null&#34;&gt;&lt;code&gt;!= null&lt;/code&gt;&lt;/h2&gt;
 &lt;p&gt;前面幾個方法都有一個共同的問題：萬一字串為 null，全都來不及檢查就會跳 NullPointerException。&lt;/p&gt;
 &lt;p&gt;所以必須要用這個方式檢查是否為 Null，再檢查是否為空字串，也就是要寫成類似下面這樣：&lt;/p&gt;
-&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#e7e9db;background-color:#2f1e2e;-moz-tab-size:4;-o-tab-size:4;tab-size:4;&#34;&gt;&lt;code class=&#34;language-java&#34; data-lang=&#34;java&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;String string&lt;span style=&#34;color:#5bc4bf&#34;&gt;;&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#815ba4&#34;&gt;if&lt;/span&gt; &lt;span style=&#34;color:#5bc4bf&#34;&gt;(&lt;/span&gt;string &lt;span style=&#34;color:#5bc4bf&#34;&gt;!=&lt;/span&gt; &lt;span style=&#34;color:#815ba4&#34;&gt;null&lt;/span&gt; &lt;span style=&#34;color:#5bc4bf&#34;&gt;&amp;amp;&amp;amp;&lt;/span&gt; string&lt;span style=&#34;color:#5bc4bf&#34;&gt;.&lt;/span&gt;&lt;span style=&#34;color:#06b6ef&#34;&gt;isEmpty&lt;/span&gt;&lt;span style=&#34;color:#5bc4bf&#34;&gt;())&lt;/span&gt; &lt;span style=&#34;color:#5bc4bf&#34;&gt;{&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    &lt;span style=&#34;color:#776e71&#34;&gt;// things to do when string is neither null nor blank;
-&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#776e71&#34;&gt;&lt;/span&gt;&lt;span style=&#34;color:#5bc4bf&#34;&gt;}&lt;/span&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;&#34;&gt;&lt;code class=&#34;language-java&#34; data-lang=&#34;java&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;String string&lt;span style=&#34;color:#ff79c6&#34;&gt;;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#ff79c6&#34;&gt;if&lt;/span&gt; &lt;span style=&#34;color:#ff79c6&#34;&gt;(&lt;/span&gt;string &lt;span style=&#34;color:#ff79c6&#34;&gt;!=&lt;/span&gt; &lt;span style=&#34;color:#ff79c6&#34;&gt;null&lt;/span&gt; &lt;span style=&#34;color:#ff79c6&#34;&gt;&amp;amp;&amp;amp;&lt;/span&gt; string&lt;span style=&#34;color:#ff79c6&#34;&gt;.&lt;/span&gt;&lt;span style=&#34;color:#50fa7b&#34;&gt;isEmpty&lt;/span&gt;&lt;span style=&#34;color:#ff79c6&#34;&gt;())&lt;/span&gt; &lt;span style=&#34;color:#ff79c6&#34;&gt;{&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    &lt;span style=&#34;color:#6272a4&#34;&gt;// things to do when string is neither null nor blank;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#6272a4&#34;&gt;&lt;/span&gt;&lt;span style=&#34;color:#ff79c6&#34;&gt;}&lt;/span&gt;
 &lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h2 id=&#34;equalsstring&#34;&gt;&lt;code&gt;&amp;quot;&amp;quot;.equals(string)&lt;/code&gt;&lt;/h2&gt;
 &lt;p&gt;但有一個更簡短的方法 &lt;code&gt;&amp;quot;&amp;quot;.equals(string)&lt;/code&gt;。&lt;/p&gt;
 &lt;p&gt;因為用 String 本身的 &lt;code&gt;.equals()&lt;/code&gt; 方法，會先檢查括號內參數字串是否為 null，若是 null 就會直接回傳 &lt;code&gt;false&lt;/code&gt;；若參數字串不為 null，才會繼續檢查是否跟 &lt;code&gt;&amp;quot;&amp;quot;&lt;/code&gt; 空字串相等。&lt;/p&gt;
 &lt;p&gt;所以前一段的檢查式就可以縮短如下：&lt;/p&gt;
-&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#e7e9db;background-color:#2f1e2e;-moz-tab-size:4;-o-tab-size:4;tab-size:4;&#34;&gt;&lt;code class=&#34;language-java&#34; data-lang=&#34;java&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;String string&lt;span style=&#34;color:#5bc4bf&#34;&gt;;&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#815ba4&#34;&gt;if&lt;/span&gt; &lt;span style=&#34;color:#5bc4bf&#34;&gt;(!&lt;/span&gt;&lt;span style=&#34;color:#48b685&#34;&gt;&amp;#34;&amp;#34;&lt;/span&gt;&lt;span style=&#34;color:#5bc4bf&#34;&gt;.&lt;/span&gt;&lt;span style=&#34;color:#06b6ef&#34;&gt;equals&lt;/span&gt;&lt;span style=&#34;color:#5bc4bf&#34;&gt;(&lt;/span&gt;string&lt;span style=&#34;color:#5bc4bf&#34;&gt;))&lt;/span&gt; &lt;span style=&#34;color:#5bc4bf&#34;&gt;{&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    &lt;span style=&#34;color:#776e71&#34;&gt;// things to do when string is neither null nor blank;
-&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#776e71&#34;&gt;&lt;/span&gt;&lt;span style=&#34;color:#5bc4bf&#34;&gt;}&lt;/span&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;&#34;&gt;&lt;code class=&#34;language-java&#34; data-lang=&#34;java&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;String string&lt;span style=&#34;color:#ff79c6&#34;&gt;;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#ff79c6&#34;&gt;if&lt;/span&gt; &lt;span style=&#34;color:#ff79c6&#34;&gt;(!&lt;/span&gt;&lt;span style=&#34;color:#f1fa8c&#34;&gt;&amp;#34;&amp;#34;&lt;/span&gt;&lt;span style=&#34;color:#ff79c6&#34;&gt;.&lt;/span&gt;&lt;span style=&#34;color:#50fa7b&#34;&gt;equals&lt;/span&gt;&lt;span style=&#34;color:#ff79c6&#34;&gt;(&lt;/span&gt;string&lt;span style=&#34;color:#ff79c6&#34;&gt;))&lt;/span&gt; &lt;span style=&#34;color:#ff79c6&#34;&gt;{&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    &lt;span style=&#34;color:#6272a4&#34;&gt;// things to do when string is neither null nor blank;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#6272a4&#34;&gt;&lt;/span&gt;&lt;span style=&#34;color:#ff79c6&#34;&gt;}&lt;/span&gt;
 &lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h1 id=&#34;結語&#34;&gt;結語&lt;/h1&gt;
 &lt;p&gt;雖然最後一個方法最簡短，但其實可讀性不見得比較優秀；而倒數第二個方法雖然比較囉唆，但整體上可讀性比較好。&lt;/p&gt;
 &lt;p&gt;所以要用哪種方法還是要看簡潔跟可讀性怎麼取捨。&lt;/p&gt;
@@ -338,29 +339,29 @@
 &lt;p&gt;這篇只討論陣列的解法。&lt;/p&gt;
 &lt;h2 id=&#34;暴力解重複檢查&#34;&gt;暴力解：重複檢查&lt;/h2&gt;
 &lt;p&gt;最簡單的寫法肯定就是暴力解：每抽出一個數字就存到結果陣列，然後每抽一次，就跟陣列裡每個數字都比對一次，一有重複就重抽。&lt;/p&gt;
-&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#e7e9db;background-color:#2f1e2e;-moz-tab-size:4;-o-tab-size:4;tab-size:4;&#34;&gt;&lt;code class=&#34;language-java&#34; data-lang=&#34;java&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#776e71&#34;&gt;// 設定存儲樂透數字陣列
-&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#776e71&#34;&gt;&lt;/span&gt;&lt;span style=&#34;color:#fec418&#34;&gt;int&lt;/span&gt;&lt;span style=&#34;color:#5bc4bf&#34;&gt;[]&lt;/span&gt; randomArray &lt;span style=&#34;color:#5bc4bf&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color:#815ba4&#34;&gt;new&lt;/span&gt; &lt;span style=&#34;color:#fec418&#34;&gt;int&lt;/span&gt;&lt;span style=&#34;color:#5bc4bf&#34;&gt;[&lt;/span&gt;6&lt;span style=&#34;color:#5bc4bf&#34;&gt;];&lt;/span&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;&#34;&gt;&lt;code class=&#34;language-java&#34; data-lang=&#34;java&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#6272a4&#34;&gt;// 設定存儲樂透數字陣列
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#6272a4&#34;&gt;&lt;/span&gt;&lt;span style=&#34;color:#8be9fd&#34;&gt;int&lt;/span&gt;&lt;span style=&#34;color:#ff79c6&#34;&gt;[]&lt;/span&gt; randomArray &lt;span style=&#34;color:#ff79c6&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color:#ff79c6&#34;&gt;new&lt;/span&gt; &lt;span style=&#34;color:#8be9fd&#34;&gt;int&lt;/span&gt;&lt;span style=&#34;color:#ff79c6&#34;&gt;[&lt;/span&gt;6&lt;span style=&#34;color:#ff79c6&#34;&gt;];&lt;/span&gt;
 &lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#776e71&#34;&gt;// 執行抽取樂透數字的動作 6次
-&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#776e71&#34;&gt;&lt;/span&gt;&lt;span style=&#34;color:#815ba4&#34;&gt;for&lt;/span&gt; &lt;span style=&#34;color:#5bc4bf&#34;&gt;(&lt;/span&gt;&lt;span style=&#34;color:#fec418&#34;&gt;int&lt;/span&gt; i &lt;span style=&#34;color:#5bc4bf&#34;&gt;=&lt;/span&gt; 0&lt;span style=&#34;color:#5bc4bf&#34;&gt;;&lt;/span&gt; i &lt;span style=&#34;color:#5bc4bf&#34;&gt;&amp;lt;&lt;/span&gt; randomArray&lt;span style=&#34;color:#5bc4bf&#34;&gt;.&lt;/span&gt;&lt;span style=&#34;color:#06b6ef&#34;&gt;length&lt;/span&gt;&lt;span style=&#34;color:#5bc4bf&#34;&gt;;&lt;/span&gt; i&lt;span style=&#34;color:#5bc4bf&#34;&gt;++)&lt;/span&gt; &lt;span style=&#34;color:#5bc4bf&#34;&gt;{&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    &lt;span style=&#34;color:#776e71&#34;&gt;// 先將亂數出來的數字存入陣列第 i個位置
-&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#776e71&#34;&gt;&lt;/span&gt;     randomArray&lt;span style=&#34;color:#5bc4bf&#34;&gt;[&lt;/span&gt;i&lt;span style=&#34;color:#5bc4bf&#34;&gt;]&lt;/span&gt; &lt;span style=&#34;color:#5bc4bf&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color:#5bc4bf&#34;&gt;(&lt;/span&gt;&lt;span style=&#34;color:#fec418&#34;&gt;int&lt;/span&gt;&lt;span style=&#34;color:#5bc4bf&#34;&gt;)(&lt;/span&gt;Math&lt;span style=&#34;color:#5bc4bf&#34;&gt;.&lt;/span&gt;&lt;span style=&#34;color:#06b6ef&#34;&gt;random&lt;/span&gt;&lt;span style=&#34;color:#5bc4bf&#34;&gt;()&lt;/span&gt; &lt;span style=&#34;color:#5bc4bf&#34;&gt;*&lt;/span&gt; 42&lt;span style=&#34;color:#5bc4bf&#34;&gt;)&lt;/span&gt; &lt;span style=&#34;color:#5bc4bf&#34;&gt;+&lt;/span&gt; 1&lt;span style=&#34;color:#5bc4bf&#34;&gt;;&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    &lt;span style=&#34;color:#776e71&#34;&gt;// 接著執行檢查迴圈
-&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#776e71&#34;&gt;&lt;/span&gt;    &lt;span style=&#34;color:#815ba4&#34;&gt;for&lt;/span&gt; &lt;span style=&#34;color:#5bc4bf&#34;&gt;(&lt;/span&gt;&lt;span style=&#34;color:#fec418&#34;&gt;int&lt;/span&gt; j &lt;span style=&#34;color:#5bc4bf&#34;&gt;=&lt;/span&gt; 0&lt;span style=&#34;color:#5bc4bf&#34;&gt;;&lt;/span&gt; j &lt;span style=&#34;color:#5bc4bf&#34;&gt;&amp;lt;&lt;/span&gt; i&lt;span style=&#34;color:#5bc4bf&#34;&gt;;&lt;/span&gt; j&lt;span style=&#34;color:#5bc4bf&#34;&gt;++)&lt;/span&gt; &lt;span style=&#34;color:#5bc4bf&#34;&gt;{&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;        &lt;span style=&#34;color:#776e71&#34;&gt;// 輪流跟陣列中目前存在的其他元素比對
-&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#776e71&#34;&gt;&lt;/span&gt;        &lt;span style=&#34;color:#815ba4&#34;&gt;if&lt;/span&gt; &lt;span style=&#34;color:#5bc4bf&#34;&gt;(&lt;/span&gt;randomArray&lt;span style=&#34;color:#5bc4bf&#34;&gt;[&lt;/span&gt;i&lt;span style=&#34;color:#5bc4bf&#34;&gt;]&lt;/span&gt; &lt;span style=&#34;color:#5bc4bf&#34;&gt;==&lt;/span&gt; randomArray&lt;span style=&#34;color:#5bc4bf&#34;&gt;[&lt;/span&gt;j&lt;span style=&#34;color:#5bc4bf&#34;&gt;])&lt;/span&gt; &lt;span style=&#34;color:#5bc4bf&#34;&gt;{&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;            &lt;span style=&#34;color:#776e71&#34;&gt;// 如果有找到重複數字，就將計數器 i減 1，然後重抽
-&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#776e71&#34;&gt;&lt;/span&gt;            i&lt;span style=&#34;color:#5bc4bf&#34;&gt;--;&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;            &lt;span style=&#34;color:#776e71&#34;&gt;// 注意這邊 break是跳出 if外面一層的 for迴圈
-&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#776e71&#34;&gt;&lt;/span&gt;            &lt;span style=&#34;color:#815ba4&#34;&gt;break&lt;/span&gt;&lt;span style=&#34;color:#5bc4bf&#34;&gt;;&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;        &lt;span style=&#34;color:#5bc4bf&#34;&gt;}&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    &lt;span style=&#34;color:#5bc4bf&#34;&gt;}&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#5bc4bf&#34;&gt;}&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#6272a4&#34;&gt;// 執行抽取樂透數字的動作 6次
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#6272a4&#34;&gt;&lt;/span&gt;&lt;span style=&#34;color:#ff79c6&#34;&gt;for&lt;/span&gt; &lt;span style=&#34;color:#ff79c6&#34;&gt;(&lt;/span&gt;&lt;span style=&#34;color:#8be9fd&#34;&gt;int&lt;/span&gt; i &lt;span style=&#34;color:#ff79c6&#34;&gt;=&lt;/span&gt; 0&lt;span style=&#34;color:#ff79c6&#34;&gt;;&lt;/span&gt; i &lt;span style=&#34;color:#ff79c6&#34;&gt;&amp;lt;&lt;/span&gt; randomArray&lt;span style=&#34;color:#ff79c6&#34;&gt;.&lt;/span&gt;&lt;span style=&#34;color:#50fa7b&#34;&gt;length&lt;/span&gt;&lt;span style=&#34;color:#ff79c6&#34;&gt;;&lt;/span&gt; i&lt;span style=&#34;color:#ff79c6&#34;&gt;++)&lt;/span&gt; &lt;span style=&#34;color:#ff79c6&#34;&gt;{&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    &lt;span style=&#34;color:#6272a4&#34;&gt;// 先將亂數出來的數字存入陣列第 i個位置
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#6272a4&#34;&gt;&lt;/span&gt;     randomArray&lt;span style=&#34;color:#ff79c6&#34;&gt;[&lt;/span&gt;i&lt;span style=&#34;color:#ff79c6&#34;&gt;]&lt;/span&gt; &lt;span style=&#34;color:#ff79c6&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color:#ff79c6&#34;&gt;(&lt;/span&gt;&lt;span style=&#34;color:#8be9fd&#34;&gt;int&lt;/span&gt;&lt;span style=&#34;color:#ff79c6&#34;&gt;)(&lt;/span&gt;Math&lt;span style=&#34;color:#ff79c6&#34;&gt;.&lt;/span&gt;&lt;span style=&#34;color:#50fa7b&#34;&gt;random&lt;/span&gt;&lt;span style=&#34;color:#ff79c6&#34;&gt;()&lt;/span&gt; &lt;span style=&#34;color:#ff79c6&#34;&gt;*&lt;/span&gt; 42&lt;span style=&#34;color:#ff79c6&#34;&gt;)&lt;/span&gt; &lt;span style=&#34;color:#ff79c6&#34;&gt;+&lt;/span&gt; 1&lt;span style=&#34;color:#ff79c6&#34;&gt;;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    &lt;span style=&#34;color:#6272a4&#34;&gt;// 接著執行檢查迴圈
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#6272a4&#34;&gt;&lt;/span&gt;    &lt;span style=&#34;color:#ff79c6&#34;&gt;for&lt;/span&gt; &lt;span style=&#34;color:#ff79c6&#34;&gt;(&lt;/span&gt;&lt;span style=&#34;color:#8be9fd&#34;&gt;int&lt;/span&gt; j &lt;span style=&#34;color:#ff79c6&#34;&gt;=&lt;/span&gt; 0&lt;span style=&#34;color:#ff79c6&#34;&gt;;&lt;/span&gt; j &lt;span style=&#34;color:#ff79c6&#34;&gt;&amp;lt;&lt;/span&gt; i&lt;span style=&#34;color:#ff79c6&#34;&gt;;&lt;/span&gt; j&lt;span style=&#34;color:#ff79c6&#34;&gt;++)&lt;/span&gt; &lt;span style=&#34;color:#ff79c6&#34;&gt;{&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;        &lt;span style=&#34;color:#6272a4&#34;&gt;// 輪流跟陣列中目前存在的其他元素比對
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#6272a4&#34;&gt;&lt;/span&gt;        &lt;span style=&#34;color:#ff79c6&#34;&gt;if&lt;/span&gt; &lt;span style=&#34;color:#ff79c6&#34;&gt;(&lt;/span&gt;randomArray&lt;span style=&#34;color:#ff79c6&#34;&gt;[&lt;/span&gt;i&lt;span style=&#34;color:#ff79c6&#34;&gt;]&lt;/span&gt; &lt;span style=&#34;color:#ff79c6&#34;&gt;==&lt;/span&gt; randomArray&lt;span style=&#34;color:#ff79c6&#34;&gt;[&lt;/span&gt;j&lt;span style=&#34;color:#ff79c6&#34;&gt;])&lt;/span&gt; &lt;span style=&#34;color:#ff79c6&#34;&gt;{&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;            &lt;span style=&#34;color:#6272a4&#34;&gt;// 如果有找到重複數字，就將計數器 i減 1，然後重抽
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#6272a4&#34;&gt;&lt;/span&gt;            i&lt;span style=&#34;color:#ff79c6&#34;&gt;--;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;            &lt;span style=&#34;color:#6272a4&#34;&gt;// 注意這邊 break是跳出 if外面一層的 for迴圈
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#6272a4&#34;&gt;&lt;/span&gt;            &lt;span style=&#34;color:#ff79c6&#34;&gt;break&lt;/span&gt;&lt;span style=&#34;color:#ff79c6&#34;&gt;;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;        &lt;span style=&#34;color:#ff79c6&#34;&gt;}&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    &lt;span style=&#34;color:#ff79c6&#34;&gt;}&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#ff79c6&#34;&gt;}&lt;/span&gt;
 &lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#776e71&#34;&gt;// 印出樂透數字陣列中的數字，列印陣列也要用迴圈，這邊是用新版寫法
-&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#776e71&#34;&gt;&lt;/span&gt;&lt;span style=&#34;color:#815ba4&#34;&gt;for&lt;/span&gt; &lt;span style=&#34;color:#5bc4bf&#34;&gt;(&lt;/span&gt;&lt;span style=&#34;color:#fec418&#34;&gt;int&lt;/span&gt; num &lt;span style=&#34;color:#5bc4bf&#34;&gt;:&lt;/span&gt; randomArray&lt;span style=&#34;color:#5bc4bf&#34;&gt;)&lt;/span&gt; &lt;span style=&#34;color:#5bc4bf&#34;&gt;{&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    System&lt;span style=&#34;color:#5bc4bf&#34;&gt;.&lt;/span&gt;&lt;span style=&#34;color:#06b6ef&#34;&gt;out&lt;/span&gt;&lt;span style=&#34;color:#5bc4bf&#34;&gt;.&lt;/span&gt;&lt;span style=&#34;color:#06b6ef&#34;&gt;print&lt;/span&gt;&lt;span style=&#34;color:#5bc4bf&#34;&gt;(&lt;/span&gt;num &lt;span style=&#34;color:#5bc4bf&#34;&gt;+&lt;/span&gt; &lt;span style=&#34;color:#48b685&#34;&gt;&amp;#34; &amp;#34;&lt;/span&gt;&lt;span style=&#34;color:#5bc4bf&#34;&gt;);&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#5bc4bf&#34;&gt;}&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#6272a4&#34;&gt;// 印出樂透數字陣列中的數字，列印陣列也要用迴圈，這邊是用新版寫法
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#6272a4&#34;&gt;&lt;/span&gt;&lt;span style=&#34;color:#ff79c6&#34;&gt;for&lt;/span&gt; &lt;span style=&#34;color:#ff79c6&#34;&gt;(&lt;/span&gt;&lt;span style=&#34;color:#8be9fd&#34;&gt;int&lt;/span&gt; num &lt;span style=&#34;color:#ff79c6&#34;&gt;:&lt;/span&gt; randomArray&lt;span style=&#34;color:#ff79c6&#34;&gt;)&lt;/span&gt; &lt;span style=&#34;color:#ff79c6&#34;&gt;{&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    System&lt;span style=&#34;color:#ff79c6&#34;&gt;.&lt;/span&gt;&lt;span style=&#34;color:#50fa7b&#34;&gt;out&lt;/span&gt;&lt;span style=&#34;color:#ff79c6&#34;&gt;.&lt;/span&gt;&lt;span style=&#34;color:#50fa7b&#34;&gt;print&lt;/span&gt;&lt;span style=&#34;color:#ff79c6&#34;&gt;(&lt;/span&gt;num &lt;span style=&#34;color:#ff79c6&#34;&gt;+&lt;/span&gt; &lt;span style=&#34;color:#f1fa8c&#34;&gt;&amp;#34; &amp;#34;&lt;/span&gt;&lt;span style=&#34;color:#ff79c6&#34;&gt;);&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#ff79c6&#34;&gt;}&lt;/span&gt;
 &lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h2 id=&#34;fisher-yates-shuffle&#34;&gt;Fisher-Yates shuffle&lt;/h2&gt;
 &lt;p&gt;能解決問題的方法就是好方法，但暴力解有一個問題，因為要檢查已存入陣列的其他元素，所以抽到越後面就要檢查越多次，現在只有 42 個數字抽 6 個，萬一是從一百億中抽一百萬個不重複數字，那該檢查多久？&lt;/p&gt;
 &lt;p&gt;所以就有一個經典的演算法來解決這個問題，是兩位統計學家 Ronald Fisher 爵士以及 Frank Yates 於 1938 年提出的。&lt;/p&gt;
@@ -376,32 +377,32 @@
 &lt;p&gt;這個算法的目的就很好地確保了每次隨機抽取數字肯定不會重複，因為之前的數字都已經從要抽取數字的數列中刪除了。&lt;/p&gt;
 &lt;p&gt;而且因為不用每次都檢查，所以可以大幅提升效率。&lt;/p&gt;
 &lt;p&gt;我們利用這個算法不會抽取到重複數字的特性，可以延伸出解法如下：&lt;/p&gt;
-&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#e7e9db;background-color:#2f1e2e;-moz-tab-size:4;-o-tab-size:4;tab-size:4;&#34;&gt;&lt;code class=&#34;language-java&#34; data-lang=&#34;java&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#776e71&#34;&gt;// 設定要抽取個數
-&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#776e71&#34;&gt;&lt;/span&gt;&lt;span style=&#34;color:#fec418&#34;&gt;int&lt;/span&gt; picks &lt;span style=&#34;color:#5bc4bf&#34;&gt;=&lt;/span&gt; 6&lt;span style=&#34;color:#5bc4bf&#34;&gt;;&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#776e71&#34;&gt;// 設定樂透數字範圍起始數字及結束數字
-&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#776e71&#34;&gt;&lt;/span&gt;&lt;span style=&#34;color:#fec418&#34;&gt;int&lt;/span&gt; startNumber &lt;span style=&#34;color:#5bc4bf&#34;&gt;=&lt;/span&gt; 1&lt;span style=&#34;color:#5bc4bf&#34;&gt;,&lt;/span&gt; endNumber &lt;span style=&#34;color:#5bc4bf&#34;&gt;=&lt;/span&gt; 42&lt;span style=&#34;color:#5bc4bf&#34;&gt;;&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#776e71&#34;&gt;// 設定儲存數字的陣列
-&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#776e71&#34;&gt;&lt;/span&gt;&lt;span style=&#34;color:#fec418&#34;&gt;int&lt;/span&gt;&lt;span style=&#34;color:#5bc4bf&#34;&gt;[]&lt;/span&gt; randomArray &lt;span style=&#34;color:#5bc4bf&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color:#815ba4&#34;&gt;new&lt;/span&gt; &lt;span style=&#34;color:#fec418&#34;&gt;int&lt;/span&gt;&lt;span style=&#34;color:#5bc4bf&#34;&gt;[&lt;/span&gt;endNumber &lt;span style=&#34;color:#5bc4bf&#34;&gt;-&lt;/span&gt; startNumber &lt;span style=&#34;color:#5bc4bf&#34;&gt;+&lt;/span&gt; 1&lt;span style=&#34;color:#5bc4bf&#34;&gt;];&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#776e71&#34;&gt;// 產生按照數值大小排序好的數列
-&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#776e71&#34;&gt;&lt;/span&gt;&lt;span style=&#34;color:#815ba4&#34;&gt;for&lt;/span&gt; &lt;span style=&#34;color:#5bc4bf&#34;&gt;(&lt;/span&gt;&lt;span style=&#34;color:#fec418&#34;&gt;int&lt;/span&gt; i &lt;span style=&#34;color:#5bc4bf&#34;&gt;=&lt;/span&gt; startNumber&lt;span style=&#34;color:#5bc4bf&#34;&gt;;&lt;/span&gt; i &lt;span style=&#34;color:#5bc4bf&#34;&gt;&amp;lt;=&lt;/span&gt; endNumber&lt;span style=&#34;color:#5bc4bf&#34;&gt;;&lt;/span&gt; i&lt;span style=&#34;color:#5bc4bf&#34;&gt;++)&lt;/span&gt; &lt;span style=&#34;color:#5bc4bf&#34;&gt;{&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    randomArray&lt;span style=&#34;color:#5bc4bf&#34;&gt;[&lt;/span&gt;i&lt;span style=&#34;color:#5bc4bf&#34;&gt;]&lt;/span&gt; &lt;span style=&#34;color:#5bc4bf&#34;&gt;=&lt;/span&gt; i&lt;span style=&#34;color:#5bc4bf&#34;&gt;;&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#5bc4bf&#34;&gt;}&lt;/span&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;&#34;&gt;&lt;code class=&#34;language-java&#34; data-lang=&#34;java&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#6272a4&#34;&gt;// 設定要抽取個數
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#6272a4&#34;&gt;&lt;/span&gt;&lt;span style=&#34;color:#8be9fd&#34;&gt;int&lt;/span&gt; picks &lt;span style=&#34;color:#ff79c6&#34;&gt;=&lt;/span&gt; 6&lt;span style=&#34;color:#ff79c6&#34;&gt;;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#6272a4&#34;&gt;// 設定樂透數字範圍起始數字及結束數字
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#6272a4&#34;&gt;&lt;/span&gt;&lt;span style=&#34;color:#8be9fd&#34;&gt;int&lt;/span&gt; startNumber &lt;span style=&#34;color:#ff79c6&#34;&gt;=&lt;/span&gt; 1&lt;span style=&#34;color:#ff79c6&#34;&gt;,&lt;/span&gt; endNumber &lt;span style=&#34;color:#ff79c6&#34;&gt;=&lt;/span&gt; 42&lt;span style=&#34;color:#ff79c6&#34;&gt;;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#6272a4&#34;&gt;// 設定儲存數字的陣列
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#6272a4&#34;&gt;&lt;/span&gt;&lt;span style=&#34;color:#8be9fd&#34;&gt;int&lt;/span&gt;&lt;span style=&#34;color:#ff79c6&#34;&gt;[]&lt;/span&gt; randomArray &lt;span style=&#34;color:#ff79c6&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color:#ff79c6&#34;&gt;new&lt;/span&gt; &lt;span style=&#34;color:#8be9fd&#34;&gt;int&lt;/span&gt;&lt;span style=&#34;color:#ff79c6&#34;&gt;[&lt;/span&gt;endNumber &lt;span style=&#34;color:#ff79c6&#34;&gt;-&lt;/span&gt; startNumber &lt;span style=&#34;color:#ff79c6&#34;&gt;+&lt;/span&gt; 1&lt;span style=&#34;color:#ff79c6&#34;&gt;];&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#6272a4&#34;&gt;// 產生按照數值大小排序好的數列
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#6272a4&#34;&gt;&lt;/span&gt;&lt;span style=&#34;color:#ff79c6&#34;&gt;for&lt;/span&gt; &lt;span style=&#34;color:#ff79c6&#34;&gt;(&lt;/span&gt;&lt;span style=&#34;color:#8be9fd&#34;&gt;int&lt;/span&gt; i &lt;span style=&#34;color:#ff79c6&#34;&gt;=&lt;/span&gt; startNumber&lt;span style=&#34;color:#ff79c6&#34;&gt;;&lt;/span&gt; i &lt;span style=&#34;color:#ff79c6&#34;&gt;&amp;lt;=&lt;/span&gt; endNumber&lt;span style=&#34;color:#ff79c6&#34;&gt;;&lt;/span&gt; i&lt;span style=&#34;color:#ff79c6&#34;&gt;++)&lt;/span&gt; &lt;span style=&#34;color:#ff79c6&#34;&gt;{&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    randomArray&lt;span style=&#34;color:#ff79c6&#34;&gt;[&lt;/span&gt;i&lt;span style=&#34;color:#ff79c6&#34;&gt;]&lt;/span&gt; &lt;span style=&#34;color:#ff79c6&#34;&gt;=&lt;/span&gt; i&lt;span style=&#34;color:#ff79c6&#34;&gt;;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#ff79c6&#34;&gt;}&lt;/span&gt;
 &lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#776e71&#34;&gt;// 開始亂數程序，但我們不用將整個數列都亂數shuffle，只需要做我們要抽取個數，也就是 6次
-&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#776e71&#34;&gt;&lt;/span&gt;&lt;span style=&#34;color:#815ba4&#34;&gt;for&lt;/span&gt; &lt;span style=&#34;color:#5bc4bf&#34;&gt;(&lt;/span&gt;&lt;span style=&#34;color:#fec418&#34;&gt;int&lt;/span&gt; j &lt;span style=&#34;color:#5bc4bf&#34;&gt;=&lt;/span&gt; 0&lt;span style=&#34;color:#5bc4bf&#34;&gt;;&lt;/span&gt; j &lt;span style=&#34;color:#5bc4bf&#34;&gt;&amp;lt;&lt;/span&gt; picks&lt;span style=&#34;color:#5bc4bf&#34;&gt;;&lt;/span&gt; j&lt;span style=&#34;color:#5bc4bf&#34;&gt;++)&lt;/span&gt; &lt;span style=&#34;color:#5bc4bf&#34;&gt;{&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    &lt;span style=&#34;color:#776e71&#34;&gt;// 先設定一個暫存亂數數字的變數 randomIndex，這是要用來當指標指向陣列元素用的
-&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#776e71&#34;&gt;&lt;/span&gt;    &lt;span style=&#34;color:#fec418&#34;&gt;int&lt;/span&gt; randomIndex &lt;span style=&#34;color:#5bc4bf&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color:#5bc4bf&#34;&gt;(&lt;/span&gt;&lt;span style=&#34;color:#fec418&#34;&gt;int&lt;/span&gt;&lt;span style=&#34;color:#5bc4bf&#34;&gt;)(&lt;/span&gt;Math&lt;span style=&#34;color:#5bc4bf&#34;&gt;.&lt;/span&gt;&lt;span style=&#34;color:#06b6ef&#34;&gt;random&lt;/span&gt;&lt;span style=&#34;color:#5bc4bf&#34;&gt;()&lt;/span&gt; &lt;span style=&#34;color:#5bc4bf&#34;&gt;*&lt;/span&gt; &lt;span style=&#34;color:#5bc4bf&#34;&gt;(&lt;/span&gt;endNumber &lt;span style=&#34;color:#5bc4bf&#34;&gt;-&lt;/span&gt; startNumber &lt;span style=&#34;color:#5bc4bf&#34;&gt;+&lt;/span&gt; 1&lt;span style=&#34;color:#5bc4bf&#34;&gt;))&lt;/span&gt; &lt;span style=&#34;color:#5bc4bf&#34;&gt;+&lt;/span&gt; 1&lt;span style=&#34;color:#5bc4bf&#34;&gt;;&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    &lt;span style=&#34;color:#776e71&#34;&gt;// 然後再設定一個暫存數字的變數 temp，暫存陣列中指標 randomIndex對應的數字
-&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#776e71&#34;&gt;&lt;/span&gt;    &lt;span style=&#34;color:#fec418&#34;&gt;int&lt;/span&gt; temp &lt;span style=&#34;color:#5bc4bf&#34;&gt;=&lt;/span&gt; randomArray&lt;span style=&#34;color:#5bc4bf&#34;&gt;[&lt;/span&gt;randomIndex&lt;span style=&#34;color:#5bc4bf&#34;&gt;];&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    &lt;span style=&#34;color:#776e71&#34;&gt;// 將 randomArray[randomIndex]跟第 j個元素對調位置
-&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#776e71&#34;&gt;&lt;/span&gt;    randomArray&lt;span style=&#34;color:#5bc4bf&#34;&gt;[&lt;/span&gt;randomIndex&lt;span style=&#34;color:#5bc4bf&#34;&gt;]&lt;/span&gt; &lt;span style=&#34;color:#5bc4bf&#34;&gt;=&lt;/span&gt; randomArray&lt;span style=&#34;color:#5bc4bf&#34;&gt;[&lt;/span&gt;j&lt;span style=&#34;color:#5bc4bf&#34;&gt;];&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    randomArray&lt;span style=&#34;color:#5bc4bf&#34;&gt;[&lt;/span&gt;j&lt;span style=&#34;color:#5bc4bf&#34;&gt;]&lt;/span&gt; &lt;span style=&#34;color:#5bc4bf&#34;&gt;=&lt;/span&gt; temp&lt;span style=&#34;color:#5bc4bf&#34;&gt;;&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#5bc4bf&#34;&gt;}&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#6272a4&#34;&gt;// 開始亂數程序，但我們不用將整個數列都亂數shuffle，只需要做我們要抽取個數，也就是 6次
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#6272a4&#34;&gt;&lt;/span&gt;&lt;span style=&#34;color:#ff79c6&#34;&gt;for&lt;/span&gt; &lt;span style=&#34;color:#ff79c6&#34;&gt;(&lt;/span&gt;&lt;span style=&#34;color:#8be9fd&#34;&gt;int&lt;/span&gt; j &lt;span style=&#34;color:#ff79c6&#34;&gt;=&lt;/span&gt; 0&lt;span style=&#34;color:#ff79c6&#34;&gt;;&lt;/span&gt; j &lt;span style=&#34;color:#ff79c6&#34;&gt;&amp;lt;&lt;/span&gt; picks&lt;span style=&#34;color:#ff79c6&#34;&gt;;&lt;/span&gt; j&lt;span style=&#34;color:#ff79c6&#34;&gt;++)&lt;/span&gt; &lt;span style=&#34;color:#ff79c6&#34;&gt;{&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    &lt;span style=&#34;color:#6272a4&#34;&gt;// 先設定一個暫存亂數數字的變數 randomIndex，這是要用來當指標指向陣列元素用的
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#6272a4&#34;&gt;&lt;/span&gt;    &lt;span style=&#34;color:#8be9fd&#34;&gt;int&lt;/span&gt; randomIndex &lt;span style=&#34;color:#ff79c6&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color:#ff79c6&#34;&gt;(&lt;/span&gt;&lt;span style=&#34;color:#8be9fd&#34;&gt;int&lt;/span&gt;&lt;span style=&#34;color:#ff79c6&#34;&gt;)(&lt;/span&gt;Math&lt;span style=&#34;color:#ff79c6&#34;&gt;.&lt;/span&gt;&lt;span style=&#34;color:#50fa7b&#34;&gt;random&lt;/span&gt;&lt;span style=&#34;color:#ff79c6&#34;&gt;()&lt;/span&gt; &lt;span style=&#34;color:#ff79c6&#34;&gt;*&lt;/span&gt; &lt;span style=&#34;color:#ff79c6&#34;&gt;(&lt;/span&gt;endNumber &lt;span style=&#34;color:#ff79c6&#34;&gt;-&lt;/span&gt; startNumber &lt;span style=&#34;color:#ff79c6&#34;&gt;+&lt;/span&gt; 1&lt;span style=&#34;color:#ff79c6&#34;&gt;))&lt;/span&gt; &lt;span style=&#34;color:#ff79c6&#34;&gt;+&lt;/span&gt; 1&lt;span style=&#34;color:#ff79c6&#34;&gt;;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    &lt;span style=&#34;color:#6272a4&#34;&gt;// 然後再設定一個暫存數字的變數 temp，暫存陣列中指標 randomIndex對應的數字
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#6272a4&#34;&gt;&lt;/span&gt;    &lt;span style=&#34;color:#8be9fd&#34;&gt;int&lt;/span&gt; temp &lt;span style=&#34;color:#ff79c6&#34;&gt;=&lt;/span&gt; randomArray&lt;span style=&#34;color:#ff79c6&#34;&gt;[&lt;/span&gt;randomIndex&lt;span style=&#34;color:#ff79c6&#34;&gt;];&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    &lt;span style=&#34;color:#6272a4&#34;&gt;// 將 randomArray[randomIndex]跟第 j個元素對調位置
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#6272a4&#34;&gt;&lt;/span&gt;    randomArray&lt;span style=&#34;color:#ff79c6&#34;&gt;[&lt;/span&gt;randomIndex&lt;span style=&#34;color:#ff79c6&#34;&gt;]&lt;/span&gt; &lt;span style=&#34;color:#ff79c6&#34;&gt;=&lt;/span&gt; randomArray&lt;span style=&#34;color:#ff79c6&#34;&gt;[&lt;/span&gt;j&lt;span style=&#34;color:#ff79c6&#34;&gt;];&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    randomArray&lt;span style=&#34;color:#ff79c6&#34;&gt;[&lt;/span&gt;j&lt;span style=&#34;color:#ff79c6&#34;&gt;]&lt;/span&gt; &lt;span style=&#34;color:#ff79c6&#34;&gt;=&lt;/span&gt; temp&lt;span style=&#34;color:#ff79c6&#34;&gt;;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#ff79c6&#34;&gt;}&lt;/span&gt;
 &lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#776e71&#34;&gt;// 印出樂透數字陣列中的數字
-&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#776e71&#34;&gt;&lt;/span&gt;&lt;span style=&#34;color:#815ba4&#34;&gt;for&lt;/span&gt; &lt;span style=&#34;color:#5bc4bf&#34;&gt;(&lt;/span&gt;&lt;span style=&#34;color:#fec418&#34;&gt;int&lt;/span&gt; k &lt;span style=&#34;color:#5bc4bf&#34;&gt;=&lt;/span&gt; 0&lt;span style=&#34;color:#5bc4bf&#34;&gt;;&lt;/span&gt; k &lt;span style=&#34;color:#5bc4bf&#34;&gt;&amp;lt;&lt;/span&gt; picks&lt;span style=&#34;color:#5bc4bf&#34;&gt;;&lt;/span&gt; k&lt;span style=&#34;color:#5bc4bf&#34;&gt;++)&lt;/span&gt; &lt;span style=&#34;color:#5bc4bf&#34;&gt;{&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    System&lt;span style=&#34;color:#5bc4bf&#34;&gt;.&lt;/span&gt;&lt;span style=&#34;color:#06b6ef&#34;&gt;out&lt;/span&gt;&lt;span style=&#34;color:#5bc4bf&#34;&gt;.&lt;/span&gt;&lt;span style=&#34;color:#06b6ef&#34;&gt;print&lt;/span&gt;&lt;span style=&#34;color:#5bc4bf&#34;&gt;(&lt;/span&gt;num &lt;span style=&#34;color:#5bc4bf&#34;&gt;+&lt;/span&gt; &lt;span style=&#34;color:#48b685&#34;&gt;&amp;#34; &amp;#34;&lt;/span&gt;&lt;span style=&#34;color:#5bc4bf&#34;&gt;);&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#5bc4bf&#34;&gt;}&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#6272a4&#34;&gt;// 印出樂透數字陣列中的數字
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#6272a4&#34;&gt;&lt;/span&gt;&lt;span style=&#34;color:#ff79c6&#34;&gt;for&lt;/span&gt; &lt;span style=&#34;color:#ff79c6&#34;&gt;(&lt;/span&gt;&lt;span style=&#34;color:#8be9fd&#34;&gt;int&lt;/span&gt; k &lt;span style=&#34;color:#ff79c6&#34;&gt;=&lt;/span&gt; 0&lt;span style=&#34;color:#ff79c6&#34;&gt;;&lt;/span&gt; k &lt;span style=&#34;color:#ff79c6&#34;&gt;&amp;lt;&lt;/span&gt; picks&lt;span style=&#34;color:#ff79c6&#34;&gt;;&lt;/span&gt; k&lt;span style=&#34;color:#ff79c6&#34;&gt;++)&lt;/span&gt; &lt;span style=&#34;color:#ff79c6&#34;&gt;{&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    System&lt;span style=&#34;color:#ff79c6&#34;&gt;.&lt;/span&gt;&lt;span style=&#34;color:#50fa7b&#34;&gt;out&lt;/span&gt;&lt;span style=&#34;color:#ff79c6&#34;&gt;.&lt;/span&gt;&lt;span style=&#34;color:#50fa7b&#34;&gt;print&lt;/span&gt;&lt;span style=&#34;color:#ff79c6&#34;&gt;(&lt;/span&gt;num &lt;span style=&#34;color:#ff79c6&#34;&gt;+&lt;/span&gt; &lt;span style=&#34;color:#f1fa8c&#34;&gt;&amp;#34; &amp;#34;&lt;/span&gt;&lt;span style=&#34;color:#ff79c6&#34;&gt;);&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#ff79c6&#34;&gt;}&lt;/span&gt;
 &lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;我有特別設定要樂透的數字個數，以及抽取範圍的起始及終止值，以便將來更動這三個參數就可以做各種不同範圍個數的樂透，甚至也可以利用 &lt;code&gt;java.util.Scanner&lt;/code&gt; 的功能讓使用者能直接用鍵盤輸入這三個參數，不過那就不在這個題目要討論的重點。&lt;/p&gt;
 &lt;h1 id=&#34;限制&#34;&gt;限制&lt;/h1&gt;
 &lt;p&gt;其實這些解法最大的問題都不在於算法本身，而是 Java 提供的 &lt;code&gt;random()&lt;/code&gt; 方法是不是真正的隨機，其實這也可以寫一個程式來檢驗，我們將這個程式跑個幾千、幾萬，甚至幾百萬次之後，每一個數字抽到的次數是不是趨於相等。&lt;/p&gt;
@@ -433,7 +434,7 @@
 &lt;p&gt;但 Homebrew 在安裝前需要先安裝 &lt;a href=&#34;https://itunes.apple.com/us/app/xcode/id497799835?mt=12&#34;&gt;Xcode&lt;/a&gt;，似乎是因為 Xcode 會一併安裝一些常用的 command line。&lt;/p&gt;
 &lt;p&gt;還好 Xcode 也是免費軟體，可以直接透過 App Store 下載，要注意檔案蠻大的，下載安裝的過程會要花一點時間。&lt;/p&gt;
 &lt;p&gt;Xcode 安裝好之後，就打開「終端機」，輸入下面這行來下載安裝 Homebrew：&lt;/p&gt;
-&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#e7e9db;background-color:#2f1e2e;-moz-tab-size:4;-o-tab-size:4;tab-size:4;&#34;&gt;&lt;code class=&#34;language-bash&#34; data-lang=&#34;bash&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;$ ruby -e &lt;span style=&#34;color:#48b685&#34;&gt;&amp;#34;&lt;/span&gt;&lt;span style=&#34;color:#815ba4&#34;&gt;$(&lt;/span&gt;curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install&lt;span style=&#34;color:#815ba4&#34;&gt;)&lt;/span&gt;&lt;span style=&#34;color:#48b685&#34;&gt;&amp;#34;&lt;/span&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;&#34;&gt;&lt;code class=&#34;language-bash&#34; data-lang=&#34;bash&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;$ ruby -e &lt;span style=&#34;color:#f1fa8c&#34;&gt;&amp;#34;&lt;/span&gt;&lt;span style=&#34;color:#ff79c6&#34;&gt;$(&lt;/span&gt;curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install&lt;span style=&#34;color:#ff79c6&#34;&gt;)&lt;/span&gt;&lt;span style=&#34;color:#f1fa8c&#34;&gt;&amp;#34;&lt;/span&gt;
 &lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;注意第一個 &lt;code&gt;$&lt;/code&gt; 是開啟終端機就會顯示在你可以打字的那一行的開頭，不用重複輸入。&lt;/p&gt;
 &lt;p&gt;讓他自動跑完之後，就可以開始使用 &lt;code&gt;brew&lt;/code&gt; 指令來操作啦！&lt;/p&gt;
 &lt;p&gt;日後要更新 Homebrew 這個軟體本身，也是一樣在終端機輸入 &lt;code&gt;brew update&lt;/code&gt; 以及 &lt;code&gt;brew tap homebrew/dupes&lt;/code&gt; 就可以了。&lt;/p&gt;
@@ -488,7 +489,7 @@
 &lt;h4 id=&#34;安裝設置-oh-my-zsh&#34;&gt;安裝設置 oh my zsh&lt;/h4&gt;
 &lt;p&gt;基本上 MacOS 都已經預設安裝好 zsh，所以不用我們安裝，所以直接安裝 oh my zsh 就好。&lt;/p&gt;
 &lt;p&gt;要安裝 oh my zsh，請打開任一 CLI，輸入以下這行指令就可以自動下載並安裝：&lt;/p&gt;
-&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#e7e9db;background-color:#2f1e2e;-moz-tab-size:4;-o-tab-size:4;tab-size:4;&#34;&gt;&lt;code class=&#34;language-bash&#34; data-lang=&#34;bash&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;$ sh -c &lt;span style=&#34;color:#48b685&#34;&gt;&amp;#34;&lt;/span&gt;&lt;span style=&#34;color:#815ba4&#34;&gt;$(&lt;/span&gt;curl -fsSL https://raw.githubusercontent.com/robbyryssell/oh-my-zsh/master/tools/install.sh&lt;span style=&#34;color:#815ba4&#34;&gt;)&lt;/span&gt;&lt;span style=&#34;color:#48b685&#34;&gt;&amp;#34;&lt;/span&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;&#34;&gt;&lt;code class=&#34;language-bash&#34; data-lang=&#34;bash&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;$ sh -c &lt;span style=&#34;color:#f1fa8c&#34;&gt;&amp;#34;&lt;/span&gt;&lt;span style=&#34;color:#ff79c6&#34;&gt;$(&lt;/span&gt;curl -fsSL https://raw.githubusercontent.com/robbyryssell/oh-my-zsh/master/tools/install.sh&lt;span style=&#34;color:#ff79c6&#34;&gt;)&lt;/span&gt;&lt;span style=&#34;color:#f1fa8c&#34;&gt;&amp;#34;&lt;/span&gt;
 &lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;安裝好 oh my zsh 之後，預設就會有主題，對初學者的我來說夠用，但如果你想做調整，就要到 &lt;code&gt;MacOS 帳號名稱&lt;/code&gt; 資料夾的隱藏檔案中尋找 &lt;code&gt;.zshrc&lt;/code&gt; 檔案，這就是 oh my zsh 的設定檔，所有東西都可以在這邊設置。&lt;/p&gt;
 &lt;p&gt;這聽起來很麻煩，但用過就會像變心的女朋友一樣，回～不～去～啦～～～&lt;/p&gt;
 &lt;h1 id=&#34;工作環境設置&#34;&gt;工作環境設置&lt;/h1&gt;
@@ -560,7 +561,7 @@
 &lt;h2 id=&#34;編寫視覺&#34;&gt;編寫／視覺&lt;/h2&gt;
 &lt;p&gt;跟 HTML 一樣，在編寫 Markdown 的時候呈現的畫面，跟實際呈現的畫面其實是不一樣的。&lt;/p&gt;
 &lt;p&gt;例如我們編寫 Markdown 如下：&lt;/p&gt;
-&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#e7e9db;background-color:#2f1e2e;-moz-tab-size:4;-o-tab-size:4;tab-size:4;&#34;&gt;&lt;code class=&#34;language-md&#34; data-lang=&#34;md&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#815ba4&#34;&gt;-&lt;/span&gt; ***This*** is a [&lt;span style=&#34;color:#5bc4bf&#34;&gt;sample&lt;/span&gt;](&lt;span style=&#34;color:#06b6ef&#34;&gt;http://example.com/ &amp;#34;example.com&amp;#34;&lt;/span&gt;).
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;&#34;&gt;&lt;code class=&#34;language-md&#34; data-lang=&#34;md&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#ff79c6&#34;&gt;-&lt;/span&gt; ***This*** is a [&lt;span style=&#34;color:#ff79c6&#34;&gt;sample&lt;/span&gt;](&lt;span style=&#34;color:#50fa7b&#34;&gt;http://example.com/ &amp;#34;example.com&amp;#34;&lt;/span&gt;).
 &lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;實際呈現的畫面其實是這樣的：&lt;/p&gt;
 &lt;blockquote&gt;
 &lt;ul&gt;
@@ -579,7 +580,7 @@
 &lt;p&gt;Markdown 支援 Setext 以及 atx 兩種形式的標題。一般都用 atx 語法，標題的階層較多，語法也比較好記。&lt;/p&gt;
 &lt;h3 id=&#34;setex-形式&#34;&gt;Setex 形式&lt;/h3&gt;
 &lt;p&gt;以底線的方式來表示標題，只有兩種如下：&lt;/p&gt;
-&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#e7e9db;background-color:#2f1e2e;-moz-tab-size:4;-o-tab-size:4;tab-size:4;&#34;&gt;&lt;code class=&#34;language-md&#34; data-lang=&#34;md&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;This is an H1
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;&#34;&gt;&lt;code class=&#34;language-md&#34; data-lang=&#34;md&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;This is an H1
 &lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;=============
 &lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;This is an H2
 &lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;-------------
@@ -590,9 +591,9 @@
 &lt;/blockquote&gt;
 &lt;h3 id=&#34;atx-形式&#34;&gt;atx 形式&lt;/h3&gt;
 &lt;p&gt;在標題前面加上 1 到 6 個 &lt;code&gt;#&lt;/code&gt;，剛好對應到 HTML 的 &lt;code&gt;h1&lt;/code&gt; 到 &lt;code&gt;h6&lt;/code&gt;，如：&lt;/p&gt;
-&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#e7e9db;background-color:#2f1e2e;-moz-tab-size:4;-o-tab-size:4;tab-size:4;&#34;&gt;&lt;code class=&#34;language-md&#34; data-lang=&#34;md&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;font-weight:bold&#34;&gt;# This is an H1
-&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;font-weight:bold&#34;&gt;&lt;/span&gt;&lt;span style=&#34;color:#5bc4bf;font-weight:bold&#34;&gt;## This is an H2
-&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#5bc4bf;font-weight:bold&#34;&gt;### This is an H3
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;&#34;&gt;&lt;code class=&#34;language-md&#34; data-lang=&#34;md&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;font-weight:bold&#34;&gt;# This is an H1
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;font-weight:bold&#34;&gt;&lt;/span&gt;&lt;span style=&#34;font-weight:bold&#34;&gt;## This is an H2
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;font-weight:bold&#34;&gt;### This is an H3
 &lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;實際呈現：&lt;/p&gt;
 &lt;blockquote&gt;
 &lt;h1 id=&#34;this-is-an-h1-1&#34;&gt;This is an H1&lt;/h1&gt;
@@ -605,8 +606,8 @@
 &lt;h3 id=&#34;有序清單&#34;&gt;有序清單&lt;/h3&gt;
 &lt;p&gt;使用一個數字，加一個英文句點 &lt;code&gt;.&lt;/code&gt;，再空一格。&lt;/p&gt;
 &lt;p&gt;注意 &lt;strong&gt;數字並不會影響實際畫面的排序&lt;/strong&gt;，例如：&lt;/p&gt;
-&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#e7e9db;background-color:#2f1e2e;-moz-tab-size:4;-o-tab-size:4;tab-size:4;&#34;&gt;&lt;code class=&#34;language-md&#34; data-lang=&#34;md&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#815ba4&#34;&gt;1.&lt;/span&gt;    First item
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#815ba4&#34;&gt;2.&lt;/span&gt;    Second item
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;&#34;&gt;&lt;code class=&#34;language-md&#34; data-lang=&#34;md&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#ff79c6&#34;&gt;1.&lt;/span&gt;    First item
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#ff79c6&#34;&gt;2.&lt;/span&gt;    Second item
 &lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;實際上 Markdown 會自動排序：&lt;/p&gt;
 &lt;blockquote&gt;
 &lt;ol start=&#34;9527&#34;&gt;
@@ -617,9 +618,9 @@
 &lt;p&gt;但建議還是照正常順序編排啦，自己編寫看得比較清楚，而且也不清楚什麼時候 Markdown 就改成一定要照順序排序（攤手）。&lt;/p&gt;
 &lt;h3 id=&#34;無序清單&#34;&gt;無序清單&lt;/h3&gt;
 &lt;p&gt;使用 &lt;code&gt;*&lt;/code&gt;、&lt;code&gt;+&lt;/code&gt; 或 &lt;code&gt;-&lt;/code&gt; 做無序清單的標記。例如：&lt;/p&gt;
-&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#e7e9db;background-color:#2f1e2e;-moz-tab-size:4;-o-tab-size:4;tab-size:4;&#34;&gt;&lt;code class=&#34;language-md&#34; data-lang=&#34;md&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#815ba4&#34;&gt;*&lt;/span&gt; First item
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#815ba4&#34;&gt;*&lt;/span&gt; Second item
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#815ba4&#34;&gt;*&lt;/span&gt; Third item
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;&#34;&gt;&lt;code class=&#34;language-md&#34; data-lang=&#34;md&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#ff79c6&#34;&gt;*&lt;/span&gt; First item
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#ff79c6&#34;&gt;*&lt;/span&gt; Second item
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#ff79c6&#34;&gt;*&lt;/span&gt; Third item
 &lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;會顯示成：&lt;/p&gt;
 &lt;blockquote&gt;
 &lt;ul&gt;
@@ -630,9 +631,9 @@
 &lt;/blockquote&gt;
 &lt;h3 id=&#34;巢狀清單&#34;&gt;巢狀清單&lt;/h3&gt;
 &lt;p&gt;不論是有序還是無序清單，都可以使用縮排 tab 鍵來做出巢狀的清單。例如：&lt;/p&gt;
-&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#e7e9db;background-color:#2f1e2e;-moz-tab-size:4;-o-tab-size:4;tab-size:4;&#34;&gt;&lt;code class=&#34;language-md&#34; data-lang=&#34;md&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#815ba4&#34;&gt;*&lt;/span&gt; First item
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;	&lt;span style=&#34;color:#815ba4&#34;&gt;*&lt;/span&gt; Second item
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;		&lt;span style=&#34;color:#815ba4&#34;&gt;*&lt;/span&gt; Third item
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;&#34;&gt;&lt;code class=&#34;language-md&#34; data-lang=&#34;md&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#ff79c6&#34;&gt;*&lt;/span&gt; First item
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;	&lt;span style=&#34;color:#ff79c6&#34;&gt;*&lt;/span&gt; Second item
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;		&lt;span style=&#34;color:#ff79c6&#34;&gt;*&lt;/span&gt; Third item
 &lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;會顯示成：&lt;/p&gt;
 &lt;blockquote&gt;
 &lt;ul&gt;
@@ -649,15 +650,15 @@
 &lt;/blockquote&gt;
 &lt;h2 id=&#34;區塊引言&#34;&gt;區塊引言&lt;/h2&gt;
 &lt;p&gt;使用 &lt;code&gt;&amp;gt;&lt;/code&gt; 來標記區塊引言。例如：&lt;/p&gt;
-&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#e7e9db;background-color:#2f1e2e;-moz-tab-size:4;-o-tab-size:4;tab-size:4;&#34;&gt;&lt;code class=&#34;language-md&#34; data-lang=&#34;md&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#815ba4&#34;&gt;&amp;gt; &lt;/span&gt;&lt;span style=&#34;font-style:italic&#34;&gt;This is a blockquote paragraph.
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;&#34;&gt;&lt;code class=&#34;language-md&#34; data-lang=&#34;md&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#ff79c6&#34;&gt;&amp;gt; &lt;/span&gt;&lt;span style=&#34;text-decoration:underline&#34;&gt;This is a blockquote paragraph.
 &lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;就會顯示成：&lt;/p&gt;
 &lt;blockquote&gt;
 &lt;p&gt;This is a blockquote paragraph.&lt;/p&gt;
 &lt;/blockquote&gt;
 &lt;p&gt;區塊引言也可以巢狀分層，例如：&lt;/p&gt;
-&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#e7e9db;background-color:#2f1e2e;-moz-tab-size:4;-o-tab-size:4;tab-size:4;&#34;&gt;&lt;code class=&#34;language-md&#34; data-lang=&#34;md&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#815ba4&#34;&gt;&amp;gt; &lt;/span&gt;&lt;span style=&#34;font-style:italic&#34;&gt;This is a blockquote sentence 1.
-&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;font-style:italic&#34;&gt;&lt;/span&gt;&lt;span style=&#34;color:#815ba4&#34;&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#815ba4&#34;&gt;&amp;gt; &lt;/span&gt;&lt;span style=&#34;font-style:italic&#34;&gt;&amp;gt; This is a blockquote sentence 2.
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;&#34;&gt;&lt;code class=&#34;language-md&#34; data-lang=&#34;md&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#ff79c6&#34;&gt;&amp;gt; &lt;/span&gt;&lt;span style=&#34;text-decoration:underline&#34;&gt;This is a blockquote sentence 1.
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;text-decoration:underline&#34;&gt;&lt;/span&gt;&lt;span style=&#34;color:#ff79c6&#34;&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#ff79c6&#34;&gt;&amp;gt; &lt;/span&gt;&lt;span style=&#34;text-decoration:underline&#34;&gt;&amp;gt; This is a blockquote sentence 2.
 &lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;會顯示成：&lt;/p&gt;
 &lt;blockquote&gt;
 &lt;p&gt;This is a blockquote sentence 1.&lt;/p&gt;
@@ -669,11 +670,11 @@
 &lt;/blockquote&gt;
 &lt;p&gt;區塊引言也可以只在一個「段落」的第一行加入 &lt;code&gt;&amp;gt;&lt;/code&gt; 標記區塊，記得「段落」是要以「空白行」做為區隔。&lt;/p&gt;
 &lt;p&gt;另外區塊內也支援 Markdown 語法。例如：&lt;/p&gt;
-&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#e7e9db;background-color:#2f1e2e;-moz-tab-size:4;-o-tab-size:4;tab-size:4;&#34;&gt;&lt;code class=&#34;language-md&#34; data-lang=&#34;md&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#815ba4&#34;&gt;&amp;gt; &lt;/span&gt;&lt;span style=&#34;font-style:italic&#34;&gt;*This* is a blockquote paragraph 1 sentence 1.
-&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;font-style:italic&#34;&gt;&lt;/span&gt;**This** is a blockquote paragraph 1 &lt;span style=&#34;font-style:italic&#34;&gt;**&lt;/span&gt;*sentence 2***.
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;&#34;&gt;&lt;code class=&#34;language-md&#34; data-lang=&#34;md&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#ff79c6&#34;&gt;&amp;gt; &lt;/span&gt;&lt;span style=&#34;text-decoration:underline&#34;&gt;*This* is a blockquote paragraph 1 sentence 1.
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;text-decoration:underline&#34;&gt;&lt;/span&gt;**This** is a blockquote paragraph 1 &lt;span style=&#34;text-decoration:underline&#34;&gt;**&lt;/span&gt;*sentence 2***.
 &lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;This is a blockquote paragraph 1 sentence 3.
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#815ba4&#34;&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#815ba4&#34;&gt;&amp;gt; &lt;/span&gt;&lt;span style=&#34;font-style:italic&#34;&gt;&amp;gt; - [ ] This is a blockquote paragraph 2 sentence 1.
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#ff79c6&#34;&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#ff79c6&#34;&gt;&amp;gt; &lt;/span&gt;&lt;span style=&#34;text-decoration:underline&#34;&gt;&amp;gt; - [ ] This is a blockquote paragraph 2 sentence 1.
 &lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;會顯示成：&lt;/p&gt;
 &lt;blockquote&gt;
 &lt;p&gt;&lt;em&gt;This&lt;/em&gt; is a blockquote paragraph 1 sentence 1.&lt;br&gt;
@@ -703,9 +704,9 @@ This is a code block.
 &lt;h2 id=&#34;分隔線&#34;&gt;分隔線&lt;/h2&gt;
 &lt;p&gt;在同一行用三個以上的 &lt;code&gt;*&lt;/code&gt;、&lt;code&gt;-&lt;/code&gt; 或 &lt;code&gt;_&lt;/code&gt; 可以組成一個分隔線，同一行不可以有其他的文字或標記，但在三個 &lt;code&gt;*&lt;/code&gt;、&lt;code&gt;-&lt;/code&gt; 或 &lt;code&gt;_&lt;/code&gt;中間可以插入空白。&lt;/p&gt;
 &lt;p&gt;以下幾種方式都可以組成分隔線：&lt;/p&gt;
-&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#e7e9db;background-color:#2f1e2e;-moz-tab-size:4;-o-tab-size:4;tab-size:4;&#34;&gt;&lt;code class=&#34;language-md&#34; data-lang=&#34;md&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#815ba4&#34;&gt;-&lt;/span&gt; - -  
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#815ba4&#34;&gt;*&lt;/span&gt; * *  
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;______ &lt;span style=&#34;font-weight:bold&#34;&gt;______&lt;/span&gt; &lt;span style=&#34;font-weight:bold&#34;&gt;______&lt;/span&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;&#34;&gt;&lt;code class=&#34;language-md&#34; data-lang=&#34;md&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#ff79c6&#34;&gt;-&lt;/span&gt; - -  
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#ff79c6&#34;&gt;*&lt;/span&gt; * *  
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;______ ______ ______
 &lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;都會顯示成同一種分隔線：&lt;/p&gt;
 &lt;blockquote&gt;
 &lt;hr&gt;
@@ -716,7 +717,7 @@ This is a code block.
 &lt;h3 id=&#34;行內連結&#34;&gt;行內連結&lt;/h3&gt;
 &lt;p&gt;行內連結是用 &lt;code&gt;[]&lt;/code&gt; 將文字包起來後，再加上 &lt;code&gt;()&lt;/code&gt;，並在小括號內加上連結網址即可。若想幫連結加上標題，也就是滑鼠移動到連結文字上會顯示的標題，在小括號內的連結網址後，空一格，用 &lt;code&gt;&amp;quot;&lt;/code&gt; 將標題文字包起來即可。&lt;/p&gt;
 &lt;p&gt;例如：&lt;/p&gt;
-&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#e7e9db;background-color:#2f1e2e;-moz-tab-size:4;-o-tab-size:4;tab-size:4;&#34;&gt;&lt;code class=&#34;language-md&#34; data-lang=&#34;md&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;This is a [&lt;span style=&#34;color:#5bc4bf&#34;&gt;sample&lt;/span&gt;](&lt;span style=&#34;color:#06b6ef&#34;&gt;http://example.com/ &amp;#34;example.com&amp;#34;&lt;/span&gt;).
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;&#34;&gt;&lt;code class=&#34;language-md&#34; data-lang=&#34;md&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;This is a [&lt;span style=&#34;color:#ff79c6&#34;&gt;sample&lt;/span&gt;](&lt;span style=&#34;color:#50fa7b&#34;&gt;http://example.com/ &amp;#34;example.com&amp;#34;&lt;/span&gt;).
 &lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;就會呈現為：&lt;/p&gt;
 &lt;blockquote&gt;
 &lt;p&gt;This is a &lt;a href=&#34;http://example.com/&#34; title=&#34;example.com&#34;&gt;sample&lt;/a&gt;.&lt;/p&gt;
@@ -724,13 +725,13 @@ This is a code block.
 &lt;h3 id=&#34;參考連結&#34;&gt;參考連結&lt;/h3&gt;
 &lt;p&gt;若你的文章內有多處要連結到同一個網址連結，則用參考連結是較好的方式。&lt;/p&gt;
 &lt;p&gt;參考連結一樣是用 &lt;code&gt;[]&lt;/code&gt; 將文字包起來，後面再用一次 &lt;code&gt;[]&lt;/code&gt; 將用來辨識連結的標籤包起來。例如：&lt;/p&gt;
-&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#e7e9db;background-color:#2f1e2e;-moz-tab-size:4;-o-tab-size:4;tab-size:4;&#34;&gt;&lt;code class=&#34;language-md&#34; data-lang=&#34;md&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;Let me [Google][0] that for you.
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;&#34;&gt;&lt;code class=&#34;language-md&#34; data-lang=&#34;md&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;Let me [Google][0] that for you.
 &lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;同樣會呈現為：&lt;/p&gt;
 &lt;blockquote&gt;
 &lt;p&gt;Let me &lt;a href=&#34;http://www.google.com/&#34; title=&#34;Google&#34;&gt;Google&lt;/a&gt; that for you.&lt;/p&gt;
 &lt;/blockquote&gt;
 &lt;p&gt;然後在文件的任意處，對，「任意處」，放上標籤內的連結內容定義，例如：&lt;/p&gt;
-&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#e7e9db;background-color:#2f1e2e;-moz-tab-size:4;-o-tab-size:4;tab-size:4;&#34;&gt;&lt;code class=&#34;language-md&#34; data-lang=&#34;md&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;[0]: http://www.google.com/ &amp;#34;Google&amp;#34;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;&#34;&gt;&lt;code class=&#34;language-md&#34; data-lang=&#34;md&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;[0]: http://www.google.com/ &amp;#34;Google&amp;#34;
 &lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;但很抱歉，這個參考連結的內容定義並不會實際呈現出來，想檢查正確與否，就是直接點超連結的文字來測試。&lt;/p&gt;
 &lt;p&gt;而連結的內容定義，有一定的語法，所以有以下幾點需要注意：&lt;/p&gt;
 &lt;ul&gt;
@@ -741,9 +742,9 @@ This is a code block.
 &lt;/ul&gt;
 &lt;h2 id=&#34;強調&#34;&gt;強調&lt;/h2&gt;
 &lt;p&gt;將想要強調的文字用 &lt;code&gt;*&lt;/code&gt; 或 &lt;code&gt;_&lt;/code&gt; 包起來，就可以呈現三種強調的方式。例如：&lt;/p&gt;
-&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#e7e9db;background-color:#2f1e2e;-moz-tab-size:4;-o-tab-size:4;tab-size:4;&#34;&gt;&lt;code class=&#34;language-md&#34; data-lang=&#34;md&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;***粗斜體***  
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;font-weight:bold&#34;&gt;__粗體__&lt;/span&gt;  
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;font-style:italic&#34;&gt;*斜體*&lt;/span&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;&#34;&gt;&lt;code class=&#34;language-md&#34; data-lang=&#34;md&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;***粗斜體***  
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;__粗體__  
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;text-decoration:underline&#34;&gt;*斜體*&lt;/span&gt;
 &lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;會呈現如下：&lt;/p&gt;
 &lt;blockquote&gt;
 &lt;p&gt;&lt;em&gt;&lt;strong&gt;粗斜體&lt;/strong&gt;&lt;/em&gt;&lt;br&gt;
@@ -752,12 +753,12 @@ This is a code block.
 &lt;/blockquote&gt;
 &lt;h2 id=&#34;程式碼&#34;&gt;程式碼&lt;/h2&gt;
 &lt;p&gt;這邊跟程式碼區塊的區別，是只用來標記一小段行內程式碼，直接用 &lt;!-- raw HTML omitted --&gt;`&lt;!-- raw HTML omitted --&gt; 將程式碼包起來即可。例如：&lt;/p&gt;
-&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#e7e9db;background-color:#2f1e2e;-moz-tab-size:4;-o-tab-size:4;tab-size:4;&#34;&gt;&lt;code class=&#34;language-md&#34; data-lang=&#34;md&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#48b685&#34;&gt;`This is a code.`&lt;/span&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;&#34;&gt;&lt;code class=&#34;language-md&#34; data-lang=&#34;md&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#f1fa8c&#34;&gt;`This is a code.`&lt;/span&gt;
 &lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;就會顯示為：&lt;/p&gt;
 &lt;p&gt;&lt;code&gt;This is a code.&lt;/code&gt;&lt;/p&gt;
 &lt;p&gt;若程式碼內有需要用到 &lt;code&gt;`&lt;/code&gt; 這個符號，可以用多個 &lt;code&gt;`&lt;/code&gt; 符號來包住程式碼以作區別，例如：&lt;/p&gt;
-&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#e7e9db;background-color:#2f1e2e;-moz-tab-size:4;-o-tab-size:4;tab-size:4;&#34;&gt;&lt;code class=&#34;language-md&#34; data-lang=&#34;md&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;A single backtick in a code span: `` &lt;span style=&#34;color:#48b685&#34;&gt;` ``  
-&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#48b685&#34;&gt;A bakctick-delimited string in a code span: `` `&lt;/span&gt;foo` ``
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;&#34;&gt;&lt;code class=&#34;language-md&#34; data-lang=&#34;md&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;A single backtick in a code span: `` &lt;span style=&#34;color:#f1fa8c&#34;&gt;` ``  
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#f1fa8c&#34;&gt;A bakctick-delimited string in a code span: `` `&lt;/span&gt;foo` ``
 &lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;就會顯示為：&lt;/p&gt;
 &lt;blockquote&gt;
 &lt;p&gt;A single backtick in a code span: &lt;code&gt;`&lt;/code&gt;&lt;br&gt;
@@ -765,7 +766,7 @@ A bakctick-delimited string in a code span: &lt;code&gt;`foo`&lt;/code&gt;&lt;/p
 &lt;/blockquote&gt;
 &lt;h2 id=&#34;圖片&#34;&gt;圖片&lt;/h2&gt;
 &lt;p&gt;插入圖片的 Markdown 語法跟連結非常相似，幾乎只差在需要在開頭加上一個 &lt;code&gt;!&lt;/code&gt; 符號。例如：&lt;/p&gt;
-&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#e7e9db;background-color:#2f1e2e;-moz-tab-size:4;-o-tab-size:4;tab-size:4;&#34;&gt;&lt;code class=&#34;language-md&#34; data-lang=&#34;md&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;![&lt;span style=&#34;color:#5bc4bf&#34;&gt;Markdown logo&lt;/span&gt;](&lt;span style=&#34;color:#06b6ef&#34;&gt;https://upload.wikimedia.org/wikipedia/commons/thumb/4/48/Markdown-mark.svg/208px-Markdown-mark.svg.png &amp;#34;Markdown&amp;#34;&lt;/span&gt;)
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;&#34;&gt;&lt;code class=&#34;language-md&#34; data-lang=&#34;md&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;![&lt;span style=&#34;color:#ff79c6&#34;&gt;Markdown logo&lt;/span&gt;](&lt;span style=&#34;color:#50fa7b&#34;&gt;https://upload.wikimedia.org/wikipedia/commons/thumb/4/48/Markdown-mark.svg/208px-Markdown-mark.svg.png &amp;#34;Markdown&amp;#34;&lt;/span&gt;)
 &lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;就會顯示出圖片：&lt;/p&gt;
 &lt;blockquote&gt;
 &lt;p&gt;&lt;img src=&#34;https://upload.wikimedia.org/wikipedia/commons/thumb/4/48/Markdown-mark.svg/208px-Markdown-mark.svg.png&#34; alt=&#34;Markdown logo&#34; title=&#34;Markdown&#34;&gt;&lt;/p&gt;
@@ -778,9 +779,9 @@ A bakctick-delimited string in a code span: &lt;code&gt;`foo`&lt;/code&gt;&lt;/p
 &lt;li&gt;&lt;code&gt;()&lt;/code&gt; 內的網址後面，只可以 &lt;code&gt;&#39;&#39;&lt;/code&gt; 或 &lt;code&gt;&amp;quot;&amp;quot;&lt;/code&gt; 包住可以選擇加上的標題&lt;/li&gt;
 &lt;/ul&gt;
 &lt;p&gt;參考圖片的語法則像這樣：&lt;/p&gt;
-&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#e7e9db;background-color:#2f1e2e;-moz-tab-size:4;-o-tab-size:4;tab-size:4;&#34;&gt;&lt;code class=&#34;language-md&#34; data-lang=&#34;md&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;![Evernote logo][1]
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;&#34;&gt;&lt;code class=&#34;language-md&#34; data-lang=&#34;md&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;![Evernote logo][1]
 &lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;參考的定義方式則與連結的參考內容定義方式一模一樣：&lt;/p&gt;
-&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#e7e9db;background-color:#2f1e2e;-moz-tab-size:4;-o-tab-size:4;tab-size:4;&#34;&gt;&lt;code class=&#34;language-md&#34; data-lang=&#34;md&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;[1]: https://upload.wikimedia.org/wikipedia/commons/a/a4/Evernote_Icon.png &amp;#34;Evernote&amp;#34;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;&#34;&gt;&lt;code class=&#34;language-md&#34; data-lang=&#34;md&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;[1]: https://upload.wikimedia.org/wikipedia/commons/a/a4/Evernote_Icon.png &amp;#34;Evernote&amp;#34;
 &lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;同樣可以顯示出圖片：&lt;/p&gt;
 &lt;blockquote&gt;
 &lt;p&gt;&lt;img src=&#34;https://upload.wikimedia.org/wikipedia/commons/a/a4/Evernote_Icon.png&#34; alt=&#34;Evernote logo&#34; title=&#34;Evernote&#34;&gt;&lt;/p&gt;
@@ -788,7 +789,7 @@ A bakctick-delimited string in a code span: &lt;code&gt;`foo`&lt;/code&gt;&lt;/p
 &lt;h1 id=&#34;其他&#34;&gt;其他&lt;/h1&gt;
 &lt;h2 id=&#34;自動連結&#34;&gt;自動連結&lt;/h2&gt;
 &lt;p&gt;Markdown 也支援比較簡短的連結形式，可以用來表達連結網址及信箱，同時也能有超連結功能，只需要用 &lt;code&gt;&amp;lt;&amp;gt;&lt;/code&gt; 包住網址即可。例如：&lt;/p&gt;
-&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#e7e9db;background-color:#2f1e2e;-moz-tab-size:4;-o-tab-size:4;tab-size:4;&#34;&gt;&lt;code class=&#34;language-md&#34; data-lang=&#34;md&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&amp;lt;&lt;span style=&#34;color:#5bc4bf&#34;&gt;http:&lt;/span&gt;&lt;span style=&#34;color:#ef6155&#34;&gt;//&lt;/span&gt;&lt;span style=&#34;color:#06b6ef&#34;&gt;example&lt;/span&gt;&lt;span style=&#34;color:#ef6155&#34;&gt;.&lt;/span&gt;&lt;span style=&#34;color:#06b6ef&#34;&gt;com&lt;/span&gt;/&amp;gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;&#34;&gt;&lt;code class=&#34;language-md&#34; data-lang=&#34;md&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&amp;lt;&lt;span style=&#34;color:#ff79c6&#34;&gt;http:&lt;/span&gt;//&lt;span style=&#34;color:#50fa7b&#34;&gt;example&lt;/span&gt;.&lt;span style=&#34;color:#50fa7b&#34;&gt;com&lt;/span&gt;/&amp;gt;
 &lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;就可以顯示為：&lt;/p&gt;
 &lt;blockquote&gt;
 &lt;p&gt;&lt;a href=&#34;http://example.com/&#34;&gt;http://example.com/&lt;/a&gt;&lt;/p&gt;
@@ -796,7 +797,7 @@ A bakctick-delimited string in a code span: &lt;code&gt;`foo`&lt;/code&gt;&lt;/p
 &lt;h2 id=&#34;跳脫字元&#34;&gt;跳脫字元&lt;/h2&gt;
 &lt;p&gt;前面講了很多 Markdown 的語法，使用很多符號來達成指定功能的標記，那如果只是需要在文章中加入那些符號，但並不想使用相關的功能，就需要在該符號前面加上 &lt;code&gt;\&lt;/code&gt; 這個符號，以達成跳脫字元的功能。&lt;/p&gt;
 &lt;p&gt;例如：&lt;/p&gt;
-&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#e7e9db;background-color:#2f1e2e;-moz-tab-size:4;-o-tab-size:4;tab-size:4;&#34;&gt;&lt;code class=&#34;language-md&#34; data-lang=&#34;md&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;If I want to \*\*emphasize\*\* something without making it &lt;span style=&#34;font-weight:bold&#34;&gt;**bold**&lt;/span&gt;.
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;&#34;&gt;&lt;code class=&#34;language-md&#34; data-lang=&#34;md&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;If I want to \*\*emphasize\*\* something without making it **bold**.
 &lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;就會顯示為：&lt;/p&gt;
 &lt;blockquote&gt;
 &lt;p&gt;If I want to **emphasize** something without making it &lt;strong&gt;bold&lt;/strong&gt;.&lt;/p&gt;
@@ -821,7 +822,7 @@ A bakctick-delimited string in a code span: &lt;code&gt;`foo`&lt;/code&gt;&lt;/p
 &lt;h3 id=&#34;checkbox&#34;&gt;Checkbox&lt;/h3&gt;
 &lt;p&gt;語法是先用一個 &lt;code&gt;-&lt;/code&gt;，一個空格，再加上 &lt;code&gt;[ ]&lt;/code&gt;，空格後再加上敘述。注意 &lt;code&gt;[ ]&lt;/code&gt; 當中必須有一個空格。若需要顯示的 checkbox 已經勾選，請將 &lt;code&gt;[ ]&lt;/code&gt; 當中的空格替換成 &lt;code&gt;x&lt;/code&gt; 或 &lt;code&gt;X&lt;/code&gt;。&lt;/p&gt;
 &lt;p&gt;例如：&lt;/p&gt;
-&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#e7e9db;background-color:#2f1e2e;-moz-tab-size:4;-o-tab-size:4;tab-size:4;&#34;&gt;&lt;code class=&#34;language-md&#34; data-lang=&#34;md&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#815ba4&#34;&gt;- [ ]&lt;/span&gt; First box
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;&#34;&gt;&lt;code class=&#34;language-md&#34; data-lang=&#34;md&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#ff79c6&#34;&gt;- [ ]&lt;/span&gt; First box
 &lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;就會顯示為：&lt;/p&gt;
 &lt;blockquote&gt;
 &lt;ul&gt;
@@ -831,7 +832,7 @@ A bakctick-delimited string in a code span: &lt;code&gt;`foo`&lt;/code&gt;&lt;/p
 &lt;h3 id=&#34;table&#34;&gt;Table&lt;/h3&gt;
 &lt;p&gt;Markdown 也支援做表格，基本上需要三個部分，標題列、設定列、內容表格。基本上都是用 &lt;code&gt;|&lt;/code&gt; 做為分隔符號。&lt;/p&gt;
 &lt;p&gt;例如：&lt;/p&gt;
-&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#e7e9db;background-color:#2f1e2e;-moz-tab-size:4;-o-tab-size:4;tab-size:4;&#34;&gt;&lt;code class=&#34;language-md&#34; data-lang=&#34;md&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;No.|Pokemon|神奇寶貝
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;&#34;&gt;&lt;code class=&#34;language-md&#34; data-lang=&#34;md&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;No.|Pokemon|神奇寶貝
 &lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;:---:|:---|---:
 &lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;1|Bulbasaur|妙蛙種子
 &lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;2|Ivysaur|妙蛙草
@@ -878,15 +879,15 @@ A bakctick-delimited string in a code span: &lt;code&gt;`foo`&lt;/code&gt;&lt;/p
 &lt;p&gt;如果記錄在程式碼區塊的程式碼有確切的語言，不仿試用以下的辦法，讓 Markdown 能更好的辨認程式碼，並更好地標記。&lt;/p&gt;
 &lt;p&gt;首先必須使用三個 &lt;code&gt;`&lt;/code&gt; 來前後包住程式碼區塊，然後在第一排 &lt;code&gt;`&lt;/code&gt; 的後面加上程式語言名稱。&lt;/p&gt;
 &lt;p&gt;例如：&lt;/p&gt;
-&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#e7e9db;background-color:#2f1e2e;-moz-tab-size:4;-o-tab-size:4;tab-size:4;&#34;&gt;&lt;code class=&#34;language-md&#34; data-lang=&#34;md&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;	```java  
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;&#34;&gt;&lt;code class=&#34;language-md&#34; data-lang=&#34;md&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;	```java  
 &lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;	public static void main(String[] args) {  
 &lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;		System.out.println(&amp;#34;Hello World!&amp;#34;);  
 &lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;	}  
 &lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;	```
 &lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;就可以讓 Markdown 辨識如下：&lt;/p&gt;
-&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#e7e9db;background-color:#2f1e2e;-moz-tab-size:4;-o-tab-size:4;tab-size:4;&#34;&gt;&lt;code class=&#34;language-java&#34; data-lang=&#34;java&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#815ba4&#34;&gt;public&lt;/span&gt; &lt;span style=&#34;color:#815ba4&#34;&gt;static&lt;/span&gt; &lt;span style=&#34;color:#fec418&#34;&gt;void&lt;/span&gt; &lt;span style=&#34;color:#06b6ef&#34;&gt;main&lt;/span&gt;&lt;span style=&#34;color:#5bc4bf&#34;&gt;(&lt;/span&gt;String&lt;span style=&#34;color:#5bc4bf&#34;&gt;[]&lt;/span&gt; args&lt;span style=&#34;color:#5bc4bf&#34;&gt;)&lt;/span&gt; &lt;span style=&#34;color:#5bc4bf&#34;&gt;{&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;	System&lt;span style=&#34;color:#5bc4bf&#34;&gt;.&lt;/span&gt;&lt;span style=&#34;color:#06b6ef&#34;&gt;out&lt;/span&gt;&lt;span style=&#34;color:#5bc4bf&#34;&gt;.&lt;/span&gt;&lt;span style=&#34;color:#06b6ef&#34;&gt;println&lt;/span&gt;&lt;span style=&#34;color:#5bc4bf&#34;&gt;(&lt;/span&gt;&lt;span style=&#34;color:#48b685&#34;&gt;&amp;#34;Hello World!&amp;#34;&lt;/span&gt;&lt;span style=&#34;color:#5bc4bf&#34;&gt;);&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#5bc4bf&#34;&gt;}&lt;/span&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;&#34;&gt;&lt;code class=&#34;language-java&#34; data-lang=&#34;java&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#8be9fd;font-style:italic&#34;&gt;public&lt;/span&gt; &lt;span style=&#34;color:#8be9fd;font-style:italic&#34;&gt;static&lt;/span&gt; &lt;span style=&#34;color:#8be9fd&#34;&gt;void&lt;/span&gt; &lt;span style=&#34;color:#50fa7b&#34;&gt;main&lt;/span&gt;&lt;span style=&#34;color:#ff79c6&#34;&gt;(&lt;/span&gt;String&lt;span style=&#34;color:#ff79c6&#34;&gt;[]&lt;/span&gt; args&lt;span style=&#34;color:#ff79c6&#34;&gt;)&lt;/span&gt; &lt;span style=&#34;color:#ff79c6&#34;&gt;{&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;	System&lt;span style=&#34;color:#ff79c6&#34;&gt;.&lt;/span&gt;&lt;span style=&#34;color:#50fa7b&#34;&gt;out&lt;/span&gt;&lt;span style=&#34;color:#ff79c6&#34;&gt;.&lt;/span&gt;&lt;span style=&#34;color:#50fa7b&#34;&gt;println&lt;/span&gt;&lt;span style=&#34;color:#ff79c6&#34;&gt;(&lt;/span&gt;&lt;span style=&#34;color:#f1fa8c&#34;&gt;&amp;#34;Hello World!&amp;#34;&lt;/span&gt;&lt;span style=&#34;color:#ff79c6&#34;&gt;);&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#ff79c6&#34;&gt;}&lt;/span&gt;
 &lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;另外，利用這個辨識的功能，還能延伸為繪製一些簡單的圖表，如流程圖。&lt;/p&gt;
 &lt;p&gt;詳細語法請上網搜尋 &lt;code&gt;markdown&lt;/code&gt; 加 &lt;code&gt;flow&lt;/code&gt;。這邊僅舉例：&lt;/p&gt;
 &lt;pre&gt;&lt;code&gt;```flow

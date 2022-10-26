@@ -38,5 +38,21 @@ tar 基本上是從 Windows 10 或 Windows Server 2019 才開始支援，很不�
 基於可以用原生就絕不多安裝東西的自虐原則，好險又找到了另一個方法，powershell 有個 archive 的模組可以用！</description>
     </item>
     
+    <item>
+      <title>Spring Boot 實作 API 版本控制</title>
+      <link>https://idontwannarock.github.io/tech_blog/2019/09/spring_api_version_with_swagger_security/</link>
+      <pubDate>Thu, 19 Sep 2019 15:53:36 +0800</pubDate>
+      
+      <guid>https://idontwannarock.github.io/tech_blog/2019/09/spring_api_version_with_swagger_security/</guid>
+      <description>本文目的是為了探討在 Spring Boot Web 專案中，實作 API 版本控制，並兼容 Swagger 及 Spring Security 的解決方式
+需要有 Spring Boot、Spring MVC、Spring Security 及 Swagger 的基礎概念會比較好理解
+API 版本控制 常見的 API 版本控制方式有三種: URI, header, content-type
+考量到 RESTful API 其中的一個好處是方便快取，使用 header 跟 content-type 的方式則可能無法正確的快取以及達成 idempotent，所以我個人採用的是在 URI 中加入版本號的方式
+再來因為有時候面對的專案有數量眾多的 handler，導致每次修改版本號都要手動修改每一支 handler 對應的 uri，這樣既麻煩又不潮，所以一定要研究一下怎麼在 Spring Boot 專案中利用註解的方式自動幫 handler 對應的 uri 自動插入版本號
+Tech Stack 專案採用的是 Spring Boot 2.0 架構，Java 1.8 版本
+有關 Maven 依賴如下:
+org.springframework.boot:spring-boot-starter-web:2.1.x org.springframework.boot:spring-boot-starter-security:2.1.x io.springfox:springfox-swagger2:2.9.2 io.springfox:springfox-swagger-ui:2.9.2 這邊強調要採用 Spring Boot 主要是因為想要利用 Spring Boot auto configuration 的功能，也因為想要利用這個功能，所以過程才會這麼曲折&amp;hellip;</description>
+    </item>
+    
   </channel>
 </rss>

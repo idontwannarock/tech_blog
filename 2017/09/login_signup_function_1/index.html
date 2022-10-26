@@ -38,7 +38,7 @@ if (!doNotTrack) {
 </script>
 
 
-<link type="text/css" rel="stylesheet" href="https://idontwannarock.github.io/tech_blog/vendor/css/bootstrap.min.css">
+
 
 
   
@@ -48,24 +48,24 @@ if (!doNotTrack) {
 
 
 
-<link rel="stylesheet" href="https://idontwannarock.github.io/tech_blog/scss/journal.min.f4a8de07567a2d29619e0711662ef6251e3e59b642079f99490f654abf89a3c4.css" integrity="sha256-9KjeB1Z6LSlhngcRZi72JR4&#43;WbZCB5&#43;ZSQ9lSr&#43;Jo8Q=" media="screen">
+<link rel="stylesheet" href="https://idontwannarock.github.io/tech_blog/scss/journal.min.c5d92f380bf10f6849c7ac487c7df2b22c081e0851e5339224f1ae29210b20d2.css" integrity="sha256-xdkvOAvxD2hJx6xIfH3ysiwIHghR5TOSJPGuKSELINI=" media="screen">
 
 
 
-<link rel="stylesheet" href="https://idontwannarock.github.io/tech_blog/scss/dark-mode.min.eeb8040aa9333250b7fec770f950bfe8ba9b18a5eeeaf2dfef61d84d3956f625.css" integrity="sha256-7rgECqkzMlC3/sdw&#43;VC/6LqbGKXu6vLf72HYTTlW9iU=" media="screen">
-
-
-<script src="https://idontwannarock.github.io/tech_blog/vendor/js/loadCSS.js"></script>
-<script>
-  loadCSS("https://fonts.googleapis.com/css?family=Fira+Mono|Material+Icons");
-</script>
+<link rel="stylesheet" href="https://idontwannarock.github.io/tech_blog/scss/dark-mode.min.9f8d8c2df9285089d141edd4a50cb7506c7948e6ab79a29968dced1bd0ab7d22.css" integrity="sha256-n42MLfkoUInRQe3UpQy3UGx5SOareaKZaNztG9CrfSI=" media="screen">
 
 
 
 
+      <script src="https://idontwannarock.github.io/tech_blog/js/toc.js"></script>
+    
+    <link type="text/css" rel="stylesheet" href="https://idontwannarock.github.io/tech_blog/vendor/css/bootstrap.min.css"><link rel="stylesheet"
+          href="https://fonts.googleapis.com/css?family=Material+Icons">
 
 
-  <script src="https://idontwannarock.github.io/tech_blog/js/toc.js"></script>
+
+
+
 
 
 
@@ -157,7 +157,7 @@ if (!doNotTrack) {
 
     <div class="nav-footer">
         
-Hugo Theme <a href="https://github.com/amazingrise/hugo-theme-diary">Diary</a> by <a href="https://amazingrise.net">Rise</a>
+Hugo Theme <a href="https://github.com/amazingrise/hugo-theme-diary">Diary</a> by <a href="https://risehere.net/">Rise</a>
 <br>
 Ported from <a href="https://mak1t0.cc/" target="_blank" rel="noreferrer noopener">Makito</a>'s <a href="https://github.com/SumiMakito/hexo-theme-journal/" target="_blank" rel="noreferrer noopener">Journal.</a> <br>
 <br>
@@ -1045,10 +1045,10 @@ Ported from <a href="https://mak1t0.cc/" target="_blank" rel="noreferrer noopene
 <p>設定 Primary Key 的目的是確保此欄位的每一筆資料都是獨一無二的；Auto Increment 則是讓資料庫自動遞增設定 <code>id</code>。</p>
 <h2 id="連接資料庫">連接資料庫</h2>
 <p>接下來就要用 PHP 的 mysqli 函數庫語法嘗試連接資料庫，我是用以下方法，並用 PHP 的 <code>print_r</code> 來顯示連結問題。</p>
-<div class="highlight"><pre tabindex="0" style="color:#e7e9db;background-color:#2f1e2e;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-php" data-lang="php"><span style="display:flex;"><span><span style="color:#ef6155">$link</span> <span style="color:#5bc4bf">=</span> <span style="color:#06b6ef">mysqli_connect</span>(<span style="color:#48b685">&#34;localhost:3306&#34;</span>, <span style="color:#48b685">&#34;root&#34;</span>, <span style="color:#48b685">&#34;&#34;</span>, <span style="color:#48b685">&#34;user&#34;</span>);  
-</span></span><span style="display:flex;"><span><span style="color:#815ba4">if</span>(<span style="color:#06b6ef">mysqli_connect_errno</span>()) {  
-</span></span><span style="display:flex;"><span>    <span style="color:#06b6ef">print_r</span>(<span style="color:#06b6ef">mysqli_connect_error</span>());  
-</span></span><span style="display:flex;"><span>    <span style="color:#815ba4">exit</span>();  
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-php" data-lang="php"><span style="display:flex;"><span><span style="color:#8be9fd;font-style:italic">$link</span> <span style="color:#ff79c6">=</span> mysqli_connect(<span style="color:#f1fa8c">&#34;localhost:3306&#34;</span>, <span style="color:#f1fa8c">&#34;root&#34;</span>, <span style="color:#f1fa8c">&#34;&#34;</span>, <span style="color:#f1fa8c">&#34;user&#34;</span>);  
+</span></span><span style="display:flex;"><span><span style="color:#ff79c6">if</span>(mysqli_connect_errno()) {  
+</span></span><span style="display:flex;"><span>    print_r(mysqli_connect_error());  
+</span></span><span style="display:flex;"><span>    <span style="color:#ff79c6">exit</span>();  
 </span></span><span style="display:flex;"><span>}
 </span></span></code></pre></div><p>記錄一下 <a href="http://php.net/manual/en/function.mysqli-connect.php"><code>mysqli_connect</code></a> 的語法是 <code>(host, username, password, dbname)</code>。這邊因為是本機，所以 <code>host</code> 就是 <code>localhost:3306</code>，3306 是 XAMPP 預設給 MySQL 的 port，如果你有調整，這邊就要相應的更改；本機上的 <code>username</code> 就是 <code>root</code>，不確定可以到 phpMyAdmin 的首頁看；<code>password</code> 預設應該就是沒有，如果有設定（我還真不知道怎麼設定）這邊就要改；最後 <code>dbname</code> 是剛剛設定的 <code>user</code>。</p>
 <p><code>mysqli</code> 是 PHP 的 MySQL 函數庫增強版，功能更強，安全性更好；所以之前的 <code>mysql</code> 已經漸漸淘汰不用。</p>
@@ -1083,9 +1083,9 @@ Ported from <a href="https://mak1t0.cc/" target="_blank" rel="noreferrer noopene
 <h2 id="login-驗證功能">Login 驗證功能</h2>
 <p>這時候先到 <code>index.php</code> 表格上方增加一個隱藏的 <code>div</code>，<code>id</code> 設為 <code>loginAlert</code>。</p>
 <p>接著到 <code>ajax</code> 的 <code>success</code> 改成以下：</p>
-<div class="highlight"><pre tabindex="0" style="color:#e7e9db;background-color:#2f1e2e;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-javascript" data-lang="javascript"><span style="display:flex;"><span><span style="color:#06b6ef">success</span><span style="color:#5bc4bf">:</span> <span style="color:#815ba4">function</span>(<span style="color:#06b6ef">result</span>) {  
-</span></span><span style="display:flex;"><span>    <span style="color:#815ba4">if</span> (<span style="color:#06b6ef">result</span>) {
-</span></span><span style="display:flex;"><span>        <span style="color:#06b6ef">$</span>(<span style="color:#48b685">&#34;#loginAlert&#34;</span>).<span style="color:#06b6ef">html</span>(<span style="color:#06b6ef">result</span>).<span style="color:#06b6ef">show</span>();
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-javascript" data-lang="javascript"><span style="display:flex;"><span>success<span style="color:#ff79c6">:</span> <span style="color:#8be9fd;font-style:italic">function</span>(result) {  
+</span></span><span style="display:flex;"><span>    <span style="color:#ff79c6">if</span> (result) {
+</span></span><span style="display:flex;"><span>        $(<span style="color:#f1fa8c">&#34;#loginAlert&#34;</span>).html(result).show();
 </span></span><span style="display:flex;"><span>    }  
 </span></span><span style="display:flex;"><span>}
 </span></span></code></pre></div><p>用意是先把所有 <code>action.php</code> 回傳的東西，傳到 <code>id</code> 為 <code>loginAlert</code> 的這個 <code>div</code> 並顯示出來。</p>
@@ -1135,17 +1135,17 @@ Ported from <a href="https://mak1t0.cc/" target="_blank" rel="noreferrer noopene
 </ol>
 <p>我的作法是結合前面的判斷式，在判斷出可以加入會員以及可以登入那邊加上 <code>setcookie</code>，並原則上設定 30 天 (<code>time()+60*60*24*30</code>，並 <code>echo &quot;1&quot;;</code>) 來回傳一個 <code>1</code> 跟 <code>ajax</code> 表達目前是已經登入的狀態。</p>
 <p>然後回到 <code>index.php</code> 的 <code>ajax</code> 那邊，將原來長這樣的：</p>
-<div class="highlight"><pre tabindex="0" style="color:#e7e9db;background-color:#2f1e2e;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-javascript" data-lang="javascript"><span style="display:flex;"><span><span style="color:#06b6ef">success</span><span style="color:#5bc4bf">:</span> <span style="color:#815ba4">function</span>(<span style="color:#06b6ef">result</span>) {  
-</span></span><span style="display:flex;"><span>    <span style="color:#815ba4">if</span> (<span style="color:#06b6ef">result</span>) {
-</span></span><span style="display:flex;"><span>        <span style="color:#06b6ef">$</span>(<span style="color:#48b685">&#34;#loginAlert&#34;</span>).<span style="color:#06b6ef">html</span>(<span style="color:#06b6ef">result</span>).<span style="color:#06b6ef">show</span>();
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-javascript" data-lang="javascript"><span style="display:flex;"><span>success<span style="color:#ff79c6">:</span> <span style="color:#8be9fd;font-style:italic">function</span>(result) {  
+</span></span><span style="display:flex;"><span>    <span style="color:#ff79c6">if</span> (result) {
+</span></span><span style="display:flex;"><span>        $(<span style="color:#f1fa8c">&#34;#loginAlert&#34;</span>).html(result).show();
 </span></span><span style="display:flex;"><span>    }  
 </span></span><span style="display:flex;"><span>}
 </span></span></code></pre></div><p>改成這樣：</p>
-<div class="highlight"><pre tabindex="0" style="color:#e7e9db;background-color:#2f1e2e;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-javascript" data-lang="javascript"><span style="display:flex;"><span><span style="color:#06b6ef">success</span><span style="color:#5bc4bf">:</span> <span style="color:#815ba4">function</span>(<span style="color:#06b6ef">result</span>) {  
-</span></span><span style="display:flex;"><span>    <span style="color:#815ba4">if</span> (<span style="color:#06b6ef">result</span>) {
-</span></span><span style="display:flex;"><span>        window.<span style="color:#06b6ef">location</span>.<span style="color:#06b6ef">assign</span>(<span style="color:#48b685">&#34;http://localhost:8080/login-signup/&#34;</span>);
-</span></span><span style="display:flex;"><span>    } <span style="color:#815ba4">else</span> {
-</span></span><span style="display:flex;"><span>        <span style="color:#06b6ef">$</span>(<span style="color:#48b685">&#34;#loginAlert&#34;</span>).<span style="color:#06b6ef">html</span>(<span style="color:#06b6ef">result</span>).<span style="color:#06b6ef">show</span>();
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-javascript" data-lang="javascript"><span style="display:flex;"><span>success<span style="color:#ff79c6">:</span> <span style="color:#8be9fd;font-style:italic">function</span>(result) {  
+</span></span><span style="display:flex;"><span>    <span style="color:#ff79c6">if</span> (result) {
+</span></span><span style="display:flex;"><span>        <span style="color:#8be9fd;font-style:italic">window</span>.location.assign(<span style="color:#f1fa8c">&#34;http://localhost:8080/login-signup/&#34;</span>);
+</span></span><span style="display:flex;"><span>    } <span style="color:#ff79c6">else</span> {
+</span></span><span style="display:flex;"><span>        $(<span style="color:#f1fa8c">&#34;#loginAlert&#34;</span>).html(result).show();
 </span></span><span style="display:flex;"><span>    }  
 </span></span><span style="display:flex;"><span>}
 </span></span></code></pre></div><p>這裡的 <a href="https://www.w3schools.com/jsref/met_loc_assign.asp"><code>location.assign</code></a> 是讓首頁重跑一遍，回到原始狀態，但已經建立好的 cookie 不會消失，所以還是登入的狀態。所以後面的網址要填上最初始首頁的完整網址。這樣做可以把 GET 放在網址列後面的資訊消除。</p>
@@ -1174,7 +1174,7 @@ Ported from <a href="https://mak1t0.cc/" target="_blank" rel="noreferrer noopene
 <p>而早期通常會以 hash 的方式，例如 <code>md5</code> 加密，然後就存進系統。基本上就是把密碼通過 md5 設定的某種轉換模式，轉成一長串字串，一個字串只會對應一個密碼，而這種加密方式很難反向破解；所以最簡單的破解手法是建立常見的密碼 - 字串轉換表來對應，所以才會常常看到各種網站在加入會員的時候讓大家設定字母與數字混雜，而且不能是常用的密碼，來避免被駭客找到對應的字串作破解。</p>
 <p>但這種方式比較大的問題是使用者常常記不得自己設定的密碼，所以後來又產生一種 salting 的作法，也就是在 hash 以前，在密碼的前面或後面加入一些基於特定規則或亂數產生的字串，用來增加密碼長度，或利用亂數來增加破解難度。</p>
 <p>我是採取 <a href="http://php.net/manual/en/function.password-hash.php"><code>password_hash</code></a> 的作法，這個 PHP 的函數本身就有包括 salting，所以直接寫這樣來 hash：</p>
-<div class="highlight"><pre tabindex="0" style="color:#e7e9db;background-color:#2f1e2e;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-php" data-lang="php"><span style="display:flex;"><span><span style="color:#06b6ef">password_hash</span>(<span style="color:#ef6155">$_POST</span>[<span style="color:#48b685">&#39;password&#39;</span>], <span style="color:#06b6ef">PASSWORD_DEFAULT</span>)
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-php" data-lang="php"><span style="display:flex;"><span>password_hash(<span style="color:#8be9fd;font-style:italic">$_POST</span>[<span style="color:#f1fa8c">&#39;password&#39;</span>], PASSWORD_DEFAULT)
 </span></span></code></pre></div><p>但有件事要記得，用 <a href="http://php.net/manual/en/function.password-hash.php"><code>password_hash</code></a> 函數來 hash 的話，Login 時就要用 <a href="http://php.net/manual/en/function.password-verify.php"><code>password_verify</code></a> 函數來作判斷式來比對 <code>password</code>。艾租以~</p>
 <h1 id="感想">感想</h1>
 <p>恭喜我作完這個簡單的功能，結果就是用網路查了一堆功能跟說明，倒是沒有直接搜尋 PHP 登入怎麼做，不知道這樣算不算自己作？XD</p>
@@ -1215,10 +1215,10 @@ Ported from <a href="https://mak1t0.cc/" target="_blank" rel="noreferrer noopene
 
     var disqus_config = function () {
         
-        this.page.url = 'https:\/\/idontwannarock.github.io\/tech_blog\/2017\/09\/login_signup_function_1\/';  
+        this.page.url = '\/2017\/09\/login_signup_function_1\/';  
         
         
-        this.page.identifier = 'https:\/\/idontwannarock.github.io\/tech_blog\/2017\/09\/login_signup_function_1\/'; 
+        this.page.identifier = '\/2017\/09\/login_signup_function_1\/'; 
     };
     (function() {
         var d = document, s = d.createElement('script');
@@ -1246,7 +1246,7 @@ Ported from <a href="https://mak1t0.cc/" target="_blank" rel="noreferrer noopene
 
                     </div>
             </div><div id="single-column-footer">
-Hugo Theme <a href="https://github.com/amazingrise/hugo-theme-diary">Diary</a> by <a href="https://amazingrise.net">Rise</a>
+Hugo Theme <a href="https://github.com/amazingrise/hugo-theme-diary">Diary</a> by <a href="https://risehere.net/">Rise</a>
 <br>
 Ported from <a href="https://mak1t0.cc/" target="_blank" rel="noreferrer noopener">Makito</a>'s <a href="https://github.com/SumiMakito/hexo-theme-journal/" target="_blank" rel="noreferrer noopener">Journal.</a> <br>
 <br>
@@ -1258,6 +1258,5 @@ Ported from <a href="https://mak1t0.cc/" target="_blank" rel="noreferrer noopene
 </div>
             </div>
     
-    <script src="https://idontwannarock.github.io/tech_blog/js/journal.js"></script>
-    </body>
+    <script src="https://idontwannarock.github.io/tech_blog/js/journal.js"></script></body>
 </html>

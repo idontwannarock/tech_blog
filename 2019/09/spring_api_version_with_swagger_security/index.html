@@ -38,7 +38,7 @@ if (!doNotTrack) {
 </script>
 
 
-<link type="text/css" rel="stylesheet" href="https://idontwannarock.github.io/tech_blog/vendor/css/bootstrap.min.css">
+
 
 
   
@@ -48,24 +48,24 @@ if (!doNotTrack) {
 
 
 
-<link rel="stylesheet" href="https://idontwannarock.github.io/tech_blog/scss/journal.min.f4a8de07567a2d29619e0711662ef6251e3e59b642079f99490f654abf89a3c4.css" integrity="sha256-9KjeB1Z6LSlhngcRZi72JR4&#43;WbZCB5&#43;ZSQ9lSr&#43;Jo8Q=" media="screen">
+<link rel="stylesheet" href="https://idontwannarock.github.io/tech_blog/scss/journal.min.c5d92f380bf10f6849c7ac487c7df2b22c081e0851e5339224f1ae29210b20d2.css" integrity="sha256-xdkvOAvxD2hJx6xIfH3ysiwIHghR5TOSJPGuKSELINI=" media="screen">
 
 
 
-<link rel="stylesheet" href="https://idontwannarock.github.io/tech_blog/scss/dark-mode.min.eeb8040aa9333250b7fec770f950bfe8ba9b18a5eeeaf2dfef61d84d3956f625.css" integrity="sha256-7rgECqkzMlC3/sdw&#43;VC/6LqbGKXu6vLf72HYTTlW9iU=" media="screen">
-
-
-<script src="https://idontwannarock.github.io/tech_blog/vendor/js/loadCSS.js"></script>
-<script>
-  loadCSS("https://fonts.googleapis.com/css?family=Fira+Mono|Material+Icons");
-</script>
+<link rel="stylesheet" href="https://idontwannarock.github.io/tech_blog/scss/dark-mode.min.9f8d8c2df9285089d141edd4a50cb7506c7948e6ab79a29968dced1bd0ab7d22.css" integrity="sha256-n42MLfkoUInRQe3UpQy3UGx5SOareaKZaNztG9CrfSI=" media="screen">
 
 
 
 
+      <script src="https://idontwannarock.github.io/tech_blog/js/toc.js"></script>
+    
+    <link type="text/css" rel="stylesheet" href="https://idontwannarock.github.io/tech_blog/vendor/css/bootstrap.min.css"><link rel="stylesheet"
+          href="https://fonts.googleapis.com/css?family=Material+Icons">
 
 
-  <script src="https://idontwannarock.github.io/tech_blog/js/toc.js"></script>
+
+
+
 
 
 
@@ -157,7 +157,7 @@ if (!doNotTrack) {
 
     <div class="nav-footer">
         
-Hugo Theme <a href="https://github.com/amazingrise/hugo-theme-diary">Diary</a> by <a href="https://amazingrise.net">Rise</a>
+Hugo Theme <a href="https://github.com/amazingrise/hugo-theme-diary">Diary</a> by <a href="https://risehere.net/">Rise</a>
 <br>
 Ported from <a href="https://mak1t0.cc/" target="_blank" rel="noreferrer noopener">Makito</a>'s <a href="https://github.com/SumiMakito/hexo-theme-journal/" target="_blank" rel="noreferrer noopener">Journal.</a> <br>
 <br>
@@ -582,7 +582,7 @@ Ported from <a href="https://mak1t0.cc/" target="_blank" rel="noreferrer noopene
 
                         
                             <i class="material-icons" style="">folder</i>
-                                <a href="https://idontwannarock.github.io/tech_blog/categories/application">application</a>
+                                <a href="https://idontwannarock.github.io/tech_blog/categories/implementation">implementation</a>
                                 &nbsp;
                         
 
@@ -633,126 +633,126 @@ Ported from <a href="https://mak1t0.cc/" target="_blank" rel="noreferrer noopene
 <h1 id="常見作法及整合問題">常見作法及整合問題</h1>
 <p>網路上 API 版本控制的文章的做法都雷同</p>
 <p>通常都是先建立自訂 <code>ApiVersion</code> 註解，裡面有版本號屬性，可以是 <code>int</code> 也可以是字串，通常都會有預設值，然後容許加註在類別或方法</p>
-<div class="highlight"><pre tabindex="0" style="color:#e7e9db;background-color:#2f1e2e;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-java" data-lang="java"><span style="display:flex;"><span><span style="color:#5bc4bf">import</span> <span style="color:#fec418">java.lang.annotation.*</span><span style="color:#5bc4bf">;</span>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-java" data-lang="java"><span style="display:flex;"><span><span style="color:#ff79c6">import</span> java.lang.annotation.*<span style="color:#ff79c6">;</span>
 </span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span><span style="color:#5bc4bf">@Target</span><span style="color:#5bc4bf">({</span>ElementType<span style="color:#5bc4bf">.</span><span style="color:#06b6ef">TYPE</span><span style="color:#5bc4bf">,</span> ElementType<span style="color:#5bc4bf">.</span><span style="color:#06b6ef">METHOD</span><span style="color:#5bc4bf">})</span>
-</span></span><span style="display:flex;"><span><span style="color:#5bc4bf">@Retention</span><span style="color:#5bc4bf">(</span>RetentionPolicy<span style="color:#5bc4bf">.</span><span style="color:#06b6ef">RUNTIME</span><span style="color:#5bc4bf">)</span>
-</span></span><span style="display:flex;"><span><span style="color:#815ba4">public</span> <span style="color:#5bc4bf">@interface</span> ApiVersion <span style="color:#5bc4bf">{</span>
+</span></span><span style="display:flex;"><span>@Target<span style="color:#ff79c6">({</span>ElementType<span style="color:#ff79c6">.</span><span style="color:#50fa7b">TYPE</span><span style="color:#ff79c6">,</span> ElementType<span style="color:#ff79c6">.</span><span style="color:#50fa7b">METHOD</span><span style="color:#ff79c6">})</span>
+</span></span><span style="display:flex;"><span>@Retention<span style="color:#ff79c6">(</span>RetentionPolicy<span style="color:#ff79c6">.</span><span style="color:#50fa7b">RUNTIME</span><span style="color:#ff79c6">)</span>
+</span></span><span style="display:flex;"><span><span style="color:#8be9fd;font-style:italic">public</span> @interface ApiVersion <span style="color:#ff79c6">{</span>
 </span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span>    <span style="color:#fec418">int</span> <span style="color:#06b6ef">value</span><span style="color:#5bc4bf">()</span> <span style="color:#815ba4">default</span> 1<span style="color:#5bc4bf">;</span>
-</span></span><span style="display:flex;"><span><span style="color:#5bc4bf">}</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#8be9fd">int</span> <span style="color:#50fa7b">value</span><span style="color:#ff79c6">()</span> <span style="color:#ff79c6">default</span> 1<span style="color:#ff79c6">;</span>
+</span></span><span style="display:flex;"><span><span style="color:#ff79c6">}</span>
 </span></span></code></pre></div><p>再來寫 <code>ApiVersionCondition</code> 實作 <code>RequestCondition</code> 介面來判斷 request 跟 handler mapping 的條件</p>
-<div class="highlight"><pre tabindex="0" style="color:#e7e9db;background-color:#2f1e2e;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-java" data-lang="java"><span style="display:flex;"><span><span style="color:#5bc4bf">import</span> <span style="color:#fec418">org.springframework.web.servlet.mvc.condition.RequestCondition</span><span style="color:#5bc4bf">;</span>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-java" data-lang="java"><span style="display:flex;"><span><span style="color:#ff79c6">import</span> org.springframework.web.servlet.mvc.condition.RequestCondition<span style="color:#ff79c6">;</span>
 </span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span><span style="color:#5bc4bf">import</span> <span style="color:#fec418">javax.servlet.http.HttpServletRequest</span><span style="color:#5bc4bf">;</span>
-</span></span><span style="display:flex;"><span><span style="color:#5bc4bf">import</span> <span style="color:#fec418">java.util.regex.Matcher</span><span style="color:#5bc4bf">;</span>
-</span></span><span style="display:flex;"><span><span style="color:#5bc4bf">import</span> <span style="color:#fec418">java.util.regex.Pattern</span><span style="color:#5bc4bf">;</span>
+</span></span><span style="display:flex;"><span><span style="color:#ff79c6">import</span> javax.servlet.http.HttpServletRequest<span style="color:#ff79c6">;</span>
+</span></span><span style="display:flex;"><span><span style="color:#ff79c6">import</span> java.util.regex.Matcher<span style="color:#ff79c6">;</span>
+</span></span><span style="display:flex;"><span><span style="color:#ff79c6">import</span> java.util.regex.Pattern<span style="color:#ff79c6">;</span>
 </span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span><span style="color:#815ba4">public</span> <span style="color:#815ba4">class</span> <span style="color:#fec418">ApiVersionCondition</span> <span style="color:#815ba4">implements</span> RequestCondition<span style="color:#5bc4bf">&lt;</span>ApiVersionCondition<span style="color:#5bc4bf">&gt;</span> <span style="color:#5bc4bf">{</span>
+</span></span><span style="display:flex;"><span><span style="color:#8be9fd;font-style:italic">public</span> <span style="color:#8be9fd;font-style:italic">class</span> <span style="color:#50fa7b">ApiVersionCondition</span> <span style="color:#8be9fd;font-style:italic">implements</span> RequestCondition<span style="color:#ff79c6">&lt;</span>ApiVersionCondition<span style="color:#ff79c6">&gt;</span> <span style="color:#ff79c6">{</span>
 </span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span>    <span style="color:#815ba4">private</span> <span style="color:#fec418">int</span> apiVersion<span style="color:#5bc4bf">;</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#8be9fd;font-style:italic">private</span> <span style="color:#8be9fd">int</span> apiVersion<span style="color:#ff79c6">;</span>
 </span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span>    <span style="color:#815ba4">private</span> <span style="color:#815ba4">final</span> <span style="color:#815ba4">static</span> Pattern VERSION_PREFIX_PATTERN <span style="color:#5bc4bf">=</span> Pattern<span style="color:#5bc4bf">.</span><span style="color:#06b6ef">compile</span><span style="color:#5bc4bf">(</span><span style="color:#48b685">&#34;/v(\\d+)/&#34;</span><span style="color:#5bc4bf">);</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#8be9fd;font-style:italic">private</span> <span style="color:#8be9fd;font-style:italic">final</span> <span style="color:#8be9fd;font-style:italic">static</span> Pattern VERSION_PREFIX_PATTERN <span style="color:#ff79c6">=</span> Pattern<span style="color:#ff79c6">.</span><span style="color:#50fa7b">compile</span><span style="color:#ff79c6">(</span><span style="color:#f1fa8c">&#34;/v(\\d+)/&#34;</span><span style="color:#ff79c6">);</span>
 </span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span>    <span style="color:#815ba4">public</span> <span style="color:#06b6ef">ApiVersionCondition</span><span style="color:#5bc4bf">(</span><span style="color:#fec418">int</span> apiVersion<span style="color:#5bc4bf">)</span> <span style="color:#5bc4bf">{</span>
-</span></span><span style="display:flex;"><span>        <span style="color:#815ba4">this</span><span style="color:#5bc4bf">.</span><span style="color:#06b6ef">apiVersion</span> <span style="color:#5bc4bf">=</span> apiVersion<span style="color:#5bc4bf">;</span>
-</span></span><span style="display:flex;"><span>    <span style="color:#5bc4bf">}</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#8be9fd;font-style:italic">public</span> <span style="color:#50fa7b">ApiVersionCondition</span><span style="color:#ff79c6">(</span><span style="color:#8be9fd">int</span> apiVersion<span style="color:#ff79c6">)</span> <span style="color:#ff79c6">{</span>
+</span></span><span style="display:flex;"><span>        <span style="color:#ff79c6">this</span><span style="color:#ff79c6">.</span><span style="color:#50fa7b">apiVersion</span> <span style="color:#ff79c6">=</span> apiVersion<span style="color:#ff79c6">;</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#ff79c6">}</span>
 </span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span>    <span style="color:#5bc4bf">@Override</span>
-</span></span><span style="display:flex;"><span>    <span style="color:#815ba4">public</span> ApiVersionCondition <span style="color:#06b6ef">combine</span><span style="color:#5bc4bf">(</span>ApiVersionCondition other<span style="color:#5bc4bf">)</span> <span style="color:#5bc4bf">{</span>
-</span></span><span style="display:flex;"><span>        <span style="color:#815ba4">return</span> <span style="color:#815ba4">new</span> ApiVersionCondition<span style="color:#5bc4bf">(</span>other<span style="color:#5bc4bf">.</span><span style="color:#06b6ef">getApiVersion</span><span style="color:#5bc4bf">());</span>
-</span></span><span style="display:flex;"><span>    <span style="color:#5bc4bf">}</span>
+</span></span><span style="display:flex;"><span>    @Override
+</span></span><span style="display:flex;"><span>    <span style="color:#8be9fd;font-style:italic">public</span> ApiVersionCondition <span style="color:#50fa7b">combine</span><span style="color:#ff79c6">(</span>ApiVersionCondition other<span style="color:#ff79c6">)</span> <span style="color:#ff79c6">{</span>
+</span></span><span style="display:flex;"><span>        <span style="color:#ff79c6">return</span> <span style="color:#ff79c6">new</span> ApiVersionCondition<span style="color:#ff79c6">(</span>other<span style="color:#ff79c6">.</span><span style="color:#50fa7b">getApiVersion</span><span style="color:#ff79c6">());</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#ff79c6">}</span>
 </span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span>    <span style="color:#5bc4bf">@Override</span>
-</span></span><span style="display:flex;"><span>    <span style="color:#815ba4">public</span> ApiVersionCondition <span style="color:#06b6ef">getMatchingCondition</span><span style="color:#5bc4bf">(</span>HttpServletRequest request<span style="color:#5bc4bf">)</span> <span style="color:#5bc4bf">{</span>
-</span></span><span style="display:flex;"><span>        Matcher m <span style="color:#5bc4bf">=</span> VERSION_PREFIX_PATTERN<span style="color:#5bc4bf">.</span><span style="color:#06b6ef">matcher</span><span style="color:#5bc4bf">(</span>request<span style="color:#5bc4bf">.</span><span style="color:#06b6ef">getRequestURI</span><span style="color:#5bc4bf">());</span>
-</span></span><span style="display:flex;"><span>        <span style="color:#815ba4">if</span> <span style="color:#5bc4bf">(</span>m<span style="color:#5bc4bf">.</span><span style="color:#06b6ef">find</span><span style="color:#5bc4bf">())</span> <span style="color:#5bc4bf">{</span>
-</span></span><span style="display:flex;"><span>            <span style="color:#fec418">int</span> version <span style="color:#5bc4bf">=</span> Integer<span style="color:#5bc4bf">.</span><span style="color:#06b6ef">parseInt</span><span style="color:#5bc4bf">(</span>m<span style="color:#5bc4bf">.</span><span style="color:#06b6ef">group</span><span style="color:#5bc4bf">(</span>1<span style="color:#5bc4bf">));</span>
-</span></span><span style="display:flex;"><span>            <span style="color:#815ba4">if</span> <span style="color:#5bc4bf">(</span>version <span style="color:#5bc4bf">&gt;=</span> getApiVersion<span style="color:#5bc4bf">())</span> <span style="color:#5bc4bf">{</span>
-</span></span><span style="display:flex;"><span>                <span style="color:#815ba4">return</span> <span style="color:#815ba4">this</span><span style="color:#5bc4bf">;</span>
-</span></span><span style="display:flex;"><span>            <span style="color:#5bc4bf">}</span>
-</span></span><span style="display:flex;"><span>        <span style="color:#5bc4bf">}</span>
-</span></span><span style="display:flex;"><span>        <span style="color:#815ba4">return</span> <span style="color:#815ba4">null</span><span style="color:#5bc4bf">;</span>
-</span></span><span style="display:flex;"><span>    <span style="color:#5bc4bf">}</span>
+</span></span><span style="display:flex;"><span>    @Override
+</span></span><span style="display:flex;"><span>    <span style="color:#8be9fd;font-style:italic">public</span> ApiVersionCondition <span style="color:#50fa7b">getMatchingCondition</span><span style="color:#ff79c6">(</span>HttpServletRequest request<span style="color:#ff79c6">)</span> <span style="color:#ff79c6">{</span>
+</span></span><span style="display:flex;"><span>        Matcher m <span style="color:#ff79c6">=</span> VERSION_PREFIX_PATTERN<span style="color:#ff79c6">.</span><span style="color:#50fa7b">matcher</span><span style="color:#ff79c6">(</span>request<span style="color:#ff79c6">.</span><span style="color:#50fa7b">getRequestURI</span><span style="color:#ff79c6">());</span>
+</span></span><span style="display:flex;"><span>        <span style="color:#ff79c6">if</span> <span style="color:#ff79c6">(</span>m<span style="color:#ff79c6">.</span><span style="color:#50fa7b">find</span><span style="color:#ff79c6">())</span> <span style="color:#ff79c6">{</span>
+</span></span><span style="display:flex;"><span>            <span style="color:#8be9fd">int</span> version <span style="color:#ff79c6">=</span> Integer<span style="color:#ff79c6">.</span><span style="color:#50fa7b">parseInt</span><span style="color:#ff79c6">(</span>m<span style="color:#ff79c6">.</span><span style="color:#50fa7b">group</span><span style="color:#ff79c6">(</span>1<span style="color:#ff79c6">));</span>
+</span></span><span style="display:flex;"><span>            <span style="color:#ff79c6">if</span> <span style="color:#ff79c6">(</span>version <span style="color:#ff79c6">&gt;=</span> getApiVersion<span style="color:#ff79c6">())</span> <span style="color:#ff79c6">{</span>
+</span></span><span style="display:flex;"><span>                <span style="color:#ff79c6">return</span> <span style="color:#ff79c6">this</span><span style="color:#ff79c6">;</span>
+</span></span><span style="display:flex;"><span>            <span style="color:#ff79c6">}</span>
+</span></span><span style="display:flex;"><span>        <span style="color:#ff79c6">}</span>
+</span></span><span style="display:flex;"><span>        <span style="color:#ff79c6">return</span> <span style="color:#ff79c6">null</span><span style="color:#ff79c6">;</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#ff79c6">}</span>
 </span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span>    <span style="color:#5bc4bf">@Override</span>
-</span></span><span style="display:flex;"><span>    <span style="color:#815ba4">public</span> <span style="color:#fec418">int</span> <span style="color:#06b6ef">compareTo</span><span style="color:#5bc4bf">(</span>ApiVersionCondition other<span style="color:#5bc4bf">,</span> HttpServletRequest request<span style="color:#5bc4bf">)</span> <span style="color:#5bc4bf">{</span>
-</span></span><span style="display:flex;"><span>        <span style="color:#815ba4">return</span> other<span style="color:#5bc4bf">.</span><span style="color:#06b6ef">getApiVersion</span><span style="color:#5bc4bf">()</span> <span style="color:#5bc4bf">-</span> getApiVersion<span style="color:#5bc4bf">();</span>
-</span></span><span style="display:flex;"><span>    <span style="color:#5bc4bf">}</span>
+</span></span><span style="display:flex;"><span>    @Override
+</span></span><span style="display:flex;"><span>    <span style="color:#8be9fd;font-style:italic">public</span> <span style="color:#8be9fd">int</span> <span style="color:#50fa7b">compareTo</span><span style="color:#ff79c6">(</span>ApiVersionCondition other<span style="color:#ff79c6">,</span> HttpServletRequest request<span style="color:#ff79c6">)</span> <span style="color:#ff79c6">{</span>
+</span></span><span style="display:flex;"><span>        <span style="color:#ff79c6">return</span> other<span style="color:#ff79c6">.</span><span style="color:#50fa7b">getApiVersion</span><span style="color:#ff79c6">()</span> <span style="color:#ff79c6">-</span> getApiVersion<span style="color:#ff79c6">();</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#ff79c6">}</span>
 </span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span>    <span style="color:#815ba4">public</span> <span style="color:#fec418">int</span> <span style="color:#06b6ef">getApiVersion</span><span style="color:#5bc4bf">()</span> <span style="color:#5bc4bf">{</span>
-</span></span><span style="display:flex;"><span>        <span style="color:#815ba4">return</span> apiVersion<span style="color:#5bc4bf">;</span>
-</span></span><span style="display:flex;"><span>    <span style="color:#5bc4bf">}</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#8be9fd;font-style:italic">public</span> <span style="color:#8be9fd">int</span> <span style="color:#50fa7b">getApiVersion</span><span style="color:#ff79c6">()</span> <span style="color:#ff79c6">{</span>
+</span></span><span style="display:flex;"><span>        <span style="color:#ff79c6">return</span> apiVersion<span style="color:#ff79c6">;</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#ff79c6">}</span>
 </span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span>    <span style="color:#815ba4">public</span> <span style="color:#fec418">void</span> <span style="color:#06b6ef">setApiVersion</span><span style="color:#5bc4bf">(</span><span style="color:#fec418">int</span> apiVersion<span style="color:#5bc4bf">)</span> <span style="color:#5bc4bf">{</span>
-</span></span><span style="display:flex;"><span>        <span style="color:#815ba4">this</span><span style="color:#5bc4bf">.</span><span style="color:#06b6ef">apiVersion</span> <span style="color:#5bc4bf">=</span> apiVersion<span style="color:#5bc4bf">;</span>
-</span></span><span style="display:flex;"><span>    <span style="color:#5bc4bf">}</span>
-</span></span><span style="display:flex;"><span><span style="color:#5bc4bf">}</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#8be9fd;font-style:italic">public</span> <span style="color:#8be9fd">void</span> <span style="color:#50fa7b">setApiVersion</span><span style="color:#ff79c6">(</span><span style="color:#8be9fd">int</span> apiVersion<span style="color:#ff79c6">)</span> <span style="color:#ff79c6">{</span>
+</span></span><span style="display:flex;"><span>        <span style="color:#ff79c6">this</span><span style="color:#ff79c6">.</span><span style="color:#50fa7b">apiVersion</span> <span style="color:#ff79c6">=</span> apiVersion<span style="color:#ff79c6">;</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#ff79c6">}</span>
+</span></span><span style="display:flex;"><span><span style="color:#ff79c6">}</span>
 </span></span></code></pre></div><p>接著寫自訂 <code>CustomRequestMappingHandlerMapping</code> 類別，繼承 <code>RequestMappingHandlerMapping</code> 並 override <code>getCustomTypeCondition(Class&lt;?&gt; handlerType)</code> 跟 <code>getCustomMethodCondition(Method method)</code> 這兩個方法，以分別取得類別跟方法上的 <code>ApiVersion</code> 註解，並據此建立 <code>ApiVersionCondition</code> 給 Spring MVC 做 request mapping 時調用</p>
-<div class="highlight"><pre tabindex="0" style="color:#e7e9db;background-color:#2f1e2e;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-java" data-lang="java"><span style="display:flex;"><span><span style="color:#5bc4bf">import</span> <span style="color:#fec418">org.springframework.core.annotation.AnnotationUtils</span><span style="color:#5bc4bf">;</span>
-</span></span><span style="display:flex;"><span><span style="color:#5bc4bf">import</span> <span style="color:#fec418">org.springframework.web.servlet.mvc.condition.*</span><span style="color:#5bc4bf">;</span>
-</span></span><span style="display:flex;"><span><span style="color:#5bc4bf">import</span> <span style="color:#fec418">org.springframework.web.servlet.mvc.method.RequestMappingInfo</span><span style="color:#5bc4bf">;</span>
-</span></span><span style="display:flex;"><span><span style="color:#5bc4bf">import</span> <span style="color:#fec418">org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerMapping</span><span style="color:#5bc4bf">;</span>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-java" data-lang="java"><span style="display:flex;"><span><span style="color:#ff79c6">import</span> org.springframework.core.annotation.AnnotationUtils<span style="color:#ff79c6">;</span>
+</span></span><span style="display:flex;"><span><span style="color:#ff79c6">import</span> org.springframework.web.servlet.mvc.condition.*<span style="color:#ff79c6">;</span>
+</span></span><span style="display:flex;"><span><span style="color:#ff79c6">import</span> org.springframework.web.servlet.mvc.method.RequestMappingInfo<span style="color:#ff79c6">;</span>
+</span></span><span style="display:flex;"><span><span style="color:#ff79c6">import</span> org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerMapping<span style="color:#ff79c6">;</span>
 </span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span><span style="color:#5bc4bf">import</span> <span style="color:#fec418">java.lang.reflect.Method</span><span style="color:#5bc4bf">;</span>
+</span></span><span style="display:flex;"><span><span style="color:#ff79c6">import</span> java.lang.reflect.Method<span style="color:#ff79c6">;</span>
 </span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span><span style="color:#815ba4">public</span> <span style="color:#815ba4">class</span> <span style="color:#fec418">ApiVersionHandlerMapping</span> <span style="color:#815ba4">extends</span> RequestMappingHandlerMapping <span style="color:#5bc4bf">{</span>
+</span></span><span style="display:flex;"><span><span style="color:#8be9fd;font-style:italic">public</span> <span style="color:#8be9fd;font-style:italic">class</span> <span style="color:#50fa7b">ApiVersionHandlerMapping</span> <span style="color:#8be9fd;font-style:italic">extends</span> RequestMappingHandlerMapping <span style="color:#ff79c6">{</span>
 </span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span>    <span style="color:#5bc4bf">@Override</span>
-</span></span><span style="display:flex;"><span>    <span style="color:#815ba4">public</span> RequestCondition<span style="color:#5bc4bf">&lt;?&gt;</span> getCustomTypeCondition<span style="color:#5bc4bf">(</span>Class<span style="color:#5bc4bf">&lt;?&gt;</span> handlerType<span style="color:#5bc4bf">)</span> <span style="color:#5bc4bf">{</span>
-</span></span><span style="display:flex;"><span>        ApiVersion apiVersion <span style="color:#5bc4bf">=</span> AnnotationUtils<span style="color:#5bc4bf">.</span><span style="color:#06b6ef">findAnnotation</span><span style="color:#5bc4bf">(</span>handlerType<span style="color:#5bc4bf">,</span> ApiVersion<span style="color:#5bc4bf">.</span><span style="color:#06b6ef">class</span><span style="color:#5bc4bf">);</span>
-</span></span><span style="display:flex;"><span>        <span style="color:#815ba4">return</span> createRequestCondition<span style="color:#5bc4bf">(</span>apiVersion<span style="color:#5bc4bf">);</span>
-</span></span><span style="display:flex;"><span>    <span style="color:#5bc4bf">}</span>
+</span></span><span style="display:flex;"><span>    @Override
+</span></span><span style="display:flex;"><span>    <span style="color:#8be9fd;font-style:italic">public</span> RequestCondition<span style="color:#ff79c6">&lt;?&gt;</span> getCustomTypeCondition<span style="color:#ff79c6">(</span>Class<span style="color:#ff79c6">&lt;?&gt;</span> handlerType<span style="color:#ff79c6">)</span> <span style="color:#ff79c6">{</span>
+</span></span><span style="display:flex;"><span>        ApiVersion apiVersion <span style="color:#ff79c6">=</span> AnnotationUtils<span style="color:#ff79c6">.</span><span style="color:#50fa7b">findAnnotation</span><span style="color:#ff79c6">(</span>handlerType<span style="color:#ff79c6">,</span> ApiVersion<span style="color:#ff79c6">.</span><span style="color:#50fa7b">class</span><span style="color:#ff79c6">);</span>
+</span></span><span style="display:flex;"><span>        <span style="color:#ff79c6">return</span> createRequestCondition<span style="color:#ff79c6">(</span>apiVersion<span style="color:#ff79c6">);</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#ff79c6">}</span>
 </span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span>    <span style="color:#5bc4bf">@Override</span>
-</span></span><span style="display:flex;"><span>    <span style="color:#815ba4">public</span> RequestCondition<span style="color:#5bc4bf">&lt;?&gt;</span> getCustomMethodCondition<span style="color:#5bc4bf">(</span>Method method<span style="color:#5bc4bf">)</span> <span style="color:#5bc4bf">{</span>
-</span></span><span style="display:flex;"><span>        ApiVersion apiVersion <span style="color:#5bc4bf">=</span> AnnotationUtils<span style="color:#5bc4bf">.</span><span style="color:#06b6ef">findAnnotation</span><span style="color:#5bc4bf">(</span>method<span style="color:#5bc4bf">,</span> ApiVersion<span style="color:#5bc4bf">.</span><span style="color:#06b6ef">class</span><span style="color:#5bc4bf">);</span>
-</span></span><span style="display:flex;"><span>        <span style="color:#815ba4">return</span> createRequestCondition<span style="color:#5bc4bf">(</span>apiVersion<span style="color:#5bc4bf">);</span>
-</span></span><span style="display:flex;"><span>    <span style="color:#5bc4bf">}</span>
+</span></span><span style="display:flex;"><span>    @Override
+</span></span><span style="display:flex;"><span>    <span style="color:#8be9fd;font-style:italic">public</span> RequestCondition<span style="color:#ff79c6">&lt;?&gt;</span> getCustomMethodCondition<span style="color:#ff79c6">(</span>Method method<span style="color:#ff79c6">)</span> <span style="color:#ff79c6">{</span>
+</span></span><span style="display:flex;"><span>        ApiVersion apiVersion <span style="color:#ff79c6">=</span> AnnotationUtils<span style="color:#ff79c6">.</span><span style="color:#50fa7b">findAnnotation</span><span style="color:#ff79c6">(</span>method<span style="color:#ff79c6">,</span> ApiVersion<span style="color:#ff79c6">.</span><span style="color:#50fa7b">class</span><span style="color:#ff79c6">);</span>
+</span></span><span style="display:flex;"><span>        <span style="color:#ff79c6">return</span> createRequestCondition<span style="color:#ff79c6">(</span>apiVersion<span style="color:#ff79c6">);</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#ff79c6">}</span>
 </span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span>    <span style="color:#815ba4">private</span> RequestCondition<span style="color:#5bc4bf">&lt;</span>ApiVersionCondition<span style="color:#5bc4bf">&gt;</span> <span style="color:#06b6ef">createRequestCondition</span><span style="color:#5bc4bf">(</span>ApiVersion apiVersion<span style="color:#5bc4bf">)</span> <span style="color:#5bc4bf">{</span>
-</span></span><span style="display:flex;"><span>        <span style="color:#815ba4">if</span> <span style="color:#5bc4bf">(</span>apiVersion <span style="color:#5bc4bf">==</span> <span style="color:#815ba4">null</span> <span style="color:#5bc4bf">||</span> apiVersion<span style="color:#5bc4bf">.</span><span style="color:#06b6ef">value</span><span style="color:#5bc4bf">()</span> <span style="color:#5bc4bf">&lt;</span> 1<span style="color:#5bc4bf">)</span> <span style="color:#5bc4bf">{</span>
-</span></span><span style="display:flex;"><span>            <span style="color:#815ba4">return</span> <span style="color:#815ba4">null</span><span style="color:#5bc4bf">;</span>
-</span></span><span style="display:flex;"><span>        <span style="color:#5bc4bf">}</span>
-</span></span><span style="display:flex;"><span>        <span style="color:#815ba4">return</span> <span style="color:#815ba4">new</span> ApiVersionCondition<span style="color:#5bc4bf">(</span>apiVersion<span style="color:#5bc4bf">.</span><span style="color:#06b6ef">value</span><span style="color:#5bc4bf">());</span>
-</span></span><span style="display:flex;"><span>    <span style="color:#5bc4bf">}</span>
-</span></span><span style="display:flex;"><span><span style="color:#5bc4bf">}</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#8be9fd;font-style:italic">private</span> RequestCondition<span style="color:#ff79c6">&lt;</span>ApiVersionCondition<span style="color:#ff79c6">&gt;</span> <span style="color:#50fa7b">createRequestCondition</span><span style="color:#ff79c6">(</span>ApiVersion apiVersion<span style="color:#ff79c6">)</span> <span style="color:#ff79c6">{</span>
+</span></span><span style="display:flex;"><span>        <span style="color:#ff79c6">if</span> <span style="color:#ff79c6">(</span>apiVersion <span style="color:#ff79c6">==</span> <span style="color:#ff79c6">null</span> <span style="color:#ff79c6">||</span> apiVersion<span style="color:#ff79c6">.</span><span style="color:#50fa7b">value</span><span style="color:#ff79c6">()</span> <span style="color:#ff79c6">&lt;</span> 1<span style="color:#ff79c6">)</span> <span style="color:#ff79c6">{</span>
+</span></span><span style="display:flex;"><span>            <span style="color:#ff79c6">return</span> <span style="color:#ff79c6">null</span><span style="color:#ff79c6">;</span>
+</span></span><span style="display:flex;"><span>        <span style="color:#ff79c6">}</span>
+</span></span><span style="display:flex;"><span>        <span style="color:#ff79c6">return</span> <span style="color:#ff79c6">new</span> ApiVersionCondition<span style="color:#ff79c6">(</span>apiVersion<span style="color:#ff79c6">.</span><span style="color:#50fa7b">value</span><span style="color:#ff79c6">());</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#ff79c6">}</span>
+</span></span><span style="display:flex;"><span><span style="color:#ff79c6">}</span>
 </span></span></code></pre></div><p>最後再建立一個設定類別繼承 <code>WebMvcConfigurationSupport</code> 類別並 override <code>requestMappingHandlerMapping()</code> 方法來提供自訂的 <code>CustomRequestMappingHandlerMapping</code></p>
-<div class="highlight"><pre tabindex="0" style="color:#e7e9db;background-color:#2f1e2e;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-java" data-lang="java"><span style="display:flex;"><span><span style="color:#5bc4bf">import</span> <span style="color:#fec418">org.springframework.context.annotation.Configuration</span><span style="color:#5bc4bf">;</span>
-</span></span><span style="display:flex;"><span><span style="color:#5bc4bf">import</span> <span style="color:#fec418">org.springframework.web.servlet.config.annotation.WebMvcConfigurationSupport</span><span style="color:#5bc4bf">;</span>
-</span></span><span style="display:flex;"><span><span style="color:#5bc4bf">import</span> <span style="color:#fec418">org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerMapping</span><span style="color:#5bc4bf">;</span>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-java" data-lang="java"><span style="display:flex;"><span><span style="color:#ff79c6">import</span> org.springframework.context.annotation.Configuration<span style="color:#ff79c6">;</span>
+</span></span><span style="display:flex;"><span><span style="color:#ff79c6">import</span> org.springframework.web.servlet.config.annotation.WebMvcConfigurationSupport<span style="color:#ff79c6">;</span>
+</span></span><span style="display:flex;"><span><span style="color:#ff79c6">import</span> org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerMapping<span style="color:#ff79c6">;</span>
 </span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span><span style="color:#5bc4bf">@Configuration</span>
-</span></span><span style="display:flex;"><span><span style="color:#815ba4">public</span> <span style="color:#815ba4">class</span> <span style="color:#fec418">WebMvcConfig</span> <span style="color:#815ba4">extends</span> WebMvcConfigurationSupport <span style="color:#5bc4bf">{</span>
+</span></span><span style="display:flex;"><span>@Configuration
+</span></span><span style="display:flex;"><span><span style="color:#8be9fd;font-style:italic">public</span> <span style="color:#8be9fd;font-style:italic">class</span> <span style="color:#50fa7b">WebMvcConfig</span> <span style="color:#8be9fd;font-style:italic">extends</span> WebMvcConfigurationSupport <span style="color:#ff79c6">{</span>
 </span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span>    <span style="color:#5bc4bf">@Override</span>
-</span></span><span style="display:flex;"><span>    <span style="color:#815ba4">public</span> RequestMappingHandlerMapping <span style="color:#06b6ef">requestMappingHandlerMapping</span><span style="color:#5bc4bf">()</span> <span style="color:#5bc4bf">{</span>
-</span></span><span style="display:flex;"><span>        ApiVersionHandlerMapping handlerMapping <span style="color:#5bc4bf">=</span> <span style="color:#815ba4">new</span> ApiVersionHandlerMapping<span style="color:#5bc4bf">();</span>
-</span></span><span style="display:flex;"><span>        handlerMapping<span style="color:#5bc4bf">.</span><span style="color:#06b6ef">setOrder</span><span style="color:#5bc4bf">(</span>0<span style="color:#5bc4bf">);</span>
-</span></span><span style="display:flex;"><span>        handlerMapping<span style="color:#5bc4bf">.</span><span style="color:#06b6ef">setInterceptors</span><span style="color:#5bc4bf">(</span>getInterceptors<span style="color:#5bc4bf">());</span>
-</span></span><span style="display:flex;"><span>        <span style="color:#815ba4">return</span> handlerMapping<span style="color:#5bc4bf">;</span>
-</span></span><span style="display:flex;"><span>    <span style="color:#5bc4bf">}</span>
-</span></span><span style="display:flex;"><span><span style="color:#5bc4bf">}</span>
+</span></span><span style="display:flex;"><span>    @Override
+</span></span><span style="display:flex;"><span>    <span style="color:#8be9fd;font-style:italic">public</span> RequestMappingHandlerMapping <span style="color:#50fa7b">requestMappingHandlerMapping</span><span style="color:#ff79c6">()</span> <span style="color:#ff79c6">{</span>
+</span></span><span style="display:flex;"><span>        ApiVersionHandlerMapping handlerMapping <span style="color:#ff79c6">=</span> <span style="color:#ff79c6">new</span> ApiVersionHandlerMapping<span style="color:#ff79c6">();</span>
+</span></span><span style="display:flex;"><span>        handlerMapping<span style="color:#ff79c6">.</span><span style="color:#50fa7b">setOrder</span><span style="color:#ff79c6">(</span>0<span style="color:#ff79c6">);</span>
+</span></span><span style="display:flex;"><span>        handlerMapping<span style="color:#ff79c6">.</span><span style="color:#50fa7b">setInterceptors</span><span style="color:#ff79c6">(</span>getInterceptors<span style="color:#ff79c6">());</span>
+</span></span><span style="display:flex;"><span>        <span style="color:#ff79c6">return</span> handlerMapping<span style="color:#ff79c6">;</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#ff79c6">}</span>
+</span></span><span style="display:flex;"><span><span style="color:#ff79c6">}</span>
 </span></span></code></pre></div><p>這樣就可以在 controller 開心地加上 <code>ApiVersion</code> 註解啦</p>
-<div class="highlight"><pre tabindex="0" style="color:#e7e9db;background-color:#2f1e2e;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-java" data-lang="java"><span style="display:flex;"><span><span style="color:#5bc4bf">import</span> <span style="color:#fec418">org.springframework.http.ResponseEntity</span><span style="color:#5bc4bf">;</span>
-</span></span><span style="display:flex;"><span><span style="color:#5bc4bf">import</span> <span style="color:#fec418">org.springframework.web.bind.annotation.*</span><span style="color:#5bc4bf">;</span>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-java" data-lang="java"><span style="display:flex;"><span><span style="color:#ff79c6">import</span> org.springframework.http.ResponseEntity<span style="color:#ff79c6">;</span>
+</span></span><span style="display:flex;"><span><span style="color:#ff79c6">import</span> org.springframework.web.bind.annotation.*<span style="color:#ff79c6">;</span>
 </span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span><span style="color:#5bc4bf">@ApiVersion</span>
-</span></span><span style="display:flex;"><span><span style="color:#5bc4bf">@RequestMapping</span><span style="color:#5bc4bf">(</span><span style="color:#48b685">&#34;home&#34;</span><span style="color:#5bc4bf">)</span>
-</span></span><span style="display:flex;"><span><span style="color:#5bc4bf">@RestController</span>
-</span></span><span style="display:flex;"><span><span style="color:#815ba4">public</span> <span style="color:#815ba4">class</span> <span style="color:#fec418">HomeController</span> <span style="color:#5bc4bf">{</span>
+</span></span><span style="display:flex;"><span>@ApiVersion
+</span></span><span style="display:flex;"><span>@RequestMapping<span style="color:#ff79c6">(</span><span style="color:#f1fa8c">&#34;home&#34;</span><span style="color:#ff79c6">)</span>
+</span></span><span style="display:flex;"><span>@RestController
+</span></span><span style="display:flex;"><span><span style="color:#8be9fd;font-style:italic">public</span> <span style="color:#8be9fd;font-style:italic">class</span> <span style="color:#50fa7b">HomeController</span> <span style="color:#ff79c6">{</span>
 </span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span>    <span style="color:#5bc4bf">@GetMapping</span><span style="color:#5bc4bf">(</span><span style="color:#48b685">&#34;hello&#34;</span><span style="color:#5bc4bf">)</span>
-</span></span><span style="display:flex;"><span>    <span style="color:#815ba4">public</span> ResponseEntity<span style="color:#5bc4bf">&lt;?&gt;</span> hello<span style="color:#5bc4bf">()</span> <span style="color:#5bc4bf">{</span>
-</span></span><span style="display:flex;"><span>        <span style="color:#815ba4">return</span> ResponseEntity<span style="color:#5bc4bf">.</span><span style="color:#06b6ef">ok</span><span style="color:#5bc4bf">(</span><span style="color:#48b685">&#34;Hello world!&#34;</span><span style="color:#5bc4bf">);</span>
-</span></span><span style="display:flex;"><span>    <span style="color:#5bc4bf">}</span>
+</span></span><span style="display:flex;"><span>    @GetMapping<span style="color:#ff79c6">(</span><span style="color:#f1fa8c">&#34;hello&#34;</span><span style="color:#ff79c6">)</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#8be9fd;font-style:italic">public</span> ResponseEntity<span style="color:#ff79c6">&lt;?&gt;</span> hello<span style="color:#ff79c6">()</span> <span style="color:#ff79c6">{</span>
+</span></span><span style="display:flex;"><span>        <span style="color:#ff79c6">return</span> ResponseEntity<span style="color:#ff79c6">.</span><span style="color:#50fa7b">ok</span><span style="color:#ff79c6">(</span><span style="color:#f1fa8c">&#34;Hello world!&#34;</span><span style="color:#ff79c6">);</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#ff79c6">}</span>
 </span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span>    <span style="color:#5bc4bf">@ApiVersion</span><span style="color:#5bc4bf">(</span>2<span style="color:#5bc4bf">)</span>
-</span></span><span style="display:flex;"><span>    <span style="color:#5bc4bf">@GetMapping</span><span style="color:#5bc4bf">(</span><span style="color:#48b685">&#34;hello&#34;</span><span style="color:#5bc4bf">)</span>
-</span></span><span style="display:flex;"><span>    <span style="color:#815ba4">public</span> ResponseEntity<span style="color:#5bc4bf">&lt;?&gt;</span> helloV2<span style="color:#5bc4bf">()</span> <span style="color:#5bc4bf">{</span>
-</span></span><span style="display:flex;"><span>        <span style="color:#815ba4">return</span> ResponseEntity<span style="color:#5bc4bf">.</span><span style="color:#06b6ef">ok</span><span style="color:#5bc4bf">(</span><span style="color:#48b685">&#34;Nice to meet you!&#34;</span><span style="color:#5bc4bf">);</span>
-</span></span><span style="display:flex;"><span>    <span style="color:#5bc4bf">}</span>
-</span></span><span style="display:flex;"><span><span style="color:#5bc4bf">}</span>
+</span></span><span style="display:flex;"><span>    @ApiVersion<span style="color:#ff79c6">(</span>2<span style="color:#ff79c6">)</span>
+</span></span><span style="display:flex;"><span>    @GetMapping<span style="color:#ff79c6">(</span><span style="color:#f1fa8c">&#34;hello&#34;</span><span style="color:#ff79c6">)</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#8be9fd;font-style:italic">public</span> ResponseEntity<span style="color:#ff79c6">&lt;?&gt;</span> helloV2<span style="color:#ff79c6">()</span> <span style="color:#ff79c6">{</span>
+</span></span><span style="display:flex;"><span>        <span style="color:#ff79c6">return</span> ResponseEntity<span style="color:#ff79c6">.</span><span style="color:#50fa7b">ok</span><span style="color:#ff79c6">(</span><span style="color:#f1fa8c">&#34;Nice to meet you!&#34;</span><span style="color:#ff79c6">);</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#ff79c6">}</span>
+</span></span><span style="display:flex;"><span><span style="color:#ff79c6">}</span>
 </span></span></code></pre></div><p><strong>BUT，人生就是這個 BUT</strong></p>
 <p>當你要兼容 Swagger 的時候，事情就沒這麼簡單惹，你會發現馬德，swagger-ui.html 開起來打 API 怎麼都沒有版本號？！</p>
 <p>其實到這邊本文才要正式開始，否則你隨便 google 都是這樣的內容，我還寫個毛</p>
@@ -762,35 +762,35 @@ Ported from <a href="https://mak1t0.cc/" target="_blank" rel="noreferrer noopene
 <p>在前面寫好的 <code>CustomRequestMappingHandlerMapping</code> 中，另外再 override <code>getMappingForMethod(Method method, Class&lt;?&gt; handlerType)</code> 方法去調整 <code>RequestMappingInfo</code></p>
 <p>這部分的作法其實要看狀況，但網路上有些範例不知道是不是比較早期的文章，還有用到 <code>Proxy</code> 來操作的寫法，我是覺得有點不必要</p>
 <p>Spring MVC 其實在 <code>RequestMappingInfo</code> 裡面已經有很靈活的 constructor 可以做這方面的設定，並且提供方法可以跟原有的 <code>RequestMappingInfo</code> 做合併</p>
-<div class="highlight"><pre tabindex="0" style="color:#e7e9db;background-color:#2f1e2e;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-java" data-lang="java"><span style="display:flex;"><span><span style="color:#5bc4bf">@Override</span>
-</span></span><span style="display:flex;"><span><span style="color:#815ba4">public</span> RequestMappingInfo <span style="color:#06b6ef">getMappingForMethod</span><span style="color:#5bc4bf">(</span>Method method<span style="color:#5bc4bf">,</span> Class<span style="color:#5bc4bf">&lt;?&gt;</span> handlerType<span style="color:#5bc4bf">)</span> <span style="color:#5bc4bf">{</span>
-</span></span><span style="display:flex;"><span>    RequestMappingInfo info <span style="color:#5bc4bf">=</span> <span style="color:#815ba4">super</span><span style="color:#5bc4bf">.</span><span style="color:#06b6ef">getMappingForMethod</span><span style="color:#5bc4bf">(</span>method<span style="color:#5bc4bf">,</span> handlerType<span style="color:#5bc4bf">);</span>
-</span></span><span style="display:flex;"><span>    <span style="color:#815ba4">if</span> <span style="color:#5bc4bf">(</span>info <span style="color:#5bc4bf">==</span> <span style="color:#815ba4">null</span><span style="color:#5bc4bf">)</span> <span style="color:#815ba4">return</span> <span style="color:#815ba4">null</span><span style="color:#5bc4bf">;</span>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-java" data-lang="java"><span style="display:flex;"><span>@Override
+</span></span><span style="display:flex;"><span><span style="color:#8be9fd;font-style:italic">public</span> RequestMappingInfo <span style="color:#50fa7b">getMappingForMethod</span><span style="color:#ff79c6">(</span>Method method<span style="color:#ff79c6">,</span> Class<span style="color:#ff79c6">&lt;?&gt;</span> handlerType<span style="color:#ff79c6">)</span> <span style="color:#ff79c6">{</span>
+</span></span><span style="display:flex;"><span>    RequestMappingInfo info <span style="color:#ff79c6">=</span> <span style="color:#8be9fd;font-style:italic">super</span><span style="color:#ff79c6">.</span><span style="color:#50fa7b">getMappingForMethod</span><span style="color:#ff79c6">(</span>method<span style="color:#ff79c6">,</span> handlerType<span style="color:#ff79c6">);</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#ff79c6">if</span> <span style="color:#ff79c6">(</span>info <span style="color:#ff79c6">==</span> <span style="color:#ff79c6">null</span><span style="color:#ff79c6">)</span> <span style="color:#ff79c6">return</span> <span style="color:#ff79c6">null</span><span style="color:#ff79c6">;</span>
 </span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span>    ApiVersion methodAnnotation <span style="color:#5bc4bf">=</span> AnnotationUtils<span style="color:#5bc4bf">.</span><span style="color:#06b6ef">findAnnotation</span><span style="color:#5bc4bf">(</span>method<span style="color:#5bc4bf">,</span> ApiVersion<span style="color:#5bc4bf">.</span><span style="color:#06b6ef">class</span><span style="color:#5bc4bf">);</span>
-</span></span><span style="display:flex;"><span>    <span style="color:#815ba4">if</span> <span style="color:#5bc4bf">(</span>methodAnnotation <span style="color:#5bc4bf">!=</span> <span style="color:#815ba4">null</span><span style="color:#5bc4bf">)</span> <span style="color:#5bc4bf">{</span>
-</span></span><span style="display:flex;"><span>        RequestCondition<span style="color:#5bc4bf">&lt;?&gt;</span> methodCondition <span style="color:#5bc4bf">=</span> getCustomMethodCondition<span style="color:#5bc4bf">(</span>method<span style="color:#5bc4bf">);</span>
-</span></span><span style="display:flex;"><span>        info <span style="color:#5bc4bf">=</span> createApiVersionInfo<span style="color:#5bc4bf">(</span>methodAnnotation<span style="color:#5bc4bf">,</span> methodCondition<span style="color:#5bc4bf">).</span><span style="color:#06b6ef">combine</span><span style="color:#5bc4bf">(</span>info<span style="color:#5bc4bf">);</span>
-</span></span><span style="display:flex;"><span>    <span style="color:#5bc4bf">}</span> <span style="color:#815ba4">else</span> <span style="color:#5bc4bf">{</span>
-</span></span><span style="display:flex;"><span>        ApiVersion typeAnnotation <span style="color:#5bc4bf">=</span> AnnotationUtils<span style="color:#5bc4bf">.</span><span style="color:#06b6ef">findAnnotation</span><span style="color:#5bc4bf">(</span>handlerType<span style="color:#5bc4bf">,</span> ApiVersion<span style="color:#5bc4bf">.</span><span style="color:#06b6ef">class</span><span style="color:#5bc4bf">);</span>
-</span></span><span style="display:flex;"><span>        <span style="color:#815ba4">if</span> <span style="color:#5bc4bf">(</span>typeAnnotation <span style="color:#5bc4bf">!=</span> <span style="color:#815ba4">null</span><span style="color:#5bc4bf">)</span> <span style="color:#5bc4bf">{</span>
-</span></span><span style="display:flex;"><span>            RequestCondition<span style="color:#5bc4bf">&lt;?&gt;</span> typeCondition <span style="color:#5bc4bf">=</span> getCustomTypeCondition<span style="color:#5bc4bf">(</span>handlerType<span style="color:#5bc4bf">);</span>
-</span></span><span style="display:flex;"><span>            info <span style="color:#5bc4bf">=</span> createApiVersionInfo<span style="color:#5bc4bf">(</span>typeAnnotation<span style="color:#5bc4bf">,</span> typeCondition<span style="color:#5bc4bf">).</span><span style="color:#06b6ef">combine</span><span style="color:#5bc4bf">(</span>info<span style="color:#5bc4bf">);</span>
-</span></span><span style="display:flex;"><span>        <span style="color:#5bc4bf">}</span>
-</span></span><span style="display:flex;"><span>    <span style="color:#5bc4bf">}</span>
-</span></span><span style="display:flex;"><span>    <span style="color:#815ba4">return</span> info<span style="color:#5bc4bf">;</span>
-</span></span><span style="display:flex;"><span><span style="color:#5bc4bf">}</span>
+</span></span><span style="display:flex;"><span>    ApiVersion methodAnnotation <span style="color:#ff79c6">=</span> AnnotationUtils<span style="color:#ff79c6">.</span><span style="color:#50fa7b">findAnnotation</span><span style="color:#ff79c6">(</span>method<span style="color:#ff79c6">,</span> ApiVersion<span style="color:#ff79c6">.</span><span style="color:#50fa7b">class</span><span style="color:#ff79c6">);</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#ff79c6">if</span> <span style="color:#ff79c6">(</span>methodAnnotation <span style="color:#ff79c6">!=</span> <span style="color:#ff79c6">null</span><span style="color:#ff79c6">)</span> <span style="color:#ff79c6">{</span>
+</span></span><span style="display:flex;"><span>        RequestCondition<span style="color:#ff79c6">&lt;?&gt;</span> methodCondition <span style="color:#ff79c6">=</span> getCustomMethodCondition<span style="color:#ff79c6">(</span>method<span style="color:#ff79c6">);</span>
+</span></span><span style="display:flex;"><span>        info <span style="color:#ff79c6">=</span> createApiVersionInfo<span style="color:#ff79c6">(</span>methodAnnotation<span style="color:#ff79c6">,</span> methodCondition<span style="color:#ff79c6">).</span><span style="color:#50fa7b">combine</span><span style="color:#ff79c6">(</span>info<span style="color:#ff79c6">);</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#ff79c6">}</span> <span style="color:#ff79c6">else</span> <span style="color:#ff79c6">{</span>
+</span></span><span style="display:flex;"><span>        ApiVersion typeAnnotation <span style="color:#ff79c6">=</span> AnnotationUtils<span style="color:#ff79c6">.</span><span style="color:#50fa7b">findAnnotation</span><span style="color:#ff79c6">(</span>handlerType<span style="color:#ff79c6">,</span> ApiVersion<span style="color:#ff79c6">.</span><span style="color:#50fa7b">class</span><span style="color:#ff79c6">);</span>
+</span></span><span style="display:flex;"><span>        <span style="color:#ff79c6">if</span> <span style="color:#ff79c6">(</span>typeAnnotation <span style="color:#ff79c6">!=</span> <span style="color:#ff79c6">null</span><span style="color:#ff79c6">)</span> <span style="color:#ff79c6">{</span>
+</span></span><span style="display:flex;"><span>            RequestCondition<span style="color:#ff79c6">&lt;?&gt;</span> typeCondition <span style="color:#ff79c6">=</span> getCustomTypeCondition<span style="color:#ff79c6">(</span>handlerType<span style="color:#ff79c6">);</span>
+</span></span><span style="display:flex;"><span>            info <span style="color:#ff79c6">=</span> createApiVersionInfo<span style="color:#ff79c6">(</span>typeAnnotation<span style="color:#ff79c6">,</span> typeCondition<span style="color:#ff79c6">).</span><span style="color:#50fa7b">combine</span><span style="color:#ff79c6">(</span>info<span style="color:#ff79c6">);</span>
+</span></span><span style="display:flex;"><span>        <span style="color:#ff79c6">}</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#ff79c6">}</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#ff79c6">return</span> info<span style="color:#ff79c6">;</span>
+</span></span><span style="display:flex;"><span><span style="color:#ff79c6">}</span>
 </span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span><span style="color:#815ba4">private</span> RequestMappingInfo <span style="color:#06b6ef">createApiVersionInfo</span><span style="color:#5bc4bf">(</span>ApiVersion annotation<span style="color:#5bc4bf">,</span> RequestCondition<span style="color:#5bc4bf">&lt;?&gt;</span> customCondition<span style="color:#5bc4bf">)</span> <span style="color:#5bc4bf">{</span>
-</span></span><span style="display:flex;"><span>    <span style="color:#815ba4">return</span> <span style="color:#815ba4">new</span> RequestMappingInfo<span style="color:#5bc4bf">(</span>
-</span></span><span style="display:flex;"><span>            <span style="color:#815ba4">new</span> PatternsRequestCondition<span style="color:#5bc4bf">(</span><span style="color:#48b685">&#34;v&#34;</span><span style="color:#5bc4bf">.</span><span style="color:#06b6ef">concat</span><span style="color:#5bc4bf">(</span>String<span style="color:#5bc4bf">.</span><span style="color:#06b6ef">valueOf</span><span style="color:#5bc4bf">(</span>annotation<span style="color:#5bc4bf">.</span><span style="color:#06b6ef">value</span><span style="color:#5bc4bf">()))),</span>
-</span></span><span style="display:flex;"><span>            <span style="color:#815ba4">new</span> RequestMethodsRequestCondition<span style="color:#5bc4bf">(),</span>
-</span></span><span style="display:flex;"><span>            <span style="color:#815ba4">new</span> ParamsRequestCondition<span style="color:#5bc4bf">(),</span>
-</span></span><span style="display:flex;"><span>            <span style="color:#815ba4">new</span> HeadersRequestCondition<span style="color:#5bc4bf">(),</span>
-</span></span><span style="display:flex;"><span>            <span style="color:#815ba4">new</span> ConsumesRequestCondition<span style="color:#5bc4bf">(),</span>
-</span></span><span style="display:flex;"><span>            <span style="color:#815ba4">new</span> ProducesRequestCondition<span style="color:#5bc4bf">(),</span>
-</span></span><span style="display:flex;"><span>            customCondition<span style="color:#5bc4bf">);</span>
-</span></span><span style="display:flex;"><span><span style="color:#5bc4bf">}</span>
+</span></span><span style="display:flex;"><span><span style="color:#8be9fd;font-style:italic">private</span> RequestMappingInfo <span style="color:#50fa7b">createApiVersionInfo</span><span style="color:#ff79c6">(</span>ApiVersion annotation<span style="color:#ff79c6">,</span> RequestCondition<span style="color:#ff79c6">&lt;?&gt;</span> customCondition<span style="color:#ff79c6">)</span> <span style="color:#ff79c6">{</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#ff79c6">return</span> <span style="color:#ff79c6">new</span> RequestMappingInfo<span style="color:#ff79c6">(</span>
+</span></span><span style="display:flex;"><span>            <span style="color:#ff79c6">new</span> PatternsRequestCondition<span style="color:#ff79c6">(</span><span style="color:#f1fa8c">&#34;v&#34;</span><span style="color:#ff79c6">.</span><span style="color:#50fa7b">concat</span><span style="color:#ff79c6">(</span>String<span style="color:#ff79c6">.</span><span style="color:#50fa7b">valueOf</span><span style="color:#ff79c6">(</span>annotation<span style="color:#ff79c6">.</span><span style="color:#50fa7b">value</span><span style="color:#ff79c6">()))),</span>
+</span></span><span style="display:flex;"><span>            <span style="color:#ff79c6">new</span> RequestMethodsRequestCondition<span style="color:#ff79c6">(),</span>
+</span></span><span style="display:flex;"><span>            <span style="color:#ff79c6">new</span> ParamsRequestCondition<span style="color:#ff79c6">(),</span>
+</span></span><span style="display:flex;"><span>            <span style="color:#ff79c6">new</span> HeadersRequestCondition<span style="color:#ff79c6">(),</span>
+</span></span><span style="display:flex;"><span>            <span style="color:#ff79c6">new</span> ConsumesRequestCondition<span style="color:#ff79c6">(),</span>
+</span></span><span style="display:flex;"><span>            <span style="color:#ff79c6">new</span> ProducesRequestCondition<span style="color:#ff79c6">(),</span>
+</span></span><span style="display:flex;"><span>            customCondition<span style="color:#ff79c6">);</span>
+</span></span><span style="display:flex;"><span><span style="color:#ff79c6">}</span>
 </span></span></code></pre></div><p>這時候再打開 swagger-ui.html，就會覺得空氣是多麼清新，世界是多麼美好</p>
 <h2 id="spring-security-設定">Spring Security 設定</h2>
 <p>當然，因為現在很多 handler 的 uri 不一樣了，設定 Spring Security 哪些請求要擋哪些不用的部分當然也要改</p>
@@ -804,26 +804,26 @@ Ported from <a href="https://mak1t0.cc/" target="_blank" rel="noreferrer noopene
 <p>而不論是 <code>@EnableWebMvc</code> 註解或直接繼承 <code>WebMvcConfigurationSupport</code> 都會停用 <code>WebMvcAutoConfiguration</code>，Spring Boot 就會改用你 <code>@EnableWebMvc</code> 註解的類別或直接繼承 <code>WebMvcConfigurationSupport</code> 的類別來做設定；如果剛好你需要的自訂部分在這裡沒有想辦法設定進去，那你繼承 <code>WebMvcConfigurer</code> 的設定就白寫了</p>
 <p>解決的關鍵點就是 <code>WebMvcRegistrations</code> 介面，看是要實作介面還是匿名類別的 <code>@Bean</code> 給 Spring Boot 都可以</p>
 <p>我是寫在繼承 <code>WebMvcConfigurer</code> 的設定類別裡面，讓 Sring MVC 相關設定集中</p>
-<div class="highlight"><pre tabindex="0" style="color:#e7e9db;background-color:#2f1e2e;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-java" data-lang="java"><span style="display:flex;"><span><span style="color:#5bc4bf">import</span> <span style="color:#fec418">org.springframework.boot.autoconfigure.web.servlet.WebMvcRegistrations</span><span style="color:#5bc4bf">;</span>
-</span></span><span style="display:flex;"><span><span style="color:#5bc4bf">import</span> <span style="color:#fec418">org.springframework.context.annotation.Bean</span><span style="color:#5bc4bf">;</span>
-</span></span><span style="display:flex;"><span><span style="color:#5bc4bf">import</span> <span style="color:#fec418">org.springframework.context.annotation.Configuration</span><span style="color:#5bc4bf">;</span>
-</span></span><span style="display:flex;"><span><span style="color:#5bc4bf">import</span> <span style="color:#fec418">org.springframework.web.servlet.config.annotation.WebMvcConfigurer</span><span style="color:#5bc4bf">;</span>
-</span></span><span style="display:flex;"><span><span style="color:#5bc4bf">import</span> <span style="color:#fec418">org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerMapping</span><span style="color:#5bc4bf">;</span>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-java" data-lang="java"><span style="display:flex;"><span><span style="color:#ff79c6">import</span> org.springframework.boot.autoconfigure.web.servlet.WebMvcRegistrations<span style="color:#ff79c6">;</span>
+</span></span><span style="display:flex;"><span><span style="color:#ff79c6">import</span> org.springframework.context.annotation.Bean<span style="color:#ff79c6">;</span>
+</span></span><span style="display:flex;"><span><span style="color:#ff79c6">import</span> org.springframework.context.annotation.Configuration<span style="color:#ff79c6">;</span>
+</span></span><span style="display:flex;"><span><span style="color:#ff79c6">import</span> org.springframework.web.servlet.config.annotation.WebMvcConfigurer<span style="color:#ff79c6">;</span>
+</span></span><span style="display:flex;"><span><span style="color:#ff79c6">import</span> org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerMapping<span style="color:#ff79c6">;</span>
 </span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span><span style="color:#5bc4bf">@Configuration</span>
-</span></span><span style="display:flex;"><span><span style="color:#815ba4">public</span> <span style="color:#815ba4">class</span> <span style="color:#fec418">CustomWebMvcConfigurer</span> <span style="color:#815ba4">implements</span> WebMvcConfigurer <span style="color:#5bc4bf">{</span>
+</span></span><span style="display:flex;"><span>@Configuration
+</span></span><span style="display:flex;"><span><span style="color:#8be9fd;font-style:italic">public</span> <span style="color:#8be9fd;font-style:italic">class</span> <span style="color:#50fa7b">CustomWebMvcConfigurer</span> <span style="color:#8be9fd;font-style:italic">implements</span> WebMvcConfigurer <span style="color:#ff79c6">{</span>
 </span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span>    <span style="color:#5bc4bf">@Bean</span>
-</span></span><span style="display:flex;"><span>    <span style="color:#815ba4">public</span> WebMvcRegistrations <span style="color:#06b6ef">webMvcRegistrationsRequestMappingHandlerMapping</span><span style="color:#5bc4bf">()</span> <span style="color:#5bc4bf">{</span>
-</span></span><span style="display:flex;"><span>        <span style="color:#815ba4">return</span> <span style="color:#815ba4">new</span> WebMvcRegistrations<span style="color:#5bc4bf">()</span> <span style="color:#5bc4bf">{</span>
+</span></span><span style="display:flex;"><span>    @Bean
+</span></span><span style="display:flex;"><span>    <span style="color:#8be9fd;font-style:italic">public</span> WebMvcRegistrations <span style="color:#50fa7b">webMvcRegistrationsRequestMappingHandlerMapping</span><span style="color:#ff79c6">()</span> <span style="color:#ff79c6">{</span>
+</span></span><span style="display:flex;"><span>        <span style="color:#ff79c6">return</span> <span style="color:#ff79c6">new</span> WebMvcRegistrations<span style="color:#ff79c6">()</span> <span style="color:#ff79c6">{</span>
 </span></span><span style="display:flex;"><span>            
-</span></span><span style="display:flex;"><span>            <span style="color:#5bc4bf">@Override</span>
-</span></span><span style="display:flex;"><span>            <span style="color:#815ba4">public</span> RequestMappingHandlerMapping <span style="color:#06b6ef">getRequestMappingHandlerMapping</span><span style="color:#5bc4bf">()</span> <span style="color:#5bc4bf">{</span>
-</span></span><span style="display:flex;"><span>                <span style="color:#815ba4">return</span> <span style="color:#815ba4">new</span> ApiVersionHandlerMapping<span style="color:#5bc4bf">();</span>
-</span></span><span style="display:flex;"><span>            <span style="color:#5bc4bf">}</span>
-</span></span><span style="display:flex;"><span>        <span style="color:#5bc4bf">};</span>
-</span></span><span style="display:flex;"><span>    <span style="color:#5bc4bf">}</span>
-</span></span><span style="display:flex;"><span><span style="color:#5bc4bf">}</span>
+</span></span><span style="display:flex;"><span>            @Override
+</span></span><span style="display:flex;"><span>            <span style="color:#8be9fd;font-style:italic">public</span> RequestMappingHandlerMapping <span style="color:#50fa7b">getRequestMappingHandlerMapping</span><span style="color:#ff79c6">()</span> <span style="color:#ff79c6">{</span>
+</span></span><span style="display:flex;"><span>                <span style="color:#ff79c6">return</span> <span style="color:#ff79c6">new</span> ApiVersionHandlerMapping<span style="color:#ff79c6">();</span>
+</span></span><span style="display:flex;"><span>            <span style="color:#ff79c6">}</span>
+</span></span><span style="display:flex;"><span>        <span style="color:#ff79c6">};</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#ff79c6">}</span>
+</span></span><span style="display:flex;"><span><span style="color:#ff79c6">}</span>
 </span></span></code></pre></div><p>至此就可以把前面寫的 <code>WebMvcConfig</code> 刪掉啦</p>
 <p>至於沒找到 <code>WebMvcRegistrations</code> 介面的朋友，要不就是你 Spring Boot 版本太低，不然就只能改用 <code>WebMvcRegistrationsAdpater</code> 試試看了 (攤手)</p>
 
@@ -857,10 +857,10 @@ Ported from <a href="https://mak1t0.cc/" target="_blank" rel="noreferrer noopene
 
     var disqus_config = function () {
         
-        this.page.url = 'https:\/\/idontwannarock.github.io\/tech_blog\/2019\/09\/spring_api_version_with_swagger_security\/';  
+        this.page.url = '\/2019\/09\/spring_api_version_with_swagger_security\/';  
         
         
-        this.page.identifier = 'https:\/\/idontwannarock.github.io\/tech_blog\/2019\/09\/spring_api_version_with_swagger_security\/'; 
+        this.page.identifier = '\/2019\/09\/spring_api_version_with_swagger_security\/'; 
     };
     (function() {
         var d = document, s = d.createElement('script');
@@ -888,7 +888,7 @@ Ported from <a href="https://mak1t0.cc/" target="_blank" rel="noreferrer noopene
 
                     </div>
             </div><div id="single-column-footer">
-Hugo Theme <a href="https://github.com/amazingrise/hugo-theme-diary">Diary</a> by <a href="https://amazingrise.net">Rise</a>
+Hugo Theme <a href="https://github.com/amazingrise/hugo-theme-diary">Diary</a> by <a href="https://risehere.net/">Rise</a>
 <br>
 Ported from <a href="https://mak1t0.cc/" target="_blank" rel="noreferrer noopener">Makito</a>'s <a href="https://github.com/SumiMakito/hexo-theme-journal/" target="_blank" rel="noreferrer noopener">Journal.</a> <br>
 <br>
@@ -900,6 +900,5 @@ Ported from <a href="https://mak1t0.cc/" target="_blank" rel="noreferrer noopene
 </div>
             </div>
     
-    <script src="https://idontwannarock.github.io/tech_blog/js/journal.js"></script>
-    </body>
+    <script src="https://idontwannarock.github.io/tech_blog/js/journal.js"></script></body>
 </html>

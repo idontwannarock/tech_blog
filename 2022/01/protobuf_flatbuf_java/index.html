@@ -38,7 +38,7 @@ if (!doNotTrack) {
 </script>
 
 
-<link type="text/css" rel="stylesheet" href="https://idontwannarock.github.io/tech_blog/vendor/css/bootstrap.min.css">
+
 
 
   
@@ -48,24 +48,24 @@ if (!doNotTrack) {
 
 
 
-<link rel="stylesheet" href="https://idontwannarock.github.io/tech_blog/scss/journal.min.f4a8de07567a2d29619e0711662ef6251e3e59b642079f99490f654abf89a3c4.css" integrity="sha256-9KjeB1Z6LSlhngcRZi72JR4&#43;WbZCB5&#43;ZSQ9lSr&#43;Jo8Q=" media="screen">
+<link rel="stylesheet" href="https://idontwannarock.github.io/tech_blog/scss/journal.min.c5d92f380bf10f6849c7ac487c7df2b22c081e0851e5339224f1ae29210b20d2.css" integrity="sha256-xdkvOAvxD2hJx6xIfH3ysiwIHghR5TOSJPGuKSELINI=" media="screen">
 
 
 
-<link rel="stylesheet" href="https://idontwannarock.github.io/tech_blog/scss/dark-mode.min.eeb8040aa9333250b7fec770f950bfe8ba9b18a5eeeaf2dfef61d84d3956f625.css" integrity="sha256-7rgECqkzMlC3/sdw&#43;VC/6LqbGKXu6vLf72HYTTlW9iU=" media="screen">
-
-
-<script src="https://idontwannarock.github.io/tech_blog/vendor/js/loadCSS.js"></script>
-<script>
-  loadCSS("https://fonts.googleapis.com/css?family=Fira+Mono|Material+Icons");
-</script>
+<link rel="stylesheet" href="https://idontwannarock.github.io/tech_blog/scss/dark-mode.min.9f8d8c2df9285089d141edd4a50cb7506c7948e6ab79a29968dced1bd0ab7d22.css" integrity="sha256-n42MLfkoUInRQe3UpQy3UGx5SOareaKZaNztG9CrfSI=" media="screen">
 
 
 
 
+      <script src="https://idontwannarock.github.io/tech_blog/js/toc.js"></script>
+    
+    <link type="text/css" rel="stylesheet" href="https://idontwannarock.github.io/tech_blog/vendor/css/bootstrap.min.css"><link rel="stylesheet"
+          href="https://fonts.googleapis.com/css?family=Material+Icons">
 
 
-  <script src="https://idontwannarock.github.io/tech_blog/js/toc.js"></script>
+
+
+
 
 
 
@@ -157,7 +157,7 @@ if (!doNotTrack) {
 
     <div class="nav-footer">
         
-Hugo Theme <a href="https://github.com/amazingrise/hugo-theme-diary">Diary</a> by <a href="https://amazingrise.net">Rise</a>
+Hugo Theme <a href="https://github.com/amazingrise/hugo-theme-diary">Diary</a> by <a href="https://risehere.net/">Rise</a>
 <br>
 Ported from <a href="https://mak1t0.cc/" target="_blank" rel="noreferrer noopener">Makito</a>'s <a href="https://github.com/SumiMakito/hexo-theme-journal/" target="_blank" rel="noreferrer noopener">Journal.</a> <br>
 <br>
@@ -549,116 +549,116 @@ Ported from <a href="https://mak1t0.cc/" target="_blank" rel="noreferrer noopene
 <p>雖然剛好 FlatBuf 都符合我的需求，但 FlatBuf 使用的人似乎還不多，雖然官方文件上說 Facebook 已經將 FlatBuf 使用在 Android App 上，不過總是沒有自己親身試驗來的準，也一併試驗開發的困難度</p>
 <p>所以乾脆來做 ProtoBuf 跟 FlatBuf 的 benchmark 來比較一下各自序列化的速度以及記憶體大致用量</p>
 <p>因為要順帶試驗開發的困難度，所以只要是各自有支援的資料格式，我都盡量加入測試的資料結構當中，以下為我用來建立測資的 Java 物件</p>
-<div class="highlight"><pre tabindex="0" style="color:#e7e9db;background-color:#2f1e2e;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-java" data-lang="java"><span style="display:flex;"><span><span style="color:#5bc4bf">@Value</span>
-</span></span><span style="display:flex;"><span><span style="color:#5bc4bf">@Builder</span>
-</span></span><span style="display:flex;"><span><span style="color:#815ba4">public</span> <span style="color:#815ba4">class</span> <span style="color:#fec418">Passenger</span> <span style="color:#5bc4bf">{</span>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-java" data-lang="java"><span style="display:flex;"><span>@Value
+</span></span><span style="display:flex;"><span>@Builder
+</span></span><span style="display:flex;"><span><span style="color:#8be9fd;font-style:italic">public</span> <span style="color:#8be9fd;font-style:italic">class</span> <span style="color:#50fa7b">Passenger</span> <span style="color:#ff79c6">{</span>
 </span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span>    Integer id<span style="color:#5bc4bf">;</span>
-</span></span><span style="display:flex;"><span>    String firstName<span style="color:#5bc4bf">;</span>
-</span></span><span style="display:flex;"><span>    String lastName<span style="color:#5bc4bf">;</span>
-</span></span><span style="display:flex;"><span>    Boolean isMale<span style="color:#5bc4bf">;</span>
-</span></span><span style="display:flex;"><span>    List<span style="color:#5bc4bf">&lt;</span>Belonging<span style="color:#5bc4bf">&gt;</span> belongings<span style="color:#5bc4bf">;</span>
-</span></span><span style="display:flex;"><span>    Ticket ticket<span style="color:#5bc4bf">;</span>
-</span></span><span style="display:flex;"><span><span style="color:#5bc4bf">}</span>
+</span></span><span style="display:flex;"><span>    Integer id<span style="color:#ff79c6">;</span>
+</span></span><span style="display:flex;"><span>    String firstName<span style="color:#ff79c6">;</span>
+</span></span><span style="display:flex;"><span>    String lastName<span style="color:#ff79c6">;</span>
+</span></span><span style="display:flex;"><span>    Boolean isMale<span style="color:#ff79c6">;</span>
+</span></span><span style="display:flex;"><span>    List<span style="color:#ff79c6">&lt;</span>Belonging<span style="color:#ff79c6">&gt;</span> belongings<span style="color:#ff79c6">;</span>
+</span></span><span style="display:flex;"><span>    Ticket ticket<span style="color:#ff79c6">;</span>
+</span></span><span style="display:flex;"><span><span style="color:#ff79c6">}</span>
 </span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span><span style="color:#5bc4bf">@Value</span>
-</span></span><span style="display:flex;"><span><span style="color:#5bc4bf">@Builder</span>
-</span></span><span style="display:flex;"><span><span style="color:#815ba4">public</span> <span style="color:#815ba4">class</span> <span style="color:#fec418">Belonging</span> <span style="color:#5bc4bf">{</span>
+</span></span><span style="display:flex;"><span>@Value
+</span></span><span style="display:flex;"><span>@Builder
+</span></span><span style="display:flex;"><span><span style="color:#8be9fd;font-style:italic">public</span> <span style="color:#8be9fd;font-style:italic">class</span> <span style="color:#50fa7b">Belonging</span> <span style="color:#ff79c6">{</span>
 </span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span>    Integer id<span style="color:#5bc4bf">;</span>
-</span></span><span style="display:flex;"><span>    BelongingType type<span style="color:#5bc4bf">;</span>
-</span></span><span style="display:flex;"><span>    Float weightInKilogram<span style="color:#5bc4bf">;</span>
+</span></span><span style="display:flex;"><span>    Integer id<span style="color:#ff79c6">;</span>
+</span></span><span style="display:flex;"><span>    BelongingType type<span style="color:#ff79c6">;</span>
+</span></span><span style="display:flex;"><span>    Float weightInKilogram<span style="color:#ff79c6">;</span>
 </span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span>    <span style="color:#815ba4">public</span> <span style="color:#815ba4">enum</span> BelongingType <span style="color:#5bc4bf">{</span>
-</span></span><span style="display:flex;"><span>        SUITCASE<span style="color:#5bc4bf">,</span> BACKPACK
-</span></span><span style="display:flex;"><span>    <span style="color:#5bc4bf">}</span>
-</span></span><span style="display:flex;"><span><span style="color:#5bc4bf">}</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#8be9fd;font-style:italic">public</span> <span style="color:#8be9fd;font-style:italic">enum</span> BelongingType <span style="color:#ff79c6">{</span>
+</span></span><span style="display:flex;"><span>        SUITCASE<span style="color:#ff79c6">,</span> BACKPACK
+</span></span><span style="display:flex;"><span>    <span style="color:#ff79c6">}</span>
+</span></span><span style="display:flex;"><span><span style="color:#ff79c6">}</span>
 </span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span><span style="color:#5bc4bf">@Value</span>
-</span></span><span style="display:flex;"><span><span style="color:#5bc4bf">@Builder</span>
-</span></span><span style="display:flex;"><span><span style="color:#815ba4">public</span> <span style="color:#815ba4">class</span> <span style="color:#fec418">Ticket</span> <span style="color:#5bc4bf">{</span>
+</span></span><span style="display:flex;"><span>@Value
+</span></span><span style="display:flex;"><span>@Builder
+</span></span><span style="display:flex;"><span><span style="color:#8be9fd;font-style:italic">public</span> <span style="color:#8be9fd;font-style:italic">class</span> <span style="color:#50fa7b">Ticket</span> <span style="color:#ff79c6">{</span>
 </span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span>    Integer id<span style="color:#5bc4bf">;</span>
-</span></span><span style="display:flex;"><span>    Transportation transportation<span style="color:#5bc4bf">;</span>
-</span></span><span style="display:flex;"><span>    Currency currency<span style="color:#5bc4bf">;</span>
-</span></span><span style="display:flex;"><span>    BigDecimal price<span style="color:#5bc4bf">;</span>
-</span></span><span style="display:flex;"><span>    Location departure<span style="color:#5bc4bf">;</span>
-</span></span><span style="display:flex;"><span>    OffsetDateTime departureTime<span style="color:#5bc4bf">;</span>
-</span></span><span style="display:flex;"><span>    Location arrival<span style="color:#5bc4bf">;</span>
-</span></span><span style="display:flex;"><span>    OffsetDateTime arrivalTime<span style="color:#5bc4bf">;</span>
+</span></span><span style="display:flex;"><span>    Integer id<span style="color:#ff79c6">;</span>
+</span></span><span style="display:flex;"><span>    Transportation transportation<span style="color:#ff79c6">;</span>
+</span></span><span style="display:flex;"><span>    Currency currency<span style="color:#ff79c6">;</span>
+</span></span><span style="display:flex;"><span>    BigDecimal price<span style="color:#ff79c6">;</span>
+</span></span><span style="display:flex;"><span>    Location departure<span style="color:#ff79c6">;</span>
+</span></span><span style="display:flex;"><span>    OffsetDateTime departureTime<span style="color:#ff79c6">;</span>
+</span></span><span style="display:flex;"><span>    Location arrival<span style="color:#ff79c6">;</span>
+</span></span><span style="display:flex;"><span>    OffsetDateTime arrivalTime<span style="color:#ff79c6">;</span>
 </span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span>    <span style="color:#815ba4">public</span> <span style="color:#815ba4">enum</span> Transportation <span style="color:#5bc4bf">{</span>
-</span></span><span style="display:flex;"><span>        AIRLINE<span style="color:#5bc4bf">,</span> TRAIN
-</span></span><span style="display:flex;"><span>    <span style="color:#5bc4bf">}</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#8be9fd;font-style:italic">public</span> <span style="color:#8be9fd;font-style:italic">enum</span> Transportation <span style="color:#ff79c6">{</span>
+</span></span><span style="display:flex;"><span>        AIRLINE<span style="color:#ff79c6">,</span> TRAIN
+</span></span><span style="display:flex;"><span>    <span style="color:#ff79c6">}</span>
 </span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span>    <span style="color:#815ba4">public</span> <span style="color:#815ba4">enum</span> Currency <span style="color:#5bc4bf">{</span>
-</span></span><span style="display:flex;"><span>        USD<span style="color:#5bc4bf">,</span> NTD
-</span></span><span style="display:flex;"><span>    <span style="color:#5bc4bf">}</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#8be9fd;font-style:italic">public</span> <span style="color:#8be9fd;font-style:italic">enum</span> Currency <span style="color:#ff79c6">{</span>
+</span></span><span style="display:flex;"><span>        USD<span style="color:#ff79c6">,</span> NTD
+</span></span><span style="display:flex;"><span>    <span style="color:#ff79c6">}</span>
 </span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span>    <span style="color:#815ba4">public</span> <span style="color:#815ba4">enum</span> Location <span style="color:#5bc4bf">{</span>
-</span></span><span style="display:flex;"><span>        TPE<span style="color:#5bc4bf">,</span> TSA<span style="color:#5bc4bf">,</span> NRT<span style="color:#5bc4bf">,</span> LAX
-</span></span><span style="display:flex;"><span>    <span style="color:#5bc4bf">}</span>
-</span></span><span style="display:flex;"><span><span style="color:#5bc4bf">}</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#8be9fd;font-style:italic">public</span> <span style="color:#8be9fd;font-style:italic">enum</span> Location <span style="color:#ff79c6">{</span>
+</span></span><span style="display:flex;"><span>        TPE<span style="color:#ff79c6">,</span> TSA<span style="color:#ff79c6">,</span> NRT<span style="color:#ff79c6">,</span> LAX
+</span></span><span style="display:flex;"><span>    <span style="color:#ff79c6">}</span>
+</span></span><span style="display:flex;"><span><span style="color:#ff79c6">}</span>
 </span></span></code></pre></div><p>我也盡量將 Java 常用的資料型別加入其中來試驗各序列化 Library 的支援度</p>
 <p>以下是 ProtoBuf 對應的 .proto 檔</p>
-<div class="highlight"><pre tabindex="0" style="color:#e7e9db;background-color:#2f1e2e;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-proto" data-lang="proto"><span style="display:flex;"><span>syntax <span style="color:#5bc4bf">=</span> <span style="color:#48b685">&#34;proto3&#34;</span>;<span style="color:#ef6155">
-</span></span></span><span style="display:flex;"><span><span style="color:#ef6155">
-</span></span></span><span style="display:flex;"><span><span style="color:#ef6155"></span><span style="color:#5bc4bf">package</span> <span style="color:#fec418">protobuf</span>;<span style="color:#ef6155">
-</span></span></span><span style="display:flex;"><span><span style="color:#ef6155">
-</span></span></span><span style="display:flex;"><span><span style="color:#ef6155"></span><span style="color:#815ba4">option</span> java_multiple_files <span style="color:#5bc4bf">=</span> <span style="color:#815ba4">true</span>;<span style="color:#ef6155">
-</span></span></span><span style="display:flex;"><span><span style="color:#ef6155"></span><span style="color:#815ba4">option</span> java_package <span style="color:#5bc4bf">=</span> <span style="color:#48b685">&#34;org.example.serialization.benchmark.protobuf&#34;</span>;<span style="color:#ef6155">
-</span></span></span><span style="display:flex;"><span><span style="color:#ef6155"></span><span style="color:#815ba4">option</span> java_generate_equals_and_hash <span style="color:#5bc4bf">=</span> <span style="color:#815ba4">true</span>;<span style="color:#ef6155">
-</span></span></span><span style="display:flex;"><span><span style="color:#ef6155"></span><span style="color:#815ba4">option</span> java_string_check_utf8 <span style="color:#5bc4bf">=</span> <span style="color:#815ba4">true</span>;<span style="color:#ef6155">
-</span></span></span><span style="display:flex;"><span><span style="color:#ef6155"></span><span style="color:#815ba4">option</span> java_outer_classname <span style="color:#5bc4bf">=</span> <span style="color:#48b685">&#34;PassengerProto&#34;</span>;<span style="color:#ef6155">
-</span></span></span><span style="display:flex;"><span><span style="color:#ef6155">
-</span></span></span><span style="display:flex;"><span><span style="color:#ef6155"></span><span style="color:#815ba4">message</span> <span style="color:#fec418">ProtoPassenger</span> {<span style="color:#ef6155">
-</span></span></span><span style="display:flex;"><span><span style="color:#ef6155"></span>  <span style="color:#fec418">int32</span> id <span style="color:#5bc4bf">=</span> <span style="color:#f99b15">1</span>;<span style="color:#ef6155">
-</span></span></span><span style="display:flex;"><span><span style="color:#ef6155"></span>  <span style="color:#fec418">string</span> firstName <span style="color:#5bc4bf">=</span> <span style="color:#f99b15">2</span>;<span style="color:#ef6155">
-</span></span></span><span style="display:flex;"><span><span style="color:#ef6155"></span>  <span style="color:#fec418">string</span> lastName <span style="color:#5bc4bf">=</span> <span style="color:#f99b15">3</span>;<span style="color:#ef6155">
-</span></span></span><span style="display:flex;"><span><span style="color:#ef6155"></span>  <span style="color:#fec418">bool</span> isMale <span style="color:#5bc4bf">=</span> <span style="color:#f99b15">4</span>;<span style="color:#ef6155">
-</span></span></span><span style="display:flex;"><span><span style="color:#ef6155"></span>  ProtoTicket ticket <span style="color:#5bc4bf">=</span> <span style="color:#f99b15">5</span>;<span style="color:#ef6155">
-</span></span></span><span style="display:flex;"><span><span style="color:#ef6155"></span>  <span style="color:#815ba4">repeated</span> ProtoBelonging belongings <span style="color:#5bc4bf">=</span> <span style="color:#f99b15">6</span>;<span style="color:#ef6155">
-</span></span></span><span style="display:flex;"><span><span style="color:#ef6155"></span>}<span style="color:#ef6155">
-</span></span></span><span style="display:flex;"><span><span style="color:#ef6155">
-</span></span></span><span style="display:flex;"><span><span style="color:#ef6155"></span><span style="color:#815ba4">message</span> <span style="color:#fec418">ProtoBelonging</span> {<span style="color:#ef6155">
-</span></span></span><span style="display:flex;"><span><span style="color:#ef6155"></span>  <span style="color:#fec418">int32</span> id <span style="color:#5bc4bf">=</span> <span style="color:#f99b15">1</span>;<span style="color:#ef6155">
-</span></span></span><span style="display:flex;"><span><span style="color:#ef6155"></span>  BelongingType type <span style="color:#5bc4bf">=</span> <span style="color:#f99b15">2</span>;<span style="color:#ef6155">
-</span></span></span><span style="display:flex;"><span><span style="color:#ef6155"></span>  <span style="color:#fec418">float</span> weightInKilogram <span style="color:#5bc4bf">=</span> <span style="color:#f99b15">3</span>;<span style="color:#ef6155">
-</span></span></span><span style="display:flex;"><span><span style="color:#ef6155">
-</span></span></span><span style="display:flex;"><span><span style="color:#ef6155"></span>  <span style="color:#815ba4">enum</span> BelongingType {<span style="color:#ef6155">
-</span></span></span><span style="display:flex;"><span><span style="color:#ef6155"></span>    SUITCASE <span style="color:#5bc4bf">=</span> <span style="color:#f99b15">0</span>;<span style="color:#ef6155">
-</span></span></span><span style="display:flex;"><span><span style="color:#ef6155"></span>    BACKPACK <span style="color:#5bc4bf">=</span> <span style="color:#f99b15">1</span>;<span style="color:#ef6155">
-</span></span></span><span style="display:flex;"><span><span style="color:#ef6155"></span>  }<span style="color:#ef6155">
-</span></span></span><span style="display:flex;"><span><span style="color:#ef6155"></span>}<span style="color:#ef6155">
-</span></span></span><span style="display:flex;"><span><span style="color:#ef6155">
-</span></span></span><span style="display:flex;"><span><span style="color:#ef6155"></span><span style="color:#815ba4">message</span> <span style="color:#fec418">ProtoTicket</span> {<span style="color:#ef6155">
-</span></span></span><span style="display:flex;"><span><span style="color:#ef6155"></span>  <span style="color:#fec418">int32</span> id <span style="color:#5bc4bf">=</span> <span style="color:#f99b15">1</span>;<span style="color:#ef6155">
-</span></span></span><span style="display:flex;"><span><span style="color:#ef6155"></span>  Transportation transportation <span style="color:#5bc4bf">=</span> <span style="color:#f99b15">2</span>;<span style="color:#ef6155">
-</span></span></span><span style="display:flex;"><span><span style="color:#ef6155"></span>  Currency currency <span style="color:#5bc4bf">=</span> <span style="color:#f99b15">3</span>;<span style="color:#ef6155">
-</span></span></span><span style="display:flex;"><span><span style="color:#ef6155"></span>  <span style="color:#fec418">string</span> price <span style="color:#5bc4bf">=</span> <span style="color:#f99b15">4</span>;<span style="color:#ef6155">
-</span></span></span><span style="display:flex;"><span><span style="color:#ef6155"></span>  Location departure <span style="color:#5bc4bf">=</span> <span style="color:#f99b15">5</span>;<span style="color:#ef6155">
-</span></span></span><span style="display:flex;"><span><span style="color:#ef6155"></span>  <span style="color:#fec418">string</span> departureTime <span style="color:#5bc4bf">=</span> <span style="color:#f99b15">6</span>;<span style="color:#ef6155">
-</span></span></span><span style="display:flex;"><span><span style="color:#ef6155"></span>  Location arrival <span style="color:#5bc4bf">=</span> <span style="color:#f99b15">7</span>;<span style="color:#ef6155">
-</span></span></span><span style="display:flex;"><span><span style="color:#ef6155"></span>  <span style="color:#fec418">string</span> arrivalTime <span style="color:#5bc4bf">=</span> <span style="color:#f99b15">8</span>;<span style="color:#ef6155">
-</span></span></span><span style="display:flex;"><span><span style="color:#ef6155">
-</span></span></span><span style="display:flex;"><span><span style="color:#ef6155"></span>  <span style="color:#815ba4">enum</span> Transportation {<span style="color:#ef6155">
-</span></span></span><span style="display:flex;"><span><span style="color:#ef6155"></span>    AIRLINE <span style="color:#5bc4bf">=</span> <span style="color:#f99b15">0</span>;<span style="color:#ef6155">
-</span></span></span><span style="display:flex;"><span><span style="color:#ef6155"></span>    TRAIN <span style="color:#5bc4bf">=</span> <span style="color:#f99b15">1</span>;<span style="color:#ef6155">
-</span></span></span><span style="display:flex;"><span><span style="color:#ef6155"></span>  }<span style="color:#ef6155">
-</span></span></span><span style="display:flex;"><span><span style="color:#ef6155">
-</span></span></span><span style="display:flex;"><span><span style="color:#ef6155"></span>  <span style="color:#815ba4">enum</span> Currency {<span style="color:#ef6155">
-</span></span></span><span style="display:flex;"><span><span style="color:#ef6155"></span>    USD <span style="color:#5bc4bf">=</span> <span style="color:#f99b15">0</span>;<span style="color:#ef6155">
-</span></span></span><span style="display:flex;"><span><span style="color:#ef6155"></span>    NTD <span style="color:#5bc4bf">=</span> <span style="color:#f99b15">1</span>;<span style="color:#ef6155">
-</span></span></span><span style="display:flex;"><span><span style="color:#ef6155"></span>  }<span style="color:#ef6155">
-</span></span></span><span style="display:flex;"><span><span style="color:#ef6155">
-</span></span></span><span style="display:flex;"><span><span style="color:#ef6155"></span>  <span style="color:#815ba4">enum</span> Location {<span style="color:#ef6155">
-</span></span></span><span style="display:flex;"><span><span style="color:#ef6155"></span>    TPE <span style="color:#5bc4bf">=</span> <span style="color:#f99b15">0</span>;<span style="color:#ef6155">
-</span></span></span><span style="display:flex;"><span><span style="color:#ef6155"></span>    TSA <span style="color:#5bc4bf">=</span> <span style="color:#f99b15">1</span>;<span style="color:#ef6155">
-</span></span></span><span style="display:flex;"><span><span style="color:#ef6155"></span>    NRT <span style="color:#5bc4bf">=</span> <span style="color:#f99b15">2</span>;<span style="color:#ef6155">
-</span></span></span><span style="display:flex;"><span><span style="color:#ef6155"></span>    LAX <span style="color:#5bc4bf">=</span> <span style="color:#f99b15">3</span>;<span style="color:#ef6155">
-</span></span></span><span style="display:flex;"><span><span style="color:#ef6155"></span>  }<span style="color:#ef6155">
-</span></span></span><span style="display:flex;"><span><span style="color:#ef6155"></span>}<span style="color:#ef6155">
-</span></span></span></code></pre></div><p>接著是 FlatBuf 對應的 fbs 檔</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-proto" data-lang="proto"><span style="display:flex;"><span>syntax <span style="color:#ff79c6">=</span> <span style="color:#f1fa8c">&#34;proto3&#34;</span>;
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#ff79c6">package</span> protobuf;
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#ff79c6">option</span> java_multiple_files <span style="color:#ff79c6">=</span> <span style="color:#ff79c6">true</span>;
+</span></span><span style="display:flex;"><span><span style="color:#ff79c6">option</span> java_package <span style="color:#ff79c6">=</span> <span style="color:#f1fa8c">&#34;org.example.serialization.benchmark.protobuf&#34;</span>;
+</span></span><span style="display:flex;"><span><span style="color:#ff79c6">option</span> java_generate_equals_and_hash <span style="color:#ff79c6">=</span> <span style="color:#ff79c6">true</span>;
+</span></span><span style="display:flex;"><span><span style="color:#ff79c6">option</span> java_string_check_utf8 <span style="color:#ff79c6">=</span> <span style="color:#ff79c6">true</span>;
+</span></span><span style="display:flex;"><span><span style="color:#ff79c6">option</span> java_outer_classname <span style="color:#ff79c6">=</span> <span style="color:#f1fa8c">&#34;PassengerProto&#34;</span>;
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#8be9fd;font-style:italic">message</span> <span style="color:#50fa7b">ProtoPassenger</span> {
+</span></span><span style="display:flex;"><span>  <span style="color:#8be9fd">int32</span> id <span style="color:#ff79c6">=</span> <span style="color:#bd93f9">1</span>;
+</span></span><span style="display:flex;"><span>  <span style="color:#8be9fd">string</span> firstName <span style="color:#ff79c6">=</span> <span style="color:#bd93f9">2</span>;
+</span></span><span style="display:flex;"><span>  <span style="color:#8be9fd">string</span> lastName <span style="color:#ff79c6">=</span> <span style="color:#bd93f9">3</span>;
+</span></span><span style="display:flex;"><span>  <span style="color:#8be9fd">bool</span> isMale <span style="color:#ff79c6">=</span> <span style="color:#bd93f9">4</span>;
+</span></span><span style="display:flex;"><span>  ProtoTicket ticket <span style="color:#ff79c6">=</span> <span style="color:#bd93f9">5</span>;
+</span></span><span style="display:flex;"><span>  <span style="color:#ff79c6">repeated</span> ProtoBelonging belongings <span style="color:#ff79c6">=</span> <span style="color:#bd93f9">6</span>;
+</span></span><span style="display:flex;"><span>}
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#8be9fd;font-style:italic">message</span> <span style="color:#50fa7b">ProtoBelonging</span> {
+</span></span><span style="display:flex;"><span>  <span style="color:#8be9fd">int32</span> id <span style="color:#ff79c6">=</span> <span style="color:#bd93f9">1</span>;
+</span></span><span style="display:flex;"><span>  BelongingType type <span style="color:#ff79c6">=</span> <span style="color:#bd93f9">2</span>;
+</span></span><span style="display:flex;"><span>  <span style="color:#8be9fd">float</span> weightInKilogram <span style="color:#ff79c6">=</span> <span style="color:#bd93f9">3</span>;
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>  <span style="color:#8be9fd;font-style:italic">enum</span> BelongingType {
+</span></span><span style="display:flex;"><span>    SUITCASE <span style="color:#ff79c6">=</span> <span style="color:#bd93f9">0</span>;
+</span></span><span style="display:flex;"><span>    BACKPACK <span style="color:#ff79c6">=</span> <span style="color:#bd93f9">1</span>;
+</span></span><span style="display:flex;"><span>  }
+</span></span><span style="display:flex;"><span>}
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#8be9fd;font-style:italic">message</span> <span style="color:#50fa7b">ProtoTicket</span> {
+</span></span><span style="display:flex;"><span>  <span style="color:#8be9fd">int32</span> id <span style="color:#ff79c6">=</span> <span style="color:#bd93f9">1</span>;
+</span></span><span style="display:flex;"><span>  Transportation transportation <span style="color:#ff79c6">=</span> <span style="color:#bd93f9">2</span>;
+</span></span><span style="display:flex;"><span>  Currency currency <span style="color:#ff79c6">=</span> <span style="color:#bd93f9">3</span>;
+</span></span><span style="display:flex;"><span>  <span style="color:#8be9fd">string</span> price <span style="color:#ff79c6">=</span> <span style="color:#bd93f9">4</span>;
+</span></span><span style="display:flex;"><span>  Location departure <span style="color:#ff79c6">=</span> <span style="color:#bd93f9">5</span>;
+</span></span><span style="display:flex;"><span>  <span style="color:#8be9fd">string</span> departureTime <span style="color:#ff79c6">=</span> <span style="color:#bd93f9">6</span>;
+</span></span><span style="display:flex;"><span>  Location arrival <span style="color:#ff79c6">=</span> <span style="color:#bd93f9">7</span>;
+</span></span><span style="display:flex;"><span>  <span style="color:#8be9fd">string</span> arrivalTime <span style="color:#ff79c6">=</span> <span style="color:#bd93f9">8</span>;
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>  <span style="color:#8be9fd;font-style:italic">enum</span> Transportation {
+</span></span><span style="display:flex;"><span>    AIRLINE <span style="color:#ff79c6">=</span> <span style="color:#bd93f9">0</span>;
+</span></span><span style="display:flex;"><span>    TRAIN <span style="color:#ff79c6">=</span> <span style="color:#bd93f9">1</span>;
+</span></span><span style="display:flex;"><span>  }
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>  <span style="color:#8be9fd;font-style:italic">enum</span> Currency {
+</span></span><span style="display:flex;"><span>    USD <span style="color:#ff79c6">=</span> <span style="color:#bd93f9">0</span>;
+</span></span><span style="display:flex;"><span>    NTD <span style="color:#ff79c6">=</span> <span style="color:#bd93f9">1</span>;
+</span></span><span style="display:flex;"><span>  }
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>  <span style="color:#8be9fd;font-style:italic">enum</span> Location {
+</span></span><span style="display:flex;"><span>    TPE <span style="color:#ff79c6">=</span> <span style="color:#bd93f9">0</span>;
+</span></span><span style="display:flex;"><span>    TSA <span style="color:#ff79c6">=</span> <span style="color:#bd93f9">1</span>;
+</span></span><span style="display:flex;"><span>    NRT <span style="color:#ff79c6">=</span> <span style="color:#bd93f9">2</span>;
+</span></span><span style="display:flex;"><span>    LAX <span style="color:#ff79c6">=</span> <span style="color:#bd93f9">3</span>;
+</span></span><span style="display:flex;"><span>  }
+</span></span><span style="display:flex;"><span>}
+</span></span></code></pre></div><p>接著是 FlatBuf 對應的 fbs 檔</p>
 <pre tabindex="0"><code class="language-fbs" data-lang="fbs">namespace org.example.serialization.benchmark.flatbuf;
 
 enum FlatBelongingType : ubyte {SUITCASE, BACKPACK}
@@ -753,10 +753,10 @@ root_type FlatPassenger;
 
     var disqus_config = function () {
         
-        this.page.url = 'https:\/\/idontwannarock.github.io\/tech_blog\/2022\/01\/protobuf_flatbuf_java\/';  
+        this.page.url = '\/2022\/01\/protobuf_flatbuf_java\/';  
         
         
-        this.page.identifier = 'https:\/\/idontwannarock.github.io\/tech_blog\/2022\/01\/protobuf_flatbuf_java\/'; 
+        this.page.identifier = '\/2022\/01\/protobuf_flatbuf_java\/'; 
     };
     (function() {
         var d = document, s = d.createElement('script');
@@ -784,7 +784,7 @@ root_type FlatPassenger;
 
                     </div>
             </div><div id="single-column-footer">
-Hugo Theme <a href="https://github.com/amazingrise/hugo-theme-diary">Diary</a> by <a href="https://amazingrise.net">Rise</a>
+Hugo Theme <a href="https://github.com/amazingrise/hugo-theme-diary">Diary</a> by <a href="https://risehere.net/">Rise</a>
 <br>
 Ported from <a href="https://mak1t0.cc/" target="_blank" rel="noreferrer noopener">Makito</a>'s <a href="https://github.com/SumiMakito/hexo-theme-journal/" target="_blank" rel="noreferrer noopener">Journal.</a> <br>
 <br>
@@ -796,6 +796,5 @@ Ported from <a href="https://mak1t0.cc/" target="_blank" rel="noreferrer noopene
 </div>
             </div>
     
-    <script src="https://idontwannarock.github.io/tech_blog/js/journal.js"></script>
-    </body>
+    <script src="https://idontwannarock.github.io/tech_blog/js/journal.js"></script></body>
 </html>

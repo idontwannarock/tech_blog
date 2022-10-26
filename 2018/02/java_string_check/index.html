@@ -38,7 +38,7 @@ if (!doNotTrack) {
 </script>
 
 
-<link type="text/css" rel="stylesheet" href="https://idontwannarock.github.io/tech_blog/vendor/css/bootstrap.min.css">
+
 
 
   
@@ -48,24 +48,24 @@ if (!doNotTrack) {
 
 
 
-<link rel="stylesheet" href="https://idontwannarock.github.io/tech_blog/scss/journal.min.f4a8de07567a2d29619e0711662ef6251e3e59b642079f99490f654abf89a3c4.css" integrity="sha256-9KjeB1Z6LSlhngcRZi72JR4&#43;WbZCB5&#43;ZSQ9lSr&#43;Jo8Q=" media="screen">
+<link rel="stylesheet" href="https://idontwannarock.github.io/tech_blog/scss/journal.min.c5d92f380bf10f6849c7ac487c7df2b22c081e0851e5339224f1ae29210b20d2.css" integrity="sha256-xdkvOAvxD2hJx6xIfH3ysiwIHghR5TOSJPGuKSELINI=" media="screen">
 
 
 
-<link rel="stylesheet" href="https://idontwannarock.github.io/tech_blog/scss/dark-mode.min.eeb8040aa9333250b7fec770f950bfe8ba9b18a5eeeaf2dfef61d84d3956f625.css" integrity="sha256-7rgECqkzMlC3/sdw&#43;VC/6LqbGKXu6vLf72HYTTlW9iU=" media="screen">
-
-
-<script src="https://idontwannarock.github.io/tech_blog/vendor/js/loadCSS.js"></script>
-<script>
-  loadCSS("https://fonts.googleapis.com/css?family=Fira+Mono|Material+Icons");
-</script>
+<link rel="stylesheet" href="https://idontwannarock.github.io/tech_blog/scss/dark-mode.min.9f8d8c2df9285089d141edd4a50cb7506c7948e6ab79a29968dced1bd0ab7d22.css" integrity="sha256-n42MLfkoUInRQe3UpQy3UGx5SOareaKZaNztG9CrfSI=" media="screen">
 
 
 
 
+      <script src="https://idontwannarock.github.io/tech_blog/js/toc.js"></script>
+    
+    <link type="text/css" rel="stylesheet" href="https://idontwannarock.github.io/tech_blog/vendor/css/bootstrap.min.css"><link rel="stylesheet"
+          href="https://fonts.googleapis.com/css?family=Material+Icons">
 
 
-  <script src="https://idontwannarock.github.io/tech_blog/js/toc.js"></script>
+
+
+
 
 
 
@@ -157,7 +157,7 @@ if (!doNotTrack) {
 
     <div class="nav-footer">
         
-Hugo Theme <a href="https://github.com/amazingrise/hugo-theme-diary">Diary</a> by <a href="https://amazingrise.net">Rise</a>
+Hugo Theme <a href="https://github.com/amazingrise/hugo-theme-diary">Diary</a> by <a href="https://risehere.net/">Rise</a>
 <br>
 Ported from <a href="https://mak1t0.cc/" target="_blank" rel="noreferrer noopener">Makito</a>'s <a href="https://github.com/SumiMakito/hexo-theme-journal/" target="_blank" rel="noreferrer noopener">Journal.</a> <br>
 <br>
@@ -690,8 +690,8 @@ Ported from <a href="https://mak1t0.cc/" target="_blank" rel="noreferrer noopene
 <p>這主要分兩個部分，一是去掉頭尾空白，一是去掉字串中間空白。</p>
 <p>去掉頭尾空白就用 <code>.trim()</code>，去掉字串中間空白則可以用 <code>.replaceAll(&quot; &quot;, &quot;&quot;)</code> 的方式簡單完成。</p>
 <p>但用 <code>replaceAll()</code> 方法有個小小的問題，就是萬一碰到的是空白字元，例如 <code>\t</code>、<code>\r</code> 這種就會有困難，所以必須要用正規表示式來去除，例如：</p>
-<div class="highlight"><pre tabindex="0" style="color:#e7e9db;background-color:#2f1e2e;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-java" data-lang="java"><span style="display:flex;"><span>String str <span style="color:#5bc4bf">=</span> <span style="color:#48b685">&#34;\t&#34;</span><span style="color:#5bc4bf">;</span>
-</span></span><span style="display:flex;"><span>str<span style="color:#5bc4bf">.</span><span style="color:#06b6ef">replaceAll</span><span style="color:#5bc4bf">(</span><span style="color:#48b685">&#34;\\s+&#34;</span><span style="color:#5bc4bf">,</span> <span style="color:#48b685">&#34;&#34;</span><span style="color:#5bc4bf">);</span>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-java" data-lang="java"><span style="display:flex;"><span>String str <span style="color:#ff79c6">=</span> <span style="color:#f1fa8c">&#34;\t&#34;</span><span style="color:#ff79c6">;</span>
+</span></span><span style="display:flex;"><span>str<span style="color:#ff79c6">.</span><span style="color:#50fa7b">replaceAll</span><span style="color:#ff79c6">(</span><span style="color:#f1fa8c">&#34;\\s+&#34;</span><span style="color:#ff79c6">,</span> <span style="color:#f1fa8c">&#34;&#34;</span><span style="color:#ff79c6">);</span>
 </span></span></code></pre></div><h1 id="檢查空值">檢查空值</h1>
 <p>接著如果要檢查字串是否有東西，要分成檢查兩種狀態，null 或空字串。</p>
 <p>這邊有幾個方法檢查這個部分，但要注意它們實際功能上的區別。</p>
@@ -704,18 +704,18 @@ Ported from <a href="https://mak1t0.cc/" target="_blank" rel="noreferrer noopene
 <h2 id="-null"><code>!= null</code></h2>
 <p>前面幾個方法都有一個共同的問題：萬一字串為 null，全都來不及檢查就會跳 NullPointerException。</p>
 <p>所以必須要用這個方式檢查是否為 Null，再檢查是否為空字串，也就是要寫成類似下面這樣：</p>
-<div class="highlight"><pre tabindex="0" style="color:#e7e9db;background-color:#2f1e2e;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-java" data-lang="java"><span style="display:flex;"><span>String string<span style="color:#5bc4bf">;</span>
-</span></span><span style="display:flex;"><span><span style="color:#815ba4">if</span> <span style="color:#5bc4bf">(</span>string <span style="color:#5bc4bf">!=</span> <span style="color:#815ba4">null</span> <span style="color:#5bc4bf">&amp;&amp;</span> string<span style="color:#5bc4bf">.</span><span style="color:#06b6ef">isEmpty</span><span style="color:#5bc4bf">())</span> <span style="color:#5bc4bf">{</span>
-</span></span><span style="display:flex;"><span>    <span style="color:#776e71">// things to do when string is neither null nor blank;
-</span></span></span><span style="display:flex;"><span><span style="color:#776e71"></span><span style="color:#5bc4bf">}</span>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-java" data-lang="java"><span style="display:flex;"><span>String string<span style="color:#ff79c6">;</span>
+</span></span><span style="display:flex;"><span><span style="color:#ff79c6">if</span> <span style="color:#ff79c6">(</span>string <span style="color:#ff79c6">!=</span> <span style="color:#ff79c6">null</span> <span style="color:#ff79c6">&amp;&amp;</span> string<span style="color:#ff79c6">.</span><span style="color:#50fa7b">isEmpty</span><span style="color:#ff79c6">())</span> <span style="color:#ff79c6">{</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#6272a4">// things to do when string is neither null nor blank;
+</span></span></span><span style="display:flex;"><span><span style="color:#6272a4"></span><span style="color:#ff79c6">}</span>
 </span></span></code></pre></div><h2 id="equalsstring"><code>&quot;&quot;.equals(string)</code></h2>
 <p>但有一個更簡短的方法 <code>&quot;&quot;.equals(string)</code>。</p>
 <p>因為用 String 本身的 <code>.equals()</code> 方法，會先檢查括號內參數字串是否為 null，若是 null 就會直接回傳 <code>false</code>；若參數字串不為 null，才會繼續檢查是否跟 <code>&quot;&quot;</code> 空字串相等。</p>
 <p>所以前一段的檢查式就可以縮短如下：</p>
-<div class="highlight"><pre tabindex="0" style="color:#e7e9db;background-color:#2f1e2e;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-java" data-lang="java"><span style="display:flex;"><span>String string<span style="color:#5bc4bf">;</span>
-</span></span><span style="display:flex;"><span><span style="color:#815ba4">if</span> <span style="color:#5bc4bf">(!</span><span style="color:#48b685">&#34;&#34;</span><span style="color:#5bc4bf">.</span><span style="color:#06b6ef">equals</span><span style="color:#5bc4bf">(</span>string<span style="color:#5bc4bf">))</span> <span style="color:#5bc4bf">{</span>
-</span></span><span style="display:flex;"><span>    <span style="color:#776e71">// things to do when string is neither null nor blank;
-</span></span></span><span style="display:flex;"><span><span style="color:#776e71"></span><span style="color:#5bc4bf">}</span>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-java" data-lang="java"><span style="display:flex;"><span>String string<span style="color:#ff79c6">;</span>
+</span></span><span style="display:flex;"><span><span style="color:#ff79c6">if</span> <span style="color:#ff79c6">(!</span><span style="color:#f1fa8c">&#34;&#34;</span><span style="color:#ff79c6">.</span><span style="color:#50fa7b">equals</span><span style="color:#ff79c6">(</span>string<span style="color:#ff79c6">))</span> <span style="color:#ff79c6">{</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#6272a4">// things to do when string is neither null nor blank;
+</span></span></span><span style="display:flex;"><span><span style="color:#6272a4"></span><span style="color:#ff79c6">}</span>
 </span></span></code></pre></div><h1 id="結語">結語</h1>
 <p>雖然最後一個方法最簡短，但其實可讀性不見得比較優秀；而倒數第二個方法雖然比較囉唆，但整體上可讀性比較好。</p>
 <p>所以要用哪種方法還是要看簡潔跟可讀性怎麼取捨。</p>
@@ -750,10 +750,10 @@ Ported from <a href="https://mak1t0.cc/" target="_blank" rel="noreferrer noopene
 
     var disqus_config = function () {
         
-        this.page.url = 'https:\/\/idontwannarock.github.io\/tech_blog\/2018\/02\/java_string_check\/';  
+        this.page.url = '\/2018\/02\/java_string_check\/';  
         
         
-        this.page.identifier = 'https:\/\/idontwannarock.github.io\/tech_blog\/2018\/02\/java_string_check\/'; 
+        this.page.identifier = '\/2018\/02\/java_string_check\/'; 
     };
     (function() {
         var d = document, s = d.createElement('script');
@@ -781,7 +781,7 @@ Ported from <a href="https://mak1t0.cc/" target="_blank" rel="noreferrer noopene
 
                     </div>
             </div><div id="single-column-footer">
-Hugo Theme <a href="https://github.com/amazingrise/hugo-theme-diary">Diary</a> by <a href="https://amazingrise.net">Rise</a>
+Hugo Theme <a href="https://github.com/amazingrise/hugo-theme-diary">Diary</a> by <a href="https://risehere.net/">Rise</a>
 <br>
 Ported from <a href="https://mak1t0.cc/" target="_blank" rel="noreferrer noopener">Makito</a>'s <a href="https://github.com/SumiMakito/hexo-theme-journal/" target="_blank" rel="noreferrer noopener">Journal.</a> <br>
 <br>
@@ -793,6 +793,5 @@ Ported from <a href="https://mak1t0.cc/" target="_blank" rel="noreferrer noopene
 </div>
             </div>
     
-    <script src="https://idontwannarock.github.io/tech_blog/js/journal.js"></script>
-    </body>
+    <script src="https://idontwannarock.github.io/tech_blog/js/journal.js"></script></body>
 </html>

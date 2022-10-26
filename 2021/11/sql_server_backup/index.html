@@ -38,7 +38,7 @@ if (!doNotTrack) {
 </script>
 
 
-<link type="text/css" rel="stylesheet" href="https://idontwannarock.github.io/tech_blog/vendor/css/bootstrap.min.css">
+
 
 
   
@@ -48,24 +48,24 @@ if (!doNotTrack) {
 
 
 
-<link rel="stylesheet" href="https://idontwannarock.github.io/tech_blog/scss/journal.min.f4a8de07567a2d29619e0711662ef6251e3e59b642079f99490f654abf89a3c4.css" integrity="sha256-9KjeB1Z6LSlhngcRZi72JR4&#43;WbZCB5&#43;ZSQ9lSr&#43;Jo8Q=" media="screen">
+<link rel="stylesheet" href="https://idontwannarock.github.io/tech_blog/scss/journal.min.c5d92f380bf10f6849c7ac487c7df2b22c081e0851e5339224f1ae29210b20d2.css" integrity="sha256-xdkvOAvxD2hJx6xIfH3ysiwIHghR5TOSJPGuKSELINI=" media="screen">
 
 
 
-<link rel="stylesheet" href="https://idontwannarock.github.io/tech_blog/scss/dark-mode.min.eeb8040aa9333250b7fec770f950bfe8ba9b18a5eeeaf2dfef61d84d3956f625.css" integrity="sha256-7rgECqkzMlC3/sdw&#43;VC/6LqbGKXu6vLf72HYTTlW9iU=" media="screen">
-
-
-<script src="https://idontwannarock.github.io/tech_blog/vendor/js/loadCSS.js"></script>
-<script>
-  loadCSS("https://fonts.googleapis.com/css?family=Fira+Mono|Material+Icons");
-</script>
+<link rel="stylesheet" href="https://idontwannarock.github.io/tech_blog/scss/dark-mode.min.9f8d8c2df9285089d141edd4a50cb7506c7948e6ab79a29968dced1bd0ab7d22.css" integrity="sha256-n42MLfkoUInRQe3UpQy3UGx5SOareaKZaNztG9CrfSI=" media="screen">
 
 
 
 
+      <script src="https://idontwannarock.github.io/tech_blog/js/toc.js"></script>
+    
+    <link type="text/css" rel="stylesheet" href="https://idontwannarock.github.io/tech_blog/vendor/css/bootstrap.min.css"><link rel="stylesheet"
+          href="https://fonts.googleapis.com/css?family=Material+Icons">
 
 
-  <script src="https://idontwannarock.github.io/tech_blog/js/toc.js"></script>
+
+
+
 
 
 
@@ -157,7 +157,7 @@ if (!doNotTrack) {
 
     <div class="nav-footer">
         
-Hugo Theme <a href="https://github.com/amazingrise/hugo-theme-diary">Diary</a> by <a href="https://amazingrise.net">Rise</a>
+Hugo Theme <a href="https://github.com/amazingrise/hugo-theme-diary">Diary</a> by <a href="https://risehere.net/">Rise</a>
 <br>
 Ported from <a href="https://mak1t0.cc/" target="_blank" rel="noreferrer noopener">Makito</a>'s <a href="https://github.com/SumiMakito/hexo-theme-journal/" target="_blank" rel="noreferrer noopener">Journal.</a> <br>
 <br>
@@ -781,108 +781,108 @@ Ported from <a href="https://mak1t0.cc/" target="_blank" rel="noreferrer noopene
 <h2 id="結論">結論</h2>
 <p>因為考慮到資料庫 table 以及非 log 資料並不多，所以最後選擇用 powershell 操作 smo 的方式產出 sql 檔的方式做 snapshot</p>
 <p>以下是我參考這篇 <a href="https://www.red-gate.com/simple-talk/databases/sql-server/database-administration-sql-server/automated-script-generation-with-powershell-and-smo/">Automated Script-generation with Powershell and SMO</a> 撰寫的 powershell 檔</p>
-<div class="highlight"><pre tabindex="0" style="color:#e7e9db;background-color:#2f1e2e;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-powershell" data-lang="powershell"><span style="display:flex;"><span><span style="color:#815ba4">param</span>(<span style="color:#ef6155">$datasource</span>, <span style="color:#ef6155">$username</span>, <span style="color:#ef6155">$password</span>, <span style="color:#ef6155">$backupPath</span>)
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-powershell" data-lang="powershell"><span style="display:flex;"><span><span style="color:#ff79c6">param</span>(<span style="color:#8be9fd;font-style:italic">$datasource</span>, <span style="color:#8be9fd;font-style:italic">$username</span>, <span style="color:#8be9fd;font-style:italic">$password</span>, <span style="color:#8be9fd;font-style:italic">$backupPath</span>)
 </span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span><span style="color:#776e71"># set &#34;Option Explicit&#34; to catch subtle errors</span>
-</span></span><span style="display:flex;"><span>set-psdebug -strict
+</span></span><span style="display:flex;"><span><span style="color:#6272a4"># set &#34;Option Explicit&#34; to catch subtle errors</span>
+</span></span><span style="display:flex;"><span><span style="color:#8be9fd;font-style:italic">set-psdebug</span> -strict
 </span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span><span style="color:#776e71"># you can opt to stagger on, bleeding, if an error occurs</span>
-</span></span><span style="display:flex;"><span><span style="color:#ef6155">$ErrorActionPreference</span> = <span style="color:#48b685">&#34;stop&#34;</span>
+</span></span><span style="display:flex;"><span><span style="color:#6272a4"># you can opt to stagger on, bleeding, if an error occurs</span>
+</span></span><span style="display:flex;"><span><span style="color:#8be9fd;font-style:italic">$ErrorActionPreference</span> = <span style="color:#f1fa8c">&#34;stop&#34;</span>
 </span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span><span style="color:#776e71"># create backup directory if not exist</span>
-</span></span><span style="display:flex;"><span>New-Item -ItemType Directory -Force -Path <span style="color:#ef6155">$backupPath</span> | Out-Null
-</span></span><span style="display:flex;"><span>cd <span style="color:#ef6155">$backupPath</span>
+</span></span><span style="display:flex;"><span><span style="color:#6272a4"># create backup directory if not exist</span>
+</span></span><span style="display:flex;"><span><span style="color:#8be9fd;font-style:italic">New-Item</span> -ItemType Directory -Force -Path <span style="color:#8be9fd;font-style:italic">$backupPath</span> | <span style="color:#8be9fd;font-style:italic">Out-Null</span>
+</span></span><span style="display:flex;"><span><span style="color:#8be9fd;font-style:italic">cd </span><span style="color:#8be9fd;font-style:italic">$backupPath</span>
 </span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span><span style="color:#776e71"># get current date in yyyyMMdd format</span>
-</span></span><span style="display:flex;"><span><span style="color:#ef6155">$currentDate</span> = Get-Date -format yyyyMMdd
-</span></span><span style="display:flex;"><span>Write-Output <span style="color:#48b685">&#34;Current Date = $currentDate&#34;</span>
+</span></span><span style="display:flex;"><span><span style="color:#6272a4"># get current date in yyyyMMdd format</span>
+</span></span><span style="display:flex;"><span><span style="color:#8be9fd;font-style:italic">$currentDate</span> = <span style="color:#8be9fd;font-style:italic">Get-Date</span> -format yyyyMMdd
+</span></span><span style="display:flex;"><span><span style="color:#8be9fd;font-style:italic">Write-Output</span> <span style="color:#f1fa8c">&#34;Current Date = $currentDate&#34;</span>
 </span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span><span style="color:#776e71"># get the latest backup directory</span>
-</span></span><span style="display:flex;"><span>Get-ChildItem -Directory -Path . | Sort-Object CreationTime -Descending | Select-Object -First 1 -ExpandProperty Name -OutVariable latestDir | Out-Null
-</span></span><span style="display:flex;"><span>Write-Output <span style="color:#48b685">&#34;Latest Backup Directory = $latestDir&#34;</span>
+</span></span><span style="display:flex;"><span><span style="color:#6272a4"># get the latest backup directory</span>
+</span></span><span style="display:flex;"><span><span style="color:#8be9fd;font-style:italic">Get-ChildItem</span> -Directory -Path . | <span style="color:#8be9fd;font-style:italic">Sort-Object</span> CreationTime -Descending | <span style="color:#8be9fd;font-style:italic">Select-Object</span> -First 1 -ExpandProperty Name -OutVariable latestDir | <span style="color:#8be9fd;font-style:italic">Out-Null</span>
+</span></span><span style="display:flex;"><span><span style="color:#8be9fd;font-style:italic">Write-Output</span> <span style="color:#f1fa8c">&#34;Latest Backup Directory = $latestDir&#34;</span>
 </span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span><span style="color:#776e71"># get the latest version of today&#39;s backups</span>
-</span></span><span style="display:flex;"><span><span style="color:#ef6155">$currentVersion</span> = 0
-</span></span><span style="display:flex;"><span><span style="color:#815ba4">if</span> (<span style="color:#ef6155">$latestDir</span> <span style="color:#5bc4bf">-Match</span> <span style="color:#ef6155">$currentDate</span>)
+</span></span><span style="display:flex;"><span><span style="color:#6272a4"># get the latest version of today&#39;s backups</span>
+</span></span><span style="display:flex;"><span><span style="color:#8be9fd;font-style:italic">$currentVersion</span> = 0
+</span></span><span style="display:flex;"><span><span style="color:#ff79c6">if</span> (<span style="color:#8be9fd;font-style:italic">$latestDir</span> <span style="color:#ff79c6">-Match</span> <span style="color:#8be9fd;font-style:italic">$currentDate</span>)
 </span></span><span style="display:flex;"><span>{
-</span></span><span style="display:flex;"><span>    <span style="color:#ef6155">$currentVersion</span> = <span style="color:#ef6155">$latestDir</span>.Substring(<span style="color:#ef6155">$currentDate</span>.Length + 1)
+</span></span><span style="display:flex;"><span>    <span style="color:#8be9fd;font-style:italic">$currentVersion</span> = <span style="color:#8be9fd;font-style:italic">$latestDir</span>.Substring(<span style="color:#8be9fd;font-style:italic">$currentDate</span>.Length + 1)
 </span></span><span style="display:flex;"><span>}
-</span></span><span style="display:flex;"><span>Write-Output <span style="color:#48b685">&#34;Current Version = $currentVersion&#34;</span>
+</span></span><span style="display:flex;"><span><span style="color:#8be9fd;font-style:italic">Write-Output</span> <span style="color:#f1fa8c">&#34;Current Version = $currentVersion&#34;</span>
 </span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span><span style="color:#776e71"># create directory for the next version of backup</span>
-</span></span><span style="display:flex;"><span><span style="color:#ef6155">$nextVersion</span> = <span style="color:#ef6155">[int]</span><span style="color:#ef6155">$currentVersion</span> + 1
-</span></span><span style="display:flex;"><span>Write-Output <span style="color:#48b685">&#34;Next Version = $nextVersion&#34;</span>
-</span></span><span style="display:flex;"><span><span style="color:#ef6155">$nextVersionDir</span> = <span style="color:#48b685">&#34;</span>$(<span style="color:#ef6155">$backupPath</span>)<span style="color:#48b685">\</span>$(<span style="color:#ef6155">$currentDate</span>)<span style="color:#48b685">_</span>$(<span style="color:#ef6155">$nextVersion</span>)<span style="color:#48b685">&#34;</span>
-</span></span><span style="display:flex;"><span>New-Item -ItemType Directory -Force -Path <span style="color:#ef6155">$nextVersionDir</span> | Out-Null
+</span></span><span style="display:flex;"><span><span style="color:#6272a4"># create directory for the next version of backup</span>
+</span></span><span style="display:flex;"><span><span style="color:#8be9fd;font-style:italic">$nextVersion</span> = [int]<span style="color:#8be9fd;font-style:italic">$currentVersion</span> + 1
+</span></span><span style="display:flex;"><span><span style="color:#8be9fd;font-style:italic">Write-Output</span> <span style="color:#f1fa8c">&#34;Next Version = $nextVersion&#34;</span>
+</span></span><span style="display:flex;"><span><span style="color:#8be9fd;font-style:italic">$nextVersionDir</span> = <span style="color:#f1fa8c">&#34;</span>$(<span style="color:#8be9fd;font-style:italic">$backupPath</span>)<span style="color:#f1fa8c">\</span>$(<span style="color:#8be9fd;font-style:italic">$currentDate</span>)<span style="color:#f1fa8c">_</span>$(<span style="color:#8be9fd;font-style:italic">$nextVersion</span>)<span style="color:#f1fa8c">&#34;</span>
+</span></span><span style="display:flex;"><span><span style="color:#8be9fd;font-style:italic">New-Item</span> -ItemType Directory -Force -Path <span style="color:#8be9fd;font-style:italic">$nextVersionDir</span> | <span style="color:#8be9fd;font-style:italic">Out-Null</span>
 </span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span><span style="color:#776e71"># load SMO assembly</span>
-</span></span><span style="display:flex;"><span><span style="color:#ef6155">$msPrefix</span> = <span style="color:#48b685">&#39;Microsoft.SqlServer&#39;</span>
-</span></span><span style="display:flex;"><span><span style="color:#ef6155">[System.Reflection.Assembly]</span>::LoadWithPartialName(<span style="color:#48b685">&#34;$msPrefix.SMO&#34;</span>) | out-null
-</span></span><span style="display:flex;"><span><span style="color:#ef6155">[System.Reflection.Assembly]</span>::LoadWithPartialName(<span style="color:#48b685">&#34;$msPrefix.SMOExtended&#34;</span>) | out-null
-</span></span><span style="display:flex;"><span><span style="color:#ef6155">$smoPrefix</span> = <span style="color:#48b685">&#34;$msPrefix.Management.Smo&#34;</span>
+</span></span><span style="display:flex;"><span><span style="color:#6272a4"># load SMO assembly</span>
+</span></span><span style="display:flex;"><span><span style="color:#8be9fd;font-style:italic">$msPrefix</span> = <span style="color:#f1fa8c">&#39;Microsoft.SqlServer&#39;</span>
+</span></span><span style="display:flex;"><span>[System.Reflection.Assembly]::LoadWithPartialName(<span style="color:#f1fa8c">&#34;$msPrefix.SMO&#34;</span>) | <span style="color:#8be9fd;font-style:italic">out-null</span>
+</span></span><span style="display:flex;"><span>[System.Reflection.Assembly]::LoadWithPartialName(<span style="color:#f1fa8c">&#34;$msPrefix.SMOExtended&#34;</span>) | <span style="color:#8be9fd;font-style:italic">out-null</span>
+</span></span><span style="display:flex;"><span><span style="color:#8be9fd;font-style:italic">$smoPrefix</span> = <span style="color:#f1fa8c">&#34;$msPrefix.Management.Smo&#34;</span>
 </span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span><span style="color:#776e71"># set connection</span>
-</span></span><span style="display:flex;"><span><span style="color:#ef6155">$server</span> = New-Object (<span style="color:#48b685">&#34;$smoPrefix.Server&#34;</span>) <span style="color:#ef6155">$datasource</span>
-</span></span><span style="display:flex;"><span><span style="color:#ef6155">$server</span>.ConnectionContext.LoginSecure = <span style="color:#ef6155">$false</span>
-</span></span><span style="display:flex;"><span><span style="color:#ef6155">$server</span>.ConnectionContext.set_Login(<span style="color:#ef6155">$username</span>)
-</span></span><span style="display:flex;"><span><span style="color:#ef6155">$server</span>.ConnectionContext.set_Password(<span style="color:#ef6155">$password</span>)
+</span></span><span style="display:flex;"><span><span style="color:#6272a4"># set connection</span>
+</span></span><span style="display:flex;"><span><span style="color:#8be9fd;font-style:italic">$server</span> = <span style="color:#8be9fd;font-style:italic">New-Object</span> (<span style="color:#f1fa8c">&#34;$smoPrefix.Server&#34;</span>) <span style="color:#8be9fd;font-style:italic">$datasource</span>
+</span></span><span style="display:flex;"><span><span style="color:#8be9fd;font-style:italic">$server</span>.ConnectionContext.LoginSecure = <span style="color:#8be9fd;font-style:italic">$false</span>
+</span></span><span style="display:flex;"><span><span style="color:#8be9fd;font-style:italic">$server</span>.ConnectionContext.set_Login(<span style="color:#8be9fd;font-style:italic">$username</span>)
+</span></span><span style="display:flex;"><span><span style="color:#8be9fd;font-style:italic">$server</span>.ConnectionContext.set_Password(<span style="color:#8be9fd;font-style:italic">$password</span>)
 </span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span><span style="color:#776e71"># check connection</span>
-</span></span><span style="display:flex;"><span><span style="color:#815ba4">if</span> (<span style="color:#ef6155">$server</span>.Version <span style="color:#5bc4bf">-eq</span> <span style="color:#ef6155">$null</span> ) {<span style="color:#815ba4">Throw</span> <span style="color:#48b685">&#34;Can&#39;t find the instance $datasource&#34;</span>}
+</span></span><span style="display:flex;"><span><span style="color:#6272a4"># check connection</span>
+</span></span><span style="display:flex;"><span><span style="color:#ff79c6">if</span> (<span style="color:#8be9fd;font-style:italic">$server</span>.Version <span style="color:#ff79c6">-eq</span> <span style="color:#8be9fd;font-style:italic">$null</span> ) {<span style="color:#ff79c6">Throw</span> <span style="color:#f1fa8c">&#34;Can&#39;t find the instance $datasource&#34;</span>}
 </span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span><span style="color:#776e71"># loop through databases names to do back up</span>
-</span></span><span style="display:flex;"><span><span style="color:#815ba4">foreach</span> (<span style="color:#ef6155">$database</span> <span style="color:#815ba4">in</span> <span style="color:#ef6155">$server</span>.databases)
+</span></span><span style="display:flex;"><span><span style="color:#6272a4"># loop through databases names to do back up</span>
+</span></span><span style="display:flex;"><span><span style="color:#ff79c6">foreach</span> (<span style="color:#8be9fd;font-style:italic">$database</span> <span style="color:#ff79c6">in</span> <span style="color:#8be9fd;font-style:italic">$server</span>.databases)
 </span></span><span style="display:flex;"><span>{
-</span></span><span style="display:flex;"><span>    <span style="color:#776e71"># skip system databases</span>
-</span></span><span style="display:flex;"><span>    <span style="color:#815ba4">if</span> (<span style="color:#ef6155">$database</span>.Name -in <span style="color:#48b685">&#39;Master&#39;</span>,<span style="color:#48b685">&#39;Model&#39;</span>,<span style="color:#48b685">&#39;MSDB&#39;</span>,<span style="color:#48b685">&#39;TempDB&#39;</span>,<span style="color:#48b685">&#39;SSISDB&#39;</span>,<span style="color:#48b685">&#39;distribution&#39;</span>,<span style="color:#48b685">&#39;ReportServer&#39;</span>,<span style="color:#48b685">&#39;ReportServerTempDB&#39;</span>) {<span style="color:#815ba4">continue</span>}
+</span></span><span style="display:flex;"><span>    <span style="color:#6272a4"># skip system databases</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#ff79c6">if</span> (<span style="color:#8be9fd;font-style:italic">$database</span>.Name -in <span style="color:#f1fa8c">&#39;Master&#39;</span>,<span style="color:#f1fa8c">&#39;Model&#39;</span>,<span style="color:#f1fa8c">&#39;MSDB&#39;</span>,<span style="color:#f1fa8c">&#39;TempDB&#39;</span>,<span style="color:#f1fa8c">&#39;SSISDB&#39;</span>,<span style="color:#f1fa8c">&#39;distribution&#39;</span>,<span style="color:#f1fa8c">&#39;ReportServer&#39;</span>,<span style="color:#f1fa8c">&#39;ReportServerTempDB&#39;</span>) {<span style="color:#ff79c6">continue</span>}
 </span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span>    <span style="color:#776e71"># skip offline databases</span>
-</span></span><span style="display:flex;"><span>    <span style="color:#815ba4">if</span> (<span style="color:#ef6155">$database</span>.Status <span style="color:#5bc4bf">-ne</span> <span style="color:#48b685">&#39;Normal&#39;</span>) {
-</span></span><span style="display:flex;"><span>        Write-Output (<span style="color:#48b685">&#34;Skipping Offline: {0}&#34;</span> <span style="color:#5bc4bf">-f</span> <span style="color:#ef6155">$database</span>.Name)
-</span></span><span style="display:flex;"><span>        <span style="color:#815ba4">continue</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#6272a4"># skip offline databases</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#ff79c6">if</span> (<span style="color:#8be9fd;font-style:italic">$database</span>.Status <span style="color:#ff79c6">-ne</span> <span style="color:#f1fa8c">&#39;Normal&#39;</span>) {
+</span></span><span style="display:flex;"><span>        <span style="color:#8be9fd;font-style:italic">Write-Output</span> (<span style="color:#f1fa8c">&#34;Skipping Offline: {0}&#34;</span> <span style="color:#ff79c6">-f</span> <span style="color:#8be9fd;font-style:italic">$database</span>.Name)
+</span></span><span style="display:flex;"><span>        <span style="color:#ff79c6">continue</span>
 </span></span><span style="display:flex;"><span>    }
 </span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span>    <span style="color:#ef6155">$backupFile</span> = <span style="color:#48b685">&#34;</span>$(<span style="color:#ef6155">$nextVersionDir</span>)<span style="color:#48b685">\</span>$(<span style="color:#ef6155">$database</span>.Name)<span style="color:#48b685">.sql&#34;</span>
-</span></span><span style="display:flex;"><span>    Write-Output <span style="color:#48b685">&#34;Start to back up </span>$(<span style="color:#ef6155">$database</span>.Name)<span style="color:#48b685">&#34;</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#8be9fd;font-style:italic">$backupFile</span> = <span style="color:#f1fa8c">&#34;</span>$(<span style="color:#8be9fd;font-style:italic">$nextVersionDir</span>)<span style="color:#f1fa8c">\</span>$(<span style="color:#8be9fd;font-style:italic">$database</span>.Name)<span style="color:#f1fa8c">.sql&#34;</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#8be9fd;font-style:italic">Write-Output</span> <span style="color:#f1fa8c">&#34;Start to back up </span>$(<span style="color:#8be9fd;font-style:italic">$database</span>.Name)<span style="color:#f1fa8c">&#34;</span>
 </span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span>    <span style="color:#776e71"># manually add create database sql statement at the beginning of the sql file</span>
-</span></span><span style="display:flex;"><span>    New-Item <span style="color:#ef6155">$backupFile</span> -ItemType File | Out-Null
-</span></span><span style="display:flex;"><span>    Add-Content <span style="color:#ef6155">$backupFile</span> <span style="color:#48b685">&#34;USE [master]&#34;</span>
-</span></span><span style="display:flex;"><span>    Add-Content <span style="color:#ef6155">$backupFile</span> <span style="color:#48b685">&#34;GO&#34;</span>
-</span></span><span style="display:flex;"><span>    Add-Content <span style="color:#ef6155">$backupFile</span> <span style="color:#48b685">&#34;Drop Database if exists [</span>$(<span style="color:#ef6155">$database</span>.Name)<span style="color:#48b685">];&#34;</span>
-</span></span><span style="display:flex;"><span>    Add-Content <span style="color:#ef6155">$backupFile</span> <span style="color:#48b685">&#34;GO&#34;</span>
-</span></span><span style="display:flex;"><span>    Add-Content <span style="color:#ef6155">$backupFile</span> <span style="color:#48b685">&#34;USE [master]&#34;</span>
-</span></span><span style="display:flex;"><span>    Add-Content <span style="color:#ef6155">$backupFile</span> <span style="color:#48b685">&#34;GO&#34;</span>
-</span></span><span style="display:flex;"><span>    Add-Content <span style="color:#ef6155">$backupFile</span> <span style="color:#48b685">&#34;CREATE DATABASE [</span>$(<span style="color:#ef6155">$database</span>.Name)<span style="color:#48b685">]&#34;</span>
-</span></span><span style="display:flex;"><span>    Add-Content <span style="color:#ef6155">$backupFile</span> <span style="color:#48b685">&#34;GO&#34;</span>
-</span></span><span style="display:flex;"><span>    Add-Content <span style="color:#ef6155">$backupFile</span> <span style="color:#48b685">&#34;USE [</span>$(<span style="color:#ef6155">$database</span>.Name)<span style="color:#48b685">]&#34;</span>
-</span></span><span style="display:flex;"><span>    Add-Content <span style="color:#ef6155">$backupFile</span> <span style="color:#48b685">&#34;GO&#34;</span>
-</span></span><span style="display:flex;"><span>    Add-Content <span style="color:#ef6155">$backupFile</span> <span style="color:#48b685">&#34;&#34;</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#6272a4"># manually add create database sql statement at the beginning of the sql file</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#8be9fd;font-style:italic">New-Item</span> <span style="color:#8be9fd;font-style:italic">$backupFile</span> -ItemType File | <span style="color:#8be9fd;font-style:italic">Out-Null</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#8be9fd;font-style:italic">Add-Content</span> <span style="color:#8be9fd;font-style:italic">$backupFile</span> <span style="color:#f1fa8c">&#34;USE [master]&#34;</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#8be9fd;font-style:italic">Add-Content</span> <span style="color:#8be9fd;font-style:italic">$backupFile</span> <span style="color:#f1fa8c">&#34;GO&#34;</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#8be9fd;font-style:italic">Add-Content</span> <span style="color:#8be9fd;font-style:italic">$backupFile</span> <span style="color:#f1fa8c">&#34;Drop Database if exists [</span>$(<span style="color:#8be9fd;font-style:italic">$database</span>.Name)<span style="color:#f1fa8c">];&#34;</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#8be9fd;font-style:italic">Add-Content</span> <span style="color:#8be9fd;font-style:italic">$backupFile</span> <span style="color:#f1fa8c">&#34;GO&#34;</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#8be9fd;font-style:italic">Add-Content</span> <span style="color:#8be9fd;font-style:italic">$backupFile</span> <span style="color:#f1fa8c">&#34;USE [master]&#34;</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#8be9fd;font-style:italic">Add-Content</span> <span style="color:#8be9fd;font-style:italic">$backupFile</span> <span style="color:#f1fa8c">&#34;GO&#34;</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#8be9fd;font-style:italic">Add-Content</span> <span style="color:#8be9fd;font-style:italic">$backupFile</span> <span style="color:#f1fa8c">&#34;CREATE DATABASE [</span>$(<span style="color:#8be9fd;font-style:italic">$database</span>.Name)<span style="color:#f1fa8c">]&#34;</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#8be9fd;font-style:italic">Add-Content</span> <span style="color:#8be9fd;font-style:italic">$backupFile</span> <span style="color:#f1fa8c">&#34;GO&#34;</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#8be9fd;font-style:italic">Add-Content</span> <span style="color:#8be9fd;font-style:italic">$backupFile</span> <span style="color:#f1fa8c">&#34;USE [</span>$(<span style="color:#8be9fd;font-style:italic">$database</span>.Name)<span style="color:#f1fa8c">]&#34;</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#8be9fd;font-style:italic">Add-Content</span> <span style="color:#8be9fd;font-style:italic">$backupFile</span> <span style="color:#f1fa8c">&#34;GO&#34;</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#8be9fd;font-style:italic">Add-Content</span> <span style="color:#8be9fd;font-style:italic">$backupFile</span> <span style="color:#f1fa8c">&#34;&#34;</span>
 </span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span>    <span style="color:#776e71"># set export configuration</span>
-</span></span><span style="display:flex;"><span>    <span style="color:#ef6155">$transfer</span> = New-Object (<span style="color:#48b685">&#34;$smoPrefix.Transfer&#34;</span>) <span style="color:#ef6155">$database</span>
-</span></span><span style="display:flex;"><span>    <span style="color:#ef6155">$transfer</span>.Options.ScriptSchema = <span style="color:#ef6155">$true</span>
-</span></span><span style="display:flex;"><span>    <span style="color:#ef6155">$transfer</span>.Options.ScriptData = <span style="color:#ef6155">$true</span>
-</span></span><span style="display:flex;"><span>    <span style="color:#ef6155">$transfer</span>.Options.ScriptBatchTerminator = <span style="color:#ef6155">$true</span>
-</span></span><span style="display:flex;"><span>    <span style="color:#ef6155">$transfer</span>.Options.ToFileOnly = <span style="color:#ef6155">$true</span>
-</span></span><span style="display:flex;"><span>    <span style="color:#ef6155">$transfer</span>.Options.AppendToFile = <span style="color:#ef6155">$true</span>
-</span></span><span style="display:flex;"><span>    <span style="color:#ef6155">$transfer</span>.Options.Encoding = New-Object (<span style="color:#48b685">&#34;System.Text.UTF8Encoding&#34;</span>)
-</span></span><span style="display:flex;"><span>    <span style="color:#ef6155">$transfer</span>.Options.AllowSystemObjects = <span style="color:#ef6155">$false</span>
-</span></span><span style="display:flex;"><span>    <span style="color:#ef6155">$transfer</span>.Options.Permissions = <span style="color:#ef6155">$true</span>
-</span></span><span style="display:flex;"><span>    <span style="color:#ef6155">$transfer</span>.Options.SchemaQualify = <span style="color:#ef6155">$true</span>
-</span></span><span style="display:flex;"><span>    <span style="color:#ef6155">$transfer</span>.Options.ExtendedProperties = <span style="color:#ef6155">$true</span>
-</span></span><span style="display:flex;"><span>    <span style="color:#ef6155">$transfer</span>.Options.DRIAll = <span style="color:#ef6155">$true</span>
-</span></span><span style="display:flex;"><span>    <span style="color:#ef6155">$transfer</span>.Options.Indexes = <span style="color:#ef6155">$true</span>
-</span></span><span style="display:flex;"><span>    <span style="color:#ef6155">$transfer</span>.Options.Triggers = <span style="color:#ef6155">$true</span>
-</span></span><span style="display:flex;"><span>    <span style="color:#ef6155">$transfer</span>.Options.IncludeHeaders = <span style="color:#ef6155">$true</span>
-</span></span><span style="display:flex;"><span>    <span style="color:#ef6155">$transfer</span>.Options.IncludeIfNotExists = <span style="color:#ef6155">$true</span>
-</span></span><span style="display:flex;"><span>    <span style="color:#ef6155">$transfer</span>.Options.Filename = <span style="color:#48b685">&#34;$backupFile&#34;</span>
-</span></span><span style="display:flex;"><span>    <span style="color:#ef6155">$transfer</span>.Options.EnforceScriptingOptions = <span style="color:#ef6155">$true</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#6272a4"># set export configuration</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#8be9fd;font-style:italic">$transfer</span> = <span style="color:#8be9fd;font-style:italic">New-Object</span> (<span style="color:#f1fa8c">&#34;$smoPrefix.Transfer&#34;</span>) <span style="color:#8be9fd;font-style:italic">$database</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#8be9fd;font-style:italic">$transfer</span>.Options.ScriptSchema = <span style="color:#8be9fd;font-style:italic">$true</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#8be9fd;font-style:italic">$transfer</span>.Options.ScriptData = <span style="color:#8be9fd;font-style:italic">$true</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#8be9fd;font-style:italic">$transfer</span>.Options.ScriptBatchTerminator = <span style="color:#8be9fd;font-style:italic">$true</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#8be9fd;font-style:italic">$transfer</span>.Options.ToFileOnly = <span style="color:#8be9fd;font-style:italic">$true</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#8be9fd;font-style:italic">$transfer</span>.Options.AppendToFile = <span style="color:#8be9fd;font-style:italic">$true</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#8be9fd;font-style:italic">$transfer</span>.Options.Encoding = <span style="color:#8be9fd;font-style:italic">New-Object</span> (<span style="color:#f1fa8c">&#34;System.Text.UTF8Encoding&#34;</span>)
+</span></span><span style="display:flex;"><span>    <span style="color:#8be9fd;font-style:italic">$transfer</span>.Options.AllowSystemObjects = <span style="color:#8be9fd;font-style:italic">$false</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#8be9fd;font-style:italic">$transfer</span>.Options.Permissions = <span style="color:#8be9fd;font-style:italic">$true</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#8be9fd;font-style:italic">$transfer</span>.Options.SchemaQualify = <span style="color:#8be9fd;font-style:italic">$true</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#8be9fd;font-style:italic">$transfer</span>.Options.ExtendedProperties = <span style="color:#8be9fd;font-style:italic">$true</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#8be9fd;font-style:italic">$transfer</span>.Options.DRIAll = <span style="color:#8be9fd;font-style:italic">$true</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#8be9fd;font-style:italic">$transfer</span>.Options.Indexes = <span style="color:#8be9fd;font-style:italic">$true</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#8be9fd;font-style:italic">$transfer</span>.Options.Triggers = <span style="color:#8be9fd;font-style:italic">$true</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#8be9fd;font-style:italic">$transfer</span>.Options.IncludeHeaders = <span style="color:#8be9fd;font-style:italic">$true</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#8be9fd;font-style:italic">$transfer</span>.Options.IncludeIfNotExists = <span style="color:#8be9fd;font-style:italic">$true</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#8be9fd;font-style:italic">$transfer</span>.Options.Filename = <span style="color:#f1fa8c">&#34;$backupFile&#34;</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#8be9fd;font-style:italic">$transfer</span>.Options.EnforceScriptingOptions = <span style="color:#8be9fd;font-style:italic">$true</span>
 </span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span>    <span style="color:#776e71"># start scripting</span>
-</span></span><span style="display:flex;"><span>    <span style="color:#ef6155">$transfer</span>.EnumScriptTransfer()
+</span></span><span style="display:flex;"><span>    <span style="color:#6272a4"># start scripting</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#8be9fd;font-style:italic">$transfer</span>.EnumScriptTransfer()
 </span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span>    Write-Output <span style="color:#48b685">&#34;Finished backing up $databaseName to $backupFile&#34;</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#8be9fd;font-style:italic">Write-Output</span> <span style="color:#f1fa8c">&#34;Finished backing up $databaseName to $backupFile&#34;</span>
 </span></span><span style="display:flex;"><span>}
 </span></span></code></pre></div>
                     
@@ -915,10 +915,10 @@ Ported from <a href="https://mak1t0.cc/" target="_blank" rel="noreferrer noopene
 
     var disqus_config = function () {
         
-        this.page.url = 'https:\/\/idontwannarock.github.io\/tech_blog\/2021\/11\/sql_server_backup\/';  
+        this.page.url = '\/2021\/11\/sql_server_backup\/';  
         
         
-        this.page.identifier = 'https:\/\/idontwannarock.github.io\/tech_blog\/2021\/11\/sql_server_backup\/'; 
+        this.page.identifier = '\/2021\/11\/sql_server_backup\/'; 
     };
     (function() {
         var d = document, s = d.createElement('script');
@@ -946,7 +946,7 @@ Ported from <a href="https://mak1t0.cc/" target="_blank" rel="noreferrer noopene
 
                     </div>
             </div><div id="single-column-footer">
-Hugo Theme <a href="https://github.com/amazingrise/hugo-theme-diary">Diary</a> by <a href="https://amazingrise.net">Rise</a>
+Hugo Theme <a href="https://github.com/amazingrise/hugo-theme-diary">Diary</a> by <a href="https://risehere.net/">Rise</a>
 <br>
 Ported from <a href="https://mak1t0.cc/" target="_blank" rel="noreferrer noopener">Makito</a>'s <a href="https://github.com/SumiMakito/hexo-theme-journal/" target="_blank" rel="noreferrer noopener">Journal.</a> <br>
 <br>
@@ -958,6 +958,5 @@ Ported from <a href="https://mak1t0.cc/" target="_blank" rel="noreferrer noopene
 </div>
             </div>
     
-    <script src="https://idontwannarock.github.io/tech_blog/js/journal.js"></script>
-    </body>
+    <script src="https://idontwannarock.github.io/tech_blog/js/journal.js"></script></body>
 </html>
