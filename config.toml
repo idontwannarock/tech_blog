@@ -19,7 +19,7 @@ googleAnalytics = "UA-106499565-1"
     lineNos = false
     lineNumbersInTable = true
     noClasses = true
-    style = "paraiso-dark"
+    style = "perldoc"
     tabWidth = 4
 
 [params]
