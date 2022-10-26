@@ -1,0 +1,779 @@
+<!DOCTYPE html>
+<html><head>
+<title>Java Optional 為何不推薦做為類別屬性</title>
+
+
+
+
+<meta charset="utf-8">
+<meta name="X-UA-Compatible" content="IE=edge">
+<meta name="google-site-verification" content="">
+<meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" name="viewport">
+<meta content="telephone=no" name="format-detection">
+<meta name="description" content="">
+<meta name="renderer" content="webkit">
+<meta name="theme-color" content="#ffffff">
+
+
+
+
+
+
+
+
+
+
+
+<script type="application/javascript">
+var doNotTrack = false;
+if (!doNotTrack) {
+	(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+	(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+	m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+	})(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+	ga('create', 'UA-106499565-1', 'auto');
+	
+	ga('send', 'pageview');
+}
+</script>
+
+
+<link type="text/css" rel="stylesheet" href="https://idontwannarock.github.io/tech_blog/vendor/css/bootstrap.min.css">
+
+
+  
+
+
+
+
+
+
+<link rel="stylesheet" href="https://idontwannarock.github.io/tech_blog/scss/journal.min.f4a8de07567a2d29619e0711662ef6251e3e59b642079f99490f654abf89a3c4.css" integrity="sha256-9KjeB1Z6LSlhngcRZi72JR4&#43;WbZCB5&#43;ZSQ9lSr&#43;Jo8Q=" media="screen">
+
+
+
+<link rel="stylesheet" href="https://idontwannarock.github.io/tech_blog/scss/dark-mode.min.eeb8040aa9333250b7fec770f950bfe8ba9b18a5eeeaf2dfef61d84d3956f625.css" integrity="sha256-7rgECqkzMlC3/sdw&#43;VC/6LqbGKXu6vLf72HYTTlW9iU=" media="screen">
+
+
+<script src="https://idontwannarock.github.io/tech_blog/vendor/js/loadCSS.js"></script>
+<script>
+  loadCSS("https://fonts.googleapis.com/css?family=Fira+Mono|Material+Icons");
+</script>
+
+
+
+
+
+
+  <script src="https://idontwannarock.github.io/tech_blog/js/toc.js"></script>
+
+
+
+
+
+
+
+<script src="https://cdn.jsdelivr.net/npm/vue-disqus@3/dist/vue-disqus.js"></script>
+
+
+
+
+
+
+
+
+</head>
+<body>
+    	<div id="app"><div id="sideContainer" class="side-container">
+    
+    <a class="a-block nav-head false" href="https://idontwannarock.github.io/tech_blog/">
+    
+        <div class="nav-title">
+            Howard Tech Note
+        </div>
+        
+        <div class="nav-subtitle">
+            Share * Record * Program
+        </div>
+        
+    </a>
+
+    <div class="nav-link-list">
+        
+        
+            
+            
+            
+            
+            
+            <a class="a-block nav-link-item false" href="https://idontwannarock.github.io/tech_blog/posts">
+                Archive
+            </a>
+            
+        
+            
+            
+            
+            
+            
+            <a class="a-block nav-link-item false" href="https://idontwannarock.github.io/tech_blog/categories">
+                Categories
+            </a>
+            
+        
+            
+            
+            
+            
+            
+            <a class="a-block nav-link-item false" href="https://idontwannarock.github.io/tech_blog/tags">
+                Tags
+            </a>
+            
+        
+            
+            
+            
+            
+            
+            <a class="a-block nav-link-item false" href="https://idontwannarock.github.io/tech_blog/about">
+                About
+            </a>
+            
+        
+            
+            
+            
+            
+            
+            <a class="a-block nav-link-item false" href="https://idontwannarock.github.io/tech_blog/index.xml">
+                RSS Feed
+            </a>
+            
+        
+    </div>
+
+    
+
+    <div class="nav-footer">
+        
+Hugo Theme <a href="https://github.com/amazingrise/hugo-theme-diary">Diary</a> by <a href="https://amazingrise.net">Rise</a>
+<br>
+Ported from <a href="https://mak1t0.cc/" target="_blank" rel="noreferrer noopener">Makito</a>'s <a href="https://github.com/SumiMakito/hexo-theme-journal/" target="_blank" rel="noreferrer noopener">Journal.</a> <br>
+<br>
+
+&copy;
+	
+	This website by Howard Wang is licensed under a Creative Common Attribution-ShareAlike 4.0 International License.
+	
+
+    </div>
+    
+</div><div id="extraContainer" class="extra-container">
+    
+    
+    <div class="toc animated-visibility" :class="{ invisible: scrollY <= 140 }">
+
+
+	<div class="toc-content">
+	
+		
+		
+		
+		<center>- CATALOG -</center>
+		
+		
+		<ul>
+			
+				
+				
+					
+						
+						
+						
+						
+							
+								
+									<ul>
+								
+							
+						
+						
+							<li>
+								<a href="#java-%e7%89%a9%e4%bb%b6%e7%9a%84%e6%af%94%e8%bc%83" onclick="onNavClick(`#java-物件的比較-nav`)" id="java-物件的比較-nav">
+									Java 物件的比較
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+						
+							<li>
+								<a href="#optional-%e9%a1%9e%e5%88%a5" onclick="onNavClick(`#optional-類別-nav`)" id="optional-類別-nav">
+									Optional 類別
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+						
+							<li>
+								<a href="#%e7%94%a8-optional-%e7%95%b6%e4%bd%9c%e9%a1%9e%e5%88%a5%e7%9a%84-field-%e6%99%82%e9%a1%9e%e5%88%a5%e6%98%af%e6%80%8e%e9%ba%bc%e5%81%9a%e6%af%94%e8%bc%83%e7%9a%84" onclick="onNavClick(`#用-optional-當作類別的-field-時類別是怎麼做比較的-nav`)" id="用-optional-當作類別的-field-時類別是怎麼做比較的-nav">
+									用 Optional 當作類別的 field 時，類別是怎麼做比較的？
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+						
+							<li>
+								<a href="#%e7%b5%90%e8%ab%96" onclick="onNavClick(`#結論-nav`)" id="結論-nav">
+									結論
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+						
+							<li>
+								<a href="#%e5%8f%83%e8%80%83" onclick="onNavClick(`#參考-nav`)" id="參考-nav">
+									參考
+								</a>
+							</li>
+						
+						
+					
+				
+			
+		</ul>
+	</div>
+
+</div>
+    
+    <div class="pagination">
+        <a id="globalBackToTop" class="pagination-action animated-visibility" href="#top" :class="{ invisible: scrollY == 0 }">
+            <i class="material-icons pagination-action-icon">
+                keyboard_arrow_up
+            </i>
+        </a>
+        
+        <a type="button" class="pagination-action" id="darkModeToggleButton">
+            <span class="material-icons pagination-action-icon" id="darkModeToggleIcon">
+                dark_mode
+            </span>
+        </a>
+        
+        
+    </div>
+</div>
+<div class="single-column-drawer-container" id="drawer"
+     v-bind:class="{ 'single-column-drawer-container-active': isDrawerOpen }">
+    <div class="drawer-content">
+        <div class="drawer-menu">
+            
+            
+            
+                
+                
+                
+                
+                
+                <a class="a-block drawer-menu-item false" href="https://idontwannarock.github.io/tech_blog/posts">
+                    Archive
+                </a>
+                
+            
+                
+                
+                
+                
+                
+                <a class="a-block drawer-menu-item false" href="https://idontwannarock.github.io/tech_blog/categories">
+                    Categories
+                </a>
+                
+            
+                
+                
+                
+                
+                
+                <a class="a-block drawer-menu-item false" href="https://idontwannarock.github.io/tech_blog/tags">
+                    Tags
+                </a>
+                
+            
+                
+                
+                
+                
+                
+                <a class="a-block drawer-menu-item false" href="https://idontwannarock.github.io/tech_blog/about">
+                    About
+                </a>
+                
+            
+                
+                
+                
+                
+                
+                <a class="a-block drawer-menu-item false" href="https://idontwannarock.github.io/tech_blog/index.xml">
+                    RSS Feed
+                </a>
+                
+            
+            
+            <div class="toc">
+
+
+	<div class="toc-content">
+	
+		
+		
+		
+		<center>- CATALOG -</center>
+		
+		
+		<ul>
+			
+				
+				
+					
+						
+						
+						
+						
+							
+								
+									<ul>
+								
+							
+						
+						
+							<li>
+								<a href="#java-%e7%89%a9%e4%bb%b6%e7%9a%84%e6%af%94%e8%bc%83" onclick="onNavClick(`#java-物件的比較-nav`)" id="java-物件的比較-nav">
+									Java 物件的比較
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+						
+							<li>
+								<a href="#optional-%e9%a1%9e%e5%88%a5" onclick="onNavClick(`#optional-類別-nav`)" id="optional-類別-nav">
+									Optional 類別
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+						
+							<li>
+								<a href="#%e7%94%a8-optional-%e7%95%b6%e4%bd%9c%e9%a1%9e%e5%88%a5%e7%9a%84-field-%e6%99%82%e9%a1%9e%e5%88%a5%e6%98%af%e6%80%8e%e9%ba%bc%e5%81%9a%e6%af%94%e8%bc%83%e7%9a%84" onclick="onNavClick(`#用-optional-當作類別的-field-時類別是怎麼做比較的-nav`)" id="用-optional-當作類別的-field-時類別是怎麼做比較的-nav">
+									用 Optional 當作類別的 field 時，類別是怎麼做比較的？
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+						
+							<li>
+								<a href="#%e7%b5%90%e8%ab%96" onclick="onNavClick(`#結論-nav`)" id="結論-nav">
+									結論
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+						
+							<li>
+								<a href="#%e5%8f%83%e8%80%83" onclick="onNavClick(`#參考-nav`)" id="參考-nav">
+									參考
+								</a>
+							</li>
+						
+						
+					
+				
+			
+		</ul>
+	</div>
+
+</div>
+            
+        </div>
+    </div>
+</div>
+<transition name="fade">
+    <div id="drawer-mask" v-bind:class="{ 'single-column-drawer-mask': mounted }" v-if="isDrawerOpen" v-on:click="toggleDrawer"></div>
+</transition>
+<nav id="navBar" class="navbar sticky-top navbar-light single-column-nav-container">
+    <div id="navBackground" class="nav-background"></div>
+    <div class="container container-narrow nav-content">
+        <button id="nav_dropdown_btn" class="nav-dropdown-toggle" type="button" v-on:click="toggleDrawer">
+            <i class="material-icons">
+                menu
+            </i>
+        </button>
+        <a id="navTitle" class="navbar-brand" href="https://idontwannarock.github.io/tech_blog/">
+            Howard Tech Note
+        </a>
+        
+        <button type="button" class="nav-darkmode-toggle" id="darkModeToggleButton2">
+            <i class="material-icons" id="darkModeToggleIcon2">
+                dark_mode
+            </i>
+        </button>
+        
+    </div>
+</nav>
+<div class="single-column-header-container" id="pageHead"
+     v-bind:style="{ transform: 'translateZ(0px) translateY('+.3*scrollY+'px)', opacity: 1-navOpacity }">
+    <a href="https://idontwannarock.github.io/tech_blog/">
+        <div class="single-column-header-title">Howard Tech Note</div>
+        
+        <div class="single-column-header-subtitle">Share * Record * Program</div>
+        
+
+    </a>
+</div>
+
+            <div id="content">
+                <div id="streamContainer" class="stream-container">
+
+    <div class="post-list-container post-list-container-shadow">
+        <div class="post">
+            
+            
+            
+
+            <div class="post-head-wrapper-text-only"
+                
+            >
+                <div class="post-title">
+                    Java Optional 為何不推薦做為類別屬性
+                    
+                    <div class="post-meta">
+                        
+                        <time itemprop="datePublished">
+                            2022-10-01 21:44
+                        </time>
+                        
+
+                        
+                            <i class="material-icons" style="">folder</i>
+                                <a href="https://idontwannarock.github.io/tech_blog/categories/concept">concept</a>
+                                &nbsp;
+                        
+
+                        
+                            <i class="material-icons" style="">label</i>
+                            
+                                <a href="https://idontwannarock.github.io/tech_blog/tags/java">java</a>
+                                &nbsp;
+                            
+                                <a href="https://idontwannarock.github.io/tech_blog/tags/optional">optional</a>
+                                &nbsp;
+                            
+                        
+                        
+                    </div>
+                </div>
+            </div>
+            
+            <div class="post-body-wrapper">
+                
+                <div class="post-body" v-pre>
+                
+                    <p>大家有在寫 Java 1.8+ 的時候使用新出的 <code>Optional</code> 類別來處理 <code>null</code> 的問題嗎？</p>
+<p>那在使用的時候有沒有碰到 IntelliJ 提示 <code>Optional</code> 不推薦用來當作類別的 field 的黃色警告 (warning) 呢？訊息應該大致如下</p>
+<div class="highlight"><pre tabindex="0" style="color:#e7e9db;background-color:#2f1e2e;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-java" data-lang="java"><span style="display:flex;"><span><span style="color:#776e71">/**
+</span></span></span><span style="display:flex;"><span><span style="color:#776e71"> * A container object which may or may not contain a non-{@code null} value.
+</span></span></span><span style="display:flex;"><span><span style="color:#776e71"> * If a value is present, {@code isPresent()} returns {@code true}. If no
+</span></span></span><span style="display:flex;"><span><span style="color:#776e71"> * value is present, the object is considered &lt;i&gt;empty&lt;/i&gt; and
+</span></span></span><span style="display:flex;"><span><span style="color:#776e71"> * {@code isPresent()} returns {@code false}.
+</span></span></span><span style="display:flex;"><span><span style="color:#776e71"> *
+</span></span></span><span style="display:flex;"><span><span style="color:#776e71"> * &lt;p&gt;Additional methods that depend on the presence or absence of a contained
+</span></span></span><span style="display:flex;"><span><span style="color:#776e71"> * value are provided, such as {@link #orElse(Object) orElse()}
+</span></span></span><span style="display:flex;"><span><span style="color:#776e71"> * (returns a default value if no value is present) and
+</span></span></span><span style="display:flex;"><span><span style="color:#776e71"> * {@link #ifPresent(Consumer) ifPresent()} (performs an
+</span></span></span><span style="display:flex;"><span><span style="color:#776e71"> * action if a value is present).
+</span></span></span><span style="display:flex;"><span><span style="color:#776e71"> *
+</span></span></span><span style="display:flex;"><span><span style="color:#776e71"> * &lt;p&gt;This is a &lt;a href=&#34;../lang/doc-files/ValueBased.html&#34;&gt;value-based&lt;/a&gt;
+</span></span></span><span style="display:flex;"><span><span style="color:#776e71"> * class; use of identity-sensitive operations (including reference equality
+</span></span></span><span style="display:flex;"><span><span style="color:#776e71"> * ({@code ==}), identity hash code, or synchronization) on instances of
+</span></span></span><span style="display:flex;"><span><span style="color:#776e71"> * {@code Optional} may have unpredictable results and should be avoided.
+</span></span></span><span style="display:flex;"><span><span style="color:#776e71"> *
+</span></span></span><span style="display:flex;"><span><span style="color:#776e71"> * @apiNote
+</span></span></span><span style="display:flex;"><span><span style="color:#776e71"> * {@code Optional} is primarily intended for use as a method return type where
+</span></span></span><span style="display:flex;"><span><span style="color:#776e71"> * there is a clear need to represent &#34;no result,&#34; and where using {@code null}
+</span></span></span><span style="display:flex;"><span><span style="color:#776e71"> * is likely to cause errors. A variable whose type is {@code Optional} should
+</span></span></span><span style="display:flex;"><span><span style="color:#776e71"> * never itself be {@code null}; it should always point to an {@code Optional}
+</span></span></span><span style="display:flex;"><span><span style="color:#776e71"> * instance.
+</span></span></span><span style="display:flex;"><span><span style="color:#776e71"> *
+</span></span></span><span style="display:flex;"><span><span style="color:#776e71"> * @param &lt;T&gt; the type of value
+</span></span></span><span style="display:flex;"><span><span style="color:#776e71"> * @since 1.8
+</span></span></span><span style="display:flex;"><span><span style="color:#776e71"> */</span>
+</span></span></code></pre></div><p>我剛碰到的時候感覺很奇怪，用 <code>Optional</code> 來當 field 表示我們想表達這個 field 有可能是 <code>null</code> 有什麼不對嗎？為什麼 IntelliJ 要警告我呢？</p>
+<p>我們今天就來研究一下這個問題吧~</p>
+<h2 id="java-物件的比較">Java 物件的比較</h2>
+<p>要回答這個問題，首先要了解 Java 是怎麼對物件做比較的</p>
+<p>有在寫 Java 的人應該都知道 primitive type 的比較可以直接用 <code>==</code>，但非 primitive type (也就是繼承了 <code>Object</code> 的類別) 的類別比較物件是否相同時應該使用 <code>equals()</code> 方法，而這兩個方式有什麼差別呢？</p>
+<p>首先，<code>==</code> 是直接比較變數中的值，這個值在 primitive type 來說，例如 <code>int a = 1; int b = 2; boolean isEqual = a == b;</code> 的變數 <code>a</code> 在跟變數 <code>b</code> 做比較的時候就是比較 1 是否等於 2；但若是非 primitive type 的時候，物件的值是什麼呢？就是該物件實例 (instance) 的 reference，也就是該物件在 JVM Heap 當中的位址</p>
+<blockquote>
+<p>重新順一次，非全域 (non-static) 變數本身原則上會保存在 JVM stack 當中；變數型態如果是 primitive type，則值就保存在 stack；變數如果是物件，那物件本身的內容實際上是保存在 JVM heap，而 stack 的變數則是保存指向 heap 當中的位址</p>
+</blockquote>
+<p>再來 <code>equals()</code> 方法就是調用方法裡面的實作去做比較，如果類別本身沒有實作，那就是找繼承的類別們當中，有實作 <code>equals()</code> 方法且繼承樹中最接近該類別的那個實作去執行比較，如果整顆繼承樹都沒有 override 過，那就是用 <code>Object</code> 預設的 <code>equals()</code> 方法</p>
+<p>接著就要再探究 <code>Object.equals()</code> 方法倒底是怎麼比較物件的呢？以 Java 11 的版本來說是這樣的</p>
+<div class="highlight"><pre tabindex="0" style="color:#e7e9db;background-color:#2f1e2e;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-java" data-lang="java"><span style="display:flex;"><span><span style="color:#815ba4">public</span> <span style="color:#fec418">boolean</span> <span style="color:#06b6ef">equals</span><span style="color:#5bc4bf">(</span>Object obj<span style="color:#5bc4bf">)</span> <span style="color:#5bc4bf">{</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#815ba4">return</span> <span style="color:#5bc4bf">(</span><span style="color:#815ba4">this</span> <span style="color:#5bc4bf">==</span> obj<span style="color:#5bc4bf">);</span>
+</span></span><span style="display:flex;"><span><span style="color:#5bc4bf">}</span>
+</span></span></code></pre></div><p>也就是說他同樣會使用 <code>==</code> 來比較物件</p>
+<h2 id="optional-類別"><code>Optional</code> 類別</h2>
+<p><code>Optional</code> 是 Java 1.8 推出的新 feature，目的就是為了處理 Java 惡名昭彰的 <code>NullPointerException</code></p>
+<blockquote>
+<p>順帶一提 <a href="https://www.infoq.com/presentations/Null-References-The-Billion-Dollar-Mistake-Tony-Hoare/">Null Reference 的發明者 Tony Hoare 公開承認這是個錯誤</a></p>
+</blockquote>
+<p><code>Optional</code> 處理 <code>null</code> 的做法其實就是在物件外面做一個包裝，讓使用者間接操作物件；而要使用物件之前，<code>Optional</code> 的方法有很強的傾向讓使用者先檢查過物件是否為 <code>null</code> 後再來將物件取出來使用，從而避免 <code>NullPointerException</code></p>
+<p>所以可見變數如果是 <code>Optional</code>，那變數裡面的值則是 <code>Optional</code> 實例在 heap 裡面的位址</p>
+<p>結合上一段的內容，當兩個 <code>Optional</code> 做 <code>==</code> 比較的時候，比較的是兩個實例在 heap 裡面的位址；而做 <code>equals()</code> 比較的時候呢？我們直接看 code，以下是 JDK 11 版本的 <code>Optional</code> 實作</p>
+<div class="highlight"><pre tabindex="0" style="color:#e7e9db;background-color:#2f1e2e;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-java" data-lang="java"><span style="display:flex;"><span><span style="color:#5bc4bf">@Override</span>
+</span></span><span style="display:flex;"><span><span style="color:#815ba4">public</span> <span style="color:#fec418">boolean</span> <span style="color:#06b6ef">equals</span><span style="color:#5bc4bf">(</span>Object obj<span style="color:#5bc4bf">)</span> <span style="color:#5bc4bf">{</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#815ba4">if</span> <span style="color:#5bc4bf">(</span><span style="color:#815ba4">this</span> <span style="color:#5bc4bf">==</span> obj<span style="color:#5bc4bf">)</span> <span style="color:#5bc4bf">{</span>
+</span></span><span style="display:flex;"><span>        <span style="color:#815ba4">return</span> <span style="color:#815ba4">true</span><span style="color:#5bc4bf">;</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#5bc4bf">}</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#815ba4">if</span> <span style="color:#5bc4bf">(!(</span>obj <span style="color:#815ba4">instanceof</span> Optional<span style="color:#5bc4bf">))</span> <span style="color:#5bc4bf">{</span>
+</span></span><span style="display:flex;"><span>        <span style="color:#815ba4">return</span> <span style="color:#815ba4">false</span><span style="color:#5bc4bf">;</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#5bc4bf">}</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    Optional<span style="color:#5bc4bf">&lt;?&gt;</span> other <span style="color:#5bc4bf">=</span> <span style="color:#5bc4bf">(</span>Optional<span style="color:#5bc4bf">&lt;?&gt;)</span> obj<span style="color:#5bc4bf">;</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#815ba4">return</span> Objects<span style="color:#5bc4bf">.</span><span style="color:#06b6ef">equals</span><span style="color:#5bc4bf">(</span>value<span style="color:#5bc4bf">,</span> other<span style="color:#5bc4bf">.</span><span style="color:#06b6ef">value</span><span style="color:#5bc4bf">);</span>
+</span></span><span style="display:flex;"><span><span style="color:#5bc4bf">}</span>
+</span></span></code></pre></div><p>其中 <code>Objects</code> 的 <code>equals()</code> 實作如下</p>
+<div class="highlight"><pre tabindex="0" style="color:#e7e9db;background-color:#2f1e2e;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-java" data-lang="java"><span style="display:flex;"><span><span style="color:#815ba4">public</span> <span style="color:#815ba4">static</span> <span style="color:#fec418">boolean</span> <span style="color:#06b6ef">equals</span><span style="color:#5bc4bf">(</span>Object a<span style="color:#5bc4bf">,</span> Object b<span style="color:#5bc4bf">)</span> <span style="color:#5bc4bf">{</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#815ba4">return</span> <span style="color:#5bc4bf">(</span>a <span style="color:#5bc4bf">==</span> b<span style="color:#5bc4bf">)</span> <span style="color:#5bc4bf">||</span> <span style="color:#5bc4bf">(</span>a <span style="color:#5bc4bf">!=</span> <span style="color:#815ba4">null</span> <span style="color:#5bc4bf">&amp;&amp;</span> a<span style="color:#5bc4bf">.</span><span style="color:#06b6ef">equals</span><span style="color:#5bc4bf">(</span>b<span style="color:#5bc4bf">));</span>
+</span></span><span style="display:flex;"><span><span style="color:#5bc4bf">}</span>
+</span></span></code></pre></div><p>從 code 我們可以看得出來，<code>Optional</code> 的 <code>equals()</code> 實際上都是用 <code>==</code> 的方式去做比較，頂多會驗證另外一個實例是否也為 <code>Optional</code> 類別而已</p>
+<h2 id="用-optional-當作類別的-field-時類別是怎麼做比較的">用 <code>Optional</code> 當作類別的 field 時，類別是怎麼做比較的？</h2>
+<p>其實講到這邊應該就可以了解為什麼 IntelliJ 會提示 <code>Optional</code> 不適合用來當作類別的 field 了吧？</p>
+<p>其實主要就在於執行比較動作的時候，採用 <code>Optional</code> 當作類別 field 容易造成一些不可預期的結果</p>
+<p>一般來說，應該相對少人會特別去自己 override <code>equals()</code> 方法吧？要不就是直接用 Lombok 或用 IDE 自動產生的 code</p>
+<p>首先我們先寫一個最簡單的類別</p>
+<div class="highlight"><pre tabindex="0" style="color:#e7e9db;background-color:#2f1e2e;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-java" data-lang="java"><span style="display:flex;"><span><span style="color:#5bc4bf">import</span> <span style="color:#fec418">java.util.Optional</span><span style="color:#5bc4bf">;</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#815ba4">public</span> <span style="color:#815ba4">class</span> <span style="color:#fec418">Test</span> <span style="color:#5bc4bf">{</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#815ba4">private</span> Optional<span style="color:#5bc4bf">&lt;</span>Integer<span style="color:#5bc4bf">&gt;</span> aField<span style="color:#5bc4bf">;</span>
+</span></span><span style="display:flex;"><span><span style="color:#5bc4bf">}</span>
+</span></span></code></pre></div><p>如果採用 Lombok 的 <code>@Data</code> annotation 的話，實際 compile 出來的 <code>equals()</code> 是這樣的</p>
+<div class="highlight"><pre tabindex="0" style="color:#e7e9db;background-color:#2f1e2e;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-java" data-lang="java"><span style="display:flex;"><span><span style="color:#815ba4">public</span> <span style="color:#fec418">boolean</span> <span style="color:#06b6ef">equals</span><span style="color:#5bc4bf">(</span><span style="color:#815ba4">final</span> Object o<span style="color:#5bc4bf">)</span> <span style="color:#5bc4bf">{</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#815ba4">if</span> <span style="color:#5bc4bf">(</span>o <span style="color:#5bc4bf">==</span> <span style="color:#815ba4">this</span><span style="color:#5bc4bf">)</span> <span style="color:#5bc4bf">{</span>
+</span></span><span style="display:flex;"><span>        <span style="color:#815ba4">return</span> <span style="color:#815ba4">true</span><span style="color:#5bc4bf">;</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#5bc4bf">}</span> <span style="color:#815ba4">else</span> <span style="color:#815ba4">if</span> <span style="color:#5bc4bf">(!(</span>o <span style="color:#815ba4">instanceof</span> Test<span style="color:#5bc4bf">))</span> <span style="color:#5bc4bf">{</span>
+</span></span><span style="display:flex;"><span>        <span style="color:#815ba4">return</span> <span style="color:#815ba4">false</span><span style="color:#5bc4bf">;</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#5bc4bf">}</span> <span style="color:#815ba4">else</span> <span style="color:#5bc4bf">{</span>
+</span></span><span style="display:flex;"><span>        Test other <span style="color:#5bc4bf">=</span> <span style="color:#5bc4bf">(</span>Test<span style="color:#5bc4bf">)</span>o<span style="color:#5bc4bf">;</span>
+</span></span><span style="display:flex;"><span>        <span style="color:#815ba4">if</span> <span style="color:#5bc4bf">(!</span>other<span style="color:#5bc4bf">.</span><span style="color:#06b6ef">canEqual</span><span style="color:#5bc4bf">(</span><span style="color:#815ba4">this</span><span style="color:#5bc4bf">))</span> <span style="color:#5bc4bf">{</span>
+</span></span><span style="display:flex;"><span>            <span style="color:#815ba4">return</span> <span style="color:#815ba4">false</span><span style="color:#5bc4bf">;</span>
+</span></span><span style="display:flex;"><span>        <span style="color:#5bc4bf">}</span> <span style="color:#815ba4">else</span> <span style="color:#5bc4bf">{</span>
+</span></span><span style="display:flex;"><span>            Object <span style="color:#815ba4">this</span>$aField <span style="color:#5bc4bf">=</span> <span style="color:#815ba4">this</span><span style="color:#5bc4bf">.</span><span style="color:#06b6ef">getAField</span><span style="color:#5bc4bf">();</span>
+</span></span><span style="display:flex;"><span>            Object other$aField <span style="color:#5bc4bf">=</span> other<span style="color:#5bc4bf">.</span><span style="color:#06b6ef">getAField</span><span style="color:#5bc4bf">();</span>
+</span></span><span style="display:flex;"><span>            <span style="color:#815ba4">if</span> <span style="color:#5bc4bf">(</span><span style="color:#815ba4">this</span>$aField <span style="color:#5bc4bf">==</span> <span style="color:#815ba4">null</span><span style="color:#5bc4bf">)</span> <span style="color:#5bc4bf">{</span>
+</span></span><span style="display:flex;"><span>                <span style="color:#815ba4">if</span> <span style="color:#5bc4bf">(</span>other$aField <span style="color:#5bc4bf">!=</span> <span style="color:#815ba4">null</span><span style="color:#5bc4bf">)</span> <span style="color:#5bc4bf">{</span>
+</span></span><span style="display:flex;"><span>                    <span style="color:#815ba4">return</span> <span style="color:#815ba4">false</span><span style="color:#5bc4bf">;</span>
+</span></span><span style="display:flex;"><span>                <span style="color:#5bc4bf">}</span>
+</span></span><span style="display:flex;"><span>            <span style="color:#5bc4bf">}</span> <span style="color:#815ba4">else</span> <span style="color:#815ba4">if</span> <span style="color:#5bc4bf">(!</span><span style="color:#815ba4">this</span>$aField<span style="color:#5bc4bf">.</span><span style="color:#06b6ef">equals</span><span style="color:#5bc4bf">(</span>other$aField<span style="color:#5bc4bf">))</span> <span style="color:#5bc4bf">{</span>
+</span></span><span style="display:flex;"><span>                <span style="color:#815ba4">return</span> <span style="color:#815ba4">false</span><span style="color:#5bc4bf">;</span>
+</span></span><span style="display:flex;"><span>            <span style="color:#5bc4bf">}</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>            <span style="color:#815ba4">return</span> <span style="color:#815ba4">true</span><span style="color:#5bc4bf">;</span>
+</span></span><span style="display:flex;"><span>        <span style="color:#5bc4bf">}</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#5bc4bf">}</span>
+</span></span><span style="display:flex;"><span><span style="color:#5bc4bf">}</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#815ba4">protected</span> <span style="color:#fec418">boolean</span> <span style="color:#06b6ef">canEqual</span><span style="color:#5bc4bf">(</span><span style="color:#815ba4">final</span> Object other<span style="color:#5bc4bf">)</span> <span style="color:#5bc4bf">{</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#815ba4">return</span> other <span style="color:#815ba4">instanceof</span> Test<span style="color:#5bc4bf">;</span>
+</span></span><span style="display:flex;"><span><span style="color:#5bc4bf">}</span>
+</span></span></code></pre></div><p>從代碼中我們可以看到實際上除了 <code>instanceof</code> 以外，其他的比較追根究柢還是用的是 <code>==</code> 做比較</p>
+<p>那我們改用 IDE 自動產生 code 來看看</p>
+<div class="highlight"><pre tabindex="0" style="color:#e7e9db;background-color:#2f1e2e;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-java" data-lang="java"><span style="display:flex;"><span><span style="color:#5bc4bf">@Override</span>
+</span></span><span style="display:flex;"><span><span style="color:#815ba4">public</span> <span style="color:#fec418">boolean</span> <span style="color:#06b6ef">equals</span><span style="color:#5bc4bf">(</span>Object o<span style="color:#5bc4bf">)</span> <span style="color:#5bc4bf">{</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#815ba4">if</span> <span style="color:#5bc4bf">(</span><span style="color:#815ba4">this</span> <span style="color:#5bc4bf">==</span> o<span style="color:#5bc4bf">)</span> <span style="color:#815ba4">return</span> <span style="color:#815ba4">true</span><span style="color:#5bc4bf">;</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#815ba4">if</span> <span style="color:#5bc4bf">(!(</span>o <span style="color:#815ba4">instanceof</span> Test<span style="color:#5bc4bf">))</span> <span style="color:#815ba4">return</span> <span style="color:#815ba4">false</span><span style="color:#5bc4bf">;</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    Test test <span style="color:#5bc4bf">=</span> <span style="color:#5bc4bf">(</span>Test<span style="color:#5bc4bf">)</span> o<span style="color:#5bc4bf">;</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#815ba4">return</span> Objects<span style="color:#5bc4bf">.</span><span style="color:#06b6ef">equals</span><span style="color:#5bc4bf">(</span>aField<span style="color:#5bc4bf">,</span> test<span style="color:#5bc4bf">.</span><span style="color:#06b6ef">aField</span><span style="color:#5bc4bf">);</span>
+</span></span><span style="display:flex;"><span><span style="color:#5bc4bf">}</span>
+</span></span></code></pre></div><p>可以看出它同樣也是用 <code>==</code> 來做比較</p>
+<h2 id="結論">結論</h2>
+<p>一般來說，我們要比較兩個相同類別的不同實例是否實質上相同時，通常都不會期待比較的是兩個實例在 heap 中的位址，而是希望比較物件內容，也就是物件包含的資料是否相同，換句話說應該是要比較物件內每個屬性是否相同</p>
+<p>雖然可以使用 Lombok 或 IDE 自動產生 code 來避免物件使用 <code>Object</code> 類別預設的 <code>equals()</code> 方法去做比較，但實際上這種自動產生出來的 code 即使會把每個 field 都拿出來一一比較，但實際上還是使用 <code>==</code> 來做 field 比較</p>
+<p>所以如果 field 如果不是 primitive type 的話，就還是很容易比較的不是 field 真正的內容，而是該 field 物件的位址，而造成物件比較的結果不穩定</p>
+<p>在這種情況下，應該還是建議要自己 override <code>equals()</code> 方法的內容，去確實將每個 field 真正的內容取出來比較</p>
+<p>另外我們可以回頭看文章最開始的那段警告訊息，其中最後一段</p>
+<div class="highlight"><pre tabindex="0" style="color:#e7e9db;background-color:#2f1e2e;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-java" data-lang="java"><span style="display:flex;"><span><span style="color:#776e71">/**
+</span></span></span><span style="display:flex;"><span><span style="color:#776e71"> * @apiNote
+</span></span></span><span style="display:flex;"><span><span style="color:#776e71"> * {@code Optional} is primarily intended for use as a method return type where
+</span></span></span><span style="display:flex;"><span><span style="color:#776e71"> * there is a clear need to represent &#34;no result,&#34; and where using {@code null}
+</span></span></span><span style="display:flex;"><span><span style="color:#776e71"> * is likely to cause errors. A variable whose type is {@code Optional} should
+</span></span></span><span style="display:flex;"><span><span style="color:#776e71"> * never itself be {@code null}; it should always point to an {@code Optional}
+</span></span></span><span style="display:flex;"><span><span style="color:#776e71"> * instance.
+</span></span></span><span style="display:flex;"><span><span style="color:#776e71"> */</span>
+</span></span></code></pre></div><p>這段很清楚的指出 <code>Optional</code> 類別設計的目的主要是為了用來替代方法回傳 null 來代表「沒有結果」這個容易造成錯誤的問題</p>
+<p>但如果你說是想要用 <code>Optional</code> 當作 field 的類別來表達該 field 可能為 null 的情況怎麼辦？</p>
+<p>我的看法是，如果你不想自己小心的 override 有關物件的 <code>equals()</code> 方法的話，建議直接改用 Kotlin，Kotlin 有著原生對於表達變數是否可以為 null 的支援</p>
+<h2 id="參考">參考</h2>
+<ul>
+<li><a href="https://projectlombok.org/features/EqualsAndHashCode">Lombok <code>@EqualsAndHashCode</code></a></li>
+</ul>
+
+                    
+                    <HR width="100%" id="EOF">
+		    <p style="color:#777;">Last modified on 2022-10-01</p>
+                    
+                </div>
+            </div>
+            
+            
+            <nav class="post-pagination">
+
+                
+                <a class="newer-posts">
+			Next<br>No newer posts.
+                </a>
+                
+                
+                
+                <a class="older-posts" href="https://idontwannarock.github.io/tech_blog/2022/01/protobuf_flatbuf_java/">
+			Previous<br>ProtoBuf FlatBuf Benchmark in Java
+                </a>
+                
+            </nav>
+            <div class="post-comment-wrapper">
+                
+<div id="disqus_thread"></div>
+<script>
+    
+
+    var disqus_config = function () {
+        
+        this.page.url = 'https:\/\/idontwannarock.github.io\/tech_blog\/2022\/10\/java_optional_not_recommand_as_field\/';  
+        
+        
+        this.page.identifier = 'https:\/\/idontwannarock.github.io\/tech_blog\/2022\/10\/java_optional_not_recommand_as_field\/'; 
+    };
+    (function() {
+        var d = document, s = d.createElement('script');
+        s.src = 'https://howard-tech-blog.disqus.com/embed.js';
+        s.setAttribute('data-timestamp', +new Date());
+        (d.head || d.body).appendChild(s);
+    })();
+</script>
+<noscript> Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript" rel="nofollow"> comments powered by Disqus.  </a> </noscript>
+
+
+
+
+
+
+
+
+
+
+
+            </div>
+        </div>
+    </div>
+
+
+                    </div>
+            </div><div id="single-column-footer">
+Hugo Theme <a href="https://github.com/amazingrise/hugo-theme-diary">Diary</a> by <a href="https://amazingrise.net">Rise</a>
+<br>
+Ported from <a href="https://mak1t0.cc/" target="_blank" rel="noreferrer noopener">Makito</a>'s <a href="https://github.com/SumiMakito/hexo-theme-journal/" target="_blank" rel="noreferrer noopener">Journal.</a> <br>
+<br>
+
+&copy;
+	
+	This website by Howard Wang is licensed under a Creative Common Attribution-ShareAlike 4.0 International License.
+	
+</div>
+            </div>
+    
+    <script src="https://idontwannarock.github.io/tech_blog/js/journal.js"></script>
+    </body>
+</html>

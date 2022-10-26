@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>optional on Howard Tech Note</title>
+    <link>https://idontwannarock.github.io/tech_blog/tags/optional/</link>
+    <description>Recent content in optional on Howard Tech Note</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-us</language>
+    <copyright>This website by Howard Wang is licensed under a Creative Common Attribution-ShareAlike 4.0 International License.</copyright>
+    <lastBuildDate>Sat, 01 Oct 2022 21:44:34 +0800</lastBuildDate><atom:link href="https://idontwannarock.github.io/tech_blog/tags/optional/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Java Optional 為何不推薦做為類別屬性</title>
+      <link>https://idontwannarock.github.io/tech_blog/2022/10/java_optional_not_recommand_as_field/</link>
+      <pubDate>Sat, 01 Oct 2022 21:44:34 +0800</pubDate>
+      
+      <guid>https://idontwannarock.github.io/tech_blog/2022/10/java_optional_not_recommand_as_field/</guid>
+      <description>大家有在寫 Java 1.8+ 的時候使用新出的 Optional 類別來處理 null 的問題嗎？
+那在使用的時候有沒有碰到 IntelliJ 提示 Optional 不推薦用來當作類別的 field 的黃色警告 (warning) 呢？訊息應該大致如下
+/** * A container object which may or may not contain a non-{@code null} value. * If a value is present, {@code isPresent()} returns {@code true}. If no * value is present, the object is considered &amp;lt;i&amp;gt;empty&amp;lt;/i&amp;gt; and * {@code isPresent()} returns {@code false}. * * &amp;lt;p&amp;gt;Additional methods that depend on the presence or absence of a contained * value are provided, such as {@link #orElse(Object) orElse()} * (returns a default value if no value is present) and * {@link #ifPresent(Consumer) ifPresent()} (performs an * action if a value is present).</description>
+    </item>
+    
+  </channel>
+</rss>

@@ -6,9 +6,78 @@
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
     <copyright>This website by Howard Wang is licensed under a Creative Common Attribution-ShareAlike 4.0 International License.</copyright>
-    <lastBuildDate>Tue, 04 Jan 2022 15:36:17 +0800</lastBuildDate>
+    <lastBuildDate>Sat, 01 Oct 2022 21:44:34 +0800</lastBuildDate>
     
         <atom:link href="https://idontwannarock.github.io/tech_blog/index.xml" rel="self" type="application/rss+xml" />
+    
+    
+    
+        <item>
+        <title>2nd Practice: Retina Morning Post</title>
+        <link>https://idontwannarock.github.io/tech_blog/2017/09/retina_morning_post/</link>
+        <pubDate>Fri, 15 Sep 2017 09:44:03 +0800</pubDate>
+        
+        <guid>https://idontwannarock.github.io/tech_blog/2017/09/retina_morning_post/</guid>
+        <description>Howard Tech Note https://idontwannarock.github.io/tech_blog/2017/09/retina_morning_post/ -&lt;h1 id=&#34;第二個目標&#34;&gt;第二個目標&lt;/h1&gt;
+&lt;p&gt;練習報紙排版。&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;作品：&lt;a href=&#34;https://goo.gl/ZEByGt&#34;&gt;視網膜早報&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;參考：&lt;a href=&#34;https://www.facebook.com/EYECTVretina/&#34;&gt;視網膜 Retina&lt;/a&gt; &lt;a href=&#34;https://goo.gl/iy9tFF&#34;&gt;FB圖片&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h1 id=&#34;遇到困難&#34;&gt;遇到困難&lt;/h1&gt;
+&lt;h2 id=&#34;分散對齊&#34;&gt;分散對齊&lt;/h2&gt;
+&lt;p&gt;首先遇到的問題就是要讓文字分散對齊，原本以為用 &lt;code&gt;text-align: justify;&lt;/code&gt; 可以解決，結果才發現這只能用在超過一行的文字上哭哭。&lt;/p&gt;
+&lt;p&gt;然後查到一個 jQuery 解法如下，我大概理解原理，但細節還待研究。簡單來說就是算每個字元平均要佔該 &lt;code&gt;div&lt;/code&gt; 多少 &lt;code&gt;width&lt;/code&gt; 來作分散對齊。&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#e7e9db;background-color:#2f1e2e;-moz-tab-size:4;-o-tab-size:4;tab-size:4;&#34;&gt;&lt;code class=&#34;language-javascript&#34; data-lang=&#34;javascript&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#06b6ef&#34;&gt;$&lt;/span&gt;.&lt;span style=&#34;color:#06b6ef&#34;&gt;fn&lt;/span&gt;.&lt;span style=&#34;color:#06b6ef&#34;&gt;strech_text&lt;/span&gt; &lt;span style=&#34;color:#5bc4bf&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color:#815ba4&#34;&gt;function&lt;/span&gt;(){
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    &lt;span style=&#34;color:#815ba4&#34;&gt;var&lt;/span&gt; &lt;span style=&#34;color:#06b6ef&#34;&gt;elmt&lt;/span&gt; &lt;span style=&#34;color:#5bc4bf&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color:#06b6ef&#34;&gt;$&lt;/span&gt;(&lt;span style=&#34;color:#815ba4&#34;&gt;this&lt;/span&gt;),
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    &lt;span style=&#34;color:#06b6ef&#34;&gt;cont_width&lt;/span&gt; &lt;span style=&#34;color:#5bc4bf&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color:#06b6ef&#34;&gt;elmt&lt;/span&gt;.&lt;span style=&#34;color:#06b6ef&#34;&gt;width&lt;/span&gt;(),
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    &lt;span style=&#34;color:#06b6ef&#34;&gt;txt&lt;/span&gt; &lt;span style=&#34;color:#5bc4bf&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color:#06b6ef&#34;&gt;elmt&lt;/span&gt;.&lt;span style=&#34;color:#06b6ef&#34;&gt;html&lt;/span&gt;(),
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    &lt;span style=&#34;color:#06b6ef&#34;&gt;one_line&lt;/span&gt; &lt;span style=&#34;color:#5bc4bf&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color:#06b6ef&#34;&gt;$&lt;/span&gt;(&lt;span style=&#34;color:#48b685&#34;&gt;&amp;#39;&amp;#39;&lt;/span&gt; &lt;span style=&#34;color:#5bc4bf&#34;&gt;+&lt;/span&gt; &lt;span style=&#34;color:#06b6ef&#34;&gt;txt&lt;/span&gt; &lt;span style=&#34;color:#5bc4bf&#34;&gt;+&lt;/span&gt; &lt;span style=&#34;color:#48b685&#34;&gt;&amp;#39;&amp;#39;&lt;/span&gt;),
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    &lt;span style=&#34;color:#06b6ef&#34;&gt;nb_char&lt;/span&gt; &lt;span style=&#34;color:#5bc4bf&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color:#06b6ef&#34;&gt;elmt&lt;/span&gt;.&lt;span style=&#34;color:#06b6ef&#34;&gt;text&lt;/span&gt;().&lt;span style=&#34;color:#06b6ef&#34;&gt;length&lt;/span&gt;,
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    &lt;span style=&#34;color:#06b6ef&#34;&gt;spacing&lt;/span&gt; &lt;span style=&#34;color:#5bc4bf&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color:#06b6ef&#34;&gt;cont_width&lt;/span&gt;&lt;span style=&#34;color:#5bc4bf&#34;&gt;/&lt;/span&gt;&lt;span style=&#34;color:#06b6ef&#34;&gt;nb_char&lt;/span&gt;,
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    &lt;span style=&#34;color:#06b6ef&#34;&gt;txt_width&lt;/span&gt;;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    &lt;span style=&#34;color:#06b6ef&#34;&gt;elmt&lt;/span&gt;.&lt;span style=&#34;color:#06b6ef&#34;&gt;html&lt;/span&gt;(&lt;span style=&#34;color:#06b6ef&#34;&gt;one_line&lt;/span&gt;);
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    &lt;span style=&#34;color:#06b6ef&#34;&gt;txt_width&lt;/span&gt; &lt;span style=&#34;color:#5bc4bf&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color:#06b6ef&#34;&gt;one_line&lt;/span&gt;.&lt;span style=&#34;color:#06b6ef&#34;&gt;width&lt;/span&gt;();
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    &lt;span style=&#34;color:#815ba4&#34;&gt;if&lt;/span&gt; (&lt;span style=&#34;color:#06b6ef&#34;&gt;txt_width&lt;/span&gt; &lt;span style=&#34;color:#5bc4bf&#34;&gt;&amp;lt;&lt;/span&gt; &lt;span style=&#34;color:#06b6ef&#34;&gt;cont_width&lt;/span&gt;){
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;        &lt;span style=&#34;color:#815ba4&#34;&gt;var&lt;/span&gt; &lt;span style=&#34;color:#06b6ef&#34;&gt;char_width&lt;/span&gt; &lt;span style=&#34;color:#5bc4bf&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color:#06b6ef&#34;&gt;txt_width&lt;/span&gt;&lt;span style=&#34;color:#5bc4bf&#34;&gt;/&lt;/span&gt;&lt;span style=&#34;color:#06b6ef&#34;&gt;nb_char&lt;/span&gt;,
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;        &lt;span style=&#34;color:#06b6ef&#34;&gt;ltr_spacing&lt;/span&gt; &lt;span style=&#34;color:#5bc4bf&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color:#06b6ef&#34;&gt;spacing&lt;/span&gt; &lt;span style=&#34;color:#5bc4bf&#34;&gt;-&lt;/span&gt; &lt;span style=&#34;color:#06b6ef&#34;&gt;char_width&lt;/span&gt; &lt;span style=&#34;color:#5bc4bf&#34;&gt;+&lt;/span&gt; (&lt;span style=&#34;color:#06b6ef&#34;&gt;spacing&lt;/span&gt; &lt;span style=&#34;color:#5bc4bf&#34;&gt;-&lt;/span&gt; &lt;span style=&#34;color:#06b6ef&#34;&gt;char_width&lt;/span&gt;)&lt;span style=&#34;color:#5bc4bf&#34;&gt;/&lt;/span&gt;&lt;span style=&#34;color:#06b6ef&#34;&gt;nb_char&lt;/span&gt;;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;        &lt;span style=&#34;color:#06b6ef&#34;&gt;one_line&lt;/span&gt;.&lt;span style=&#34;color:#06b6ef&#34;&gt;css&lt;/span&gt;({&lt;span style=&#34;color:#48b685&#34;&gt;&amp;#39;letter-spacing&amp;#39;&lt;/span&gt;&lt;span style=&#34;color:#5bc4bf&#34;&gt;:&lt;/span&gt; &lt;span style=&#34;color:#06b6ef&#34;&gt;ltr_spacing&lt;/span&gt;});
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    } &lt;span style=&#34;color:#815ba4&#34;&gt;else&lt;/span&gt; {
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;        &lt;span style=&#34;color:#06b6ef&#34;&gt;one_line&lt;/span&gt;.&lt;span style=&#34;color:#06b6ef&#34;&gt;contents&lt;/span&gt;().&lt;span style=&#34;color:#06b6ef&#34;&gt;unwrap&lt;/span&gt;();
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;        &lt;span style=&#34;color:#06b6ef&#34;&gt;elmt&lt;/span&gt;.&lt;span style=&#34;color:#06b6ef&#34;&gt;addClass&lt;/span&gt;(&lt;span style=&#34;color:#48b685&#34;&gt;&amp;#39;justify&amp;#39;&lt;/span&gt;);
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    }
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;};
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#06b6ef&#34;&gt;$&lt;/span&gt;(document).&lt;span style=&#34;color:#06b6ef&#34;&gt;ready&lt;/span&gt;(&lt;span style=&#34;color:#815ba4&#34;&gt;function&lt;/span&gt; () {
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    &lt;span style=&#34;color:#06b6ef&#34;&gt;$&lt;/span&gt;(&lt;span style=&#34;color:#48b685&#34;&gt;&amp;#39;.stretch&amp;#39;&lt;/span&gt;).&lt;span style=&#34;color:#06b6ef&#34;&gt;each&lt;/span&gt;(&lt;span style=&#34;color:#815ba4&#34;&gt;function&lt;/span&gt;(){
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;        &lt;span style=&#34;color:#06b6ef&#34;&gt;$&lt;/span&gt;(&lt;span style=&#34;color:#815ba4&#34;&gt;this&lt;/span&gt;).&lt;span style=&#34;color:#06b6ef&#34;&gt;strech_text&lt;/span&gt;();
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    });
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;});
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;然後幫各 &lt;code&gt;div&lt;/code&gt; 設定 &lt;code&gt;class=&amp;quot;stretch&amp;quot;&lt;/code&gt;，並且一定要設定 &lt;code&gt;width&lt;/code&gt; 才能算。&lt;/p&gt;
+&lt;h2 id=&#34;水平向下對齊&#34;&gt;水平向下對齊&lt;/h2&gt;
+&lt;p&gt;然後碰到第二個問題是水平的欄位如何向下對齊，其實後來查了一下。這個問題好像並不應該很難，只能說我觀念不夠清晰。&lt;/p&gt;
+&lt;p&gt;總之解決的辦法是針對包住水平欄位的 &lt;code&gt;container&lt;/code&gt; 設定 &lt;code&gt;position: relative;&lt;/code&gt;，然後各欄位設定 &lt;code&gt;position: absolute;&lt;/code&gt;，再用 &lt;code&gt;top&lt;/code&gt;、&lt;code&gt;right&lt;/code&gt;、&lt;code&gt;bottom&lt;/code&gt;、&lt;code&gt;left&lt;/code&gt; 去調位置就可以了。&lt;/p&gt;
+&lt;p&gt;&lt;code&gt;position&lt;/code&gt; 的 &lt;code&gt;absolute&lt;/code&gt; 跟 &lt;code&gt;relative&lt;/code&gt; 好難懂 R 囧&amp;gt;&lt;/p&gt;
+&lt;h2 id=&#34;分隔線加粗&#34;&gt;分隔線加粗&lt;/h2&gt;
+&lt;p&gt;好，這其實不算問題，只是我忘了加粗的敘述去 google 發現了一種可以相容舊 IE 的方法，藉此作個紀錄，如下：&lt;/p&gt;
+&lt;pre tabindex=&#34;0&#34;&gt;&lt;code&gt;hr {
+    border: none;
+    height: 1px;
+    /* Set the hr color */
+    color: #333; /* old IE */
+    background-color: #333; /* Modern Browsers */
+}
+&lt;/code&gt;&lt;/pre&gt;&lt;h2 id=&#34;縱排文字&#34;&gt;縱排文字&lt;/h2&gt;
+&lt;p&gt;這本來是我認為這個 project 最難的部分，結果 google 到好幾種做法，其中一種解法我覺得超級天才！是開發商 cmonos 作的 taketori-js，還開源！&lt;/p&gt;
+&lt;p&gt;先用 CSS 的 &lt;code&gt;transform&lt;/code&gt; 把整個 &lt;code&gt;block&lt;/code&gt; 轉 +90 度，然後偵測裡面的漢字分別用 &lt;code&gt;span&lt;/code&gt; 包起來轉 -90 度，再處理斷行與標點等等。這個解法真的太強，實用！&lt;/p&gt;
+&lt;p&gt;Github 開源：&lt;a href=&#34;https://github.com/cmonos/TAKETORI-JS&#34;&gt;TAKETORI-JS&lt;/a&gt;&lt;/p&gt;
+&lt;h1 id=&#34;感想&#34;&gt;感想&lt;/h1&gt;
+&lt;p&gt;切版真的麻煩，而且我還沒做適應手機大小的版本，不過考慮到這是舊報紙版型，沒有也很正常對吧？（其實只是懶）&lt;/p&gt;
+- https://idontwannarock.github.io/tech_blog/2017/09/retina_morning_post/ - This website by Howard Wang is licensed under a Creative Common Attribution-ShareAlike 4.0 International License.</description>
+        </item>
     
     
     

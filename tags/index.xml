@@ -7,7 +7,25 @@
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
     <copyright>This website by Howard Wang is licensed under a Creative Common Attribution-ShareAlike 4.0 International License.</copyright>
-    <lastBuildDate>Tue, 04 Jan 2022 15:36:17 +0800</lastBuildDate><atom:link href="https://idontwannarock.github.io/tech_blog/tags/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Sat, 01 Oct 2022 21:44:34 +0800</lastBuildDate><atom:link href="https://idontwannarock.github.io/tech_blog/tags/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>java</title>
+      <link>https://idontwannarock.github.io/tech_blog/tags/java/</link>
+      <pubDate>Sat, 01 Oct 2022 21:44:34 +0800</pubDate>
+      
+      <guid>https://idontwannarock.github.io/tech_blog/tags/java/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>optional</title>
+      <link>https://idontwannarock.github.io/tech_blog/tags/optional/</link>
+      <pubDate>Sat, 01 Oct 2022 21:44:34 +0800</pubDate>
+      
+      <guid>https://idontwannarock.github.io/tech_blog/tags/optional/</guid>
+      <description></description>
+    </item>
+    
     <item>
       <title>flat buffers</title>
       <link>https://idontwannarock.github.io/tech_blog/tags/flat-buffers/</link>
@@ -230,15 +248,6 @@
       <pubDate>Thu, 19 Sep 2019 15:53:36 +0800</pubDate>
       
       <guid>https://idontwannarock.github.io/tech_blog/tags/api-versioning/</guid>
-      <description></description>
-    </item>
-    
-    <item>
-      <title>java</title>
-      <link>https://idontwannarock.github.io/tech_blog/tags/java/</link>
-      <pubDate>Thu, 19 Sep 2019 15:53:36 +0800</pubDate>
-      
-      <guid>https://idontwannarock.github.io/tech_blog/tags/java/</guid>
       <description></description>
     </item>
     
