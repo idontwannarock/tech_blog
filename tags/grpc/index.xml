@@ -16,9 +16,10 @@
       <guid>https://idontwannarock.github.io/tech_blog/2021/12/grpc/</guid>
       <description>在前幾篇大略了解 HTTP/2 的概念後，就可以來了解 gRPC 的運作概念了
 HTTP/2 系列:
- HTTP/2 系列 - HTTP/2 概念 HTTP/2 系列 - HTTP Server Push 技術  概念 gRPC 原本是 Google 內部的 RPC 系統，後來開源後，近年成為很熱門的 RPC 系統，採用 HTTP/2 做傳輸，ProtoBuf 作為介面描述語言 (interface description language)，提供身分驗證 (authentication)、雙向串流 (bidirectional streaming)、流量控制 (flow control)、阻塞或非阻塞綁定 (blocking or nonblocking binding)、取消 (cancellation) 及逾時 (timeouts) 等特性
- RPC Remote Procedure Call 遠端程序呼叫指服務之間互相溝通就如同呼叫本地程式一般，不須關注呼叫互動的細節。例如以前的 CORBA, Java RMI 等
- 使用 gRPC API 主要是透過 .proto 檔定義 service 結構，再透過 ProtoBuf compiler 的幫助產生各語言的 client/server 端代碼</description>
+HTTP/2 系列 - HTTP/2 概念 HTTP/2 系列 - HTTP Server Push 技術 概念 gRPC 原本是 Google 內部的 RPC 系統，後來開源後，近年成為很熱門的 RPC 系統，採用 HTTP/2 做傳輸，ProtoBuf 作為介面描述語言 (interface description language)，提供身分驗證 (authentication)、雙向串流 (bidirectional streaming)、流量控制 (flow control)、阻塞或非阻塞綁定 (blocking or nonblocking binding)、取消 (cancellation) 及逾時 (timeouts) 等特性
+RPC Remote Procedure Call 遠端程序呼叫指服務之間互相溝通就如同呼叫本地程式一般，不須關注呼叫互動的細節。例如以前的 CORBA, Java RMI 等
+使用 gRPC API 主要是透過 .proto 檔定義 service 結構，再透過 ProtoBuf compiler 的幫助產生各語言的 client/server 端代碼
+client 端會有一個本地物件 stub 實作 service 中相同的方法，讓 client 端可以直接呼叫該本地物件的方法，gRPC 會處理發出 request 以及從 server 端的 ProtoBuf response server 端會真正實作 service 中宣告的方法，並運行 gRPC server 來處理 client 端的呼叫，gRPC infra 會將 request 解碼，執行 service 方法，再將 service response 編碼 Image from gRPC Official Documentation</description>
     </item>
     
   </channel>

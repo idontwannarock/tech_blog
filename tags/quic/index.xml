@@ -16,9 +16,10 @@
       <guid>https://idontwannarock.github.io/tech_blog/2021/12/http2/</guid>
       <description>從 2015 年 RFC 7540 正式發表後，至今 HTTP/2 已經被絕大多數主流瀏覽器所支援，並且是正當紅的 gRPC 的基礎，在研究 gPRC 之前，先來釐清一下 HTTP/2 的概念
 這篇是 HTTP/2 系列文章的第一篇:
- HTTP/2 系列 - HTTP/2 概念 HTTP/2 系列 - HTTP Server Push 技術  不過，我其實只想研究我想研究的部分，所以不見得會把 HTTP/2 所有相關的內容都研究一遍
+HTTP/2 系列 - HTTP/2 概念 HTTP/2 系列 - HTTP Server Push 技術 不過，我其實只想研究我想研究的部分，所以不見得會把 HTTP/2 所有相關的內容都研究一遍
 從遠古 HTTP/1.0 開始 HTTP 是定義在 OSI 模型第七層 Application Layer 網路協議，HTTP/1.0 採取先進先出 (first-in first-out, FIFO) 策略，每次請求/回應都是有序的，必須等到請求收到對應回應後，才能進行下一次請求
-HTTP 在 Transport Layer 採用 TCP 連線來通訊，而 TCP 要在 client/server 之間建立連線，是靠著三向交握 (three-way handshake) 來完成；而傳輸完成要斷線時則要做四次握手 (four-way handshake)。如果還有 TLS，那握手的來回通訊次數 (round-trip time, RTT) 就更多次了</description>
+HTTP 在 Transport Layer 採用 TCP 連線來通訊，而 TCP 要在 client/server 之間建立連線，是靠著三向交握 (three-way handshake) 來完成；而傳輸完成要斷線時則要做四次握手 (four-way handshake)。如果還有 TLS，那握手的來回通訊次數 (round-trip time, RTT) 就更多次了
+而在最初的 HTTP/1.0 的年代，硬體普遍效能都不高，為了提高系統的效率，所以 HTTP/1.</description>
     </item>
     
   </channel>

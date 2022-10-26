@@ -16,12 +16,12 @@
       <guid>https://idontwannarock.github.io/tech_blog/2019/05/github_flow_intro/</guid>
       <description>Understanding the GitHub flow
 GitHub flow 只有一條原則：
- 在 master 的任何 commit 永遠都是可以被部署的
- 所以所有要做開發的 branch 都直接從 master 分支出去，不論是 feature 或 fix
+在 master 的任何 commit 永遠都是可以被部署的
+所以所有要做開發的 branch 都直接從 master 分支出去，不論是 feature 或 fix
 開發的每個 commit 都要寫清楚 message，註明該 commit 做的變動以及理由等等
 當開發到一定階段後，就可以對 master 開 Pull Request, PR，這在 GitHub flow 很重要
 如果是用 Fork &amp;amp; Pull 模式，PR 就是用來通知專案維護者關於你希望他們考慮的變更；如果是用 Shared Repository 模式，則 PR 就像是用來開一個討論空間，在 merge 到 master 之前來做 code review 或針對特定變更的討論
- Fork &amp;amp; Pull 模式就是需要先 fork 後再 pull 到本機做開發，完成並 push 後，開 PR 要求合併到主專案
+Fork &amp;amp; Pull 模式就是需要先 fork 後再 pull 到本機做開發，完成並 push 後，開 PR 要求合併到主專案
 Shared Repository 模式則是直接可以對主專案開 branch 做開發</description>
     </item>
     

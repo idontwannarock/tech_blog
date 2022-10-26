@@ -25,7 +25,7 @@ String str = &amp;#34;\t&amp;#34;; str.replaceAll(&amp;#34;\\s+&amp;#34;, &amp;#
 .equals(&amp;quot;&amp;quot;) 這個功能是用字串的比對功能，比對是否為空字串，結果應該會跟前兩個方法相同。
 != null 前面幾個方法都有一個共同的問題：萬一字串為 null，全都來不及檢查就會跳 NullPointerException。
 所以必須要用這個方式檢查是否為 Null，再檢查是否為空字串，也就是要寫成類似下面這樣：
-String string; if (string != null &amp;amp;&amp;amp; string.isEmpty()) {  // things to do when string is neither null nor blank; } &amp;quot;&amp;quot;.</description>
+String string; if (string != null &amp;amp;&amp;amp; string.isEmpty()) { // things to do when string is neither null nor blank; } &amp;quot;&amp;quot;.</description>
     </item>
     
   </channel>
