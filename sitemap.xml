@@ -3,13 +3,40 @@
   xmlns:xhtml="http://www.w3.org/1999/xhtml">
   <url>
     <loc>https://idontwannarock.github.io/tech_blog/categories/</loc>
-    <lastmod>2022-10-01T21:44:34+08:00</lastmod>
-  </url><url>
-    <loc>https://idontwannarock.github.io/tech_blog/categories/concept/</loc>
-    <lastmod>2022-10-01T21:44:34+08:00</lastmod>
+    <lastmod>2022-11-01T15:28:32+08:00</lastmod>
   </url><url>
     <loc>https://idontwannarock.github.io/tech_blog/</loc>
-    <lastmod>2022-10-01T21:44:34+08:00</lastmod>
+    <lastmod>2022-11-01T15:28:32+08:00</lastmod>
+  </url><url>
+    <loc>https://idontwannarock.github.io/tech_blog/categories/implementation/</loc>
+    <lastmod>2022-11-01T15:28:32+08:00</lastmod>
+  </url><url>
+    <loc>https://idontwannarock.github.io/tech_blog/tags/owasp/</loc>
+    <lastmod>2022-11-01T15:28:32+08:00</lastmod>
+  </url><url>
+    <loc>https://idontwannarock.github.io/tech_blog/posts/</loc>
+    <lastmod>2022-11-01T15:28:32+08:00</lastmod>
+  </url><url>
+    <loc>https://idontwannarock.github.io/tech_blog/2022/11/xss_prevention_spring_boot/</loc>
+    <lastmod>2022-11-01T15:28:32+08:00</lastmod>
+  </url><url>
+    <loc>https://idontwannarock.github.io/tech_blog/tags/spring-boot/</loc>
+    <lastmod>2022-11-01T15:28:32+08:00</lastmod>
+  </url><url>
+    <loc>https://idontwannarock.github.io/tech_blog/tags/spring-security/</loc>
+    <lastmod>2022-11-01T15:28:32+08:00</lastmod>
+  </url><url>
+    <loc>https://idontwannarock.github.io/tech_blog/tags/</loc>
+    <lastmod>2022-11-01T15:28:32+08:00</lastmod>
+  </url><url>
+    <loc>https://idontwannarock.github.io/tech_blog/tags/xss/</loc>
+    <lastmod>2022-11-01T15:28:32+08:00</lastmod>
+  </url><url>
+    <loc>https://idontwannarock.github.io/tech_blog/categories/concept/</loc>
+    <lastmod>2022-11-01T14:00:26+08:00</lastmod>
+  </url><url>
+    <loc>https://idontwannarock.github.io/tech_blog/2022/11/xss_prevention_intro/</loc>
+    <lastmod>2022-11-01T14:00:26+08:00</lastmod>
   </url><url>
     <loc>https://idontwannarock.github.io/tech_blog/tags/java/</loc>
     <lastmod>2022-10-01T21:44:34+08:00</lastmod>
@@ -20,19 +47,10 @@
     <loc>https://idontwannarock.github.io/tech_blog/tags/optional/</loc>
     <lastmod>2022-10-01T21:44:34+08:00</lastmod>
   </url><url>
-    <loc>https://idontwannarock.github.io/tech_blog/posts/</loc>
-    <lastmod>2022-10-01T21:44:34+08:00</lastmod>
-  </url><url>
-    <loc>https://idontwannarock.github.io/tech_blog/tags/</loc>
-    <lastmod>2022-10-01T21:44:34+08:00</lastmod>
-  </url><url>
     <loc>https://idontwannarock.github.io/tech_blog/tags/flat-buffers/</loc>
     <lastmod>2022-01-04T15:36:17+08:00</lastmod>
   </url><url>
     <loc>https://idontwannarock.github.io/tech_blog/tags/flatbuf/</loc>
-    <lastmod>2022-01-04T15:36:17+08:00</lastmod>
-  </url><url>
-    <loc>https://idontwannarock.github.io/tech_blog/categories/implementation/</loc>
     <lastmod>2022-01-04T15:36:17+08:00</lastmod>
   </url><url>
     <loc>https://idontwannarock.github.io/tech_blog/tags/protobuf/</loc>
@@ -129,12 +147,6 @@
     <lastmod>2019-09-19T15:53:36+08:00</lastmod>
   </url><url>
     <loc>https://idontwannarock.github.io/tech_blog/2019/09/spring_api_version_with_swagger_security/</loc>
-    <lastmod>2019-09-19T15:53:36+08:00</lastmod>
-  </url><url>
-    <loc>https://idontwannarock.github.io/tech_blog/tags/spring-boot/</loc>
-    <lastmod>2019-09-19T15:53:36+08:00</lastmod>
-  </url><url>
-    <loc>https://idontwannarock.github.io/tech_blog/tags/spring-security/</loc>
     <lastmod>2019-09-19T15:53:36+08:00</lastmod>
   </url><url>
     <loc>https://idontwannarock.github.io/tech_blog/tags/swagger/</loc>

@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>xss on Howard Tech Note</title>
+    <link>https://idontwannarock.github.io/tech_blog/tags/xss/</link>
+    <description>Recent content in xss on Howard Tech Note</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-us</language>
+    <copyright>This website by Howard Wang is licensed under a Creative Common Attribution-ShareAlike 4.0 International License.</copyright>
+    <lastBuildDate>Tue, 01 Nov 2022 15:28:32 +0800</lastBuildDate><atom:link href="https://idontwannarock.github.io/tech_blog/tags/xss/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Spring Boot 後端實作 XSS 防範</title>
+      <link>https://idontwannarock.github.io/tech_blog/2022/11/xss_prevention_spring_boot/</link>
+      <pubDate>Tue, 01 Nov 2022 15:28:32 +0800</pubDate>
+      
+      <guid>https://idontwannarock.github.io/tech_blog/2022/11/xss_prevention_spring_boot/</guid>
+      <description>XSS 系列：
+XSS 防範簡介 Spring Boot 後端實作 XSS 防範 身為一個 Java 後端工程師，今天要來討論如何在 Spring Boot 的後端專案進行 general 的 XSS 防範。
+請還是注意，general 的手段並不能很良好的防範 XSS 攻擊，而只是提供一個基本程度的防範。
+CSP Header 如果專案有整合 Spring Security，Spring Security 原生就已經預設在 response header 中加入 X-XSS-Protection: 1; mode=block，但因為 CSP 需要自行設定資源允許的來源，所以 Spring Security 並沒有預設，需要在 SecurityFilterChain 當中設定，舉例如下：
+@Bean SecurityFilterChain filterChain(HttpSecurity httpSecurity) throws Exception { httpSecurity.headers().contentSecurityPolicy(&amp;#34;script-src &amp;#39;self&amp;#39;&amp;#34;); ... } 如此就會在 response header 中加入 Content-Security-Policy: script-src &#39;self&#39;。
+Output Encoding 再來，後端也可以對接收到或回傳的資料做 escape，例如採取將內容都做 escape，將符號都轉換成 HTML Entities 的方式。
+首先可以加入 Apache Commons Text dependency，有現成的方法可以處理文字中符號轉換的部分：</description>
+    </item>
+    
+    <item>
+      <title>XSS 防範簡介</title>
+      <link>https://idontwannarock.github.io/tech_blog/2022/11/xss_prevention_intro/</link>
+      <pubDate>Tue, 01 Nov 2022 14:00:26 +0800</pubDate>
+      
+      <guid>https://idontwannarock.github.io/tech_blog/2022/11/xss_prevention_intro/</guid>
+      <description>XSS 系列：
+XSS 防範簡介 Spring Boot 後端實作 XSS 防範 跨網站指令碼 Cross-site Scripting, XSS，是一種代碼注入的攻擊，讓攻擊者在網頁上注入代碼，而其他使用者在觀看網頁的時候就會受到影響。
+攻擊模式 以電商系統舉例，例如管理後台網頁表單的商品描述輸入欄位 Input 在沒有進行相對應防範的前提下，攻擊者可以藉由輸入 &amp;lt;script&amp;gt;alert(document.cookie)&amp;lt;/script&amp;gt; 這段內容，並透過 API 保存到資料庫，如此一來下次其他使用者在瀏覽該商品的時候，也同樣從後端取得資料庫中的這段描述內容，並且顯示在網頁上，則使用者在載入網頁的時候，瀏覽器就可能會跳出彈窗並把使用者當下的 cookie 直接顯示出來。
+當然實際的攻擊不會只有跳出彈窗並印出資料這麼簡單，可能是竊取 cookie 或任何 JavaScript 可以存取的敏感資料、側錄使用者行為，或跳轉惡意網址等等行為。
+當然注入的代碼也不僅限於 JavaScript，也可以是 Java、VBScript 等，甚至是普通的 HTML。
+跟 CSRF 的區別 另一種常搞混的攻擊是跨站請求偽造 Cross-site Request Forgery, CSRF，是一種挾制使用者在當前已登入的 Web 應用程式上執行非本意的操作的攻擊方法。
+例如使用者可能使用某網路銀行做轉帳，當使用者不小心存取到惡意的網址，就可能因為瀏覽器中之前登錄該網路銀行的登錄資訊尚未過期，所以被存取的網路銀行因為信任瀏覽器保存的登錄資訊，而認為是真正的使用者在進行操作而去執行某些動作。
+跟 XSS 相比，XSS 利用的是「使用者對指定網站的信任」，CSRF 利用的則是「網站對使用者網頁瀏覽器的信任」。
+防範措施 OWASP 網站 有提出一些基本的防範措施，但要能真正達到成效，是需要多種手段結合、前後端合作才能達到。並且攻擊手段常常是並用，所以採取防範措施的時候，也要考慮並防範其他種攻擊手段。
+Output Encoding 這部分首先會需要了解使用的 Web Framework 的安全措施跟限制在哪。
+例如 React 預設會對 render 內容進行跳脫處理 (escape)，將所有的資料都視為文字字串，等同使用原生的 textContent；但有些時候我們就是需要 React 將內容也 render 成 HTML，因此需要使用 dangerouslySetInnerHTML 來做 render，那可能就沒辦法依靠框架預設的方式去阻止 XSS，而是要使用其他手段來做處理。</description>
+    </item>
+    
+  </channel>
+</rss>

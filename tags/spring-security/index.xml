@@ -7,7 +7,22 @@
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
     <copyright>This website by Howard Wang is licensed under a Creative Common Attribution-ShareAlike 4.0 International License.</copyright>
-    <lastBuildDate>Thu, 19 Sep 2019 15:53:36 +0800</lastBuildDate><atom:link href="https://idontwannarock.github.io/tech_blog/tags/spring-security/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Tue, 01 Nov 2022 15:28:32 +0800</lastBuildDate><atom:link href="https://idontwannarock.github.io/tech_blog/tags/spring-security/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Spring Boot 後端實作 XSS 防範</title>
+      <link>https://idontwannarock.github.io/tech_blog/2022/11/xss_prevention_spring_boot/</link>
+      <pubDate>Tue, 01 Nov 2022 15:28:32 +0800</pubDate>
+      
+      <guid>https://idontwannarock.github.io/tech_blog/2022/11/xss_prevention_spring_boot/</guid>
+      <description>XSS 系列：
+XSS 防範簡介 Spring Boot 後端實作 XSS 防範 身為一個 Java 後端工程師，今天要來討論如何在 Spring Boot 的後端專案進行 general 的 XSS 防範。
+請還是注意，general 的手段並不能很良好的防範 XSS 攻擊，而只是提供一個基本程度的防範。
+CSP Header 如果專案有整合 Spring Security，Spring Security 原生就已經預設在 response header 中加入 X-XSS-Protection: 1; mode=block，但因為 CSP 需要自行設定資源允許的來源，所以 Spring Security 並沒有預設，需要在 SecurityFilterChain 當中設定，舉例如下：
+@Bean SecurityFilterChain filterChain(HttpSecurity httpSecurity) throws Exception { httpSecurity.headers().contentSecurityPolicy(&amp;#34;script-src &amp;#39;self&amp;#39;&amp;#34;); ... } 如此就會在 response header 中加入 Content-Security-Policy: script-src &#39;self&#39;。
+Output Encoding 再來，後端也可以對接收到或回傳的資料做 escape，例如採取將內容都做 escape，將符號都轉換成 HTML Entities 的方式。
+首先可以加入 Apache Commons Text dependency，有現成的方法可以處理文字中符號轉換的部分：</description>
+    </item>
+    
     <item>
       <title>Spring Boot 實作 API 版本控制</title>
       <link>https://idontwannarock.github.io/tech_blog/2019/09/spring_api_version_with_swagger_security/</link>

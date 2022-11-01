@@ -1,0 +1,987 @@
+<!DOCTYPE html>
+<html><head>
+<title>Spring Boot 後端實作 XSS 防範</title>
+
+
+
+
+<meta charset="utf-8">
+<meta name="X-UA-Compatible" content="IE=edge">
+<meta name="google-site-verification" content="">
+<meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" name="viewport">
+<meta content="telephone=no" name="format-detection">
+<meta name="description" content="介紹 Spring Boot 整合 Spring Security 後端專案如何提供 XSS 基本防範">
+<meta name="renderer" content="webkit">
+<meta name="theme-color" content="#ffffff">
+
+
+
+
+
+
+
+
+
+
+
+<script type="application/javascript">
+var doNotTrack = false;
+if (!doNotTrack) {
+	(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+	(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+	m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+	})(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+	ga('create', 'UA-106499565-1', 'auto');
+	
+	ga('send', 'pageview');
+}
+</script>
+
+
+
+
+
+  
+
+
+
+
+
+
+<link rel="stylesheet" href="https://idontwannarock.github.io/tech_blog/scss/journal.min.c5d92f380bf10f6849c7ac487c7df2b22c081e0851e5339224f1ae29210b20d2.css" integrity="sha256-xdkvOAvxD2hJx6xIfH3ysiwIHghR5TOSJPGuKSELINI=" media="screen">
+
+
+
+<link rel="stylesheet" href="https://idontwannarock.github.io/tech_blog/scss/dark-mode.min.9f8d8c2df9285089d141edd4a50cb7506c7948e6ab79a29968dced1bd0ab7d22.css" integrity="sha256-n42MLfkoUInRQe3UpQy3UGx5SOareaKZaNztG9CrfSI=" media="screen">
+
+
+
+
+      <script src="https://idontwannarock.github.io/tech_blog/js/toc.js"></script>
+    
+    <link type="text/css" rel="stylesheet" href="https://idontwannarock.github.io/tech_blog/vendor/css/bootstrap.min.css"><link rel="stylesheet"
+          href="https://fonts.googleapis.com/css?family=Material+Icons">
+
+
+
+
+
+
+
+
+
+
+
+
+<script src="https://cdn.jsdelivr.net/npm/vue-disqus@3/dist/vue-disqus.js"></script>
+
+
+
+
+
+
+
+
+</head>
+<body>
+    	<div id="app"><div id="sideContainer" class="side-container">
+    
+    <a class="a-block nav-head false" href="https://idontwannarock.github.io/tech_blog/">
+    
+        <div class="nav-title">
+            Howard Tech Note
+        </div>
+        
+        <div class="nav-subtitle">
+            Share * Record * Program
+        </div>
+        
+    </a>
+
+    <div class="nav-link-list">
+        
+        
+            
+            
+            
+            
+            
+            <a class="a-block nav-link-item false" href="https://idontwannarock.github.io/tech_blog/posts">
+                Archive
+            </a>
+            
+        
+            
+            
+            
+            
+            
+            <a class="a-block nav-link-item false" href="https://idontwannarock.github.io/tech_blog/categories">
+                Categories
+            </a>
+            
+        
+            
+            
+            
+            
+            
+            <a class="a-block nav-link-item false" href="https://idontwannarock.github.io/tech_blog/tags">
+                Tags
+            </a>
+            
+        
+            
+            
+            
+            
+            
+            <a class="a-block nav-link-item false" href="https://idontwannarock.github.io/tech_blog/about">
+                About
+            </a>
+            
+        
+            
+            
+            
+            
+            
+            <a class="a-block nav-link-item false" href="https://idontwannarock.github.io/tech_blog/index.xml">
+                RSS Feed
+            </a>
+            
+        
+    </div>
+
+    
+
+    <div class="nav-footer">
+        
+Hugo Theme <a href="https://github.com/amazingrise/hugo-theme-diary">Diary</a> by <a href="https://risehere.net/">Rise</a>
+<br>
+Ported from <a href="https://mak1t0.cc/" target="_blank" rel="noreferrer noopener">Makito</a>'s <a href="https://github.com/SumiMakito/hexo-theme-journal/" target="_blank" rel="noreferrer noopener">Journal.</a> <br>
+<br>
+
+&copy;
+	
+	This website by Howard Wang is licensed under a Creative Common Attribution-ShareAlike 4.0 International License.
+	
+
+    </div>
+    
+</div><div id="extraContainer" class="extra-container">
+    
+    
+    <div class="toc animated-visibility" :class="{ invisible: scrollY <= 140 }">
+
+
+	<div class="toc-content">
+	
+		
+		
+		
+		<center>- CATALOG -</center>
+		
+		
+		<ul>
+			
+				
+				
+					
+						
+						
+						
+						
+							
+								
+									<ul>
+								
+							
+						
+						
+							<li>
+								<a href="#csp-header" onclick="onNavClick(`#csp-header-nav`)" id="csp-header-nav">
+									CSP Header
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+						
+							<li>
+								<a href="#output-encoding" onclick="onNavClick(`#output-encoding-nav`)" id="output-encoding-nav">
+									Output Encoding
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+							
+								
+									<ul>
+								
+							
+						
+						
+							<li>
+								<a href="#query-string-posted-form-data-and-header" onclick="onNavClick(`#query-string-posted-form-data-and-header-nav`)" id="query-string-posted-form-data-and-header-nav">
+									Query String, Posted Form Data, and Header
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+						
+							<li>
+								<a href="#requestresponse-body---json" onclick="onNavClick(`#requestresponse-body---json-nav`)" id="requestresponse-body---json-nav">
+									Request/Response Body - JSON
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+						
+							<li>
+								<a href="#requestresponse-body---string" onclick="onNavClick(`#requestresponse-body---string-nav`)" id="requestresponse-body---string-nav">
+									Request/Response Body - String
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+							
+								</ul>
+							
+						
+						
+						
+							<li>
+								<a href="#%e7%b5%90%e8%ab%96" onclick="onNavClick(`#結論-nav`)" id="結論-nav">
+									結論
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+						
+							<li>
+								<a href="#%e5%8f%83%e8%80%83" onclick="onNavClick(`#參考-nav`)" id="參考-nav">
+									參考
+								</a>
+							</li>
+						
+						
+					
+				
+			
+		</ul>
+	</div>
+
+</div>
+    
+    <div class="pagination">
+        <a id="globalBackToTop" class="pagination-action animated-visibility" href="#top" :class="{ invisible: scrollY == 0 }">
+            <i class="material-icons pagination-action-icon">
+                keyboard_arrow_up
+            </i>
+        </a>
+        
+        <a type="button" class="pagination-action" id="darkModeToggleButton">
+            <span class="material-icons pagination-action-icon" id="darkModeToggleIcon">
+                dark_mode
+            </span>
+        </a>
+        
+        
+    </div>
+</div>
+<div class="single-column-drawer-container" id="drawer"
+     v-bind:class="{ 'single-column-drawer-container-active': isDrawerOpen }">
+    <div class="drawer-content">
+        <div class="drawer-menu">
+            
+            
+            
+                
+                
+                
+                
+                
+                <a class="a-block drawer-menu-item false" href="https://idontwannarock.github.io/tech_blog/posts">
+                    Archive
+                </a>
+                
+            
+                
+                
+                
+                
+                
+                <a class="a-block drawer-menu-item false" href="https://idontwannarock.github.io/tech_blog/categories">
+                    Categories
+                </a>
+                
+            
+                
+                
+                
+                
+                
+                <a class="a-block drawer-menu-item false" href="https://idontwannarock.github.io/tech_blog/tags">
+                    Tags
+                </a>
+                
+            
+                
+                
+                
+                
+                
+                <a class="a-block drawer-menu-item false" href="https://idontwannarock.github.io/tech_blog/about">
+                    About
+                </a>
+                
+            
+                
+                
+                
+                
+                
+                <a class="a-block drawer-menu-item false" href="https://idontwannarock.github.io/tech_blog/index.xml">
+                    RSS Feed
+                </a>
+                
+            
+            
+            <div class="toc">
+
+
+	<div class="toc-content">
+	
+		
+		
+		
+		<center>- CATALOG -</center>
+		
+		
+		<ul>
+			
+				
+				
+					
+						
+						
+						
+						
+							
+								
+									<ul>
+								
+							
+						
+						
+							<li>
+								<a href="#csp-header" onclick="onNavClick(`#csp-header-nav`)" id="csp-header-nav">
+									CSP Header
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+						
+							<li>
+								<a href="#output-encoding" onclick="onNavClick(`#output-encoding-nav`)" id="output-encoding-nav">
+									Output Encoding
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+							
+								
+									<ul>
+								
+							
+						
+						
+							<li>
+								<a href="#query-string-posted-form-data-and-header" onclick="onNavClick(`#query-string-posted-form-data-and-header-nav`)" id="query-string-posted-form-data-and-header-nav">
+									Query String, Posted Form Data, and Header
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+						
+							<li>
+								<a href="#requestresponse-body---json" onclick="onNavClick(`#requestresponse-body---json-nav`)" id="requestresponse-body---json-nav">
+									Request/Response Body - JSON
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+						
+							<li>
+								<a href="#requestresponse-body---string" onclick="onNavClick(`#requestresponse-body---string-nav`)" id="requestresponse-body---string-nav">
+									Request/Response Body - String
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+							
+								</ul>
+							
+						
+						
+						
+							<li>
+								<a href="#%e7%b5%90%e8%ab%96" onclick="onNavClick(`#結論-nav`)" id="結論-nav">
+									結論
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+						
+							<li>
+								<a href="#%e5%8f%83%e8%80%83" onclick="onNavClick(`#參考-nav`)" id="參考-nav">
+									參考
+								</a>
+							</li>
+						
+						
+					
+				
+			
+		</ul>
+	</div>
+
+</div>
+            
+        </div>
+    </div>
+</div>
+<transition name="fade">
+    <div id="drawer-mask" v-bind:class="{ 'single-column-drawer-mask': mounted }" v-if="isDrawerOpen" v-on:click="toggleDrawer"></div>
+</transition>
+<nav id="navBar" class="navbar sticky-top navbar-light single-column-nav-container">
+    <div id="navBackground" class="nav-background"></div>
+    <div class="container container-narrow nav-content">
+        <button id="nav_dropdown_btn" class="nav-dropdown-toggle" type="button" v-on:click="toggleDrawer">
+            <i class="material-icons">
+                menu
+            </i>
+        </button>
+        <a id="navTitle" class="navbar-brand" href="https://idontwannarock.github.io/tech_blog/">
+            Howard Tech Note
+        </a>
+        
+        <button type="button" class="nav-darkmode-toggle" id="darkModeToggleButton2">
+            <i class="material-icons" id="darkModeToggleIcon2">
+                dark_mode
+            </i>
+        </button>
+        
+    </div>
+</nav>
+<div class="single-column-header-container" id="pageHead"
+     v-bind:style="{ transform: 'translateZ(0px) translateY('+.3*scrollY+'px)', opacity: 1-navOpacity }">
+    <a href="https://idontwannarock.github.io/tech_blog/">
+        <div class="single-column-header-title">Howard Tech Note</div>
+        
+        <div class="single-column-header-subtitle">Share * Record * Program</div>
+        
+
+    </a>
+</div>
+
+            <div id="content">
+                <div id="streamContainer" class="stream-container">
+
+    <div class="post-list-container post-list-container-shadow">
+        <div class="post">
+            
+            
+            
+
+            <div class="post-head-wrapper-text-only"
+                
+            >
+                <div class="post-title">
+                    Spring Boot 後端實作 XSS 防範
+                    
+                    <div class="post-subtitle">
+                        介紹 Spring Boot 整合 Spring Security 後端專案如何提供 XSS 基本防範
+                    </div>
+                    
+                    <div class="post-meta">
+                        
+                        <time itemprop="datePublished">
+                            2022-11-01 15:28
+                        </time>
+                        
+
+                        
+                            <i class="material-icons" style="">folder</i>
+                                <a href="https://idontwannarock.github.io/tech_blog/categories/implementation">implementation</a>
+                                &nbsp;
+                        
+
+                        
+                            <i class="material-icons" style="">label</i>
+                            
+                                <a href="https://idontwannarock.github.io/tech_blog/tags/xss">xss</a>
+                                &nbsp;
+                            
+                                <a href="https://idontwannarock.github.io/tech_blog/tags/owasp">owasp</a>
+                                &nbsp;
+                            
+                                <a href="https://idontwannarock.github.io/tech_blog/tags/spring-boot">spring-boot</a>
+                                &nbsp;
+                            
+                                <a href="https://idontwannarock.github.io/tech_blog/tags/spring-security">spring-security</a>
+                                &nbsp;
+                            
+                        
+                        
+                    </div>
+                </div>
+            </div>
+            
+            <div class="post-body-wrapper">
+                
+                <div class="post-body" v-pre>
+                
+                    <p>XSS 系列：</p>
+<ol>
+<li>XSS 防範簡介</li>
+<li>Spring Boot 後端實作 XSS 防範</li>
+</ol>
+<p>身為一個 Java 後端工程師，今天要來討論如何在 Spring Boot 的後端專案進行 general 的 XSS 防範。</p>
+<blockquote>
+<p>請還是注意，general 的手段並不能很良好的防範 XSS 攻擊，而只是提供一個基本程度的防範。</p>
+</blockquote>
+<h2 id="csp-header">CSP Header</h2>
+<p>如果專案有整合 Spring Security，Spring Security 原生就已經預設在 response header 中加入 <code>X-XSS-Protection: 1; mode=block</code>，但因為 CSP 需要自行設定資源允許的來源，所以 Spring Security 並沒有預設，需要在 <code>SecurityFilterChain</code> 當中設定，舉例如下：</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-java" data-lang="java"><span style="display:flex;"><span>@Bean
+</span></span><span style="display:flex;"><span>SecurityFilterChain <span style="color:#50fa7b">filterChain</span><span style="color:#ff79c6">(</span>HttpSecurity httpSecurity<span style="color:#ff79c6">)</span> <span style="color:#8be9fd;font-style:italic">throws</span> Exception <span style="color:#ff79c6">{</span>
+</span></span><span style="display:flex;"><span>  httpSecurity<span style="color:#ff79c6">.</span><span style="color:#50fa7b">headers</span><span style="color:#ff79c6">().</span><span style="color:#50fa7b">contentSecurityPolicy</span><span style="color:#ff79c6">(</span><span style="color:#f1fa8c">&#34;script-src &#39;self&#39;&#34;</span><span style="color:#ff79c6">);</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#ff79c6">...</span>
+</span></span><span style="display:flex;"><span><span style="color:#ff79c6">}</span>
+</span></span></code></pre></div><p>如此就會在 response header 中加入 <code>Content-Security-Policy: script-src 'self'</code>。</p>
+<h2 id="output-encoding">Output Encoding</h2>
+<p>再來，後端也可以對接收到或回傳的資料做 escape，例如採取將內容都做 escape，將符號都轉換成 HTML Entities 的方式。</p>
+<p>首先可以加入 Apache Commons Text dependency，有現成的方法可以處理文字中符號轉換的部分：</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-xml" data-lang="xml"><span style="display:flex;"><span><span style="color:#ff79c6">&lt;dependency&gt;</span>
+</span></span><span style="display:flex;"><span>	<span style="color:#ff79c6">&lt;groupId&gt;</span>org.apache.commons<span style="color:#ff79c6">&lt;/groupId&gt;</span>
+</span></span><span style="display:flex;"><span>	<span style="color:#ff79c6">&lt;artifactId&gt;</span>commons-text<span style="color:#ff79c6">&lt;/artifactId&gt;</span>
+</span></span><span style="display:flex;"><span>	<span style="color:#ff79c6">&lt;version&gt;</span>1.10.0<span style="color:#ff79c6">&lt;/version&gt;</span>
+</span></span><span style="display:flex;"><span><span style="color:#ff79c6">&lt;/dependency&gt;</span>
+</span></span></code></pre></div><p>如此就可以在需要的時候直接使用 <code>StringEscapeUtils.escapeHtml4(input)</code> 即可。</p>
+<p>接著有幾處地方要處理，首先針對 request 的部分。</p>
+<h3 id="query-string-posted-form-data-and-header">Query String, Posted Form Data, and Header</h3>
+<p>先對 query string、posted form data 及 header 的部分作處理，首先我們建立一個 <code>HttpSevletRequestWrapper</code> 來加上從 request 取得 query string、posted form data 以及 header 時要做的處理：</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-java" data-lang="java"><span style="display:flex;"><span><span style="color:#ff79c6">import</span> org.apache.commons.text.StringEscapeUtils<span style="color:#ff79c6">;</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#ff79c6">import</span> javax.servlet.http.HttpServletRequest<span style="color:#ff79c6">;</span>
+</span></span><span style="display:flex;"><span><span style="color:#ff79c6">import</span> javax.servlet.http.HttpServletRequestWrapper<span style="color:#ff79c6">;</span>
+</span></span><span style="display:flex;"><span><span style="color:#ff79c6">import</span> java.util.ArrayList<span style="color:#ff79c6">;</span>
+</span></span><span style="display:flex;"><span><span style="color:#ff79c6">import</span> java.util.Collections<span style="color:#ff79c6">;</span>
+</span></span><span style="display:flex;"><span><span style="color:#ff79c6">import</span> java.util.Enumeration<span style="color:#ff79c6">;</span>
+</span></span><span style="display:flex;"><span><span style="color:#ff79c6">import</span> java.util.List<span style="color:#ff79c6">;</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#8be9fd;font-style:italic">public</span> <span style="color:#8be9fd;font-style:italic">class</span> <span style="color:#50fa7b">XssRequestWrapper</span> <span style="color:#8be9fd;font-style:italic">extends</span> HttpServletRequestWrapper <span style="color:#ff79c6">{</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#6272a4">/**
+</span></span></span><span style="display:flex;"><span><span style="color:#6272a4">     * Constructs a request object wrapping the given request.
+</span></span></span><span style="display:flex;"><span><span style="color:#6272a4">     *
+</span></span></span><span style="display:flex;"><span><span style="color:#6272a4">     * @param request The request to wrap
+</span></span></span><span style="display:flex;"><span><span style="color:#6272a4">     * @throws IllegalArgumentException if the request is null
+</span></span></span><span style="display:flex;"><span><span style="color:#6272a4">     */</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#8be9fd;font-style:italic">public</span> <span style="color:#50fa7b">XssRequestWrapper</span><span style="color:#ff79c6">(</span>HttpServletRequest request<span style="color:#ff79c6">)</span> <span style="color:#ff79c6">{</span>
+</span></span><span style="display:flex;"><span>        <span style="color:#8be9fd;font-style:italic">super</span><span style="color:#ff79c6">(</span>request<span style="color:#ff79c6">);</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#ff79c6">}</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#6272a4">/**
+</span></span></span><span style="display:flex;"><span><span style="color:#6272a4">     * 處理請求參數 (單一值)&lt;br&gt;
+</span></span></span><span style="display:flex;"><span><span style="color:#6272a4">     * 此請求參數只會從 query string 或 posted form data 取得
+</span></span></span><span style="display:flex;"><span><span style="color:#6272a4">     */</span>
+</span></span><span style="display:flex;"><span>    @Override
+</span></span><span style="display:flex;"><span>    <span style="color:#8be9fd;font-style:italic">public</span> String <span style="color:#50fa7b">getParameter</span><span style="color:#ff79c6">(</span>String name<span style="color:#ff79c6">)</span> <span style="color:#ff79c6">{</span>
+</span></span><span style="display:flex;"><span>        String parameter <span style="color:#ff79c6">=</span> <span style="color:#8be9fd;font-style:italic">super</span><span style="color:#ff79c6">.</span><span style="color:#50fa7b">getParameter</span><span style="color:#ff79c6">(</span>name<span style="color:#ff79c6">);</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>        <span style="color:#ff79c6">if</span> <span style="color:#ff79c6">(</span>StringUtil<span style="color:#ff79c6">.</span><span style="color:#50fa7b">isNotNullOrBlank</span><span style="color:#ff79c6">(</span>parameter<span style="color:#ff79c6">))</span> <span style="color:#ff79c6">{</span>
+</span></span><span style="display:flex;"><span>            parameter <span style="color:#ff79c6">=</span> StringEscapeUtils<span style="color:#ff79c6">.</span><span style="color:#50fa7b">escapeHtml4</span><span style="color:#ff79c6">(</span>parameter<span style="color:#ff79c6">);</span>
+</span></span><span style="display:flex;"><span>        <span style="color:#ff79c6">}</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>        <span style="color:#ff79c6">return</span> parameter<span style="color:#ff79c6">;</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#ff79c6">}</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#6272a4">/**
+</span></span></span><span style="display:flex;"><span><span style="color:#6272a4">     * 處理請求參數 (多值)&lt;br&gt;
+</span></span></span><span style="display:flex;"><span><span style="color:#6272a4">     * 此請求參數只會從 query string 或 posted form data 取得
+</span></span></span><span style="display:flex;"><span><span style="color:#6272a4">     */</span>
+</span></span><span style="display:flex;"><span>    @Override
+</span></span><span style="display:flex;"><span>    <span style="color:#8be9fd;font-style:italic">public</span> String<span style="color:#ff79c6">[]</span> <span style="color:#50fa7b">getParameterValues</span><span style="color:#ff79c6">(</span>String name<span style="color:#ff79c6">)</span> <span style="color:#ff79c6">{</span>
+</span></span><span style="display:flex;"><span>        String<span style="color:#ff79c6">[]</span> parameterValues <span style="color:#ff79c6">=</span> <span style="color:#8be9fd;font-style:italic">super</span><span style="color:#ff79c6">.</span><span style="color:#50fa7b">getParameterValues</span><span style="color:#ff79c6">(</span>name<span style="color:#ff79c6">);</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>        <span style="color:#ff79c6">if</span> <span style="color:#ff79c6">(</span>parameterValues <span style="color:#ff79c6">==</span> <span style="color:#ff79c6">null</span><span style="color:#ff79c6">)</span> <span style="color:#ff79c6">return</span> <span style="color:#ff79c6">null</span><span style="color:#ff79c6">;</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>        <span style="color:#ff79c6">for</span> <span style="color:#ff79c6">(</span><span style="color:#8be9fd">int</span> index <span style="color:#ff79c6">=</span> 0<span style="color:#ff79c6">;</span> index <span style="color:#ff79c6">&lt;</span> parameterValues<span style="color:#ff79c6">.</span><span style="color:#50fa7b">length</span><span style="color:#ff79c6">;</span> index<span style="color:#ff79c6">++)</span> <span style="color:#ff79c6">{</span>
+</span></span><span style="display:flex;"><span>            parameterValues<span style="color:#ff79c6">[</span>index<span style="color:#ff79c6">]</span> <span style="color:#ff79c6">=</span> StringEscapeUtils<span style="color:#ff79c6">.</span><span style="color:#50fa7b">escapeHtml4</span><span style="color:#ff79c6">(</span>parameterValues<span style="color:#ff79c6">[</span>index<span style="color:#ff79c6">]);</span>
+</span></span><span style="display:flex;"><span>        <span style="color:#ff79c6">}</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>        <span style="color:#ff79c6">return</span> parameterValues<span style="color:#ff79c6">;</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#ff79c6">}</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#6272a4">/**
+</span></span></span><span style="display:flex;"><span><span style="color:#6272a4">     * 處理請求 header
+</span></span></span><span style="display:flex;"><span><span style="color:#6272a4">     */</span>
+</span></span><span style="display:flex;"><span>    @Override
+</span></span><span style="display:flex;"><span>    <span style="color:#8be9fd;font-style:italic">public</span> Enumeration<span style="color:#ff79c6">&lt;</span>String<span style="color:#ff79c6">&gt;</span> <span style="color:#50fa7b">getHeaders</span><span style="color:#ff79c6">(</span>String name<span style="color:#ff79c6">)</span> <span style="color:#ff79c6">{</span>
+</span></span><span style="display:flex;"><span>        Enumeration<span style="color:#ff79c6">&lt;</span>String<span style="color:#ff79c6">&gt;</span> headers <span style="color:#ff79c6">=</span> <span style="color:#8be9fd;font-style:italic">super</span><span style="color:#ff79c6">.</span><span style="color:#50fa7b">getHeaders</span><span style="color:#ff79c6">(</span>name<span style="color:#ff79c6">);</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>        List<span style="color:#ff79c6">&lt;</span>String<span style="color:#ff79c6">&gt;</span> result <span style="color:#ff79c6">=</span> <span style="color:#ff79c6">new</span> ArrayList<span style="color:#ff79c6">&lt;&gt;();</span>
+</span></span><span style="display:flex;"><span>        <span style="color:#ff79c6">while</span> <span style="color:#ff79c6">(</span>headers<span style="color:#ff79c6">.</span><span style="color:#50fa7b">hasMoreElements</span><span style="color:#ff79c6">())</span> <span style="color:#ff79c6">{</span>
+</span></span><span style="display:flex;"><span>            String<span style="color:#ff79c6">[]</span> tokens <span style="color:#ff79c6">=</span> headers<span style="color:#ff79c6">.</span><span style="color:#50fa7b">nextElement</span><span style="color:#ff79c6">().</span><span style="color:#50fa7b">split</span><span style="color:#ff79c6">(</span><span style="color:#f1fa8c">&#34;,&#34;</span><span style="color:#ff79c6">);</span>
+</span></span><span style="display:flex;"><span>            <span style="color:#ff79c6">for</span> <span style="color:#ff79c6">(</span>String token <span style="color:#ff79c6">:</span> tokens<span style="color:#ff79c6">)</span> <span style="color:#ff79c6">{</span>
+</span></span><span style="display:flex;"><span>                result<span style="color:#ff79c6">.</span><span style="color:#50fa7b">add</span><span style="color:#ff79c6">(</span>StringEscapeUtils<span style="color:#ff79c6">.</span><span style="color:#50fa7b">escapeHtml4</span><span style="color:#ff79c6">(</span>token<span style="color:#ff79c6">));</span>
+</span></span><span style="display:flex;"><span>            <span style="color:#ff79c6">}</span>
+</span></span><span style="display:flex;"><span>        <span style="color:#ff79c6">}</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>        <span style="color:#ff79c6">return</span> Collections<span style="color:#ff79c6">.</span><span style="color:#50fa7b">enumeration</span><span style="color:#ff79c6">(</span>result<span style="color:#ff79c6">);</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#ff79c6">}</span>
+</span></span><span style="display:flex;"><span><span style="color:#ff79c6">}</span>
+</span></span></code></pre></div><p>接下來要在 Spring Boot Web 框架處理 request 的過程中，用新建立的 <code>XssRequestWrapper</code> 去包裝原本的 <code>HttpServletRequest</code>。這部分其實有許多方式可以做處理，例如 <code>HandlerInterceptor</code> 或 <code>OncePerRequestFilter</code>。但這裡我選擇 <code>Filter</code>，因為其實方式都大同小異：</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-java" data-lang="java"><span style="display:flex;"><span><span style="color:#ff79c6">import</span> org.springframework.core.Ordered<span style="color:#ff79c6">;</span>
+</span></span><span style="display:flex;"><span><span style="color:#ff79c6">import</span> org.springframework.core.annotation.Order<span style="color:#ff79c6">;</span>
+</span></span><span style="display:flex;"><span><span style="color:#ff79c6">import</span> org.springframework.stereotype.Component<span style="color:#ff79c6">;</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#ff79c6">import</span> javax.servlet.*<span style="color:#ff79c6">;</span>
+</span></span><span style="display:flex;"><span><span style="color:#ff79c6">import</span> javax.servlet.annotation.WebFilter<span style="color:#ff79c6">;</span>
+</span></span><span style="display:flex;"><span><span style="color:#ff79c6">import</span> javax.servlet.http.HttpServletRequest<span style="color:#ff79c6">;</span>
+</span></span><span style="display:flex;"><span><span style="color:#ff79c6">import</span> java.io.IOException<span style="color:#ff79c6">;</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>@Order<span style="color:#ff79c6">(</span>Ordered<span style="color:#ff79c6">.</span><span style="color:#50fa7b">HIGHEST_PRECEDENCE</span><span style="color:#ff79c6">)</span>
+</span></span><span style="display:flex;"><span>@WebFilter<span style="color:#ff79c6">(</span>filterName <span style="color:#ff79c6">=</span> <span style="color:#f1fa8c">&#34;xssFilter&#34;</span><span style="color:#ff79c6">,</span> urlPatterns <span style="color:#ff79c6">=</span> <span style="color:#f1fa8c">&#34;/*&#34;</span><span style="color:#ff79c6">)</span>
+</span></span><span style="display:flex;"><span>@Component
+</span></span><span style="display:flex;"><span><span style="color:#8be9fd;font-style:italic">public</span> <span style="color:#8be9fd;font-style:italic">class</span> <span style="color:#50fa7b">XssFilter</span> <span style="color:#8be9fd;font-style:italic">implements</span> Filter <span style="color:#ff79c6">{</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    @Override
+</span></span><span style="display:flex;"><span>    <span style="color:#8be9fd;font-style:italic">public</span> <span style="color:#8be9fd">void</span> <span style="color:#50fa7b">doFilter</span><span style="color:#ff79c6">(</span>ServletRequest servletRequest<span style="color:#ff79c6">,</span> ServletResponse servletResponse<span style="color:#ff79c6">,</span> FilterChain filterChain<span style="color:#ff79c6">)</span>
+</span></span><span style="display:flex;"><span>            <span style="color:#8be9fd;font-style:italic">throws</span> IOException<span style="color:#ff79c6">,</span> ServletException <span style="color:#ff79c6">{</span>
+</span></span><span style="display:flex;"><span>        filterChain<span style="color:#ff79c6">.</span><span style="color:#50fa7b">doFilter</span><span style="color:#ff79c6">(</span><span style="color:#ff79c6">new</span> XssRequestWrapper<span style="color:#ff79c6">((</span>HttpServletRequest<span style="color:#ff79c6">)</span> servletRequest<span style="color:#ff79c6">),</span> servletResponse<span style="color:#ff79c6">);</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#ff79c6">}</span>
+</span></span><span style="display:flex;"><span><span style="color:#ff79c6">}</span>
+</span></span></code></pre></div><p>此處可以注意的是，<code>@Order</code> 標籤是用來指定 <code>Filter</code> 的執行優先順序，內容是一個 <code>int</code>，值越大，優先度越高；另外就是 <code>@WebFilter</code> 這個標籤，裡面有一個 <code>urlPatterns</code> 的屬性，可以用來指定 <code>Filter</code> 適用的 url pattern，而且可以指定多個 pattern。</p>
+<h3 id="requestresponse-body---json">Request/Response Body - JSON</h3>
+<p>接著要處理 request/response body 的部分，先處理 JSON 格式的 body。</p>
+<p>因為 Spring Boot Web 預設處理 JSON 整合的是 Jackson 這個 library，所以可以直接利用 Jackson 本身的功能，直接針對類型為 <code>String</code> 的 value 做處理。</p>
+<p>將 JSON 轉換為物件的部分如下：</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-java" data-lang="java"><span style="display:flex;"><span><span style="color:#ff79c6">import</span> com.fasterxml.jackson.core.JsonParser<span style="color:#ff79c6">;</span>
+</span></span><span style="display:flex;"><span><span style="color:#ff79c6">import</span> com.fasterxml.jackson.core.JsonToken<span style="color:#ff79c6">;</span>
+</span></span><span style="display:flex;"><span><span style="color:#ff79c6">import</span> com.fasterxml.jackson.databind.DeserializationContext<span style="color:#ff79c6">;</span>
+</span></span><span style="display:flex;"><span><span style="color:#ff79c6">import</span> com.fasterxml.jackson.databind.JsonDeserializer<span style="color:#ff79c6">;</span>
+</span></span><span style="display:flex;"><span><span style="color:#ff79c6">import</span> org.apache.commons.text.StringEscapeUtils<span style="color:#ff79c6">;</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#ff79c6">import</span> java.io.IOException<span style="color:#ff79c6">;</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#8be9fd;font-style:italic">public</span> <span style="color:#8be9fd;font-style:italic">class</span> <span style="color:#50fa7b">XssJsonDeserializer</span> <span style="color:#8be9fd;font-style:italic">extends</span> JsonDeserializer<span style="color:#ff79c6">&lt;</span>String<span style="color:#ff79c6">&gt;</span> <span style="color:#ff79c6">{</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    @Override
+</span></span><span style="display:flex;"><span>    <span style="color:#8be9fd;font-style:italic">public</span> String <span style="color:#50fa7b">deserialize</span><span style="color:#ff79c6">(</span>JsonParser parser<span style="color:#ff79c6">,</span> DeserializationContext context<span style="color:#ff79c6">)</span> <span style="color:#8be9fd;font-style:italic">throws</span> IOException <span style="color:#ff79c6">{</span>
+</span></span><span style="display:flex;"><span>        <span style="color:#ff79c6">if</span> <span style="color:#ff79c6">(</span>parser<span style="color:#ff79c6">.</span><span style="color:#50fa7b">getCurrentToken</span><span style="color:#ff79c6">()</span> <span style="color:#ff79c6">==</span> JsonToken<span style="color:#ff79c6">.</span><span style="color:#50fa7b">VALUE_STRING</span><span style="color:#ff79c6">)</span> <span style="color:#ff79c6">{</span>
+</span></span><span style="display:flex;"><span>            <span style="color:#ff79c6">return</span> StringEscapeUtils<span style="color:#ff79c6">.</span><span style="color:#50fa7b">escapeHtml4</span><span style="color:#ff79c6">(</span>parser<span style="color:#ff79c6">.</span><span style="color:#50fa7b">getText</span><span style="color:#ff79c6">());</span>
+</span></span><span style="display:flex;"><span>        <span style="color:#ff79c6">}</span>
+</span></span><span style="display:flex;"><span>        <span style="color:#ff79c6">return</span> <span style="color:#ff79c6">null</span><span style="color:#ff79c6">;</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#ff79c6">}</span>
+</span></span><span style="display:flex;"><span><span style="color:#ff79c6">}</span>
+</span></span></code></pre></div><p>將物件轉換為 JSON 的部分如下：</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-java" data-lang="java"><span style="display:flex;"><span><span style="color:#ff79c6">import</span> com.fasterxml.jackson.core.JsonGenerator<span style="color:#ff79c6">;</span>
+</span></span><span style="display:flex;"><span><span style="color:#ff79c6">import</span> com.fasterxml.jackson.databind.JsonSerializer<span style="color:#ff79c6">;</span>
+</span></span><span style="display:flex;"><span><span style="color:#ff79c6">import</span> com.fasterxml.jackson.databind.SerializerProvider<span style="color:#ff79c6">;</span>
+</span></span><span style="display:flex;"><span><span style="color:#ff79c6">import</span> org.apache.commons.text.StringEscapeUtils<span style="color:#ff79c6">;</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#ff79c6">import</span> java.io.IOException<span style="color:#ff79c6">;</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#8be9fd;font-style:italic">public</span> <span style="color:#8be9fd;font-style:italic">class</span> <span style="color:#50fa7b">XssJsonSerializer</span> <span style="color:#8be9fd;font-style:italic">extends</span> JsonSerializer<span style="color:#ff79c6">&lt;</span>String<span style="color:#ff79c6">&gt;</span> <span style="color:#ff79c6">{</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    @Override
+</span></span><span style="display:flex;"><span>    <span style="color:#8be9fd;font-style:italic">public</span> <span style="color:#8be9fd">void</span> <span style="color:#50fa7b">serialize</span><span style="color:#ff79c6">(</span>String value<span style="color:#ff79c6">,</span> JsonGenerator generator<span style="color:#ff79c6">,</span> SerializerProvider serializers<span style="color:#ff79c6">)</span> <span style="color:#8be9fd;font-style:italic">throws</span> IOException <span style="color:#ff79c6">{</span>
+</span></span><span style="display:flex;"><span>        <span style="color:#ff79c6">if</span> <span style="color:#ff79c6">(</span>value <span style="color:#ff79c6">==</span> <span style="color:#ff79c6">null</span><span style="color:#ff79c6">)</span> <span style="color:#ff79c6">{</span>
+</span></span><span style="display:flex;"><span>            <span style="color:#ff79c6">return</span><span style="color:#ff79c6">;</span>
+</span></span><span style="display:flex;"><span>        <span style="color:#ff79c6">}</span>
+</span></span><span style="display:flex;"><span>        generator<span style="color:#ff79c6">.</span><span style="color:#50fa7b">writeString</span><span style="color:#ff79c6">(</span>StringEscapeUtils<span style="color:#ff79c6">.</span><span style="color:#50fa7b">escapeHtml4</span><span style="color:#ff79c6">(</span>value<span style="color:#ff79c6">));</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#ff79c6">}</span>
+</span></span><span style="display:flex;"><span><span style="color:#ff79c6">}</span>
+</span></span></code></pre></div><p>然後將 serializer 跟 deserializer 註冊到 Spring Boot Web 中，當有 Jackson 2 在依賴時會預設使用來對 JSON 做轉換的 <code>MappingJackson2HttpMessageConverter</code> 當中：</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-java" data-lang="java"><span style="display:flex;"><span><span style="color:#ff79c6">import</span> com.fasterxml.jackson.databind.module.SimpleModule<span style="color:#ff79c6">;</span>
+</span></span><span style="display:flex;"><span><span style="color:#ff79c6">import</span> org.example.config.security.xss.XssJsonDeserializer<span style="color:#ff79c6">;</span>
+</span></span><span style="display:flex;"><span><span style="color:#ff79c6">import</span> org.example.config.security.xss.XssJsonSerializer<span style="color:#ff79c6">;</span>
+</span></span><span style="display:flex;"><span><span style="color:#ff79c6">import</span> org.springframework.context.annotation.Configuration<span style="color:#ff79c6">;</span>
+</span></span><span style="display:flex;"><span><span style="color:#ff79c6">import</span> org.springframework.http.converter.HttpMessageConverter<span style="color:#ff79c6">;</span>
+</span></span><span style="display:flex;"><span><span style="color:#ff79c6">import</span> org.springframework.http.converter.json.MappingJackson2HttpMessageConverter<span style="color:#ff79c6">;</span>
+</span></span><span style="display:flex;"><span><span style="color:#ff79c6">import</span> org.springframework.web.servlet.config.annotation.WebMvcConfigurer<span style="color:#ff79c6">;</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#ff79c6">import</span> java.util.List<span style="color:#ff79c6">;</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>@Configuration
+</span></span><span style="display:flex;"><span><span style="color:#8be9fd;font-style:italic">public</span> <span style="color:#8be9fd;font-style:italic">class</span> <span style="color:#50fa7b">CustomWebConfigurer</span> <span style="color:#8be9fd;font-style:italic">implements</span> WebMvcConfigurer <span style="color:#ff79c6">{</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    @Override
+</span></span><span style="display:flex;"><span>    <span style="color:#8be9fd;font-style:italic">public</span> <span style="color:#8be9fd">void</span> <span style="color:#50fa7b">extendMessageConverters</span><span style="color:#ff79c6">(</span>List<span style="color:#ff79c6">&lt;</span>HttpMessageConverter<span style="color:#ff79c6">&lt;?&gt;&gt;</span> converters<span style="color:#ff79c6">)</span> <span style="color:#ff79c6">{</span>        
+</span></span><span style="display:flex;"><span>        <span style="color:#6272a4">// register XssJsonDeserializer
+</span></span></span><span style="display:flex;"><span><span style="color:#6272a4"></span>        var module <span style="color:#ff79c6">=</span> <span style="color:#ff79c6">new</span> SimpleModule<span style="color:#ff79c6">();</span>
+</span></span><span style="display:flex;"><span>        module<span style="color:#ff79c6">.</span><span style="color:#50fa7b">addDeserializer</span><span style="color:#ff79c6">(</span>String<span style="color:#ff79c6">.</span><span style="color:#50fa7b">class</span><span style="color:#ff79c6">,</span> <span style="color:#ff79c6">new</span> XssJsonDeserializer<span style="color:#ff79c6">());</span>
+</span></span><span style="display:flex;"><span>        module<span style="color:#ff79c6">.</span><span style="color:#50fa7b">addSerializer</span><span style="color:#ff79c6">(</span>String<span style="color:#ff79c6">.</span><span style="color:#50fa7b">class</span><span style="color:#ff79c6">,</span> <span style="color:#ff79c6">new</span> XssJsonSerializer<span style="color:#ff79c6">());</span>
+</span></span><span style="display:flex;"><span>        converters<span style="color:#ff79c6">.</span><span style="color:#50fa7b">stream</span><span style="color:#ff79c6">()</span>
+</span></span><span style="display:flex;"><span>                <span style="color:#ff79c6">.</span><span style="color:#50fa7b">filter</span><span style="color:#ff79c6">(</span>converter <span style="color:#ff79c6">-&gt;</span> converter<span style="color:#ff79c6">.</span><span style="color:#50fa7b">getClass</span><span style="color:#ff79c6">().</span><span style="color:#50fa7b">getSimpleName</span><span style="color:#ff79c6">().</span><span style="color:#50fa7b">equals</span><span style="color:#ff79c6">(</span><span style="color:#f1fa8c">&#34;MappingJackson2HttpMessageConverter&#34;</span><span style="color:#ff79c6">))</span>
+</span></span><span style="display:flex;"><span>                <span style="color:#ff79c6">.</span><span style="color:#50fa7b">forEach</span><span style="color:#ff79c6">(</span>converter <span style="color:#ff79c6">-&gt;</span> <span style="color:#ff79c6">((</span>MappingJackson2HttpMessageConverter<span style="color:#ff79c6">)</span> converter<span style="color:#ff79c6">).</span><span style="color:#50fa7b">getObjectMapper</span><span style="color:#ff79c6">().</span><span style="color:#50fa7b">registerModule</span><span style="color:#ff79c6">(</span>module<span style="color:#ff79c6">));</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>        WebMvcConfigurer<span style="color:#ff79c6">.</span><span style="color:#50fa7b">super</span><span style="color:#ff79c6">.</span><span style="color:#50fa7b">extendMessageConverters</span><span style="color:#ff79c6">(</span>converters<span style="color:#ff79c6">);</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#ff79c6">}</span>
+</span></span><span style="display:flex;"><span><span style="color:#ff79c6">}</span>
+</span></span></code></pre></div><p>其實要註冊 serializer 跟 deserializer 也有好幾種方式，不論是用 <code>Jackson2ObjectMapperBuilder</code> 還是用 <code>Jackson2ObjectMapperBuilderCustomizer</code> 都可以。</p>
+<h3 id="requestresponse-body---string">Request/Response Body - String</h3>
+<p>最後要來處理 request/response body 裡面直接提供 <code>String</code> 的情況。</p>
+<p>首先要知道的是 Spring Boot Web 預設處理這種情況會使用的是 <code>StringHttpMessageConverter</code>，但這個 converter 本身並沒有什麼原生的方法接受客製調整，所以只好直接繼承開一個新的 converter：</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-java" data-lang="java"><span style="display:flex;"><span><span style="color:#ff79c6">import</span> org.apache.commons.text.StringEscapeUtils<span style="color:#ff79c6">;</span>
+</span></span><span style="display:flex;"><span><span style="color:#ff79c6">import</span> org.springframework.http.HttpInputMessage<span style="color:#ff79c6">;</span>
+</span></span><span style="display:flex;"><span><span style="color:#ff79c6">import</span> org.springframework.http.MediaType<span style="color:#ff79c6">;</span>
+</span></span><span style="display:flex;"><span><span style="color:#ff79c6">import</span> org.springframework.http.converter.StringHttpMessageConverter<span style="color:#ff79c6">;</span>
+</span></span><span style="display:flex;"><span><span style="color:#ff79c6">import</span> org.springframework.lang.Nullable<span style="color:#ff79c6">;</span>
+</span></span><span style="display:flex;"><span><span style="color:#ff79c6">import</span> org.springframework.util.Assert<span style="color:#ff79c6">;</span>
+</span></span><span style="display:flex;"><span><span style="color:#ff79c6">import</span> org.springframework.util.StreamUtils<span style="color:#ff79c6">;</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#ff79c6">import</span> java.io.IOException<span style="color:#ff79c6">;</span>
+</span></span><span style="display:flex;"><span><span style="color:#ff79c6">import</span> java.nio.charset.Charset<span style="color:#ff79c6">;</span>
+</span></span><span style="display:flex;"><span><span style="color:#ff79c6">import</span> java.nio.charset.StandardCharsets<span style="color:#ff79c6">;</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#8be9fd;font-style:italic">public</span> <span style="color:#8be9fd;font-style:italic">class</span> <span style="color:#50fa7b">XssStringHttpMessageConverter</span> <span style="color:#8be9fd;font-style:italic">extends</span> StringHttpMessageConverter <span style="color:#ff79c6">{</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#8be9fd;font-style:italic">private</span> <span style="color:#8be9fd;font-style:italic">static</span> <span style="color:#8be9fd;font-style:italic">final</span> MediaType APPLICATION_PLUS_JSON <span style="color:#ff79c6">=</span> <span style="color:#ff79c6">new</span> MediaType<span style="color:#ff79c6">(</span><span style="color:#f1fa8c">&#34;application&#34;</span><span style="color:#ff79c6">,</span> <span style="color:#f1fa8c">&#34;*+json&#34;</span><span style="color:#ff79c6">);</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    @Override
+</span></span><span style="display:flex;"><span>    <span style="color:#8be9fd;font-style:italic">protected</span> String <span style="color:#50fa7b">readInternal</span><span style="color:#ff79c6">(</span>Class<span style="color:#ff79c6">&lt;?</span> <span style="color:#8be9fd;font-style:italic">extends</span> String<span style="color:#ff79c6">&gt;</span> clazz<span style="color:#ff79c6">,</span> HttpInputMessage inputMessage<span style="color:#ff79c6">)</span> <span style="color:#8be9fd;font-style:italic">throws</span> IOException <span style="color:#ff79c6">{</span>
+</span></span><span style="display:flex;"><span>        Charset charset <span style="color:#ff79c6">=</span> getContentTypeCharset<span style="color:#ff79c6">(</span>inputMessage<span style="color:#ff79c6">.</span><span style="color:#50fa7b">getHeaders</span><span style="color:#ff79c6">().</span><span style="color:#50fa7b">getContentType</span><span style="color:#ff79c6">());</span>
+</span></span><span style="display:flex;"><span>        String input <span style="color:#ff79c6">=</span> StreamUtils<span style="color:#ff79c6">.</span><span style="color:#50fa7b">copyToString</span><span style="color:#ff79c6">(</span>inputMessage<span style="color:#ff79c6">.</span><span style="color:#50fa7b">getBody</span><span style="color:#ff79c6">(),</span> charset<span style="color:#ff79c6">);</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>        <span style="color:#ff79c6">return</span> StringEscapeUtils<span style="color:#ff79c6">.</span><span style="color:#50fa7b">escapeHtml4</span><span style="color:#ff79c6">(</span>input<span style="color:#ff79c6">);</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#ff79c6">}</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#8be9fd;font-style:italic">private</span> Charset <span style="color:#50fa7b">getContentTypeCharset</span><span style="color:#ff79c6">(</span>@Nullable MediaType contentType<span style="color:#ff79c6">)</span> <span style="color:#ff79c6">{</span>
+</span></span><span style="display:flex;"><span>        <span style="color:#ff79c6">if</span> <span style="color:#ff79c6">(</span>contentType <span style="color:#ff79c6">!=</span> <span style="color:#ff79c6">null</span><span style="color:#ff79c6">)</span> <span style="color:#ff79c6">{</span>
+</span></span><span style="display:flex;"><span>            Charset charset <span style="color:#ff79c6">=</span> contentType<span style="color:#ff79c6">.</span><span style="color:#50fa7b">getCharset</span><span style="color:#ff79c6">();</span>
+</span></span><span style="display:flex;"><span>            <span style="color:#ff79c6">if</span> <span style="color:#ff79c6">(</span>charset <span style="color:#ff79c6">!=</span> <span style="color:#ff79c6">null</span><span style="color:#ff79c6">)</span> <span style="color:#ff79c6">{</span>
+</span></span><span style="display:flex;"><span>                <span style="color:#ff79c6">return</span> charset<span style="color:#ff79c6">;</span>
+</span></span><span style="display:flex;"><span>            <span style="color:#ff79c6">}</span>
+</span></span><span style="display:flex;"><span>            <span style="color:#ff79c6">else</span> <span style="color:#ff79c6">if</span> <span style="color:#ff79c6">(</span>contentType<span style="color:#ff79c6">.</span><span style="color:#50fa7b">isCompatibleWith</span><span style="color:#ff79c6">(</span>MediaType<span style="color:#ff79c6">.</span><span style="color:#50fa7b">APPLICATION_JSON</span><span style="color:#ff79c6">)</span> <span style="color:#ff79c6">||</span>
+</span></span><span style="display:flex;"><span>                    contentType<span style="color:#ff79c6">.</span><span style="color:#50fa7b">isCompatibleWith</span><span style="color:#ff79c6">(</span>APPLICATION_PLUS_JSON<span style="color:#ff79c6">))</span> <span style="color:#ff79c6">{</span>
+</span></span><span style="display:flex;"><span>                <span style="color:#6272a4">// Matching to AbstractJackson2HttpMessageConverter#DEFAULT_CHARSET
+</span></span></span><span style="display:flex;"><span><span style="color:#6272a4"></span>                <span style="color:#ff79c6">return</span> StandardCharsets<span style="color:#ff79c6">.</span><span style="color:#50fa7b">UTF_8</span><span style="color:#ff79c6">;</span>
+</span></span><span style="display:flex;"><span>            <span style="color:#ff79c6">}</span>
+</span></span><span style="display:flex;"><span>        <span style="color:#ff79c6">}</span>
+</span></span><span style="display:flex;"><span>        Charset charset <span style="color:#ff79c6">=</span> getDefaultCharset<span style="color:#ff79c6">();</span>
+</span></span><span style="display:flex;"><span>        Assert<span style="color:#ff79c6">.</span><span style="color:#50fa7b">state</span><span style="color:#ff79c6">(</span>charset <span style="color:#ff79c6">!=</span> <span style="color:#ff79c6">null</span><span style="color:#ff79c6">,</span> <span style="color:#f1fa8c">&#34;No default charset&#34;</span><span style="color:#ff79c6">);</span>
+</span></span><span style="display:flex;"><span>        <span style="color:#ff79c6">return</span> charset<span style="color:#ff79c6">;</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#ff79c6">}</span>
+</span></span><span style="display:flex;"><span><span style="color:#ff79c6">}</span>
+</span></span></code></pre></div><p>接著也是要將這個客製的 converter 註冊起來，同樣在 <code>WebMvcConfigurer</code> 的 <code>extendMessageConverters</code> 方法裡面加上這兩行：</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-java" data-lang="java"><span style="display:flex;"><span><span style="color:#6272a4">// replace with customized StringHttpMessageConverter
+</span></span></span><span style="display:flex;"><span><span style="color:#6272a4"></span>converters<span style="color:#ff79c6">.</span><span style="color:#50fa7b">removeIf</span><span style="color:#ff79c6">(</span>converter <span style="color:#ff79c6">-&gt;</span> converter<span style="color:#ff79c6">.</span><span style="color:#50fa7b">getClass</span><span style="color:#ff79c6">().</span><span style="color:#50fa7b">getSimpleName</span><span style="color:#ff79c6">().</span><span style="color:#50fa7b">equals</span><span style="color:#ff79c6">(</span><span style="color:#f1fa8c">&#34;StringHttpMessageConverter&#34;</span><span style="color:#ff79c6">));</span>
+</span></span><span style="display:flex;"><span>converters<span style="color:#ff79c6">.</span><span style="color:#50fa7b">add</span><span style="color:#ff79c6">(</span>1<span style="color:#ff79c6">,</span> <span style="color:#ff79c6">new</span> XssStringHttpMessageConverter<span style="color:#ff79c6">());</span>
+</span></span></code></pre></div><p>注意 converters 是有順序的，Spring Boot Web 預設第一個 converter 是 <code>ByteArrayHttpMessageConverter</code>，第二個就是原本的 <code>StringHttpMessageConverter</code>，所以我們這邊直接用客製的 converter 取代原位置的 <code>StringHttpMessageConverter</code>。</p>
+<h2 id="結論">結論</h2>
+<p>XSS 攻擊的手段有很多種，而且因為各網站需求不同的關係，也沒有一個統一的方式可以做絕對的防範，其核心的防範概念主要就圍繞在對於各種 Input 的檢查是否符合預期。</p>
+<p>例如前面提過針對文字欄位做 HTML Sanitization 的白名單，明確規定可接受的內容、長度等等，就可以盡量提高安全性，但也因為如此，需要前後端互相配合；再加上攻擊手法不停推陳出新，這也可能是個長期的過程。</p>
+<h2 id="參考">參考</h2>
+<ul>
+<li><a href="https://www.1ju.org/article/spring-prevent-xss">在 Spring 應用程序中防止跨站點腳本（XSS）</a></li>
+<li><a href="https://www.cnblogs.com/zhangruifeng/p/16082741.html">SpringBoot Xss 漏洞修复</a></li>
+<li><a href="https://blog.darkthread.net/blog/csp-script-src/">XSS 防禦 - CSP script-src 設定</a></li>
+<li><a href="https://www.baeldung.com/spring-httpmessageconverter-rest">Http Message Converters with the Spring Framework</a></li>
+</ul>
+
+                    
+                    <HR width="100%" id="EOF">
+		    <p style="color:#777;">Last modified on 2022-11-01</p>
+                    
+                </div>
+            </div>
+            
+            
+            <nav class="post-pagination">
+
+                
+                <a class="newer-posts">
+			Next<br>No newer posts.
+                </a>
+                
+                
+                
+                <a class="older-posts" href="https://idontwannarock.github.io/tech_blog/2022/11/xss_prevention_intro/">
+			Previous<br>XSS 防範簡介
+                </a>
+                
+            </nav>
+            <div class="post-comment-wrapper">
+                
+<div id="disqus_thread"></div>
+<script>
+    
+
+    var disqus_config = function () {
+        
+        this.page.url = '\/2022\/11\/xss_prevention_spring_boot\/';  
+        
+        
+        this.page.identifier = '\/2022\/11\/xss_prevention_spring_boot\/'; 
+    };
+    (function() {
+        var d = document, s = d.createElement('script');
+        s.src = 'https://howard-tech-blog.disqus.com/embed.js';
+        s.setAttribute('data-timestamp', +new Date());
+        (d.head || d.body).appendChild(s);
+    })();
+</script>
+<noscript> Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript" rel="nofollow"> comments powered by Disqus.  </a> </noscript>
+
+
+
+
+
+
+
+
+
+
+
+            </div>
+        </div>
+    </div>
+
+
+                    </div>
+            </div><div id="single-column-footer">
+Hugo Theme <a href="https://github.com/amazingrise/hugo-theme-diary">Diary</a> by <a href="https://risehere.net/">Rise</a>
+<br>
+Ported from <a href="https://mak1t0.cc/" target="_blank" rel="noreferrer noopener">Makito</a>'s <a href="https://github.com/SumiMakito/hexo-theme-journal/" target="_blank" rel="noreferrer noopener">Journal.</a> <br>
+<br>
+
+&copy;
+	
+	This website by Howard Wang is licensed under a Creative Common Attribution-ShareAlike 4.0 International License.
+	
+</div>
+            </div>
+    
+    <script src="https://idontwannarock.github.io/tech_blog/js/journal.js"></script></body>
+</html>

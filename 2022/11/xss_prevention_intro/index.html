@@ -1,0 +1,843 @@
+<!DOCTYPE html>
+<html><head>
+<title>XSS 防範簡介</title>
+
+
+
+
+<meta charset="utf-8">
+<meta name="X-UA-Compatible" content="IE=edge">
+<meta name="google-site-verification" content="">
+<meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" name="viewport">
+<meta content="telephone=no" name="format-detection">
+<meta name="description" content="介紹 XSS 攻擊及簡單防範概念">
+<meta name="renderer" content="webkit">
+<meta name="theme-color" content="#ffffff">
+
+
+
+
+
+
+
+
+
+
+
+<script type="application/javascript">
+var doNotTrack = false;
+if (!doNotTrack) {
+	(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+	(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+	m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+	})(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+	ga('create', 'UA-106499565-1', 'auto');
+	
+	ga('send', 'pageview');
+}
+</script>
+
+
+
+
+
+  
+
+
+
+
+
+
+<link rel="stylesheet" href="https://idontwannarock.github.io/tech_blog/scss/journal.min.c5d92f380bf10f6849c7ac487c7df2b22c081e0851e5339224f1ae29210b20d2.css" integrity="sha256-xdkvOAvxD2hJx6xIfH3ysiwIHghR5TOSJPGuKSELINI=" media="screen">
+
+
+
+<link rel="stylesheet" href="https://idontwannarock.github.io/tech_blog/scss/dark-mode.min.9f8d8c2df9285089d141edd4a50cb7506c7948e6ab79a29968dced1bd0ab7d22.css" integrity="sha256-n42MLfkoUInRQe3UpQy3UGx5SOareaKZaNztG9CrfSI=" media="screen">
+
+
+
+
+      <script src="https://idontwannarock.github.io/tech_blog/js/toc.js"></script>
+    
+    <link type="text/css" rel="stylesheet" href="https://idontwannarock.github.io/tech_blog/vendor/css/bootstrap.min.css"><link rel="stylesheet"
+          href="https://fonts.googleapis.com/css?family=Material+Icons">
+
+
+
+
+
+
+
+
+
+
+
+
+<script src="https://cdn.jsdelivr.net/npm/vue-disqus@3/dist/vue-disqus.js"></script>
+
+
+
+
+
+
+
+
+</head>
+<body>
+    	<div id="app"><div id="sideContainer" class="side-container">
+    
+    <a class="a-block nav-head false" href="https://idontwannarock.github.io/tech_blog/">
+    
+        <div class="nav-title">
+            Howard Tech Note
+        </div>
+        
+        <div class="nav-subtitle">
+            Share * Record * Program
+        </div>
+        
+    </a>
+
+    <div class="nav-link-list">
+        
+        
+            
+            
+            
+            
+            
+            <a class="a-block nav-link-item false" href="https://idontwannarock.github.io/tech_blog/posts">
+                Archive
+            </a>
+            
+        
+            
+            
+            
+            
+            
+            <a class="a-block nav-link-item false" href="https://idontwannarock.github.io/tech_blog/categories">
+                Categories
+            </a>
+            
+        
+            
+            
+            
+            
+            
+            <a class="a-block nav-link-item false" href="https://idontwannarock.github.io/tech_blog/tags">
+                Tags
+            </a>
+            
+        
+            
+            
+            
+            
+            
+            <a class="a-block nav-link-item false" href="https://idontwannarock.github.io/tech_blog/about">
+                About
+            </a>
+            
+        
+            
+            
+            
+            
+            
+            <a class="a-block nav-link-item false" href="https://idontwannarock.github.io/tech_blog/index.xml">
+                RSS Feed
+            </a>
+            
+        
+    </div>
+
+    
+
+    <div class="nav-footer">
+        
+Hugo Theme <a href="https://github.com/amazingrise/hugo-theme-diary">Diary</a> by <a href="https://risehere.net/">Rise</a>
+<br>
+Ported from <a href="https://mak1t0.cc/" target="_blank" rel="noreferrer noopener">Makito</a>'s <a href="https://github.com/SumiMakito/hexo-theme-journal/" target="_blank" rel="noreferrer noopener">Journal.</a> <br>
+<br>
+
+&copy;
+	
+	This website by Howard Wang is licensed under a Creative Common Attribution-ShareAlike 4.0 International License.
+	
+
+    </div>
+    
+</div><div id="extraContainer" class="extra-container">
+    
+    
+    <div class="toc animated-visibility" :class="{ invisible: scrollY <= 140 }">
+
+
+	<div class="toc-content">
+	
+		
+		
+		
+		<center>- CATALOG -</center>
+		
+		
+		<ul>
+			
+				
+				
+					
+						
+						
+						
+						
+							
+								
+									<ul>
+								
+							
+						
+						
+							<li>
+								<a href="#%e6%94%bb%e6%93%8a%e6%a8%a1%e5%bc%8f" onclick="onNavClick(`#攻擊模式-nav`)" id="攻擊模式-nav">
+									攻擊模式
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+						
+							<li>
+								<a href="#%e8%b7%9f-csrf-%e7%9a%84%e5%8d%80%e5%88%a5" onclick="onNavClick(`#跟-csrf-的區別-nav`)" id="跟-csrf-的區別-nav">
+									跟 CSRF 的區別
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+						
+							<li>
+								<a href="#%e9%98%b2%e7%af%84%e6%8e%aa%e6%96%bd" onclick="onNavClick(`#防範措施-nav`)" id="防範措施-nav">
+									防範措施
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+							
+								
+									<ul>
+								
+							
+						
+						
+							<li>
+								<a href="#output-encoding" onclick="onNavClick(`#output-encoding-nav`)" id="output-encoding-nav">
+									Output Encoding
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+						
+							<li>
+								<a href="#html-sanitization" onclick="onNavClick(`#html-sanitization-nav`)" id="html-sanitization-nav">
+									HTML Sanitization
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+						
+							<li>
+								<a href="#content-security-policy-header" onclick="onNavClick(`#content-security-policy-header-nav`)" id="content-security-policy-header-nav">
+									Content-Security-Policy Header
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+							
+								
+									<ul>
+								
+							
+						
+						
+							<li>
+								<a href="#restful-api-with-content-security-policy-header" onclick="onNavClick(`#restful-api-with-content-security-policy-header-nav`)" id="restful-api-with-content-security-policy-header-nav">
+									RESTful API with Content-Security-Policy Header
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+							
+								</ul>
+							
+								</ul>
+							
+						
+						
+						
+							<li>
+								<a href="#%e5%8f%83%e8%80%83" onclick="onNavClick(`#參考-nav`)" id="參考-nav">
+									參考
+								</a>
+							</li>
+						
+						
+					
+				
+			
+		</ul>
+	</div>
+
+</div>
+    
+    <div class="pagination">
+        <a id="globalBackToTop" class="pagination-action animated-visibility" href="#top" :class="{ invisible: scrollY == 0 }">
+            <i class="material-icons pagination-action-icon">
+                keyboard_arrow_up
+            </i>
+        </a>
+        
+        <a type="button" class="pagination-action" id="darkModeToggleButton">
+            <span class="material-icons pagination-action-icon" id="darkModeToggleIcon">
+                dark_mode
+            </span>
+        </a>
+        
+        
+    </div>
+</div>
+<div class="single-column-drawer-container" id="drawer"
+     v-bind:class="{ 'single-column-drawer-container-active': isDrawerOpen }">
+    <div class="drawer-content">
+        <div class="drawer-menu">
+            
+            
+            
+                
+                
+                
+                
+                
+                <a class="a-block drawer-menu-item false" href="https://idontwannarock.github.io/tech_blog/posts">
+                    Archive
+                </a>
+                
+            
+                
+                
+                
+                
+                
+                <a class="a-block drawer-menu-item false" href="https://idontwannarock.github.io/tech_blog/categories">
+                    Categories
+                </a>
+                
+            
+                
+                
+                
+                
+                
+                <a class="a-block drawer-menu-item false" href="https://idontwannarock.github.io/tech_blog/tags">
+                    Tags
+                </a>
+                
+            
+                
+                
+                
+                
+                
+                <a class="a-block drawer-menu-item false" href="https://idontwannarock.github.io/tech_blog/about">
+                    About
+                </a>
+                
+            
+                
+                
+                
+                
+                
+                <a class="a-block drawer-menu-item false" href="https://idontwannarock.github.io/tech_blog/index.xml">
+                    RSS Feed
+                </a>
+                
+            
+            
+            <div class="toc">
+
+
+	<div class="toc-content">
+	
+		
+		
+		
+		<center>- CATALOG -</center>
+		
+		
+		<ul>
+			
+				
+				
+					
+						
+						
+						
+						
+							
+								
+									<ul>
+								
+							
+						
+						
+							<li>
+								<a href="#%e6%94%bb%e6%93%8a%e6%a8%a1%e5%bc%8f" onclick="onNavClick(`#攻擊模式-nav`)" id="攻擊模式-nav">
+									攻擊模式
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+						
+							<li>
+								<a href="#%e8%b7%9f-csrf-%e7%9a%84%e5%8d%80%e5%88%a5" onclick="onNavClick(`#跟-csrf-的區別-nav`)" id="跟-csrf-的區別-nav">
+									跟 CSRF 的區別
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+						
+							<li>
+								<a href="#%e9%98%b2%e7%af%84%e6%8e%aa%e6%96%bd" onclick="onNavClick(`#防範措施-nav`)" id="防範措施-nav">
+									防範措施
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+							
+								
+									<ul>
+								
+							
+						
+						
+							<li>
+								<a href="#output-encoding" onclick="onNavClick(`#output-encoding-nav`)" id="output-encoding-nav">
+									Output Encoding
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+						
+							<li>
+								<a href="#html-sanitization" onclick="onNavClick(`#html-sanitization-nav`)" id="html-sanitization-nav">
+									HTML Sanitization
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+						
+							<li>
+								<a href="#content-security-policy-header" onclick="onNavClick(`#content-security-policy-header-nav`)" id="content-security-policy-header-nav">
+									Content-Security-Policy Header
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+							
+								
+									<ul>
+								
+							
+						
+						
+							<li>
+								<a href="#restful-api-with-content-security-policy-header" onclick="onNavClick(`#restful-api-with-content-security-policy-header-nav`)" id="restful-api-with-content-security-policy-header-nav">
+									RESTful API with Content-Security-Policy Header
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+							
+								</ul>
+							
+								</ul>
+							
+						
+						
+						
+							<li>
+								<a href="#%e5%8f%83%e8%80%83" onclick="onNavClick(`#參考-nav`)" id="參考-nav">
+									參考
+								</a>
+							</li>
+						
+						
+					
+				
+			
+		</ul>
+	</div>
+
+</div>
+            
+        </div>
+    </div>
+</div>
+<transition name="fade">
+    <div id="drawer-mask" v-bind:class="{ 'single-column-drawer-mask': mounted }" v-if="isDrawerOpen" v-on:click="toggleDrawer"></div>
+</transition>
+<nav id="navBar" class="navbar sticky-top navbar-light single-column-nav-container">
+    <div id="navBackground" class="nav-background"></div>
+    <div class="container container-narrow nav-content">
+        <button id="nav_dropdown_btn" class="nav-dropdown-toggle" type="button" v-on:click="toggleDrawer">
+            <i class="material-icons">
+                menu
+            </i>
+        </button>
+        <a id="navTitle" class="navbar-brand" href="https://idontwannarock.github.io/tech_blog/">
+            Howard Tech Note
+        </a>
+        
+        <button type="button" class="nav-darkmode-toggle" id="darkModeToggleButton2">
+            <i class="material-icons" id="darkModeToggleIcon2">
+                dark_mode
+            </i>
+        </button>
+        
+    </div>
+</nav>
+<div class="single-column-header-container" id="pageHead"
+     v-bind:style="{ transform: 'translateZ(0px) translateY('+.3*scrollY+'px)', opacity: 1-navOpacity }">
+    <a href="https://idontwannarock.github.io/tech_blog/">
+        <div class="single-column-header-title">Howard Tech Note</div>
+        
+        <div class="single-column-header-subtitle">Share * Record * Program</div>
+        
+
+    </a>
+</div>
+
+            <div id="content">
+                <div id="streamContainer" class="stream-container">
+
+    <div class="post-list-container post-list-container-shadow">
+        <div class="post">
+            
+            
+            
+
+            <div class="post-head-wrapper-text-only"
+                
+            >
+                <div class="post-title">
+                    XSS 防範簡介
+                    
+                    <div class="post-subtitle">
+                        介紹 XSS 攻擊及簡單防範概念
+                    </div>
+                    
+                    <div class="post-meta">
+                        
+                        <time itemprop="datePublished">
+                            2022-11-01 14:00
+                        </time>
+                        
+
+                        
+                            <i class="material-icons" style="">folder</i>
+                                <a href="https://idontwannarock.github.io/tech_blog/categories/concept">concept</a>
+                                &nbsp;
+                        
+
+                        
+                            <i class="material-icons" style="">label</i>
+                            
+                                <a href="https://idontwannarock.github.io/tech_blog/tags/xss">xss</a>
+                                &nbsp;
+                            
+                                <a href="https://idontwannarock.github.io/tech_blog/tags/owasp">owasp</a>
+                                &nbsp;
+                            
+                        
+                        
+                    </div>
+                </div>
+            </div>
+            
+            <div class="post-body-wrapper">
+                
+                <div class="post-body" v-pre>
+                
+                    <p>XSS 系列：</p>
+<ol>
+<li>XSS 防範簡介</li>
+<li>Spring Boot 後端實作 XSS 防範</li>
+</ol>
+<p>跨網站指令碼 Cross-site Scripting, XSS，是一種代碼注入的攻擊，讓攻擊者在網頁上注入代碼，而其他使用者在觀看網頁的時候就會受到影響。</p>
+<h2 id="攻擊模式">攻擊模式</h2>
+<p>以電商系統舉例，例如管理後台網頁表單的商品描述輸入欄位 Input 在沒有進行相對應防範的前提下，攻擊者可以藉由輸入 <code>&lt;script&gt;alert(document.cookie)&lt;/script&gt;</code> 這段內容，並透過 API 保存到資料庫，如此一來下次其他使用者在瀏覽該商品的時候，也同樣從後端取得資料庫中的這段描述內容，並且顯示在網頁上，則使用者在載入網頁的時候，瀏覽器就可能會跳出彈窗並把使用者當下的 cookie 直接顯示出來。</p>
+<p>當然實際的攻擊不會只有跳出彈窗並印出資料這麼簡單，可能是竊取 cookie 或任何 JavaScript 可以存取的敏感資料、側錄使用者行為，或跳轉惡意網址等等行為。</p>
+<p>當然注入的代碼也不僅限於 JavaScript，也可以是 Java、VBScript 等，甚至是普通的 HTML。</p>
+<h2 id="跟-csrf-的區別">跟 CSRF 的區別</h2>
+<p>另一種常搞混的攻擊是跨站請求偽造 Cross-site Request Forgery, CSRF，是一種挾制使用者在當前已登入的 Web 應用程式上執行非本意的操作的攻擊方法。</p>
+<p>例如使用者可能使用某網路銀行做轉帳，當使用者不小心存取到惡意的網址，就可能因為瀏覽器中之前登錄該網路銀行的登錄資訊尚未過期，所以被存取的網路銀行因為信任瀏覽器保存的登錄資訊，而認為是真正的使用者在進行操作而去執行某些動作。</p>
+<p>跟 XSS 相比，XSS 利用的是「<strong>使用者對指定網站的信任</strong>」，CSRF 利用的則是「<strong>網站對使用者網頁瀏覽器的信任</strong>」。</p>
+<h2 id="防範措施">防範措施</h2>
+<p><a href="https://cheatsheetseries.owasp.org/cheatsheets/Cross_Site_Scripting_Prevention_Cheat_Sheet.html">OWASP 網站</a> 有提出一些基本的防範措施，但要能真正達到成效，是需要多種手段結合、前後端合作才能達到。並且攻擊手段常常是並用，所以採取防範措施的時候，也要考慮並防範其他種攻擊手段。</p>
+<h3 id="output-encoding">Output Encoding</h3>
+<p>這部分首先會需要了解使用的 Web Framework 的安全措施跟限制在哪。</p>
+<p>例如 React 預設會對 render 內容進行跳脫處理 (escape)，將所有的資料都視為文字字串，等同使用原生的 <code>textContent</code>；但有些時候我們就是需要 React 將內容也 render 成 HTML，因此需要使用 <code>dangerouslySetInnerHTML</code> 來做 render，那可能就沒辦法依靠框架預設的方式去阻止 XSS，而是要使用其他手段來做處理。</p>
+<p>而 React 這種預設對 render 內容作跳脫處理就是一種 Output Encoding 的手法。而跳脫處理並不僅是針對 HTML 內容，也會需要對 HTML 屬性 (Attribute)、JavaScript、CSS、URL 或其他惠可能會造成危險的部分進行處理。</p>
+<p>這種手法可能前後端都可以做、也都需要做，但也同樣需要前後端互相的配合，以免處理之後，反而網頁的顯示不如預期。</p>
+<h3 id="html-sanitization">HTML Sanitization</h3>
+<p>在前一段我們有說到一種情況，就是需要將某些內容 render 成 HTML 來做顯示，例如可能網頁有提供簡單的編輯功能，而編輯的內容可能不只是純文字，例如可能會要標記某段文字粗體，或甚至插入圖片等等；因此需要利用 tag 來標註某些特性，而且之後也需要將 tag 正確 render 成 HTML 以做顯示。</p>
+<p>在這種情況下如果採用 encoding 的方式，則很可能造成畫面顯示不如預期，但如果如實保存內容，又可能會產生 XSS 漏洞。</p>
+<p>此時可以採取另一種方式叫做 HTML Sanitization，也就是對可疑的內容進行移除，只留下安全的內容，這部分通常有黑名單跟白名單兩種做法。</p>
+<p>黑名單就是過濾某些不允許的元素或性質，例如只是靜態文字圖片顯示，所以不允許內容包含 <code>&lt;script&gt;</code> 標籤；白名單相對就是只留下某些允許的元素或內容，例如雖然允許 <code>&lt;img&gt;</code> 標籤做圖片插入，但 <code>&lt;img&gt;</code> 標籤的屬性只允許 href 等等，並且此時也要結合 Output Encoding 方法對 href 內容作跳脫處理等等。</p>
+<p>但因為大家需求不同的因素，不論是白名單還是黑名單都會需要依照需求確認來做調整，以避免不該擋的擋掉，該擋的卻沒擋掉，反而造成 XSS 漏洞或跟需求不符。</p>
+<h3 id="content-security-policy-header">Content-Security-Policy Header</h3>
+<p>以上都是我們寫代碼的實作面去做防範，但其實各家主流瀏覽器也都有通用的標準來協助我們阻擋 XSS 攻擊。但須要注意的是，這些瀏覽器的功能都可能可以被關閉 (例如用 Tampermonkey)，所以只是防君子不防小人，不可以僅依賴瀏覽器的防範功能。</p>
+<p>比較早期的就是在 Header 中加入 <code>x-xss-protection</code> 來指定瀏覽器針對 XSS 內容如何做 filtering，但比較近代的瀏覽器已經不太支援此 Header；當前主流瀏覽器普遍支援的是 <code>Content-Security-Policy</code> 這個 Header。</p>
+<p><code>Content-Security-Policy</code> 這個 Header 主要是用來控制各種資源 (包含對外部的請求跟內部 inline script 或 css) 的載入，這個資源可以包括 css, js, img, video, iframe等等。</p>
+<p>例如 <code>Content-Security-Policy: script-src 'self'</code> 表示在此頁面可以載入的合法 JavaScript 或 WebAssembly 來源只有 self，也就是同個來源 (schema + domain + port) 的 script 才可以載入及執行。</p>
+<p>詳細設定細節可以參考 <a href="https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Content-Security-Policy">MDN Content-Security-Policy</a> 的說明，或乾脆參考例如 Facebook 等網站是怎麼配置。</p>
+<p>因為 <code>Content-Security-Policy</code> Header 是放在 response header 當中以告訴瀏覽器要如何控制資源載入，所以一般是由伺服器端加上；如果是 server side render 的網站沒有問題，就是在例如 php、jsp 或 cshtml 這種頁面上的 <code>&lt;head&gt;</code> 裡面加上例如 <code>&lt;meta http-equiv=&quot;Content-Security-Policy&quot; content=&quot;default-src 'self'; img-src *&quot;&gt;</code>；但如果是前後端分離，則是在前端 web server serving 的 html 等檔案上加入，或由 web server 設定在 response header 中加入。</p>
+<h4 id="restful-api-with-content-security-policy-header">RESTful API with Content-Security-Policy Header</h4>
+<p>這邊額外研究一下如果是 RESTful API 還有需要加上 <code>Content-Security-Policy</code> header 嗎？</p>
+<blockquote>
+<p>這邊特別指定討論 RESTful API，其實是想表達後端 API 僅提供資料與前端溝通，而不負責提供待 render 的 HTML、CSS、JavaScript 等資源的情況，所以其他相同功能但並不特別遵守 REST 的 API 其實也適用此處的情況。</p>
+</blockquote>
+<p>通常這種情況多發生在前後端分離架構，前端透過 Ajax 呼叫後端 RESTful API 來取得資料進行畫面 render 的場景下，CSP 一般會直接配置在頁面 <code>&lt;head&gt;</code> 中。所以原則上不需要後端回傳的 response 來提供 CSP 限制。</p>
+<p>但若是硬要在後端 RESTful API 的 response header 中加入 CSP 會對前端造成什麼影響嗎？</p>
+<p>我們可以從 W3C 提供的 CSP 文件中 <a href="https://www.w3.org/TR/CSP2/#which-policy-applies">3.5 Policy applicability</a> 這段可以看到：</p>
+<blockquote>
+<p>&hellip;If a resource does not create a new execution context (for example, when including a script, image, or stylesheet into a document), then any policies delivered with that resource are discarded without effect. Its execution is subject to the policy or policies of the including context&hellip;</p>
+</blockquote>
+<p>CSP 是否 apply 的關鍵是回傳的資源是否會產生新的執行上下文 (execution context)，這樣講很抽象，但可以參考 W3C 文件 <a href="https://www.w3.org/TR/CSP2/#which-policy-applies">3.5 Policy applicability</a> 列出的表格來參照哪些資源回傳後 CSP 是否會 apply。</p>
+<p>但同時也要注意，W3C 文件中同時也有指出其列出的 applicability 並非規範標準，所以實際各家瀏覽器如何實作可能並不一定相同。</p>
+<blockquote>
+<p><em>This section is not normative.</em></p>
+</blockquote>
+<h2 id="參考">參考</h2>
+<ul>
+<li><a href="https://en.wikipedia.org/wiki/Cross-site_scripting">Cross-site scripting</a></li>
+<li><a href="https://en.wikipedia.org/wiki/Cross-site_request_forgery">Cross-site request forgery</a></li>
+<li><a href="https://cheatsheetseries.owasp.org/cheatsheets/Cross_Site_Scripting_Prevention_Cheat_Sheet.html">OWASP XSS Prevention Cheat Sheet</a></li>
+<li><a href="https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/X-XSS-Protection">MDN X-XSS-Protection</a></li>
+<li><a href="https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Content-Security-Policy">MDN Content-Security-Policy</a></li>
+<li><a href="https://www.w3.org/TR/CSP2/">W3C Content Security Policy Level 2</a></li>
+</ul>
+
+                    
+                    <HR width="100%" id="EOF">
+		    <p style="color:#777;">Last modified on 2022-11-01</p>
+                    
+                </div>
+            </div>
+            
+            
+            <nav class="post-pagination">
+
+                
+                <a class="newer-posts" href="https://idontwannarock.github.io/tech_blog/2022/11/xss_prevention_spring_boot/">
+			Next<br>Spring Boot 後端實作 XSS 防範
+                </a>
+                
+                
+                
+                <a class="older-posts" href="https://idontwannarock.github.io/tech_blog/2022/10/java_optional_not_recommand_as_field/">
+			Previous<br>Java Optional 為何不推薦做為類別屬性
+                </a>
+                
+            </nav>
+            <div class="post-comment-wrapper">
+                
+<div id="disqus_thread"></div>
+<script>
+    
+
+    var disqus_config = function () {
+        
+        this.page.url = '\/2022\/11\/xss_prevention_intro\/';  
+        
+        
+        this.page.identifier = '\/2022\/11\/xss_prevention_intro\/'; 
+    };
+    (function() {
+        var d = document, s = d.createElement('script');
+        s.src = 'https://howard-tech-blog.disqus.com/embed.js';
+        s.setAttribute('data-timestamp', +new Date());
+        (d.head || d.body).appendChild(s);
+    })();
+</script>
+<noscript> Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript" rel="nofollow"> comments powered by Disqus.  </a> </noscript>
+
+
+
+
+
+
+
+
+
+
+
+            </div>
+        </div>
+    </div>
+
+
+                    </div>
+            </div><div id="single-column-footer">
+Hugo Theme <a href="https://github.com/amazingrise/hugo-theme-diary">Diary</a> by <a href="https://risehere.net/">Rise</a>
+<br>
+Ported from <a href="https://mak1t0.cc/" target="_blank" rel="noreferrer noopener">Makito</a>'s <a href="https://github.com/SumiMakito/hexo-theme-journal/" target="_blank" rel="noreferrer noopener">Journal.</a> <br>
+<br>
+
+&copy;
+	
+	This website by Howard Wang is licensed under a Creative Common Attribution-ShareAlike 4.0 International License.
+	
+</div>
+            </div>
+    
+    <script src="https://idontwannarock.github.io/tech_blog/js/journal.js"></script></body>
+</html>
