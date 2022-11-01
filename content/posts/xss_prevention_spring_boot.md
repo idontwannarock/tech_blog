@@ -13,7 +13,7 @@ enableLaTeX: false
 
 XSS 系列：
 
-1. XSS 防範簡介
+1. [XSS 防範簡介](https://idontwannarock.github.io/tech_blog/2022/11/xss_prevention_intro/)
 2. Spring Boot 後端實作 XSS 防範
 
 身為一個 Java 後端工程師，今天要來討論如何在 Spring Boot 的後端專案進行 general 的 XSS 防範。
