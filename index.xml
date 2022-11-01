@@ -21,7 +21,7 @@
         <guid>https://idontwannarock.github.io/tech_blog/2022/11/xss_prevention_spring_boot/</guid>
         <description>Howard Tech Note https://idontwannarock.github.io/tech_blog/2022/11/xss_prevention_spring_boot/ -&lt;p&gt;XSS 系列：&lt;/p&gt;
 &lt;ol&gt;
-&lt;li&gt;XSS 防範簡介&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;https://idontwannarock.github.io/tech_blog/2022/11/xss_prevention_intro/&#34;&gt;XSS 防範簡介&lt;/a&gt;&lt;/li&gt;
 &lt;li&gt;Spring Boot 後端實作 XSS 防範&lt;/li&gt;
 &lt;/ol&gt;
 &lt;p&gt;身為一個 Java 後端工程師，今天要來討論如何在 Spring Boot 的後端專案進行 general 的 XSS 防範。&lt;/p&gt;
@@ -282,7 +282,7 @@
         <description>Howard Tech Note https://idontwannarock.github.io/tech_blog/2022/11/xss_prevention_intro/ -&lt;p&gt;XSS 系列：&lt;/p&gt;
 &lt;ol&gt;
 &lt;li&gt;XSS 防範簡介&lt;/li&gt;
-&lt;li&gt;Spring Boot 後端實作 XSS 防範&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;https://idontwannarock.github.io/tech_blog/2022/11/xss_prevention_spring_boot/&#34;&gt;Spring Boot 後端實作 XSS 防範&lt;/a&gt;&lt;/li&gt;
 &lt;/ol&gt;
 &lt;p&gt;跨網站指令碼 Cross-site Scripting, XSS，是一種代碼注入的攻擊，讓攻擊者在網頁上注入代碼，而其他使用者在觀看網頁的時候就會受到影響。&lt;/p&gt;
 &lt;h2 id=&#34;攻擊模式&#34;&gt;攻擊模式&lt;/h2&gt;
