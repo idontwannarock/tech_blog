@@ -7,7 +7,22 @@
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
     <copyright>This website by Howard Wang is licensed under a Creative Common Attribution-ShareAlike 4.0 International License.</copyright>
-    <lastBuildDate>Tue, 01 Nov 2022 15:28:32 +0800</lastBuildDate><atom:link href="https://idontwannarock.github.io/tech_blog/tags/spring-boot/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Tue, 15 Nov 2022 16:54:13 +0800</lastBuildDate><atom:link href="https://idontwannarock.github.io/tech_blog/tags/spring-boot/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Spring Boot 整合 Quartz 集群執行預設及動態排程</title>
+      <link>https://idontwannarock.github.io/tech_blog/2022/11/quartz-cluster-fixed-and-dynamic-trigger-spring-boot-integration/</link>
+      <pubDate>Tue, 15 Nov 2022 16:54:13 +0800</pubDate>
+      
+      <guid>https://idontwannarock.github.io/tech_blog/2022/11/quartz-cluster-fixed-and-dynamic-trigger-spring-boot-integration/</guid>
+      <description>Quartz 系列：
+Quartz 介紹 Spring Boot 整合 Quartz 集群執行預設及動態排程 Spring Boot 官方本身就有 spring-boot-starter-quartz 來提供 Quartz 整合，所以在 Spring Boot 當中使用基本 Quartz 功能已經非常簡單
+至於動態產生排程，網路上也很多教學，只是大多是採用 API 呼叫的方式去動態產生、運行、暫停、刪除排程等功能，而幾乎沒看到利用預設排程定時從 database 取得動態排程設定，並動態產生或移除排程的功能
+接下來探討如何在 Spring Boot 整合 Quartz 的框架中實作以上需求，來達成依照自訂動態排程來發通知的需求
+以下討論採用 Spring Boot 2.7.5 及 Quartz 2.3.2 版本並搭配 MySQL 做持久化
+Database Schema 首先需要在 MySQL 內建立相關的 schema，可以利用官方提供的這個 script 來建立，並額外依照以下 sql 建立動態通知排程的 table：
+create table if not exist NOTIFICATION_SCHEDULE ( ID int auto_increment primary key, CRON varchar(100) not null comment &amp;#39;Quartz type cron&amp;#39;, TIMEZONE varchar(64) default &amp;#39;Asia/Taipei&amp;#39; null, TEMPLATE_ID int not null, IS_ONLINE tinyint(1) default 1 null, IS_DELETED tinyint(1) default 0 null, CREATE_TIME datetime default CURRENT_TIMESTAMP null, UPDATE_TIME datetime null on update CURRENT_TIMESTAMP ) comment &amp;#39;紀錄通知排程資訊&amp;#39;; Dependency 接著在 pom 檔引用以下依賴：</description>
+    </item>
+    
     <item>
       <title>Spring Boot 後端實作 XSS 防範</title>
       <link>https://idontwannarock.github.io/tech_blog/2022/11/xss_prevention_spring_boot/</link>

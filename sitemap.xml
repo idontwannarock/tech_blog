@@ -3,21 +3,39 @@
   xmlns:xhtml="http://www.w3.org/1999/xhtml">
   <url>
     <loc>https://idontwannarock.github.io/tech_blog/categories/</loc>
-    <lastmod>2022-11-15T16:24:46+08:00</lastmod>
+    <lastmod>2022-11-15T16:54:13+08:00</lastmod>
+  </url><url>
+    <loc>https://idontwannarock.github.io/tech_blog/tags/dynamic-trigger/</loc>
+    <lastmod>2022-11-15T16:54:13+08:00</lastmod>
+  </url><url>
+    <loc>https://idontwannarock.github.io/tech_blog/</loc>
+    <lastmod>2022-11-15T16:54:13+08:00</lastmod>
+  </url><url>
+    <loc>https://idontwannarock.github.io/tech_blog/categories/implementation/</loc>
+    <lastmod>2022-11-15T16:54:13+08:00</lastmod>
+  </url><url>
+    <loc>https://idontwannarock.github.io/tech_blog/posts/</loc>
+    <lastmod>2022-11-15T16:54:13+08:00</lastmod>
+  </url><url>
+    <loc>https://idontwannarock.github.io/tech_blog/tags/quartz/</loc>
+    <lastmod>2022-11-15T16:54:13+08:00</lastmod>
+  </url><url>
+    <loc>https://idontwannarock.github.io/tech_blog/tags/quartz-cluster/</loc>
+    <lastmod>2022-11-15T16:54:13+08:00</lastmod>
+  </url><url>
+    <loc>https://idontwannarock.github.io/tech_blog/2022/11/quartz-cluster-fixed-and-dynamic-trigger-spring-boot-integration/</loc>
+    <lastmod>2022-11-15T16:54:13+08:00</lastmod>
+  </url><url>
+    <loc>https://idontwannarock.github.io/tech_blog/tags/spring-boot/</loc>
+    <lastmod>2022-11-15T16:54:13+08:00</lastmod>
+  </url><url>
+    <loc>https://idontwannarock.github.io/tech_blog/tags/</loc>
+    <lastmod>2022-11-15T16:54:13+08:00</lastmod>
   </url><url>
     <loc>https://idontwannarock.github.io/tech_blog/categories/concept/</loc>
     <lastmod>2022-11-15T16:24:46+08:00</lastmod>
   </url><url>
-    <loc>https://idontwannarock.github.io/tech_blog/</loc>
-    <lastmod>2022-11-15T16:24:46+08:00</lastmod>
-  </url><url>
     <loc>https://idontwannarock.github.io/tech_blog/tags/java/</loc>
-    <lastmod>2022-11-15T16:24:46+08:00</lastmod>
-  </url><url>
-    <loc>https://idontwannarock.github.io/tech_blog/posts/</loc>
-    <lastmod>2022-11-15T16:24:46+08:00</lastmod>
-  </url><url>
-    <loc>https://idontwannarock.github.io/tech_blog/tags/quartz/</loc>
     <lastmod>2022-11-15T16:24:46+08:00</lastmod>
   </url><url>
     <loc>https://idontwannarock.github.io/tech_blog/2022/11/quartz-intro/</loc>
@@ -26,19 +44,10 @@
     <loc>https://idontwannarock.github.io/tech_blog/tags/scheduling/</loc>
     <lastmod>2022-11-15T16:24:46+08:00</lastmod>
   </url><url>
-    <loc>https://idontwannarock.github.io/tech_blog/tags/</loc>
-    <lastmod>2022-11-15T16:24:46+08:00</lastmod>
-  </url><url>
-    <loc>https://idontwannarock.github.io/tech_blog/categories/implementation/</loc>
-    <lastmod>2022-11-01T15:28:32+08:00</lastmod>
-  </url><url>
     <loc>https://idontwannarock.github.io/tech_blog/tags/owasp/</loc>
     <lastmod>2022-11-01T15:28:32+08:00</lastmod>
   </url><url>
     <loc>https://idontwannarock.github.io/tech_blog/2022/11/xss_prevention_spring_boot/</loc>
-    <lastmod>2022-11-01T15:28:32+08:00</lastmod>
-  </url><url>
-    <loc>https://idontwannarock.github.io/tech_blog/tags/spring-boot/</loc>
     <lastmod>2022-11-01T15:28:32+08:00</lastmod>
   </url><url>
     <loc>https://idontwannarock.github.io/tech_blog/tags/spring-security/</loc>
