@@ -7,7 +7,18 @@
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
     <copyright>This website by Howard Wang is licensed under a Creative Common Attribution-ShareAlike 4.0 International License.</copyright>
-    <lastBuildDate>Tue, 01 Nov 2022 14:00:26 +0800</lastBuildDate><atom:link href="https://idontwannarock.github.io/tech_blog/categories/concept/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Tue, 15 Nov 2022 16:24:46 +0800</lastBuildDate><atom:link href="https://idontwannarock.github.io/tech_blog/categories/concept/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Quartz 介紹</title>
+      <link>https://idontwannarock.github.io/tech_blog/2022/11/quartz-intro/</link>
+      <pubDate>Tue, 15 Nov 2022 16:24:46 +0800</pubDate>
+      
+      <guid>https://idontwannarock.github.io/tech_blog/2022/11/quartz-intro/</guid>
+      <description>Quartz 系列：
+Quartz 介紹 Spring Boot 整合 Quartz 集群執行預設及動態排程 Quartz 是 Java 生態中一套成熟的開源排程框架，其完整的排程功能包含多樣排程設定、自動任務調度、任務持久化，以及支援分散式排程調度、自動負載平衡，讓排程可以輕鬆運行、應用可以輕鬆 scale out
+概念 核心元件 Job: 任務需要執行的內容；Job 有區分是否可併行執行，不能併行執行意思是只有上一次觸發的任務執行完後才能觸發下一次執行；另外，一個 Job 可以關聯到多個 Trigger，也就是同一個 Job 可以以不同時間規則多次觸發，但一個 Trigger 只能關聯一個 Job JobDetail: 包含任務的設定，也就是要實例化 Job 時的相關設定；由 JobKey (Job 名稱 name 和分組 group)、JobClass、JobDataMap (任務相關數據)、JobBuilder 組成，並可以設定任務調度的方案和策略，並指定要調度的 Job 類別 Trigger: 設定觸發執行 Job 實例的時間規則；Scheduler 負責掃描需要執行的 Job 任務，而 Trigger 負責告訴 Scheduler 何時執行；Quartz 2.3.2 版提供 SimpleTrigger、CronTrigger、DailyTimeIntervalTrigger 及 CalendarIntervalTrigger 等 Trigger Scheduler: 任務調度器，會讀取 Trigger 從而觸發以 JobDetail 產生的 Job 實例；一個調度器中可以註冊多個 JobDetail 及 Trigger，只要 JobDetail 與 Trigger 組合，就可以被 Scheduler 調度 單體 stand-alone 模式運作 流程很簡單，就是 Scheduler 負責管理 Trigger 及 Job，會讀取 Trigger 並按照設定觸發時間規則，到時間就依照 JobDetail 設定產生跟該 Trigger 關聯的 Job 實例並運行</description>
+    </item>
+    
     <item>
       <title>XSS 防範簡介</title>
       <link>https://idontwannarock.github.io/tech_blog/2022/11/xss_prevention_intro/</link>

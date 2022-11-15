@@ -7,9 +7,216 @@
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
     <copyright>This website by Howard Wang is licensed under a Creative Common Attribution-ShareAlike 4.0 International License.</copyright>
-    <lastBuildDate>Tue, 01 Nov 2022 15:28:32 +0800</lastBuildDate>
+    <lastBuildDate>Tue, 15 Nov 2022 16:24:46 +0800</lastBuildDate>
     
         <atom:link href="https://idontwannarock.github.io/tech_blog/index.xml" rel="self" type="application/rss+xml" />
+    
+    
+    
+        <item>
+        <title>Quartz 介紹</title>
+        <link>https://idontwannarock.github.io/tech_blog/2022/11/quartz-intro/</link>
+        <pubDate>Tue, 15 Nov 2022 16:24:46 +0800</pubDate>
+        
+        <guid>https://idontwannarock.github.io/tech_blog/2022/11/quartz-intro/</guid>
+        <description>Howard Tech Note https://idontwannarock.github.io/tech_blog/2022/11/quartz-intro/ -&lt;p&gt;Quartz 系列：&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;Quartz 介紹&lt;/li&gt;
+&lt;li&gt;Spring Boot 整合 Quartz 集群執行預設及動態排程&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;Quartz 是 Java 生態中一套成熟的開源排程框架，其完整的排程功能包含多樣排程設定、自動任務調度、任務持久化，以及支援分散式排程調度、自動負載平衡，讓排程可以輕鬆運行、應用可以輕鬆 scale out&lt;/p&gt;
+&lt;h1 id=&#34;概念&#34;&gt;概念&lt;/h1&gt;
+&lt;h2 id=&#34;核心元件&#34;&gt;核心元件&lt;/h2&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;code&gt;Job&lt;/code&gt;: 任務需要執行的內容；&lt;code&gt;Job&lt;/code&gt; 有區分是否可併行執行，不能併行執行意思是只有上一次觸發的任務執行完後才能觸發下一次執行；另外，一個 &lt;code&gt;Job&lt;/code&gt; 可以關聯到多個 &lt;code&gt;Trigger&lt;/code&gt;，也就是同一個 &lt;code&gt;Job&lt;/code&gt; 可以以不同時間規則多次觸發，但一個 &lt;code&gt;Trigger&lt;/code&gt; 只能關聯一個 &lt;code&gt;Job&lt;/code&gt;&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;JobDetail&lt;/code&gt;: 包含任務的設定，也就是要實例化 &lt;code&gt;Job&lt;/code&gt; 時的相關設定；由 &lt;code&gt;JobKey&lt;/code&gt; (Job 名稱 name 和分組 group)、&lt;code&gt;JobClass&lt;/code&gt;、&lt;code&gt;JobDataMap&lt;/code&gt; (任務相關數據)、&lt;code&gt;JobBuilder&lt;/code&gt; 組成，並可以設定任務調度的方案和策略，並指定要調度的 &lt;code&gt;Job&lt;/code&gt; 類別&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;Trigger&lt;/code&gt;: 設定觸發執行 &lt;code&gt;Job&lt;/code&gt; 實例的時間規則；&lt;code&gt;Scheduler&lt;/code&gt; 負責掃描需要執行的 &lt;code&gt;Job&lt;/code&gt; 任務，而 &lt;code&gt;Trigger&lt;/code&gt; 負責告訴 &lt;code&gt;Scheduler&lt;/code&gt; 何時執行；Quartz 2.3.2 版提供 &lt;code&gt;SimpleTrigger&lt;/code&gt;、&lt;code&gt;CronTrigger&lt;/code&gt;、&lt;code&gt;DailyTimeIntervalTrigger&lt;/code&gt; 及 &lt;code&gt;CalendarIntervalTrigger&lt;/code&gt; 等 &lt;code&gt;Trigger&lt;/code&gt;&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;Scheduler&lt;/code&gt;: 任務調度器，會讀取 &lt;code&gt;Trigger&lt;/code&gt; 從而觸發以 &lt;code&gt;JobDetail&lt;/code&gt; 產生的 &lt;code&gt;Job&lt;/code&gt; 實例；一個調度器中可以註冊多個 &lt;code&gt;JobDetail&lt;/code&gt; 及 &lt;code&gt;Trigger&lt;/code&gt;，只要 &lt;code&gt;JobDetail&lt;/code&gt; 與 &lt;code&gt;Trigger&lt;/code&gt; 組合，就可以被 &lt;code&gt;Scheduler&lt;/code&gt; 調度&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2 id=&#34;單體-stand-alone-模式運作&#34;&gt;單體 stand-alone 模式運作&lt;/h2&gt;
+&lt;p&gt;流程很簡單，就是 &lt;code&gt;Scheduler&lt;/code&gt; 負責管理 &lt;code&gt;Trigger&lt;/code&gt; 及 &lt;code&gt;Job&lt;/code&gt;，會讀取 &lt;code&gt;Trigger&lt;/code&gt; 並按照設定觸發時間規則，到時間就依照 &lt;code&gt;JobDetail&lt;/code&gt; 設定產生跟該 &lt;code&gt;Trigger&lt;/code&gt; 關聯的 &lt;code&gt;Job&lt;/code&gt; 實例並運行&lt;/p&gt;
+&lt;h2 id=&#34;集群-cluster-模式原理&#34;&gt;集群 cluster 模式原理&lt;/h2&gt;
+&lt;p&gt;集群模式就不如單體模式這麼單純，有以下三個問題需要處理：&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;code&gt;Job&lt;/code&gt; 資訊的保存&lt;/li&gt;
+&lt;li&gt;各節點狀態更新以及 failover&lt;/li&gt;
+&lt;li&gt;保證任務執行的一致性，避免重複執行&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;而 Quartz 的集群並不需要節點之間互相通訊，只依賴可以共同存取的的資料，就可達成分散式任務調度，也不需要在不同應用實例之間做額外配置&lt;/p&gt;
+&lt;h3 id=&#34;資料保存方式&#34;&gt;資料保存方式&lt;/h3&gt;
+&lt;p&gt;首先 Quartz 中的 &lt;code&gt;Trigger&lt;/code&gt; 和 &lt;code&gt;Job&lt;/code&gt; 需要保存下來才能使用，目前 Quartz 提供四種保存方式：&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;code&gt;RAMJobStore&lt;/code&gt;: 資料保存在記憶體，只適合 stand-alone 應用&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;JobStoreTX&lt;/code&gt;: 資料以 JDBC 方式保存，會自行透過 db connection 處理 transaction，適合 stand-alone 應用&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;JobStroeCMT&lt;/code&gt;: 資料以 JDBC 方式保存，但依賴應用去管理 transaction，適合分散式 transaction，例如使用 JTA 操作分散式 transaction 的應用&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;TerracottaJobStore&lt;/code&gt;: 資料保存在 Terracotta server (Terracotta 公司開發專門用來提供 Terracotta 公司產品分散式 in-memory 資料管理的應用)，因為 Terracotta server 有特別優化，所以適合需要比保存資料在 database 效能更高，但也同時需要分散式調度排程的應用&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h4 id=&#34;資料庫-schema&#34;&gt;資料庫 schema&lt;/h4&gt;
+&lt;p&gt;以下是 Quartz 2.3.2 版本採用 &lt;code&gt;JobStoreTX&lt;/code&gt; 或 &lt;code&gt;JobStoreCMT&lt;/code&gt; 所需要的 11 張資料表&lt;/p&gt;
+&lt;table&gt;
+&lt;thead&gt;
+&lt;tr&gt;
+&lt;th style=&#34;text-align:left&#34;&gt;Table Name&lt;/th&gt;
+&lt;th style=&#34;text-align:left&#34;&gt;Description&lt;/th&gt;
+&lt;/tr&gt;
+&lt;/thead&gt;
+&lt;tbody&gt;
+&lt;tr&gt;
+&lt;td style=&#34;text-align:left&#34;&gt;QRTZ_BLOB_TRIGGERS&lt;/td&gt;
+&lt;td style=&#34;text-align:left&#34;&gt;以 Blob 類型保存的 &lt;code&gt;Trigger&lt;/code&gt;&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td style=&#34;text-align:left&#34;&gt;QRTZ_CALENDARS&lt;/td&gt;
+&lt;td style=&#34;text-align:left&#34;&gt;保存日曆資訊&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td style=&#34;text-align:left&#34;&gt;QRTZ_CRON_TRIGGERS&lt;/td&gt;
+&lt;td style=&#34;text-align:left&#34;&gt;保存 Cron 類型的 &lt;code&gt;Trigger&lt;/code&gt;，包含 Quartz cron expression 及時區&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td style=&#34;text-align:left&#34;&gt;QRTZ_FIRED_TRIGGERS&lt;/td&gt;
+&lt;td style=&#34;text-align:left&#34;&gt;保存已觸發 &lt;code&gt;Trigger&lt;/code&gt; 相關的狀態資訊，以及相關 &lt;code&gt;Job&lt;/code&gt; 的執行資訊&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td style=&#34;text-align:left&#34;&gt;QRTZ_JOB_DETAILS&lt;/td&gt;
+&lt;td style=&#34;text-align:left&#34;&gt;保存 &lt;code&gt;JobDetail&lt;/code&gt; 的設定跟資訊&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td style=&#34;text-align:left&#34;&gt;QRTZ_LOCKS&lt;/td&gt;
+&lt;td style=&#34;text-align:left&#34;&gt;保存悲觀鎖的資訊&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td style=&#34;text-align:left&#34;&gt;QRTZ_PAUSED_TRIGGER_GRPS&lt;/td&gt;
+&lt;td style=&#34;text-align:left&#34;&gt;保存已暫停的 &lt;code&gt;Trigger&lt;/code&gt; 分組相關資訊&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td style=&#34;text-align:left&#34;&gt;QRTZ_SCHEDULER_STATE&lt;/td&gt;
+&lt;td style=&#34;text-align:left&#34;&gt;保存 &lt;code&gt;Scheduler&lt;/code&gt; 相關的狀態資訊&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td style=&#34;text-align:left&#34;&gt;QRTZ_SIMPLE_TRIGGERS&lt;/td&gt;
+&lt;td style=&#34;text-align:left&#34;&gt;以 Simple 類型保存的 &lt;code&gt;Trigger&lt;/code&gt;，包含重複次數、間隔及已觸發的次數&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td style=&#34;text-align:left&#34;&gt;QRTZ_SIMPROP_TRIGGERS&lt;/td&gt;
+&lt;td style=&#34;text-align:left&#34;&gt;作用未明&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td style=&#34;text-align:left&#34;&gt;QRTZ_TRIGGERS&lt;/td&gt;
+&lt;td style=&#34;text-align:left&#34;&gt;保存已設定的 &lt;code&gt;Trigger&lt;/code&gt; 基本資訊&lt;/td&gt;
+&lt;/tr&gt;
+&lt;/tbody&gt;
+&lt;/table&gt;
+&lt;h3 id=&#34;節點狀態更新及-failover&#34;&gt;節點狀態更新及 Failover&lt;/h3&gt;
+&lt;p&gt;前面有提到 Quartz 並不需要節點之間互相通訊，而是透過各節點自行定時保持心跳更新 &lt;code&gt;QRTZ_SCHEDULER_STATE&lt;/code&gt; 當中的 &lt;code&gt;LAST_CHECKIN_TIME&lt;/code&gt;&lt;/p&gt;
+&lt;p&gt;再來是每個節點都會檢查所有其他節點的 &lt;code&gt;LAST_CHECKIN_TIME&lt;/code&gt; 是否過期，如果過期就認為該節點失效：&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;&#34;&gt;&lt;code class=&#34;language-java&#34; data-lang=&#34;java&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#8be9fd;font-style:italic&#34;&gt;protected&lt;/span&gt; List&lt;span style=&#34;color:#ff79c6&#34;&gt;&amp;lt;&lt;/span&gt;SchedulerStateRecord&lt;span style=&#34;color:#ff79c6&#34;&gt;&amp;gt;&lt;/span&gt; &lt;span style=&#34;color:#50fa7b&#34;&gt;findFailedInstances&lt;/span&gt;&lt;span style=&#34;color:#ff79c6&#34;&gt;(&lt;/span&gt;Connection conn&lt;span style=&#34;color:#ff79c6&#34;&gt;)&lt;/span&gt; &lt;span style=&#34;color:#8be9fd;font-style:italic&#34;&gt;throws&lt;/span&gt; JobPersistenceException &lt;span style=&#34;color:#ff79c6&#34;&gt;{&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;	&lt;span style=&#34;color:#ff79c6&#34;&gt;try&lt;/span&gt; &lt;span style=&#34;color:#ff79c6&#34;&gt;{&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;		&lt;span style=&#34;color:#ff79c6&#34;&gt;...&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;		List&lt;span style=&#34;color:#ff79c6&#34;&gt;&amp;lt;&lt;/span&gt;SchedulerStateRecord&lt;span style=&#34;color:#ff79c6&#34;&gt;&amp;gt;&lt;/span&gt; states &lt;span style=&#34;color:#ff79c6&#34;&gt;=&lt;/span&gt; getDelegate&lt;span style=&#34;color:#ff79c6&#34;&gt;().&lt;/span&gt;&lt;span style=&#34;color:#50fa7b&#34;&gt;selectSchedulerStateRecords&lt;/span&gt;&lt;span style=&#34;color:#ff79c6&#34;&gt;(&lt;/span&gt;conn&lt;span style=&#34;color:#ff79c6&#34;&gt;,&lt;/span&gt; &lt;span style=&#34;color:#ff79c6&#34;&gt;null&lt;/span&gt;&lt;span style=&#34;color:#ff79c6&#34;&gt;);&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;		&lt;span style=&#34;color:#ff79c6&#34;&gt;for&lt;/span&gt;&lt;span style=&#34;color:#ff79c6&#34;&gt;(&lt;/span&gt;SchedulerStateRecord rec&lt;span style=&#34;color:#ff79c6&#34;&gt;:&lt;/span&gt; states&lt;span style=&#34;color:#ff79c6&#34;&gt;)&lt;/span&gt; &lt;span style=&#34;color:#ff79c6&#34;&gt;{&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;			&lt;span style=&#34;color:#6272a4&#34;&gt;// find own record...
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#6272a4&#34;&gt;&lt;/span&gt;			&lt;span style=&#34;color:#ff79c6&#34;&gt;if&lt;/span&gt; &lt;span style=&#34;color:#ff79c6&#34;&gt;(&lt;/span&gt;rec&lt;span style=&#34;color:#ff79c6&#34;&gt;.&lt;/span&gt;&lt;span style=&#34;color:#50fa7b&#34;&gt;getSchedulerInstanceId&lt;/span&gt;&lt;span style=&#34;color:#ff79c6&#34;&gt;().&lt;/span&gt;&lt;span style=&#34;color:#50fa7b&#34;&gt;equals&lt;/span&gt;&lt;span style=&#34;color:#ff79c6&#34;&gt;(&lt;/span&gt;getInstanceId&lt;span style=&#34;color:#ff79c6&#34;&gt;()))&lt;/span&gt; &lt;span style=&#34;color:#ff79c6&#34;&gt;{&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;				foundThisScheduler &lt;span style=&#34;color:#ff79c6&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color:#ff79c6&#34;&gt;true&lt;/span&gt;&lt;span style=&#34;color:#ff79c6&#34;&gt;;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;				&lt;span style=&#34;color:#ff79c6&#34;&gt;if&lt;/span&gt; &lt;span style=&#34;color:#ff79c6&#34;&gt;(&lt;/span&gt;firstCheckIn&lt;span style=&#34;color:#ff79c6&#34;&gt;)&lt;/span&gt; &lt;span style=&#34;color:#ff79c6&#34;&gt;{&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;					failedInstances&lt;span style=&#34;color:#ff79c6&#34;&gt;.&lt;/span&gt;&lt;span style=&#34;color:#50fa7b&#34;&gt;add&lt;/span&gt;&lt;span style=&#34;color:#ff79c6&#34;&gt;(&lt;/span&gt;rec&lt;span style=&#34;color:#ff79c6&#34;&gt;);&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;				&lt;span style=&#34;color:#ff79c6&#34;&gt;}&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;			&lt;span style=&#34;color:#ff79c6&#34;&gt;}&lt;/span&gt; &lt;span style=&#34;color:#ff79c6&#34;&gt;else&lt;/span&gt; &lt;span style=&#34;color:#ff79c6&#34;&gt;{&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;				&lt;span style=&#34;color:#6272a4&#34;&gt;// find failed instances...
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#6272a4&#34;&gt;&lt;/span&gt;				&lt;span style=&#34;color:#ff79c6&#34;&gt;if&lt;/span&gt; &lt;span style=&#34;color:#ff79c6&#34;&gt;(&lt;/span&gt;calcFailedIfAfter&lt;span style=&#34;color:#ff79c6&#34;&gt;(&lt;/span&gt;rec&lt;span style=&#34;color:#ff79c6&#34;&gt;)&lt;/span&gt; &lt;span style=&#34;color:#ff79c6&#34;&gt;&amp;lt;&lt;/span&gt; timeNow&lt;span style=&#34;color:#ff79c6&#34;&gt;)&lt;/span&gt; &lt;span style=&#34;color:#ff79c6&#34;&gt;{&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;					failedInstances&lt;span style=&#34;color:#ff79c6&#34;&gt;.&lt;/span&gt;&lt;span style=&#34;color:#50fa7b&#34;&gt;add&lt;/span&gt;&lt;span style=&#34;color:#ff79c6&#34;&gt;(&lt;/span&gt;rec&lt;span style=&#34;color:#ff79c6&#34;&gt;);&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;				&lt;span style=&#34;color:#ff79c6&#34;&gt;}&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;			&lt;span style=&#34;color:#ff79c6&#34;&gt;}&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;		&lt;span style=&#34;color:#ff79c6&#34;&gt;}&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;		&lt;span style=&#34;color:#ff79c6&#34;&gt;...&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;	&lt;span style=&#34;color:#ff79c6&#34;&gt;}&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;	&lt;span style=&#34;color:#ff79c6&#34;&gt;...&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#ff79c6&#34;&gt;}&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#8be9fd;font-style:italic&#34;&gt;protected&lt;/span&gt; &lt;span style=&#34;color:#8be9fd&#34;&gt;long&lt;/span&gt; &lt;span style=&#34;color:#50fa7b&#34;&gt;calcFailedIfAfter&lt;/span&gt;&lt;span style=&#34;color:#ff79c6&#34;&gt;(&lt;/span&gt;SchedulerStateRecord rec&lt;span style=&#34;color:#ff79c6&#34;&gt;)&lt;/span&gt; &lt;span style=&#34;color:#ff79c6&#34;&gt;{&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;	&lt;span style=&#34;color:#ff79c6&#34;&gt;return&lt;/span&gt; rec&lt;span style=&#34;color:#ff79c6&#34;&gt;.&lt;/span&gt;&lt;span style=&#34;color:#50fa7b&#34;&gt;getCheckinTimestamp&lt;/span&gt;&lt;span style=&#34;color:#ff79c6&#34;&gt;()&lt;/span&gt; &lt;span style=&#34;color:#ff79c6&#34;&gt;+&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;		Math&lt;span style=&#34;color:#ff79c6&#34;&gt;.&lt;/span&gt;&lt;span style=&#34;color:#50fa7b&#34;&gt;max&lt;/span&gt;&lt;span style=&#34;color:#ff79c6&#34;&gt;(&lt;/span&gt;rec&lt;span style=&#34;color:#ff79c6&#34;&gt;.&lt;/span&gt;&lt;span style=&#34;color:#50fa7b&#34;&gt;getCheckinInterval&lt;/span&gt;&lt;span style=&#34;color:#ff79c6&#34;&gt;(),&lt;/span&gt; 
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;			&lt;span style=&#34;color:#ff79c6&#34;&gt;(&lt;/span&gt;System&lt;span style=&#34;color:#ff79c6&#34;&gt;.&lt;/span&gt;&lt;span style=&#34;color:#50fa7b&#34;&gt;currentTimeMillis&lt;/span&gt;&lt;span style=&#34;color:#ff79c6&#34;&gt;()&lt;/span&gt; &lt;span style=&#34;color:#ff79c6&#34;&gt;-&lt;/span&gt; lastCheckin&lt;span style=&#34;color:#ff79c6&#34;&gt;))&lt;/span&gt; &lt;span style=&#34;color:#ff79c6&#34;&gt;+&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;		7500L&lt;span style=&#34;color:#ff79c6&#34;&gt;;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#ff79c6&#34;&gt;}&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;接著就會依照檢查到的 fail 節點列表去取得那些實例在處理的 &lt;code&gt;Trigger&lt;/code&gt;，並將那些 &lt;code&gt;Trigger&lt;/code&gt; 從 &lt;code&gt;QRTZ_FIRED_TRIGGERS&lt;/code&gt; 表中刪除，再從 &lt;code&gt;QRTZ_SCHEDULER_STATE&lt;/code&gt; 表中刪除那些 fail 的節點，即可達成 failover：&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;&#34;&gt;&lt;code class=&#34;language-java&#34; data-lang=&#34;java&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#8be9fd;font-style:italic&#34;&gt;protected&lt;/span&gt; &lt;span style=&#34;color:#8be9fd&#34;&gt;void&lt;/span&gt; &lt;span style=&#34;color:#50fa7b&#34;&gt;clusterRecover&lt;/span&gt;&lt;span style=&#34;color:#ff79c6&#34;&gt;(&lt;/span&gt;Connection conn&lt;span style=&#34;color:#ff79c6&#34;&gt;,&lt;/span&gt; List&lt;span style=&#34;color:#ff79c6&#34;&gt;&amp;lt;&lt;/span&gt;SchedulerStateRecord&lt;span style=&#34;color:#ff79c6&#34;&gt;&amp;gt;&lt;/span&gt; failedInstances&lt;span style=&#34;color:#ff79c6&#34;&gt;)&lt;/span&gt; &lt;span style=&#34;color:#8be9fd;font-style:italic&#34;&gt;throws&lt;/span&gt; JobPersistenceException &lt;span style=&#34;color:#ff79c6&#34;&gt;{&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;	&lt;span style=&#34;color:#ff79c6&#34;&gt;if&lt;/span&gt; &lt;span style=&#34;color:#ff79c6&#34;&gt;(&lt;/span&gt;failedInstances&lt;span style=&#34;color:#ff79c6&#34;&gt;.&lt;/span&gt;&lt;span style=&#34;color:#50fa7b&#34;&gt;size&lt;/span&gt;&lt;span style=&#34;color:#ff79c6&#34;&gt;()&lt;/span&gt; &lt;span style=&#34;color:#ff79c6&#34;&gt;&amp;gt;&lt;/span&gt; 0&lt;span style=&#34;color:#ff79c6&#34;&gt;)&lt;/span&gt; &lt;span style=&#34;color:#ff79c6&#34;&gt;{&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;		&lt;span style=&#34;color:#ff79c6&#34;&gt;...&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;		&lt;span style=&#34;color:#6272a4&#34;&gt;// release acquired triggers..
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#6272a4&#34;&gt;&lt;/span&gt;		getDelegate&lt;span style=&#34;color:#ff79c6&#34;&gt;().&lt;/span&gt;&lt;span style=&#34;color:#50fa7b&#34;&gt;updateTriggerStateFromOtherState&lt;/span&gt;&lt;span style=&#34;color:#ff79c6&#34;&gt;(&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;				conn&lt;span style=&#34;color:#ff79c6&#34;&gt;,&lt;/span&gt; tKey&lt;span style=&#34;color:#ff79c6&#34;&gt;,&lt;/span&gt; STATE_WAITING&lt;span style=&#34;color:#ff79c6&#34;&gt;,&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;				STATE_ACQUIRED&lt;span style=&#34;color:#ff79c6&#34;&gt;);&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;		&lt;span style=&#34;color:#ff79c6&#34;&gt;...&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;		getDelegate&lt;span style=&#34;color:#ff79c6&#34;&gt;().&lt;/span&gt;&lt;span style=&#34;color:#50fa7b&#34;&gt;deleteFiredTriggers&lt;/span&gt;&lt;span style=&#34;color:#ff79c6&#34;&gt;(&lt;/span&gt;conn&lt;span style=&#34;color:#ff79c6&#34;&gt;,&lt;/span&gt; rec&lt;span style=&#34;color:#ff79c6&#34;&gt;.&lt;/span&gt;&lt;span style=&#34;color:#50fa7b&#34;&gt;getSchedulerInstanceId&lt;/span&gt;&lt;span style=&#34;color:#ff79c6&#34;&gt;());&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;		&lt;span style=&#34;color:#ff79c6&#34;&gt;...&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;		&lt;span style=&#34;color:#ff79c6&#34;&gt;if&lt;/span&gt; &lt;span style=&#34;color:#ff79c6&#34;&gt;(!&lt;/span&gt;rec&lt;span style=&#34;color:#ff79c6&#34;&gt;.&lt;/span&gt;&lt;span style=&#34;color:#50fa7b&#34;&gt;getSchedulerInstanceId&lt;/span&gt;&lt;span style=&#34;color:#ff79c6&#34;&gt;().&lt;/span&gt;&lt;span style=&#34;color:#50fa7b&#34;&gt;equals&lt;/span&gt;&lt;span style=&#34;color:#ff79c6&#34;&gt;(&lt;/span&gt;getInstanceId&lt;span style=&#34;color:#ff79c6&#34;&gt;()))&lt;/span&gt; &lt;span style=&#34;color:#ff79c6&#34;&gt;{&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;			getDelegate&lt;span style=&#34;color:#ff79c6&#34;&gt;().&lt;/span&gt;&lt;span style=&#34;color:#50fa7b&#34;&gt;deleteSchedulerState&lt;/span&gt;&lt;span style=&#34;color:#ff79c6&#34;&gt;(&lt;/span&gt;conn&lt;span style=&#34;color:#ff79c6&#34;&gt;,&lt;/span&gt; rec&lt;span style=&#34;color:#ff79c6&#34;&gt;.&lt;/span&gt;&lt;span style=&#34;color:#50fa7b&#34;&gt;getSchedulerInstanceId&lt;/span&gt;&lt;span style=&#34;color:#ff79c6&#34;&gt;());&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;		&lt;span style=&#34;color:#ff79c6&#34;&gt;}&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;		&lt;span style=&#34;color:#ff79c6&#34;&gt;...&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;	&lt;span style=&#34;color:#ff79c6&#34;&gt;}&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#ff79c6&#34;&gt;}&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;所以我們可以得知 Quartz 更新節點狀態是依靠運行環境的時間來進行同步，所以實際情況下，如果各節點運行在不同環境，需要注意各環境之間時間的同步&lt;/p&gt;
+&lt;h3 id=&#34;保證任務執行的一致性&#34;&gt;保證任務執行的一致性&lt;/h3&gt;
+&lt;blockquote&gt;
+&lt;p&gt;以下討論皆以採用 &lt;code&gt;JobStroeTX&lt;/code&gt; 並配合 MySQL 來繼續討論 Quartz 集群機制，可以比較清楚看到 Quartz 實作的步驟；若是採用 &lt;code&gt;JobStoreCMT&lt;/code&gt; 則要看應用本身提供怎樣的 transaction 機制，例如 JTA，但除了 transaction 的部分，其他概念大致上還是相同，所以其餘步驟也是大致相同&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;p&gt;Quartz 保證任務執行一致性的方式實際上是在各節點認領 &lt;code&gt;Trigger&lt;/code&gt; 時，先透過 database 本身支援的 row lock，例如 MySQL 在開啟 transaction 後，可透過 &lt;code&gt;select * from QRTZ_LOCKS where SCHED_NAME = &amp;lt;scheduleName&amp;gt; AND LOCK_NAME = ? for update&lt;/code&gt; 語句取得 row lock 實作悲觀鎖，以確保任務不會被重複執行：&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;&#34;&gt;&lt;code class=&#34;language-java&#34; data-lang=&#34;java&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#8be9fd;font-style:italic&#34;&gt;protected&lt;/span&gt; &lt;span style=&#34;color:#ff79c6&#34;&gt;&amp;lt;&lt;/span&gt;T&lt;span style=&#34;color:#ff79c6&#34;&gt;&amp;gt;&lt;/span&gt; T &lt;span style=&#34;color:#50fa7b&#34;&gt;executeInNonManagedTXLock&lt;/span&gt;&lt;span style=&#34;color:#ff79c6&#34;&gt;(&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;	String lockName&lt;span style=&#34;color:#ff79c6&#34;&gt;,&lt;/span&gt; 
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;	TransactionCallback&lt;span style=&#34;color:#ff79c6&#34;&gt;&amp;lt;&lt;/span&gt;T&lt;span style=&#34;color:#ff79c6&#34;&gt;&amp;gt;&lt;/span&gt; txCallback&lt;span style=&#34;color:#ff79c6&#34;&gt;,&lt;/span&gt; &lt;span style=&#34;color:#8be9fd;font-style:italic&#34;&gt;final&lt;/span&gt; TransactionValidator&lt;span style=&#34;color:#ff79c6&#34;&gt;&amp;lt;&lt;/span&gt;T&lt;span style=&#34;color:#ff79c6&#34;&gt;&amp;gt;&lt;/span&gt; txValidator&lt;span style=&#34;color:#ff79c6&#34;&gt;)&lt;/span&gt; &lt;span style=&#34;color:#8be9fd;font-style:italic&#34;&gt;throws&lt;/span&gt; JobPersistenceException &lt;span style=&#34;color:#ff79c6&#34;&gt;{&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;	&lt;span style=&#34;color:#ff79c6&#34;&gt;...&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;	transOwner &lt;span style=&#34;color:#ff79c6&#34;&gt;=&lt;/span&gt; getLockHandler&lt;span style=&#34;color:#ff79c6&#34;&gt;().&lt;/span&gt;&lt;span style=&#34;color:#50fa7b&#34;&gt;obtainLock&lt;/span&gt;&lt;span style=&#34;color:#ff79c6&#34;&gt;(&lt;/span&gt;conn&lt;span style=&#34;color:#ff79c6&#34;&gt;,&lt;/span&gt; lockName&lt;span style=&#34;color:#ff79c6&#34;&gt;);&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;	&lt;span style=&#34;color:#ff79c6&#34;&gt;...&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;	&lt;span style=&#34;color:#8be9fd;font-style:italic&#34;&gt;final&lt;/span&gt; T result &lt;span style=&#34;color:#ff79c6&#34;&gt;=&lt;/span&gt; txCallback&lt;span style=&#34;color:#ff79c6&#34;&gt;.&lt;/span&gt;&lt;span style=&#34;color:#50fa7b&#34;&gt;execute&lt;/span&gt;&lt;span style=&#34;color:#ff79c6&#34;&gt;(&lt;/span&gt;conn&lt;span style=&#34;color:#ff79c6&#34;&gt;);&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;	&lt;span style=&#34;color:#ff79c6&#34;&gt;...&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;	releaseLock&lt;span style=&#34;color:#ff79c6&#34;&gt;(&lt;/span&gt;lockName&lt;span style=&#34;color:#ff79c6&#34;&gt;,&lt;/span&gt; transOwner&lt;span style=&#34;color:#ff79c6&#34;&gt;);&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;	&lt;span style=&#34;color:#ff79c6&#34;&gt;...&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#ff79c6&#34;&gt;}&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#8be9fd;font-style:italic&#34;&gt;protected&lt;/span&gt; List&lt;span style=&#34;color:#ff79c6&#34;&gt;&amp;lt;&lt;/span&gt;OperableTrigger&lt;span style=&#34;color:#ff79c6&#34;&gt;&amp;gt;&lt;/span&gt; &lt;span style=&#34;color:#50fa7b&#34;&gt;acquireNextTrigger&lt;/span&gt;&lt;span style=&#34;color:#ff79c6&#34;&gt;(&lt;/span&gt;Connection conn&lt;span style=&#34;color:#ff79c6&#34;&gt;,&lt;/span&gt; &lt;span style=&#34;color:#8be9fd&#34;&gt;long&lt;/span&gt; noLaterThan&lt;span style=&#34;color:#ff79c6&#34;&gt;,&lt;/span&gt; &lt;span style=&#34;color:#8be9fd&#34;&gt;int&lt;/span&gt; maxCount&lt;span style=&#34;color:#ff79c6&#34;&gt;,&lt;/span&gt; &lt;span style=&#34;color:#8be9fd&#34;&gt;long&lt;/span&gt; timeWindow&lt;span style=&#34;color:#ff79c6&#34;&gt;)&lt;/span&gt; &lt;span style=&#34;color:#8be9fd;font-style:italic&#34;&gt;throws&lt;/span&gt; JobPersistenceException &lt;span style=&#34;color:#ff79c6&#34;&gt;{&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;	&lt;span style=&#34;color:#ff79c6&#34;&gt;...&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;	List&lt;span style=&#34;color:#ff79c6&#34;&gt;&amp;lt;&lt;/span&gt;TriggerKey&lt;span style=&#34;color:#ff79c6&#34;&gt;&amp;gt;&lt;/span&gt; keys &lt;span style=&#34;color:#ff79c6&#34;&gt;=&lt;/span&gt; getDelegate&lt;span style=&#34;color:#ff79c6&#34;&gt;().&lt;/span&gt;&lt;span style=&#34;color:#50fa7b&#34;&gt;selectTriggerToAcquire&lt;/span&gt;&lt;span style=&#34;color:#ff79c6&#34;&gt;(&lt;/span&gt;conn&lt;span style=&#34;color:#ff79c6&#34;&gt;,&lt;/span&gt; noLaterThan &lt;span style=&#34;color:#ff79c6&#34;&gt;+&lt;/span&gt; timeWindow&lt;span style=&#34;color:#ff79c6&#34;&gt;,&lt;/span&gt; getMisfireTime&lt;span style=&#34;color:#ff79c6&#34;&gt;(),&lt;/span&gt; maxCount&lt;span style=&#34;color:#ff79c6&#34;&gt;);&lt;/span&gt;  
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;	&lt;span style=&#34;color:#ff79c6&#34;&gt;...&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;	&lt;span style=&#34;color:#ff79c6&#34;&gt;for&lt;/span&gt;&lt;span style=&#34;color:#ff79c6&#34;&gt;(&lt;/span&gt;TriggerKey triggerKey&lt;span style=&#34;color:#ff79c6&#34;&gt;:&lt;/span&gt; keys&lt;span style=&#34;color:#ff79c6&#34;&gt;)&lt;/span&gt; &lt;span style=&#34;color:#ff79c6&#34;&gt;{&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;		&lt;span style=&#34;color:#ff79c6&#34;&gt;...&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;		JobDetail job &lt;span style=&#34;color:#ff79c6&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color:#ff79c6&#34;&gt;=&lt;/span&gt; retrieveJob&lt;span style=&#34;color:#ff79c6&#34;&gt;(&lt;/span&gt;conn&lt;span style=&#34;color:#ff79c6&#34;&gt;,&lt;/span&gt; jobKey&lt;span style=&#34;color:#ff79c6&#34;&gt;);&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;		&lt;span style=&#34;color:#ff79c6&#34;&gt;...&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;		&lt;span style=&#34;color:#8be9fd&#34;&gt;int&lt;/span&gt; rowsUpdated &lt;span style=&#34;color:#ff79c6&#34;&gt;=&lt;/span&gt; getDelegate&lt;span style=&#34;color:#ff79c6&#34;&gt;().&lt;/span&gt;&lt;span style=&#34;color:#50fa7b&#34;&gt;updateTriggerStateFromOtherState&lt;/span&gt;&lt;span style=&#34;color:#ff79c6&#34;&gt;(&lt;/span&gt;conn&lt;span style=&#34;color:#ff79c6&#34;&gt;,&lt;/span&gt; triggerKey&lt;span style=&#34;color:#ff79c6&#34;&gt;,&lt;/span&gt; STATE_ACQUIRED&lt;span style=&#34;color:#ff79c6&#34;&gt;,&lt;/span&gt; STATE_WAITING&lt;span style=&#34;color:#ff79c6&#34;&gt;);&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;		&lt;span style=&#34;color:#ff79c6&#34;&gt;...&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;		getDelegate&lt;span style=&#34;color:#ff79c6&#34;&gt;().&lt;/span&gt;&lt;span style=&#34;color:#50fa7b&#34;&gt;insertFiredTrigger&lt;/span&gt;&lt;span style=&#34;color:#ff79c6&#34;&gt;(&lt;/span&gt;conn&lt;span style=&#34;color:#ff79c6&#34;&gt;,&lt;/span&gt; nextTrigger&lt;span style=&#34;color:#ff79c6&#34;&gt;,&lt;/span&gt; STATE_ACQUIRED&lt;span style=&#34;color:#ff79c6&#34;&gt;,&lt;/span&gt; &lt;span style=&#34;color:#ff79c6&#34;&gt;null&lt;/span&gt;&lt;span style=&#34;color:#ff79c6&#34;&gt;);&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;		&lt;span style=&#34;color:#ff79c6&#34;&gt;...&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;		acquiredTriggers&lt;span style=&#34;color:#ff79c6&#34;&gt;.&lt;/span&gt;&lt;span style=&#34;color:#50fa7b&#34;&gt;add&lt;/span&gt;&lt;span style=&#34;color:#ff79c6&#34;&gt;(&lt;/span&gt;nextTrigger&lt;span style=&#34;color:#ff79c6&#34;&gt;);&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;		&lt;span style=&#34;color:#ff79c6&#34;&gt;...&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;	&lt;span style=&#34;color:#ff79c6&#34;&gt;}&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;	&lt;span style=&#34;color:#ff79c6&#34;&gt;...&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;	&lt;span style=&#34;color:#ff79c6&#34;&gt;return&lt;/span&gt; acquiredTriggers&lt;span style=&#34;color:#ff79c6&#34;&gt;;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#ff79c6&#34;&gt;}&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h1 id=&#34;結語&#34;&gt;結語&lt;/h1&gt;
+&lt;p&gt;這篇簡單探討過 Quartz 單體跟集群的任務分配機制後，下一篇就要進入實作部分&lt;/p&gt;
+&lt;h1 id=&#34;reference&#34;&gt;Reference&lt;/h1&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;a href=&#34;https://blog.csdn.net/ThinkWon/article/details/109936696&#34;&gt;Quartz简介&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;https://flylib.com/books/en/2.65.1/creating_the_quartz_database_structure.html&#34;&gt;Creating the Quartz Database Structure&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+- https://idontwannarock.github.io/tech_blog/2022/11/quartz-intro/ - This website by Howard Wang is licensed under a Creative Common Attribution-ShareAlike 4.0 International License.</description>
+        </item>
     
     
     
@@ -1218,100 +1425,6 @@ root_type FlatPassenger;
 &lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    &lt;span style=&#34;color:#8be9fd;font-style:italic&#34;&gt;Write-Output&lt;/span&gt; &lt;span style=&#34;color:#f1fa8c&#34;&gt;&amp;#34;Finished backing up $databaseName to $backupFile&amp;#34;&lt;/span&gt;
 &lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;}
 &lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;- https://idontwannarock.github.io/tech_blog/2021/11/sql_server_backup/ - This website by Howard Wang is licensed under a Creative Common Attribution-ShareAlike 4.0 International License.</description>
-        </item>
-    
-    
-    
-        <item>
-        <title>Hugo 半自動部署</title>
-        <link>https://idontwannarock.github.io/tech_blog/2021/11/hugo_semi_auto_deploy/</link>
-        <pubDate>Wed, 03 Nov 2021 16:29:03 +0800</pubDate>
-        
-        <guid>https://idontwannarock.github.io/tech_blog/2021/11/hugo_semi_auto_deploy/</guid>
-        <description>Howard Tech Note https://idontwannarock.github.io/tech_blog/2021/11/hugo_semi_auto_deploy/ -&lt;p&gt;這篇主要在講將以往所有手動的步驟，包括網站建置及發佈到 GitHub Pages 等，盡量調整為一個 script 來處理&lt;/p&gt;
-&lt;p&gt;起因是因為種種因素，所以這個 Blog 停更了很久，其實也就是懶，還有之前沒有找到符合我要求的佈景主題。所以把手動的步驟減少，懶惰的理由就少了一個&lt;/p&gt;
-&lt;p&gt;至於佈景主題我自己是有幾個要求:&lt;/p&gt;
-&lt;ol&gt;
-&lt;li&gt;主要是給 Blog 用。這個要求是因為其實有很多佈景主題是給 Portfolio, Landing Page 等等使用的，所以首頁或 pages 的功能很強，文件都在講這些，但我都不需要&lt;/li&gt;
-&lt;li&gt;文章要在側邊自動生成 Table of Content。這個就是 Blog 的要求，很多佈景主題是沒有支援這個功能的&lt;/li&gt;
-&lt;li&gt;要有 Category 跟 Tag 的功能&lt;/li&gt;
-&lt;li&gt;風格簡單&lt;/li&gt;
-&lt;/ol&gt;
-&lt;p&gt;這些要求看起來很基本，但不知道為什麼，就算只滿足 2、3 項的交集都極少。目前找到最符合要求的就是 &lt;a href=&#34;https://themes.gohugo.io/themes/hugo-theme-diary/&#34;&gt;Diary&lt;/a&gt;&lt;/p&gt;
-&lt;p&gt;換 theme 的部分參考&lt;a href=&#34;https://gohugo.io/getting-started/quick-start/#step-3-add-a-theme&#34;&gt;官網&lt;/a&gt;，沒什麼好說的&lt;/p&gt;
-&lt;p&gt;主要講如何部署到 GitHub Pages 的部分&lt;/p&gt;
-&lt;h2 id=&#34;部署到-github-pages&#34;&gt;部署到 GitHub Pages&lt;/h2&gt;
-&lt;p&gt;以我的了解，主要有三種方式&lt;/p&gt;
-&lt;ul&gt;
-&lt;li&gt;直接部署&lt;/li&gt;
-&lt;li&gt;資料夾部署&lt;/li&gt;
-&lt;li&gt;分支部署&lt;/li&gt;
-&lt;/ul&gt;
-&lt;h3 id=&#34;直接部署&#34;&gt;直接部署&lt;/h3&gt;
-&lt;p&gt;就是只單獨把建置 (&lt;code&gt;hugo&lt;/code&gt;) 出來的 &lt;code&gt;public&lt;/code&gt; 資料夾推到 GitHub main branch，然後在 repo 的 Pages 設定頁面指定 Source 為 main branch&lt;/p&gt;
-&lt;h3 id=&#34;資料夾部署&#34;&gt;資料夾部署&lt;/h3&gt;
-&lt;p&gt;這個方式是把整個專案包含原始檔都推到 GitHub main branch，然後在 repo 的 Pages 設定頁面指定 Source 為 main branch 的 docs 資料夾&lt;/p&gt;
-&lt;p&gt;因為 GitHub 只認根目錄或 docs 資料夾的內容，所以在 config 檔裡面要加上 &lt;code&gt;publishDir: &amp;quot;docs&amp;quot;&lt;/code&gt; 的設定項，建置出來的靜態網站才會在 docs 資料夾裡面&lt;/p&gt;
-&lt;h3 id=&#34;分支部署&#34;&gt;分支部署&lt;/h3&gt;
-&lt;p&gt;這個方式是將專案原始檔跟建置出來的靜態網站放在不同的分支，讓 GitHub 以分支來部署&lt;/p&gt;
-&lt;p&gt;這有兩種做法，要看你 Git 的版本 (2.5+) 是否有支援 &lt;a href=&#34;https://git-scm.com/docs/git-worktree&#34;&gt;&lt;code&gt;git worktree&lt;/code&gt;&lt;/a&gt; 指令，如果沒有支援，就要改用 &lt;code&gt;git clone&lt;/code&gt; 的方式&lt;/p&gt;
-&lt;p&gt;&lt;code&gt;git worktree&lt;/code&gt; 指令是在 2.5 版 2015 年加入的，所以我只研究 &lt;code&gt;git worktree&lt;/code&gt; 的作法&lt;/p&gt;
-&lt;p&gt;首先先把 public 資料夾加入 .gitignore 檔，讓 public 資料夾的內容都不會被 commit 到放原始檔的 main 分支&lt;/p&gt;
-&lt;blockquote&gt;
-&lt;p&gt;btw，之前 GitHub 為了政治正確，所以把行之有年的 master 分支名稱都改為 main，所以你看到官網的文件都只會看到 main 分支，指的就是 master。但其實你要用 master 也沒有不行的樣子&lt;/p&gt;
-&lt;/blockquote&gt;
-&lt;p&gt;接著建立要放靜態網站的分支 gh-pages (名稱應該也是隨意)，但要將其建立為 orphan branch 以免將原始碼帶進去，並建立一個空的 commit 並設定對應 GitHub 的遠端分支&lt;/p&gt;
-&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;&#34;&gt;&lt;code class=&#34;language-shell&#34; data-lang=&#34;shell&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;git checkout --orphan gh-pages
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;git reset --hard
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;git commit --allow-empty -m &lt;span style=&#34;color:#f1fa8c&#34;&gt;&amp;#34;feat: init gh-pages branch&amp;#34;&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;git push origin gh-pages
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;git checkout master
-&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;接著就是做幾件事:&lt;/p&gt;
-&lt;ol&gt;
-&lt;li&gt;移除 public 資料夾以清除前一次建置出來的靜態網站&lt;/li&gt;
-&lt;li&gt;以 &lt;code&gt;git worktree&lt;/code&gt; 指令將 gh-pages 分支開在 public 資料夾&lt;/li&gt;
-&lt;li&gt;建置網站&lt;/li&gt;
-&lt;li&gt;將 public 資料夾建置出來的內容 commit 到 gh-pages&lt;/li&gt;
-&lt;li&gt;將 gh-pages 分支推送到 GitHub&lt;/li&gt;
-&lt;/ol&gt;
-&lt;p&gt;以下是我用來建置並部署到 GitHub Pages 的 script&lt;/p&gt;
-&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;&#34;&gt;&lt;code class=&#34;language-shell&#34; data-lang=&#34;shell&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#8be9fd;font-style:italic&#34;&gt;DIR&lt;/span&gt;&lt;span style=&#34;color:#ff79c6&#34;&gt;=&lt;/span&gt;&lt;span style=&#34;color:#ff79c6&#34;&gt;$(&lt;/span&gt;dirname &lt;span style=&#34;color:#f1fa8c&#34;&gt;&amp;#34;&lt;/span&gt;&lt;span style=&#34;color:#8be9fd;font-style:italic&#34;&gt;$0&lt;/span&gt;&lt;span style=&#34;color:#f1fa8c&#34;&gt;&amp;#34;&lt;/span&gt;&lt;span style=&#34;color:#ff79c6&#34;&gt;)&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#8be9fd;font-style:italic&#34;&gt;cd&lt;/span&gt; &lt;span style=&#34;color:#f1fa8c&#34;&gt;&amp;#34;&lt;/span&gt;&lt;span style=&#34;color:#8be9fd;font-style:italic&#34;&gt;$DIR&lt;/span&gt;&lt;span style=&#34;color:#f1fa8c&#34;&gt;&amp;#34;&lt;/span&gt; &lt;span style=&#34;color:#ff79c6&#34;&gt;||&lt;/span&gt; &lt;span style=&#34;color:#ff79c6&#34;&gt;(&lt;/span&gt;&lt;span style=&#34;color:#8be9fd;font-style:italic&#34;&gt;echo&lt;/span&gt; &lt;span style=&#34;color:#f1fa8c&#34;&gt;&amp;#34;&lt;/span&gt;&lt;span style=&#34;color:#8be9fd;font-style:italic&#34;&gt;$DIR&lt;/span&gt;&lt;span style=&#34;color:#f1fa8c&#34;&gt; does not exist&amp;#34;&lt;/span&gt; &amp;amp; &lt;span style=&#34;color:#8be9fd;font-style:italic&#34;&gt;exit&lt;/span&gt;&lt;span style=&#34;color:#ff79c6&#34;&gt;)&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#ff79c6&#34;&gt;if&lt;/span&gt; &lt;span style=&#34;color:#ff79c6&#34;&gt;[&lt;/span&gt; &lt;span style=&#34;color:#f1fa8c&#34;&gt;&amp;#34;&lt;/span&gt;&lt;span style=&#34;color:#ff79c6&#34;&gt;$(&lt;/span&gt;git status -s&lt;span style=&#34;color:#ff79c6&#34;&gt;)&lt;/span&gt;&lt;span style=&#34;color:#f1fa8c&#34;&gt;&amp;#34;&lt;/span&gt; &lt;span style=&#34;color:#ff79c6&#34;&gt;]&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#ff79c6&#34;&gt;then&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;  &lt;span style=&#34;color:#8be9fd;font-style:italic&#34;&gt;echo&lt;/span&gt; &lt;span style=&#34;color:#f1fa8c&#34;&gt;&amp;#34;The working directory is dirty. Please commit any pending changes.&amp;#34;&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;  &lt;span style=&#34;color:#8be9fd;font-style:italic&#34;&gt;exit&lt;/span&gt; 1;
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#ff79c6&#34;&gt;fi&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#8be9fd;font-style:italic&#34;&gt;echo&lt;/span&gt; &lt;span style=&#34;color:#f1fa8c&#34;&gt;&amp;#34;Deleting old publication&amp;#34;&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;rm -rf public
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;mkdir public
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;git worktree prune
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;rm -rf .git/worktree/public/
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#8be9fd;font-style:italic&#34;&gt;echo&lt;/span&gt; &lt;span style=&#34;color:#f1fa8c&#34;&gt;&amp;#34;Checking out gh-pages branch into public&amp;#34;&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;git worktree add -B gh-pages public origin/gh-pages
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#8be9fd;font-style:italic&#34;&gt;echo&lt;/span&gt; &lt;span style=&#34;color:#f1fa8c&#34;&gt;&amp;#34;Removing existing files&amp;#34;&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;rm -rf public/*
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#8be9fd;font-style:italic&#34;&gt;echo&lt;/span&gt; &lt;span style=&#34;color:#f1fa8c&#34;&gt;&amp;#34;Generating site&amp;#34;&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;hugo
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#8be9fd;font-style:italic&#34;&gt;echo&lt;/span&gt; &lt;span style=&#34;color:#f1fa8c&#34;&gt;&amp;#34;Updating gh-pages branch&amp;#34;&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#8be9fd;font-style:italic&#34;&gt;cd&lt;/span&gt; public &lt;span style=&#34;color:#ff79c6&#34;&gt;&amp;amp;&amp;amp;&lt;/span&gt; git add --all &lt;span style=&#34;color:#ff79c6&#34;&gt;&amp;amp;&amp;amp;&lt;/span&gt; git commit -m &lt;span style=&#34;color:#f1fa8c&#34;&gt;&amp;#34;feat: publish to gh-pages (publish.sh)&amp;#34;&lt;/span&gt; &lt;span style=&#34;color:#ff79c6&#34;&gt;&amp;amp;&amp;amp;&lt;/span&gt; &lt;span style=&#34;color:#8be9fd;font-style:italic&#34;&gt;cd&lt;/span&gt; ..
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#6272a4&#34;&gt;# publish&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;git push origin gh-pages
-&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;在 script 裡面我有先檢查是否還有未 commit 的修改，然後做完整的清除，才去建置網站&lt;/p&gt;
-&lt;p&gt;推到 GitHub 後，要記在 repo 的 Pages 設定頁面指定 Source 為 gh-pages branch&lt;/p&gt;
-&lt;h2 id=&#34;reference&#34;&gt;Reference&lt;/h2&gt;
-&lt;ul&gt;
-&lt;li&gt;&lt;a href=&#34;https://bwaycer.github.io/hugo_tutorial.hugo/tutorials/github-pages-blog/&#34;&gt;Hosting on GitHub Pages&lt;/a&gt;&lt;/li&gt;
-&lt;/ul&gt;
-- https://idontwannarock.github.io/tech_blog/2021/11/hugo_semi_auto_deploy/ - This website by Howard Wang is licensed under a Creative Common Attribution-ShareAlike 4.0 International License.</description>
         </item>
     
     

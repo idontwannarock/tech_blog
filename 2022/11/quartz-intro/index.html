@@ -1,0 +1,1063 @@
+<!DOCTYPE html>
+<html><head>
+<title>Quartz 介紹</title>
+
+
+
+
+<meta charset="utf-8">
+<meta name="X-UA-Compatible" content="IE=edge">
+<meta name="google-site-verification" content="">
+<meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" name="viewport">
+<meta content="telephone=no" name="format-detection">
+<meta name="description" content="簡介 Quartz 這個 Java 生態圈有名的排程框架">
+<meta name="renderer" content="webkit">
+<meta name="theme-color" content="#ffffff">
+
+
+
+
+
+
+
+
+
+
+
+<script type="application/javascript">
+var doNotTrack = false;
+if (!doNotTrack) {
+	(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+	(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+	m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+	})(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+	ga('create', 'UA-106499565-1', 'auto');
+	
+	ga('send', 'pageview');
+}
+</script>
+
+
+
+
+
+  
+
+
+
+
+
+
+<link rel="stylesheet" href="https://idontwannarock.github.io/tech_blog/scss/journal.min.c5d92f380bf10f6849c7ac487c7df2b22c081e0851e5339224f1ae29210b20d2.css" integrity="sha256-xdkvOAvxD2hJx6xIfH3ysiwIHghR5TOSJPGuKSELINI=" media="screen">
+
+
+
+<link rel="stylesheet" href="https://idontwannarock.github.io/tech_blog/scss/dark-mode.min.9f8d8c2df9285089d141edd4a50cb7506c7948e6ab79a29968dced1bd0ab7d22.css" integrity="sha256-n42MLfkoUInRQe3UpQy3UGx5SOareaKZaNztG9CrfSI=" media="screen">
+
+
+
+
+      <script src="https://idontwannarock.github.io/tech_blog/js/toc.js"></script>
+    
+    <link type="text/css" rel="stylesheet" href="https://idontwannarock.github.io/tech_blog/vendor/css/bootstrap.min.css"><link rel="stylesheet"
+          href="https://fonts.googleapis.com/css?family=Material+Icons">
+
+
+
+
+
+
+
+
+
+
+
+
+<script src="https://cdn.jsdelivr.net/npm/vue-disqus@3/dist/vue-disqus.js"></script>
+
+
+
+
+
+
+
+
+</head>
+<body>
+    	<div id="app"><div id="sideContainer" class="side-container">
+    
+    <a class="a-block nav-head false" href="https://idontwannarock.github.io/tech_blog/">
+    
+        <div class="nav-title">
+            Howard Tech Note
+        </div>
+        
+        <div class="nav-subtitle">
+            Share * Record * Program
+        </div>
+        
+    </a>
+
+    <div class="nav-link-list">
+        
+        
+            
+            
+            
+            
+            
+            <a class="a-block nav-link-item false" href="https://idontwannarock.github.io/tech_blog/posts">
+                Archive
+            </a>
+            
+        
+            
+            
+            
+            
+            
+            <a class="a-block nav-link-item false" href="https://idontwannarock.github.io/tech_blog/categories">
+                Categories
+            </a>
+            
+        
+            
+            
+            
+            
+            
+            <a class="a-block nav-link-item false" href="https://idontwannarock.github.io/tech_blog/tags">
+                Tags
+            </a>
+            
+        
+            
+            
+            
+            
+            
+            <a class="a-block nav-link-item false" href="https://idontwannarock.github.io/tech_blog/about">
+                About
+            </a>
+            
+        
+            
+            
+            
+            
+            
+            <a class="a-block nav-link-item false" href="https://idontwannarock.github.io/tech_blog/index.xml">
+                RSS Feed
+            </a>
+            
+        
+    </div>
+
+    
+
+    <div class="nav-footer">
+        
+Hugo Theme <a href="https://github.com/amazingrise/hugo-theme-diary">Diary</a> by <a href="https://risehere.net/">Rise</a>
+<br>
+Ported from <a href="https://mak1t0.cc/" target="_blank" rel="noreferrer noopener">Makito</a>'s <a href="https://github.com/SumiMakito/hexo-theme-journal/" target="_blank" rel="noreferrer noopener">Journal.</a> <br>
+<br>
+
+&copy;
+	
+	This website by Howard Wang is licensed under a Creative Common Attribution-ShareAlike 4.0 International License.
+	
+
+    </div>
+    
+</div><div id="extraContainer" class="extra-container">
+    
+    
+    <div class="toc animated-visibility" :class="{ invisible: scrollY <= 140 }">
+
+
+	<div class="toc-content">
+	
+		
+		
+		
+		<center>- CATALOG -</center>
+		
+		
+		<ul>
+			
+				
+				
+					
+						
+						
+						
+						
+						
+							<li>
+								<a href="#%e6%a6%82%e5%bf%b5" onclick="onNavClick(`#概念-nav`)" id="概念-nav">
+									概念
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+							
+								
+									<ul>
+								
+							
+						
+						
+							<li>
+								<a href="#%e6%a0%b8%e5%bf%83%e5%85%83%e4%bb%b6" onclick="onNavClick(`#核心元件-nav`)" id="核心元件-nav">
+									核心元件
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+						
+							<li>
+								<a href="#%e5%96%ae%e9%ab%94-stand-alone-%e6%a8%a1%e5%bc%8f%e9%81%8b%e4%bd%9c" onclick="onNavClick(`#單體-stand-alone-模式運作-nav`)" id="單體-stand-alone-模式運作-nav">
+									單體 stand-alone 模式運作
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+						
+							<li>
+								<a href="#%e9%9b%86%e7%be%a4-cluster-%e6%a8%a1%e5%bc%8f%e5%8e%9f%e7%90%86" onclick="onNavClick(`#集群-cluster-模式原理-nav`)" id="集群-cluster-模式原理-nav">
+									集群 cluster 模式原理
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+							
+								
+									<ul>
+								
+							
+						
+						
+							<li>
+								<a href="#%e8%b3%87%e6%96%99%e4%bf%9d%e5%ad%98%e6%96%b9%e5%bc%8f" onclick="onNavClick(`#資料保存方式-nav`)" id="資料保存方式-nav">
+									資料保存方式
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+							
+								
+									<ul>
+								
+							
+						
+						
+							<li>
+								<a href="#%e8%b3%87%e6%96%99%e5%ba%ab-schema" onclick="onNavClick(`#資料庫-schema-nav`)" id="資料庫-schema-nav">
+									資料庫 schema
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+							
+								</ul>
+							
+						
+						
+						
+							<li>
+								<a href="#%e7%af%80%e9%bb%9e%e7%8b%80%e6%85%8b%e6%9b%b4%e6%96%b0%e5%8f%8a-failover" onclick="onNavClick(`#節點狀態更新及-failover-nav`)" id="節點狀態更新及-failover-nav">
+									節點狀態更新及 Failover
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+						
+							<li>
+								<a href="#%e4%bf%9d%e8%ad%89%e4%bb%bb%e5%8b%99%e5%9f%b7%e8%a1%8c%e7%9a%84%e4%b8%80%e8%87%b4%e6%80%a7" onclick="onNavClick(`#保證任務執行的一致性-nav`)" id="保證任務執行的一致性-nav">
+									保證任務執行的一致性
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+							
+								</ul>
+							
+								</ul>
+							
+						
+						
+						
+							<li>
+								<a href="#%e7%b5%90%e8%aa%9e" onclick="onNavClick(`#結語-nav`)" id="結語-nav">
+									結語
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+						
+							<li>
+								<a href="#reference" onclick="onNavClick(`#reference-nav`)" id="reference-nav">
+									Reference
+								</a>
+							</li>
+						
+						
+					
+				
+			
+		</ul>
+	</div>
+
+</div>
+    
+    <div class="pagination">
+        <a id="globalBackToTop" class="pagination-action animated-visibility" href="#top" :class="{ invisible: scrollY == 0 }">
+            <i class="material-icons pagination-action-icon">
+                keyboard_arrow_up
+            </i>
+        </a>
+        
+        <a type="button" class="pagination-action" id="darkModeToggleButton">
+            <span class="material-icons pagination-action-icon" id="darkModeToggleIcon">
+                dark_mode
+            </span>
+        </a>
+        
+        
+    </div>
+</div>
+<div class="single-column-drawer-container" id="drawer"
+     v-bind:class="{ 'single-column-drawer-container-active': isDrawerOpen }">
+    <div class="drawer-content">
+        <div class="drawer-menu">
+            
+            
+            
+                
+                
+                
+                
+                
+                <a class="a-block drawer-menu-item false" href="https://idontwannarock.github.io/tech_blog/posts">
+                    Archive
+                </a>
+                
+            
+                
+                
+                
+                
+                
+                <a class="a-block drawer-menu-item false" href="https://idontwannarock.github.io/tech_blog/categories">
+                    Categories
+                </a>
+                
+            
+                
+                
+                
+                
+                
+                <a class="a-block drawer-menu-item false" href="https://idontwannarock.github.io/tech_blog/tags">
+                    Tags
+                </a>
+                
+            
+                
+                
+                
+                
+                
+                <a class="a-block drawer-menu-item false" href="https://idontwannarock.github.io/tech_blog/about">
+                    About
+                </a>
+                
+            
+                
+                
+                
+                
+                
+                <a class="a-block drawer-menu-item false" href="https://idontwannarock.github.io/tech_blog/index.xml">
+                    RSS Feed
+                </a>
+                
+            
+            
+            <div class="toc">
+
+
+	<div class="toc-content">
+	
+		
+		
+		
+		<center>- CATALOG -</center>
+		
+		
+		<ul>
+			
+				
+				
+					
+						
+						
+						
+						
+						
+							<li>
+								<a href="#%e6%a6%82%e5%bf%b5" onclick="onNavClick(`#概念-nav`)" id="概念-nav">
+									概念
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+							
+								
+									<ul>
+								
+							
+						
+						
+							<li>
+								<a href="#%e6%a0%b8%e5%bf%83%e5%85%83%e4%bb%b6" onclick="onNavClick(`#核心元件-nav`)" id="核心元件-nav">
+									核心元件
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+						
+							<li>
+								<a href="#%e5%96%ae%e9%ab%94-stand-alone-%e6%a8%a1%e5%bc%8f%e9%81%8b%e4%bd%9c" onclick="onNavClick(`#單體-stand-alone-模式運作-nav`)" id="單體-stand-alone-模式運作-nav">
+									單體 stand-alone 模式運作
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+						
+							<li>
+								<a href="#%e9%9b%86%e7%be%a4-cluster-%e6%a8%a1%e5%bc%8f%e5%8e%9f%e7%90%86" onclick="onNavClick(`#集群-cluster-模式原理-nav`)" id="集群-cluster-模式原理-nav">
+									集群 cluster 模式原理
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+							
+								
+									<ul>
+								
+							
+						
+						
+							<li>
+								<a href="#%e8%b3%87%e6%96%99%e4%bf%9d%e5%ad%98%e6%96%b9%e5%bc%8f" onclick="onNavClick(`#資料保存方式-nav`)" id="資料保存方式-nav">
+									資料保存方式
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+							
+								
+									<ul>
+								
+							
+						
+						
+							<li>
+								<a href="#%e8%b3%87%e6%96%99%e5%ba%ab-schema" onclick="onNavClick(`#資料庫-schema-nav`)" id="資料庫-schema-nav">
+									資料庫 schema
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+							
+								</ul>
+							
+						
+						
+						
+							<li>
+								<a href="#%e7%af%80%e9%bb%9e%e7%8b%80%e6%85%8b%e6%9b%b4%e6%96%b0%e5%8f%8a-failover" onclick="onNavClick(`#節點狀態更新及-failover-nav`)" id="節點狀態更新及-failover-nav">
+									節點狀態更新及 Failover
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+						
+							<li>
+								<a href="#%e4%bf%9d%e8%ad%89%e4%bb%bb%e5%8b%99%e5%9f%b7%e8%a1%8c%e7%9a%84%e4%b8%80%e8%87%b4%e6%80%a7" onclick="onNavClick(`#保證任務執行的一致性-nav`)" id="保證任務執行的一致性-nav">
+									保證任務執行的一致性
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+							
+								</ul>
+							
+								</ul>
+							
+						
+						
+						
+							<li>
+								<a href="#%e7%b5%90%e8%aa%9e" onclick="onNavClick(`#結語-nav`)" id="結語-nav">
+									結語
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+						
+							<li>
+								<a href="#reference" onclick="onNavClick(`#reference-nav`)" id="reference-nav">
+									Reference
+								</a>
+							</li>
+						
+						
+					
+				
+			
+		</ul>
+	</div>
+
+</div>
+            
+        </div>
+    </div>
+</div>
+<transition name="fade">
+    <div id="drawer-mask" v-bind:class="{ 'single-column-drawer-mask': mounted }" v-if="isDrawerOpen" v-on:click="toggleDrawer"></div>
+</transition>
+<nav id="navBar" class="navbar sticky-top navbar-light single-column-nav-container">
+    <div id="navBackground" class="nav-background"></div>
+    <div class="container container-narrow nav-content">
+        <button id="nav_dropdown_btn" class="nav-dropdown-toggle" type="button" v-on:click="toggleDrawer">
+            <i class="material-icons">
+                menu
+            </i>
+        </button>
+        <a id="navTitle" class="navbar-brand" href="https://idontwannarock.github.io/tech_blog/">
+            Howard Tech Note
+        </a>
+        
+        <button type="button" class="nav-darkmode-toggle" id="darkModeToggleButton2">
+            <i class="material-icons" id="darkModeToggleIcon2">
+                dark_mode
+            </i>
+        </button>
+        
+    </div>
+</nav>
+<div class="single-column-header-container" id="pageHead"
+     v-bind:style="{ transform: 'translateZ(0px) translateY('+.3*scrollY+'px)', opacity: 1-navOpacity }">
+    <a href="https://idontwannarock.github.io/tech_blog/">
+        <div class="single-column-header-title">Howard Tech Note</div>
+        
+        <div class="single-column-header-subtitle">Share * Record * Program</div>
+        
+
+    </a>
+</div>
+
+            <div id="content">
+                <div id="streamContainer" class="stream-container">
+
+    <div class="post-list-container post-list-container-shadow">
+        <div class="post">
+            
+            
+            
+
+            <div class="post-head-wrapper-text-only"
+                
+            >
+                <div class="post-title">
+                    Quartz 介紹
+                    
+                    <div class="post-subtitle">
+                        簡介 Quartz 這個 Java 生態圈有名的排程框架
+                    </div>
+                    
+                    <div class="post-meta">
+                        
+                        <time itemprop="datePublished">
+                            2022-11-15 16:24
+                        </time>
+                        
+
+                        
+                            <i class="material-icons" style="">folder</i>
+                                <a href="https://idontwannarock.github.io/tech_blog/categories/concept">concept</a>
+                                &nbsp;
+                        
+
+                        
+                            <i class="material-icons" style="">label</i>
+                            
+                                <a href="https://idontwannarock.github.io/tech_blog/tags/quartz">quartz</a>
+                                &nbsp;
+                            
+                                <a href="https://idontwannarock.github.io/tech_blog/tags/scheduling">scheduling</a>
+                                &nbsp;
+                            
+                                <a href="https://idontwannarock.github.io/tech_blog/tags/java">java</a>
+                                &nbsp;
+                            
+                        
+                        
+                    </div>
+                </div>
+            </div>
+            
+            <div class="post-body-wrapper">
+                
+                <div class="post-body" v-pre>
+                
+                    <p>Quartz 系列：</p>
+<ul>
+<li>Quartz 介紹</li>
+<li>Spring Boot 整合 Quartz 集群執行預設及動態排程</li>
+</ul>
+<p>Quartz 是 Java 生態中一套成熟的開源排程框架，其完整的排程功能包含多樣排程設定、自動任務調度、任務持久化，以及支援分散式排程調度、自動負載平衡，讓排程可以輕鬆運行、應用可以輕鬆 scale out</p>
+<h1 id="概念">概念</h1>
+<h2 id="核心元件">核心元件</h2>
+<ul>
+<li><code>Job</code>: 任務需要執行的內容；<code>Job</code> 有區分是否可併行執行，不能併行執行意思是只有上一次觸發的任務執行完後才能觸發下一次執行；另外，一個 <code>Job</code> 可以關聯到多個 <code>Trigger</code>，也就是同一個 <code>Job</code> 可以以不同時間規則多次觸發，但一個 <code>Trigger</code> 只能關聯一個 <code>Job</code></li>
+<li><code>JobDetail</code>: 包含任務的設定，也就是要實例化 <code>Job</code> 時的相關設定；由 <code>JobKey</code> (Job 名稱 name 和分組 group)、<code>JobClass</code>、<code>JobDataMap</code> (任務相關數據)、<code>JobBuilder</code> 組成，並可以設定任務調度的方案和策略，並指定要調度的 <code>Job</code> 類別</li>
+<li><code>Trigger</code>: 設定觸發執行 <code>Job</code> 實例的時間規則；<code>Scheduler</code> 負責掃描需要執行的 <code>Job</code> 任務，而 <code>Trigger</code> 負責告訴 <code>Scheduler</code> 何時執行；Quartz 2.3.2 版提供 <code>SimpleTrigger</code>、<code>CronTrigger</code>、<code>DailyTimeIntervalTrigger</code> 及 <code>CalendarIntervalTrigger</code> 等 <code>Trigger</code></li>
+<li><code>Scheduler</code>: 任務調度器，會讀取 <code>Trigger</code> 從而觸發以 <code>JobDetail</code> 產生的 <code>Job</code> 實例；一個調度器中可以註冊多個 <code>JobDetail</code> 及 <code>Trigger</code>，只要 <code>JobDetail</code> 與 <code>Trigger</code> 組合，就可以被 <code>Scheduler</code> 調度</li>
+</ul>
+<h2 id="單體-stand-alone-模式運作">單體 stand-alone 模式運作</h2>
+<p>流程很簡單，就是 <code>Scheduler</code> 負責管理 <code>Trigger</code> 及 <code>Job</code>，會讀取 <code>Trigger</code> 並按照設定觸發時間規則，到時間就依照 <code>JobDetail</code> 設定產生跟該 <code>Trigger</code> 關聯的 <code>Job</code> 實例並運行</p>
+<h2 id="集群-cluster-模式原理">集群 cluster 模式原理</h2>
+<p>集群模式就不如單體模式這麼單純，有以下三個問題需要處理：</p>
+<ul>
+<li><code>Job</code> 資訊的保存</li>
+<li>各節點狀態更新以及 failover</li>
+<li>保證任務執行的一致性，避免重複執行</li>
+</ul>
+<p>而 Quartz 的集群並不需要節點之間互相通訊，只依賴可以共同存取的的資料，就可達成分散式任務調度，也不需要在不同應用實例之間做額外配置</p>
+<h3 id="資料保存方式">資料保存方式</h3>
+<p>首先 Quartz 中的 <code>Trigger</code> 和 <code>Job</code> 需要保存下來才能使用，目前 Quartz 提供四種保存方式：</p>
+<ul>
+<li><code>RAMJobStore</code>: 資料保存在記憶體，只適合 stand-alone 應用</li>
+<li><code>JobStoreTX</code>: 資料以 JDBC 方式保存，會自行透過 db connection 處理 transaction，適合 stand-alone 應用</li>
+<li><code>JobStroeCMT</code>: 資料以 JDBC 方式保存，但依賴應用去管理 transaction，適合分散式 transaction，例如使用 JTA 操作分散式 transaction 的應用</li>
+<li><code>TerracottaJobStore</code>: 資料保存在 Terracotta server (Terracotta 公司開發專門用來提供 Terracotta 公司產品分散式 in-memory 資料管理的應用)，因為 Terracotta server 有特別優化，所以適合需要比保存資料在 database 效能更高，但也同時需要分散式調度排程的應用</li>
+</ul>
+<h4 id="資料庫-schema">資料庫 schema</h4>
+<p>以下是 Quartz 2.3.2 版本採用 <code>JobStoreTX</code> 或 <code>JobStoreCMT</code> 所需要的 11 張資料表</p>
+<table>
+<thead>
+<tr>
+<th style="text-align:left">Table Name</th>
+<th style="text-align:left">Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left">QRTZ_BLOB_TRIGGERS</td>
+<td style="text-align:left">以 Blob 類型保存的 <code>Trigger</code></td>
+</tr>
+<tr>
+<td style="text-align:left">QRTZ_CALENDARS</td>
+<td style="text-align:left">保存日曆資訊</td>
+</tr>
+<tr>
+<td style="text-align:left">QRTZ_CRON_TRIGGERS</td>
+<td style="text-align:left">保存 Cron 類型的 <code>Trigger</code>，包含 Quartz cron expression 及時區</td>
+</tr>
+<tr>
+<td style="text-align:left">QRTZ_FIRED_TRIGGERS</td>
+<td style="text-align:left">保存已觸發 <code>Trigger</code> 相關的狀態資訊，以及相關 <code>Job</code> 的執行資訊</td>
+</tr>
+<tr>
+<td style="text-align:left">QRTZ_JOB_DETAILS</td>
+<td style="text-align:left">保存 <code>JobDetail</code> 的設定跟資訊</td>
+</tr>
+<tr>
+<td style="text-align:left">QRTZ_LOCKS</td>
+<td style="text-align:left">保存悲觀鎖的資訊</td>
+</tr>
+<tr>
+<td style="text-align:left">QRTZ_PAUSED_TRIGGER_GRPS</td>
+<td style="text-align:left">保存已暫停的 <code>Trigger</code> 分組相關資訊</td>
+</tr>
+<tr>
+<td style="text-align:left">QRTZ_SCHEDULER_STATE</td>
+<td style="text-align:left">保存 <code>Scheduler</code> 相關的狀態資訊</td>
+</tr>
+<tr>
+<td style="text-align:left">QRTZ_SIMPLE_TRIGGERS</td>
+<td style="text-align:left">以 Simple 類型保存的 <code>Trigger</code>，包含重複次數、間隔及已觸發的次數</td>
+</tr>
+<tr>
+<td style="text-align:left">QRTZ_SIMPROP_TRIGGERS</td>
+<td style="text-align:left">作用未明</td>
+</tr>
+<tr>
+<td style="text-align:left">QRTZ_TRIGGERS</td>
+<td style="text-align:left">保存已設定的 <code>Trigger</code> 基本資訊</td>
+</tr>
+</tbody>
+</table>
+<h3 id="節點狀態更新及-failover">節點狀態更新及 Failover</h3>
+<p>前面有提到 Quartz 並不需要節點之間互相通訊，而是透過各節點自行定時保持心跳更新 <code>QRTZ_SCHEDULER_STATE</code> 當中的 <code>LAST_CHECKIN_TIME</code></p>
+<p>再來是每個節點都會檢查所有其他節點的 <code>LAST_CHECKIN_TIME</code> 是否過期，如果過期就認為該節點失效：</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-java" data-lang="java"><span style="display:flex;"><span><span style="color:#8be9fd;font-style:italic">protected</span> List<span style="color:#ff79c6">&lt;</span>SchedulerStateRecord<span style="color:#ff79c6">&gt;</span> <span style="color:#50fa7b">findFailedInstances</span><span style="color:#ff79c6">(</span>Connection conn<span style="color:#ff79c6">)</span> <span style="color:#8be9fd;font-style:italic">throws</span> JobPersistenceException <span style="color:#ff79c6">{</span>
+</span></span><span style="display:flex;"><span>	<span style="color:#ff79c6">try</span> <span style="color:#ff79c6">{</span>
+</span></span><span style="display:flex;"><span>		<span style="color:#ff79c6">...</span>
+</span></span><span style="display:flex;"><span>		List<span style="color:#ff79c6">&lt;</span>SchedulerStateRecord<span style="color:#ff79c6">&gt;</span> states <span style="color:#ff79c6">=</span> getDelegate<span style="color:#ff79c6">().</span><span style="color:#50fa7b">selectSchedulerStateRecords</span><span style="color:#ff79c6">(</span>conn<span style="color:#ff79c6">,</span> <span style="color:#ff79c6">null</span><span style="color:#ff79c6">);</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>		<span style="color:#ff79c6">for</span><span style="color:#ff79c6">(</span>SchedulerStateRecord rec<span style="color:#ff79c6">:</span> states<span style="color:#ff79c6">)</span> <span style="color:#ff79c6">{</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>			<span style="color:#6272a4">// find own record...
+</span></span></span><span style="display:flex;"><span><span style="color:#6272a4"></span>			<span style="color:#ff79c6">if</span> <span style="color:#ff79c6">(</span>rec<span style="color:#ff79c6">.</span><span style="color:#50fa7b">getSchedulerInstanceId</span><span style="color:#ff79c6">().</span><span style="color:#50fa7b">equals</span><span style="color:#ff79c6">(</span>getInstanceId<span style="color:#ff79c6">()))</span> <span style="color:#ff79c6">{</span>
+</span></span><span style="display:flex;"><span>				foundThisScheduler <span style="color:#ff79c6">=</span> <span style="color:#ff79c6">true</span><span style="color:#ff79c6">;</span>
+</span></span><span style="display:flex;"><span>				<span style="color:#ff79c6">if</span> <span style="color:#ff79c6">(</span>firstCheckIn<span style="color:#ff79c6">)</span> <span style="color:#ff79c6">{</span>
+</span></span><span style="display:flex;"><span>					failedInstances<span style="color:#ff79c6">.</span><span style="color:#50fa7b">add</span><span style="color:#ff79c6">(</span>rec<span style="color:#ff79c6">);</span>
+</span></span><span style="display:flex;"><span>				<span style="color:#ff79c6">}</span>
+</span></span><span style="display:flex;"><span>			<span style="color:#ff79c6">}</span> <span style="color:#ff79c6">else</span> <span style="color:#ff79c6">{</span>
+</span></span><span style="display:flex;"><span>				<span style="color:#6272a4">// find failed instances...
+</span></span></span><span style="display:flex;"><span><span style="color:#6272a4"></span>				<span style="color:#ff79c6">if</span> <span style="color:#ff79c6">(</span>calcFailedIfAfter<span style="color:#ff79c6">(</span>rec<span style="color:#ff79c6">)</span> <span style="color:#ff79c6">&lt;</span> timeNow<span style="color:#ff79c6">)</span> <span style="color:#ff79c6">{</span>
+</span></span><span style="display:flex;"><span>					failedInstances<span style="color:#ff79c6">.</span><span style="color:#50fa7b">add</span><span style="color:#ff79c6">(</span>rec<span style="color:#ff79c6">);</span>
+</span></span><span style="display:flex;"><span>				<span style="color:#ff79c6">}</span>
+</span></span><span style="display:flex;"><span>			<span style="color:#ff79c6">}</span>
+</span></span><span style="display:flex;"><span>		<span style="color:#ff79c6">}</span>
+</span></span><span style="display:flex;"><span>		<span style="color:#ff79c6">...</span>
+</span></span><span style="display:flex;"><span>	<span style="color:#ff79c6">}</span>
+</span></span><span style="display:flex;"><span>	<span style="color:#ff79c6">...</span>
+</span></span><span style="display:flex;"><span><span style="color:#ff79c6">}</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#8be9fd;font-style:italic">protected</span> <span style="color:#8be9fd">long</span> <span style="color:#50fa7b">calcFailedIfAfter</span><span style="color:#ff79c6">(</span>SchedulerStateRecord rec<span style="color:#ff79c6">)</span> <span style="color:#ff79c6">{</span>
+</span></span><span style="display:flex;"><span>	<span style="color:#ff79c6">return</span> rec<span style="color:#ff79c6">.</span><span style="color:#50fa7b">getCheckinTimestamp</span><span style="color:#ff79c6">()</span> <span style="color:#ff79c6">+</span>
+</span></span><span style="display:flex;"><span>		Math<span style="color:#ff79c6">.</span><span style="color:#50fa7b">max</span><span style="color:#ff79c6">(</span>rec<span style="color:#ff79c6">.</span><span style="color:#50fa7b">getCheckinInterval</span><span style="color:#ff79c6">(),</span> 
+</span></span><span style="display:flex;"><span>			<span style="color:#ff79c6">(</span>System<span style="color:#ff79c6">.</span><span style="color:#50fa7b">currentTimeMillis</span><span style="color:#ff79c6">()</span> <span style="color:#ff79c6">-</span> lastCheckin<span style="color:#ff79c6">))</span> <span style="color:#ff79c6">+</span>
+</span></span><span style="display:flex;"><span>		7500L<span style="color:#ff79c6">;</span>
+</span></span><span style="display:flex;"><span><span style="color:#ff79c6">}</span>
+</span></span></code></pre></div><p>接著就會依照檢查到的 fail 節點列表去取得那些實例在處理的 <code>Trigger</code>，並將那些 <code>Trigger</code> 從 <code>QRTZ_FIRED_TRIGGERS</code> 表中刪除，再從 <code>QRTZ_SCHEDULER_STATE</code> 表中刪除那些 fail 的節點，即可達成 failover：</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-java" data-lang="java"><span style="display:flex;"><span><span style="color:#8be9fd;font-style:italic">protected</span> <span style="color:#8be9fd">void</span> <span style="color:#50fa7b">clusterRecover</span><span style="color:#ff79c6">(</span>Connection conn<span style="color:#ff79c6">,</span> List<span style="color:#ff79c6">&lt;</span>SchedulerStateRecord<span style="color:#ff79c6">&gt;</span> failedInstances<span style="color:#ff79c6">)</span> <span style="color:#8be9fd;font-style:italic">throws</span> JobPersistenceException <span style="color:#ff79c6">{</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>	<span style="color:#ff79c6">if</span> <span style="color:#ff79c6">(</span>failedInstances<span style="color:#ff79c6">.</span><span style="color:#50fa7b">size</span><span style="color:#ff79c6">()</span> <span style="color:#ff79c6">&gt;</span> 0<span style="color:#ff79c6">)</span> <span style="color:#ff79c6">{</span>
+</span></span><span style="display:flex;"><span>		<span style="color:#ff79c6">...</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>		<span style="color:#6272a4">// release acquired triggers..
+</span></span></span><span style="display:flex;"><span><span style="color:#6272a4"></span>		getDelegate<span style="color:#ff79c6">().</span><span style="color:#50fa7b">updateTriggerStateFromOtherState</span><span style="color:#ff79c6">(</span>
+</span></span><span style="display:flex;"><span>				conn<span style="color:#ff79c6">,</span> tKey<span style="color:#ff79c6">,</span> STATE_WAITING<span style="color:#ff79c6">,</span>
+</span></span><span style="display:flex;"><span>				STATE_ACQUIRED<span style="color:#ff79c6">);</span>
+</span></span><span style="display:flex;"><span>		<span style="color:#ff79c6">...</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>		getDelegate<span style="color:#ff79c6">().</span><span style="color:#50fa7b">deleteFiredTriggers</span><span style="color:#ff79c6">(</span>conn<span style="color:#ff79c6">,</span> rec<span style="color:#ff79c6">.</span><span style="color:#50fa7b">getSchedulerInstanceId</span><span style="color:#ff79c6">());</span>
+</span></span><span style="display:flex;"><span>		<span style="color:#ff79c6">...</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>		<span style="color:#ff79c6">if</span> <span style="color:#ff79c6">(!</span>rec<span style="color:#ff79c6">.</span><span style="color:#50fa7b">getSchedulerInstanceId</span><span style="color:#ff79c6">().</span><span style="color:#50fa7b">equals</span><span style="color:#ff79c6">(</span>getInstanceId<span style="color:#ff79c6">()))</span> <span style="color:#ff79c6">{</span>
+</span></span><span style="display:flex;"><span>			getDelegate<span style="color:#ff79c6">().</span><span style="color:#50fa7b">deleteSchedulerState</span><span style="color:#ff79c6">(</span>conn<span style="color:#ff79c6">,</span> rec<span style="color:#ff79c6">.</span><span style="color:#50fa7b">getSchedulerInstanceId</span><span style="color:#ff79c6">());</span>
+</span></span><span style="display:flex;"><span>		<span style="color:#ff79c6">}</span>
+</span></span><span style="display:flex;"><span>		<span style="color:#ff79c6">...</span>
+</span></span><span style="display:flex;"><span>	<span style="color:#ff79c6">}</span>
+</span></span><span style="display:flex;"><span><span style="color:#ff79c6">}</span>
+</span></span></code></pre></div><p>所以我們可以得知 Quartz 更新節點狀態是依靠運行環境的時間來進行同步，所以實際情況下，如果各節點運行在不同環境，需要注意各環境之間時間的同步</p>
+<h3 id="保證任務執行的一致性">保證任務執行的一致性</h3>
+<blockquote>
+<p>以下討論皆以採用 <code>JobStroeTX</code> 並配合 MySQL 來繼續討論 Quartz 集群機制，可以比較清楚看到 Quartz 實作的步驟；若是採用 <code>JobStoreCMT</code> 則要看應用本身提供怎樣的 transaction 機制，例如 JTA，但除了 transaction 的部分，其他概念大致上還是相同，所以其餘步驟也是大致相同</p>
+</blockquote>
+<p>Quartz 保證任務執行一致性的方式實際上是在各節點認領 <code>Trigger</code> 時，先透過 database 本身支援的 row lock，例如 MySQL 在開啟 transaction 後，可透過 <code>select * from QRTZ_LOCKS where SCHED_NAME = &lt;scheduleName&gt; AND LOCK_NAME = ? for update</code> 語句取得 row lock 實作悲觀鎖，以確保任務不會被重複執行：</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-java" data-lang="java"><span style="display:flex;"><span><span style="color:#8be9fd;font-style:italic">protected</span> <span style="color:#ff79c6">&lt;</span>T<span style="color:#ff79c6">&gt;</span> T <span style="color:#50fa7b">executeInNonManagedTXLock</span><span style="color:#ff79c6">(</span>
+</span></span><span style="display:flex;"><span>	String lockName<span style="color:#ff79c6">,</span> 
+</span></span><span style="display:flex;"><span>	TransactionCallback<span style="color:#ff79c6">&lt;</span>T<span style="color:#ff79c6">&gt;</span> txCallback<span style="color:#ff79c6">,</span> <span style="color:#8be9fd;font-style:italic">final</span> TransactionValidator<span style="color:#ff79c6">&lt;</span>T<span style="color:#ff79c6">&gt;</span> txValidator<span style="color:#ff79c6">)</span> <span style="color:#8be9fd;font-style:italic">throws</span> JobPersistenceException <span style="color:#ff79c6">{</span>
+</span></span><span style="display:flex;"><span>	<span style="color:#ff79c6">...</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>	transOwner <span style="color:#ff79c6">=</span> getLockHandler<span style="color:#ff79c6">().</span><span style="color:#50fa7b">obtainLock</span><span style="color:#ff79c6">(</span>conn<span style="color:#ff79c6">,</span> lockName<span style="color:#ff79c6">);</span>
+</span></span><span style="display:flex;"><span>	<span style="color:#ff79c6">...</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>	<span style="color:#8be9fd;font-style:italic">final</span> T result <span style="color:#ff79c6">=</span> txCallback<span style="color:#ff79c6">.</span><span style="color:#50fa7b">execute</span><span style="color:#ff79c6">(</span>conn<span style="color:#ff79c6">);</span>
+</span></span><span style="display:flex;"><span>	<span style="color:#ff79c6">...</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>	releaseLock<span style="color:#ff79c6">(</span>lockName<span style="color:#ff79c6">,</span> transOwner<span style="color:#ff79c6">);</span>
+</span></span><span style="display:flex;"><span>	<span style="color:#ff79c6">...</span>
+</span></span><span style="display:flex;"><span><span style="color:#ff79c6">}</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#8be9fd;font-style:italic">protected</span> List<span style="color:#ff79c6">&lt;</span>OperableTrigger<span style="color:#ff79c6">&gt;</span> <span style="color:#50fa7b">acquireNextTrigger</span><span style="color:#ff79c6">(</span>Connection conn<span style="color:#ff79c6">,</span> <span style="color:#8be9fd">long</span> noLaterThan<span style="color:#ff79c6">,</span> <span style="color:#8be9fd">int</span> maxCount<span style="color:#ff79c6">,</span> <span style="color:#8be9fd">long</span> timeWindow<span style="color:#ff79c6">)</span> <span style="color:#8be9fd;font-style:italic">throws</span> JobPersistenceException <span style="color:#ff79c6">{</span>
+</span></span><span style="display:flex;"><span>	<span style="color:#ff79c6">...</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>	List<span style="color:#ff79c6">&lt;</span>TriggerKey<span style="color:#ff79c6">&gt;</span> keys <span style="color:#ff79c6">=</span> getDelegate<span style="color:#ff79c6">().</span><span style="color:#50fa7b">selectTriggerToAcquire</span><span style="color:#ff79c6">(</span>conn<span style="color:#ff79c6">,</span> noLaterThan <span style="color:#ff79c6">+</span> timeWindow<span style="color:#ff79c6">,</span> getMisfireTime<span style="color:#ff79c6">(),</span> maxCount<span style="color:#ff79c6">);</span>  
+</span></span><span style="display:flex;"><span>	<span style="color:#ff79c6">...</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>	<span style="color:#ff79c6">for</span><span style="color:#ff79c6">(</span>TriggerKey triggerKey<span style="color:#ff79c6">:</span> keys<span style="color:#ff79c6">)</span> <span style="color:#ff79c6">{</span>
+</span></span><span style="display:flex;"><span>		<span style="color:#ff79c6">...</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>		JobDetail job <span style="color:#ff79c6">=</span> <span style="color:#ff79c6">=</span> retrieveJob<span style="color:#ff79c6">(</span>conn<span style="color:#ff79c6">,</span> jobKey<span style="color:#ff79c6">);</span>
+</span></span><span style="display:flex;"><span>		<span style="color:#ff79c6">...</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>		<span style="color:#8be9fd">int</span> rowsUpdated <span style="color:#ff79c6">=</span> getDelegate<span style="color:#ff79c6">().</span><span style="color:#50fa7b">updateTriggerStateFromOtherState</span><span style="color:#ff79c6">(</span>conn<span style="color:#ff79c6">,</span> triggerKey<span style="color:#ff79c6">,</span> STATE_ACQUIRED<span style="color:#ff79c6">,</span> STATE_WAITING<span style="color:#ff79c6">);</span>
+</span></span><span style="display:flex;"><span>		<span style="color:#ff79c6">...</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>		getDelegate<span style="color:#ff79c6">().</span><span style="color:#50fa7b">insertFiredTrigger</span><span style="color:#ff79c6">(</span>conn<span style="color:#ff79c6">,</span> nextTrigger<span style="color:#ff79c6">,</span> STATE_ACQUIRED<span style="color:#ff79c6">,</span> <span style="color:#ff79c6">null</span><span style="color:#ff79c6">);</span>
+</span></span><span style="display:flex;"><span>		<span style="color:#ff79c6">...</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>		acquiredTriggers<span style="color:#ff79c6">.</span><span style="color:#50fa7b">add</span><span style="color:#ff79c6">(</span>nextTrigger<span style="color:#ff79c6">);</span>
+</span></span><span style="display:flex;"><span>		<span style="color:#ff79c6">...</span>
+</span></span><span style="display:flex;"><span>	<span style="color:#ff79c6">}</span>
+</span></span><span style="display:flex;"><span>	<span style="color:#ff79c6">...</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>	<span style="color:#ff79c6">return</span> acquiredTriggers<span style="color:#ff79c6">;</span>
+</span></span><span style="display:flex;"><span><span style="color:#ff79c6">}</span>
+</span></span></code></pre></div><h1 id="結語">結語</h1>
+<p>這篇簡單探討過 Quartz 單體跟集群的任務分配機制後，下一篇就要進入實作部分</p>
+<h1 id="reference">Reference</h1>
+<ul>
+<li><a href="https://blog.csdn.net/ThinkWon/article/details/109936696">Quartz简介</a></li>
+<li><a href="https://flylib.com/books/en/2.65.1/creating_the_quartz_database_structure.html">Creating the Quartz Database Structure</a></li>
+</ul>
+
+                    
+                    <HR width="100%" id="EOF">
+		    <p style="color:#777;">Last modified on 2022-11-15</p>
+                    
+                </div>
+            </div>
+            
+            
+            <nav class="post-pagination">
+
+                
+                <a class="newer-posts">
+			Next<br>No newer posts.
+                </a>
+                
+                
+                
+                <a class="older-posts" href="https://idontwannarock.github.io/tech_blog/2022/11/xss_prevention_spring_boot/">
+			Previous<br>Spring Boot 後端實作 XSS 防範
+                </a>
+                
+            </nav>
+            <div class="post-comment-wrapper">
+                
+<div id="disqus_thread"></div>
+<script>
+    
+
+    var disqus_config = function () {
+        
+        this.page.url = '\/2022\/11\/quartz-intro\/';  
+        
+        
+        this.page.identifier = '\/2022\/11\/quartz-intro\/'; 
+    };
+    (function() {
+        var d = document, s = d.createElement('script');
+        s.src = 'https://howard-tech-blog.disqus.com/embed.js';
+        s.setAttribute('data-timestamp', +new Date());
+        (d.head || d.body).appendChild(s);
+    })();
+</script>
+<noscript> Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript" rel="nofollow"> comments powered by Disqus.  </a> </noscript>
+
+
+
+
+
+
+
+
+
+
+
+            </div>
+        </div>
+    </div>
+
+
+                    </div>
+            </div><div id="single-column-footer">
+Hugo Theme <a href="https://github.com/amazingrise/hugo-theme-diary">Diary</a> by <a href="https://risehere.net/">Rise</a>
+<br>
+Ported from <a href="https://mak1t0.cc/" target="_blank" rel="noreferrer noopener">Makito</a>'s <a href="https://github.com/SumiMakito/hexo-theme-journal/" target="_blank" rel="noreferrer noopener">Journal.</a> <br>
+<br>
+
+&copy;
+	
+	This website by Howard Wang is licensed under a Creative Common Attribution-ShareAlike 4.0 International License.
+	
+</div>
+            </div>
+    
+    <script src="https://idontwannarock.github.io/tech_blog/js/journal.js"></script></body>
+</html>
