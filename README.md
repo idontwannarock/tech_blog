@@ -7,7 +7,7 @@
 
 ## Quick Publish
 
-Execute `publish.sh`
+Commit any changes in main branch and then execute `publish.sh`.
 
 ## Hugo Basic Operation
 
