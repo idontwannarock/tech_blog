@@ -15,6 +15,7 @@ Quartz 系列：
 
 - [Quartz 介紹](https://idontwannarock.github.io/tech_blog/2022/11/quartz-intro/)
 - Spring Boot 整合 Quartz 集群執行預設及動態排程
+- Quartz Misfire Handling Instruction
 
 Spring Boot 官方本身就有 `spring-boot-starter-quartz` 來提供 Quartz 整合，所以在 Spring Boot 當中使用基本 Quartz 功能已經非常簡單
 
