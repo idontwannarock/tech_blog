@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>misfire on Howard Tech Note</title>
+    <link>https://idontwannarock.github.io/tech_blog/tags/misfire/</link>
+    <description>Recent content in misfire on Howard Tech Note</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-us</language>
+    <copyright>This website by Howard Wang is licensed under a Creative Common Attribution-ShareAlike 4.0 International License.</copyright>
+    <lastBuildDate>Tue, 29 Nov 2022 15:21:19 +0800</lastBuildDate><atom:link href="https://idontwannarock.github.io/tech_blog/tags/misfire/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Quartz Misfire Handling Instruction</title>
+      <link>https://idontwannarock.github.io/tech_blog/2022/11/quartz-misfire-handling-instruction/</link>
+      <pubDate>Tue, 29 Nov 2022 15:21:19 +0800</pubDate>
+      
+      <guid>https://idontwannarock.github.io/tech_blog/2022/11/quartz-misfire-handling-instruction/</guid>
+      <description>Quartz 系列：
+Quartz 介紹 Spring Boot 整合 Quartz 集群執行預設及動態排程 Quartz Misfire Handling Instruction 使用 Quartz 來幫助排程管理很方便，但還有一個需要注意的地方，就是設定 misfire handling instruction
+Misfire 概念 首先要來釐清在 Quartz 的架構下，什麼情況能稱為 misfire，其實講到底就只有一種：「Job 在到達預定該觸發的時間未觸發」
+但怎樣算是未觸發，其實主要有兩個條件，第一個是設定的「觸發時間」，第二個則是「misfireThreshold」
+舉例來說如果有一個 Job 設定 12:00 觸發，並且 Quartz 的 misfireThreshold 設定為 2min，因此當我在 12:01 準備要執行的時候，因為已經超過設定的觸發時間，但還沒有超過 misfireThreshold 的 2min，所以並不會被 Quartz 認為是 misfire
+那另一方面來說，以同樣的例子而言，如果 Quartz 準備要執行的時候已經是 12:03，那這個 Job 的這次執行就會被認為是 misfire，這時候 Quartz 就會依照設定好的 misfire handling instruction 來執行未觸發時的動作
+這樣舉例就能很清楚的理解 misfireThreshold 的意義
+要在 Spring Boot 整合 Quartz 專案中設定 misfireThreshold，可在 properties 檔中設定 spring.</description>
+    </item>
+    
+  </channel>
+</rss>

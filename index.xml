@@ -7,9 +7,243 @@
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
     <copyright>This website by Howard Wang is licensed under a Creative Common Attribution-ShareAlike 4.0 International License.</copyright>
-    <lastBuildDate>Tue, 15 Nov 2022 16:54:13 +0800</lastBuildDate>
+    <lastBuildDate>Tue, 29 Nov 2022 15:21:19 +0800</lastBuildDate>
     
         <atom:link href="https://idontwannarock.github.io/tech_blog/index.xml" rel="self" type="application/rss+xml" />
+    
+    
+    
+        <item>
+        <title>Quartz Misfire Handling Instruction</title>
+        <link>https://idontwannarock.github.io/tech_blog/2022/11/quartz-misfire-handling-instruction/</link>
+        <pubDate>Tue, 29 Nov 2022 15:21:19 +0800</pubDate>
+        
+        <guid>https://idontwannarock.github.io/tech_blog/2022/11/quartz-misfire-handling-instruction/</guid>
+        <description>Howard Tech Note https://idontwannarock.github.io/tech_blog/2022/11/quartz-misfire-handling-instruction/ -&lt;p&gt;Quartz 系列：&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;a href=&#34;https://idontwannarock.github.io/tech_blog/2022/11/quartz-intro/&#34;&gt;Quartz 介紹&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;https://idontwannarock.github.io/tech_blog/2022/11/quartz-cluster-fixed-and-dynamic-trigger-spring-boot-integration/&#34;&gt;Spring Boot 整合 Quartz 集群執行預設及動態排程&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;Quartz Misfire Handling Instruction&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;使用 Quartz 來幫助排程管理很方便，但還有一個需要注意的地方，就是設定 misfire handling instruction&lt;/p&gt;
+&lt;h1 id=&#34;misfire-概念&#34;&gt;Misfire 概念&lt;/h1&gt;
+&lt;p&gt;首先要來釐清在 Quartz 的架構下，什麼情況能稱為 misfire，其實講到底就只有一種：「Job 在到達預定該觸發的時間未觸發」&lt;/p&gt;
+&lt;p&gt;但怎樣算是未觸發，其實主要有兩個條件，第一個是設定的「觸發時間」，第二個則是「&lt;code&gt;misfireThreshold&lt;/code&gt;」&lt;/p&gt;
+&lt;p&gt;舉例來說如果有一個 Job 設定 12:00 觸發，並且 Quartz 的 &lt;code&gt;misfireThreshold&lt;/code&gt; 設定為 2min，因此當我在 12:01 準備要執行的時候，因為已經超過設定的觸發時間，但還沒有超過 &lt;code&gt;misfireThreshold&lt;/code&gt; 的 2min，所以並不會被 Quartz 認為是 misfire&lt;/p&gt;
+&lt;p&gt;那另一方面來說，以同樣的例子而言，如果 Quartz 準備要執行的時候已經是 12:03，那這個 Job 的這次執行就會被認為是 misfire，這時候 Quartz 就會依照設定好的 misfire handling instruction 來執行未觸發時的動作&lt;/p&gt;
+&lt;p&gt;這樣舉例就能很清楚的理解 &lt;code&gt;misfireThreshold&lt;/code&gt; 的意義&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;p&gt;要在 Spring Boot 整合 Quartz 專案中設定 &lt;code&gt;misfireThreshold&lt;/code&gt;，可在 properties 檔中設定 &lt;code&gt;spring.quartz.properties.org.quartz.jobStore.misfireThreshold=60000&lt;/code&gt;，這個參數的 default 就是 60000 milliseconds 也就是一分鐘&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;p&gt;而 misfire handling instruction 會因為不同類型的 Trigger 而會有些不同，以下來討論常見的 &lt;code&gt;SimpleTrigger&lt;/code&gt; 跟 &lt;code&gt;CronTrigger&lt;/code&gt; 有提供的 misfire handling instruction&lt;/p&gt;
+&lt;h1 id=&#34;misfire-handling-instruction&#34;&gt;Misfire Handling Instruction&lt;/h1&gt;
+&lt;h2 id=&#34;simpletrigger&#34;&gt;SimpleTrigger&lt;/h2&gt;
+&lt;p&gt;以 &lt;code&gt;SimpleTrigger&lt;/code&gt; 來說，有提供以下七種 misfire handling instruction：&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;code&gt;MISFIRE_INSTRUCTION_SMART_POLICY&lt;/code&gt;&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;MISFIRE_INSTRUCTION_IGNORE_MISFIRE_POLICY&lt;/code&gt;&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;MISFIRE_INSTRUCTION_FIRE_NOW&lt;/code&gt;&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;MISFIRE_INSTRUCTION_RESCHEDULE_NEXT_WITH_EXISTING_COUNT&lt;/code&gt;&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;MISFIRE_INSTRUCTION_RESCHEDULE_NEXT_WITH_REMAINING_COUNT&lt;/code&gt;&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;MISFIRE_INSTRUCTION_RESCHEDULE_NOW_WITH_EXISTING_REPEAT_COUNT&lt;/code&gt;&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;MISFIRE_INSTRUCTION_RESCHEDULE_NOW_WITH_REMAINING_REPEAT_COUNT&lt;/code&gt;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;因為 &lt;code&gt;SimpleTrigger&lt;/code&gt; 有分為「不重複執行」、「執行固定次數」及「無限次執行」三種狀況，所以各種 misfire handling instruction 的實際執行狀況就會有所不同&lt;/p&gt;
+&lt;h3 id=&#34;不重複執行&#34;&gt;不重複執行&lt;/h3&gt;
+&lt;table&gt;
+&lt;thead&gt;
+&lt;tr&gt;
+&lt;th style=&#34;text-align:left&#34;&gt;Instruction&lt;/th&gt;
+&lt;th style=&#34;text-align:left&#34;&gt;解釋&lt;/th&gt;
+&lt;th style=&#34;text-align:left&#34;&gt;情境舉例&lt;/th&gt;
+&lt;/tr&gt;
+&lt;/thead&gt;
+&lt;tbody&gt;
+&lt;tr&gt;
+&lt;td style=&#34;text-align:left&#34;&gt;&lt;code&gt;MISFIRE_INSTRUCTION_SMART_POLICY&lt;/code&gt;&lt;/td&gt;
+&lt;td style=&#34;text-align:left&#34;&gt;同 &lt;code&gt;MISFIRE_INSTRUCTION_FIRE_NOW&lt;/code&gt;&lt;/td&gt;
+&lt;td&gt;&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td style=&#34;text-align:left&#34;&gt;&lt;code&gt;MISFIRE_INSTRUCTION_IGNORE_MISFIRE_POLICY&lt;/code&gt;&lt;/td&gt;
+&lt;td style=&#34;text-align:left&#34;&gt;同 &lt;code&gt;MISFIRE_INSTRUCTION_FIRE_NOW&lt;/code&gt;&lt;/td&gt;
+&lt;td&gt;&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td style=&#34;text-align:left&#34;&gt;&lt;code&gt;MISFIRE_INSTRUCTION_FIRE_NOW&lt;/code&gt;&lt;/td&gt;
+&lt;td style=&#34;text-align:left&#34;&gt;當 Quartz 發現 job misfire，會立刻執行&lt;/td&gt;
+&lt;td style=&#34;text-align:left&#34;&gt;例如有個原本預計在 12:00 執行的系統清理的 job，但 Quartz 應用程式可能因為維護的關係，13:00 才啟動&lt;!-- raw HTML omitted --&gt;所以 scheduler 在 13:00 一啟動的時候，就會立刻執行 misfire 的那次 job&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td style=&#34;text-align:left&#34;&gt;&lt;code&gt;MISFIRE_INSTRUCTION_RESCHEDULE_NEXT_WITH_EXISTING_COUNT&lt;/code&gt;&lt;/td&gt;
+&lt;td style=&#34;text-align:left&#34;&gt;同 &lt;code&gt;MISFIRE_INSTRUCTION_RESCHEDULE_NEXT_WITH_REMAINING_COUNT&lt;/code&gt;&lt;/td&gt;
+&lt;td&gt;&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td style=&#34;text-align:left&#34;&gt;&lt;code&gt;MISFIRE_INSTRUCTION_RESCHEDULE_NEXT_WITH_REMAINING_COUNT&lt;/code&gt;&lt;/td&gt;
+&lt;td style=&#34;text-align:left&#34;&gt;因為已經沒有下一次觸發，所以不執行任何動作&lt;/td&gt;
+&lt;td style=&#34;text-align:left&#34;&gt;例如預計錄製一個電視節目，如果已經超過兩個小時才發現 misfire，已經沒有必要再執行錄製的工作&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td style=&#34;text-align:left&#34;&gt;&lt;code&gt;MISFIRE_INSTRUCTION_RESCHEDULE_NOW_WITH_EXISTING_REPEAT_COUNT&lt;/code&gt;&lt;/td&gt;
+&lt;td style=&#34;text-align:left&#34;&gt;同 &lt;code&gt;MISFIRE_INSTRUCTION_FIRE_NOW&lt;/code&gt;&lt;/td&gt;
+&lt;td&gt;&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td style=&#34;text-align:left&#34;&gt;&lt;code&gt;MISFIRE_INSTRUCTION_RESCHEDULE_NOW_WITH_REMAINING_REPEAT_COUNT&lt;/code&gt;&lt;/td&gt;
+&lt;td style=&#34;text-align:left&#34;&gt;同 &lt;code&gt;MISFIRE_INSTRUCTION_FIRE_NOW&lt;/code&gt;&lt;/td&gt;
+&lt;td&gt;&lt;/td&gt;
+&lt;/tr&gt;
+&lt;/tbody&gt;
+&lt;/table&gt;
+&lt;h3 id=&#34;執行固定次數&#34;&gt;執行固定次數&lt;/h3&gt;
+&lt;p&gt;例如有個從今天 9:00 開始每隔一個小時執行一次，總共執行 8 次的任務，正常情況下應該在 16:00 執行最後一次&lt;/p&gt;
+&lt;p&gt;但因為某種原因 scheduler 沒辦法執行 9:00 跟 10:00 這兩次任務，並且直到 10:15 才發現有 2 次 misfire:&lt;/p&gt;
+&lt;table&gt;
+&lt;thead&gt;
+&lt;tr&gt;
+&lt;th style=&#34;text-align:left&#34;&gt;Instruction&lt;/th&gt;
+&lt;th style=&#34;text-align:left&#34;&gt;解釋&lt;/th&gt;
+&lt;th style=&#34;text-align:left&#34;&gt;情境舉例&lt;/th&gt;
+&lt;/tr&gt;
+&lt;/thead&gt;
+&lt;tbody&gt;
+&lt;tr&gt;
+&lt;td style=&#34;text-align:left&#34;&gt;&lt;code&gt;MISFIRE_INSTRUCTION_SMART_POLICY&lt;/code&gt;&lt;/td&gt;
+&lt;td style=&#34;text-align:left&#34;&gt;同 &lt;code&gt;MISFIRE_INSTRUCTION_RESCHEDULE_NOW_WITH_EXISTING_REPEAT_COUNT&lt;/code&gt;&lt;/td&gt;
+&lt;td&gt;&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td style=&#34;text-align:left&#34;&gt;&lt;code&gt;MISFIRE_INSTRUCTION_IGNORE_MISFIRE_POLICY&lt;/code&gt;&lt;/td&gt;
+&lt;td style=&#34;text-align:left&#34;&gt;以最快的速度執行所有 misfire 的 job，然後再回到正常的 schedule&lt;/td&gt;
+&lt;td style=&#34;text-align:left&#34;&gt;scheduler  會以最快的速度執行 9:00 及 10:00 這兩次 misfire 的 job，並等到 11:00 回復到正常的排程&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td style=&#34;text-align:left&#34;&gt;&lt;code&gt;MISFIRE_INSTRUCTION_FIRE_NOW&lt;/code&gt;&lt;/td&gt;
+&lt;td style=&#34;text-align:left&#34;&gt;同 &lt;code&gt;MISFIRE_INSTRUCTION_RESCHEDULE_NOW_WITH_REMAINING_REPEAT_COUNT&lt;/code&gt;&lt;/td&gt;
+&lt;td&gt;&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td style=&#34;text-align:left&#34;&gt;&lt;code&gt;MISFIRE_INSTRUCTION_RESCHEDULE_NEXT_WITH_EXISTING_COUNT&lt;/code&gt;&lt;/td&gt;
+&lt;td style=&#34;text-align:left&#34;&gt;scheduler 當下不會做任何動作，而是依照設定的執行間隔，在下一次預定執行的時間，重新開始執行所有 misfire 的任務&lt;/td&gt;
+&lt;td style=&#34;text-align:left&#34;&gt;scheduler 會等到 11:00 再開始重新以每小時執行一次的間隔，依序執行原定的任務直到 18:00 結束&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td style=&#34;text-align:left&#34;&gt;&lt;code&gt;MISFIRE_INSTRUCTION_RESCHEDULE_NEXT_WITH_REMAINING_COUNT&lt;/code&gt;&lt;/td&gt;
+&lt;td style=&#34;text-align:left&#34;&gt;scheduler 會放棄 misfire 的任務，等到下次執行的時間，執行剩下的任務&lt;!-- raw HTML omitted --&gt;&lt;strong&gt;任務總執行次數會比原本預計的較少&lt;/strong&gt;&lt;/td&gt;
+&lt;td style=&#34;text-align:left&#34;&gt;scheduler 10:15 發現有 2 次 misfire，但會執行放棄那兩次 misfire，仍然等到 11:00 開始執行下次任務直到原訂的 16:00&lt;!-- raw HTML omitted --&gt;所以總執行次數只會有 6 次，而不是原定的 8 次&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td style=&#34;text-align:left&#34;&gt;&lt;code&gt;MISFIRE_INSTRUCTION_RESCHEDULE_NOW_WITH_EXISTING_REPEAT_COUNT&lt;/code&gt;&lt;/td&gt;
+&lt;td style=&#34;text-align:left&#34;&gt;第一次 misfire 會被立刻執行，其餘的 misfire 及原定任務會被以設定好的執行間隔，重新排程執行&lt;!-- raw HTML omitted --&gt;&lt;strong&gt;任務總執行次數不會改變&lt;/strong&gt;&lt;/td&gt;
+&lt;td style=&#34;text-align:left&#34;&gt;當 scheduler 10:15 發現有 2 次 misfire 時，第一個 misfire 會被立刻執行，然後 scheduler 會等待一個小時到 11:15 執行第二次任務，最後 8 次任務執行結束的時間為 17:15&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td style=&#34;text-align:left&#34;&gt;&lt;code&gt;MISFIRE_INSTRUCTION_RESCHEDULE_NOW_WITH_REMAINING_REPEAT_COUNT&lt;/code&gt;&lt;/td&gt;
+&lt;td style=&#34;text-align:left&#34;&gt;第一次 misfire 會被立刻執行，其他的 misfire 會被放棄，scheduler 會以設定好的執行間隔，重新排程執行剩下未被 misfire 的任務&lt;!-- raw HTML omitted --&gt;&lt;strong&gt;如果 misfire 超過一次，任務總執行次數會比原本預定地少&lt;/strong&gt;&lt;/td&gt;
+&lt;td style=&#34;text-align:left&#34;&gt;當 scheduler 10:15 發現有 2 次 misfire 時，第一個 misfire 會被立刻執行，第二個 misfire 會被放棄，然後 scheduler 會等待一個小時到 11:15 執行剩下的任務，最後 7 次任務執行結束時間為 16:15&lt;/td&gt;
+&lt;/tr&gt;
+&lt;/tbody&gt;
+&lt;/table&gt;
+&lt;h3 id=&#34;無限次執行&#34;&gt;無限次執行&lt;/h3&gt;
+&lt;p&gt;例如有一個任務從 9:00 開始每隔一個小時觸發，但因為某種原因 scheduler 沒辦法執行 9:00 跟 10:00 這兩次任務，並且直到 10:15 才發現有 2 次 misfire:&lt;/p&gt;
+&lt;table&gt;
+&lt;thead&gt;
+&lt;tr&gt;
+&lt;th style=&#34;text-align:left&#34;&gt;Instruction&lt;/th&gt;
+&lt;th style=&#34;text-align:left&#34;&gt;解釋&lt;/th&gt;
+&lt;th style=&#34;text-align:left&#34;&gt;情境舉例&lt;/th&gt;
+&lt;/tr&gt;
+&lt;/thead&gt;
+&lt;tbody&gt;
+&lt;tr&gt;
+&lt;td style=&#34;text-align:left&#34;&gt;&lt;code&gt;MISFIRE_INSTRUCTION_SMART_POLICY&lt;/code&gt;&lt;/td&gt;
+&lt;td style=&#34;text-align:left&#34;&gt;同 &lt;code&gt;MISFIRE_INSTRUCTION_RESCHEDULE_NEXT_WITH_REMAINING_COUNT&lt;/code&gt;&lt;/td&gt;
+&lt;td&gt;&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td style=&#34;text-align:left&#34;&gt;&lt;code&gt;MISFIRE_INSTRUCTION_IGNORE_MISFIRE_POLICY&lt;/code&gt;&lt;/td&gt;
+&lt;td style=&#34;text-align:left&#34;&gt;以最快的速度執行所有 misfire 的 job，然後再回到正常的 schedule&lt;/td&gt;
+&lt;td style=&#34;text-align:left&#34;&gt;scheduler  會以最快的速度執行 9:00 及 10:00 這兩次 misfire 的 job，並等到 11:00 回復到正常的排程&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td style=&#34;text-align:left&#34;&gt;&lt;code&gt;MISFIRE_INSTRUCTION_FIRE_NOW&lt;/code&gt;&lt;/td&gt;
+&lt;td style=&#34;text-align:left&#34;&gt;同 &lt;code&gt;MISFIRE_INSTRUCTION_RESCHEDULE_NOW_WITH_REMAINING_REPEAT_COUNT&lt;/code&gt;&lt;/td&gt;
+&lt;td&gt;&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td style=&#34;text-align:left&#34;&gt;&lt;code&gt;MISFIRE_INSTRUCTION_RESCHEDULE_NEXT_WITH_EXISTING_COUNT&lt;/code&gt;&lt;/td&gt;
+&lt;td style=&#34;text-align:left&#34;&gt;同 &lt;code&gt;MISFIRE_INSTRUCTION_RESCHEDULE_NEXT_WITH_REMAINING_COUNT&lt;/code&gt;&lt;/td&gt;
+&lt;td&gt;&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td style=&#34;text-align:left&#34;&gt;&lt;code&gt;MISFIRE_INSTRUCTION_RESCHEDULE_NEXT_WITH_REMAINING_COUNT&lt;/code&gt;&lt;/td&gt;
+&lt;td style=&#34;text-align:left&#34;&gt;scheduler 會放棄 misfire 的任務，等到下次執行的時間，執行接下來的任務&lt;/td&gt;
+&lt;td style=&#34;text-align:left&#34;&gt;scheduler 10:15 發現有 2 次 misfire，但會執行放棄那兩次 misfire，等到 11:00 開始執行下次任務&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td style=&#34;text-align:left&#34;&gt;&lt;code&gt;MISFIRE_INSTRUCTION_RESCHEDULE_NOW_WITH_EXISTING_REPEAT_COUNT&lt;/code&gt;&lt;/td&gt;
+&lt;td style=&#34;text-align:left&#34;&gt;同 &lt;code&gt;MISFIRE_INSTRUCTION_RESCHEDULE_NOW_WITH_REMAINING_REPEAT_COUNT&lt;/code&gt;&lt;/td&gt;
+&lt;td&gt;&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td style=&#34;text-align:left&#34;&gt;&lt;code&gt;MISFIRE_INSTRUCTION_RESCHEDULE_NOW_WITH_REMAINING_REPEAT_COUNT&lt;/code&gt;&lt;/td&gt;
+&lt;td style=&#34;text-align:left&#34;&gt;第一次 misfire 會被立刻執行，其他的 misfire 會被放棄，scheduler 會以設定好的執行間隔，重新排程執行接下來的任務&lt;/td&gt;
+&lt;td style=&#34;text-align:left&#34;&gt;當 scheduler 10:15 發現有 2 次 misfire 時，第一個 misfire 會被立刻執行，第二個 misfire 會被放棄，然後 scheduler 會等待一個小時到 11:15 執行接下來的任務&lt;/td&gt;
+&lt;/tr&gt;
+&lt;/tbody&gt;
+&lt;/table&gt;
+&lt;h2 id=&#34;crontrigger&#34;&gt;CronTrigger&lt;/h2&gt;
+&lt;p&gt;&lt;code&gt;CronTrigger&lt;/code&gt; 有提供以下四種 misfire handling instruction:&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;code&gt;MISFIRE_INSTRUCTION_SMART_POLICY&lt;/code&gt;&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;MISFIRE_INSTRUCTION_IGNORE_MISFIRE_POLICY&lt;/code&gt;&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;MISFIRE_INSTRUCTION_FIRE_ONCE_NOW&lt;/code&gt;&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;MISFIRE_INSTRUCTION_DO_NOTHING&lt;/code&gt;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;舉例來說，我們安排了一個星期一到五，每天 9:00 到 17:00 之間，每隔一個小時執行一次的任務 (&lt;code&gt;0 0 9-17 ? * MON-FRI&lt;/code&gt;)，但同樣的錯過了頭兩次執行，並在 10:15 發現有兩次 misfire:&lt;/p&gt;
+&lt;table&gt;
+&lt;thead&gt;
+&lt;tr&gt;
+&lt;th style=&#34;text-align:left&#34;&gt;Instruction&lt;/th&gt;
+&lt;th style=&#34;text-align:left&#34;&gt;解釋&lt;/th&gt;
+&lt;th style=&#34;text-align:left&#34;&gt;情境舉例&lt;/th&gt;
+&lt;/tr&gt;
+&lt;/thead&gt;
+&lt;tbody&gt;
+&lt;tr&gt;
+&lt;td style=&#34;text-align:left&#34;&gt;&lt;code&gt;MISFIRE_INSTRUCTION_SMART_POLICY&lt;/code&gt;&lt;/td&gt;
+&lt;td style=&#34;text-align:left&#34;&gt;同 &lt;code&gt;MISFIRE_INSTRUCTION_FIRE_ONCE_NOW&lt;/code&gt;&lt;/td&gt;
+&lt;td&gt;&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td style=&#34;text-align:left&#34;&gt;&lt;code&gt;MISFIRE_INSTRUCTION_IGNORE_MISFIRE_POLICY&lt;/code&gt;&lt;/td&gt;
+&lt;td style=&#34;text-align:left&#34;&gt;以最快的速度執行所有 misfire 的 job，然後再回到正常的 schedule&lt;/td&gt;
+&lt;td style=&#34;text-align:left&#34;&gt;scheduler  會以最快的速度執行 9:00 及 10:00 這兩次 misfire 的 job，並等到 11:00 回復到正常的排程&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td style=&#34;text-align:left&#34;&gt;&lt;code&gt;MISFIRE_INSTRUCTION_FIRE_ONCE_NOW&lt;/code&gt;&lt;/td&gt;
+&lt;td style=&#34;text-align:left&#34;&gt;第一次 misfire 會被立刻執行，其他的 misfire 會被放棄，等到下次執行的時間，執行接下來的任務&lt;/td&gt;
+&lt;td style=&#34;text-align:left&#34;&gt;當 scheduler 10:15 發現有 2 次 misfire 時，第一個 misfire 會被立刻執行，第二個 misfire 會被放棄，然後 scheduler 會等到 11:00 開始執行下次任務&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td style=&#34;text-align:left&#34;&gt;&lt;code&gt;MISFIRE_INSTRUCTION_DO_NOTHING&lt;/code&gt;&lt;/td&gt;
+&lt;td style=&#34;text-align:left&#34;&gt;scheduler 會放棄 misfire 的任務，等到下次執行的時間，執行接下來的任務&lt;/td&gt;
+&lt;td style=&#34;text-align:left&#34;&gt;scheduler 10:15 發現有 2 次 misfire，但會執行放棄那兩次 misfire，等到 11:00 開始執行下次任務&lt;/td&gt;
+&lt;/tr&gt;
+&lt;/tbody&gt;
+&lt;/table&gt;
+&lt;p&gt;另外可以注意的是，還有以下兩種 trigger 也支援跟 &lt;code&gt;CronTrigger&lt;/code&gt; 相同的 misfire handling instruction:&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;code&gt;DailyTimeIntervalTrigger&lt;/code&gt;: 例如每 25 分鐘執行一次&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;CalendarIntervalTrigger&lt;/code&gt;: 例如每五個月執行一次&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h1 id=&#34;參考&#34;&gt;參考&lt;/h1&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;a href=&#34;https://nurkiewicz.com/2012/04/quartz-scheduler-misfire-instructions.html&#34;&gt;Quartz scheduler misfire instructions explained&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+- https://idontwannarock.github.io/tech_blog/2022/11/quartz-misfire-handling-instruction/ - This website by Howard Wang is licensed under a Creative Common Attribution-ShareAlike 4.0 International License.</description>
+        </item>
     
     
     
@@ -23,6 +257,7 @@
 &lt;ul&gt;
 &lt;li&gt;&lt;a href=&#34;https://idontwannarock.github.io/tech_blog/2022/11/quartz-intro/&#34;&gt;Quartz 介紹&lt;/a&gt;&lt;/li&gt;
 &lt;li&gt;Spring Boot 整合 Quartz 集群執行預設及動態排程&lt;/li&gt;
+&lt;li&gt;Quartz Misfire Handling Instruction&lt;/li&gt;
 &lt;/ul&gt;
 &lt;p&gt;Spring Boot 官方本身就有 &lt;code&gt;spring-boot-starter-quartz&lt;/code&gt; 來提供 Quartz 整合，所以在 Spring Boot 當中使用基本 Quartz 功能已經非常簡單&lt;/p&gt;
 &lt;p&gt;至於動態產生排程，網路上也很多教學，只是大多是採用 API 呼叫的方式去動態產生、運行、暫停、刪除排程等功能，而幾乎沒看到利用預設排程定時從 database 取得動態排程設定，並動態產生或移除排程的功能&lt;/p&gt;
@@ -390,6 +625,7 @@
 &lt;ul&gt;
 &lt;li&gt;Quartz 介紹&lt;/li&gt;
 &lt;li&gt;&lt;a href=&#34;https://idontwannarock.github.io/tech_blog/2022/11/quartz-cluster-fixed-and-dynamic-trigger-spring-boot-integration/&#34;&gt;Spring Boot 整合 Quartz 集群執行預設及動態排程&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;Quartz Misfire Handling Instruction&lt;/li&gt;
 &lt;/ul&gt;
 &lt;p&gt;Quartz 是 Java 生態中一套成熟的開源排程框架，其完整的排程功能包含多樣排程設定、自動任務調度、任務持久化，以及支援分散式排程調度、自動負載平衡，讓排程可以輕鬆運行、應用可以輕鬆 scale out&lt;/p&gt;
 &lt;h1 id=&#34;概念&#34;&gt;概念&lt;/h1&gt;
@@ -1592,40 +1828,6 @@ root_type FlatPassenger;
 &lt;li&gt;&lt;a href=&#34;https://livebook.manning.com/book/http2-in-action&#34;&gt;HTTP/2 in Action&lt;/a&gt;&lt;/li&gt;
 &lt;/ul&gt;
 - https://idontwannarock.github.io/tech_blog/2021/12/http2/ - This website by Howard Wang is licensed under a Creative Common Attribution-ShareAlike 4.0 International License.</description>
-        </item>
-    
-    
-    
-        <item>
-        <title>在 Batch Script 壓縮檔案</title>
-        <link>https://idontwannarock.github.io/tech_blog/2021/12/zip_in_batch_script/</link>
-        <pubDate>Thu, 16 Dec 2021 15:32:25 +0800</pubDate>
-        
-        <guid>https://idontwannarock.github.io/tech_blog/2021/12/zip_in_batch_script/</guid>
-        <description>Howard Tech Note https://idontwannarock.github.io/tech_blog/2021/12/zip_in_batch_script/ -&lt;p&gt;因為目前公司沒有專職 SRE 或 DevOps 幫忙做 CI/CD，身為小小後端工程師只好自己想辦法，偏偏目前用到的 tech stack 包括 .net framework，所以必須跟 Windows 環境的 batch file 打交道來替代習慣的 shell 檔，其中有個步驟必須要壓縮/解壓縮資料夾&lt;/p&gt;
-&lt;h2 id=&#34;tar&#34;&gt;Tar&lt;/h2&gt;
-&lt;p&gt;研究了一下，很興奮的發現 tar 在 command prompt 跟 powershell 都可以用，那代表我在 batch 檔裡面使用沒問題ＲＲＲ&lt;/p&gt;
-&lt;p&gt;所以可以這樣用&lt;/p&gt;
-&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;&#34;&gt;&lt;code class=&#34;language-batch&#34; data-lang=&#34;batch&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;:&lt;span style=&#34;color:#6272a4&#34;&gt;: zip&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;tar -cvzf &lt;span style=&#34;color:#f1fa8c&#34;&gt;&amp;#34;path and name to archive.tar&amp;#34;&lt;/span&gt; &lt;span style=&#34;color:#f1fa8c&#34;&gt;&amp;#34;path to folder to compress&amp;#34;&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;:&lt;span style=&#34;color:#6272a4&#34;&gt;: unzip&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;tar -xvzf &lt;span style=&#34;color:#f1fa8c&#34;&gt;&amp;#34;path and name to archive.tar&amp;#34;&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h2 id=&#34;microsoftpowershellarchive-module&#34;&gt;Microsoft.Powershell.Archive Module&lt;/h2&gt;
-&lt;p&gt;很可惜，這個方法有一個小小的問題&lt;/p&gt;
-&lt;p&gt;tar 基本上是從 Windows 10 或 Windows Server 2019 才開始支援，很不巧，我手上有個環境是 Windows Server 2016&amp;hellip;&lt;/p&gt;
-&lt;p&gt;基於可以用原生就絕不多安裝東西的自虐原則，好險又找到了另一個方法，powershell 有個 archive 的模組可以用！&lt;/p&gt;
-&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;&#34;&gt;&lt;code class=&#34;language-powershell&#34; data-lang=&#34;powershell&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#6272a4&#34;&gt;# zip&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#8be9fd;font-style:italic&#34;&gt;Compress-Archive&lt;/span&gt; -Path &lt;span style=&#34;color:#f1fa8c&#34;&gt;&amp;#34;path to folder to compress&amp;#34;&lt;/span&gt; -DestinationPath &lt;span style=&#34;color:#f1fa8c&#34;&gt;&amp;#34;path and name to archive.zip&amp;#34;&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#6272a4&#34;&gt;# unzip&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#8be9fd;font-style:italic&#34;&gt;Expand-Archive&lt;/span&gt; -Path &lt;span style=&#34;color:#f1fa8c&#34;&gt;&amp;#34;path and name to archive.zip&amp;#34;&lt;/span&gt; -DestinationPath &lt;span style=&#34;color:#f1fa8c&#34;&gt;&amp;#34;path to unzip archive.zip&amp;#34;&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h2 id=&#34;參考連結&#34;&gt;參考連結&lt;/h2&gt;
-&lt;ul&gt;
-&lt;li&gt;&lt;a href=&#34;https://techcommunity.microsoft.com/t5/containers/tar-and-curl-come-to-windows/ba-p/382409&#34;&gt;Tar and Curl Come to Windows!&lt;/a&gt;&lt;/li&gt;
-&lt;li&gt;&lt;a href=&#34;https://docs.microsoft.com/zh-tw/powershell/module/microsoft.powershell.archive/?view=powershell-7.2&amp;amp;viewFallbackFrom=powershell-5.0&#34;&gt;Microsoft.PowerShell.Archive&lt;/a&gt;&lt;/li&gt;
-&lt;/ul&gt;
-- https://idontwannarock.github.io/tech_blog/2021/12/zip_in_batch_script/ - This website by Howard Wang is licensed under a Creative Common Attribution-ShareAlike 4.0 International License.</description>
         </item>
     
     

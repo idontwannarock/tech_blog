@@ -7,22 +7,31 @@
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
     <copyright>This website by Howard Wang is licensed under a Creative Common Attribution-ShareAlike 4.0 International License.</copyright>
-    <lastBuildDate>Tue, 15 Nov 2022 16:54:13 +0800</lastBuildDate><atom:link href="https://idontwannarock.github.io/tech_blog/tags/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Tue, 29 Nov 2022 15:21:19 +0800</lastBuildDate><atom:link href="https://idontwannarock.github.io/tech_blog/tags/index.xml" rel="self" type="application/rss+xml" />
     <item>
-      <title>dynamic-trigger</title>
-      <link>https://idontwannarock.github.io/tech_blog/tags/dynamic-trigger/</link>
-      <pubDate>Tue, 15 Nov 2022 16:54:13 +0800</pubDate>
+      <title>misfire</title>
+      <link>https://idontwannarock.github.io/tech_blog/tags/misfire/</link>
+      <pubDate>Tue, 29 Nov 2022 15:21:19 +0800</pubDate>
       
-      <guid>https://idontwannarock.github.io/tech_blog/tags/dynamic-trigger/</guid>
+      <guid>https://idontwannarock.github.io/tech_blog/tags/misfire/</guid>
       <description></description>
     </item>
     
     <item>
       <title>quartz</title>
       <link>https://idontwannarock.github.io/tech_blog/tags/quartz/</link>
-      <pubDate>Tue, 15 Nov 2022 16:54:13 +0800</pubDate>
+      <pubDate>Tue, 29 Nov 2022 15:21:19 +0800</pubDate>
       
       <guid>https://idontwannarock.github.io/tech_blog/tags/quartz/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>dynamic-trigger</title>
+      <link>https://idontwannarock.github.io/tech_blog/tags/dynamic-trigger/</link>
+      <pubDate>Tue, 15 Nov 2022 16:54:13 +0800</pubDate>
+      
+      <guid>https://idontwannarock.github.io/tech_blog/tags/dynamic-trigger/</guid>
       <description></description>
     </item>
     

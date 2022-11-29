@@ -7,9 +7,141 @@
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
     <copyright>This website by Howard Wang is licensed under a Creative Common Attribution-ShareAlike 4.0 International License.</copyright>
-    <lastBuildDate>Tue, 15 Nov 2022 16:54:13 +0800</lastBuildDate>
+    <lastBuildDate>Tue, 29 Nov 2022 15:21:19 +0800</lastBuildDate>
     
         <atom:link href="https://idontwannarock.github.io/tech_blog/index.xml" rel="self" type="application/rss+xml" />
+    
+    
+    
+        <item>
+        <title>Macbook Pro 的設置 2017 版</title>
+        <link>https://idontwannarock.github.io/tech_blog/2017/11/mbp_setup_2017/</link>
+        <pubDate>Fri, 03 Nov 2017 09:05:02 +0800</pubDate>
+        
+        <guid>https://idontwannarock.github.io/tech_blog/2017/11/mbp_setup_2017/</guid>
+        <description>Howard Tech Note https://idontwannarock.github.io/tech_blog/2017/11/mbp_setup_2017/ -&lt;blockquote&gt;
+&lt;p&gt;這篇文章是初學的時候撰寫的，其中一些觀念並不正確，步驟也可能因為更新或觀念問題而不適用或者多餘，此篇文章僅為留做紀錄&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;p&gt;一直以來都是 PC 人，從來沒用過任何 Apple 或 Linux 的相關產品，剛好有買筆電的需求，想趁機接觸一下不同的作業系統生態，而且久聞 Apple 筆電品質很好，就添購了 Macbook Pro 來當我人生第一台筆電。&lt;/p&gt;
+&lt;p&gt;剛拿到筆電總是需要一些設置，盡量讓 PC 跟 MBP 之間資訊同步以及應用軟體上相通或相容，以達到同步並簡化作業環境的目標，提高生產效率。&lt;/p&gt;
+&lt;p&gt;於是跟朋友詢問以及上網稍作了解後，有了以下的設置。&lt;/p&gt;
+&lt;h1 id=&#34;軟體環境設置&#34;&gt;軟體環境設置&lt;/h1&gt;
+&lt;p&gt;因為是要習慣 Unix-based 的作業環境，所以我並沒有特別強求各方面都要設置到跟 Windows 環境類似，所以操作模式上並沒有更動。&lt;/p&gt;
+&lt;p&gt;但安裝的軟體上就有些考量，希望能達到集中管理，這就不得不提每個 MacOS 都應該必備的 Homebrew。&lt;/p&gt;
+&lt;h2 id=&#34;安裝-homebrew&#34;&gt;安裝 Homebrew&lt;/h2&gt;
+&lt;p&gt;&lt;a href=&#34;https://brew.sh/&#34;&gt;Homebrew&lt;/a&gt; 是一套開源的 MacOS 系統的軟體套件管理系統，用來簡化 MacOS 系統上的軟體安裝、卸載等過程，是用 MacOS 內建的 Ruby 語言寫成。&lt;/p&gt;
+&lt;p&gt;但 Homebrew 在安裝前需要先安裝 &lt;a href=&#34;https://itunes.apple.com/us/app/xcode/id497799835?mt=12&#34;&gt;Xcode&lt;/a&gt;，似乎是因為 Xcode 會一併安裝一些常用的 command line。&lt;/p&gt;
+&lt;p&gt;還好 Xcode 也是免費軟體，可以直接透過 App Store 下載，要注意檔案蠻大的，下載安裝的過程會要花一點時間。&lt;/p&gt;
+&lt;p&gt;Xcode 安裝好之後，就打開「終端機」，輸入下面這行來下載安裝 Homebrew：&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;&#34;&gt;&lt;code class=&#34;language-bash&#34; data-lang=&#34;bash&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;$ ruby -e &lt;span style=&#34;color:#f1fa8c&#34;&gt;&amp;#34;&lt;/span&gt;&lt;span style=&#34;color:#ff79c6&#34;&gt;$(&lt;/span&gt;curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install&lt;span style=&#34;color:#ff79c6&#34;&gt;)&lt;/span&gt;&lt;span style=&#34;color:#f1fa8c&#34;&gt;&amp;#34;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;注意第一個 &lt;code&gt;$&lt;/code&gt; 是開啟終端機就會顯示在你可以打字的那一行的開頭，不用重複輸入。&lt;/p&gt;
+&lt;p&gt;讓他自動跑完之後，就可以開始使用 &lt;code&gt;brew&lt;/code&gt; 指令來操作啦！&lt;/p&gt;
+&lt;p&gt;日後要更新 Homebrew 這個軟體本身，也是一樣在終端機輸入 &lt;code&gt;brew update&lt;/code&gt; 以及 &lt;code&gt;brew tap homebrew/dupes&lt;/code&gt; 就可以了。&lt;/p&gt;
+&lt;h2 id=&#34;安裝-caskroom&#34;&gt;安裝 Caskroom&lt;/h2&gt;
+&lt;p&gt;除了 Homebrew 以外，第二個推薦安裝的就是 &lt;a href=&#34;https://caskroom.github.io/&#34;&gt;Caskroom&lt;/a&gt;，這也是一個軟體套件管理系統，是 Homebrew 的擴充。&lt;/p&gt;
+&lt;p&gt;一般來說 Caskroom 主要用來下載安裝一些有操作介面的應用軟體，譬如 Chrome、Spotify、Evernote 等等；Homebrew 則常用於下載安裝一些沒有操作介面的工具或第三方資源，例如 Git、Hugo、Telnet 這種。&lt;/p&gt;
+&lt;p&gt;Caskroom 可以看成 App Store 的擴充，並附帶自動安裝管理的功能，而且因為也是開源專案，它能安裝的軟體是由開放社群中的使用者提供維護，有很多 App Store 沒有的軟體，當然是正版、免費版或試用版。&lt;/p&gt;
+&lt;p&gt;而且 Caskroom 還有 &lt;strong&gt;更新管理&lt;/strong&gt; 的功能，除非軟體自帶自動更新功能，否則可以透過 Caskroom 統一更新。所以一般來說，Homebrew 更偏開發者使用，Caskroom 則更適合一般使用者。&lt;/p&gt;
+&lt;p&gt;而 Caskroom 的安裝也很簡單，安裝過 Homebrew 後，只需要輸入以下這行就可以安裝好 Homebrew：&lt;/p&gt;
+&lt;pre tabindex=&#34;0&#34;&gt;&lt;code&gt;$ brew install caskroom/cask/brew-cask
+&lt;/code&gt;&lt;/pre&gt;&lt;h2 id=&#34;使用-homebrew-及-caskroom&#34;&gt;使用 Homebrew 及 Caskroom&lt;/h2&gt;
+&lt;p&gt;這兩個軟體的指令都很類似而且很容易，Homebrew 就是指令前面加上 &lt;code&gt;brew&lt;/code&gt;，Caskroom 就是 &lt;code&gt;brew cask&lt;/code&gt;。&lt;/p&gt;
+&lt;p&gt;然後共通的常用指令就是 &lt;code&gt;install&lt;/code&gt; 安裝、&lt;code&gt;uninstall&lt;/code&gt; 解安裝、&lt;code&gt;info&lt;/code&gt; 查詢軟體資料以及 &lt;code&gt;list&lt;/code&gt; 列出已安裝軟體，一樣都是前面加上 &lt;code&gt;brew&lt;/code&gt; 或 &lt;code&gt;brew cask&lt;/code&gt;，然後加上選擇的指令，最後再加上軟體名稱。&lt;/p&gt;
+&lt;p&gt;Caskroom 還有一個很好用的功能 &lt;code&gt;search&lt;/code&gt;，也就是你輸入 &lt;code&gt;brew cask search xxx&lt;/code&gt;，它會搜尋比對已安裝、未安裝的軟體名稱，未安裝的軟體名稱還會分成完全相同 (Exact Match) 以及部份相同 (Partial Matches) 兩部份，讓你選擇需要的軟體來安裝。&lt;/p&gt;
+&lt;h2 id=&#34;我的安裝列表&#34;&gt;我的安裝列表&lt;/h2&gt;
+&lt;p&gt;這邊列出我的安裝列表，都是一些我覺得在 MacOS 上，很通用、方便的軟體跟功能，提供給大家參考：&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;p&gt;&lt;strong&gt;Homebrew&lt;/strong&gt;&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;git // 開發版本管理工具&lt;/li&gt;
+&lt;li&gt;hugo // 靜態網站生成器&lt;/li&gt;
+&lt;li&gt;telnet // 上 ptt 用環境設置&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;&lt;strong&gt;Caskroom&lt;/strong&gt;&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;google-chrome // 上網必備&lt;/li&gt;
+&lt;li&gt;appcleaner // 好用的刪除軟體工具&lt;/li&gt;
+&lt;li&gt;istat-menus // 顯示系統資訊，可以在桌面頂部的資訊列顯示上下傳速度、電池狀況、CPU 溫度等等資訊&lt;/li&gt;
+&lt;li&gt;sourcetree // Git 的圖形化介面軟體&lt;/li&gt;
+&lt;li&gt;iterm2 // 更好用的終端機，可以多開分頁！&lt;/li&gt;
+&lt;li&gt;spotify // 聽音樂，不解釋&lt;/li&gt;
+&lt;li&gt;moom // 讓 Mac 可以調整最大化視窗的位置&lt;/li&gt;
+&lt;li&gt;cheatsheet // Mac 快速鍵指令表&lt;/li&gt;
+&lt;li&gt;the-unarchiver // 增強解壓縮功能的工具&lt;/li&gt;
+&lt;li&gt;vlc // 強悍影音播放程式&lt;/li&gt;
+&lt;li&gt;evernote // 資訊管理、筆記軟體，跨平台超好用，重點還可以 web clip 存網頁&lt;/li&gt;
+&lt;li&gt;welly // 上 ptt 用軟體&lt;/li&gt;
+&lt;li&gt;xmind // 心智圖軟體&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/blockquote&gt;
+&lt;p&gt;當然每個人都有不同的偏好，其中有些也有很好的替代軟體，像是 Welly 就有相同功能的 Nally，再加上 PTT 最近基於 &lt;a href=&#34;https://iamchucky.github.io/PttChrome/&#34;&gt;PttChrome&lt;/a&gt;，採用實驗性的 Websocket 連線而推出一個新的服務，直接在瀏覽器輸入 &lt;code&gt;term.ptt.cc&lt;/code&gt; 就可以直接上 PTT，不用額外安裝任何軟體或插件，讓 Welly 跟 Nally 對我來說幾乎就要淘汰(攤手)。&lt;/p&gt;
+&lt;p&gt;詳情可參考這篇公告：&lt;a href=&#34;https://www.ptt.cc/bbs/SYSOP/M.1508496102.A.17E.html&#34;&gt;[公告] 使用瀏覽器直接連線至批踢踢&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;另外，因為 Homebrew 跟 Caskroom 的安裝指令都要在終端機或 iTerm2 這類 CLI 軟體上輸入指令，厲害的人可以把你有安裝的軟體，每一條指令合起來做成 .sh 檔，這樣如果有需要重灌系統，只要執行一遍 .sh檔，所有軟體就可以一次性的安裝回來啦！&lt;/p&gt;
+&lt;h3 id=&#34;honorable-mention-oh-my-zsh&#34;&gt;Honorable Mention: oh my zsh&lt;/h3&gt;
+&lt;p&gt;這邊想推薦的是對常用終端機類 CLI 軟體的使用者或開發者比較有用的東西，所以不常用或對 CLI 沒興趣的讀者直接跳過這段吧！&lt;/p&gt;
+&lt;p&gt;在說明 oh my zsh 之前，要先簡單說明，也是記錄一下什麼是 zsh。&lt;/p&gt;
+&lt;p&gt;但在說明 zsh 之前要再說明一下什麼是 shell (跪)。&lt;/p&gt;
+&lt;p&gt;shell 是一種泛稱。在 Unix-based 的作業系統，例如 Linux 或 MacOS 中，shell 就是指用來跟系統核心 (kernel) 溝通的工具，kernel 收到 shell 傳來的指令後，會解析成各種電腦看得懂的指令，然後交給 CPU 或其他有關的電子元件做資料處理，kernel 的簡單說明可以參考 &lt;a href=&#34;https://zh.wikipedia.org/zh-tw/%E5%85%A7%E6%A0%B8&#34;&gt;wiki&lt;/a&gt;。&lt;/p&gt;
+&lt;p&gt;zsh(z shell) 也是一種 shell，但 Unix-based 的作業系統默認的 shell 是 bash，總之都是一種 shell。&lt;/p&gt;
+&lt;p&gt;而 zsh 的好處就在於比預設的 bash 有更多、更方便的指令，例如忘記完整指令，只要輸入指令前幾個字，按 &lt;code&gt;tab&lt;/code&gt; 鍵，zsh 就會幫你列出所有選項，再按一次 &lt;code&gt;tab&lt;/code&gt; 鍵就可以切換到選擇模式，在列出的指令列表中選擇要執行的指令，光這點就不用選了，就是 zsh 了！&lt;/p&gt;
+&lt;p&gt;然後講到 oh my zsh，這是一套基於 zsh 的框架，也就是提供更進階的功能，身為剛入門的開發者，我覺得它最大的好處就是彩色化！oh my zsh 可以安裝 themes，各種 themes 會對許多常用的關鍵字做不同的彩色化等等的處理，這樣用純文字畫面的 CLI 時，就可以更清楚的區分畫面上的資訊！&lt;/p&gt;
+&lt;h4 id=&#34;安裝設置-oh-my-zsh&#34;&gt;安裝設置 oh my zsh&lt;/h4&gt;
+&lt;p&gt;基本上 MacOS 都已經預設安裝好 zsh，所以不用我們安裝，所以直接安裝 oh my zsh 就好。&lt;/p&gt;
+&lt;p&gt;要安裝 oh my zsh，請打開任一 CLI，輸入以下這行指令就可以自動下載並安裝：&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;&#34;&gt;&lt;code class=&#34;language-bash&#34; data-lang=&#34;bash&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;$ sh -c &lt;span style=&#34;color:#f1fa8c&#34;&gt;&amp;#34;&lt;/span&gt;&lt;span style=&#34;color:#ff79c6&#34;&gt;$(&lt;/span&gt;curl -fsSL https://raw.githubusercontent.com/robbyryssell/oh-my-zsh/master/tools/install.sh&lt;span style=&#34;color:#ff79c6&#34;&gt;)&lt;/span&gt;&lt;span style=&#34;color:#f1fa8c&#34;&gt;&amp;#34;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;安裝好 oh my zsh 之後，預設就會有主題，對初學者的我來說夠用，但如果你想做調整，就要到 &lt;code&gt;MacOS 帳號名稱&lt;/code&gt; 資料夾的隱藏檔案中尋找 &lt;code&gt;.zshrc&lt;/code&gt; 檔案，這就是 oh my zsh 的設定檔，所有東西都可以在這邊設置。&lt;/p&gt;
+&lt;p&gt;這聽起來很麻煩，但用過就會像變心的女朋友一樣，回～不～去～啦～～～&lt;/p&gt;
+&lt;h1 id=&#34;工作環境設置&#34;&gt;工作環境設置&lt;/h1&gt;
+&lt;p&gt;接下來講到工作環境設置。&lt;/p&gt;
+&lt;p&gt;因為在學習網頁前後端開發，會用到 &lt;a href=&#34;http://www.oracle.com/technetwork/java/javase/downloads/index.html&#34;&gt;Java JDK&lt;/a&gt;、&lt;a href=&#34;https://www.eclipse.org/downloads/packages/eclipse-ide-java-developers/oxygen1a&#34;&gt;Eclipse&lt;/a&gt;、&lt;a href=&#34;http://brackets.io/&#34;&gt;Brackets&lt;/a&gt; 等等，也會寫一些筆記存到 &lt;a href=&#34;https://evernote.com/&#34;&gt;Evernote&lt;/a&gt;，或例如這篇的靜態部落格文章。&lt;/p&gt;
+&lt;p&gt;但我常常會交替在 MBP 跟 PC 上進行開發或筆記的工作，要怎樣保持 MBP、PC，甚至手機上都能同步到最新進度，對初學者的我，是花了一番心思。&lt;/p&gt;
+&lt;h2 id=&#34;開發同步&#34;&gt;開發同步&lt;/h2&gt;
+&lt;p&gt;首先講純開發的部分，比較簡單，前面提到的開發軟體或環境一樣都可以利用 Homebrew 或 Caskroom 下載安裝。&lt;/p&gt;
+&lt;p&gt;接著就是利用 &lt;a href=&#34;https://www.sourcetreeapp.com/&#34;&gt;Sourcetree&lt;/a&gt; 跟 &lt;a href=&#34;https://github.com/&#34;&gt;GitHub&lt;/a&gt; 來做 Git 版本管理同步。&lt;/p&gt;
+&lt;p&gt;所有專案、檔案，都透過 Sourcetree push 到 GitHub 的 repositories。然後每個裝置要編輯開發前，都先 pull Github 上的最新進度，這樣就可以簡單的保持各裝置開發進度相同。&lt;/p&gt;
+&lt;p&gt;當然，使用 Sourcetree 會需要一些 Git 觀念。有關 Git 的簡單觀念及操作，可以參考我寫的 &lt;a href=&#34;https://idontwannarock.github.io/tech_blog/2017/09/git_and_github_basic/&#34;&gt;這一篇文章&lt;/a&gt;。&lt;/p&gt;
+&lt;h2 id=&#34;筆記同步&#34;&gt;筆記同步&lt;/h2&gt;
+&lt;p&gt;這部分比較麻煩一點，因為我習慣統一用 Markdown 語法寫筆記跟部落格，這樣規格統一，筆記跟部落格文章可以很方便地互相轉換。&lt;/p&gt;
+&lt;p&gt;Markdown 簡介跟語法可以參考我的 &lt;a href=&#34;https://idontwannarock.github.io/tech_blog/2017/10/markdown_syntax/&#34;&gt;這一篇文章&lt;/a&gt;。&lt;/p&gt;
+&lt;p&gt;而我的筆記都習慣收在 Evernote，這樣可以隨時利用 Evernote 的分類以及搜尋功能，並且手機上也可以看。但要將 Markdown 筆記轉成 Evernote 讀得懂的格式並上傳到 Evernote 並不是很容易。&lt;/p&gt;
+&lt;p&gt;之前是選擇用 Sublime Text 加上開源的 Plug-in 來轉換並上傳，但最近 Evernote 將 developer token 的功能停止之後，這個方法就不能再使用了。&lt;/p&gt;
+&lt;p&gt;於是我換到 &lt;a href=&#34;https://marxi.co/&#34;&gt;Marxico&lt;/a&gt;，其實算是相當方便，只是要收費，但在找不到更好的替換工具之下，也只能忍痛花下去。但好處就是我只要寫好 Markdown 筆記，就可以很方便的上傳 Evernote，也可以匯出 Markdown、HTML，甚至是 PDF 檔。&lt;/p&gt;
+&lt;p&gt;另一方面部落格就真的很麻煩了，我原本只有 PC 的時候，就是寫 Markdown 草稿，然後用靜態部落格產生器 Hugo 轉換並生成部落格，再 Host 到 GitHub Pages 來部署我的靜態部落格，可以參考我 &lt;a href=&#34;https://idontwannarock.github.io/tech_blog/2017/09/hugo_practice_2/&#34;&gt;這一篇&lt;/a&gt;。&lt;/p&gt;
+&lt;p&gt;但這個方法的問題就是無法多部裝置間同步，因為 push 到 GitHub 的只有 Hugo 生成的 &lt;code&gt;public&lt;/code&gt; 資料夾，而不是整個包含 layout 跟 Markdown 原稿的完整資料夾，所以換一部裝置就要用很麻煩的方式另外傳送整個資料夾。&lt;/p&gt;
+&lt;p&gt;於是我嘗試了別的方法。&lt;/p&gt;
+&lt;h3 id=&#34;github-pages&#34;&gt;GitHub Pages&lt;/h3&gt;
+&lt;p&gt;在講解我的方法之前，要講一下 GitHub Pages 提供的託管靜態網頁服務分成兩種形式：&lt;strong&gt;個人或組織主頁(User or Organization Page)&lt;/strong&gt; 以及 &lt;strong&gt;專案主頁(Project Page)&lt;/strong&gt;。&lt;/p&gt;
+&lt;p&gt;差別在於個人主頁就是 &lt;strong&gt;一個 GitHub帳號只會有一個個人主頁方式的靜態網頁&lt;/strong&gt;，網址會是 &lt;code&gt;https://&amp;lt;GitHub帳號&amp;gt;.github.io&lt;/code&gt;；而 &lt;strong&gt;一個 GitHub帳號則可以有數個專案主頁&lt;/strong&gt;，網址原則上應該就是 &lt;code&gt;https://&amp;lt;GitHub帳號&amp;gt;.github.io/Repo名稱&lt;/code&gt; 這樣。&lt;/p&gt;
+&lt;p&gt;當然，只要是專案主頁方式，網頁的網址就可以透過在 Repo 根目錄生成 CNAME 檔案，並記錄申請的域名來替換，這邊不多說。&lt;/p&gt;
+&lt;h3 id=&#34;部署-hugo-產生的靜態網頁到-github-pages&#34;&gt;部署 Hugo 產生的靜態網頁到 GitHub Pages&lt;/h3&gt;
+&lt;p&gt;我之前裡選擇的方式是專案主頁，因為我想保留個人主頁做我個人的履歷主頁，放置我的資訊跟 Porfolio 之類的，所以 Blog 就不能用個人主頁的方式部署在 GitHub Pages。&lt;/p&gt;
+&lt;p&gt;這便順便記錄一下，個人主頁其實部署方式跟專案主頁沒有太大差別，主要的差別在於個人主頁的 Repo 名稱必須取為 &lt;code&gt;&amp;lt;GitHub帳號&amp;gt;.github.io&lt;/code&gt;，也就是跟個人主頁的網址相同；而專案主頁的 Repo 名稱則沒有限定。&lt;/p&gt;
+&lt;p&gt;而 GitHub Pages 的部署方式有三種，如同 &lt;a href=&#34;https://help.github.com/articles/configuring-a-publishing-source-for-github-pages/&#34;&gt;官網說明&lt;/a&gt;。&lt;/p&gt;
+&lt;h4 id=&#34;default-source-settings&#34;&gt;Default Source Settings&lt;/h4&gt;
+&lt;p&gt;第一種參考官網說明 &lt;a href=&#34;https://help.github.com/articles/configuring-a-publishing-source-for-github-pages/#default-source-settings-for-repositories-without-the-username-naming-scheme&#34;&gt;這一段&lt;/a&gt;。&lt;/p&gt;
+&lt;p&gt;就是我之前用的方式，在 &lt;a href=&#34;https://idontwannarock.github.io/tech_blog/2017/09/hugo_practice_2/&#34;&gt;這一篇&lt;/a&gt; 裡有說明。&lt;/p&gt;
+&lt;p&gt;簡單來說，就是將 Hugo 預設產生的 &lt;code&gt;public&lt;/code&gt; 資料夾，直接 push 到 GitHub 的 Repo，GitHub 預設會直接讀取 Repo 中的檔案生成靜態網站。&lt;/p&gt;
+&lt;h4 id=&#34;publish-from-a-docs-folder-on-master-branch&#34;&gt;Publish From a &lt;code&gt;docs&lt;/code&gt; Folder on &lt;code&gt;master&lt;/code&gt; Branch&lt;/h4&gt;
+&lt;p&gt;第二種要做比較多設定，參考官網 &lt;a href=&#34;https://help.github.com/articles/configuring-a-publishing-source-for-github-pages/#publishing-your-github-pages-site-from-a-docs-folder-on-your-master-branch&#34;&gt;這段&lt;/a&gt;。&lt;/p&gt;
+&lt;p&gt;因為 GitHub Pages 有提供另一種部署方式，就是它可以選擇讀取 Repo 的 &lt;code&gt;docs&lt;/code&gt; 資料夾內檔案來生成靜態網站，而不是第一種方式直接讀取 Repo 根目錄裡的檔案。&lt;/p&gt;
+&lt;p&gt;所以我們先將 Hugo 資料夾中的 &lt;code&gt;config.toml&lt;/code&gt; 檔案用文字編輯器打開，在開頭加入以下這一行：&lt;/p&gt;
+&lt;pre tabindex=&#34;0&#34;&gt;&lt;code&gt;publishDir = &amp;#34;docs&amp;#34;
+&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;這是因為 Hugo 預設生成靜態網頁的檔案會存在 &lt;code&gt;public&lt;/code&gt; 資料夾，而這一行參數就是告訴 Hugo 將生成的靜態網頁檔案改存在 &lt;code&gt;docs&lt;/code&gt; 資料夾。&lt;/p&gt;
+&lt;p&gt;然後一樣將整個 Hugo 資料夾 push 到 GitHub 上，然後開啟瀏覽器進入那個 GitHub Repo，選擇 Repo 名稱底下那排最右邊的 Settings，然後往下拉到倒數第二個區塊 GitHub Pages，在 source 那邊的下拉選單選擇 &lt;code&gt;master branch/docs folder&lt;/code&gt;，然後點擊 &lt;code&gt;save&lt;/code&gt; 就完成部署了。&lt;/p&gt;
+&lt;p&gt;這個時候 source 上方應該會出現一行綠色底的文字，註明生成的網址，點進去就是實際生成的靜態網站。&lt;/p&gt;
+&lt;p&gt;往後寫新的文章就可以不用更動任何設置，直接用 Hugo 指令生成後 push 到 GitHub 上就好。&lt;/p&gt;
+&lt;p&gt;然後不同裝置要保持同步也很簡單，就直接將整個 Repo 從 GitHub 上 pull 或 clone 下來，因為所有的設定檔案、layout、Markdown 原稿都已經存在 GitHub 上。&lt;/p&gt;
+&lt;h4 id=&#34;publish-from-master-or-gh-pages-branch&#34;&gt;Publish from &lt;code&gt;master&lt;/code&gt; or &lt;code&gt;gh-pages&lt;/code&gt; Branch&lt;/h4&gt;
+&lt;p&gt;第三種方式就難了，可以參考官網 &lt;a href=&#34;https://help.github.com/articles/configuring-a-publishing-source-for-github-pages/#enabling-github-pages-to-publish-your-site-from-master-or-gh-pages&#34;&gt;這段&lt;/a&gt; 了解概念。&lt;/p&gt;
+&lt;p&gt;這種方式要對 Git 有比較深入的了解，我也還沒全部弄懂 Git 部分的操作過程。&lt;/p&gt;
+&lt;p&gt;但原理似乎大概是這樣，但 &lt;strong&gt;我不是非常確定&lt;/strong&gt;：&lt;/p&gt;
+&lt;p&gt;同樣利用 Hugo 預設生成靜態網頁檔案到 &lt;code&gt;public&lt;/code&gt; 資料夾，然後利用 Git branch 的功能，產生一個 &lt;code&gt;gh-pages&lt;/code&gt; 的分支版本，所以在 local，也就是操作的電腦上就會有 &lt;code&gt;master&lt;/code&gt; 跟 &lt;code&gt;gh-pages&lt;/code&gt; 兩個不同版本的檔案紀錄。&lt;/p&gt;
+&lt;p&gt;在 &lt;code&gt;master&lt;/code&gt; 這個分支上利用 gitignore 屏蔽掉 &lt;code&gt;public&lt;/code&gt; 資料夾，然後將其他所有檔案 staging -&amp;gt; commit -&amp;gt; push 到 GitHub Repo 的 &lt;code&gt;master&lt;/code&gt; 分支。&lt;/p&gt;
+&lt;p&gt;再切換到 &lt;code&gt;gh-pages&lt;/code&gt; 這個分支上，將除了 &lt;code&gt;public&lt;/code&gt; 資料夾以外的所有檔案都用 gitignore 屏蔽掉，然後一樣將 &lt;code&gt;public&lt;/code&gt; 資料夾 staging -&amp;gt; commit -&amp;gt; push 到 GitHub Repo 的 &lt;code&gt;gh-pages&lt;/code&gt; 分支。&lt;/p&gt;
+&lt;p&gt;這時候 GitHub 的 Repo 上就同樣有 &lt;code&gt;master&lt;/code&gt; 跟 &lt;code&gt;gh-pages&lt;/code&gt; 兩個不同版本的紀錄。&lt;/p&gt;
+&lt;p&gt;然後開啟瀏覽器進入 GitHub Repo，同樣選擇 Repo 名稱底下那排最右邊的 Settings，然後在 GitHub Pages 區塊的 source 下拉選單裡選擇 &lt;code&gt;gh-pages branch&lt;/code&gt;，然後點擊 &lt;code&gt;save&lt;/code&gt; 就完成了。&lt;/p&gt;
+- https://idontwannarock.github.io/tech_blog/2017/11/mbp_setup_2017/ - This website by Howard Wang is licensed under a Creative Common Attribution-ShareAlike 4.0 International License.</description>
+        </item>
     
     
     
@@ -1134,141 +1266,6 @@ git push origin master
 &lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;&#34;&gt;&lt;code class=&#34;language-php&#34; data-lang=&#34;php&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#ff79c6&#34;&gt;&amp;lt;?&lt;/span&gt;php &lt;span style=&#34;color:#ff79c6&#34;&gt;echo&lt;/span&gt; &lt;span style=&#34;color:#f1fa8c&#34;&gt;&amp;#34;Hello World!&amp;#34;&lt;/span&gt;; &lt;span style=&#34;color:#ff79c6&#34;&gt;?&amp;gt;&lt;/span&gt;
 &lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;接著存檔取名 &lt;code&gt;helloworld.php&lt;/code&gt;，然後將檔案移到這個資料夾內 &lt;code&gt;C:\xampp\htdocs&lt;/code&gt;。開啟瀏覽器，輸入 &lt;code&gt;http://localhost:8080/helloworld.php&lt;/code&gt;，如果畫面有出現 Hello World! 字樣，就表示今天可以睡覺啦，謝謝大家~~~~&lt;/p&gt;
 - https://idontwannarock.github.io/tech_blog/2017/09/xampp_setup_and_php_practice/ - This website by Howard Wang is licensed under a Creative Common Attribution-ShareAlike 4.0 International License.</description>
-        </item>
-    
-    
-    
-        <item>
-        <title>Hugo 練習 (2)</title>
-        <link>https://idontwannarock.github.io/tech_blog/2017/09/hugo_practice_2/</link>
-        <pubDate>Sat, 09 Sep 2017 15:22:03 +0800</pubDate>
-        
-        <guid>https://idontwannarock.github.io/tech_blog/2017/09/hugo_practice_2/</guid>
-        <description>Howard Tech Note https://idontwannarock.github.io/tech_blog/2017/09/hugo_practice_2/ -&lt;blockquote&gt;
-&lt;p&gt;這篇文章是初學的時候撰寫的，其中一些觀念並不正確，步驟也可能因為更新或觀念問題而不適用或者多餘，此篇文章僅為留做紀錄&lt;/p&gt;
-&lt;/blockquote&gt;
-&lt;h1 id=&#34;學習目標&#34;&gt;學習目標&lt;/h1&gt;
-&lt;p&gt;學習怎麼使用 Hugo 架設網頁在 Github Pages。&lt;/p&gt;
-&lt;h1 id=&#34;學習內容&#34;&gt;學習內容&lt;/h1&gt;
-&lt;h2 id=&#34;環境設定&#34;&gt;環境設定&lt;/h2&gt;
-&lt;p&gt;我並非本科，所以以下作法全都是從各官網跟谷哥研究而來。先說明我只會用 Windows，而且是 Win10，所以想用 MacOS 或 Linux 的可以左轉出去自己上官網跟谷哥研究。&lt;/p&gt;
-&lt;p&gt;環境設定這邊需要作幾件事，設定 Hugo，設定 Git，新增 Github 帳號，跟設定 SSH，除了設定 SSH 要最後作以外，其他順序無所謂。&lt;/p&gt;
-&lt;h2 id=&#34;hugo-環境設定&#34;&gt;Hugo 環境設定&lt;/h2&gt;
-&lt;p&gt;如同上一篇所述，Hugo 雖然是 Go 語言寫的，但現在的版本並不用安裝 Go，只要到 &lt;a href=&#34;https://github.com/gohugoio/hugo/releases&#34;&gt;這個網址&lt;/a&gt; 下載最新版本，找地方解壓縮，然後將解壓縮後的 exe 檔路徑設定到 Path 環境變數裡面就可以了。&lt;/p&gt;
-&lt;p&gt;比較完整的流程應該是先創建 Hugo 目錄，例如 &lt;code&gt;C:\Hugo&lt;/code&gt;，然後建兩個子資料夾 &lt;code&gt;bin&lt;/code&gt; 和 &lt;code&gt;Sites&lt;/code&gt;。下載 Hugo 最新版本的 zip 檔，解壓縮到 &lt;code&gt;bin&lt;/code&gt; 資料夾裡面，若 exe 檔檔名不是 &lt;code&gt;hugo.exe&lt;/code&gt; 就改成 &lt;code&gt;hugo.exe&lt;/code&gt;。&lt;/p&gt;
-&lt;p&gt;然後要設定 Path 環境變數，厲害的人可以直接用 cmd 設定，就不講了。來講我這種菜鳥的方法，右鍵點開始鍵（就是狀態列 Windows 圖案的那個鈕），選「系統」，然後選右上方的「系統資訊」，跳出來視窗後，選左邊的「進階系統設定」，再跳出一個視窗後，選「進階」頁面下方的「環境變數(N)&amp;hellip;」，會再跳出一個視窗分成上下兩區塊，在上方的使用者變數區塊，變數那一欄找到 Path 後，連點兩下又會跳出一個新視窗，這次直接按右邊的「新增(N)」，然後填上剛剛 &lt;code&gt;hugo.exe&lt;/code&gt; 的路徑，例如 &lt;code&gt;C:\Hugo\bin&lt;/code&gt;，最後再一路按確定以及關閉視窗出去。&lt;/p&gt;
-&lt;p&gt;然後為了確定是否有設定成功，請再右鍵點一次開始鍵，選「Windows PowerShell(系統管理員)(A)」來打開 PowerShell，然後直接輸入 &lt;code&gt;hugo version&lt;/code&gt; 後按 Enter 鍵，如果有顯示出版本資訊，那就是設定成功。&lt;/p&gt;
-&lt;h2 id=&#34;安裝-git申請-github-帳號及設定-ssh&#34;&gt;安裝 Git、申請 Github 帳號及設定 SSH&lt;/h2&gt;
-&lt;p&gt;這段建議直接參考另外一篇筆記來操作。&lt;/p&gt;
-&lt;p&gt;&lt;a href=&#34;https://idontwannarock.github.io/tech_blog/2017/09/git_and_github_basic/&#34;&gt;Git及 Github基礎認識&lt;/a&gt;&lt;/p&gt;
-&lt;h2 id=&#34;生成基本網頁&#34;&gt;生成基本網頁&lt;/h2&gt;
-&lt;p&gt;這邊會用到一個簡單的指令，跟一些 Hugo 本身的指令。主要會用到移到資料夾位置的 &lt;code&gt;cd&lt;/code&gt; 指令，所以不太會的人可以谷哥了解一下。&lt;/p&gt;
-&lt;p&gt;請先打開前面建立好的 &lt;code&gt;C:\Hugo\Sites&lt;/code&gt; 資料夾，對資料夾內空白處點右鍵，選擇 Git Bash Here 開啟 Git Bash，這樣就預設好路徑是在 &lt;code&gt;Sites&lt;/code&gt; 資料夾內。&lt;/p&gt;
-&lt;p&gt;接著輸入以下指令生成基本的網頁。&lt;/p&gt;
-&lt;pre tabindex=&#34;0&#34;&gt;&lt;code&gt;hugo new site Hugo-Blog
-&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;這樣就會在 &lt;code&gt;Sites&lt;/code&gt; 資料夾內生成 &lt;code&gt;Hugo-Blog&lt;/code&gt; 資料夾，並有以下目錄結構：&lt;/p&gt;
-&lt;pre tabindex=&#34;0&#34;&gt;&lt;code&gt;|--archetypes 
-   |--default.md # 生成文章的模板  
-|--content       # md 檔案存放位置  
-|--data  
-|--layouts  
-|--static        # 圖片等存放位置  
-|--themes        # 模板主題目錄  
-config.toml      # 網站配置屬性
-&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;&lt;code&gt;config.toml&lt;/code&gt; 是紀錄網站配置屬性的文件；&lt;code&gt;content&lt;/code&gt; 則是放網頁的內容，之後寫的 md 檔會放在這邊；&lt;code&gt;static&lt;/code&gt; 資料夾則存放圖片等東西。&lt;/p&gt;
-&lt;h2 id=&#34;生成新文章&#34;&gt;生成新文章&lt;/h2&gt;
-&lt;p&gt;網頁的內容 md 檔建議在同樣的 Git Bash 用以下命令生成，因為用命令生成的 md 檔會有內建的 &lt;code&gt;front matter&lt;/code&gt;，記錄三項必備資訊，&lt;code&gt;title&lt;/code&gt;、&lt;code&gt;date（生成時間）&lt;/code&gt;及&lt;code&gt;draft（草稿狀態）&lt;/code&gt;。裡面比較重要的是 &lt;code&gt;draft&lt;/code&gt;，預設是 &lt;code&gt;true&lt;/code&gt;，意思是還是草稿，網頁上並不會顯示出來；若完成後想發布到網頁上顯示出來，請記得將此項改為 &lt;code&gt;false&lt;/code&gt;。&lt;/p&gt;
-&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;&#34;&gt;&lt;code class=&#34;language-bash&#34; data-lang=&#34;bash&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#8be9fd;font-style:italic&#34;&gt;cd&lt;/span&gt; Hugo-Blog  &lt;span style=&#34;color:#6272a4&#34;&gt;# 切換到 Hugo-Blog 資料夾路徑  &lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;hugo new post/firstPost.md
-&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;如此，Hugo 就會自動在 &lt;code&gt;content&lt;/code&gt; 資料夾中建立 &lt;code&gt;post&lt;/code&gt; 資料夾，並在其中建立 &lt;code&gt;firstPost.md&lt;/code&gt; 這個 md 檔案。&lt;/p&gt;
-&lt;p&gt;剛剛有提到，裡面生成的 &lt;code&gt;front matter&lt;/code&gt; 包含了一些資訊，然後就可以在 &lt;code&gt;front matter&lt;/code&gt; 區塊底下開始用 &lt;a href=&#34;http://markdown.tw/&#34;&gt;Markdown語法&lt;/a&gt;寫 blog 了。&lt;/p&gt;
-&lt;h2 id=&#34;設定-theme&#34;&gt;設定 theme&lt;/h2&gt;
-&lt;p&gt;接下來可以選擇喜歡的網站主題，可以到這邊選擇 &lt;a href=&#34;https://themes.gohugo.io/&#34;&gt;Hugo themes&lt;/a&gt;。&lt;/p&gt;
-&lt;p&gt;這邊有個問題我還沒找到解法，就是這些 theme 幾乎都提供 &lt;code&gt;git clone&lt;/code&gt; 的方式下載，ssh 連線方式沒問題，但我不知道為什麼用 https 連線的方式從來沒有成功過。不知道有沒有人知道可能的原因？&lt;/p&gt;
-&lt;p&gt;接下來以我選擇的 &lt;a href=&#34;https://themes.gohugo.io/casper/&#34;&gt;casper主題&lt;/a&gt; 來示範 ssh 連線的作法。&lt;/p&gt;
-&lt;p&gt;首先進入 &lt;a href=&#34;https://themes.gohugo.io/casper/&#34;&gt;casper主題&lt;/a&gt; 點選 Download 進入其 Github 資料夾，點右邊綠色 Clone or download 按鈕，點藍色 Use SSH 連結切換到 Clone with SSH，再複製 url。&lt;/p&gt;
-&lt;p&gt;接著同樣用剛才打開的 Git Bash 輸入以下指令：&lt;/p&gt;
-&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;&#34;&gt;&lt;code class=&#34;language-bash&#34; data-lang=&#34;bash&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;mkdir themes
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#8be9fd;font-style:italic&#34;&gt;cd&lt;/span&gt; themes
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;git clone git@github.com:vjeantet/hugo-theme-casper.git casper
-&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;這幾行指令就是先在 &lt;code&gt;Hugo-Blog&lt;/code&gt; 資料夾內建立 &lt;code&gt;themes&lt;/code&gt; 資料夾，然後移動路徑到 &lt;code&gt;themes&lt;/code&gt; 資料夾內，再下載 casper 主題到 &lt;code&gt;themes&lt;/code&gt; 資料夾。&lt;/p&gt;
-&lt;p&gt;接著針對 &lt;code&gt;Hugo-Blog&lt;/code&gt; 資料夾內的 &lt;code&gt;config.toml&lt;/code&gt; 檔案作一些修改。&lt;/p&gt;
-&lt;pre tabindex=&#34;0&#34;&gt;&lt;code&gt;baseURL = &amp;#34;https://idontwannarock.github.io/Hugo-Blog&amp;#34;  
-languageCode = &amp;#34;zh-TW&amp;#34;  
-title = &amp;#34;Wang&amp;#39;s Blog&amp;#34;  
-paginate = 5  
-DisqusShortname = &amp;#34;Wang Cheng Hao&amp;#34;  
-Copyright = &amp;#34;&amp;amp;copy; All rights reserved - 2017&amp;#34;  
-canonifyurls = false  
-  
-[params]  
-description = &amp;#34;Ignorance is a bliss...&amp;#34;  
-cover = &amp;#34;images/cover.jpg&amp;#34;  
-author = &amp;#34;Wang Cheng Hao&amp;#34;  
-authorlocation = &amp;#34;Taipei, Taiwan&amp;#34;  
-authorwebsite = &amp;#34;https://idontwannarock.github.io/Hugo-Blog&amp;#34;  
-authorbio= &amp;#34;邁向軟體工程師&amp;#34;  
-logo = &amp;#34;images/logo.jpg&amp;#34;  
-#googleAnalyticsUserID = &amp;#34;&amp;#34;  
-#Optional RSS-Link, if not provided it defaults to the standard index.xml  
-#RSSLink = &amp;#34;http://feeds.feedburner.com/...&amp;#34;  
-githubName = &amp;#34;idontwannarock&amp;#34;  
-twitterName = &amp;#34;CH_Howard_Wang&amp;#34;  
-facebookName = &amp;#34;howard.wang.3990&amp;#34;  
-linkedinName = &amp;#34;cheng-hao-wang-a2298289&amp;#34;  
-#set true if you are not proud of using Hugo (true will hide the footer note &amp;#34;Proudly published with HUGO.....&amp;#34;)  
-hideHUGOSupport = false  
- 
-[[menu.main]]  
-name = &amp;#34;Blog&amp;#34;  
-weight = 200  
-identifier = &amp;#34;blog&amp;#34;  
-url = &amp;#34;/&amp;#34;  
-
-[[menu.main]]  
-name = &amp;#34;About me&amp;#34;  
-weight = 190  
-identifier = &amp;#34;about&amp;#34;  
-url = &amp;#34;/about&amp;#34;
-&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;其中比較重要的就是 &lt;code&gt;baseURL&lt;/code&gt;，&lt;code&gt;https://使用者名稱.github.io&lt;/code&gt; 是 Github Pages 固定生成的網址，後面則是接你預計要儲存資料的 Repository 的名稱。&lt;/p&gt;
-&lt;p&gt;然後 &lt;code&gt;canonifyurls&lt;/code&gt; 要記得設置為 &lt;code&gt;false&lt;/code&gt;，否則生成的網頁會抓不到主題配置。&lt;/p&gt;
-&lt;p&gt;當然我也會相應的將選好的 &lt;code&gt;cover.jpg&lt;/code&gt; 以及 &lt;code&gt;logo.jpg&lt;/code&gt; 兩張圖片放到 &lt;code&gt;static\images&lt;/code&gt; 資料夾當中。&lt;/p&gt;
-&lt;p&gt;其他資訊都可以自己修改或參考 &lt;a href=&#34;https://themes.gohugo.io/casper/&#34;&gt;casper主題&lt;/a&gt;的說明。&lt;/p&gt;
-&lt;h2 id=&#34;生成測試網頁&#34;&gt;生成測試網頁&lt;/h2&gt;
-&lt;p&gt;接著建議用 Hugo 自帶的 server 功能作一下測試，在剛才打開的 Git Bash 中輸入以下命令：&lt;/p&gt;
-&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;&#34;&gt;&lt;code class=&#34;language-bash&#34; data-lang=&#34;bash&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#8be9fd;font-style:italic&#34;&gt;cd&lt;/span&gt; .. &lt;span style=&#34;color:#6272a4&#34;&gt;# 切換到上一層 Hugo-Blog 資料夾路徑  &lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;hugo server -t casper
-&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;若成功，在瀏覽器網址列輸入 &lt;code&gt;http://localhost:1313/Hugo-Blog/&lt;/code&gt; 來預覽，有哪裡不喜歡或不舒服就直接修改 md 文件或 &lt;code&gt;config.toml&lt;/code&gt;；有錯誤就依照 Git Bash 指示的問題去改。&lt;/p&gt;
-&lt;h2 id=&#34;生成網頁&#34;&gt;生成網頁&lt;/h2&gt;
-&lt;p&gt;若測試沒問題，就可以執行以下命令來正式生成網頁：&lt;/p&gt;
-&lt;pre tabindex=&#34;0&#34;&gt;&lt;code&gt;hugo -t casper
-&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;這時 Hugo 會用選定的 casper theme 來生成網頁，並放在自動建立的 &lt;code&gt;public&lt;/code&gt; 資料夾當中。&lt;/p&gt;
-&lt;h2 id=&#34;上傳到-github&#34;&gt;上傳到 Github&lt;/h2&gt;
-&lt;p&gt;接著再上傳整個 &lt;code&gt;public&lt;/code&gt; 資料夾到 Github 上之前，請先用瀏覽器到 Github 上面建立一個 Repository，假設叫做 Hugo-Blog。建立好之後，請點中間 SSH 那個按鈕，後面會生成 SSH 的 url 網址，把那個網址複製下來；若建立 Repo 的時候有勾 README 選項，則按右邊綠色 Clone or download 按鈕，點藍色 Use SSH連 結切換到 Clone with SSH，再複製 url。&lt;/p&gt;
-&lt;p&gt;接著在剛才的 Git Bash 輸入以下命令：&lt;/p&gt;
-&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;&#34;&gt;&lt;code class=&#34;language-bash&#34; data-lang=&#34;bash&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#8be9fd;font-style:italic&#34;&gt;cd&lt;/span&gt; public &lt;span style=&#34;color:#6272a4&#34;&gt;# 切換到 public 資料夾路徑&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;git init &lt;span style=&#34;color:#6272a4&#34;&gt;# 生成 Git 紀錄&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;git add . &lt;span style=&#34;color:#6272a4&#34;&gt;# 將 public 資料夾內全部檔案 staging&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;git commit -m &lt;span style=&#34;color:#f1fa8c&#34;&gt;&amp;#34;Initial commit.&amp;#34;&lt;/span&gt; &lt;span style=&#34;color:#6272a4&#34;&gt;# commit 所有已 staging 的檔案  &lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;git remote add origin git@github.com:idontwannarock/Hugo-Blog.git &lt;span style=&#34;color:#6272a4&#34;&gt;# 加入遠端資訊&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;git push -u origin master &lt;span style=&#34;color:#6272a4&#34;&gt;# 將本地的 master branch push 到 Github 上的 origin/master branch&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;其中 &lt;code&gt;git remote&lt;/code&gt; 那行後面的網址請貼上你在 Github 複製的 SSH url。&lt;/p&gt;
-&lt;p&gt;等 Git Bash 顯示上傳完成後，上 Github 的 Hugo-Blog Repository 檢查資料都上傳好之後，就可以到 &lt;code&gt;config.toml&lt;/code&gt; 這個檔案裡面 &lt;code&gt;baseURL&lt;/code&gt; 所記錄的網址去看新生成的網頁；這個網址也可以到 Github 對應的 Repo 裡面，Settings 底下的 Github Pages 區塊找到。&lt;/p&gt;
-&lt;p&gt;這邊是一些基本的 Git 功能，將 &lt;code&gt;public&lt;/code&gt; 資料夾內的東西上傳到 Github 已經建立好的 Hugo-Blog 這個名稱的 Repo，Github Pages 就會抓取其中 &lt;code&gt;index.html&lt;/code&gt; 檔案來生成靜態網頁。&lt;/p&gt;
-&lt;p&gt;後續如果新寫了一些 md 檔存在 &lt;code&gt;content\post&lt;/code&gt; 資料夾中想要上傳到網頁上，只需要進到 &lt;code&gt;public&lt;/code&gt; 資料夾右鍵打開 Git Bash，執行以下命令：&lt;/p&gt;
-&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;&#34;&gt;&lt;code class=&#34;language-bash&#34; data-lang=&#34;bash&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;git pull origin master &lt;span style=&#34;color:#6272a4&#34;&gt;# 先把 Github 的主版本抓下來以免衝突&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#8be9fd;font-style:italic&#34;&gt;cd&lt;/span&gt; .. &lt;span style=&#34;color:#6272a4&#34;&gt;# 切換到 Hugo-Blog 資料夾路徑&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;hugo server -t casper &lt;span style=&#34;color:#6272a4&#34;&gt;# 一樣先測試網頁看有沒有需要修改&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;hugo -t casper &lt;span style=&#34;color:#6272a4&#34;&gt;# 生成網頁&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#8be9fd;font-style:italic&#34;&gt;cd&lt;/span&gt; public &lt;span style=&#34;color:#6272a4&#34;&gt;# 切換到 public 資料夾路徑&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;git add .
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;git commit -m &lt;span style=&#34;color:#f1fa8c&#34;&gt;&amp;#34;說明文字&amp;#34;&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;git push origin master
-&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;即可更新變動。&lt;/p&gt;
-&lt;p&gt;如果覺得這些 Git 指令太麻煩，其實可以用 Github Desktop 來完成上傳的操作，非常方便。&lt;/p&gt;
-&lt;p&gt;大 guy 4 醬。&lt;/p&gt;
-&lt;p&gt;如果對 Git 指令不熟悉，可以參考我另外寫的 &lt;a href=&#34;https://idontwannarock.github.io/tech_blog/2017/09/git_and_github_basic/&#34;&gt;這篇筆記&lt;/a&gt;。&lt;/p&gt;
-- https://idontwannarock.github.io/tech_blog/2017/09/hugo_practice_2/ - This website by Howard Wang is licensed under a Creative Common Attribution-ShareAlike 4.0 International License.</description>
         </item>
     
     
