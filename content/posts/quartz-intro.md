@@ -15,7 +15,7 @@ Quartz 系列：
 
 - Quartz 介紹
 - [Spring Boot 整合 Quartz 集群執行預設及動態排程](https://idontwannarock.github.io/tech_blog/2022/11/quartz-cluster-fixed-and-dynamic-trigger-spring-boot-integration/)
-- Quartz Misfire Handling Instruction
+- [Quartz Misfire Handling Instruction](https://idontwannarock.github.io/tech_blog/2022/11/quartz-misfire-handling-instruction/)
 
 Quartz 是 Java 生態中一套成熟的開源排程框架，其完整的排程功能包含多樣排程設定、自動任務調度、任務持久化，以及支援分散式排程調度、自動負載平衡，讓排程可以輕鬆運行、應用可以輕鬆 scale out
 
