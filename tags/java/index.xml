@@ -2,18 +2,18 @@
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
     <title>java on Howard Tech Note</title>
-    <link>https://idontwannarock.github.io/tech_blog/tags/java/</link>
+    <link>https://blog.idontwannarock.me/tags/java/</link>
     <description>Recent content in java on Howard Tech Note</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
     <copyright>This website by Howard Wang is licensed under a Creative Common Attribution-ShareAlike 4.0 International License.</copyright>
-    <lastBuildDate>Tue, 15 Nov 2022 16:24:46 +0800</lastBuildDate><atom:link href="https://idontwannarock.github.io/tech_blog/tags/java/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Tue, 15 Nov 2022 16:24:46 +0800</lastBuildDate><atom:link href="https://blog.idontwannarock.me/tags/java/index.xml" rel="self" type="application/rss+xml" />
     <item>
       <title>Quartz 介紹</title>
-      <link>https://idontwannarock.github.io/tech_blog/2022/11/quartz-intro/</link>
+      <link>https://blog.idontwannarock.me/2022/11/quartz-intro/</link>
       <pubDate>Tue, 15 Nov 2022 16:24:46 +0800</pubDate>
       
-      <guid>https://idontwannarock.github.io/tech_blog/2022/11/quartz-intro/</guid>
+      <guid>https://blog.idontwannarock.me/2022/11/quartz-intro/</guid>
       <description>Quartz 系列：
 Quartz 介紹 Spring Boot 整合 Quartz 集群執行預設及動態排程 Quartz Misfire Handling Instruction Quartz 是 Java 生態中一套成熟的開源排程框架，其完整的排程功能包含多樣排程設定、自動任務調度、任務持久化，以及支援分散式排程調度、自動負載平衡，讓排程可以輕鬆運行、應用可以輕鬆 scale out
 概念 核心元件 Job: 任務需要執行的內容；Job 有區分是否可併行執行，不能併行執行意思是只有上一次觸發的任務執行完後才能觸發下一次執行；另外，一個 Job 可以關聯到多個 Trigger，也就是同一個 Job 可以以不同時間規則多次觸發，但一個 Trigger 只能關聯一個 Job JobDetail: 包含任務的設定，也就是要實例化 Job 時的相關設定；由 JobKey (Job 名稱 name 和分組 group)、JobClass、JobDataMap (任務相關數據)、JobBuilder 組成，並可以設定任務調度的方案和策略，並指定要調度的 Job 類別 Trigger: 設定觸發執行 Job 實例的時間規則；Scheduler 負責掃描需要執行的 Job 任務，而 Trigger 負責告訴 Scheduler 何時執行；Quartz 2.3.2 版提供 SimpleTrigger、CronTrigger、DailyTimeIntervalTrigger 及 CalendarIntervalTrigger 等 Trigger Scheduler: 任務調度器，會讀取 Trigger 從而觸發以 JobDetail 產生的 Job 實例；一個調度器中可以註冊多個 JobDetail 及 Trigger，只要 JobDetail 與 Trigger 組合，就可以被 Scheduler 調度 單體 stand-alone 模式運作 流程很簡單，就是 Scheduler 負責管理 Trigger 及 Job，會讀取 Trigger 並按照設定觸發時間規則，到時間就依照 JobDetail 設定產生跟該 Trigger 關聯的 Job 實例並運行</description>
@@ -21,10 +21,10 @@ Quartz 介紹 Spring Boot 整合 Quartz 集群執行預設及動態排程 Quartz
     
     <item>
       <title>Java Optional 為何不推薦做為類別屬性</title>
-      <link>https://idontwannarock.github.io/tech_blog/2022/10/java_optional_not_recommand_as_field/</link>
+      <link>https://blog.idontwannarock.me/2022/10/java_optional_not_recommand_as_field/</link>
       <pubDate>Sat, 01 Oct 2022 21:44:34 +0800</pubDate>
       
-      <guid>https://idontwannarock.github.io/tech_blog/2022/10/java_optional_not_recommand_as_field/</guid>
+      <guid>https://blog.idontwannarock.me/2022/10/java_optional_not_recommand_as_field/</guid>
       <description>大家有在寫 Java 1.8+ 的時候使用新出的 Optional 類別來處理 null 的問題嗎？
 那在使用的時候有沒有碰到 IntelliJ 提示 Optional 不推薦用來當作類別的 field 的黃色警告 (warning) 呢？訊息應該大致如下
 /** * A container object which may or may not contain a non-{@code null} value. * If a value is present, {@code isPresent()} returns {@code true}. If no * value is present, the object is considered &amp;lt;i&amp;gt;empty&amp;lt;/i&amp;gt; and * {@code isPresent()} returns {@code false}. * * &amp;lt;p&amp;gt;Additional methods that depend on the presence or absence of a contained * value are provided, such as {@link #orElse(Object) orElse()} * (returns a default value if no value is present) and * {@link #ifPresent(Consumer) ifPresent()} (performs an * action if a value is present).</description>
@@ -32,10 +32,10 @@ Quartz 介紹 Spring Boot 整合 Quartz 集群執行預設及動態排程 Quartz
     
     <item>
       <title>Spring Boot 實作 API 版本控制</title>
-      <link>https://idontwannarock.github.io/tech_blog/2019/09/spring_api_version_with_swagger_security/</link>
+      <link>https://blog.idontwannarock.me/2019/09/spring_api_version_with_swagger_security/</link>
       <pubDate>Thu, 19 Sep 2019 15:53:36 +0800</pubDate>
       
-      <guid>https://idontwannarock.github.io/tech_blog/2019/09/spring_api_version_with_swagger_security/</guid>
+      <guid>https://blog.idontwannarock.me/2019/09/spring_api_version_with_swagger_security/</guid>
       <description>本文目的是為了探討在 Spring Boot Web 專案中，實作 API 版本控制，並兼容 Swagger 及 Spring Security 的解決方式
 需要有 Spring Boot、Spring MVC、Spring Security 及 Swagger 的基礎概念會比較好理解
 API 版本控制 常見的 API 版本控制方式有三種: URI, header, content-type
@@ -48,10 +48,10 @@ org.springframework.boot:spring-boot-starter-web:2.1.x org.springframework.boot:
     
     <item>
       <title>Spring Security 整合 RBAC</title>
-      <link>https://idontwannarock.github.io/tech_blog/2019/05/spring_security_rbac/</link>
+      <link>https://blog.idontwannarock.me/2019/05/spring_security_rbac/</link>
       <pubDate>Thu, 30 May 2019 15:33:07 +0800</pubDate>
       
-      <guid>https://idontwannarock.github.io/tech_blog/2019/05/spring_security_rbac/</guid>
+      <guid>https://blog.idontwannarock.me/2019/05/spring_security_rbac/</guid>
       <description>目前比較主流的 Role-based Access Control, RBAC 算是比較成熟且彈性的權限架構，若要在 Spring Security 實作 RBAC 並搭配 JWT 或 OAuth 2.0，大概要探討兩個問題
 是否值得為了減少查詢資料源的次數，而將角色或權限直接置入 JWT 或 Authorization Server 回傳的 token 是否採取 Spring Security 原生只使用最細粒度的權限來進行存取控制 關於第一個問題，目前的思考點大概就是考量系統的併發度跟使用者總數
 如果需要高併發，那自然希望盡量減少查詢資料的次數或資料量，盡量避免同時大量消耗 DB 資源；相反的，如果不需要高併發，那每次驗證都重新取得角色及權限資料也沒關係
@@ -65,20 +65,20 @@ GrantedAuthority: 可以將每個 GrantedAuthority 想成是個別的 privilege�
     
     <item>
       <title>AOP 及 Spring AOP 簡述</title>
-      <link>https://idontwannarock.github.io/tech_blog/2018/04/aop_and_spring_aop_basic/</link>
+      <link>https://blog.idontwannarock.me/2018/04/aop_and_spring_aop_basic/</link>
       <pubDate>Tue, 10 Apr 2018 13:22:52 +0800</pubDate>
       
-      <guid>https://idontwannarock.github.io/tech_blog/2018/04/aop_and_spring_aop_basic/</guid>
+      <guid>https://blog.idontwannarock.me/2018/04/aop_and_spring_aop_basic/</guid>
       <description>這篇文章是初學的時候撰寫的，其中一些觀念並不正確，步驟也可能因為更新或觀念問題而不適用或者多餘，此篇文章僅為留做紀錄
 AOP(Aspect-Oriented Programming) 是一種基於 OOP(Object-Oriented Programming) 的改進 AOP 是基於動態代理 (Dynamic Proxy) 這種 design pattern AOP 主要的設計對象是切面 (Aspect)，而切面是用來模組化橫切關注點 (Cross-Cutting Concern) 切面需要定義公共功能，但可以明確定義功能在哪裡或以什麼方式應用，而不必修改受影響的類別。如此切面關注點就可以被模組化到特殊的類別 (切面) 裡面 優點 交易相關的邏輯位於同一位置，便於維護與升級 業務邏輯更簡潔，只包含核心業務代碼 術語及概念 Cross-Cutting Concern 橫切關注點：橫跨應用系統多個流程、模組的功能，例如日誌 (Logging)、安全 (Security) 檢查、交易 (Transaction) 等動作，在許多流程的多個位置都需要執行，這種動作就被稱為橫切關注點 Aspect 切面：橫切關注點被模組化後的一種特殊物件；還未模組化前是橫切關注點，抽取後成為一組一組的切面；另一方面來說代理會將一個一個切面重組為橫切關注點 Advice 通知：切面必須要完成的工作或行為，也就是切面的實作內容。切面裡面的各個方法即是一個、一個的通知 Target 目標：被通知的物件，也就是要被橫切的業務邏輯類別 Proxy 代理：向目標物件通知之後創建的對象。容器會建立一個代理，依照設定去縫合 (weave) 切面到應用程式中 JoinPoint 連接點：程序執行的某個特定位置或時機。例如某個類別的某個方法呼叫前、呼叫後、拋出異常後等等。 連接點由兩個因素決定：以方法表示的程式執行點、相對執行點表示的方位。例如 A 類別的 a() 方法執行前的 JoinPoint 連接點決定要素為：執行點 A#a()，方位為執行前的位置 概念類比：JoinPoint 連接點相當於資料庫的紀錄，切面相當於查詢條件 Pointcut 切面定義：每個類別都有多個連接點，類別的所有方法某種程度上都可以想成是 JoinPoint 連接點。AOP通過切面定位到特定的連接點 Spring AOP AspectJ：Java 社群最完整、最廣為人知的 AOP 實作 Spring 2.0 以上，可以使用基於 AspectJ 的 annotation 註解或基於 XML 設定的 AOP Dependencies Spring commons logging spring beans spring context spring core spring expression Spring AOP aopalliance aspectj weaver spring aop spring aspects 註：Spring 框架的版本可以更動，但須一致</description>
     </item>
     
     <item>
       <title>Java 字串判定</title>
-      <link>https://idontwannarock.github.io/tech_blog/2018/02/java_string_check/</link>
+      <link>https://blog.idontwannarock.me/2018/02/java_string_check/</link>
       <pubDate>Tue, 06 Feb 2018 14:09:25 +0800</pubDate>
       
-      <guid>https://idontwannarock.github.io/tech_blog/2018/02/java_string_check/</guid>
+      <guid>https://blog.idontwannarock.me/2018/02/java_string_check/</guid>
       <description>因為開始做專題，開始要作資料檢查，首先會要碰到的就是最基本的檢查是否有輸入資料，也就是要檢查字串，記錄一下 Java 當中有關字串檢查的東西。
 去除字串空白 這主要分兩個部分，一是去掉頭尾空白，一是去掉字串中間空白。
 去掉頭尾空白就用 .trim()，去掉字串中間空白則可以用 .replaceAll(&amp;quot; &amp;quot;, &amp;quot;&amp;quot;) 的方式簡單完成。
@@ -95,10 +95,10 @@ String string; if (string != null &amp;amp;&amp;amp; string.isEmpty()) { // thin
     
     <item>
       <title>Java 樂透抽取算法初探</title>
-      <link>https://idontwannarock.github.io/tech_blog/2017/11/java_lottery_algorithm_basic/</link>
+      <link>https://blog.idontwannarock.me/2017/11/java_lottery_algorithm_basic/</link>
       <pubDate>Wed, 15 Nov 2017 14:26:17 +0800</pubDate>
       
-      <guid>https://idontwannarock.github.io/tech_blog/2017/11/java_lottery_algorithm_basic/</guid>
+      <guid>https://blog.idontwannarock.me/2017/11/java_lottery_algorithm_basic/</guid>
       <description>因為做到這個經典練習演算法的題目，雖然是非常入門級的，也是讓我想了很久，覺得都做了這麼久，不記錄下來也是蠻可惜。
 題目 請隨機從正整數 1-42當中隨機抽出 6個數字，不用排序，但不可重複。
 解法 樂透這個題目主要可以練習的有三個地方，隨機、迴圈，還有就是如何確保數字不重複。

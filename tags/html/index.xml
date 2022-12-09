@@ -2,18 +2,18 @@
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
     <title>html on Howard Tech Note</title>
-    <link>https://idontwannarock.github.io/tech_blog/tags/html/</link>
+    <link>https://blog.idontwannarock.me/tags/html/</link>
     <description>Recent content in html on Howard Tech Note</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
     <copyright>This website by Howard Wang is licensed under a Creative Common Attribution-ShareAlike 4.0 International License.</copyright>
-    <lastBuildDate>Sun, 22 Oct 2017 15:42:04 +0800</lastBuildDate><atom:link href="https://idontwannarock.github.io/tech_blog/tags/html/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Sun, 22 Oct 2017 15:42:04 +0800</lastBuildDate><atom:link href="https://blog.idontwannarock.me/tags/html/index.xml" rel="self" type="application/rss+xml" />
     <item>
       <title>Markdown 語法</title>
-      <link>https://idontwannarock.github.io/tech_blog/2017/10/markdown_syntax/</link>
+      <link>https://blog.idontwannarock.me/2017/10/markdown_syntax/</link>
       <pubDate>Sun, 22 Oct 2017 15:42:04 +0800</pubDate>
       
-      <guid>https://idontwannarock.github.io/tech_blog/2017/10/markdown_syntax/</guid>
+      <guid>https://blog.idontwannarock.me/2017/10/markdown_syntax/</guid>
       <description>Markdown 特色 易編寫 相對於 HTML 需要注意各種 tag、屬性、特殊字元，Markdown 是更容易編寫的方式，雖然無法像 HTML 那樣可以直接透過各種屬性，甚至 CSS 來達到各種效果，但純粹以書寫來說，Markdown 的功能已經相當夠用。
 轉換 HTML 不過如果有需要的話，Markdown 可以用各種方式轉換成 HTML，以方便我們發布成網頁或部落格文章，網路上有相當多的程式可以達到這點；相對之下，從 HTML 轉換回 Markdown 就沒這麼方便了，主要原因就是 HTML 有相當多屬性等並不被 Markdown 支援，所以有轉換回 Markdown 的困難。
 但還是有補救的辦法，在編寫 Markdown 文件的時候，其實還是可以使用 HTML 語法的，我使用過的轉換器都可以讀取 HTML 語法，並正常顯示以及轉換，所以真的有什麼 Markdown 找不到的 HTML 功能，就直接寫 HTML 吧！當然這就需要對 HTML 語法有更多認識了。
@@ -26,10 +26,10 @@ This is a sample. 所以在編寫 Markdown 的時候，最好找個可以隨時�
     
     <item>
       <title>2nd Practice: Retina Morning Post</title>
-      <link>https://idontwannarock.github.io/tech_blog/2017/09/retina_morning_post/</link>
+      <link>https://blog.idontwannarock.me/2017/09/retina_morning_post/</link>
       <pubDate>Fri, 15 Sep 2017 09:44:03 +0800</pubDate>
       
-      <guid>https://idontwannarock.github.io/tech_blog/2017/09/retina_morning_post/</guid>
+      <guid>https://blog.idontwannarock.me/2017/09/retina_morning_post/</guid>
       <description>第二個目標 練習報紙排版。
 作品：視網膜早報 參考：視網膜 Retina FB圖片 遇到困難 分散對齊 首先遇到的問題就是要讓文字分散對齊，原本以為用 text-align: justify; 可以解決，結果才發現這只能用在超過一行的文字上哭哭。
 然後查到一個 jQuery 解法如下，我大概理解原理，但細節還待研究。簡單來說就是算每個字元平均要佔該 div 多少 width 來作分散對齊。
@@ -38,10 +38,10 @@ $.fn.strech_text = function(){ var elmt = $(this), cont_width = elmt.width(), tx
     
     <item>
       <title>1st Practice: Click Click Boom</title>
-      <link>https://idontwannarock.github.io/tech_blog/2017/09/click_click_boom/</link>
+      <link>https://blog.idontwannarock.me/2017/09/click_click_boom/</link>
       <pubDate>Fri, 15 Sep 2017 07:36:23 +0800</pubDate>
       
-      <guid>https://idontwannarock.github.io/tech_blog/2017/09/click_click_boom/</guid>
+      <guid>https://blog.idontwannarock.me/2017/09/click_click_boom/</guid>
       <description>第一個目標 寫個簡單作品來練習 HTML 跟 CSS
 作品：Click Click Boom 黑白版本 粉紅大理石版本 黑色大理石版本 遇到困難 置中 左右置中很容易，但上下置中就麻煩了，還要隨瀏覽器視窗大小變動就更麻煩。
 最後在 stackoverflow 查到一種解法，就是先設定 position: absolute;，然後 top、bottom、left、right 都設 0，再用 margin: 0; 來自動對齊。

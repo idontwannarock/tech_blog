@@ -2,18 +2,18 @@
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
     <title>integer on Howard Tech Note</title>
-    <link>https://idontwannarock.github.io/tech_blog/tags/integer/</link>
+    <link>https://blog.idontwannarock.me/tags/integer/</link>
     <description>Recent content in integer on Howard Tech Note</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
     <copyright>This website by Howard Wang is licensed under a Creative Common Attribution-ShareAlike 4.0 International License.</copyright>
-    <lastBuildDate>Sun, 01 Oct 2017 07:04:47 +0800</lastBuildDate><atom:link href="https://idontwannarock.github.io/tech_blog/tags/integer/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Sun, 01 Oct 2017 07:04:47 +0800</lastBuildDate><atom:link href="https://blog.idontwannarock.me/tags/integer/index.xml" rel="self" type="application/rss+xml" />
     <item>
       <title>整數溢位 Integer Overflow</title>
-      <link>https://idontwannarock.github.io/tech_blog/2017/10/integer_overflow/</link>
+      <link>https://blog.idontwannarock.me/2017/10/integer_overflow/</link>
       <pubDate>Sun, 01 Oct 2017 07:04:47 +0800</pubDate>
       
-      <guid>https://idontwannarock.github.io/tech_blog/2017/10/integer_overflow/</guid>
+      <guid>https://blog.idontwannarock.me/2017/10/integer_overflow/</guid>
       <description>這是我查到一些資料後的理解，希望能多一點對整數溢位後為何會正負循環的了解。
 數字系統 首先要了解的是數字系統，因為一般電腦是採用二進制 (Binary) 來作數字計算，而不是我們習慣的十進制 (Decimal)。
 我們一般人都是用十進制，十進制就是用 0、1、2、3、4、5、6、7、8、9 十個數字來表達，一個位數就有十種狀態，從 0 開始往上累積，超過 9 就進一位。

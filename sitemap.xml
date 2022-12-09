@@ -2,334 +2,334 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
   xmlns:xhtml="http://www.w3.org/1999/xhtml">
   <url>
-    <loc>https://idontwannarock.github.io/tech_blog/categories/</loc>
+    <loc>https://blog.idontwannarock.me/categories/</loc>
     <lastmod>2022-11-29T15:21:19+08:00</lastmod>
   </url><url>
-    <loc>https://idontwannarock.github.io/tech_blog/categories/concept/</loc>
+    <loc>https://blog.idontwannarock.me/categories/concept/</loc>
     <lastmod>2022-11-29T15:21:19+08:00</lastmod>
   </url><url>
-    <loc>https://idontwannarock.github.io/tech_blog/</loc>
+    <loc>https://blog.idontwannarock.me/</loc>
     <lastmod>2022-11-29T15:21:19+08:00</lastmod>
   </url><url>
-    <loc>https://idontwannarock.github.io/tech_blog/tags/misfire/</loc>
+    <loc>https://blog.idontwannarock.me/tags/misfire/</loc>
     <lastmod>2022-11-29T15:21:19+08:00</lastmod>
   </url><url>
-    <loc>https://idontwannarock.github.io/tech_blog/posts/</loc>
+    <loc>https://blog.idontwannarock.me/posts/</loc>
     <lastmod>2022-11-29T15:21:19+08:00</lastmod>
   </url><url>
-    <loc>https://idontwannarock.github.io/tech_blog/tags/quartz/</loc>
+    <loc>https://blog.idontwannarock.me/tags/quartz/</loc>
     <lastmod>2022-11-29T15:21:19+08:00</lastmod>
   </url><url>
-    <loc>https://idontwannarock.github.io/tech_blog/2022/11/quartz-misfire-handling-instruction/</loc>
+    <loc>https://blog.idontwannarock.me/2022/11/quartz-misfire-handling-instruction/</loc>
     <lastmod>2022-11-29T15:21:19+08:00</lastmod>
   </url><url>
-    <loc>https://idontwannarock.github.io/tech_blog/tags/</loc>
+    <loc>https://blog.idontwannarock.me/tags/</loc>
     <lastmod>2022-11-29T15:21:19+08:00</lastmod>
   </url><url>
-    <loc>https://idontwannarock.github.io/tech_blog/tags/dynamic-trigger/</loc>
+    <loc>https://blog.idontwannarock.me/tags/dynamic-trigger/</loc>
     <lastmod>2022-11-15T16:54:13+08:00</lastmod>
   </url><url>
-    <loc>https://idontwannarock.github.io/tech_blog/categories/implementation/</loc>
+    <loc>https://blog.idontwannarock.me/categories/implementation/</loc>
     <lastmod>2022-11-15T16:54:13+08:00</lastmod>
   </url><url>
-    <loc>https://idontwannarock.github.io/tech_blog/tags/quartz-cluster/</loc>
+    <loc>https://blog.idontwannarock.me/tags/quartz-cluster/</loc>
     <lastmod>2022-11-15T16:54:13+08:00</lastmod>
   </url><url>
-    <loc>https://idontwannarock.github.io/tech_blog/2022/11/quartz-cluster-fixed-and-dynamic-trigger-spring-boot-integration/</loc>
+    <loc>https://blog.idontwannarock.me/2022/11/quartz-cluster-fixed-and-dynamic-trigger-spring-boot-integration/</loc>
     <lastmod>2022-11-15T16:54:13+08:00</lastmod>
   </url><url>
-    <loc>https://idontwannarock.github.io/tech_blog/tags/spring-boot/</loc>
+    <loc>https://blog.idontwannarock.me/tags/spring-boot/</loc>
     <lastmod>2022-11-15T16:54:13+08:00</lastmod>
   </url><url>
-    <loc>https://idontwannarock.github.io/tech_blog/tags/java/</loc>
+    <loc>https://blog.idontwannarock.me/tags/java/</loc>
     <lastmod>2022-11-15T16:24:46+08:00</lastmod>
   </url><url>
-    <loc>https://idontwannarock.github.io/tech_blog/2022/11/quartz-intro/</loc>
+    <loc>https://blog.idontwannarock.me/2022/11/quartz-intro/</loc>
     <lastmod>2022-11-15T16:24:46+08:00</lastmod>
   </url><url>
-    <loc>https://idontwannarock.github.io/tech_blog/tags/scheduling/</loc>
+    <loc>https://blog.idontwannarock.me/tags/scheduling/</loc>
     <lastmod>2022-11-15T16:24:46+08:00</lastmod>
   </url><url>
-    <loc>https://idontwannarock.github.io/tech_blog/tags/owasp/</loc>
+    <loc>https://blog.idontwannarock.me/tags/owasp/</loc>
     <lastmod>2022-11-01T15:28:32+08:00</lastmod>
   </url><url>
-    <loc>https://idontwannarock.github.io/tech_blog/2022/11/xss_prevention_spring_boot/</loc>
+    <loc>https://blog.idontwannarock.me/2022/11/xss_prevention_spring_boot/</loc>
     <lastmod>2022-11-01T15:28:32+08:00</lastmod>
   </url><url>
-    <loc>https://idontwannarock.github.io/tech_blog/tags/spring-security/</loc>
+    <loc>https://blog.idontwannarock.me/tags/spring-security/</loc>
     <lastmod>2022-11-01T15:28:32+08:00</lastmod>
   </url><url>
-    <loc>https://idontwannarock.github.io/tech_blog/tags/xss/</loc>
+    <loc>https://blog.idontwannarock.me/tags/xss/</loc>
     <lastmod>2022-11-01T15:28:32+08:00</lastmod>
   </url><url>
-    <loc>https://idontwannarock.github.io/tech_blog/2022/11/xss_prevention_intro/</loc>
+    <loc>https://blog.idontwannarock.me/2022/11/xss_prevention_intro/</loc>
     <lastmod>2022-11-01T14:00:26+08:00</lastmod>
   </url><url>
-    <loc>https://idontwannarock.github.io/tech_blog/2022/10/java_optional_not_recommand_as_field/</loc>
+    <loc>https://blog.idontwannarock.me/2022/10/java_optional_not_recommand_as_field/</loc>
     <lastmod>2022-10-01T21:44:34+08:00</lastmod>
   </url><url>
-    <loc>https://idontwannarock.github.io/tech_blog/tags/optional/</loc>
+    <loc>https://blog.idontwannarock.me/tags/optional/</loc>
     <lastmod>2022-10-01T21:44:34+08:00</lastmod>
   </url><url>
-    <loc>https://idontwannarock.github.io/tech_blog/tags/flat-buffers/</loc>
+    <loc>https://blog.idontwannarock.me/tags/flat-buffers/</loc>
     <lastmod>2022-01-04T15:36:17+08:00</lastmod>
   </url><url>
-    <loc>https://idontwannarock.github.io/tech_blog/tags/flatbuf/</loc>
+    <loc>https://blog.idontwannarock.me/tags/flatbuf/</loc>
     <lastmod>2022-01-04T15:36:17+08:00</lastmod>
   </url><url>
-    <loc>https://idontwannarock.github.io/tech_blog/tags/protobuf/</loc>
+    <loc>https://blog.idontwannarock.me/tags/protobuf/</loc>
     <lastmod>2022-01-04T15:36:17+08:00</lastmod>
   </url><url>
-    <loc>https://idontwannarock.github.io/tech_blog/2022/01/protobuf_flatbuf_java/</loc>
+    <loc>https://blog.idontwannarock.me/2022/01/protobuf_flatbuf_java/</loc>
     <lastmod>2022-01-04T15:36:17+08:00</lastmod>
   </url><url>
-    <loc>https://idontwannarock.github.io/tech_blog/tags/protocol-buffers/</loc>
+    <loc>https://blog.idontwannarock.me/tags/protocol-buffers/</loc>
     <lastmod>2022-01-04T15:36:17+08:00</lastmod>
   </url><url>
-    <loc>https://idontwannarock.github.io/tech_blog/tags/grpc/</loc>
+    <loc>https://blog.idontwannarock.me/tags/grpc/</loc>
     <lastmod>2021-12-27T09:44:31+08:00</lastmod>
   </url><url>
-    <loc>https://idontwannarock.github.io/tech_blog/2021/12/grpc/</loc>
+    <loc>https://blog.idontwannarock.me/2021/12/grpc/</loc>
     <lastmod>2021-12-27T09:44:31+08:00</lastmod>
   </url><url>
-    <loc>https://idontwannarock.github.io/tech_blog/tags/http2/</loc>
+    <loc>https://blog.idontwannarock.me/tags/http2/</loc>
     <lastmod>2021-12-27T09:44:31+08:00</lastmod>
   </url><url>
-    <loc>https://idontwannarock.github.io/tech_blog/tags/http/</loc>
+    <loc>https://blog.idontwannarock.me/tags/http/</loc>
     <lastmod>2021-12-24T15:49:27+08:00</lastmod>
   </url><url>
-    <loc>https://idontwannarock.github.io/tech_blog/2021/12/http_server_push/</loc>
+    <loc>https://blog.idontwannarock.me/2021/12/http_server_push/</loc>
     <lastmod>2021-12-24T15:49:27+08:00</lastmod>
   </url><url>
-    <loc>https://idontwannarock.github.io/tech_blog/tags/long-polling/</loc>
+    <loc>https://blog.idontwannarock.me/tags/long-polling/</loc>
     <lastmod>2021-12-24T15:49:27+08:00</lastmod>
   </url><url>
-    <loc>https://idontwannarock.github.io/tech_blog/tags/server-push/</loc>
+    <loc>https://blog.idontwannarock.me/tags/server-push/</loc>
     <lastmod>2021-12-24T15:49:27+08:00</lastmod>
   </url><url>
-    <loc>https://idontwannarock.github.io/tech_blog/tags/server-sent-event/</loc>
+    <loc>https://blog.idontwannarock.me/tags/server-sent-event/</loc>
     <lastmod>2021-12-24T15:49:27+08:00</lastmod>
   </url><url>
-    <loc>https://idontwannarock.github.io/tech_blog/tags/sse/</loc>
+    <loc>https://blog.idontwannarock.me/tags/sse/</loc>
     <lastmod>2021-12-24T15:49:27+08:00</lastmod>
   </url><url>
-    <loc>https://idontwannarock.github.io/tech_blog/tags/websocket/</loc>
+    <loc>https://blog.idontwannarock.me/tags/websocket/</loc>
     <lastmod>2021-12-24T15:49:27+08:00</lastmod>
   </url><url>
-    <loc>https://idontwannarock.github.io/tech_blog/2021/12/http2/</loc>
+    <loc>https://blog.idontwannarock.me/2021/12/http2/</loc>
     <lastmod>2021-12-21T09:06:29+08:00</lastmod>
   </url><url>
-    <loc>https://idontwannarock.github.io/tech_blog/tags/http3/</loc>
+    <loc>https://blog.idontwannarock.me/tags/http3/</loc>
     <lastmod>2021-12-21T09:06:29+08:00</lastmod>
   </url><url>
-    <loc>https://idontwannarock.github.io/tech_blog/tags/quic/</loc>
+    <loc>https://blog.idontwannarock.me/tags/quic/</loc>
     <lastmod>2021-12-21T09:06:29+08:00</lastmod>
   </url><url>
-    <loc>https://idontwannarock.github.io/tech_blog/tags/tcp/</loc>
+    <loc>https://blog.idontwannarock.me/tags/tcp/</loc>
     <lastmod>2021-12-21T09:06:29+08:00</lastmod>
   </url><url>
-    <loc>https://idontwannarock.github.io/tech_blog/tags/udp/</loc>
+    <loc>https://blog.idontwannarock.me/tags/udp/</loc>
     <lastmod>2021-12-21T09:06:29+08:00</lastmod>
   </url><url>
-    <loc>https://idontwannarock.github.io/tech_blog/tags/batch/</loc>
+    <loc>https://blog.idontwannarock.me/tags/batch/</loc>
     <lastmod>2021-12-16T15:32:25+08:00</lastmod>
   </url><url>
-    <loc>https://idontwannarock.github.io/tech_blog/tags/compression/</loc>
+    <loc>https://blog.idontwannarock.me/tags/compression/</loc>
     <lastmod>2021-12-16T15:32:25+08:00</lastmod>
   </url><url>
-    <loc>https://idontwannarock.github.io/tech_blog/2021/12/zip_in_batch_script/</loc>
+    <loc>https://blog.idontwannarock.me/2021/12/zip_in_batch_script/</loc>
     <lastmod>2021-12-16T15:32:25+08:00</lastmod>
   </url><url>
-    <loc>https://idontwannarock.github.io/tech_blog/categories/application/</loc>
+    <loc>https://blog.idontwannarock.me/categories/application/</loc>
     <lastmod>2021-11-16T11:58:47+08:00</lastmod>
   </url><url>
-    <loc>https://idontwannarock.github.io/tech_blog/tags/database/</loc>
+    <loc>https://blog.idontwannarock.me/tags/database/</loc>
     <lastmod>2021-11-16T11:58:47+08:00</lastmod>
   </url><url>
-    <loc>https://idontwannarock.github.io/tech_blog/2021/11/sql_server_backup/</loc>
+    <loc>https://blog.idontwannarock.me/2021/11/sql_server_backup/</loc>
     <lastmod>2021-11-16T11:58:47+08:00</lastmod>
   </url><url>
-    <loc>https://idontwannarock.github.io/tech_blog/tags/sql-server/</loc>
+    <loc>https://blog.idontwannarock.me/tags/sql-server/</loc>
     <lastmod>2021-11-16T11:58:47+08:00</lastmod>
   </url><url>
-    <loc>https://idontwannarock.github.io/tech_blog/tags/git/</loc>
+    <loc>https://blog.idontwannarock.me/tags/git/</loc>
     <lastmod>2021-11-03T16:29:03+08:00</lastmod>
   </url><url>
-    <loc>https://idontwannarock.github.io/tech_blog/tags/github/</loc>
+    <loc>https://blog.idontwannarock.me/tags/github/</loc>
     <lastmod>2021-11-03T16:29:03+08:00</lastmod>
   </url><url>
-    <loc>https://idontwannarock.github.io/tech_blog/tags/github-pages/</loc>
+    <loc>https://blog.idontwannarock.me/tags/github-pages/</loc>
     <lastmod>2021-11-03T16:29:03+08:00</lastmod>
   </url><url>
-    <loc>https://idontwannarock.github.io/tech_blog/tags/hugo/</loc>
+    <loc>https://blog.idontwannarock.me/tags/hugo/</loc>
     <lastmod>2021-11-03T16:29:03+08:00</lastmod>
   </url><url>
-    <loc>https://idontwannarock.github.io/tech_blog/2021/11/hugo_semi_auto_deploy/</loc>
+    <loc>https://blog.idontwannarock.me/2021/11/hugo_semi_auto_deploy/</loc>
     <lastmod>2021-11-03T16:29:03+08:00</lastmod>
   </url><url>
-    <loc>https://idontwannarock.github.io/tech_blog/tags/api-versioning/</loc>
+    <loc>https://blog.idontwannarock.me/tags/api-versioning/</loc>
     <lastmod>2019-09-19T15:53:36+08:00</lastmod>
   </url><url>
-    <loc>https://idontwannarock.github.io/tech_blog/2019/09/spring_api_version_with_swagger_security/</loc>
+    <loc>https://blog.idontwannarock.me/2019/09/spring_api_version_with_swagger_security/</loc>
     <lastmod>2019-09-19T15:53:36+08:00</lastmod>
   </url><url>
-    <loc>https://idontwannarock.github.io/tech_blog/tags/swagger/</loc>
+    <loc>https://blog.idontwannarock.me/tags/swagger/</loc>
     <lastmod>2019-09-19T15:53:36+08:00</lastmod>
   </url><url>
-    <loc>https://idontwannarock.github.io/tech_blog/tags/rbac/</loc>
+    <loc>https://blog.idontwannarock.me/tags/rbac/</loc>
     <lastmod>2019-05-30T15:33:07+08:00</lastmod>
   </url><url>
-    <loc>https://idontwannarock.github.io/tech_blog/2019/05/spring_security_rbac/</loc>
+    <loc>https://blog.idontwannarock.me/2019/05/spring_security_rbac/</loc>
     <lastmod>2019-05-30T15:33:07+08:00</lastmod>
   </url><url>
-    <loc>https://idontwannarock.github.io/tech_blog/2019/05/github_flow_intro/</loc>
+    <loc>https://blog.idontwannarock.me/2019/05/github_flow_intro/</loc>
     <lastmod>2019-05-29T10:52:45+08:00</lastmod>
   </url><url>
-    <loc>https://idontwannarock.github.io/tech_blog/tags/github-flow/</loc>
+    <loc>https://blog.idontwannarock.me/tags/github-flow/</loc>
     <lastmod>2019-05-29T10:52:45+08:00</lastmod>
   </url><url>
-    <loc>https://idontwannarock.github.io/tech_blog/2019/05/hugo_tutorial/</loc>
+    <loc>https://blog.idontwannarock.me/2019/05/hugo_tutorial/</loc>
     <lastmod>2019-05-07T16:03:07+08:00</lastmod>
   </url><url>
-    <loc>https://idontwannarock.github.io/tech_blog/tags/aop/</loc>
+    <loc>https://blog.idontwannarock.me/tags/aop/</loc>
     <lastmod>2018-04-10T13:22:52+08:00</lastmod>
   </url><url>
-    <loc>https://idontwannarock.github.io/tech_blog/2018/04/aop_and_spring_aop_basic/</loc>
+    <loc>https://blog.idontwannarock.me/2018/04/aop_and_spring_aop_basic/</loc>
     <lastmod>2018-04-10T13:22:52+08:00</lastmod>
   </url><url>
-    <loc>https://idontwannarock.github.io/tech_blog/tags/spring/</loc>
+    <loc>https://blog.idontwannarock.me/tags/spring/</loc>
     <lastmod>2018-04-10T13:22:52+08:00</lastmod>
   </url><url>
-    <loc>https://idontwannarock.github.io/tech_blog/2018/02/java_string_check/</loc>
+    <loc>https://blog.idontwannarock.me/2018/02/java_string_check/</loc>
     <lastmod>2018-02-06T14:09:25+08:00</lastmod>
   </url><url>
-    <loc>https://idontwannarock.github.io/tech_blog/tags/string/</loc>
+    <loc>https://blog.idontwannarock.me/tags/string/</loc>
     <lastmod>2018-02-06T14:09:25+08:00</lastmod>
   </url><url>
-    <loc>https://idontwannarock.github.io/tech_blog/tags/algorithm/</loc>
+    <loc>https://blog.idontwannarock.me/tags/algorithm/</loc>
     <lastmod>2017-11-15T14:26:17+08:00</lastmod>
   </url><url>
-    <loc>https://idontwannarock.github.io/tech_blog/2017/11/java_lottery_algorithm_basic/</loc>
+    <loc>https://blog.idontwannarock.me/2017/11/java_lottery_algorithm_basic/</loc>
     <lastmod>2017-11-15T14:26:17+08:00</lastmod>
   </url><url>
-    <loc>https://idontwannarock.github.io/tech_blog/tags/brew/</loc>
+    <loc>https://blog.idontwannarock.me/tags/brew/</loc>
     <lastmod>2017-11-03T09:05:02+08:00</lastmod>
   </url><url>
-    <loc>https://idontwannarock.github.io/tech_blog/tags/cask/</loc>
+    <loc>https://blog.idontwannarock.me/tags/cask/</loc>
     <lastmod>2017-11-03T09:05:02+08:00</lastmod>
   </url><url>
-    <loc>https://idontwannarock.github.io/tech_blog/tags/mac/</loc>
+    <loc>https://blog.idontwannarock.me/tags/mac/</loc>
     <lastmod>2017-11-03T09:05:02+08:00</lastmod>
   </url><url>
-    <loc>https://idontwannarock.github.io/tech_blog/2017/11/mbp_setup_2017/</loc>
+    <loc>https://blog.idontwannarock.me/2017/11/mbp_setup_2017/</loc>
     <lastmod>2017-11-03T09:05:02+08:00</lastmod>
   </url><url>
-    <loc>https://idontwannarock.github.io/tech_blog/tags/oh-my-zsh/</loc>
+    <loc>https://blog.idontwannarock.me/tags/oh-my-zsh/</loc>
     <lastmod>2017-11-03T09:05:02+08:00</lastmod>
   </url><url>
-    <loc>https://idontwannarock.github.io/tech_blog/tags/zsh/</loc>
+    <loc>https://blog.idontwannarock.me/tags/zsh/</loc>
     <lastmod>2017-11-03T09:05:02+08:00</lastmod>
   </url><url>
-    <loc>https://idontwannarock.github.io/tech_blog/tags/html/</loc>
+    <loc>https://blog.idontwannarock.me/tags/html/</loc>
     <lastmod>2017-10-22T15:42:04+08:00</lastmod>
   </url><url>
-    <loc>https://idontwannarock.github.io/tech_blog/tags/markdown/</loc>
+    <loc>https://blog.idontwannarock.me/tags/markdown/</loc>
     <lastmod>2017-10-22T15:42:04+08:00</lastmod>
   </url><url>
-    <loc>https://idontwannarock.github.io/tech_blog/2017/10/markdown_syntax/</loc>
+    <loc>https://blog.idontwannarock.me/2017/10/markdown_syntax/</loc>
     <lastmod>2017-10-22T15:42:04+08:00</lastmod>
   </url><url>
-    <loc>https://idontwannarock.github.io/tech_blog/tags/binary/</loc>
+    <loc>https://blog.idontwannarock.me/tags/binary/</loc>
     <lastmod>2017-10-01T07:04:47+08:00</lastmod>
   </url><url>
-    <loc>https://idontwannarock.github.io/tech_blog/tags/integer/</loc>
+    <loc>https://blog.idontwannarock.me/tags/integer/</loc>
     <lastmod>2017-10-01T07:04:47+08:00</lastmod>
   </url><url>
-    <loc>https://idontwannarock.github.io/tech_blog/tags/overflow/</loc>
+    <loc>https://blog.idontwannarock.me/tags/overflow/</loc>
     <lastmod>2017-10-01T07:04:47+08:00</lastmod>
   </url><url>
-    <loc>https://idontwannarock.github.io/tech_blog/2017/10/integer_overflow/</loc>
+    <loc>https://blog.idontwannarock.me/2017/10/integer_overflow/</loc>
     <lastmod>2017-10-01T07:04:47+08:00</lastmod>
   </url><url>
-    <loc>https://idontwannarock.github.io/tech_blog/2017/09/twitter_clone/</loc>
+    <loc>https://blog.idontwannarock.me/2017/09/twitter_clone/</loc>
     <lastmod>2017-09-15T10:27:28+08:00</lastmod>
   </url><url>
-    <loc>https://idontwannarock.github.io/tech_blog/tags/bootstrap/</loc>
+    <loc>https://blog.idontwannarock.me/tags/bootstrap/</loc>
     <lastmod>2017-09-15T10:27:28+08:00</lastmod>
   </url><url>
-    <loc>https://idontwannarock.github.io/tech_blog/tags/mvc/</loc>
+    <loc>https://blog.idontwannarock.me/tags/mvc/</loc>
     <lastmod>2017-09-15T10:27:28+08:00</lastmod>
   </url><url>
-    <loc>https://idontwannarock.github.io/tech_blog/tags/mysql/</loc>
+    <loc>https://blog.idontwannarock.me/tags/mysql/</loc>
     <lastmod>2017-09-15T10:27:28+08:00</lastmod>
   </url><url>
-    <loc>https://idontwannarock.github.io/tech_blog/tags/php/</loc>
+    <loc>https://blog.idontwannarock.me/tags/php/</loc>
     <lastmod>2017-09-15T10:27:28+08:00</lastmod>
   </url><url>
-    <loc>https://idontwannarock.github.io/tech_blog/categories/practice/</loc>
+    <loc>https://blog.idontwannarock.me/categories/practice/</loc>
     <lastmod>2017-09-15T10:27:28+08:00</lastmod>
   </url><url>
-    <loc>https://idontwannarock.github.io/tech_blog/2017/09/click_click_ben/</loc>
+    <loc>https://blog.idontwannarock.me/2017/09/click_click_ben/</loc>
     <lastmod>2017-09-15T10:11:46+08:00</lastmod>
   </url><url>
-    <loc>https://idontwannarock.github.io/tech_blog/tags/javascript/</loc>
+    <loc>https://blog.idontwannarock.me/tags/javascript/</loc>
     <lastmod>2017-09-15T10:11:46+08:00</lastmod>
   </url><url>
-    <loc>https://idontwannarock.github.io/tech_blog/2017/09/retina_morning_post/</loc>
+    <loc>https://blog.idontwannarock.me/2017/09/retina_morning_post/</loc>
     <lastmod>2017-09-15T09:44:03+08:00</lastmod>
   </url><url>
-    <loc>https://idontwannarock.github.io/tech_blog/tags/css/</loc>
+    <loc>https://blog.idontwannarock.me/tags/css/</loc>
     <lastmod>2017-09-15T09:44:03+08:00</lastmod>
   </url><url>
-    <loc>https://idontwannarock.github.io/tech_blog/2017/09/click_click_boom/</loc>
+    <loc>https://blog.idontwannarock.me/2017/09/click_click_boom/</loc>
     <lastmod>2017-09-15T07:36:23+08:00</lastmod>
   </url><url>
-    <loc>https://idontwannarock.github.io/tech_blog/2017/09/git_and_github_basic/</loc>
+    <loc>https://blog.idontwannarock.me/2017/09/git_and_github_basic/</loc>
     <lastmod>2017-09-14T07:13:01+08:00</lastmod>
   </url><url>
-    <loc>https://idontwannarock.github.io/tech_blog/tags/git-bash/</loc>
+    <loc>https://blog.idontwannarock.me/tags/git-bash/</loc>
     <lastmod>2017-09-14T07:13:01+08:00</lastmod>
   </url><url>
-    <loc>https://idontwannarock.github.io/tech_blog/tags/macos/</loc>
+    <loc>https://blog.idontwannarock.me/tags/macos/</loc>
     <lastmod>2017-09-14T07:13:01+08:00</lastmod>
   </url><url>
-    <loc>https://idontwannarock.github.io/tech_blog/tags/ssh/</loc>
+    <loc>https://blog.idontwannarock.me/tags/ssh/</loc>
     <lastmod>2017-09-14T07:13:01+08:00</lastmod>
   </url><url>
-    <loc>https://idontwannarock.github.io/tech_blog/tags/win10/</loc>
+    <loc>https://blog.idontwannarock.me/tags/win10/</loc>
     <lastmod>2017-09-14T07:13:01+08:00</lastmod>
   </url><url>
-    <loc>https://idontwannarock.github.io/tech_blog/tags/hash/</loc>
+    <loc>https://blog.idontwannarock.me/tags/hash/</loc>
     <lastmod>2017-09-11T07:11:59+08:00</lastmod>
   </url><url>
-    <loc>https://idontwannarock.github.io/tech_blog/2017/09/login_signup_function_1/</loc>
+    <loc>https://blog.idontwannarock.me/2017/09/login_signup_function_1/</loc>
     <lastmod>2017-09-11T07:11:59+08:00</lastmod>
   </url><url>
-    <loc>https://idontwannarock.github.io/tech_blog/tags/apache/</loc>
+    <loc>https://blog.idontwannarock.me/tags/apache/</loc>
     <lastmod>2017-09-10T07:39:23+08:00</lastmod>
   </url><url>
-    <loc>https://idontwannarock.github.io/tech_blog/tags/xampp/</loc>
+    <loc>https://blog.idontwannarock.me/tags/xampp/</loc>
     <lastmod>2017-09-10T07:39:23+08:00</lastmod>
   </url><url>
-    <loc>https://idontwannarock.github.io/tech_blog/2017/09/xampp_setup_and_php_practice/</loc>
+    <loc>https://blog.idontwannarock.me/2017/09/xampp_setup_and_php_practice/</loc>
     <lastmod>2017-09-10T07:39:23+08:00</lastmod>
   </url><url>
-    <loc>https://idontwannarock.github.io/tech_blog/2017/09/hugo_practice_2/</loc>
+    <loc>https://blog.idontwannarock.me/2017/09/hugo_practice_2/</loc>
     <lastmod>2017-09-09T15:22:03+08:00</lastmod>
   </url><url>
-    <loc>https://idontwannarock.github.io/tech_blog/2017/09/hugo_practice_1/</loc>
+    <loc>https://blog.idontwannarock.me/2017/09/hugo_practice_1/</loc>
     <lastmod>2017-09-09T00:17:31+08:00</lastmod>
   </url><url>
-    <loc>https://idontwannarock.github.io/tech_blog/tags/ssg/</loc>
+    <loc>https://blog.idontwannarock.me/tags/ssg/</loc>
     <lastmod>2017-09-09T00:17:31+08:00</lastmod>
   </url><url>
-    <loc>https://idontwannarock.github.io/tech_blog/pages/</loc>
+    <loc>https://blog.idontwannarock.me/pages/</loc>
     <lastmod>2017-05-08T09:43:46+08:00</lastmod>
   </url><url>
-    <loc>https://idontwannarock.github.io/tech_blog/works/</loc>
+    <loc>https://blog.idontwannarock.me/works/</loc>
     <lastmod>2017-05-08T09:43:46+08:00</lastmod>
   </url><url>
-    <loc>https://idontwannarock.github.io/tech_blog/about/</loc>
+    <loc>https://blog.idontwannarock.me/about/</loc>
     <lastmod>2017-05-07T17:32:00+08:00</lastmod>
   </url>
 </urlset>

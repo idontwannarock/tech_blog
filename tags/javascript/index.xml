@@ -2,18 +2,18 @@
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
     <title>javascript on Howard Tech Note</title>
-    <link>https://idontwannarock.github.io/tech_blog/tags/javascript/</link>
+    <link>https://blog.idontwannarock.me/tags/javascript/</link>
     <description>Recent content in javascript on Howard Tech Note</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
     <copyright>This website by Howard Wang is licensed under a Creative Common Attribution-ShareAlike 4.0 International License.</copyright>
-    <lastBuildDate>Fri, 15 Sep 2017 10:11:46 +0800</lastBuildDate><atom:link href="https://idontwannarock.github.io/tech_blog/tags/javascript/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Fri, 15 Sep 2017 10:11:46 +0800</lastBuildDate><atom:link href="https://blog.idontwannarock.me/tags/javascript/index.xml" rel="self" type="application/rss+xml" />
     <item>
       <title>3rd Practice: Click Click Ben</title>
-      <link>https://idontwannarock.github.io/tech_blog/2017/09/click_click_ben/</link>
+      <link>https://blog.idontwannarock.me/2017/09/click_click_ben/</link>
       <pubDate>Fri, 15 Sep 2017 10:11:46 +0800</pubDate>
       
-      <guid>https://idontwannarock.github.io/tech_blog/2017/09/click_click_ben/</guid>
+      <guid>https://blog.idontwannarock.me/2017/09/click_click_ben/</guid>
       <description>第三個目標 練習 JavaScript 跟 random() 函數。
 作品：Click Click Ben 參考：大帥哥 Ben Hsieh ~ 遇到困難 帥哥阿 Ben 照片太難挑 這是我製作這個作品中碰到最大的困難！太多太帥了，我無法選擇！！我的媽！！！誰來救救我！！！！
 照片亂數出現位置及亂數間隔時間 其實這個問題我之前就有學過，所以這邊大概紀錄一下作法。
@@ -28,10 +28,10 @@
     
     <item>
       <title>2nd Practice: Retina Morning Post</title>
-      <link>https://idontwannarock.github.io/tech_blog/2017/09/retina_morning_post/</link>
+      <link>https://blog.idontwannarock.me/2017/09/retina_morning_post/</link>
       <pubDate>Fri, 15 Sep 2017 09:44:03 +0800</pubDate>
       
-      <guid>https://idontwannarock.github.io/tech_blog/2017/09/retina_morning_post/</guid>
+      <guid>https://blog.idontwannarock.me/2017/09/retina_morning_post/</guid>
       <description>第二個目標 練習報紙排版。
 作品：視網膜早報 參考：視網膜 Retina FB圖片 遇到困難 分散對齊 首先遇到的問題就是要讓文字分散對齊，原本以為用 text-align: justify; 可以解決，結果才發現這只能用在超過一行的文字上哭哭。
 然後查到一個 jQuery 解法如下，我大概理解原理，但細節還待研究。簡單來說就是算每個字元平均要佔該 div 多少 width 來作分散對齊。
@@ -40,10 +40,10 @@ $.fn.strech_text = function(){ var elmt = $(this), cont_width = elmt.width(), tx
     
     <item>
       <title>1st Practice: Click Click Boom</title>
-      <link>https://idontwannarock.github.io/tech_blog/2017/09/click_click_boom/</link>
+      <link>https://blog.idontwannarock.me/2017/09/click_click_boom/</link>
       <pubDate>Fri, 15 Sep 2017 07:36:23 +0800</pubDate>
       
-      <guid>https://idontwannarock.github.io/tech_blog/2017/09/click_click_boom/</guid>
+      <guid>https://blog.idontwannarock.me/2017/09/click_click_boom/</guid>
       <description>第一個目標 寫個簡單作品來練習 HTML 跟 CSS
 作品：Click Click Boom 黑白版本 粉紅大理石版本 黑色大理石版本 遇到困難 置中 左右置中很容易，但上下置中就麻煩了，還要隨瀏覽器視窗大小變動就更麻煩。
 最後在 stackoverflow 查到一種解法，就是先設定 position: absolute;，然後 top、bottom、left、right 都設 0，再用 margin: 0; 來自動對齊。

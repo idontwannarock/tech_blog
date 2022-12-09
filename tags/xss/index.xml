@@ -2,18 +2,18 @@
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
     <title>xss on Howard Tech Note</title>
-    <link>https://idontwannarock.github.io/tech_blog/tags/xss/</link>
+    <link>https://blog.idontwannarock.me/tags/xss/</link>
     <description>Recent content in xss on Howard Tech Note</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
     <copyright>This website by Howard Wang is licensed under a Creative Common Attribution-ShareAlike 4.0 International License.</copyright>
-    <lastBuildDate>Tue, 01 Nov 2022 15:28:32 +0800</lastBuildDate><atom:link href="https://idontwannarock.github.io/tech_blog/tags/xss/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Tue, 01 Nov 2022 15:28:32 +0800</lastBuildDate><atom:link href="https://blog.idontwannarock.me/tags/xss/index.xml" rel="self" type="application/rss+xml" />
     <item>
       <title>Spring Boot 後端實作 XSS 防範</title>
-      <link>https://idontwannarock.github.io/tech_blog/2022/11/xss_prevention_spring_boot/</link>
+      <link>https://blog.idontwannarock.me/2022/11/xss_prevention_spring_boot/</link>
       <pubDate>Tue, 01 Nov 2022 15:28:32 +0800</pubDate>
       
-      <guid>https://idontwannarock.github.io/tech_blog/2022/11/xss_prevention_spring_boot/</guid>
+      <guid>https://blog.idontwannarock.me/2022/11/xss_prevention_spring_boot/</guid>
       <description>XSS 系列：
 XSS 防範簡介 Spring Boot 後端實作 XSS 防範 身為一個 Java 後端工程師，今天要來討論如何在 Spring Boot 的後端專案進行 general 的 XSS 防範。
 請還是注意，general 的手段並不能很良好的防範 XSS 攻擊，而只是提供一個基本程度的防範。
@@ -25,10 +25,10 @@ Output Encoding 再來，後端也可以對接收到或回傳的資料做 escape
     
     <item>
       <title>XSS 防範簡介</title>
-      <link>https://idontwannarock.github.io/tech_blog/2022/11/xss_prevention_intro/</link>
+      <link>https://blog.idontwannarock.me/2022/11/xss_prevention_intro/</link>
       <pubDate>Tue, 01 Nov 2022 14:00:26 +0800</pubDate>
       
-      <guid>https://idontwannarock.github.io/tech_blog/2022/11/xss_prevention_intro/</guid>
+      <guid>https://blog.idontwannarock.me/2022/11/xss_prevention_intro/</guid>
       <description>XSS 系列：
 XSS 防範簡介 Spring Boot 後端實作 XSS 防範 跨網站指令碼 Cross-site Scripting, XSS，是一種代碼注入的攻擊，讓攻擊者在網頁上注入代碼，而其他使用者在觀看網頁的時候就會受到影響。
 攻擊模式 以電商系統舉例，例如管理後台網頁表單的商品描述輸入欄位 Input 在沒有進行相對應防範的前提下，攻擊者可以藉由輸入 &amp;lt;script&amp;gt;alert(document.cookie)&amp;lt;/script&amp;gt; 這段內容，並透過 API 保存到資料庫，如此一來下次其他使用者在瀏覽該商品的時候，也同樣從後端取得資料庫中的這段描述內容，並且顯示在網頁上，則使用者在載入網頁的時候，瀏覽器就可能會跳出彈窗並把使用者當下的 cookie 直接顯示出來。

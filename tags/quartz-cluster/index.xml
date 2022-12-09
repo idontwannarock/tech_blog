@@ -2,18 +2,18 @@
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
     <title>quartz-cluster on Howard Tech Note</title>
-    <link>https://idontwannarock.github.io/tech_blog/tags/quartz-cluster/</link>
+    <link>https://blog.idontwannarock.me/tags/quartz-cluster/</link>
     <description>Recent content in quartz-cluster on Howard Tech Note</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
     <copyright>This website by Howard Wang is licensed under a Creative Common Attribution-ShareAlike 4.0 International License.</copyright>
-    <lastBuildDate>Tue, 15 Nov 2022 16:54:13 +0800</lastBuildDate><atom:link href="https://idontwannarock.github.io/tech_blog/tags/quartz-cluster/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Tue, 15 Nov 2022 16:54:13 +0800</lastBuildDate><atom:link href="https://blog.idontwannarock.me/tags/quartz-cluster/index.xml" rel="self" type="application/rss+xml" />
     <item>
       <title>Spring Boot 整合 Quartz 集群執行預設及動態排程</title>
-      <link>https://idontwannarock.github.io/tech_blog/2022/11/quartz-cluster-fixed-and-dynamic-trigger-spring-boot-integration/</link>
+      <link>https://blog.idontwannarock.me/2022/11/quartz-cluster-fixed-and-dynamic-trigger-spring-boot-integration/</link>
       <pubDate>Tue, 15 Nov 2022 16:54:13 +0800</pubDate>
       
-      <guid>https://idontwannarock.github.io/tech_blog/2022/11/quartz-cluster-fixed-and-dynamic-trigger-spring-boot-integration/</guid>
+      <guid>https://blog.idontwannarock.me/2022/11/quartz-cluster-fixed-and-dynamic-trigger-spring-boot-integration/</guid>
       <description>Quartz 系列：
 Quartz 介紹 Spring Boot 整合 Quartz 集群執行預設及動態排程 Quartz Misfire Handling Instruction Spring Boot 官方本身就有 spring-boot-starter-quartz 來提供 Quartz 整合，所以在 Spring Boot 當中使用基本 Quartz 功能已經非常簡單
 至於動態產生排程，網路上也很多教學，只是大多是採用 API 呼叫的方式去動態產生、運行、暫停、刪除排程等功能，而幾乎沒看到利用預設排程定時從 database 取得動態排程設定，並動態產生或移除排程的功能

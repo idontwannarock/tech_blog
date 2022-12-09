@@ -2,18 +2,18 @@
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
     <title>macos on Howard Tech Note</title>
-    <link>https://idontwannarock.github.io/tech_blog/tags/macos/</link>
+    <link>https://blog.idontwannarock.me/tags/macos/</link>
     <description>Recent content in macos on Howard Tech Note</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
     <copyright>This website by Howard Wang is licensed under a Creative Common Attribution-ShareAlike 4.0 International License.</copyright>
-    <lastBuildDate>Thu, 14 Sep 2017 07:13:01 +0800</lastBuildDate><atom:link href="https://idontwannarock.github.io/tech_blog/tags/macos/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Thu, 14 Sep 2017 07:13:01 +0800</lastBuildDate><atom:link href="https://blog.idontwannarock.me/tags/macos/index.xml" rel="self" type="application/rss+xml" />
     <item>
       <title>Git 及 GitHub 基礎認識</title>
-      <link>https://idontwannarock.github.io/tech_blog/2017/09/git_and_github_basic/</link>
+      <link>https://blog.idontwannarock.me/2017/09/git_and_github_basic/</link>
       <pubDate>Thu, 14 Sep 2017 07:13:01 +0800</pubDate>
       
-      <guid>https://idontwannarock.github.io/tech_blog/2017/09/git_and_github_basic/</guid>
+      <guid>https://blog.idontwannarock.me/2017/09/git_and_github_basic/</guid>
       <description>這篇文章是初學的時候撰寫的，其中一些觀念並不正確，步驟也可能因為更新或觀念問題而不適用或者多餘，此篇文章僅為留做紀錄
 學習目標 因為 Git 指令一直出問題，今天就來搞清楚 Git 跟 GitHub 的各種問題吧！
 學習內容 Git 跟 GitHub 是什麼 Git Wiki 則說 Git 是一種分散式版本控制軟體。

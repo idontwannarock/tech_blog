@@ -2,18 +2,18 @@
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
     <title>rbac on Howard Tech Note</title>
-    <link>https://idontwannarock.github.io/tech_blog/tags/rbac/</link>
+    <link>https://blog.idontwannarock.me/tags/rbac/</link>
     <description>Recent content in rbac on Howard Tech Note</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
     <copyright>This website by Howard Wang is licensed under a Creative Common Attribution-ShareAlike 4.0 International License.</copyright>
-    <lastBuildDate>Thu, 30 May 2019 15:33:07 +0800</lastBuildDate><atom:link href="https://idontwannarock.github.io/tech_blog/tags/rbac/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Thu, 30 May 2019 15:33:07 +0800</lastBuildDate><atom:link href="https://blog.idontwannarock.me/tags/rbac/index.xml" rel="self" type="application/rss+xml" />
     <item>
       <title>Spring Security 整合 RBAC</title>
-      <link>https://idontwannarock.github.io/tech_blog/2019/05/spring_security_rbac/</link>
+      <link>https://blog.idontwannarock.me/2019/05/spring_security_rbac/</link>
       <pubDate>Thu, 30 May 2019 15:33:07 +0800</pubDate>
       
-      <guid>https://idontwannarock.github.io/tech_blog/2019/05/spring_security_rbac/</guid>
+      <guid>https://blog.idontwannarock.me/2019/05/spring_security_rbac/</guid>
       <description>目前比較主流的 Role-based Access Control, RBAC 算是比較成熟且彈性的權限架構，若要在 Spring Security 實作 RBAC 並搭配 JWT 或 OAuth 2.0，大概要探討兩個問題
 是否值得為了減少查詢資料源的次數，而將角色或權限直接置入 JWT 或 Authorization Server 回傳的 token 是否採取 Spring Security 原生只使用最細粒度的權限來進行存取控制 關於第一個問題，目前的思考點大概就是考量系統的併發度跟使用者總數
 如果需要高併發，那自然希望盡量減少查詢資料的次數或資料量，盡量避免同時大量消耗 DB 資源；相反的，如果不需要高併發，那每次驗證都重新取得角色及權限資料也沒關係

@@ -2,18 +2,18 @@
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
     <title>spring-security on Howard Tech Note</title>
-    <link>https://idontwannarock.github.io/tech_blog/tags/spring-security/</link>
+    <link>https://blog.idontwannarock.me/tags/spring-security/</link>
     <description>Recent content in spring-security on Howard Tech Note</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
     <copyright>This website by Howard Wang is licensed under a Creative Common Attribution-ShareAlike 4.0 International License.</copyright>
-    <lastBuildDate>Tue, 01 Nov 2022 15:28:32 +0800</lastBuildDate><atom:link href="https://idontwannarock.github.io/tech_blog/tags/spring-security/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Tue, 01 Nov 2022 15:28:32 +0800</lastBuildDate><atom:link href="https://blog.idontwannarock.me/tags/spring-security/index.xml" rel="self" type="application/rss+xml" />
     <item>
       <title>Spring Boot 後端實作 XSS 防範</title>
-      <link>https://idontwannarock.github.io/tech_blog/2022/11/xss_prevention_spring_boot/</link>
+      <link>https://blog.idontwannarock.me/2022/11/xss_prevention_spring_boot/</link>
       <pubDate>Tue, 01 Nov 2022 15:28:32 +0800</pubDate>
       
-      <guid>https://idontwannarock.github.io/tech_blog/2022/11/xss_prevention_spring_boot/</guid>
+      <guid>https://blog.idontwannarock.me/2022/11/xss_prevention_spring_boot/</guid>
       <description>XSS 系列：
 XSS 防範簡介 Spring Boot 後端實作 XSS 防範 身為一個 Java 後端工程師，今天要來討論如何在 Spring Boot 的後端專案進行 general 的 XSS 防範。
 請還是注意，general 的手段並不能很良好的防範 XSS 攻擊，而只是提供一個基本程度的防範。
@@ -25,10 +25,10 @@ Output Encoding 再來，後端也可以對接收到或回傳的資料做 escape
     
     <item>
       <title>Spring Boot 實作 API 版本控制</title>
-      <link>https://idontwannarock.github.io/tech_blog/2019/09/spring_api_version_with_swagger_security/</link>
+      <link>https://blog.idontwannarock.me/2019/09/spring_api_version_with_swagger_security/</link>
       <pubDate>Thu, 19 Sep 2019 15:53:36 +0800</pubDate>
       
-      <guid>https://idontwannarock.github.io/tech_blog/2019/09/spring_api_version_with_swagger_security/</guid>
+      <guid>https://blog.idontwannarock.me/2019/09/spring_api_version_with_swagger_security/</guid>
       <description>本文目的是為了探討在 Spring Boot Web 專案中，實作 API 版本控制，並兼容 Swagger 及 Spring Security 的解決方式
 需要有 Spring Boot、Spring MVC、Spring Security 及 Swagger 的基礎概念會比較好理解
 API 版本控制 常見的 API 版本控制方式有三種: URI, header, content-type
@@ -41,10 +41,10 @@ org.springframework.boot:spring-boot-starter-web:2.1.x org.springframework.boot:
     
     <item>
       <title>Spring Security 整合 RBAC</title>
-      <link>https://idontwannarock.github.io/tech_blog/2019/05/spring_security_rbac/</link>
+      <link>https://blog.idontwannarock.me/2019/05/spring_security_rbac/</link>
       <pubDate>Thu, 30 May 2019 15:33:07 +0800</pubDate>
       
-      <guid>https://idontwannarock.github.io/tech_blog/2019/05/spring_security_rbac/</guid>
+      <guid>https://blog.idontwannarock.me/2019/05/spring_security_rbac/</guid>
       <description>目前比較主流的 Role-based Access Control, RBAC 算是比較成熟且彈性的權限架構，若要在 Spring Security 實作 RBAC 並搭配 JWT 或 OAuth 2.0，大概要探討兩個問題
 是否值得為了減少查詢資料源的次數，而將角色或權限直接置入 JWT 或 Authorization Server 回傳的 token 是否採取 Spring Security 原生只使用最細粒度的權限來進行存取控制 關於第一個問題，目前的思考點大概就是考量系統的併發度跟使用者總數
 如果需要高併發，那自然希望盡量減少查詢資料的次數或資料量，盡量避免同時大量消耗 DB 資源；相反的，如果不需要高併發，那每次驗證都重新取得角色及權限資料也沒關係

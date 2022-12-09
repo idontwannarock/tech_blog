@@ -2,18 +2,18 @@
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
     <title>git-bash on Howard Tech Note</title>
-    <link>https://idontwannarock.github.io/tech_blog/tags/git-bash/</link>
+    <link>https://blog.idontwannarock.me/tags/git-bash/</link>
     <description>Recent content in git-bash on Howard Tech Note</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
     <copyright>This website by Howard Wang is licensed under a Creative Common Attribution-ShareAlike 4.0 International License.</copyright>
-    <lastBuildDate>Thu, 14 Sep 2017 07:13:01 +0800</lastBuildDate><atom:link href="https://idontwannarock.github.io/tech_blog/tags/git-bash/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Thu, 14 Sep 2017 07:13:01 +0800</lastBuildDate><atom:link href="https://blog.idontwannarock.me/tags/git-bash/index.xml" rel="self" type="application/rss+xml" />
     <item>
       <title>Git 及 GitHub 基礎認識</title>
-      <link>https://idontwannarock.github.io/tech_blog/2017/09/git_and_github_basic/</link>
+      <link>https://blog.idontwannarock.me/2017/09/git_and_github_basic/</link>
       <pubDate>Thu, 14 Sep 2017 07:13:01 +0800</pubDate>
       
-      <guid>https://idontwannarock.github.io/tech_blog/2017/09/git_and_github_basic/</guid>
+      <guid>https://blog.idontwannarock.me/2017/09/git_and_github_basic/</guid>
       <description>這篇文章是初學的時候撰寫的，其中一些觀念並不正確，步驟也可能因為更新或觀念問題而不適用或者多餘，此篇文章僅為留做紀錄
 學習目標 因為 Git 指令一直出問題，今天就來搞清楚 Git 跟 GitHub 的各種問題吧！
 學習內容 Git 跟 GitHub 是什麼 Git Wiki 則說 Git 是一種分散式版本控制軟體。
@@ -27,10 +27,10 @@ GIT新手入門教學 – PART 1 GIT新手入門教學 – PART 2 我的理解�
     
     <item>
       <title>Hugo 練習 (2)</title>
-      <link>https://idontwannarock.github.io/tech_blog/2017/09/hugo_practice_2/</link>
+      <link>https://blog.idontwannarock.me/2017/09/hugo_practice_2/</link>
       <pubDate>Sat, 09 Sep 2017 15:22:03 +0800</pubDate>
       
-      <guid>https://idontwannarock.github.io/tech_blog/2017/09/hugo_practice_2/</guid>
+      <guid>https://blog.idontwannarock.me/2017/09/hugo_practice_2/</guid>
       <description>這篇文章是初學的時候撰寫的，其中一些觀念並不正確，步驟也可能因為更新或觀念問題而不適用或者多餘，此篇文章僅為留做紀錄
 學習目標 學習怎麼使用 Hugo 架設網頁在 Github Pages。
 學習內容 環境設定 我並非本科，所以以下作法全都是從各官網跟谷哥研究而來。先說明我只會用 Windows，而且是 Win10，所以想用 MacOS 或 Linux 的可以左轉出去自己上官網跟谷哥研究。

@@ -2,18 +2,18 @@
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
     <title>spring-boot on Howard Tech Note</title>
-    <link>https://idontwannarock.github.io/tech_blog/tags/spring-boot/</link>
+    <link>https://blog.idontwannarock.me/tags/spring-boot/</link>
     <description>Recent content in spring-boot on Howard Tech Note</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
     <copyright>This website by Howard Wang is licensed under a Creative Common Attribution-ShareAlike 4.0 International License.</copyright>
-    <lastBuildDate>Tue, 15 Nov 2022 16:54:13 +0800</lastBuildDate><atom:link href="https://idontwannarock.github.io/tech_blog/tags/spring-boot/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Tue, 15 Nov 2022 16:54:13 +0800</lastBuildDate><atom:link href="https://blog.idontwannarock.me/tags/spring-boot/index.xml" rel="self" type="application/rss+xml" />
     <item>
       <title>Spring Boot 整合 Quartz 集群執行預設及動態排程</title>
-      <link>https://idontwannarock.github.io/tech_blog/2022/11/quartz-cluster-fixed-and-dynamic-trigger-spring-boot-integration/</link>
+      <link>https://blog.idontwannarock.me/2022/11/quartz-cluster-fixed-and-dynamic-trigger-spring-boot-integration/</link>
       <pubDate>Tue, 15 Nov 2022 16:54:13 +0800</pubDate>
       
-      <guid>https://idontwannarock.github.io/tech_blog/2022/11/quartz-cluster-fixed-and-dynamic-trigger-spring-boot-integration/</guid>
+      <guid>https://blog.idontwannarock.me/2022/11/quartz-cluster-fixed-and-dynamic-trigger-spring-boot-integration/</guid>
       <description>Quartz 系列：
 Quartz 介紹 Spring Boot 整合 Quartz 集群執行預設及動態排程 Quartz Misfire Handling Instruction Spring Boot 官方本身就有 spring-boot-starter-quartz 來提供 Quartz 整合，所以在 Spring Boot 當中使用基本 Quartz 功能已經非常簡單
 至於動態產生排程，網路上也很多教學，只是大多是採用 API 呼叫的方式去動態產生、運行、暫停、刪除排程等功能，而幾乎沒看到利用預設排程定時從 database 取得動態排程設定，並動態產生或移除排程的功能
@@ -25,10 +25,10 @@ create table if not exist NOTIFICATION_SCHEDULE ( ID int auto_increment primary 
     
     <item>
       <title>Spring Boot 後端實作 XSS 防範</title>
-      <link>https://idontwannarock.github.io/tech_blog/2022/11/xss_prevention_spring_boot/</link>
+      <link>https://blog.idontwannarock.me/2022/11/xss_prevention_spring_boot/</link>
       <pubDate>Tue, 01 Nov 2022 15:28:32 +0800</pubDate>
       
-      <guid>https://idontwannarock.github.io/tech_blog/2022/11/xss_prevention_spring_boot/</guid>
+      <guid>https://blog.idontwannarock.me/2022/11/xss_prevention_spring_boot/</guid>
       <description>XSS 系列：
 XSS 防範簡介 Spring Boot 後端實作 XSS 防範 身為一個 Java 後端工程師，今天要來討論如何在 Spring Boot 的後端專案進行 general 的 XSS 防範。
 請還是注意，general 的手段並不能很良好的防範 XSS 攻擊，而只是提供一個基本程度的防範。
@@ -40,10 +40,10 @@ Output Encoding 再來，後端也可以對接收到或回傳的資料做 escape
     
     <item>
       <title>Spring Boot 實作 API 版本控制</title>
-      <link>https://idontwannarock.github.io/tech_blog/2019/09/spring_api_version_with_swagger_security/</link>
+      <link>https://blog.idontwannarock.me/2019/09/spring_api_version_with_swagger_security/</link>
       <pubDate>Thu, 19 Sep 2019 15:53:36 +0800</pubDate>
       
-      <guid>https://idontwannarock.github.io/tech_blog/2019/09/spring_api_version_with_swagger_security/</guid>
+      <guid>https://blog.idontwannarock.me/2019/09/spring_api_version_with_swagger_security/</guid>
       <description>本文目的是為了探討在 Spring Boot Web 專案中，實作 API 版本控制，並兼容 Swagger 及 Spring Security 的解決方式
 需要有 Spring Boot、Spring MVC、Spring Security 及 Swagger 的基礎概念會比較好理解
 API 版本控制 常見的 API 版本控制方式有三種: URI, header, content-type

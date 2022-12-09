@@ -2,45 +2,45 @@
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
     <title>Categories on Howard Tech Note</title>
-    <link>https://idontwannarock.github.io/tech_blog/categories/</link>
+    <link>https://blog.idontwannarock.me/categories/</link>
     <description>Recent content in Categories on Howard Tech Note</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
     <copyright>This website by Howard Wang is licensed under a Creative Common Attribution-ShareAlike 4.0 International License.</copyright>
-    <lastBuildDate>Tue, 29 Nov 2022 15:21:19 +0800</lastBuildDate><atom:link href="https://idontwannarock.github.io/tech_blog/categories/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Tue, 29 Nov 2022 15:21:19 +0800</lastBuildDate><atom:link href="https://blog.idontwannarock.me/categories/index.xml" rel="self" type="application/rss+xml" />
     <item>
       <title>concept</title>
-      <link>https://idontwannarock.github.io/tech_blog/categories/concept/</link>
+      <link>https://blog.idontwannarock.me/categories/concept/</link>
       <pubDate>Tue, 29 Nov 2022 15:21:19 +0800</pubDate>
       
-      <guid>https://idontwannarock.github.io/tech_blog/categories/concept/</guid>
+      <guid>https://blog.idontwannarock.me/categories/concept/</guid>
       <description></description>
     </item>
     
     <item>
       <title>implementation</title>
-      <link>https://idontwannarock.github.io/tech_blog/categories/implementation/</link>
+      <link>https://blog.idontwannarock.me/categories/implementation/</link>
       <pubDate>Tue, 15 Nov 2022 16:54:13 +0800</pubDate>
       
-      <guid>https://idontwannarock.github.io/tech_blog/categories/implementation/</guid>
+      <guid>https://blog.idontwannarock.me/categories/implementation/</guid>
       <description></description>
     </item>
     
     <item>
       <title>application</title>
-      <link>https://idontwannarock.github.io/tech_blog/categories/application/</link>
+      <link>https://blog.idontwannarock.me/categories/application/</link>
       <pubDate>Tue, 16 Nov 2021 11:58:47 +0800</pubDate>
       
-      <guid>https://idontwannarock.github.io/tech_blog/categories/application/</guid>
+      <guid>https://blog.idontwannarock.me/categories/application/</guid>
       <description></description>
     </item>
     
     <item>
       <title>practice</title>
-      <link>https://idontwannarock.github.io/tech_blog/categories/practice/</link>
+      <link>https://blog.idontwannarock.me/categories/practice/</link>
       <pubDate>Fri, 15 Sep 2017 10:27:28 +0800</pubDate>
       
-      <guid>https://idontwannarock.github.io/tech_blog/categories/practice/</guid>
+      <guid>https://blog.idontwannarock.me/categories/practice/</guid>
       <description></description>
     </item>
     

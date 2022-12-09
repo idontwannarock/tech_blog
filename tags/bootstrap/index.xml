@@ -2,18 +2,18 @@
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
     <title>bootstrap on Howard Tech Note</title>
-    <link>https://idontwannarock.github.io/tech_blog/tags/bootstrap/</link>
+    <link>https://blog.idontwannarock.me/tags/bootstrap/</link>
     <description>Recent content in bootstrap on Howard Tech Note</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
     <copyright>This website by Howard Wang is licensed under a Creative Common Attribution-ShareAlike 4.0 International License.</copyright>
-    <lastBuildDate>Fri, 15 Sep 2017 10:27:28 +0800</lastBuildDate><atom:link href="https://idontwannarock.github.io/tech_blog/tags/bootstrap/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Fri, 15 Sep 2017 10:27:28 +0800</lastBuildDate><atom:link href="https://blog.idontwannarock.me/tags/bootstrap/index.xml" rel="self" type="application/rss+xml" />
     <item>
       <title>4th Practice: Twitter Clone</title>
-      <link>https://idontwannarock.github.io/tech_blog/2017/09/twitter_clone/</link>
+      <link>https://blog.idontwannarock.me/2017/09/twitter_clone/</link>
       <pubDate>Fri, 15 Sep 2017 10:27:28 +0800</pubDate>
       
-      <guid>https://idontwannarock.github.io/tech_blog/2017/09/twitter_clone/</guid>
+      <guid>https://blog.idontwannarock.me/2017/09/twitter_clone/</guid>
       <description>第四個目標 練習 PHP、MySQL 跟 MVC，因為 Bootstrap 很方便，所以 HTML 跟 CSS 就這樣吧！廠廠~
 作品：史上最簡陋 Twitter 參考：這參考太多了，只能說各種參考 orz 原始碼：可以參考 我的Github 還是要先講一下，這並不是我憑空寫出來的作品，是跟著 Udemy 網路課程教學作出來的。
 遇到困難 對自己智商產生質疑 真的是這樣，之所以這麼廢的東西還能作這麼久，事後檢討的結果，絕大多數時間都浪費在因為智商太低產生的各種製造障礙，簡稱製障問題上。

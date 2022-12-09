@@ -2,24 +2,24 @@
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
     <title>Howard Tech Note</title>
-    <link>https://idontwannarock.github.io/tech_blog/</link>
+    <link>https://blog.idontwannarock.me/</link>
     <description>Recent content on Howard Tech Note</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
     <copyright>This website by Howard Wang is licensed under a Creative Common Attribution-ShareAlike 4.0 International License.</copyright>
     <lastBuildDate>Tue, 29 Nov 2022 15:21:19 +0800</lastBuildDate>
     
-        <atom:link href="https://idontwannarock.github.io/tech_blog/index.xml" rel="self" type="application/rss+xml" />
+        <atom:link href="https://blog.idontwannarock.me/index.xml" rel="self" type="application/rss+xml" />
     
     
     
         <item>
         <title>Hugo 練習 (2)</title>
-        <link>https://idontwannarock.github.io/tech_blog/2017/09/hugo_practice_2/</link>
+        <link>https://blog.idontwannarock.me/2017/09/hugo_practice_2/</link>
         <pubDate>Sat, 09 Sep 2017 15:22:03 +0800</pubDate>
         
-        <guid>https://idontwannarock.github.io/tech_blog/2017/09/hugo_practice_2/</guid>
-        <description>Howard Tech Note https://idontwannarock.github.io/tech_blog/2017/09/hugo_practice_2/ -&lt;blockquote&gt;
+        <guid>https://blog.idontwannarock.me/2017/09/hugo_practice_2/</guid>
+        <description>Howard Tech Note https://blog.idontwannarock.me/2017/09/hugo_practice_2/ -&lt;blockquote&gt;
 &lt;p&gt;這篇文章是初學的時候撰寫的，其中一些觀念並不正確，步驟也可能因為更新或觀念問題而不適用或者多餘，此篇文章僅為留做紀錄&lt;/p&gt;
 &lt;/blockquote&gt;
 &lt;h1 id=&#34;學習目標&#34;&gt;學習目標&lt;/h1&gt;
@@ -35,7 +35,7 @@
 &lt;p&gt;然後為了確定是否有設定成功，請再右鍵點一次開始鍵，選「Windows PowerShell(系統管理員)(A)」來打開 PowerShell，然後直接輸入 &lt;code&gt;hugo version&lt;/code&gt; 後按 Enter 鍵，如果有顯示出版本資訊，那就是設定成功。&lt;/p&gt;
 &lt;h2 id=&#34;安裝-git申請-github-帳號及設定-ssh&#34;&gt;安裝 Git、申請 Github 帳號及設定 SSH&lt;/h2&gt;
 &lt;p&gt;這段建議直接參考另外一篇筆記來操作。&lt;/p&gt;
-&lt;p&gt;&lt;a href=&#34;https://idontwannarock.github.io/tech_blog/2017/09/git_and_github_basic/&#34;&gt;Git及 Github基礎認識&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;&lt;a href=&#34;https://blog.idontwannarock.me/2017/09/git_and_github_basic/&#34;&gt;Git及 Github基礎認識&lt;/a&gt;&lt;/p&gt;
 &lt;h2 id=&#34;生成基本網頁&#34;&gt;生成基本網頁&lt;/h2&gt;
 &lt;p&gt;這邊會用到一個簡單的指令，跟一些 Hugo 本身的指令。主要會用到移到資料夾位置的 &lt;code&gt;cd&lt;/code&gt; 指令，所以不太會的人可以谷哥了解一下。&lt;/p&gt;
 &lt;p&gt;請先打開前面建立好的 &lt;code&gt;C:\Hugo\Sites&lt;/code&gt; 資料夾，對資料夾內空白處點右鍵，選擇 Git Bash Here 開啟 Git Bash，這樣就預設好路徑是在 &lt;code&gt;Sites&lt;/code&gt; 資料夾內。&lt;/p&gt;
@@ -142,19 +142,19 @@ url = &amp;#34;/about&amp;#34;
 &lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;即可更新變動。&lt;/p&gt;
 &lt;p&gt;如果覺得這些 Git 指令太麻煩，其實可以用 Github Desktop 來完成上傳的操作，非常方便。&lt;/p&gt;
 &lt;p&gt;大 guy 4 醬。&lt;/p&gt;
-&lt;p&gt;如果對 Git 指令不熟悉，可以參考我另外寫的 &lt;a href=&#34;https://idontwannarock.github.io/tech_blog/2017/09/git_and_github_basic/&#34;&gt;這篇筆記&lt;/a&gt;。&lt;/p&gt;
-- https://idontwannarock.github.io/tech_blog/2017/09/hugo_practice_2/ - This website by Howard Wang is licensed under a Creative Common Attribution-ShareAlike 4.0 International License.</description>
+&lt;p&gt;如果對 Git 指令不熟悉，可以參考我另外寫的 &lt;a href=&#34;https://blog.idontwannarock.me/2017/09/git_and_github_basic/&#34;&gt;這篇筆記&lt;/a&gt;。&lt;/p&gt;
+- https://blog.idontwannarock.me/2017/09/hugo_practice_2/ - This website by Howard Wang is licensed under a Creative Common Attribution-ShareAlike 4.0 International License.</description>
         </item>
     
     
     
         <item>
         <title>Hugo 練習 (1)</title>
-        <link>https://idontwannarock.github.io/tech_blog/2017/09/hugo_practice_1/</link>
+        <link>https://blog.idontwannarock.me/2017/09/hugo_practice_1/</link>
         <pubDate>Sat, 09 Sep 2017 00:17:31 +0800</pubDate>
         
-        <guid>https://idontwannarock.github.io/tech_blog/2017/09/hugo_practice_1/</guid>
-        <description>Howard Tech Note https://idontwannarock.github.io/tech_blog/2017/09/hugo_practice_1/ -&lt;blockquote&gt;
+        <guid>https://blog.idontwannarock.me/2017/09/hugo_practice_1/</guid>
+        <description>Howard Tech Note https://blog.idontwannarock.me/2017/09/hugo_practice_1/ -&lt;blockquote&gt;
 &lt;p&gt;這篇文章是初學的時候撰寫的，其中一些觀念並不正確，步驟也可能因為更新或觀念問題而不適用或者多餘，此篇文章僅為留做紀錄&lt;/p&gt;
 &lt;/blockquote&gt;
 &lt;h1 id=&#34;源起&#34;&gt;源起&lt;/h1&gt;
@@ -199,31 +199,31 @@ url = &amp;#34;/about&amp;#34;
 &lt;p&gt;因為全都要用 Git 的功能所以全都要安裝 Git 這個就不用比了。Jekyll 是 Ruby on rails(ROR) 寫的，使用前要安裝 ROR；胡立大大提到的 Hexo 要裝 Node.js 跟 nvm；只有 Hugo 雖然是 Go 寫的，但不用安裝 Go，只要把執行檔下載下來設定好環境變數 Path 就可以使用。不用安裝一堆我最喜歡惹~&lt;/p&gt;
 &lt;p&gt;在功能教學上，我個人覺得其實 Hugo 官網並沒有寫得很好，不管中文還是英文都一樣，後來各種解法都是別人自己寫的心得，譬如我找到一個講的比較清楚的這篇：用 &lt;a href=&#34;https://brent-li.github.io/post/build-personal-site-with-hugo/&#34;&gt;Hugo搭建個人網站&lt;/a&gt;，但我完全照作也是到後面 Git 操作那邊就掛點，怎麼都傳不上去，搞到焦頭爛額。&lt;/p&gt;
 &lt;p&gt;下一篇再來寫我完整的作法，我並不是本科出身，有很多基礎知識不清楚，只能從別人寫的作法中去理解，有問題請見諒，也可以提出來指正我，謝謝大家，今天就到這邊。&lt;/p&gt;
-&lt;p&gt;這裡是 &lt;a href=&#34;https://idontwannarock.github.io/tech_blog/2017/09/hugo_practice_2/&#34;&gt;下一篇&lt;/a&gt;。&lt;/p&gt;
-- https://idontwannarock.github.io/tech_blog/2017/09/hugo_practice_1/ - This website by Howard Wang is licensed under a Creative Common Attribution-ShareAlike 4.0 International License.</description>
+&lt;p&gt;這裡是 &lt;a href=&#34;https://blog.idontwannarock.me/2017/09/hugo_practice_2/&#34;&gt;下一篇&lt;/a&gt;。&lt;/p&gt;
+- https://blog.idontwannarock.me/2017/09/hugo_practice_1/ - This website by Howard Wang is licensed under a Creative Common Attribution-ShareAlike 4.0 International License.</description>
         </item>
     
     
     
         <item>
         <title>作品介紹</title>
-        <link>https://idontwannarock.github.io/tech_blog/works/</link>
+        <link>https://blog.idontwannarock.me/works/</link>
         <pubDate>Mon, 08 May 2017 09:43:46 +0800</pubDate>
         
-        <guid>https://idontwannarock.github.io/tech_blog/works/</guid>
-        <description>Howard Tech Note https://idontwannarock.github.io/tech_blog/works/ -&lt;p&gt;正在整理過去的作品，見諒&lt;/p&gt;
-- https://idontwannarock.github.io/tech_blog/works/ - This website by Howard Wang is licensed under a Creative Common Attribution-ShareAlike 4.0 International License.</description>
+        <guid>https://blog.idontwannarock.me/works/</guid>
+        <description>Howard Tech Note https://blog.idontwannarock.me/works/ -&lt;p&gt;正在整理過去的作品，見諒&lt;/p&gt;
+- https://blog.idontwannarock.me/works/ - This website by Howard Wang is licensed under a Creative Common Attribution-ShareAlike 4.0 International License.</description>
         </item>
     
     
     
         <item>
         <title>About</title>
-        <link>https://idontwannarock.github.io/tech_blog/about/</link>
+        <link>https://blog.idontwannarock.me/about/</link>
         <pubDate>Sun, 07 May 2017 17:32:00 +0800</pubDate>
         
-        <guid>https://idontwannarock.github.io/tech_blog/about/</guid>
-        <description>Howard Tech Note https://idontwannarock.github.io/tech_blog/about/ -&lt;p&gt;從自學 PHP 到北科上課學習 Java 入門，從事軟體工程師三年有餘，目前主要工作內容為網路應用開發&lt;/p&gt;
+        <guid>https://blog.idontwannarock.me/about/</guid>
+        <description>Howard Tech Note https://blog.idontwannarock.me/about/ -&lt;p&gt;從自學 PHP 到北科上課學習 Java 入門，從事軟體工程師三年有餘，目前主要工作內容為網路應用開發&lt;/p&gt;
 &lt;p&gt;過去接觸過的技術包括&lt;/p&gt;
 &lt;p&gt;語言: Java, JavaScript, C#, Lua&lt;/p&gt;
 &lt;p&gt;框架: Spring, .Net Framework, NodeJS&lt;/p&gt;
@@ -237,7 +237,7 @@ url = &amp;#34;/about&amp;#34;
 &lt;ul&gt;
 &lt;li&gt;&lt;a href=&#34;https://github.com/idontwannarock&#34;&gt;GitHub&lt;/a&gt;&lt;/li&gt;
 &lt;/ul&gt;
-- https://idontwannarock.github.io/tech_blog/about/ - This website by Howard Wang is licensed under a Creative Common Attribution-ShareAlike 4.0 International License.</description>
+- https://blog.idontwannarock.me/about/ - This website by Howard Wang is licensed under a Creative Common Attribution-ShareAlike 4.0 International License.</description>
         </item>
     
     

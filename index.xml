@@ -2,27 +2,27 @@
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
     <title>Howard Tech Note</title>
-    <link>https://idontwannarock.github.io/tech_blog/</link>
+    <link>https://blog.idontwannarock.me/</link>
     <description>Recent content on Howard Tech Note</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
     <copyright>This website by Howard Wang is licensed under a Creative Common Attribution-ShareAlike 4.0 International License.</copyright>
     <lastBuildDate>Tue, 29 Nov 2022 15:21:19 +0800</lastBuildDate>
     
-        <atom:link href="https://idontwannarock.github.io/tech_blog/index.xml" rel="self" type="application/rss+xml" />
+        <atom:link href="https://blog.idontwannarock.me/index.xml" rel="self" type="application/rss+xml" />
     
     
     
         <item>
         <title>Quartz Misfire Handling Instruction</title>
-        <link>https://idontwannarock.github.io/tech_blog/2022/11/quartz-misfire-handling-instruction/</link>
+        <link>https://blog.idontwannarock.me/2022/11/quartz-misfire-handling-instruction/</link>
         <pubDate>Tue, 29 Nov 2022 15:21:19 +0800</pubDate>
         
-        <guid>https://idontwannarock.github.io/tech_blog/2022/11/quartz-misfire-handling-instruction/</guid>
-        <description>Howard Tech Note https://idontwannarock.github.io/tech_blog/2022/11/quartz-misfire-handling-instruction/ -&lt;p&gt;Quartz 系列：&lt;/p&gt;
+        <guid>https://blog.idontwannarock.me/2022/11/quartz-misfire-handling-instruction/</guid>
+        <description>Howard Tech Note https://blog.idontwannarock.me/2022/11/quartz-misfire-handling-instruction/ -&lt;p&gt;Quartz 系列：&lt;/p&gt;
 &lt;ul&gt;
-&lt;li&gt;&lt;a href=&#34;https://idontwannarock.github.io/tech_blog/2022/11/quartz-intro/&#34;&gt;Quartz 介紹&lt;/a&gt;&lt;/li&gt;
-&lt;li&gt;&lt;a href=&#34;https://idontwannarock.github.io/tech_blog/2022/11/quartz-cluster-fixed-and-dynamic-trigger-spring-boot-integration/&#34;&gt;Spring Boot 整合 Quartz 集群執行預設及動態排程&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;https://blog.idontwannarock.me/2022/11/quartz-intro/&#34;&gt;Quartz 介紹&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;https://blog.idontwannarock.me/2022/11/quartz-cluster-fixed-and-dynamic-trigger-spring-boot-integration/&#34;&gt;Spring Boot 整合 Quartz 集群執行預設及動態排程&lt;/a&gt;&lt;/li&gt;
 &lt;li&gt;Quartz Misfire Handling Instruction&lt;/li&gt;
 &lt;/ul&gt;
 &lt;p&gt;使用 Quartz 來幫助排程管理很方便，但還有一個需要注意的地方，就是設定 misfire handling instruction&lt;/p&gt;
@@ -242,22 +242,22 @@
 &lt;ul&gt;
 &lt;li&gt;&lt;a href=&#34;https://nurkiewicz.com/2012/04/quartz-scheduler-misfire-instructions.html&#34;&gt;Quartz scheduler misfire instructions explained&lt;/a&gt;&lt;/li&gt;
 &lt;/ul&gt;
-- https://idontwannarock.github.io/tech_blog/2022/11/quartz-misfire-handling-instruction/ - This website by Howard Wang is licensed under a Creative Common Attribution-ShareAlike 4.0 International License.</description>
+- https://blog.idontwannarock.me/2022/11/quartz-misfire-handling-instruction/ - This website by Howard Wang is licensed under a Creative Common Attribution-ShareAlike 4.0 International License.</description>
         </item>
     
     
     
         <item>
         <title>Spring Boot 整合 Quartz 集群執行預設及動態排程</title>
-        <link>https://idontwannarock.github.io/tech_blog/2022/11/quartz-cluster-fixed-and-dynamic-trigger-spring-boot-integration/</link>
+        <link>https://blog.idontwannarock.me/2022/11/quartz-cluster-fixed-and-dynamic-trigger-spring-boot-integration/</link>
         <pubDate>Tue, 15 Nov 2022 16:54:13 +0800</pubDate>
         
-        <guid>https://idontwannarock.github.io/tech_blog/2022/11/quartz-cluster-fixed-and-dynamic-trigger-spring-boot-integration/</guid>
-        <description>Howard Tech Note https://idontwannarock.github.io/tech_blog/2022/11/quartz-cluster-fixed-and-dynamic-trigger-spring-boot-integration/ -&lt;p&gt;Quartz 系列：&lt;/p&gt;
+        <guid>https://blog.idontwannarock.me/2022/11/quartz-cluster-fixed-and-dynamic-trigger-spring-boot-integration/</guid>
+        <description>Howard Tech Note https://blog.idontwannarock.me/2022/11/quartz-cluster-fixed-and-dynamic-trigger-spring-boot-integration/ -&lt;p&gt;Quartz 系列：&lt;/p&gt;
 &lt;ul&gt;
-&lt;li&gt;&lt;a href=&#34;https://idontwannarock.github.io/tech_blog/2022/11/quartz-intro/&#34;&gt;Quartz 介紹&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;https://blog.idontwannarock.me/2022/11/quartz-intro/&#34;&gt;Quartz 介紹&lt;/a&gt;&lt;/li&gt;
 &lt;li&gt;Spring Boot 整合 Quartz 集群執行預設及動態排程&lt;/li&gt;
-&lt;li&gt;&lt;a href=&#34;https://idontwannarock.github.io/tech_blog/2022/11/quartz-misfire-handling-instruction/&#34;&gt;Quartz Misfire Handling Instruction&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;https://blog.idontwannarock.me/2022/11/quartz-misfire-handling-instruction/&#34;&gt;Quartz Misfire Handling Instruction&lt;/a&gt;&lt;/li&gt;
 &lt;/ul&gt;
 &lt;p&gt;Spring Boot 官方本身就有 &lt;code&gt;spring-boot-starter-quartz&lt;/code&gt; 來提供 Quartz 整合，所以在 Spring Boot 當中使用基本 Quartz 功能已經非常簡單&lt;/p&gt;
 &lt;p&gt;至於動態產生排程，網路上也很多教學，只是大多是採用 API 呼叫的方式去動態產生、運行、暫停、刪除排程等功能，而幾乎沒看到利用預設排程定時從 database 取得動態排程設定，並動態產生或移除排程的功能&lt;/p&gt;
@@ -385,7 +385,7 @@
 &lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;        schedulerFactoryBean&lt;span style=&#34;color:#ff79c6&#34;&gt;.&lt;/span&gt;&lt;span style=&#34;color:#50fa7b&#34;&gt;setTaskExecutor&lt;/span&gt;&lt;span style=&#34;color:#ff79c6&#34;&gt;(&lt;/span&gt;schedulerExecutor&lt;span style=&#34;color:#ff79c6&#34;&gt;);&lt;/span&gt;
 &lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;        schedulerFactoryBean&lt;span style=&#34;color:#ff79c6&#34;&gt;.&lt;/span&gt;&lt;span style=&#34;color:#50fa7b&#34;&gt;setJobFactory&lt;/span&gt;&lt;span style=&#34;color:#ff79c6&#34;&gt;(&lt;/span&gt;jobFactory&lt;span style=&#34;color:#ff79c6&#34;&gt;);&lt;/span&gt;
 &lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;        schedulerFactoryBean&lt;span style=&#34;color:#ff79c6&#34;&gt;.&lt;/span&gt;&lt;span style=&#34;color:#50fa7b&#34;&gt;setWaitForJobsToCompleteOnShutdown&lt;/span&gt;&lt;span style=&#34;color:#ff79c6&#34;&gt;(&lt;/span&gt;&lt;span style=&#34;color:#ff79c6&#34;&gt;true&lt;/span&gt;&lt;span style=&#34;color:#ff79c6&#34;&gt;);&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;        schedulerFactoryBean&lt;span style=&#34;color:#ff79c6&#34;&gt;.&lt;/span&gt;&lt;span style=&#34;color:#50fa7b&#34;&gt;setStartupDelay&lt;/span&gt;&lt;span style=&#34;color:#ff79c6&#34;&gt;(&lt;/span&gt;5&lt;span style=&#34;color:#ff79c6&#34;&gt;);&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;        schedulerFactoryBean&lt;span style=&#34;color:#ff79c6&#34;&gt;.&lt;/span&gt;&lt;span style=&#34;color:#50fa7b&#34;&gt;setStartupDelay&lt;/span&gt;&lt;span style=&#34;color:#ff79c6&#34;&gt;(&lt;/span&gt;&lt;span style=&#34;color:#bd93f9&#34;&gt;5&lt;/span&gt;&lt;span style=&#34;color:#ff79c6&#34;&gt;);&lt;/span&gt;
 &lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    &lt;span style=&#34;color:#ff79c6&#34;&gt;}&lt;/span&gt;
 &lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#ff79c6&#34;&gt;}&lt;/span&gt;
 &lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;其中因為要讓 Quartz 保存資料到 database，所以需要提供 &lt;code&gt;DataSource&lt;/code&gt;；然後如果想要控制 Quartz 運行使用的 thread pool，也可以提供自訂的 &lt;code&gt;Executor&lt;/code&gt;，預設 Quartz 會自己使用 &lt;code&gt;SimpleThreadPool&lt;/code&gt; 來操作&lt;/p&gt;
@@ -585,7 +585,7 @@
 &lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;                &lt;span style=&#34;color:#ff79c6&#34;&gt;.&lt;/span&gt;&lt;span style=&#34;color:#50fa7b&#34;&gt;forJob&lt;/span&gt;&lt;span style=&#34;color:#ff79c6&#34;&gt;(&lt;/span&gt;createNotificationSchedulerJobDetail&lt;span style=&#34;color:#ff79c6&#34;&gt;)&lt;/span&gt;
 &lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;                &lt;span style=&#34;color:#ff79c6&#34;&gt;.&lt;/span&gt;&lt;span style=&#34;color:#50fa7b&#34;&gt;withIdentity&lt;/span&gt;&lt;span style=&#34;color:#ff79c6&#34;&gt;(&lt;/span&gt;&lt;span style=&#34;color:#f1fa8c&#34;&gt;&amp;#34;create_notification_scheduler&amp;#34;&lt;/span&gt;&lt;span style=&#34;color:#ff79c6&#34;&gt;,&lt;/span&gt; &lt;span style=&#34;color:#f1fa8c&#34;&gt;&amp;#34;scheduler_creator&amp;#34;&lt;/span&gt;&lt;span style=&#34;color:#ff79c6&#34;&gt;)&lt;/span&gt;
 &lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;                &lt;span style=&#34;color:#ff79c6&#34;&gt;.&lt;/span&gt;&lt;span style=&#34;color:#50fa7b&#34;&gt;startNow&lt;/span&gt;&lt;span style=&#34;color:#ff79c6&#34;&gt;()&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;                &lt;span style=&#34;color:#ff79c6&#34;&gt;.&lt;/span&gt;&lt;span style=&#34;color:#50fa7b&#34;&gt;withSchedule&lt;/span&gt;&lt;span style=&#34;color:#ff79c6&#34;&gt;(&lt;/span&gt;SimpleScheduleBuilder&lt;span style=&#34;color:#ff79c6&#34;&gt;.&lt;/span&gt;&lt;span style=&#34;color:#50fa7b&#34;&gt;repeatSecondlyForever&lt;/span&gt;&lt;span style=&#34;color:#ff79c6&#34;&gt;(&lt;/span&gt;30&lt;span style=&#34;color:#ff79c6&#34;&gt;))&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;                &lt;span style=&#34;color:#ff79c6&#34;&gt;.&lt;/span&gt;&lt;span style=&#34;color:#50fa7b&#34;&gt;withSchedule&lt;/span&gt;&lt;span style=&#34;color:#ff79c6&#34;&gt;(&lt;/span&gt;SimpleScheduleBuilder&lt;span style=&#34;color:#ff79c6&#34;&gt;.&lt;/span&gt;&lt;span style=&#34;color:#50fa7b&#34;&gt;repeatSecondlyForever&lt;/span&gt;&lt;span style=&#34;color:#ff79c6&#34;&gt;(&lt;/span&gt;&lt;span style=&#34;color:#bd93f9&#34;&gt;30&lt;/span&gt;&lt;span style=&#34;color:#ff79c6&#34;&gt;))&lt;/span&gt;
 &lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;                &lt;span style=&#34;color:#ff79c6&#34;&gt;.&lt;/span&gt;&lt;span style=&#34;color:#50fa7b&#34;&gt;build&lt;/span&gt;&lt;span style=&#34;color:#ff79c6&#34;&gt;();&lt;/span&gt;
 &lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    &lt;span style=&#34;color:#ff79c6&#34;&gt;}&lt;/span&gt;
 &lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#ff79c6&#34;&gt;}&lt;/span&gt;
@@ -610,22 +610,22 @@
 &lt;li&gt;&lt;a href=&#34;https://github.com/quartz-scheduler/quartz/blob/master/quartz-core/src/main/resources/org/quartz/impl/jdbcjobstore/tables_mysql_innodb.sql&#34;&gt;MySQL schema script&lt;/a&gt;&lt;/li&gt;
 &lt;li&gt;&lt;a href=&#34;https://docs.spring.io/spring-boot/docs/current/reference/html/io.html#io.quartz&#34;&gt;Spring Boot Quartz Scheduler Documentation&lt;/a&gt;&lt;/li&gt;
 &lt;/ul&gt;
-- https://idontwannarock.github.io/tech_blog/2022/11/quartz-cluster-fixed-and-dynamic-trigger-spring-boot-integration/ - This website by Howard Wang is licensed under a Creative Common Attribution-ShareAlike 4.0 International License.</description>
+- https://blog.idontwannarock.me/2022/11/quartz-cluster-fixed-and-dynamic-trigger-spring-boot-integration/ - This website by Howard Wang is licensed under a Creative Common Attribution-ShareAlike 4.0 International License.</description>
         </item>
     
     
     
         <item>
         <title>Quartz 介紹</title>
-        <link>https://idontwannarock.github.io/tech_blog/2022/11/quartz-intro/</link>
+        <link>https://blog.idontwannarock.me/2022/11/quartz-intro/</link>
         <pubDate>Tue, 15 Nov 2022 16:24:46 +0800</pubDate>
         
-        <guid>https://idontwannarock.github.io/tech_blog/2022/11/quartz-intro/</guid>
-        <description>Howard Tech Note https://idontwannarock.github.io/tech_blog/2022/11/quartz-intro/ -&lt;p&gt;Quartz 系列：&lt;/p&gt;
+        <guid>https://blog.idontwannarock.me/2022/11/quartz-intro/</guid>
+        <description>Howard Tech Note https://blog.idontwannarock.me/2022/11/quartz-intro/ -&lt;p&gt;Quartz 系列：&lt;/p&gt;
 &lt;ul&gt;
 &lt;li&gt;Quartz 介紹&lt;/li&gt;
-&lt;li&gt;&lt;a href=&#34;https://idontwannarock.github.io/tech_blog/2022/11/quartz-cluster-fixed-and-dynamic-trigger-spring-boot-integration/&#34;&gt;Spring Boot 整合 Quartz 集群執行預設及動態排程&lt;/a&gt;&lt;/li&gt;
-&lt;li&gt;&lt;a href=&#34;https://idontwannarock.github.io/tech_blog/2022/11/quartz-misfire-handling-instruction/&#34;&gt;Quartz Misfire Handling Instruction&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;https://blog.idontwannarock.me/2022/11/quartz-cluster-fixed-and-dynamic-trigger-spring-boot-integration/&#34;&gt;Spring Boot 整合 Quartz 集群執行預設及動態排程&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;https://blog.idontwannarock.me/2022/11/quartz-misfire-handling-instruction/&#34;&gt;Quartz Misfire Handling Instruction&lt;/a&gt;&lt;/li&gt;
 &lt;/ul&gt;
 &lt;p&gt;Quartz 是 Java 生態中一套成熟的開源排程框架，其完整的排程功能包含多樣排程設定、自動任務調度、任務持久化，以及支援分散式排程調度、自動負載平衡，讓排程可以輕鬆運行、應用可以輕鬆 scale out&lt;/p&gt;
 &lt;h1 id=&#34;概念&#34;&gt;概念&lt;/h1&gt;
@@ -742,12 +742,12 @@
 &lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;	&lt;span style=&#34;color:#ff79c6&#34;&gt;return&lt;/span&gt; rec&lt;span style=&#34;color:#ff79c6&#34;&gt;.&lt;/span&gt;&lt;span style=&#34;color:#50fa7b&#34;&gt;getCheckinTimestamp&lt;/span&gt;&lt;span style=&#34;color:#ff79c6&#34;&gt;()&lt;/span&gt; &lt;span style=&#34;color:#ff79c6&#34;&gt;+&lt;/span&gt;
 &lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;		Math&lt;span style=&#34;color:#ff79c6&#34;&gt;.&lt;/span&gt;&lt;span style=&#34;color:#50fa7b&#34;&gt;max&lt;/span&gt;&lt;span style=&#34;color:#ff79c6&#34;&gt;(&lt;/span&gt;rec&lt;span style=&#34;color:#ff79c6&#34;&gt;.&lt;/span&gt;&lt;span style=&#34;color:#50fa7b&#34;&gt;getCheckinInterval&lt;/span&gt;&lt;span style=&#34;color:#ff79c6&#34;&gt;(),&lt;/span&gt; 
 &lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;			&lt;span style=&#34;color:#ff79c6&#34;&gt;(&lt;/span&gt;System&lt;span style=&#34;color:#ff79c6&#34;&gt;.&lt;/span&gt;&lt;span style=&#34;color:#50fa7b&#34;&gt;currentTimeMillis&lt;/span&gt;&lt;span style=&#34;color:#ff79c6&#34;&gt;()&lt;/span&gt; &lt;span style=&#34;color:#ff79c6&#34;&gt;-&lt;/span&gt; lastCheckin&lt;span style=&#34;color:#ff79c6&#34;&gt;))&lt;/span&gt; &lt;span style=&#34;color:#ff79c6&#34;&gt;+&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;		7500L&lt;span style=&#34;color:#ff79c6&#34;&gt;;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;		&lt;span style=&#34;color:#bd93f9&#34;&gt;7500L&lt;/span&gt;&lt;span style=&#34;color:#ff79c6&#34;&gt;;&lt;/span&gt;
 &lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#ff79c6&#34;&gt;}&lt;/span&gt;
 &lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;接著就會依照檢查到的 fail 節點列表去取得那些實例在處理的 &lt;code&gt;Trigger&lt;/code&gt;，並將那些 &lt;code&gt;Trigger&lt;/code&gt; 從 &lt;code&gt;QRTZ_FIRED_TRIGGERS&lt;/code&gt; 表中刪除，再從 &lt;code&gt;QRTZ_SCHEDULER_STATE&lt;/code&gt; 表中刪除那些 fail 的節點，即可達成 failover：&lt;/p&gt;
 &lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;&#34;&gt;&lt;code class=&#34;language-java&#34; data-lang=&#34;java&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#8be9fd;font-style:italic&#34;&gt;protected&lt;/span&gt; &lt;span style=&#34;color:#8be9fd&#34;&gt;void&lt;/span&gt; &lt;span style=&#34;color:#50fa7b&#34;&gt;clusterRecover&lt;/span&gt;&lt;span style=&#34;color:#ff79c6&#34;&gt;(&lt;/span&gt;Connection conn&lt;span style=&#34;color:#ff79c6&#34;&gt;,&lt;/span&gt; List&lt;span style=&#34;color:#ff79c6&#34;&gt;&amp;lt;&lt;/span&gt;SchedulerStateRecord&lt;span style=&#34;color:#ff79c6&#34;&gt;&amp;gt;&lt;/span&gt; failedInstances&lt;span style=&#34;color:#ff79c6&#34;&gt;)&lt;/span&gt; &lt;span style=&#34;color:#8be9fd;font-style:italic&#34;&gt;throws&lt;/span&gt; JobPersistenceException &lt;span style=&#34;color:#ff79c6&#34;&gt;{&lt;/span&gt;
 &lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;	&lt;span style=&#34;color:#ff79c6&#34;&gt;if&lt;/span&gt; &lt;span style=&#34;color:#ff79c6&#34;&gt;(&lt;/span&gt;failedInstances&lt;span style=&#34;color:#ff79c6&#34;&gt;.&lt;/span&gt;&lt;span style=&#34;color:#50fa7b&#34;&gt;size&lt;/span&gt;&lt;span style=&#34;color:#ff79c6&#34;&gt;()&lt;/span&gt; &lt;span style=&#34;color:#ff79c6&#34;&gt;&amp;gt;&lt;/span&gt; 0&lt;span style=&#34;color:#ff79c6&#34;&gt;)&lt;/span&gt; &lt;span style=&#34;color:#ff79c6&#34;&gt;{&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;	&lt;span style=&#34;color:#ff79c6&#34;&gt;if&lt;/span&gt; &lt;span style=&#34;color:#ff79c6&#34;&gt;(&lt;/span&gt;failedInstances&lt;span style=&#34;color:#ff79c6&#34;&gt;.&lt;/span&gt;&lt;span style=&#34;color:#50fa7b&#34;&gt;size&lt;/span&gt;&lt;span style=&#34;color:#ff79c6&#34;&gt;()&lt;/span&gt; &lt;span style=&#34;color:#ff79c6&#34;&gt;&amp;gt;&lt;/span&gt; &lt;span style=&#34;color:#bd93f9&#34;&gt;0&lt;/span&gt;&lt;span style=&#34;color:#ff79c6&#34;&gt;)&lt;/span&gt; &lt;span style=&#34;color:#ff79c6&#34;&gt;{&lt;/span&gt;
 &lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;		&lt;span style=&#34;color:#ff79c6&#34;&gt;...&lt;/span&gt;
 &lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;
 &lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;		&lt;span style=&#34;color:#6272a4&#34;&gt;// release acquired triggers..
@@ -818,20 +818,20 @@
 &lt;li&gt;&lt;a href=&#34;https://blog.csdn.net/ThinkWon/article/details/109936696&#34;&gt;Quartz简介&lt;/a&gt;&lt;/li&gt;
 &lt;li&gt;&lt;a href=&#34;https://flylib.com/books/en/2.65.1/creating_the_quartz_database_structure.html&#34;&gt;Creating the Quartz Database Structure&lt;/a&gt;&lt;/li&gt;
 &lt;/ul&gt;
-- https://idontwannarock.github.io/tech_blog/2022/11/quartz-intro/ - This website by Howard Wang is licensed under a Creative Common Attribution-ShareAlike 4.0 International License.</description>
+- https://blog.idontwannarock.me/2022/11/quartz-intro/ - This website by Howard Wang is licensed under a Creative Common Attribution-ShareAlike 4.0 International License.</description>
         </item>
     
     
     
         <item>
         <title>Spring Boot 後端實作 XSS 防範</title>
-        <link>https://idontwannarock.github.io/tech_blog/2022/11/xss_prevention_spring_boot/</link>
+        <link>https://blog.idontwannarock.me/2022/11/xss_prevention_spring_boot/</link>
         <pubDate>Tue, 01 Nov 2022 15:28:32 +0800</pubDate>
         
-        <guid>https://idontwannarock.github.io/tech_blog/2022/11/xss_prevention_spring_boot/</guid>
-        <description>Howard Tech Note https://idontwannarock.github.io/tech_blog/2022/11/xss_prevention_spring_boot/ -&lt;p&gt;XSS 系列：&lt;/p&gt;
+        <guid>https://blog.idontwannarock.me/2022/11/xss_prevention_spring_boot/</guid>
+        <description>Howard Tech Note https://blog.idontwannarock.me/2022/11/xss_prevention_spring_boot/ -&lt;p&gt;XSS 系列：&lt;/p&gt;
 &lt;ol&gt;
-&lt;li&gt;&lt;a href=&#34;https://idontwannarock.github.io/tech_blog/2022/11/xss_prevention_intro/&#34;&gt;XSS 防範簡介&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;https://blog.idontwannarock.me/2022/11/xss_prevention_intro/&#34;&gt;XSS 防範簡介&lt;/a&gt;&lt;/li&gt;
 &lt;li&gt;Spring Boot 後端實作 XSS 防範&lt;/li&gt;
 &lt;/ol&gt;
 &lt;p&gt;身為一個 Java 後端工程師，今天要來討論如何在 Spring Boot 的後端專案進行 general 的 XSS 防範。&lt;/p&gt;
@@ -904,7 +904,7 @@
 &lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;
 &lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;        &lt;span style=&#34;color:#ff79c6&#34;&gt;if&lt;/span&gt; &lt;span style=&#34;color:#ff79c6&#34;&gt;(&lt;/span&gt;parameterValues &lt;span style=&#34;color:#ff79c6&#34;&gt;==&lt;/span&gt; &lt;span style=&#34;color:#ff79c6&#34;&gt;null&lt;/span&gt;&lt;span style=&#34;color:#ff79c6&#34;&gt;)&lt;/span&gt; &lt;span style=&#34;color:#ff79c6&#34;&gt;return&lt;/span&gt; &lt;span style=&#34;color:#ff79c6&#34;&gt;null&lt;/span&gt;&lt;span style=&#34;color:#ff79c6&#34;&gt;;&lt;/span&gt;
 &lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;        &lt;span style=&#34;color:#ff79c6&#34;&gt;for&lt;/span&gt; &lt;span style=&#34;color:#ff79c6&#34;&gt;(&lt;/span&gt;&lt;span style=&#34;color:#8be9fd&#34;&gt;int&lt;/span&gt; index &lt;span style=&#34;color:#ff79c6&#34;&gt;=&lt;/span&gt; 0&lt;span style=&#34;color:#ff79c6&#34;&gt;;&lt;/span&gt; index &lt;span style=&#34;color:#ff79c6&#34;&gt;&amp;lt;&lt;/span&gt; parameterValues&lt;span style=&#34;color:#ff79c6&#34;&gt;.&lt;/span&gt;&lt;span style=&#34;color:#50fa7b&#34;&gt;length&lt;/span&gt;&lt;span style=&#34;color:#ff79c6&#34;&gt;;&lt;/span&gt; index&lt;span style=&#34;color:#ff79c6&#34;&gt;++)&lt;/span&gt; &lt;span style=&#34;color:#ff79c6&#34;&gt;{&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;        &lt;span style=&#34;color:#ff79c6&#34;&gt;for&lt;/span&gt; &lt;span style=&#34;color:#ff79c6&#34;&gt;(&lt;/span&gt;&lt;span style=&#34;color:#8be9fd&#34;&gt;int&lt;/span&gt; index &lt;span style=&#34;color:#ff79c6&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color:#bd93f9&#34;&gt;0&lt;/span&gt;&lt;span style=&#34;color:#ff79c6&#34;&gt;;&lt;/span&gt; index &lt;span style=&#34;color:#ff79c6&#34;&gt;&amp;lt;&lt;/span&gt; parameterValues&lt;span style=&#34;color:#ff79c6&#34;&gt;.&lt;/span&gt;&lt;span style=&#34;color:#50fa7b&#34;&gt;length&lt;/span&gt;&lt;span style=&#34;color:#ff79c6&#34;&gt;;&lt;/span&gt; index&lt;span style=&#34;color:#ff79c6&#34;&gt;++)&lt;/span&gt; &lt;span style=&#34;color:#ff79c6&#34;&gt;{&lt;/span&gt;
 &lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;            parameterValues&lt;span style=&#34;color:#ff79c6&#34;&gt;[&lt;/span&gt;index&lt;span style=&#34;color:#ff79c6&#34;&gt;]&lt;/span&gt; &lt;span style=&#34;color:#ff79c6&#34;&gt;=&lt;/span&gt; StringEscapeUtils&lt;span style=&#34;color:#ff79c6&#34;&gt;.&lt;/span&gt;&lt;span style=&#34;color:#50fa7b&#34;&gt;escapeHtml4&lt;/span&gt;&lt;span style=&#34;color:#ff79c6&#34;&gt;(&lt;/span&gt;parameterValues&lt;span style=&#34;color:#ff79c6&#34;&gt;[&lt;/span&gt;index&lt;span style=&#34;color:#ff79c6&#34;&gt;]);&lt;/span&gt;
 &lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;        &lt;span style=&#34;color:#ff79c6&#34;&gt;}&lt;/span&gt;
 &lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;
@@ -1066,7 +1066,7 @@
 &lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;接著也是要將這個客製的 converter 註冊起來，同樣在 &lt;code&gt;WebMvcConfigurer&lt;/code&gt; 的 &lt;code&gt;extendMessageConverters&lt;/code&gt; 方法裡面加上這兩行：&lt;/p&gt;
 &lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;&#34;&gt;&lt;code class=&#34;language-java&#34; data-lang=&#34;java&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#6272a4&#34;&gt;// replace with customized StringHttpMessageConverter
 &lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#6272a4&#34;&gt;&lt;/span&gt;converters&lt;span style=&#34;color:#ff79c6&#34;&gt;.&lt;/span&gt;&lt;span style=&#34;color:#50fa7b&#34;&gt;removeIf&lt;/span&gt;&lt;span style=&#34;color:#ff79c6&#34;&gt;(&lt;/span&gt;converter &lt;span style=&#34;color:#ff79c6&#34;&gt;-&amp;gt;&lt;/span&gt; converter&lt;span style=&#34;color:#ff79c6&#34;&gt;.&lt;/span&gt;&lt;span style=&#34;color:#50fa7b&#34;&gt;getClass&lt;/span&gt;&lt;span style=&#34;color:#ff79c6&#34;&gt;().&lt;/span&gt;&lt;span style=&#34;color:#50fa7b&#34;&gt;getSimpleName&lt;/span&gt;&lt;span style=&#34;color:#ff79c6&#34;&gt;().&lt;/span&gt;&lt;span style=&#34;color:#50fa7b&#34;&gt;equals&lt;/span&gt;&lt;span style=&#34;color:#ff79c6&#34;&gt;(&lt;/span&gt;&lt;span style=&#34;color:#f1fa8c&#34;&gt;&amp;#34;StringHttpMessageConverter&amp;#34;&lt;/span&gt;&lt;span style=&#34;color:#ff79c6&#34;&gt;));&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;converters&lt;span style=&#34;color:#ff79c6&#34;&gt;.&lt;/span&gt;&lt;span style=&#34;color:#50fa7b&#34;&gt;add&lt;/span&gt;&lt;span style=&#34;color:#ff79c6&#34;&gt;(&lt;/span&gt;1&lt;span style=&#34;color:#ff79c6&#34;&gt;,&lt;/span&gt; &lt;span style=&#34;color:#ff79c6&#34;&gt;new&lt;/span&gt; XssStringHttpMessageConverter&lt;span style=&#34;color:#ff79c6&#34;&gt;());&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;converters&lt;span style=&#34;color:#ff79c6&#34;&gt;.&lt;/span&gt;&lt;span style=&#34;color:#50fa7b&#34;&gt;add&lt;/span&gt;&lt;span style=&#34;color:#ff79c6&#34;&gt;(&lt;/span&gt;&lt;span style=&#34;color:#bd93f9&#34;&gt;1&lt;/span&gt;&lt;span style=&#34;color:#ff79c6&#34;&gt;,&lt;/span&gt; &lt;span style=&#34;color:#ff79c6&#34;&gt;new&lt;/span&gt; XssStringHttpMessageConverter&lt;span style=&#34;color:#ff79c6&#34;&gt;());&lt;/span&gt;
 &lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;注意 converters 是有順序的，Spring Boot Web 預設第一個 converter 是 &lt;code&gt;ByteArrayHttpMessageConverter&lt;/code&gt;，第二個就是原本的 &lt;code&gt;StringHttpMessageConverter&lt;/code&gt;，所以我們這邊直接用客製的 converter 取代原位置的 &lt;code&gt;StringHttpMessageConverter&lt;/code&gt;。&lt;/p&gt;
 &lt;h2 id=&#34;結論&#34;&gt;結論&lt;/h2&gt;
 &lt;p&gt;XSS 攻擊的手段有很多種，而且因為各網站需求不同的關係，也沒有一個統一的方式可以做絕對的防範，其核心的防範概念主要就圍繞在對於各種 Input 的檢查是否符合預期。&lt;/p&gt;
@@ -1078,21 +1078,21 @@
 &lt;li&gt;&lt;a href=&#34;https://blog.darkthread.net/blog/csp-script-src/&#34;&gt;XSS 防禦 - CSP script-src 設定&lt;/a&gt;&lt;/li&gt;
 &lt;li&gt;&lt;a href=&#34;https://www.baeldung.com/spring-httpmessageconverter-rest&#34;&gt;Http Message Converters with the Spring Framework&lt;/a&gt;&lt;/li&gt;
 &lt;/ul&gt;
-- https://idontwannarock.github.io/tech_blog/2022/11/xss_prevention_spring_boot/ - This website by Howard Wang is licensed under a Creative Common Attribution-ShareAlike 4.0 International License.</description>
+- https://blog.idontwannarock.me/2022/11/xss_prevention_spring_boot/ - This website by Howard Wang is licensed under a Creative Common Attribution-ShareAlike 4.0 International License.</description>
         </item>
     
     
     
         <item>
         <title>XSS 防範簡介</title>
-        <link>https://idontwannarock.github.io/tech_blog/2022/11/xss_prevention_intro/</link>
+        <link>https://blog.idontwannarock.me/2022/11/xss_prevention_intro/</link>
         <pubDate>Tue, 01 Nov 2022 14:00:26 +0800</pubDate>
         
-        <guid>https://idontwannarock.github.io/tech_blog/2022/11/xss_prevention_intro/</guid>
-        <description>Howard Tech Note https://idontwannarock.github.io/tech_blog/2022/11/xss_prevention_intro/ -&lt;p&gt;XSS 系列：&lt;/p&gt;
+        <guid>https://blog.idontwannarock.me/2022/11/xss_prevention_intro/</guid>
+        <description>Howard Tech Note https://blog.idontwannarock.me/2022/11/xss_prevention_intro/ -&lt;p&gt;XSS 系列：&lt;/p&gt;
 &lt;ol&gt;
 &lt;li&gt;XSS 防範簡介&lt;/li&gt;
-&lt;li&gt;&lt;a href=&#34;https://idontwannarock.github.io/tech_blog/2022/11/xss_prevention_spring_boot/&#34;&gt;Spring Boot 後端實作 XSS 防範&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;https://blog.idontwannarock.me/2022/11/xss_prevention_spring_boot/&#34;&gt;Spring Boot 後端實作 XSS 防範&lt;/a&gt;&lt;/li&gt;
 &lt;/ol&gt;
 &lt;p&gt;跨網站指令碼 Cross-site Scripting, XSS，是一種代碼注入的攻擊，讓攻擊者在網頁上注入代碼，而其他使用者在觀看網頁的時候就會受到影響。&lt;/p&gt;
 &lt;h2 id=&#34;攻擊模式&#34;&gt;攻擊模式&lt;/h2&gt;
@@ -1148,18 +1148,18 @@
 &lt;li&gt;&lt;a href=&#34;https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Content-Security-Policy&#34;&gt;MDN Content-Security-Policy&lt;/a&gt;&lt;/li&gt;
 &lt;li&gt;&lt;a href=&#34;https://www.w3.org/TR/CSP2/&#34;&gt;W3C Content Security Policy Level 2&lt;/a&gt;&lt;/li&gt;
 &lt;/ul&gt;
-- https://idontwannarock.github.io/tech_blog/2022/11/xss_prevention_intro/ - This website by Howard Wang is licensed under a Creative Common Attribution-ShareAlike 4.0 International License.</description>
+- https://blog.idontwannarock.me/2022/11/xss_prevention_intro/ - This website by Howard Wang is licensed under a Creative Common Attribution-ShareAlike 4.0 International License.</description>
         </item>
     
     
     
         <item>
         <title>Java Optional 為何不推薦做為類別屬性</title>
-        <link>https://idontwannarock.github.io/tech_blog/2022/10/java_optional_not_recommand_as_field/</link>
+        <link>https://blog.idontwannarock.me/2022/10/java_optional_not_recommand_as_field/</link>
         <pubDate>Sat, 01 Oct 2022 21:44:34 +0800</pubDate>
         
-        <guid>https://idontwannarock.github.io/tech_blog/2022/10/java_optional_not_recommand_as_field/</guid>
-        <description>Howard Tech Note https://idontwannarock.github.io/tech_blog/2022/10/java_optional_not_recommand_as_field/ -&lt;p&gt;大家有在寫 Java 1.8+ 的時候使用新出的 &lt;code&gt;Optional&lt;/code&gt; 類別來處理 &lt;code&gt;null&lt;/code&gt; 的問題嗎？&lt;/p&gt;
+        <guid>https://blog.idontwannarock.me/2022/10/java_optional_not_recommand_as_field/</guid>
+        <description>Howard Tech Note https://blog.idontwannarock.me/2022/10/java_optional_not_recommand_as_field/ -&lt;p&gt;大家有在寫 Java 1.8+ 的時候使用新出的 &lt;code&gt;Optional&lt;/code&gt; 類別來處理 &lt;code&gt;null&lt;/code&gt; 的問題嗎？&lt;/p&gt;
 &lt;p&gt;那在使用的時候有沒有碰到 IntelliJ 提示 &lt;code&gt;Optional&lt;/code&gt; 不推薦用來當作類別的 field 的黃色警告 (warning) 呢？訊息應該大致如下&lt;/p&gt;
 &lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;&#34;&gt;&lt;code class=&#34;language-java&#34; data-lang=&#34;java&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#6272a4&#34;&gt;/**
 &lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#6272a4&#34;&gt; * A container object which may or may not contain a non-{@code null} value.
@@ -1301,18 +1301,18 @@
 &lt;ul&gt;
 &lt;li&gt;&lt;a href=&#34;https://projectlombok.org/features/EqualsAndHashCode&#34;&gt;Lombok &lt;code&gt;@EqualsAndHashCode&lt;/code&gt;&lt;/a&gt;&lt;/li&gt;
 &lt;/ul&gt;
-- https://idontwannarock.github.io/tech_blog/2022/10/java_optional_not_recommand_as_field/ - This website by Howard Wang is licensed under a Creative Common Attribution-ShareAlike 4.0 International License.</description>
+- https://blog.idontwannarock.me/2022/10/java_optional_not_recommand_as_field/ - This website by Howard Wang is licensed under a Creative Common Attribution-ShareAlike 4.0 International License.</description>
         </item>
     
     
     
         <item>
         <title>ProtoBuf FlatBuf Benchmark in Java</title>
-        <link>https://idontwannarock.github.io/tech_blog/2022/01/protobuf_flatbuf_java/</link>
+        <link>https://blog.idontwannarock.me/2022/01/protobuf_flatbuf_java/</link>
         <pubDate>Tue, 04 Jan 2022 15:36:17 +0800</pubDate>
         
-        <guid>https://idontwannarock.github.io/tech_blog/2022/01/protobuf_flatbuf_java/</guid>
-        <description>Howard Tech Note https://idontwannarock.github.io/tech_blog/2022/01/protobuf_flatbuf_java/ -&lt;p&gt;繼續之前研究的 gRPC，除了 HTTP/2 以外，另外一個支柱就是 Protocol Buffers (ProtoBuf)&lt;/p&gt;
+        <guid>https://blog.idontwannarock.me/2022/01/protobuf_flatbuf_java/</guid>
+        <description>Howard Tech Note https://blog.idontwannarock.me/2022/01/protobuf_flatbuf_java/ -&lt;p&gt;繼續之前研究的 gRPC，除了 HTTP/2 以外，另外一個支柱就是 Protocol Buffers (ProtoBuf)&lt;/p&gt;
 &lt;p&gt;ProtoBuf 是一種二進制的序列化資料格式，透過介面描述語言 (Interface description language, IDL) 來描述資料結構，再利用工具依據 IDL 產生程式碼，這些程式碼可以用來生成或解析代表這些資料結構的位元組流&lt;/p&gt;
 &lt;p&gt;ProtoBuf 是 Google 原本用來內部使用的資料格式，但現在已開源，加上被 gRPC 原生支援，現在已經是重要的序列化 library&lt;/p&gt;
 &lt;p&gt;Google 官方支援了許多語言的工具用來轉換 IDL 為代碼，但其中很不巧的不包含我目前工作上避不開的 Lua 或 TypeScript，所以我又另外找到同樣也是 Google 推出的 FlatBuffers (FlatBuf)，同樣也是二進制的序列化 library，但官方支援的語系就很多了，正好也包括 Lua 及 TypeScript&lt;/p&gt;
@@ -1495,22 +1495,22 @@ root_type FlatPassenger;
 &lt;li&gt;&lt;a href=&#34;https://google.github.io/flatbuffers/index.html&#34;&gt;FlatBuffers&lt;/a&gt;&lt;/li&gt;
 &lt;li&gt;&lt;a href=&#34;https://en.wikipedia.org/wiki/FlatBuffers&#34;&gt;FlatBuffers Wiki&lt;/a&gt;&lt;/li&gt;
 &lt;/ul&gt;
-- https://idontwannarock.github.io/tech_blog/2022/01/protobuf_flatbuf_java/ - This website by Howard Wang is licensed under a Creative Common Attribution-ShareAlike 4.0 International License.</description>
+- https://blog.idontwannarock.me/2022/01/protobuf_flatbuf_java/ - This website by Howard Wang is licensed under a Creative Common Attribution-ShareAlike 4.0 International License.</description>
         </item>
     
     
     
         <item>
         <title>gRPC 概念</title>
-        <link>https://idontwannarock.github.io/tech_blog/2021/12/grpc/</link>
+        <link>https://blog.idontwannarock.me/2021/12/grpc/</link>
         <pubDate>Mon, 27 Dec 2021 09:44:31 +0800</pubDate>
         
-        <guid>https://idontwannarock.github.io/tech_blog/2021/12/grpc/</guid>
-        <description>Howard Tech Note https://idontwannarock.github.io/tech_blog/2021/12/grpc/ -&lt;p&gt;在前幾篇大略了解 HTTP/2 的概念後，就可以來了解 gRPC 的運作概念了&lt;/p&gt;
+        <guid>https://blog.idontwannarock.me/2021/12/grpc/</guid>
+        <description>Howard Tech Note https://blog.idontwannarock.me/2021/12/grpc/ -&lt;p&gt;在前幾篇大略了解 HTTP/2 的概念後，就可以來了解 gRPC 的運作概念了&lt;/p&gt;
 &lt;p&gt;HTTP/2 系列:&lt;/p&gt;
 &lt;ol&gt;
-&lt;li&gt;&lt;a href=&#34;https://idontwannarock.github.io/tech_blog/2021/12/http2/&#34;&gt;HTTP/2 系列 - HTTP/2 概念&lt;/a&gt;&lt;/li&gt;
-&lt;li&gt;&lt;a href=&#34;https://idontwannarock.github.io/tech_blog/2021/12/http_server_push/&#34;&gt;HTTP/2 系列 - HTTP Server Push 技術&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;https://blog.idontwannarock.me/2021/12/http2/&#34;&gt;HTTP/2 系列 - HTTP/2 概念&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;https://blog.idontwannarock.me/2021/12/http_server_push/&#34;&gt;HTTP/2 系列 - HTTP Server Push 技術&lt;/a&gt;&lt;/li&gt;
 &lt;/ol&gt;
 &lt;h2 id=&#34;概念&#34;&gt;概念&lt;/h2&gt;
 &lt;p&gt;gRPC 原本是 Google 內部的 RPC 系統，後來開源後，近年成為很熱門的 RPC 系統，採用 HTTP/2 做傳輸，ProtoBuf 作為介面描述語言 (interface description language)，提供身分驗證 (authentication)、雙向串流 (bidirectional streaming)、流量控制 (flow control)、阻塞或非阻塞綁定 (blocking or nonblocking binding)、取消 (cancellation) 及逾時 (timeouts) 等特性&lt;/p&gt;
@@ -1574,21 +1574,21 @@ root_type FlatPassenger;
 &lt;li&gt;&lt;a href=&#34;https://thenewstack.io/grpc-a-deep-dive-into-the-communication-pattern/&#34;&gt;gRPC: A Deep Dive into the Communication Pattern&lt;/a&gt;&lt;/li&gt;
 &lt;li&gt;&lt;a href=&#34;https://www.oreilly.com/library/view/grpc-up-and/9781492058328/&#34;&gt;gRPC Up and Running&lt;/a&gt;&lt;/li&gt;
 &lt;/ul&gt;
-- https://idontwannarock.github.io/tech_blog/2021/12/grpc/ - This website by Howard Wang is licensed under a Creative Common Attribution-ShareAlike 4.0 International License.</description>
+- https://blog.idontwannarock.me/2021/12/grpc/ - This website by Howard Wang is licensed under a Creative Common Attribution-ShareAlike 4.0 International License.</description>
         </item>
     
     
     
         <item>
         <title>HTTP/2 系列 - HTTP Server Push 技術</title>
-        <link>https://idontwannarock.github.io/tech_blog/2021/12/http_server_push/</link>
+        <link>https://blog.idontwannarock.me/2021/12/http_server_push/</link>
         <pubDate>Fri, 24 Dec 2021 15:49:27 +0800</pubDate>
         
-        <guid>https://idontwannarock.github.io/tech_blog/2021/12/http_server_push/</guid>
-        <description>Howard Tech Note https://idontwannarock.github.io/tech_blog/2021/12/http_server_push/ -&lt;p&gt;這篇預計是 HTTP/2 系列的最後一篇，之前在系列前面已經釐清了 HTTP/2 的概念了，其中我比較有興趣的就是 HTTP/2 的 server push 新特性，這邊就繼續來了解一下吧~&lt;/p&gt;
+        <guid>https://blog.idontwannarock.me/2021/12/http_server_push/</guid>
+        <description>Howard Tech Note https://blog.idontwannarock.me/2021/12/http_server_push/ -&lt;p&gt;這篇預計是 HTTP/2 系列的最後一篇，之前在系列前面已經釐清了 HTTP/2 的概念了，其中我比較有興趣的就是 HTTP/2 的 server push 新特性，這邊就繼續來了解一下吧~&lt;/p&gt;
 &lt;p&gt;HTTP/2 系列:&lt;/p&gt;
 &lt;ol&gt;
-&lt;li&gt;&lt;a href=&#34;https://idontwannarock.github.io/tech_blog/2021/12/http2/&#34;&gt;HTTP/2 系列 - HTTP/2 概念&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;https://blog.idontwannarock.me/2021/12/http2/&#34;&gt;HTTP/2 系列 - HTTP/2 概念&lt;/a&gt;&lt;/li&gt;
 &lt;li&gt;HTTP/2 系列 - HTTP Server Push 技術&lt;/li&gt;
 &lt;/ol&gt;
 &lt;h2 id=&#34;http-server-push-技術&#34;&gt;HTTP Server Push 技術&lt;/h2&gt;
@@ -1656,22 +1656,22 @@ root_type FlatPassenger;
 &lt;li&gt;&lt;a href=&#34;https://stackoverflow.com/a/42560354/7605040&#34;&gt;What is the difference between HTTP streaming and server sent events?&lt;/a&gt;&lt;/li&gt;
 &lt;li&gt;&lt;a href=&#34;https://www.infoq.com/articles/websocket-and-http2-coexist/&#34;&gt;Will WebSocket survive HTTP/2?&lt;/a&gt;&lt;/li&gt;
 &lt;/ul&gt;
-- https://idontwannarock.github.io/tech_blog/2021/12/http_server_push/ - This website by Howard Wang is licensed under a Creative Common Attribution-ShareAlike 4.0 International License.</description>
+- https://blog.idontwannarock.me/2021/12/http_server_push/ - This website by Howard Wang is licensed under a Creative Common Attribution-ShareAlike 4.0 International License.</description>
         </item>
     
     
     
         <item>
         <title>HTTP/2 系列 - HTTP/2 概念</title>
-        <link>https://idontwannarock.github.io/tech_blog/2021/12/http2/</link>
+        <link>https://blog.idontwannarock.me/2021/12/http2/</link>
         <pubDate>Tue, 21 Dec 2021 09:06:29 +0800</pubDate>
         
-        <guid>https://idontwannarock.github.io/tech_blog/2021/12/http2/</guid>
-        <description>Howard Tech Note https://idontwannarock.github.io/tech_blog/2021/12/http2/ -&lt;p&gt;從 2015 年 RFC 7540 正式發表後，至今 HTTP/2 已經被絕大多數主流瀏覽器所支援，並且是正當紅的 gRPC 的基礎，在研究 gPRC 之前，先來釐清一下 HTTP/2 的概念&lt;/p&gt;
+        <guid>https://blog.idontwannarock.me/2021/12/http2/</guid>
+        <description>Howard Tech Note https://blog.idontwannarock.me/2021/12/http2/ -&lt;p&gt;從 2015 年 RFC 7540 正式發表後，至今 HTTP/2 已經被絕大多數主流瀏覽器所支援，並且是正當紅的 gRPC 的基礎，在研究 gPRC 之前，先來釐清一下 HTTP/2 的概念&lt;/p&gt;
 &lt;p&gt;這篇是 HTTP/2 系列文章的第一篇:&lt;/p&gt;
 &lt;ol&gt;
 &lt;li&gt;HTTP/2 系列 - HTTP/2 概念&lt;/li&gt;
-&lt;li&gt;&lt;a href=&#34;https://idontwannarock.github.io/tech_blog/2021/12/http_server_push/&#34;&gt;HTTP/2 系列 - HTTP Server Push 技術&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;https://blog.idontwannarock.me/2021/12/http_server_push/&#34;&gt;HTTP/2 系列 - HTTP Server Push 技術&lt;/a&gt;&lt;/li&gt;
 &lt;/ol&gt;
 &lt;p&gt;不過，我其實只想研究我想研究的部分，所以不見得會把 HTTP/2 所有相關的內容都研究一遍&lt;/p&gt;
 &lt;h2 id=&#34;從遠古-http10-開始&#34;&gt;從遠古 HTTP/1.0 開始&lt;/h2&gt;
@@ -1827,7 +1827,7 @@ root_type FlatPassenger;
 &lt;li&gt;&lt;a href=&#34;https://en.wikipedia.org/wiki/HTTP/3&#34;&gt;HTTP/3 Wiki&lt;/a&gt;&lt;/li&gt;
 &lt;li&gt;&lt;a href=&#34;https://livebook.manning.com/book/http2-in-action&#34;&gt;HTTP/2 in Action&lt;/a&gt;&lt;/li&gt;
 &lt;/ul&gt;
-- https://idontwannarock.github.io/tech_blog/2021/12/http2/ - This website by Howard Wang is licensed under a Creative Common Attribution-ShareAlike 4.0 International License.</description>
+- https://blog.idontwannarock.me/2021/12/http2/ - This website by Howard Wang is licensed under a Creative Common Attribution-ShareAlike 4.0 International License.</description>
         </item>
     
     

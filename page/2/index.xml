@@ -2,24 +2,24 @@
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
     <title>Howard Tech Note</title>
-    <link>https://idontwannarock.github.io/tech_blog/</link>
+    <link>https://blog.idontwannarock.me/</link>
     <description>Recent content on Howard Tech Note</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
     <copyright>This website by Howard Wang is licensed under a Creative Common Attribution-ShareAlike 4.0 International License.</copyright>
     <lastBuildDate>Tue, 29 Nov 2022 15:21:19 +0800</lastBuildDate>
     
-        <atom:link href="https://idontwannarock.github.io/tech_blog/index.xml" rel="self" type="application/rss+xml" />
+        <atom:link href="https://blog.idontwannarock.me/index.xml" rel="self" type="application/rss+xml" />
     
     
     
         <item>
         <title>在 Batch Script 壓縮檔案</title>
-        <link>https://idontwannarock.github.io/tech_blog/2021/12/zip_in_batch_script/</link>
+        <link>https://blog.idontwannarock.me/2021/12/zip_in_batch_script/</link>
         <pubDate>Thu, 16 Dec 2021 15:32:25 +0800</pubDate>
         
-        <guid>https://idontwannarock.github.io/tech_blog/2021/12/zip_in_batch_script/</guid>
-        <description>Howard Tech Note https://idontwannarock.github.io/tech_blog/2021/12/zip_in_batch_script/ -&lt;p&gt;因為目前公司沒有專職 SRE 或 DevOps 幫忙做 CI/CD，身為小小後端工程師只好自己想辦法，偏偏目前用到的 tech stack 包括 .net framework，所以必須跟 Windows 環境的 batch file 打交道來替代習慣的 shell 檔，其中有個步驟必須要壓縮/解壓縮資料夾&lt;/p&gt;
+        <guid>https://blog.idontwannarock.me/2021/12/zip_in_batch_script/</guid>
+        <description>Howard Tech Note https://blog.idontwannarock.me/2021/12/zip_in_batch_script/ -&lt;p&gt;因為目前公司沒有專職 SRE 或 DevOps 幫忙做 CI/CD，身為小小後端工程師只好自己想辦法，偏偏目前用到的 tech stack 包括 .net framework，所以必須跟 Windows 環境的 batch file 打交道來替代習慣的 shell 檔，其中有個步驟必須要壓縮/解壓縮資料夾&lt;/p&gt;
 &lt;h2 id=&#34;tar&#34;&gt;Tar&lt;/h2&gt;
 &lt;p&gt;研究了一下，很興奮的發現 tar 在 command prompt 跟 powershell 都可以用，那代表我在 batch 檔裡面使用沒問題ＲＲＲ&lt;/p&gt;
 &lt;p&gt;所以可以這樣用&lt;/p&gt;
@@ -42,18 +42,18 @@
 &lt;li&gt;&lt;a href=&#34;https://techcommunity.microsoft.com/t5/containers/tar-and-curl-come-to-windows/ba-p/382409&#34;&gt;Tar and Curl Come to Windows!&lt;/a&gt;&lt;/li&gt;
 &lt;li&gt;&lt;a href=&#34;https://docs.microsoft.com/zh-tw/powershell/module/microsoft.powershell.archive/?view=powershell-7.2&amp;amp;viewFallbackFrom=powershell-5.0&#34;&gt;Microsoft.PowerShell.Archive&lt;/a&gt;&lt;/li&gt;
 &lt;/ul&gt;
-- https://idontwannarock.github.io/tech_blog/2021/12/zip_in_batch_script/ - This website by Howard Wang is licensed under a Creative Common Attribution-ShareAlike 4.0 International License.</description>
+- https://blog.idontwannarock.me/2021/12/zip_in_batch_script/ - This website by Howard Wang is licensed under a Creative Common Attribution-ShareAlike 4.0 International License.</description>
         </item>
     
     
     
         <item>
         <title>Sql Server 備份方式</title>
-        <link>https://idontwannarock.github.io/tech_blog/2021/11/sql_server_backup/</link>
+        <link>https://blog.idontwannarock.me/2021/11/sql_server_backup/</link>
         <pubDate>Tue, 16 Nov 2021 11:58:47 +0800</pubDate>
         
-        <guid>https://idontwannarock.github.io/tech_blog/2021/11/sql_server_backup/</guid>
-        <description>Howard Tech Note https://idontwannarock.github.io/tech_blog/2021/11/sql_server_backup/ -&lt;p&gt;最近工作上碰到需要對 Sql Server 做 snapshot 的場合，所以就順便來研究一下怎麼對 Sql Server 做備份&lt;/p&gt;
+        <guid>https://blog.idontwannarock.me/2021/11/sql_server_backup/</guid>
+        <description>Howard Tech Note https://blog.idontwannarock.me/2021/11/sql_server_backup/ -&lt;p&gt;最近工作上碰到需要對 Sql Server 做 snapshot 的場合，所以就順便來研究一下怎麼對 Sql Server 做備份&lt;/p&gt;
 &lt;p&gt;按照過去的經驗，我第一個想法就是找 Sql Server 有沒有類似 mysqldump 或 pg_dump 的工具可以直接將 schema 及 data 導出成 SQL 檔，這樣方便閱讀也方便各種場景下重建資料庫，尤其是在資料庫的 table 數量及資料量並不算大的前提下&lt;/p&gt;
 &lt;p&gt;結果，我太天真了，Microsoft 怎麼可能這麼好用 (誤)，人家就是要走自己的路！&lt;/p&gt;
 &lt;h2 id=&#34;備份檔案格式&#34;&gt;備份檔案格式&lt;/h2&gt;
@@ -119,40 +119,40 @@
 &lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;
 &lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#6272a4&#34;&gt;# get current date in yyyyMMdd format&lt;/span&gt;
 &lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#8be9fd;font-style:italic&#34;&gt;$currentDate&lt;/span&gt; = &lt;span style=&#34;color:#8be9fd;font-style:italic&#34;&gt;Get-Date&lt;/span&gt; -format yyyyMMdd
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#8be9fd;font-style:italic&#34;&gt;Write-Output&lt;/span&gt; &lt;span style=&#34;color:#f1fa8c&#34;&gt;&amp;#34;Current Date = $currentDate&amp;#34;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#8be9fd;font-style:italic&#34;&gt;Write-Output&lt;/span&gt; &lt;span style=&#34;color:#f1fa8c&#34;&gt;&amp;#34;Current Date = &lt;/span&gt;&lt;span style=&#34;color:#8be9fd;font-style:italic&#34;&gt;$currentDate&lt;/span&gt;&lt;span style=&#34;color:#f1fa8c&#34;&gt;&amp;#34;&lt;/span&gt;
 &lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;
 &lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#6272a4&#34;&gt;# get the latest backup directory&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#8be9fd;font-style:italic&#34;&gt;Get-ChildItem&lt;/span&gt; -Directory -Path . | &lt;span style=&#34;color:#8be9fd;font-style:italic&#34;&gt;Sort-Object&lt;/span&gt; CreationTime -Descending | &lt;span style=&#34;color:#8be9fd;font-style:italic&#34;&gt;Select-Object&lt;/span&gt; -First 1 -ExpandProperty Name -OutVariable latestDir | &lt;span style=&#34;color:#8be9fd;font-style:italic&#34;&gt;Out-Null&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#8be9fd;font-style:italic&#34;&gt;Write-Output&lt;/span&gt; &lt;span style=&#34;color:#f1fa8c&#34;&gt;&amp;#34;Latest Backup Directory = $latestDir&amp;#34;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#8be9fd;font-style:italic&#34;&gt;Get-ChildItem&lt;/span&gt; -Directory -Path . | &lt;span style=&#34;color:#8be9fd;font-style:italic&#34;&gt;Sort-Object&lt;/span&gt; CreationTime -Descending | &lt;span style=&#34;color:#8be9fd;font-style:italic&#34;&gt;Select-Object&lt;/span&gt; -First &lt;span style=&#34;color:#bd93f9&#34;&gt;1&lt;/span&gt; -ExpandProperty Name -OutVariable latestDir | &lt;span style=&#34;color:#8be9fd;font-style:italic&#34;&gt;Out-Null&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#8be9fd;font-style:italic&#34;&gt;Write-Output&lt;/span&gt; &lt;span style=&#34;color:#f1fa8c&#34;&gt;&amp;#34;Latest Backup Directory = &lt;/span&gt;&lt;span style=&#34;color:#8be9fd;font-style:italic&#34;&gt;$latestDir&lt;/span&gt;&lt;span style=&#34;color:#f1fa8c&#34;&gt;&amp;#34;&lt;/span&gt;
 &lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;
 &lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#6272a4&#34;&gt;# get the latest version of today&amp;#39;s backups&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#8be9fd;font-style:italic&#34;&gt;$currentVersion&lt;/span&gt; = 0
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#8be9fd;font-style:italic&#34;&gt;$currentVersion&lt;/span&gt; = &lt;span style=&#34;color:#bd93f9&#34;&gt;0&lt;/span&gt;
 &lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#ff79c6&#34;&gt;if&lt;/span&gt; (&lt;span style=&#34;color:#8be9fd;font-style:italic&#34;&gt;$latestDir&lt;/span&gt; &lt;span style=&#34;color:#ff79c6&#34;&gt;-Match&lt;/span&gt; &lt;span style=&#34;color:#8be9fd;font-style:italic&#34;&gt;$currentDate&lt;/span&gt;)
 &lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;{
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    &lt;span style=&#34;color:#8be9fd;font-style:italic&#34;&gt;$currentVersion&lt;/span&gt; = &lt;span style=&#34;color:#8be9fd;font-style:italic&#34;&gt;$latestDir&lt;/span&gt;.Substring(&lt;span style=&#34;color:#8be9fd;font-style:italic&#34;&gt;$currentDate&lt;/span&gt;.Length + 1)
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    &lt;span style=&#34;color:#8be9fd;font-style:italic&#34;&gt;$currentVersion&lt;/span&gt; = &lt;span style=&#34;color:#8be9fd;font-style:italic&#34;&gt;$latestDir&lt;/span&gt;.Substring(&lt;span style=&#34;color:#8be9fd;font-style:italic&#34;&gt;$currentDate&lt;/span&gt;.Length + &lt;span style=&#34;color:#bd93f9&#34;&gt;1&lt;/span&gt;)
 &lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;}
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#8be9fd;font-style:italic&#34;&gt;Write-Output&lt;/span&gt; &lt;span style=&#34;color:#f1fa8c&#34;&gt;&amp;#34;Current Version = $currentVersion&amp;#34;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#8be9fd;font-style:italic&#34;&gt;Write-Output&lt;/span&gt; &lt;span style=&#34;color:#f1fa8c&#34;&gt;&amp;#34;Current Version = &lt;/span&gt;&lt;span style=&#34;color:#8be9fd;font-style:italic&#34;&gt;$currentVersion&lt;/span&gt;&lt;span style=&#34;color:#f1fa8c&#34;&gt;&amp;#34;&lt;/span&gt;
 &lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;
 &lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#6272a4&#34;&gt;# create directory for the next version of backup&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#8be9fd;font-style:italic&#34;&gt;$nextVersion&lt;/span&gt; = [int]&lt;span style=&#34;color:#8be9fd;font-style:italic&#34;&gt;$currentVersion&lt;/span&gt; + 1
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#8be9fd;font-style:italic&#34;&gt;Write-Output&lt;/span&gt; &lt;span style=&#34;color:#f1fa8c&#34;&gt;&amp;#34;Next Version = $nextVersion&amp;#34;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#8be9fd;font-style:italic&#34;&gt;$nextVersion&lt;/span&gt; = [int]&lt;span style=&#34;color:#8be9fd;font-style:italic&#34;&gt;$currentVersion&lt;/span&gt; + &lt;span style=&#34;color:#bd93f9&#34;&gt;1&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#8be9fd;font-style:italic&#34;&gt;Write-Output&lt;/span&gt; &lt;span style=&#34;color:#f1fa8c&#34;&gt;&amp;#34;Next Version = &lt;/span&gt;&lt;span style=&#34;color:#8be9fd;font-style:italic&#34;&gt;$nextVersion&lt;/span&gt;&lt;span style=&#34;color:#f1fa8c&#34;&gt;&amp;#34;&lt;/span&gt;
 &lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#8be9fd;font-style:italic&#34;&gt;$nextVersionDir&lt;/span&gt; = &lt;span style=&#34;color:#f1fa8c&#34;&gt;&amp;#34;&lt;/span&gt;$(&lt;span style=&#34;color:#8be9fd;font-style:italic&#34;&gt;$backupPath&lt;/span&gt;)&lt;span style=&#34;color:#f1fa8c&#34;&gt;\&lt;/span&gt;$(&lt;span style=&#34;color:#8be9fd;font-style:italic&#34;&gt;$currentDate&lt;/span&gt;)&lt;span style=&#34;color:#f1fa8c&#34;&gt;_&lt;/span&gt;$(&lt;span style=&#34;color:#8be9fd;font-style:italic&#34;&gt;$nextVersion&lt;/span&gt;)&lt;span style=&#34;color:#f1fa8c&#34;&gt;&amp;#34;&lt;/span&gt;
 &lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#8be9fd;font-style:italic&#34;&gt;New-Item&lt;/span&gt; -ItemType Directory -Force -Path &lt;span style=&#34;color:#8be9fd;font-style:italic&#34;&gt;$nextVersionDir&lt;/span&gt; | &lt;span style=&#34;color:#8be9fd;font-style:italic&#34;&gt;Out-Null&lt;/span&gt;
 &lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;
 &lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#6272a4&#34;&gt;# load SMO assembly&lt;/span&gt;
 &lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#8be9fd;font-style:italic&#34;&gt;$msPrefix&lt;/span&gt; = &lt;span style=&#34;color:#f1fa8c&#34;&gt;&amp;#39;Microsoft.SqlServer&amp;#39;&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;[System.Reflection.Assembly]::LoadWithPartialName(&lt;span style=&#34;color:#f1fa8c&#34;&gt;&amp;#34;$msPrefix.SMO&amp;#34;&lt;/span&gt;) | &lt;span style=&#34;color:#8be9fd;font-style:italic&#34;&gt;out-null&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;[System.Reflection.Assembly]::LoadWithPartialName(&lt;span style=&#34;color:#f1fa8c&#34;&gt;&amp;#34;$msPrefix.SMOExtended&amp;#34;&lt;/span&gt;) | &lt;span style=&#34;color:#8be9fd;font-style:italic&#34;&gt;out-null&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#8be9fd;font-style:italic&#34;&gt;$smoPrefix&lt;/span&gt; = &lt;span style=&#34;color:#f1fa8c&#34;&gt;&amp;#34;$msPrefix.Management.Smo&amp;#34;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;[System.Reflection.Assembly]::LoadWithPartialName(&lt;span style=&#34;color:#f1fa8c&#34;&gt;&amp;#34;&lt;/span&gt;&lt;span style=&#34;color:#8be9fd;font-style:italic&#34;&gt;$msPrefix&lt;/span&gt;&lt;span style=&#34;color:#f1fa8c&#34;&gt;.SMO&amp;#34;&lt;/span&gt;) | &lt;span style=&#34;color:#8be9fd;font-style:italic&#34;&gt;out-null&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;[System.Reflection.Assembly]::LoadWithPartialName(&lt;span style=&#34;color:#f1fa8c&#34;&gt;&amp;#34;&lt;/span&gt;&lt;span style=&#34;color:#8be9fd;font-style:italic&#34;&gt;$msPrefix&lt;/span&gt;&lt;span style=&#34;color:#f1fa8c&#34;&gt;.SMOExtended&amp;#34;&lt;/span&gt;) | &lt;span style=&#34;color:#8be9fd;font-style:italic&#34;&gt;out-null&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#8be9fd;font-style:italic&#34;&gt;$smoPrefix&lt;/span&gt; = &lt;span style=&#34;color:#f1fa8c&#34;&gt;&amp;#34;&lt;/span&gt;&lt;span style=&#34;color:#8be9fd;font-style:italic&#34;&gt;$msPrefix&lt;/span&gt;&lt;span style=&#34;color:#f1fa8c&#34;&gt;.Management.Smo&amp;#34;&lt;/span&gt;
 &lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;
 &lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#6272a4&#34;&gt;# set connection&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#8be9fd;font-style:italic&#34;&gt;$server&lt;/span&gt; = &lt;span style=&#34;color:#8be9fd;font-style:italic&#34;&gt;New-Object&lt;/span&gt; (&lt;span style=&#34;color:#f1fa8c&#34;&gt;&amp;#34;$smoPrefix.Server&amp;#34;&lt;/span&gt;) &lt;span style=&#34;color:#8be9fd;font-style:italic&#34;&gt;$datasource&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#8be9fd;font-style:italic&#34;&gt;$server&lt;/span&gt;.ConnectionContext.LoginSecure = &lt;span style=&#34;color:#8be9fd;font-style:italic&#34;&gt;$false&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#8be9fd;font-style:italic&#34;&gt;$server&lt;/span&gt; = &lt;span style=&#34;color:#8be9fd;font-style:italic&#34;&gt;New-Object&lt;/span&gt; (&lt;span style=&#34;color:#f1fa8c&#34;&gt;&amp;#34;&lt;/span&gt;&lt;span style=&#34;color:#8be9fd;font-style:italic&#34;&gt;$smoPrefix&lt;/span&gt;&lt;span style=&#34;color:#f1fa8c&#34;&gt;.Server&amp;#34;&lt;/span&gt;) &lt;span style=&#34;color:#8be9fd;font-style:italic&#34;&gt;$datasource&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#8be9fd;font-style:italic&#34;&gt;$server&lt;/span&gt;.ConnectionContext.LoginSecure = $false
 &lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#8be9fd;font-style:italic&#34;&gt;$server&lt;/span&gt;.ConnectionContext.set_Login(&lt;span style=&#34;color:#8be9fd;font-style:italic&#34;&gt;$username&lt;/span&gt;)
 &lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#8be9fd;font-style:italic&#34;&gt;$server&lt;/span&gt;.ConnectionContext.set_Password(&lt;span style=&#34;color:#8be9fd;font-style:italic&#34;&gt;$password&lt;/span&gt;)
 &lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;
 &lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#6272a4&#34;&gt;# check connection&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#ff79c6&#34;&gt;if&lt;/span&gt; (&lt;span style=&#34;color:#8be9fd;font-style:italic&#34;&gt;$server&lt;/span&gt;.Version &lt;span style=&#34;color:#ff79c6&#34;&gt;-eq&lt;/span&gt; &lt;span style=&#34;color:#8be9fd;font-style:italic&#34;&gt;$null&lt;/span&gt; ) {&lt;span style=&#34;color:#ff79c6&#34;&gt;Throw&lt;/span&gt; &lt;span style=&#34;color:#f1fa8c&#34;&gt;&amp;#34;Can&amp;#39;t find the instance $datasource&amp;#34;&lt;/span&gt;}
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#ff79c6&#34;&gt;if&lt;/span&gt; (&lt;span style=&#34;color:#8be9fd;font-style:italic&#34;&gt;$server&lt;/span&gt;.Version &lt;span style=&#34;color:#ff79c6&#34;&gt;-eq&lt;/span&gt; $null ) {&lt;span style=&#34;color:#ff79c6&#34;&gt;Throw&lt;/span&gt; &lt;span style=&#34;color:#f1fa8c&#34;&gt;&amp;#34;Can&amp;#39;t find the instance &lt;/span&gt;&lt;span style=&#34;color:#8be9fd;font-style:italic&#34;&gt;$datasource&lt;/span&gt;&lt;span style=&#34;color:#f1fa8c&#34;&gt;&amp;#34;&lt;/span&gt;}
 &lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;
 &lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#6272a4&#34;&gt;# loop through databases names to do back up&lt;/span&gt;
 &lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#ff79c6&#34;&gt;foreach&lt;/span&gt; (&lt;span style=&#34;color:#8be9fd;font-style:italic&#34;&gt;$database&lt;/span&gt; &lt;span style=&#34;color:#ff79c6&#34;&gt;in&lt;/span&gt; &lt;span style=&#34;color:#8be9fd;font-style:italic&#34;&gt;$server&lt;/span&gt;.databases)
@@ -184,42 +184,42 @@
 &lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    &lt;span style=&#34;color:#8be9fd;font-style:italic&#34;&gt;Add-Content&lt;/span&gt; &lt;span style=&#34;color:#8be9fd;font-style:italic&#34;&gt;$backupFile&lt;/span&gt; &lt;span style=&#34;color:#f1fa8c&#34;&gt;&amp;#34;&amp;#34;&lt;/span&gt;
 &lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;
 &lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    &lt;span style=&#34;color:#6272a4&#34;&gt;# set export configuration&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    &lt;span style=&#34;color:#8be9fd;font-style:italic&#34;&gt;$transfer&lt;/span&gt; = &lt;span style=&#34;color:#8be9fd;font-style:italic&#34;&gt;New-Object&lt;/span&gt; (&lt;span style=&#34;color:#f1fa8c&#34;&gt;&amp;#34;$smoPrefix.Transfer&amp;#34;&lt;/span&gt;) &lt;span style=&#34;color:#8be9fd;font-style:italic&#34;&gt;$database&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    &lt;span style=&#34;color:#8be9fd;font-style:italic&#34;&gt;$transfer&lt;/span&gt;.Options.ScriptSchema = &lt;span style=&#34;color:#8be9fd;font-style:italic&#34;&gt;$true&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    &lt;span style=&#34;color:#8be9fd;font-style:italic&#34;&gt;$transfer&lt;/span&gt;.Options.ScriptData = &lt;span style=&#34;color:#8be9fd;font-style:italic&#34;&gt;$true&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    &lt;span style=&#34;color:#8be9fd;font-style:italic&#34;&gt;$transfer&lt;/span&gt;.Options.ScriptBatchTerminator = &lt;span style=&#34;color:#8be9fd;font-style:italic&#34;&gt;$true&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    &lt;span style=&#34;color:#8be9fd;font-style:italic&#34;&gt;$transfer&lt;/span&gt;.Options.ToFileOnly = &lt;span style=&#34;color:#8be9fd;font-style:italic&#34;&gt;$true&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    &lt;span style=&#34;color:#8be9fd;font-style:italic&#34;&gt;$transfer&lt;/span&gt;.Options.AppendToFile = &lt;span style=&#34;color:#8be9fd;font-style:italic&#34;&gt;$true&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    &lt;span style=&#34;color:#8be9fd;font-style:italic&#34;&gt;$transfer&lt;/span&gt; = &lt;span style=&#34;color:#8be9fd;font-style:italic&#34;&gt;New-Object&lt;/span&gt; (&lt;span style=&#34;color:#f1fa8c&#34;&gt;&amp;#34;&lt;/span&gt;&lt;span style=&#34;color:#8be9fd;font-style:italic&#34;&gt;$smoPrefix&lt;/span&gt;&lt;span style=&#34;color:#f1fa8c&#34;&gt;.Transfer&amp;#34;&lt;/span&gt;) &lt;span style=&#34;color:#8be9fd;font-style:italic&#34;&gt;$database&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    &lt;span style=&#34;color:#8be9fd;font-style:italic&#34;&gt;$transfer&lt;/span&gt;.Options.ScriptSchema = $true
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    &lt;span style=&#34;color:#8be9fd;font-style:italic&#34;&gt;$transfer&lt;/span&gt;.Options.ScriptData = $true
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    &lt;span style=&#34;color:#8be9fd;font-style:italic&#34;&gt;$transfer&lt;/span&gt;.Options.ScriptBatchTerminator = $true
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    &lt;span style=&#34;color:#8be9fd;font-style:italic&#34;&gt;$transfer&lt;/span&gt;.Options.ToFileOnly = $true
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    &lt;span style=&#34;color:#8be9fd;font-style:italic&#34;&gt;$transfer&lt;/span&gt;.Options.AppendToFile = $true
 &lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    &lt;span style=&#34;color:#8be9fd;font-style:italic&#34;&gt;$transfer&lt;/span&gt;.Options.Encoding = &lt;span style=&#34;color:#8be9fd;font-style:italic&#34;&gt;New-Object&lt;/span&gt; (&lt;span style=&#34;color:#f1fa8c&#34;&gt;&amp;#34;System.Text.UTF8Encoding&amp;#34;&lt;/span&gt;)
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    &lt;span style=&#34;color:#8be9fd;font-style:italic&#34;&gt;$transfer&lt;/span&gt;.Options.AllowSystemObjects = &lt;span style=&#34;color:#8be9fd;font-style:italic&#34;&gt;$false&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    &lt;span style=&#34;color:#8be9fd;font-style:italic&#34;&gt;$transfer&lt;/span&gt;.Options.Permissions = &lt;span style=&#34;color:#8be9fd;font-style:italic&#34;&gt;$true&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    &lt;span style=&#34;color:#8be9fd;font-style:italic&#34;&gt;$transfer&lt;/span&gt;.Options.SchemaQualify = &lt;span style=&#34;color:#8be9fd;font-style:italic&#34;&gt;$true&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    &lt;span style=&#34;color:#8be9fd;font-style:italic&#34;&gt;$transfer&lt;/span&gt;.Options.ExtendedProperties = &lt;span style=&#34;color:#8be9fd;font-style:italic&#34;&gt;$true&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    &lt;span style=&#34;color:#8be9fd;font-style:italic&#34;&gt;$transfer&lt;/span&gt;.Options.DRIAll = &lt;span style=&#34;color:#8be9fd;font-style:italic&#34;&gt;$true&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    &lt;span style=&#34;color:#8be9fd;font-style:italic&#34;&gt;$transfer&lt;/span&gt;.Options.Indexes = &lt;span style=&#34;color:#8be9fd;font-style:italic&#34;&gt;$true&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    &lt;span style=&#34;color:#8be9fd;font-style:italic&#34;&gt;$transfer&lt;/span&gt;.Options.Triggers = &lt;span style=&#34;color:#8be9fd;font-style:italic&#34;&gt;$true&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    &lt;span style=&#34;color:#8be9fd;font-style:italic&#34;&gt;$transfer&lt;/span&gt;.Options.IncludeHeaders = &lt;span style=&#34;color:#8be9fd;font-style:italic&#34;&gt;$true&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    &lt;span style=&#34;color:#8be9fd;font-style:italic&#34;&gt;$transfer&lt;/span&gt;.Options.IncludeIfNotExists = &lt;span style=&#34;color:#8be9fd;font-style:italic&#34;&gt;$true&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    &lt;span style=&#34;color:#8be9fd;font-style:italic&#34;&gt;$transfer&lt;/span&gt;.Options.Filename = &lt;span style=&#34;color:#f1fa8c&#34;&gt;&amp;#34;$backupFile&amp;#34;&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    &lt;span style=&#34;color:#8be9fd;font-style:italic&#34;&gt;$transfer&lt;/span&gt;.Options.EnforceScriptingOptions = &lt;span style=&#34;color:#8be9fd;font-style:italic&#34;&gt;$true&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    &lt;span style=&#34;color:#8be9fd;font-style:italic&#34;&gt;$transfer&lt;/span&gt;.Options.AllowSystemObjects = $false
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    &lt;span style=&#34;color:#8be9fd;font-style:italic&#34;&gt;$transfer&lt;/span&gt;.Options.Permissions = $true
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    &lt;span style=&#34;color:#8be9fd;font-style:italic&#34;&gt;$transfer&lt;/span&gt;.Options.SchemaQualify = $true
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    &lt;span style=&#34;color:#8be9fd;font-style:italic&#34;&gt;$transfer&lt;/span&gt;.Options.ExtendedProperties = $true
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    &lt;span style=&#34;color:#8be9fd;font-style:italic&#34;&gt;$transfer&lt;/span&gt;.Options.DRIAll = $true
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    &lt;span style=&#34;color:#8be9fd;font-style:italic&#34;&gt;$transfer&lt;/span&gt;.Options.Indexes = $true
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    &lt;span style=&#34;color:#8be9fd;font-style:italic&#34;&gt;$transfer&lt;/span&gt;.Options.Triggers = $true
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    &lt;span style=&#34;color:#8be9fd;font-style:italic&#34;&gt;$transfer&lt;/span&gt;.Options.IncludeHeaders = $true
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    &lt;span style=&#34;color:#8be9fd;font-style:italic&#34;&gt;$transfer&lt;/span&gt;.Options.IncludeIfNotExists = $true
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    &lt;span style=&#34;color:#8be9fd;font-style:italic&#34;&gt;$transfer&lt;/span&gt;.Options.Filename = &lt;span style=&#34;color:#f1fa8c&#34;&gt;&amp;#34;&lt;/span&gt;&lt;span style=&#34;color:#8be9fd;font-style:italic&#34;&gt;$backupFile&lt;/span&gt;&lt;span style=&#34;color:#f1fa8c&#34;&gt;&amp;#34;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    &lt;span style=&#34;color:#8be9fd;font-style:italic&#34;&gt;$transfer&lt;/span&gt;.Options.EnforceScriptingOptions = $true
 &lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;
 &lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    &lt;span style=&#34;color:#6272a4&#34;&gt;# start scripting&lt;/span&gt;
 &lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    &lt;span style=&#34;color:#8be9fd;font-style:italic&#34;&gt;$transfer&lt;/span&gt;.EnumScriptTransfer()
 &lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    &lt;span style=&#34;color:#8be9fd;font-style:italic&#34;&gt;Write-Output&lt;/span&gt; &lt;span style=&#34;color:#f1fa8c&#34;&gt;&amp;#34;Finished backing up $databaseName to $backupFile&amp;#34;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    &lt;span style=&#34;color:#8be9fd;font-style:italic&#34;&gt;Write-Output&lt;/span&gt; &lt;span style=&#34;color:#f1fa8c&#34;&gt;&amp;#34;Finished backing up &lt;/span&gt;&lt;span style=&#34;color:#8be9fd;font-style:italic&#34;&gt;$databaseName&lt;/span&gt;&lt;span style=&#34;color:#f1fa8c&#34;&gt; to &lt;/span&gt;&lt;span style=&#34;color:#8be9fd;font-style:italic&#34;&gt;$backupFile&lt;/span&gt;&lt;span style=&#34;color:#f1fa8c&#34;&gt;&amp;#34;&lt;/span&gt;
 &lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;}
-&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;- https://idontwannarock.github.io/tech_blog/2021/11/sql_server_backup/ - This website by Howard Wang is licensed under a Creative Common Attribution-ShareAlike 4.0 International License.</description>
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;- https://blog.idontwannarock.me/2021/11/sql_server_backup/ - This website by Howard Wang is licensed under a Creative Common Attribution-ShareAlike 4.0 International License.</description>
         </item>
     
     
     
         <item>
         <title>Hugo 半自動部署</title>
-        <link>https://idontwannarock.github.io/tech_blog/2021/11/hugo_semi_auto_deploy/</link>
+        <link>https://blog.idontwannarock.me/2021/11/hugo_semi_auto_deploy/</link>
         <pubDate>Wed, 03 Nov 2021 16:29:03 +0800</pubDate>
         
-        <guid>https://idontwannarock.github.io/tech_blog/2021/11/hugo_semi_auto_deploy/</guid>
-        <description>Howard Tech Note https://idontwannarock.github.io/tech_blog/2021/11/hugo_semi_auto_deploy/ -&lt;p&gt;這篇主要在講將以往所有手動的步驟，包括網站建置及發佈到 GitHub Pages 等，盡量調整為一個 script 來處理&lt;/p&gt;
+        <guid>https://blog.idontwannarock.me/2021/11/hugo_semi_auto_deploy/</guid>
+        <description>Howard Tech Note https://blog.idontwannarock.me/2021/11/hugo_semi_auto_deploy/ -&lt;p&gt;這篇主要在講將以往所有手動的步驟，包括網站建置及發佈到 GitHub Pages 等，盡量調整為一個 script 來處理&lt;/p&gt;
 &lt;p&gt;起因是因為種種因素，所以這個 Blog 停更了很久，其實也就是懶，還有之前沒有找到符合我要求的佈景主題。所以把手動的步驟減少，懶惰的理由就少了一個&lt;/p&gt;
 &lt;p&gt;至於佈景主題我自己是有幾個要求:&lt;/p&gt;
 &lt;ol&gt;
@@ -302,18 +302,18 @@
 &lt;ul&gt;
 &lt;li&gt;&lt;a href=&#34;https://bwaycer.github.io/hugo_tutorial.hugo/tutorials/github-pages-blog/&#34;&gt;Hosting on GitHub Pages&lt;/a&gt;&lt;/li&gt;
 &lt;/ul&gt;
-- https://idontwannarock.github.io/tech_blog/2021/11/hugo_semi_auto_deploy/ - This website by Howard Wang is licensed under a Creative Common Attribution-ShareAlike 4.0 International License.</description>
+- https://blog.idontwannarock.me/2021/11/hugo_semi_auto_deploy/ - This website by Howard Wang is licensed under a Creative Common Attribution-ShareAlike 4.0 International License.</description>
         </item>
     
     
     
         <item>
         <title>Spring Boot 實作 API 版本控制</title>
-        <link>https://idontwannarock.github.io/tech_blog/2019/09/spring_api_version_with_swagger_security/</link>
+        <link>https://blog.idontwannarock.me/2019/09/spring_api_version_with_swagger_security/</link>
         <pubDate>Thu, 19 Sep 2019 15:53:36 +0800</pubDate>
         
-        <guid>https://idontwannarock.github.io/tech_blog/2019/09/spring_api_version_with_swagger_security/</guid>
-        <description>Howard Tech Note https://idontwannarock.github.io/tech_blog/2019/09/spring_api_version_with_swagger_security/ -&lt;p&gt;本文目的是為了探討在 Spring Boot Web 專案中，實作 API 版本控制，並兼容 Swagger 及 Spring Security 的解決方式&lt;/p&gt;
+        <guid>https://blog.idontwannarock.me/2019/09/spring_api_version_with_swagger_security/</guid>
+        <description>Howard Tech Note https://blog.idontwannarock.me/2019/09/spring_api_version_with_swagger_security/ -&lt;p&gt;本文目的是為了探討在 Spring Boot Web 專案中，實作 API 版本控制，並兼容 Swagger 及 Spring Security 的解決方式&lt;/p&gt;
 &lt;p&gt;需要有 Spring Boot、Spring MVC、Spring Security 及 Swagger 的基礎概念會比較好理解&lt;/p&gt;
 &lt;h1 id=&#34;api-版本控制&#34;&gt;API 版本控制&lt;/h1&gt;
 &lt;p&gt;常見的 API 版本控制方式有三種: URI, header, content-type&lt;/p&gt;
@@ -338,7 +338,7 @@
 &lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;@Retention&lt;span style=&#34;color:#ff79c6&#34;&gt;(&lt;/span&gt;RetentionPolicy&lt;span style=&#34;color:#ff79c6&#34;&gt;.&lt;/span&gt;&lt;span style=&#34;color:#50fa7b&#34;&gt;RUNTIME&lt;/span&gt;&lt;span style=&#34;color:#ff79c6&#34;&gt;)&lt;/span&gt;
 &lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#8be9fd;font-style:italic&#34;&gt;public&lt;/span&gt; @interface ApiVersion &lt;span style=&#34;color:#ff79c6&#34;&gt;{&lt;/span&gt;
 &lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    &lt;span style=&#34;color:#8be9fd&#34;&gt;int&lt;/span&gt; &lt;span style=&#34;color:#50fa7b&#34;&gt;value&lt;/span&gt;&lt;span style=&#34;color:#ff79c6&#34;&gt;()&lt;/span&gt; &lt;span style=&#34;color:#ff79c6&#34;&gt;default&lt;/span&gt; 1&lt;span style=&#34;color:#ff79c6&#34;&gt;;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    &lt;span style=&#34;color:#8be9fd&#34;&gt;int&lt;/span&gt; &lt;span style=&#34;color:#50fa7b&#34;&gt;value&lt;/span&gt;&lt;span style=&#34;color:#ff79c6&#34;&gt;()&lt;/span&gt; &lt;span style=&#34;color:#ff79c6&#34;&gt;default&lt;/span&gt; &lt;span style=&#34;color:#bd93f9&#34;&gt;1&lt;/span&gt;&lt;span style=&#34;color:#ff79c6&#34;&gt;;&lt;/span&gt;
 &lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#ff79c6&#34;&gt;}&lt;/span&gt;
 &lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;再來寫 &lt;code&gt;ApiVersionCondition&lt;/code&gt; 實作 &lt;code&gt;RequestCondition&lt;/code&gt; 介面來判斷 request 跟 handler mapping 的條件&lt;/p&gt;
 &lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;&#34;&gt;&lt;code class=&#34;language-java&#34; data-lang=&#34;java&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#ff79c6&#34;&gt;import&lt;/span&gt; org.springframework.web.servlet.mvc.condition.RequestCondition&lt;span style=&#34;color:#ff79c6&#34;&gt;;&lt;/span&gt;
@@ -366,7 +366,7 @@
 &lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    &lt;span style=&#34;color:#8be9fd;font-style:italic&#34;&gt;public&lt;/span&gt; ApiVersionCondition &lt;span style=&#34;color:#50fa7b&#34;&gt;getMatchingCondition&lt;/span&gt;&lt;span style=&#34;color:#ff79c6&#34;&gt;(&lt;/span&gt;HttpServletRequest request&lt;span style=&#34;color:#ff79c6&#34;&gt;)&lt;/span&gt; &lt;span style=&#34;color:#ff79c6&#34;&gt;{&lt;/span&gt;
 &lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;        Matcher m &lt;span style=&#34;color:#ff79c6&#34;&gt;=&lt;/span&gt; VERSION_PREFIX_PATTERN&lt;span style=&#34;color:#ff79c6&#34;&gt;.&lt;/span&gt;&lt;span style=&#34;color:#50fa7b&#34;&gt;matcher&lt;/span&gt;&lt;span style=&#34;color:#ff79c6&#34;&gt;(&lt;/span&gt;request&lt;span style=&#34;color:#ff79c6&#34;&gt;.&lt;/span&gt;&lt;span style=&#34;color:#50fa7b&#34;&gt;getRequestURI&lt;/span&gt;&lt;span style=&#34;color:#ff79c6&#34;&gt;());&lt;/span&gt;
 &lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;        &lt;span style=&#34;color:#ff79c6&#34;&gt;if&lt;/span&gt; &lt;span style=&#34;color:#ff79c6&#34;&gt;(&lt;/span&gt;m&lt;span style=&#34;color:#ff79c6&#34;&gt;.&lt;/span&gt;&lt;span style=&#34;color:#50fa7b&#34;&gt;find&lt;/span&gt;&lt;span style=&#34;color:#ff79c6&#34;&gt;())&lt;/span&gt; &lt;span style=&#34;color:#ff79c6&#34;&gt;{&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;            &lt;span style=&#34;color:#8be9fd&#34;&gt;int&lt;/span&gt; version &lt;span style=&#34;color:#ff79c6&#34;&gt;=&lt;/span&gt; Integer&lt;span style=&#34;color:#ff79c6&#34;&gt;.&lt;/span&gt;&lt;span style=&#34;color:#50fa7b&#34;&gt;parseInt&lt;/span&gt;&lt;span style=&#34;color:#ff79c6&#34;&gt;(&lt;/span&gt;m&lt;span style=&#34;color:#ff79c6&#34;&gt;.&lt;/span&gt;&lt;span style=&#34;color:#50fa7b&#34;&gt;group&lt;/span&gt;&lt;span style=&#34;color:#ff79c6&#34;&gt;(&lt;/span&gt;1&lt;span style=&#34;color:#ff79c6&#34;&gt;));&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;            &lt;span style=&#34;color:#8be9fd&#34;&gt;int&lt;/span&gt; version &lt;span style=&#34;color:#ff79c6&#34;&gt;=&lt;/span&gt; Integer&lt;span style=&#34;color:#ff79c6&#34;&gt;.&lt;/span&gt;&lt;span style=&#34;color:#50fa7b&#34;&gt;parseInt&lt;/span&gt;&lt;span style=&#34;color:#ff79c6&#34;&gt;(&lt;/span&gt;m&lt;span style=&#34;color:#ff79c6&#34;&gt;.&lt;/span&gt;&lt;span style=&#34;color:#50fa7b&#34;&gt;group&lt;/span&gt;&lt;span style=&#34;color:#ff79c6&#34;&gt;(&lt;/span&gt;&lt;span style=&#34;color:#bd93f9&#34;&gt;1&lt;/span&gt;&lt;span style=&#34;color:#ff79c6&#34;&gt;));&lt;/span&gt;
 &lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;            &lt;span style=&#34;color:#ff79c6&#34;&gt;if&lt;/span&gt; &lt;span style=&#34;color:#ff79c6&#34;&gt;(&lt;/span&gt;version &lt;span style=&#34;color:#ff79c6&#34;&gt;&amp;gt;=&lt;/span&gt; getApiVersion&lt;span style=&#34;color:#ff79c6&#34;&gt;())&lt;/span&gt; &lt;span style=&#34;color:#ff79c6&#34;&gt;{&lt;/span&gt;
 &lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;                &lt;span style=&#34;color:#ff79c6&#34;&gt;return&lt;/span&gt; &lt;span style=&#34;color:#ff79c6&#34;&gt;this&lt;/span&gt;&lt;span style=&#34;color:#ff79c6&#34;&gt;;&lt;/span&gt;
 &lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;            &lt;span style=&#34;color:#ff79c6&#34;&gt;}&lt;/span&gt;
@@ -410,7 +410,7 @@
 &lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    &lt;span style=&#34;color:#ff79c6&#34;&gt;}&lt;/span&gt;
 &lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;
 &lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    &lt;span style=&#34;color:#8be9fd;font-style:italic&#34;&gt;private&lt;/span&gt; RequestCondition&lt;span style=&#34;color:#ff79c6&#34;&gt;&amp;lt;&lt;/span&gt;ApiVersionCondition&lt;span style=&#34;color:#ff79c6&#34;&gt;&amp;gt;&lt;/span&gt; &lt;span style=&#34;color:#50fa7b&#34;&gt;createRequestCondition&lt;/span&gt;&lt;span style=&#34;color:#ff79c6&#34;&gt;(&lt;/span&gt;ApiVersion apiVersion&lt;span style=&#34;color:#ff79c6&#34;&gt;)&lt;/span&gt; &lt;span style=&#34;color:#ff79c6&#34;&gt;{&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;        &lt;span style=&#34;color:#ff79c6&#34;&gt;if&lt;/span&gt; &lt;span style=&#34;color:#ff79c6&#34;&gt;(&lt;/span&gt;apiVersion &lt;span style=&#34;color:#ff79c6&#34;&gt;==&lt;/span&gt; &lt;span style=&#34;color:#ff79c6&#34;&gt;null&lt;/span&gt; &lt;span style=&#34;color:#ff79c6&#34;&gt;||&lt;/span&gt; apiVersion&lt;span style=&#34;color:#ff79c6&#34;&gt;.&lt;/span&gt;&lt;span style=&#34;color:#50fa7b&#34;&gt;value&lt;/span&gt;&lt;span style=&#34;color:#ff79c6&#34;&gt;()&lt;/span&gt; &lt;span style=&#34;color:#ff79c6&#34;&gt;&amp;lt;&lt;/span&gt; 1&lt;span style=&#34;color:#ff79c6&#34;&gt;)&lt;/span&gt; &lt;span style=&#34;color:#ff79c6&#34;&gt;{&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;        &lt;span style=&#34;color:#ff79c6&#34;&gt;if&lt;/span&gt; &lt;span style=&#34;color:#ff79c6&#34;&gt;(&lt;/span&gt;apiVersion &lt;span style=&#34;color:#ff79c6&#34;&gt;==&lt;/span&gt; &lt;span style=&#34;color:#ff79c6&#34;&gt;null&lt;/span&gt; &lt;span style=&#34;color:#ff79c6&#34;&gt;||&lt;/span&gt; apiVersion&lt;span style=&#34;color:#ff79c6&#34;&gt;.&lt;/span&gt;&lt;span style=&#34;color:#50fa7b&#34;&gt;value&lt;/span&gt;&lt;span style=&#34;color:#ff79c6&#34;&gt;()&lt;/span&gt; &lt;span style=&#34;color:#ff79c6&#34;&gt;&amp;lt;&lt;/span&gt; &lt;span style=&#34;color:#bd93f9&#34;&gt;1&lt;/span&gt;&lt;span style=&#34;color:#ff79c6&#34;&gt;)&lt;/span&gt; &lt;span style=&#34;color:#ff79c6&#34;&gt;{&lt;/span&gt;
 &lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;            &lt;span style=&#34;color:#ff79c6&#34;&gt;return&lt;/span&gt; &lt;span style=&#34;color:#ff79c6&#34;&gt;null&lt;/span&gt;&lt;span style=&#34;color:#ff79c6&#34;&gt;;&lt;/span&gt;
 &lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;        &lt;span style=&#34;color:#ff79c6&#34;&gt;}&lt;/span&gt;
 &lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;        &lt;span style=&#34;color:#ff79c6&#34;&gt;return&lt;/span&gt; &lt;span style=&#34;color:#ff79c6&#34;&gt;new&lt;/span&gt; ApiVersionCondition&lt;span style=&#34;color:#ff79c6&#34;&gt;(&lt;/span&gt;apiVersion&lt;span style=&#34;color:#ff79c6&#34;&gt;.&lt;/span&gt;&lt;span style=&#34;color:#50fa7b&#34;&gt;value&lt;/span&gt;&lt;span style=&#34;color:#ff79c6&#34;&gt;());&lt;/span&gt;
@@ -427,7 +427,7 @@
 &lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    @Override
 &lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    &lt;span style=&#34;color:#8be9fd;font-style:italic&#34;&gt;public&lt;/span&gt; RequestMappingHandlerMapping &lt;span style=&#34;color:#50fa7b&#34;&gt;requestMappingHandlerMapping&lt;/span&gt;&lt;span style=&#34;color:#ff79c6&#34;&gt;()&lt;/span&gt; &lt;span style=&#34;color:#ff79c6&#34;&gt;{&lt;/span&gt;
 &lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;        ApiVersionHandlerMapping handlerMapping &lt;span style=&#34;color:#ff79c6&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color:#ff79c6&#34;&gt;new&lt;/span&gt; ApiVersionHandlerMapping&lt;span style=&#34;color:#ff79c6&#34;&gt;();&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;        handlerMapping&lt;span style=&#34;color:#ff79c6&#34;&gt;.&lt;/span&gt;&lt;span style=&#34;color:#50fa7b&#34;&gt;setOrder&lt;/span&gt;&lt;span style=&#34;color:#ff79c6&#34;&gt;(&lt;/span&gt;0&lt;span style=&#34;color:#ff79c6&#34;&gt;);&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;        handlerMapping&lt;span style=&#34;color:#ff79c6&#34;&gt;.&lt;/span&gt;&lt;span style=&#34;color:#50fa7b&#34;&gt;setOrder&lt;/span&gt;&lt;span style=&#34;color:#ff79c6&#34;&gt;(&lt;/span&gt;&lt;span style=&#34;color:#bd93f9&#34;&gt;0&lt;/span&gt;&lt;span style=&#34;color:#ff79c6&#34;&gt;);&lt;/span&gt;
 &lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;        handlerMapping&lt;span style=&#34;color:#ff79c6&#34;&gt;.&lt;/span&gt;&lt;span style=&#34;color:#50fa7b&#34;&gt;setInterceptors&lt;/span&gt;&lt;span style=&#34;color:#ff79c6&#34;&gt;(&lt;/span&gt;getInterceptors&lt;span style=&#34;color:#ff79c6&#34;&gt;());&lt;/span&gt;
 &lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;        &lt;span style=&#34;color:#ff79c6&#34;&gt;return&lt;/span&gt; handlerMapping&lt;span style=&#34;color:#ff79c6&#34;&gt;;&lt;/span&gt;
 &lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    &lt;span style=&#34;color:#ff79c6&#34;&gt;}&lt;/span&gt;
@@ -446,7 +446,7 @@
 &lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;        &lt;span style=&#34;color:#ff79c6&#34;&gt;return&lt;/span&gt; ResponseEntity&lt;span style=&#34;color:#ff79c6&#34;&gt;.&lt;/span&gt;&lt;span style=&#34;color:#50fa7b&#34;&gt;ok&lt;/span&gt;&lt;span style=&#34;color:#ff79c6&#34;&gt;(&lt;/span&gt;&lt;span style=&#34;color:#f1fa8c&#34;&gt;&amp;#34;Hello world!&amp;#34;&lt;/span&gt;&lt;span style=&#34;color:#ff79c6&#34;&gt;);&lt;/span&gt;
 &lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    &lt;span style=&#34;color:#ff79c6&#34;&gt;}&lt;/span&gt;
 &lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    @ApiVersion&lt;span style=&#34;color:#ff79c6&#34;&gt;(&lt;/span&gt;2&lt;span style=&#34;color:#ff79c6&#34;&gt;)&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    @ApiVersion&lt;span style=&#34;color:#ff79c6&#34;&gt;(&lt;/span&gt;&lt;span style=&#34;color:#bd93f9&#34;&gt;2&lt;/span&gt;&lt;span style=&#34;color:#ff79c6&#34;&gt;)&lt;/span&gt;
 &lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    @GetMapping&lt;span style=&#34;color:#ff79c6&#34;&gt;(&lt;/span&gt;&lt;span style=&#34;color:#f1fa8c&#34;&gt;&amp;#34;hello&amp;#34;&lt;/span&gt;&lt;span style=&#34;color:#ff79c6&#34;&gt;)&lt;/span&gt;
 &lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    &lt;span style=&#34;color:#8be9fd;font-style:italic&#34;&gt;public&lt;/span&gt; ResponseEntity&lt;span style=&#34;color:#ff79c6&#34;&gt;&amp;lt;?&amp;gt;&lt;/span&gt; helloV2&lt;span style=&#34;color:#ff79c6&#34;&gt;()&lt;/span&gt; &lt;span style=&#34;color:#ff79c6&#34;&gt;{&lt;/span&gt;
 &lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;        &lt;span style=&#34;color:#ff79c6&#34;&gt;return&lt;/span&gt; ResponseEntity&lt;span style=&#34;color:#ff79c6&#34;&gt;.&lt;/span&gt;&lt;span style=&#34;color:#50fa7b&#34;&gt;ok&lt;/span&gt;&lt;span style=&#34;color:#ff79c6&#34;&gt;(&lt;/span&gt;&lt;span style=&#34;color:#f1fa8c&#34;&gt;&amp;#34;Nice to meet you!&amp;#34;&lt;/span&gt;&lt;span style=&#34;color:#ff79c6&#34;&gt;);&lt;/span&gt;
@@ -525,18 +525,18 @@
 &lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#ff79c6&#34;&gt;}&lt;/span&gt;
 &lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;至此就可以把前面寫的 &lt;code&gt;WebMvcConfig&lt;/code&gt; 刪掉啦&lt;/p&gt;
 &lt;p&gt;至於沒找到 &lt;code&gt;WebMvcRegistrations&lt;/code&gt; 介面的朋友，要不就是你 Spring Boot 版本太低，不然就只能改用 &lt;code&gt;WebMvcRegistrationsAdpater&lt;/code&gt; 試試看了 (攤手)&lt;/p&gt;
-- https://idontwannarock.github.io/tech_blog/2019/09/spring_api_version_with_swagger_security/ - This website by Howard Wang is licensed under a Creative Common Attribution-ShareAlike 4.0 International License.</description>
+- https://blog.idontwannarock.me/2019/09/spring_api_version_with_swagger_security/ - This website by Howard Wang is licensed under a Creative Common Attribution-ShareAlike 4.0 International License.</description>
         </item>
     
     
     
         <item>
         <title>Spring Security 整合 RBAC</title>
-        <link>https://idontwannarock.github.io/tech_blog/2019/05/spring_security_rbac/</link>
+        <link>https://blog.idontwannarock.me/2019/05/spring_security_rbac/</link>
         <pubDate>Thu, 30 May 2019 15:33:07 +0800</pubDate>
         
-        <guid>https://idontwannarock.github.io/tech_blog/2019/05/spring_security_rbac/</guid>
-        <description>Howard Tech Note https://idontwannarock.github.io/tech_blog/2019/05/spring_security_rbac/ -&lt;p&gt;目前比較主流的 &lt;a href=&#34;https://en.wikipedia.org/wiki/Role-based_access_control&#34;&gt;Role-based Access Control, RBAC&lt;/a&gt; 算是比較成熟且彈性的權限架構，若要在 Spring Security 實作 RBAC 並搭配 JWT 或 OAuth 2.0，大概要探討兩個問題&lt;/p&gt;
+        <guid>https://blog.idontwannarock.me/2019/05/spring_security_rbac/</guid>
+        <description>Howard Tech Note https://blog.idontwannarock.me/2019/05/spring_security_rbac/ -&lt;p&gt;目前比較主流的 &lt;a href=&#34;https://en.wikipedia.org/wiki/Role-based_access_control&#34;&gt;Role-based Access Control, RBAC&lt;/a&gt; 算是比較成熟且彈性的權限架構，若要在 Spring Security 實作 RBAC 並搭配 JWT 或 OAuth 2.0，大概要探討兩個問題&lt;/p&gt;
 &lt;ol&gt;
 &lt;li&gt;是否值得為了減少查詢資料源的次數，而將角色或權限直接置入 JWT 或 Authorization Server 回傳的 token&lt;/li&gt;
 &lt;li&gt;是否採取 Spring Security 原生只使用最細粒度的權限來進行存取控制&lt;/li&gt;
@@ -586,18 +586,18 @@
 &lt;p&gt;&lt;a href=&#34;https://www.baeldung.com/spring-security-custom-voter&#34;&gt;Custom AccessDecisionVoters in Spring Security&lt;/a&gt;&lt;/p&gt;
 &lt;/blockquote&gt;
 &lt;p&gt;這部分就只能基於實際業務邏輯做考量&lt;/p&gt;
-- https://idontwannarock.github.io/tech_blog/2019/05/spring_security_rbac/ - This website by Howard Wang is licensed under a Creative Common Attribution-ShareAlike 4.0 International License.</description>
+- https://blog.idontwannarock.me/2019/05/spring_security_rbac/ - This website by Howard Wang is licensed under a Creative Common Attribution-ShareAlike 4.0 International License.</description>
         </item>
     
     
     
         <item>
         <title>Github Flow 簡介</title>
-        <link>https://idontwannarock.github.io/tech_blog/2019/05/github_flow_intro/</link>
+        <link>https://blog.idontwannarock.me/2019/05/github_flow_intro/</link>
         <pubDate>Wed, 29 May 2019 10:52:45 +0800</pubDate>
         
-        <guid>https://idontwannarock.github.io/tech_blog/2019/05/github_flow_intro/</guid>
-        <description>Howard Tech Note https://idontwannarock.github.io/tech_blog/2019/05/github_flow_intro/ -&lt;p&gt;&lt;a href=&#34;https://guides.github.com/introduction/flow/&#34;&gt;Understanding the GitHub flow&lt;/a&gt;&lt;/p&gt;
+        <guid>https://blog.idontwannarock.me/2019/05/github_flow_intro/</guid>
+        <description>Howard Tech Note https://blog.idontwannarock.me/2019/05/github_flow_intro/ -&lt;p&gt;&lt;a href=&#34;https://guides.github.com/introduction/flow/&#34;&gt;Understanding the GitHub flow&lt;/a&gt;&lt;/p&gt;
 &lt;p&gt;GitHub flow 只有一條原則：&lt;/p&gt;
 &lt;blockquote&gt;
 &lt;p&gt;&lt;strong&gt;在 master 的任何 commit 永遠都是可以被部署的&lt;/strong&gt;&lt;/p&gt;
@@ -617,18 +617,18 @@
 &lt;/blockquote&gt;
 &lt;p&gt;當變更通過部署在 production 的驗證後，就可以將該變更 merge 到 master，此時 PR 就結束，並會留下該變更的整個紀錄，讓其他人了解整個變更的流程以及脈絡&lt;/p&gt;
 &lt;p&gt;而且因為 PR 可以連結 Issue，當 PR 被 merge 後，關聯到的 Issue 也會同時關閉&lt;/p&gt;
-- https://idontwannarock.github.io/tech_blog/2019/05/github_flow_intro/ - This website by Howard Wang is licensed under a Creative Common Attribution-ShareAlike 4.0 International License.</description>
+- https://blog.idontwannarock.me/2019/05/github_flow_intro/ - This website by Howard Wang is licensed under a Creative Common Attribution-ShareAlike 4.0 International License.</description>
         </item>
     
     
     
         <item>
         <title>Hugo 入門教學</title>
-        <link>https://idontwannarock.github.io/tech_blog/2019/05/hugo_tutorial/</link>
+        <link>https://blog.idontwannarock.me/2019/05/hugo_tutorial/</link>
         <pubDate>Tue, 07 May 2019 16:03:07 +0800</pubDate>
         
-        <guid>https://idontwannarock.github.io/tech_blog/2019/05/hugo_tutorial/</guid>
-        <description>Howard Tech Note https://idontwannarock.github.io/tech_blog/2019/05/hugo_tutorial/ -&lt;p&gt;我個人在建立部落格的路上碰到了很多問題：&lt;/p&gt;
+        <guid>https://blog.idontwannarock.me/2019/05/hugo_tutorial/</guid>
+        <description>Howard Tech Note https://blog.idontwannarock.me/2019/05/hugo_tutorial/ -&lt;p&gt;我個人在建立部落格的路上碰到了很多問題：&lt;/p&gt;
 &lt;ul&gt;
 &lt;li&gt;Wordpress 要花錢，雖然好像不多，但作為一個沒有人看的部落格，這樣還要花錢就是不爽&lt;/li&gt;
 &lt;li&gt;沒有網路無法寫文章，就算寫了純文字的內容，等有網路後貼到 Wordpress 的編輯器還要重新設定字體大小等等&lt;/li&gt;
@@ -743,18 +743,18 @@
 &lt;p&gt;然後用 &lt;code&gt;git add .&lt;/code&gt;、&lt;code&gt;git commit -m &amp;quot;&amp;lt;commit message&amp;gt;&amp;quot;&lt;/code&gt;、&lt;code&gt;git push&lt;/code&gt; 的組合技把整個 test 資料夾 push 到指定的 repo master branch&lt;/p&gt;
 &lt;p&gt;最後到 Settings 的 GitHub Pages 區塊，下拉選單選 master branch /docs folder，如此 GitHub 就會自動讀取 docs 資料夾中的靜態網站資料&lt;/p&gt;
 &lt;p&gt;什麼？你跟我說不會 Git？再說一次，那你裝什麼逼？&lt;/p&gt;
-- https://idontwannarock.github.io/tech_blog/2019/05/hugo_tutorial/ - This website by Howard Wang is licensed under a Creative Common Attribution-ShareAlike 4.0 International License.</description>
+- https://blog.idontwannarock.me/2019/05/hugo_tutorial/ - This website by Howard Wang is licensed under a Creative Common Attribution-ShareAlike 4.0 International License.</description>
         </item>
     
     
     
         <item>
         <title>AOP 及 Spring AOP 簡述</title>
-        <link>https://idontwannarock.github.io/tech_blog/2018/04/aop_and_spring_aop_basic/</link>
+        <link>https://blog.idontwannarock.me/2018/04/aop_and_spring_aop_basic/</link>
         <pubDate>Tue, 10 Apr 2018 13:22:52 +0800</pubDate>
         
-        <guid>https://idontwannarock.github.io/tech_blog/2018/04/aop_and_spring_aop_basic/</guid>
-        <description>Howard Tech Note https://idontwannarock.github.io/tech_blog/2018/04/aop_and_spring_aop_basic/ -&lt;blockquote&gt;
+        <guid>https://blog.idontwannarock.me/2018/04/aop_and_spring_aop_basic/</guid>
+        <description>Howard Tech Note https://blog.idontwannarock.me/2018/04/aop_and_spring_aop_basic/ -&lt;blockquote&gt;
 &lt;p&gt;這篇文章是初學的時候撰寫的，其中一些觀念並不正確，步驟也可能因為更新或觀念問題而不適用或者多餘，此篇文章僅為留做紀錄&lt;/p&gt;
 &lt;/blockquote&gt;
 &lt;ul&gt;
@@ -846,18 +846,18 @@
 &lt;li&gt;再於 XML 文件中在&lt;code&gt;&amp;lt;aop:config&amp;gt;&amp;lt;/aop:config&amp;gt;&lt;/code&gt;元素內設定 AOP 有關設定&lt;/li&gt;
 &lt;li&gt;其中設定的元素跟屬性都跟註解相同&lt;/li&gt;
 &lt;/ul&gt;
-- https://idontwannarock.github.io/tech_blog/2018/04/aop_and_spring_aop_basic/ - This website by Howard Wang is licensed under a Creative Common Attribution-ShareAlike 4.0 International License.</description>
+- https://blog.idontwannarock.me/2018/04/aop_and_spring_aop_basic/ - This website by Howard Wang is licensed under a Creative Common Attribution-ShareAlike 4.0 International License.</description>
         </item>
     
     
     
         <item>
         <title>Java 字串判定</title>
-        <link>https://idontwannarock.github.io/tech_blog/2018/02/java_string_check/</link>
+        <link>https://blog.idontwannarock.me/2018/02/java_string_check/</link>
         <pubDate>Tue, 06 Feb 2018 14:09:25 +0800</pubDate>
         
-        <guid>https://idontwannarock.github.io/tech_blog/2018/02/java_string_check/</guid>
-        <description>Howard Tech Note https://idontwannarock.github.io/tech_blog/2018/02/java_string_check/ -&lt;p&gt;因為開始做專題，開始要作資料檢查，首先會要碰到的就是最基本的檢查是否有輸入資料，也就是要檢查字串，記錄一下 Java 當中有關字串檢查的東西。&lt;/p&gt;
+        <guid>https://blog.idontwannarock.me/2018/02/java_string_check/</guid>
+        <description>Howard Tech Note https://blog.idontwannarock.me/2018/02/java_string_check/ -&lt;p&gt;因為開始做專題，開始要作資料檢查，首先會要碰到的就是最基本的檢查是否有輸入資料，也就是要檢查字串，記錄一下 Java 當中有關字串檢查的東西。&lt;/p&gt;
 &lt;h1 id=&#34;去除字串空白&#34;&gt;去除字串空白&lt;/h1&gt;
 &lt;p&gt;這主要分兩個部分，一是去掉頭尾空白，一是去掉字串中間空白。&lt;/p&gt;
 &lt;p&gt;去掉頭尾空白就用 &lt;code&gt;.trim()&lt;/code&gt;，去掉字串中間空白則可以用 &lt;code&gt;.replaceAll(&amp;quot; &amp;quot;, &amp;quot;&amp;quot;)&lt;/code&gt; 的方式簡單完成。&lt;/p&gt;
@@ -891,18 +891,18 @@
 &lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h1 id=&#34;結語&#34;&gt;結語&lt;/h1&gt;
 &lt;p&gt;雖然最後一個方法最簡短，但其實可讀性不見得比較優秀；而倒數第二個方法雖然比較囉唆，但整體上可讀性比較好。&lt;/p&gt;
 &lt;p&gt;所以要用哪種方法還是要看簡潔跟可讀性怎麼取捨。&lt;/p&gt;
-- https://idontwannarock.github.io/tech_blog/2018/02/java_string_check/ - This website by Howard Wang is licensed under a Creative Common Attribution-ShareAlike 4.0 International License.</description>
+- https://blog.idontwannarock.me/2018/02/java_string_check/ - This website by Howard Wang is licensed under a Creative Common Attribution-ShareAlike 4.0 International License.</description>
         </item>
     
     
     
         <item>
         <title>Java 樂透抽取算法初探</title>
-        <link>https://idontwannarock.github.io/tech_blog/2017/11/java_lottery_algorithm_basic/</link>
+        <link>https://blog.idontwannarock.me/2017/11/java_lottery_algorithm_basic/</link>
         <pubDate>Wed, 15 Nov 2017 14:26:17 +0800</pubDate>
         
-        <guid>https://idontwannarock.github.io/tech_blog/2017/11/java_lottery_algorithm_basic/</guid>
-        <description>Howard Tech Note https://idontwannarock.github.io/tech_blog/2017/11/java_lottery_algorithm_basic/ -&lt;p&gt;因為做到這個經典練習演算法的題目，雖然是非常入門級的，也是讓我想了很久，覺得都做了這麼久，不記錄下來也是蠻可惜。&lt;/p&gt;
+        <guid>https://blog.idontwannarock.me/2017/11/java_lottery_algorithm_basic/</guid>
+        <description>Howard Tech Note https://blog.idontwannarock.me/2017/11/java_lottery_algorithm_basic/ -&lt;p&gt;因為做到這個經典練習演算法的題目，雖然是非常入門級的，也是讓我想了很久，覺得都做了這麼久，不記錄下來也是蠻可惜。&lt;/p&gt;
 &lt;h1 id=&#34;題目&#34;&gt;題目&lt;/h1&gt;
 &lt;p&gt;請隨機從正整數 1-42當中隨機抽出 6個數字，不用排序，但不可重複。&lt;/p&gt;
 &lt;h1 id=&#34;解法&#34;&gt;解法&lt;/h1&gt;
@@ -918,14 +918,14 @@
 &lt;h2 id=&#34;暴力解重複檢查&#34;&gt;暴力解：重複檢查&lt;/h2&gt;
 &lt;p&gt;最簡單的寫法肯定就是暴力解：每抽出一個數字就存到結果陣列，然後每抽一次，就跟陣列裡每個數字都比對一次，一有重複就重抽。&lt;/p&gt;
 &lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;&#34;&gt;&lt;code class=&#34;language-java&#34; data-lang=&#34;java&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#6272a4&#34;&gt;// 設定存儲樂透數字陣列
-&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#6272a4&#34;&gt;&lt;/span&gt;&lt;span style=&#34;color:#8be9fd&#34;&gt;int&lt;/span&gt;&lt;span style=&#34;color:#ff79c6&#34;&gt;[]&lt;/span&gt; randomArray &lt;span style=&#34;color:#ff79c6&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color:#ff79c6&#34;&gt;new&lt;/span&gt; &lt;span style=&#34;color:#8be9fd&#34;&gt;int&lt;/span&gt;&lt;span style=&#34;color:#ff79c6&#34;&gt;[&lt;/span&gt;6&lt;span style=&#34;color:#ff79c6&#34;&gt;];&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#6272a4&#34;&gt;&lt;/span&gt;&lt;span style=&#34;color:#8be9fd&#34;&gt;int&lt;/span&gt;&lt;span style=&#34;color:#ff79c6&#34;&gt;[]&lt;/span&gt; randomArray &lt;span style=&#34;color:#ff79c6&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color:#ff79c6&#34;&gt;new&lt;/span&gt; &lt;span style=&#34;color:#8be9fd&#34;&gt;int&lt;/span&gt;&lt;span style=&#34;color:#ff79c6&#34;&gt;[&lt;/span&gt;&lt;span style=&#34;color:#bd93f9&#34;&gt;6&lt;/span&gt;&lt;span style=&#34;color:#ff79c6&#34;&gt;];&lt;/span&gt;
 &lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;
 &lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#6272a4&#34;&gt;// 執行抽取樂透數字的動作 6次
-&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#6272a4&#34;&gt;&lt;/span&gt;&lt;span style=&#34;color:#ff79c6&#34;&gt;for&lt;/span&gt; &lt;span style=&#34;color:#ff79c6&#34;&gt;(&lt;/span&gt;&lt;span style=&#34;color:#8be9fd&#34;&gt;int&lt;/span&gt; i &lt;span style=&#34;color:#ff79c6&#34;&gt;=&lt;/span&gt; 0&lt;span style=&#34;color:#ff79c6&#34;&gt;;&lt;/span&gt; i &lt;span style=&#34;color:#ff79c6&#34;&gt;&amp;lt;&lt;/span&gt; randomArray&lt;span style=&#34;color:#ff79c6&#34;&gt;.&lt;/span&gt;&lt;span style=&#34;color:#50fa7b&#34;&gt;length&lt;/span&gt;&lt;span style=&#34;color:#ff79c6&#34;&gt;;&lt;/span&gt; i&lt;span style=&#34;color:#ff79c6&#34;&gt;++)&lt;/span&gt; &lt;span style=&#34;color:#ff79c6&#34;&gt;{&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#6272a4&#34;&gt;&lt;/span&gt;&lt;span style=&#34;color:#ff79c6&#34;&gt;for&lt;/span&gt; &lt;span style=&#34;color:#ff79c6&#34;&gt;(&lt;/span&gt;&lt;span style=&#34;color:#8be9fd&#34;&gt;int&lt;/span&gt; i &lt;span style=&#34;color:#ff79c6&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color:#bd93f9&#34;&gt;0&lt;/span&gt;&lt;span style=&#34;color:#ff79c6&#34;&gt;;&lt;/span&gt; i &lt;span style=&#34;color:#ff79c6&#34;&gt;&amp;lt;&lt;/span&gt; randomArray&lt;span style=&#34;color:#ff79c6&#34;&gt;.&lt;/span&gt;&lt;span style=&#34;color:#50fa7b&#34;&gt;length&lt;/span&gt;&lt;span style=&#34;color:#ff79c6&#34;&gt;;&lt;/span&gt; i&lt;span style=&#34;color:#ff79c6&#34;&gt;++)&lt;/span&gt; &lt;span style=&#34;color:#ff79c6&#34;&gt;{&lt;/span&gt;
 &lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    &lt;span style=&#34;color:#6272a4&#34;&gt;// 先將亂數出來的數字存入陣列第 i個位置
-&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#6272a4&#34;&gt;&lt;/span&gt;     randomArray&lt;span style=&#34;color:#ff79c6&#34;&gt;[&lt;/span&gt;i&lt;span style=&#34;color:#ff79c6&#34;&gt;]&lt;/span&gt; &lt;span style=&#34;color:#ff79c6&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color:#ff79c6&#34;&gt;(&lt;/span&gt;&lt;span style=&#34;color:#8be9fd&#34;&gt;int&lt;/span&gt;&lt;span style=&#34;color:#ff79c6&#34;&gt;)(&lt;/span&gt;Math&lt;span style=&#34;color:#ff79c6&#34;&gt;.&lt;/span&gt;&lt;span style=&#34;color:#50fa7b&#34;&gt;random&lt;/span&gt;&lt;span style=&#34;color:#ff79c6&#34;&gt;()&lt;/span&gt; &lt;span style=&#34;color:#ff79c6&#34;&gt;*&lt;/span&gt; 42&lt;span style=&#34;color:#ff79c6&#34;&gt;)&lt;/span&gt; &lt;span style=&#34;color:#ff79c6&#34;&gt;+&lt;/span&gt; 1&lt;span style=&#34;color:#ff79c6&#34;&gt;;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#6272a4&#34;&gt;&lt;/span&gt;     randomArray&lt;span style=&#34;color:#ff79c6&#34;&gt;[&lt;/span&gt;i&lt;span style=&#34;color:#ff79c6&#34;&gt;]&lt;/span&gt; &lt;span style=&#34;color:#ff79c6&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color:#ff79c6&#34;&gt;(&lt;/span&gt;&lt;span style=&#34;color:#8be9fd&#34;&gt;int&lt;/span&gt;&lt;span style=&#34;color:#ff79c6&#34;&gt;)(&lt;/span&gt;Math&lt;span style=&#34;color:#ff79c6&#34;&gt;.&lt;/span&gt;&lt;span style=&#34;color:#50fa7b&#34;&gt;random&lt;/span&gt;&lt;span style=&#34;color:#ff79c6&#34;&gt;()&lt;/span&gt; &lt;span style=&#34;color:#ff79c6&#34;&gt;*&lt;/span&gt; &lt;span style=&#34;color:#bd93f9&#34;&gt;42&lt;/span&gt;&lt;span style=&#34;color:#ff79c6&#34;&gt;)&lt;/span&gt; &lt;span style=&#34;color:#ff79c6&#34;&gt;+&lt;/span&gt; &lt;span style=&#34;color:#bd93f9&#34;&gt;1&lt;/span&gt;&lt;span style=&#34;color:#ff79c6&#34;&gt;;&lt;/span&gt;
 &lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    &lt;span style=&#34;color:#6272a4&#34;&gt;// 接著執行檢查迴圈
-&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#6272a4&#34;&gt;&lt;/span&gt;    &lt;span style=&#34;color:#ff79c6&#34;&gt;for&lt;/span&gt; &lt;span style=&#34;color:#ff79c6&#34;&gt;(&lt;/span&gt;&lt;span style=&#34;color:#8be9fd&#34;&gt;int&lt;/span&gt; j &lt;span style=&#34;color:#ff79c6&#34;&gt;=&lt;/span&gt; 0&lt;span style=&#34;color:#ff79c6&#34;&gt;;&lt;/span&gt; j &lt;span style=&#34;color:#ff79c6&#34;&gt;&amp;lt;&lt;/span&gt; i&lt;span style=&#34;color:#ff79c6&#34;&gt;;&lt;/span&gt; j&lt;span style=&#34;color:#ff79c6&#34;&gt;++)&lt;/span&gt; &lt;span style=&#34;color:#ff79c6&#34;&gt;{&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#6272a4&#34;&gt;&lt;/span&gt;    &lt;span style=&#34;color:#ff79c6&#34;&gt;for&lt;/span&gt; &lt;span style=&#34;color:#ff79c6&#34;&gt;(&lt;/span&gt;&lt;span style=&#34;color:#8be9fd&#34;&gt;int&lt;/span&gt; j &lt;span style=&#34;color:#ff79c6&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color:#bd93f9&#34;&gt;0&lt;/span&gt;&lt;span style=&#34;color:#ff79c6&#34;&gt;;&lt;/span&gt; j &lt;span style=&#34;color:#ff79c6&#34;&gt;&amp;lt;&lt;/span&gt; i&lt;span style=&#34;color:#ff79c6&#34;&gt;;&lt;/span&gt; j&lt;span style=&#34;color:#ff79c6&#34;&gt;++)&lt;/span&gt; &lt;span style=&#34;color:#ff79c6&#34;&gt;{&lt;/span&gt;
 &lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;        &lt;span style=&#34;color:#6272a4&#34;&gt;// 輪流跟陣列中目前存在的其他元素比對
 &lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#6272a4&#34;&gt;&lt;/span&gt;        &lt;span style=&#34;color:#ff79c6&#34;&gt;if&lt;/span&gt; &lt;span style=&#34;color:#ff79c6&#34;&gt;(&lt;/span&gt;randomArray&lt;span style=&#34;color:#ff79c6&#34;&gt;[&lt;/span&gt;i&lt;span style=&#34;color:#ff79c6&#34;&gt;]&lt;/span&gt; &lt;span style=&#34;color:#ff79c6&#34;&gt;==&lt;/span&gt; randomArray&lt;span style=&#34;color:#ff79c6&#34;&gt;[&lt;/span&gt;j&lt;span style=&#34;color:#ff79c6&#34;&gt;])&lt;/span&gt; &lt;span style=&#34;color:#ff79c6&#34;&gt;{&lt;/span&gt;
 &lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;            &lt;span style=&#34;color:#6272a4&#34;&gt;// 如果有找到重複數字，就將計數器 i減 1，然後重抽
@@ -956,20 +956,20 @@
 &lt;p&gt;而且因為不用每次都檢查，所以可以大幅提升效率。&lt;/p&gt;
 &lt;p&gt;我們利用這個算法不會抽取到重複數字的特性，可以延伸出解法如下：&lt;/p&gt;
 &lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;&#34;&gt;&lt;code class=&#34;language-java&#34; data-lang=&#34;java&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#6272a4&#34;&gt;// 設定要抽取個數
-&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#6272a4&#34;&gt;&lt;/span&gt;&lt;span style=&#34;color:#8be9fd&#34;&gt;int&lt;/span&gt; picks &lt;span style=&#34;color:#ff79c6&#34;&gt;=&lt;/span&gt; 6&lt;span style=&#34;color:#ff79c6&#34;&gt;;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#6272a4&#34;&gt;&lt;/span&gt;&lt;span style=&#34;color:#8be9fd&#34;&gt;int&lt;/span&gt; picks &lt;span style=&#34;color:#ff79c6&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color:#bd93f9&#34;&gt;6&lt;/span&gt;&lt;span style=&#34;color:#ff79c6&#34;&gt;;&lt;/span&gt;
 &lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#6272a4&#34;&gt;// 設定樂透數字範圍起始數字及結束數字
-&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#6272a4&#34;&gt;&lt;/span&gt;&lt;span style=&#34;color:#8be9fd&#34;&gt;int&lt;/span&gt; startNumber &lt;span style=&#34;color:#ff79c6&#34;&gt;=&lt;/span&gt; 1&lt;span style=&#34;color:#ff79c6&#34;&gt;,&lt;/span&gt; endNumber &lt;span style=&#34;color:#ff79c6&#34;&gt;=&lt;/span&gt; 42&lt;span style=&#34;color:#ff79c6&#34;&gt;;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#6272a4&#34;&gt;&lt;/span&gt;&lt;span style=&#34;color:#8be9fd&#34;&gt;int&lt;/span&gt; startNumber &lt;span style=&#34;color:#ff79c6&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color:#bd93f9&#34;&gt;1&lt;/span&gt;&lt;span style=&#34;color:#ff79c6&#34;&gt;,&lt;/span&gt; endNumber &lt;span style=&#34;color:#ff79c6&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color:#bd93f9&#34;&gt;42&lt;/span&gt;&lt;span style=&#34;color:#ff79c6&#34;&gt;;&lt;/span&gt;
 &lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#6272a4&#34;&gt;// 設定儲存數字的陣列
-&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#6272a4&#34;&gt;&lt;/span&gt;&lt;span style=&#34;color:#8be9fd&#34;&gt;int&lt;/span&gt;&lt;span style=&#34;color:#ff79c6&#34;&gt;[]&lt;/span&gt; randomArray &lt;span style=&#34;color:#ff79c6&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color:#ff79c6&#34;&gt;new&lt;/span&gt; &lt;span style=&#34;color:#8be9fd&#34;&gt;int&lt;/span&gt;&lt;span style=&#34;color:#ff79c6&#34;&gt;[&lt;/span&gt;endNumber &lt;span style=&#34;color:#ff79c6&#34;&gt;-&lt;/span&gt; startNumber &lt;span style=&#34;color:#ff79c6&#34;&gt;+&lt;/span&gt; 1&lt;span style=&#34;color:#ff79c6&#34;&gt;];&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#6272a4&#34;&gt;&lt;/span&gt;&lt;span style=&#34;color:#8be9fd&#34;&gt;int&lt;/span&gt;&lt;span style=&#34;color:#ff79c6&#34;&gt;[]&lt;/span&gt; randomArray &lt;span style=&#34;color:#ff79c6&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color:#ff79c6&#34;&gt;new&lt;/span&gt; &lt;span style=&#34;color:#8be9fd&#34;&gt;int&lt;/span&gt;&lt;span style=&#34;color:#ff79c6&#34;&gt;[&lt;/span&gt;endNumber &lt;span style=&#34;color:#ff79c6&#34;&gt;-&lt;/span&gt; startNumber &lt;span style=&#34;color:#ff79c6&#34;&gt;+&lt;/span&gt; &lt;span style=&#34;color:#bd93f9&#34;&gt;1&lt;/span&gt;&lt;span style=&#34;color:#ff79c6&#34;&gt;];&lt;/span&gt;
 &lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#6272a4&#34;&gt;// 產生按照數值大小排序好的數列
 &lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#6272a4&#34;&gt;&lt;/span&gt;&lt;span style=&#34;color:#ff79c6&#34;&gt;for&lt;/span&gt; &lt;span style=&#34;color:#ff79c6&#34;&gt;(&lt;/span&gt;&lt;span style=&#34;color:#8be9fd&#34;&gt;int&lt;/span&gt; i &lt;span style=&#34;color:#ff79c6&#34;&gt;=&lt;/span&gt; startNumber&lt;span style=&#34;color:#ff79c6&#34;&gt;;&lt;/span&gt; i &lt;span style=&#34;color:#ff79c6&#34;&gt;&amp;lt;=&lt;/span&gt; endNumber&lt;span style=&#34;color:#ff79c6&#34;&gt;;&lt;/span&gt; i&lt;span style=&#34;color:#ff79c6&#34;&gt;++)&lt;/span&gt; &lt;span style=&#34;color:#ff79c6&#34;&gt;{&lt;/span&gt;
 &lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    randomArray&lt;span style=&#34;color:#ff79c6&#34;&gt;[&lt;/span&gt;i&lt;span style=&#34;color:#ff79c6&#34;&gt;]&lt;/span&gt; &lt;span style=&#34;color:#ff79c6&#34;&gt;=&lt;/span&gt; i&lt;span style=&#34;color:#ff79c6&#34;&gt;;&lt;/span&gt;
 &lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#ff79c6&#34;&gt;}&lt;/span&gt;
 &lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;
 &lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#6272a4&#34;&gt;// 開始亂數程序，但我們不用將整個數列都亂數shuffle，只需要做我們要抽取個數，也就是 6次
-&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#6272a4&#34;&gt;&lt;/span&gt;&lt;span style=&#34;color:#ff79c6&#34;&gt;for&lt;/span&gt; &lt;span style=&#34;color:#ff79c6&#34;&gt;(&lt;/span&gt;&lt;span style=&#34;color:#8be9fd&#34;&gt;int&lt;/span&gt; j &lt;span style=&#34;color:#ff79c6&#34;&gt;=&lt;/span&gt; 0&lt;span style=&#34;color:#ff79c6&#34;&gt;;&lt;/span&gt; j &lt;span style=&#34;color:#ff79c6&#34;&gt;&amp;lt;&lt;/span&gt; picks&lt;span style=&#34;color:#ff79c6&#34;&gt;;&lt;/span&gt; j&lt;span style=&#34;color:#ff79c6&#34;&gt;++)&lt;/span&gt; &lt;span style=&#34;color:#ff79c6&#34;&gt;{&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#6272a4&#34;&gt;&lt;/span&gt;&lt;span style=&#34;color:#ff79c6&#34;&gt;for&lt;/span&gt; &lt;span style=&#34;color:#ff79c6&#34;&gt;(&lt;/span&gt;&lt;span style=&#34;color:#8be9fd&#34;&gt;int&lt;/span&gt; j &lt;span style=&#34;color:#ff79c6&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color:#bd93f9&#34;&gt;0&lt;/span&gt;&lt;span style=&#34;color:#ff79c6&#34;&gt;;&lt;/span&gt; j &lt;span style=&#34;color:#ff79c6&#34;&gt;&amp;lt;&lt;/span&gt; picks&lt;span style=&#34;color:#ff79c6&#34;&gt;;&lt;/span&gt; j&lt;span style=&#34;color:#ff79c6&#34;&gt;++)&lt;/span&gt; &lt;span style=&#34;color:#ff79c6&#34;&gt;{&lt;/span&gt;
 &lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    &lt;span style=&#34;color:#6272a4&#34;&gt;// 先設定一個暫存亂數數字的變數 randomIndex，這是要用來當指標指向陣列元素用的
-&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#6272a4&#34;&gt;&lt;/span&gt;    &lt;span style=&#34;color:#8be9fd&#34;&gt;int&lt;/span&gt; randomIndex &lt;span style=&#34;color:#ff79c6&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color:#ff79c6&#34;&gt;(&lt;/span&gt;&lt;span style=&#34;color:#8be9fd&#34;&gt;int&lt;/span&gt;&lt;span style=&#34;color:#ff79c6&#34;&gt;)(&lt;/span&gt;Math&lt;span style=&#34;color:#ff79c6&#34;&gt;.&lt;/span&gt;&lt;span style=&#34;color:#50fa7b&#34;&gt;random&lt;/span&gt;&lt;span style=&#34;color:#ff79c6&#34;&gt;()&lt;/span&gt; &lt;span style=&#34;color:#ff79c6&#34;&gt;*&lt;/span&gt; &lt;span style=&#34;color:#ff79c6&#34;&gt;(&lt;/span&gt;endNumber &lt;span style=&#34;color:#ff79c6&#34;&gt;-&lt;/span&gt; startNumber &lt;span style=&#34;color:#ff79c6&#34;&gt;+&lt;/span&gt; 1&lt;span style=&#34;color:#ff79c6&#34;&gt;))&lt;/span&gt; &lt;span style=&#34;color:#ff79c6&#34;&gt;+&lt;/span&gt; 1&lt;span style=&#34;color:#ff79c6&#34;&gt;;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#6272a4&#34;&gt;&lt;/span&gt;    &lt;span style=&#34;color:#8be9fd&#34;&gt;int&lt;/span&gt; randomIndex &lt;span style=&#34;color:#ff79c6&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color:#ff79c6&#34;&gt;(&lt;/span&gt;&lt;span style=&#34;color:#8be9fd&#34;&gt;int&lt;/span&gt;&lt;span style=&#34;color:#ff79c6&#34;&gt;)(&lt;/span&gt;Math&lt;span style=&#34;color:#ff79c6&#34;&gt;.&lt;/span&gt;&lt;span style=&#34;color:#50fa7b&#34;&gt;random&lt;/span&gt;&lt;span style=&#34;color:#ff79c6&#34;&gt;()&lt;/span&gt; &lt;span style=&#34;color:#ff79c6&#34;&gt;*&lt;/span&gt; &lt;span style=&#34;color:#ff79c6&#34;&gt;(&lt;/span&gt;endNumber &lt;span style=&#34;color:#ff79c6&#34;&gt;-&lt;/span&gt; startNumber &lt;span style=&#34;color:#ff79c6&#34;&gt;+&lt;/span&gt; &lt;span style=&#34;color:#bd93f9&#34;&gt;1&lt;/span&gt;&lt;span style=&#34;color:#ff79c6&#34;&gt;))&lt;/span&gt; &lt;span style=&#34;color:#ff79c6&#34;&gt;+&lt;/span&gt; &lt;span style=&#34;color:#bd93f9&#34;&gt;1&lt;/span&gt;&lt;span style=&#34;color:#ff79c6&#34;&gt;;&lt;/span&gt;
 &lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    &lt;span style=&#34;color:#6272a4&#34;&gt;// 然後再設定一個暫存數字的變數 temp，暫存陣列中指標 randomIndex對應的數字
 &lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#6272a4&#34;&gt;&lt;/span&gt;    &lt;span style=&#34;color:#8be9fd&#34;&gt;int&lt;/span&gt; temp &lt;span style=&#34;color:#ff79c6&#34;&gt;=&lt;/span&gt; randomArray&lt;span style=&#34;color:#ff79c6&#34;&gt;[&lt;/span&gt;randomIndex&lt;span style=&#34;color:#ff79c6&#34;&gt;];&lt;/span&gt;
 &lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    &lt;span style=&#34;color:#6272a4&#34;&gt;// 將 randomArray[randomIndex]跟第 j個元素對調位置
@@ -978,7 +978,7 @@
 &lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#ff79c6&#34;&gt;}&lt;/span&gt;
 &lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;
 &lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#6272a4&#34;&gt;// 印出樂透數字陣列中的數字
-&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#6272a4&#34;&gt;&lt;/span&gt;&lt;span style=&#34;color:#ff79c6&#34;&gt;for&lt;/span&gt; &lt;span style=&#34;color:#ff79c6&#34;&gt;(&lt;/span&gt;&lt;span style=&#34;color:#8be9fd&#34;&gt;int&lt;/span&gt; k &lt;span style=&#34;color:#ff79c6&#34;&gt;=&lt;/span&gt; 0&lt;span style=&#34;color:#ff79c6&#34;&gt;;&lt;/span&gt; k &lt;span style=&#34;color:#ff79c6&#34;&gt;&amp;lt;&lt;/span&gt; picks&lt;span style=&#34;color:#ff79c6&#34;&gt;;&lt;/span&gt; k&lt;span style=&#34;color:#ff79c6&#34;&gt;++)&lt;/span&gt; &lt;span style=&#34;color:#ff79c6&#34;&gt;{&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#6272a4&#34;&gt;&lt;/span&gt;&lt;span style=&#34;color:#ff79c6&#34;&gt;for&lt;/span&gt; &lt;span style=&#34;color:#ff79c6&#34;&gt;(&lt;/span&gt;&lt;span style=&#34;color:#8be9fd&#34;&gt;int&lt;/span&gt; k &lt;span style=&#34;color:#ff79c6&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color:#bd93f9&#34;&gt;0&lt;/span&gt;&lt;span style=&#34;color:#ff79c6&#34;&gt;;&lt;/span&gt; k &lt;span style=&#34;color:#ff79c6&#34;&gt;&amp;lt;&lt;/span&gt; picks&lt;span style=&#34;color:#ff79c6&#34;&gt;;&lt;/span&gt; k&lt;span style=&#34;color:#ff79c6&#34;&gt;++)&lt;/span&gt; &lt;span style=&#34;color:#ff79c6&#34;&gt;{&lt;/span&gt;
 &lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    System&lt;span style=&#34;color:#ff79c6&#34;&gt;.&lt;/span&gt;&lt;span style=&#34;color:#50fa7b&#34;&gt;out&lt;/span&gt;&lt;span style=&#34;color:#ff79c6&#34;&gt;.&lt;/span&gt;&lt;span style=&#34;color:#50fa7b&#34;&gt;print&lt;/span&gt;&lt;span style=&#34;color:#ff79c6&#34;&gt;(&lt;/span&gt;num &lt;span style=&#34;color:#ff79c6&#34;&gt;+&lt;/span&gt; &lt;span style=&#34;color:#f1fa8c&#34;&gt;&amp;#34; &amp;#34;&lt;/span&gt;&lt;span style=&#34;color:#ff79c6&#34;&gt;);&lt;/span&gt;
 &lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#ff79c6&#34;&gt;}&lt;/span&gt;
 &lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;我有特別設定要樂透的數字個數，以及抽取範圍的起始及終止值，以便將來更動這三個參數就可以做各種不同範圍個數的樂透，甚至也可以利用 &lt;code&gt;java.util.Scanner&lt;/code&gt; 的功能讓使用者能直接用鍵盤輸入這三個參數，不過那就不在這個題目要討論的重點。&lt;/p&gt;
@@ -987,7 +987,7 @@
 &lt;p&gt;就我現在粗淺的理解，基本上還沒有能產生真正隨機數字的演算法；或者說，能用演算法產生的隨機數字都不是真正的隨機，只是趨近於隨機。&lt;/p&gt;
 &lt;p&gt;畢竟只要提到演算，就代表有一定規則，而透過一定規則產生出來的東西就無法稱為真正的隨機。&lt;/p&gt;
 &lt;p&gt;而 Java 提供的 &lt;code&gt;random()&lt;/code&gt; 方法則是透過線性同餘公式產生的偽隨機數，詳細可以參考 &lt;a href=&#34;https://zh.wikipedia.org/wiki/%E7%B7%9A%E6%80%A7%E5%90%8C%E9%A4%98%E6%96%B9%E6%B3%95&#34;&gt;維基&lt;/a&gt;。&lt;/p&gt;
-- https://idontwannarock.github.io/tech_blog/2017/11/java_lottery_algorithm_basic/ - This website by Howard Wang is licensed under a Creative Common Attribution-ShareAlike 4.0 International License.</description>
+- https://blog.idontwannarock.me/2017/11/java_lottery_algorithm_basic/ - This website by Howard Wang is licensed under a Creative Common Attribution-ShareAlike 4.0 International License.</description>
         </item>
     
     

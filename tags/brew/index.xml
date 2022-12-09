@@ -2,18 +2,18 @@
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
     <title>brew on Howard Tech Note</title>
-    <link>https://idontwannarock.github.io/tech_blog/tags/brew/</link>
+    <link>https://blog.idontwannarock.me/tags/brew/</link>
     <description>Recent content in brew on Howard Tech Note</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
     <copyright>This website by Howard Wang is licensed under a Creative Common Attribution-ShareAlike 4.0 International License.</copyright>
-    <lastBuildDate>Fri, 03 Nov 2017 09:05:02 +0800</lastBuildDate><atom:link href="https://idontwannarock.github.io/tech_blog/tags/brew/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Fri, 03 Nov 2017 09:05:02 +0800</lastBuildDate><atom:link href="https://blog.idontwannarock.me/tags/brew/index.xml" rel="self" type="application/rss+xml" />
     <item>
       <title>Macbook Pro 的設置 2017 版</title>
-      <link>https://idontwannarock.github.io/tech_blog/2017/11/mbp_setup_2017/</link>
+      <link>https://blog.idontwannarock.me/2017/11/mbp_setup_2017/</link>
       <pubDate>Fri, 03 Nov 2017 09:05:02 +0800</pubDate>
       
-      <guid>https://idontwannarock.github.io/tech_blog/2017/11/mbp_setup_2017/</guid>
+      <guid>https://blog.idontwannarock.me/2017/11/mbp_setup_2017/</guid>
       <description>這篇文章是初學的時候撰寫的，其中一些觀念並不正確，步驟也可能因為更新或觀念問題而不適用或者多餘，此篇文章僅為留做紀錄
 一直以來都是 PC 人，從來沒用過任何 Apple 或 Linux 的相關產品，剛好有買筆電的需求，想趁機接觸一下不同的作業系統生態，而且久聞 Apple 筆電品質很好，就添購了 Macbook Pro 來當我人生第一台筆電。
 剛拿到筆電總是需要一些設置，盡量讓 PC 跟 MBP 之間資訊同步以及應用軟體上相通或相容，以達到同步並簡化作業環境的目標，提高生產效率。

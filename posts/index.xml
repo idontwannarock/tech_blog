@@ -2,18 +2,18 @@
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
     <title>Posts on Howard Tech Note</title>
-    <link>https://idontwannarock.github.io/tech_blog/posts/</link>
+    <link>https://blog.idontwannarock.me/posts/</link>
     <description>Recent content in Posts on Howard Tech Note</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
     <copyright>This website by Howard Wang is licensed under a Creative Common Attribution-ShareAlike 4.0 International License.</copyright>
-    <lastBuildDate>Tue, 29 Nov 2022 15:21:19 +0800</lastBuildDate><atom:link href="https://idontwannarock.github.io/tech_blog/posts/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Tue, 29 Nov 2022 15:21:19 +0800</lastBuildDate><atom:link href="https://blog.idontwannarock.me/posts/index.xml" rel="self" type="application/rss+xml" />
     <item>
       <title>Quartz Misfire Handling Instruction</title>
-      <link>https://idontwannarock.github.io/tech_blog/2022/11/quartz-misfire-handling-instruction/</link>
+      <link>https://blog.idontwannarock.me/2022/11/quartz-misfire-handling-instruction/</link>
       <pubDate>Tue, 29 Nov 2022 15:21:19 +0800</pubDate>
       
-      <guid>https://idontwannarock.github.io/tech_blog/2022/11/quartz-misfire-handling-instruction/</guid>
+      <guid>https://blog.idontwannarock.me/2022/11/quartz-misfire-handling-instruction/</guid>
       <description>Quartz 系列：
 Quartz 介紹 Spring Boot 整合 Quartz 集群執行預設及動態排程 Quartz Misfire Handling Instruction 使用 Quartz 來幫助排程管理很方便，但還有一個需要注意的地方，就是設定 misfire handling instruction
 Misfire 概念 首先要來釐清在 Quartz 的架構下，什麼情況能稱為 misfire，其實講到底就只有一種：「Job 在到達預定該觸發的時間未觸發」
@@ -26,10 +26,10 @@ Misfire 概念 首先要來釐清在 Quartz 的架構下，什麼情況能稱為
     
     <item>
       <title>Spring Boot 整合 Quartz 集群執行預設及動態排程</title>
-      <link>https://idontwannarock.github.io/tech_blog/2022/11/quartz-cluster-fixed-and-dynamic-trigger-spring-boot-integration/</link>
+      <link>https://blog.idontwannarock.me/2022/11/quartz-cluster-fixed-and-dynamic-trigger-spring-boot-integration/</link>
       <pubDate>Tue, 15 Nov 2022 16:54:13 +0800</pubDate>
       
-      <guid>https://idontwannarock.github.io/tech_blog/2022/11/quartz-cluster-fixed-and-dynamic-trigger-spring-boot-integration/</guid>
+      <guid>https://blog.idontwannarock.me/2022/11/quartz-cluster-fixed-and-dynamic-trigger-spring-boot-integration/</guid>
       <description>Quartz 系列：
 Quartz 介紹 Spring Boot 整合 Quartz 集群執行預設及動態排程 Quartz Misfire Handling Instruction Spring Boot 官方本身就有 spring-boot-starter-quartz 來提供 Quartz 整合，所以在 Spring Boot 當中使用基本 Quartz 功能已經非常簡單
 至於動態產生排程，網路上也很多教學，只是大多是採用 API 呼叫的方式去動態產生、運行、暫停、刪除排程等功能，而幾乎沒看到利用預設排程定時從 database 取得動態排程設定，並動態產生或移除排程的功能
@@ -41,10 +41,10 @@ create table if not exist NOTIFICATION_SCHEDULE ( ID int auto_increment primary 
     
     <item>
       <title>Quartz 介紹</title>
-      <link>https://idontwannarock.github.io/tech_blog/2022/11/quartz-intro/</link>
+      <link>https://blog.idontwannarock.me/2022/11/quartz-intro/</link>
       <pubDate>Tue, 15 Nov 2022 16:24:46 +0800</pubDate>
       
-      <guid>https://idontwannarock.github.io/tech_blog/2022/11/quartz-intro/</guid>
+      <guid>https://blog.idontwannarock.me/2022/11/quartz-intro/</guid>
       <description>Quartz 系列：
 Quartz 介紹 Spring Boot 整合 Quartz 集群執行預設及動態排程 Quartz Misfire Handling Instruction Quartz 是 Java 生態中一套成熟的開源排程框架，其完整的排程功能包含多樣排程設定、自動任務調度、任務持久化，以及支援分散式排程調度、自動負載平衡，讓排程可以輕鬆運行、應用可以輕鬆 scale out
 概念 核心元件 Job: 任務需要執行的內容；Job 有區分是否可併行執行，不能併行執行意思是只有上一次觸發的任務執行完後才能觸發下一次執行；另外，一個 Job 可以關聯到多個 Trigger，也就是同一個 Job 可以以不同時間規則多次觸發，但一個 Trigger 只能關聯一個 Job JobDetail: 包含任務的設定，也就是要實例化 Job 時的相關設定；由 JobKey (Job 名稱 name 和分組 group)、JobClass、JobDataMap (任務相關數據)、JobBuilder 組成，並可以設定任務調度的方案和策略，並指定要調度的 Job 類別 Trigger: 設定觸發執行 Job 實例的時間規則；Scheduler 負責掃描需要執行的 Job 任務，而 Trigger 負責告訴 Scheduler 何時執行；Quartz 2.3.2 版提供 SimpleTrigger、CronTrigger、DailyTimeIntervalTrigger 及 CalendarIntervalTrigger 等 Trigger Scheduler: 任務調度器，會讀取 Trigger 從而觸發以 JobDetail 產生的 Job 實例；一個調度器中可以註冊多個 JobDetail 及 Trigger，只要 JobDetail 與 Trigger 組合，就可以被 Scheduler 調度 單體 stand-alone 模式運作 流程很簡單，就是 Scheduler 負責管理 Trigger 及 Job，會讀取 Trigger 並按照設定觸發時間規則，到時間就依照 JobDetail 設定產生跟該 Trigger 關聯的 Job 實例並運行</description>
@@ -52,10 +52,10 @@ Quartz 介紹 Spring Boot 整合 Quartz 集群執行預設及動態排程 Quartz
     
     <item>
       <title>Spring Boot 後端實作 XSS 防範</title>
-      <link>https://idontwannarock.github.io/tech_blog/2022/11/xss_prevention_spring_boot/</link>
+      <link>https://blog.idontwannarock.me/2022/11/xss_prevention_spring_boot/</link>
       <pubDate>Tue, 01 Nov 2022 15:28:32 +0800</pubDate>
       
-      <guid>https://idontwannarock.github.io/tech_blog/2022/11/xss_prevention_spring_boot/</guid>
+      <guid>https://blog.idontwannarock.me/2022/11/xss_prevention_spring_boot/</guid>
       <description>XSS 系列：
 XSS 防範簡介 Spring Boot 後端實作 XSS 防範 身為一個 Java 後端工程師，今天要來討論如何在 Spring Boot 的後端專案進行 general 的 XSS 防範。
 請還是注意，general 的手段並不能很良好的防範 XSS 攻擊，而只是提供一個基本程度的防範。
@@ -67,10 +67,10 @@ Output Encoding 再來，後端也可以對接收到或回傳的資料做 escape
     
     <item>
       <title>XSS 防範簡介</title>
-      <link>https://idontwannarock.github.io/tech_blog/2022/11/xss_prevention_intro/</link>
+      <link>https://blog.idontwannarock.me/2022/11/xss_prevention_intro/</link>
       <pubDate>Tue, 01 Nov 2022 14:00:26 +0800</pubDate>
       
-      <guid>https://idontwannarock.github.io/tech_blog/2022/11/xss_prevention_intro/</guid>
+      <guid>https://blog.idontwannarock.me/2022/11/xss_prevention_intro/</guid>
       <description>XSS 系列：
 XSS 防範簡介 Spring Boot 後端實作 XSS 防範 跨網站指令碼 Cross-site Scripting, XSS，是一種代碼注入的攻擊，讓攻擊者在網頁上注入代碼，而其他使用者在觀看網頁的時候就會受到影響。
 攻擊模式 以電商系統舉例，例如管理後台網頁表單的商品描述輸入欄位 Input 在沒有進行相對應防範的前提下，攻擊者可以藉由輸入 &amp;lt;script&amp;gt;alert(document.cookie)&amp;lt;/script&amp;gt; 這段內容，並透過 API 保存到資料庫，如此一來下次其他使用者在瀏覽該商品的時候，也同樣從後端取得資料庫中的這段描述內容，並且顯示在網頁上，則使用者在載入網頁的時候，瀏覽器就可能會跳出彈窗並把使用者當下的 cookie 直接顯示出來。
@@ -86,10 +86,10 @@ Output Encoding 這部分首先會需要了解使用的 Web Framework 的安全�
     
     <item>
       <title>Java Optional 為何不推薦做為類別屬性</title>
-      <link>https://idontwannarock.github.io/tech_blog/2022/10/java_optional_not_recommand_as_field/</link>
+      <link>https://blog.idontwannarock.me/2022/10/java_optional_not_recommand_as_field/</link>
       <pubDate>Sat, 01 Oct 2022 21:44:34 +0800</pubDate>
       
-      <guid>https://idontwannarock.github.io/tech_blog/2022/10/java_optional_not_recommand_as_field/</guid>
+      <guid>https://blog.idontwannarock.me/2022/10/java_optional_not_recommand_as_field/</guid>
       <description>大家有在寫 Java 1.8+ 的時候使用新出的 Optional 類別來處理 null 的問題嗎？
 那在使用的時候有沒有碰到 IntelliJ 提示 Optional 不推薦用來當作類別的 field 的黃色警告 (warning) 呢？訊息應該大致如下
 /** * A container object which may or may not contain a non-{@code null} value. * If a value is present, {@code isPresent()} returns {@code true}. If no * value is present, the object is considered &amp;lt;i&amp;gt;empty&amp;lt;/i&amp;gt; and * {@code isPresent()} returns {@code false}. * * &amp;lt;p&amp;gt;Additional methods that depend on the presence or absence of a contained * value are provided, such as {@link #orElse(Object) orElse()} * (returns a default value if no value is present) and * {@link #ifPresent(Consumer) ifPresent()} (performs an * action if a value is present).</description>
@@ -97,10 +97,10 @@ Output Encoding 這部分首先會需要了解使用的 Web Framework 的安全�
     
     <item>
       <title>ProtoBuf FlatBuf Benchmark in Java</title>
-      <link>https://idontwannarock.github.io/tech_blog/2022/01/protobuf_flatbuf_java/</link>
+      <link>https://blog.idontwannarock.me/2022/01/protobuf_flatbuf_java/</link>
       <pubDate>Tue, 04 Jan 2022 15:36:17 +0800</pubDate>
       
-      <guid>https://idontwannarock.github.io/tech_blog/2022/01/protobuf_flatbuf_java/</guid>
+      <guid>https://blog.idontwannarock.me/2022/01/protobuf_flatbuf_java/</guid>
       <description>繼續之前研究的 gRPC，除了 HTTP/2 以外，另外一個支柱就是 Protocol Buffers (ProtoBuf)
 ProtoBuf 是一種二進制的序列化資料格式，透過介面描述語言 (Interface description language, IDL) 來描述資料結構，再利用工具依據 IDL 產生程式碼，這些程式碼可以用來生成或解析代表這些資料結構的位元組流
 ProtoBuf 是 Google 原本用來內部使用的資料格式，但現在已開源，加上被 gRPC 原生支援，現在已經是重要的序列化 library
@@ -113,10 +113,10 @@ Benchmark 方法 雖然剛好 FlatBuf 都符合我的需求，但 FlatBuf 使用
     
     <item>
       <title>gRPC 概念</title>
-      <link>https://idontwannarock.github.io/tech_blog/2021/12/grpc/</link>
+      <link>https://blog.idontwannarock.me/2021/12/grpc/</link>
       <pubDate>Mon, 27 Dec 2021 09:44:31 +0800</pubDate>
       
-      <guid>https://idontwannarock.github.io/tech_blog/2021/12/grpc/</guid>
+      <guid>https://blog.idontwannarock.me/2021/12/grpc/</guid>
       <description>在前幾篇大略了解 HTTP/2 的概念後，就可以來了解 gRPC 的運作概念了
 HTTP/2 系列:
 HTTP/2 系列 - HTTP/2 概念 HTTP/2 系列 - HTTP Server Push 技術 概念 gRPC 原本是 Google 內部的 RPC 系統，後來開源後，近年成為很熱門的 RPC 系統，採用 HTTP/2 做傳輸，ProtoBuf 作為介面描述語言 (interface description language)，提供身分驗證 (authentication)、雙向串流 (bidirectional streaming)、流量控制 (flow control)、阻塞或非阻塞綁定 (blocking or nonblocking binding)、取消 (cancellation) 及逾時 (timeouts) 等特性
@@ -127,10 +127,10 @@ client 端會有一個本地物件 stub 實作 service 中相同的方法，讓 
     
     <item>
       <title>HTTP/2 系列 - HTTP Server Push 技術</title>
-      <link>https://idontwannarock.github.io/tech_blog/2021/12/http_server_push/</link>
+      <link>https://blog.idontwannarock.me/2021/12/http_server_push/</link>
       <pubDate>Fri, 24 Dec 2021 15:49:27 +0800</pubDate>
       
-      <guid>https://idontwannarock.github.io/tech_blog/2021/12/http_server_push/</guid>
+      <guid>https://blog.idontwannarock.me/2021/12/http_server_push/</guid>
       <description>這篇預計是 HTTP/2 系列的最後一篇，之前在系列前面已經釐清了 HTTP/2 的概念了，其中我比較有興趣的就是 HTTP/2 的 server push 新特性，這邊就繼續來了解一下吧~
 HTTP/2 系列:
 HTTP/2 系列 - HTTP/2 概念 HTTP/2 系列 - HTTP Server Push 技術 HTTP Server Push 技術 首先來探討一下有哪些基於 HTTP 協定的 server push 技術
@@ -141,10 +141,10 @@ HTTP/2 系列 - HTTP/2 概念 HTTP/2 系列 - HTTP Server Push 技術 HTTP Serve
     
     <item>
       <title>HTTP/2 系列 - HTTP/2 概念</title>
-      <link>https://idontwannarock.github.io/tech_blog/2021/12/http2/</link>
+      <link>https://blog.idontwannarock.me/2021/12/http2/</link>
       <pubDate>Tue, 21 Dec 2021 09:06:29 +0800</pubDate>
       
-      <guid>https://idontwannarock.github.io/tech_blog/2021/12/http2/</guid>
+      <guid>https://blog.idontwannarock.me/2021/12/http2/</guid>
       <description>從 2015 年 RFC 7540 正式發表後，至今 HTTP/2 已經被絕大多數主流瀏覽器所支援，並且是正當紅的 gRPC 的基礎，在研究 gPRC 之前，先來釐清一下 HTTP/2 的概念
 這篇是 HTTP/2 系列文章的第一篇:
 HTTP/2 系列 - HTTP/2 概念 HTTP/2 系列 - HTTP Server Push 技術 不過，我其實只想研究我想研究的部分，所以不見得會把 HTTP/2 所有相關的內容都研究一遍
@@ -155,10 +155,10 @@ HTTP 在 Transport Layer 採用 TCP 連線來通訊，而 TCP 要在 client/serv
     
     <item>
       <title>在 Batch Script 壓縮檔案</title>
-      <link>https://idontwannarock.github.io/tech_blog/2021/12/zip_in_batch_script/</link>
+      <link>https://blog.idontwannarock.me/2021/12/zip_in_batch_script/</link>
       <pubDate>Thu, 16 Dec 2021 15:32:25 +0800</pubDate>
       
-      <guid>https://idontwannarock.github.io/tech_blog/2021/12/zip_in_batch_script/</guid>
+      <guid>https://blog.idontwannarock.me/2021/12/zip_in_batch_script/</guid>
       <description>因為目前公司沒有專職 SRE 或 DevOps 幫忙做 CI/CD，身為小小後端工程師只好自己想辦法，偏偏目前用到的 tech stack 包括 .net framework，所以必須跟 Windows 環境的 batch file 打交道來替代習慣的 shell 檔，其中有個步驟必須要壓縮/解壓縮資料夾
 Tar 研究了一下，很興奮的發現 tar 在 command prompt 跟 powershell 都可以用，那代表我在 batch 檔裡面使用沒問題ＲＲＲ
 所以可以這樣用
@@ -169,10 +169,10 @@ tar 基本上是從 Windows 10 或 Windows Server 2019 才開始支援，很不�
     
     <item>
       <title>Sql Server 備份方式</title>
-      <link>https://idontwannarock.github.io/tech_blog/2021/11/sql_server_backup/</link>
+      <link>https://blog.idontwannarock.me/2021/11/sql_server_backup/</link>
       <pubDate>Tue, 16 Nov 2021 11:58:47 +0800</pubDate>
       
-      <guid>https://idontwannarock.github.io/tech_blog/2021/11/sql_server_backup/</guid>
+      <guid>https://blog.idontwannarock.me/2021/11/sql_server_backup/</guid>
       <description>最近工作上碰到需要對 Sql Server 做 snapshot 的場合，所以就順便來研究一下怎麼對 Sql Server 做備份
 按照過去的經驗，我第一個想法就是找 Sql Server 有沒有類似 mysqldump 或 pg_dump 的工具可以直接將 schema 及 data 導出成 SQL 檔，這樣方便閱讀也方便各種場景下重建資料庫，尤其是在資料庫的 table 數量及資料量並不算大的前提下
 結果，我太天真了，Microsoft 怎麼可能這麼好用 (誤)，人家就是要走自己的路！
@@ -183,10 +183,10 @@ SqlCmd (官方) BCP (官方) SMO (官方) SqlPackage.</description>
     
     <item>
       <title>Hugo 半自動部署</title>
-      <link>https://idontwannarock.github.io/tech_blog/2021/11/hugo_semi_auto_deploy/</link>
+      <link>https://blog.idontwannarock.me/2021/11/hugo_semi_auto_deploy/</link>
       <pubDate>Wed, 03 Nov 2021 16:29:03 +0800</pubDate>
       
-      <guid>https://idontwannarock.github.io/tech_blog/2021/11/hugo_semi_auto_deploy/</guid>
+      <guid>https://blog.idontwannarock.me/2021/11/hugo_semi_auto_deploy/</guid>
       <description>這篇主要在講將以往所有手動的步驟，包括網站建置及發佈到 GitHub Pages 等，盡量調整為一個 script 來處理
 起因是因為種種因素，所以這個 Blog 停更了很久，其實也就是懶，還有之前沒有找到符合我要求的佈景主題。所以把手動的步驟減少，懶惰的理由就少了一個
 至於佈景主題我自己是有幾個要求:
@@ -200,10 +200,10 @@ SqlCmd (官方) BCP (官方) SMO (官方) SqlPackage.</description>
     
     <item>
       <title>Spring Boot 實作 API 版本控制</title>
-      <link>https://idontwannarock.github.io/tech_blog/2019/09/spring_api_version_with_swagger_security/</link>
+      <link>https://blog.idontwannarock.me/2019/09/spring_api_version_with_swagger_security/</link>
       <pubDate>Thu, 19 Sep 2019 15:53:36 +0800</pubDate>
       
-      <guid>https://idontwannarock.github.io/tech_blog/2019/09/spring_api_version_with_swagger_security/</guid>
+      <guid>https://blog.idontwannarock.me/2019/09/spring_api_version_with_swagger_security/</guid>
       <description>本文目的是為了探討在 Spring Boot Web 專案中，實作 API 版本控制，並兼容 Swagger 及 Spring Security 的解決方式
 需要有 Spring Boot、Spring MVC、Spring Security 及 Swagger 的基礎概念會比較好理解
 API 版本控制 常見的 API 版本控制方式有三種: URI, header, content-type
@@ -216,10 +216,10 @@ org.springframework.boot:spring-boot-starter-web:2.1.x org.springframework.boot:
     
     <item>
       <title>Spring Security 整合 RBAC</title>
-      <link>https://idontwannarock.github.io/tech_blog/2019/05/spring_security_rbac/</link>
+      <link>https://blog.idontwannarock.me/2019/05/spring_security_rbac/</link>
       <pubDate>Thu, 30 May 2019 15:33:07 +0800</pubDate>
       
-      <guid>https://idontwannarock.github.io/tech_blog/2019/05/spring_security_rbac/</guid>
+      <guid>https://blog.idontwannarock.me/2019/05/spring_security_rbac/</guid>
       <description>目前比較主流的 Role-based Access Control, RBAC 算是比較成熟且彈性的權限架構，若要在 Spring Security 實作 RBAC 並搭配 JWT 或 OAuth 2.0，大概要探討兩個問題
 是否值得為了減少查詢資料源的次數，而將角色或權限直接置入 JWT 或 Authorization Server 回傳的 token 是否採取 Spring Security 原生只使用最細粒度的權限來進行存取控制 關於第一個問題，目前的思考點大概就是考量系統的併發度跟使用者總數
 如果需要高併發，那自然希望盡量減少查詢資料的次數或資料量，盡量避免同時大量消耗 DB 資源；相反的，如果不需要高併發，那每次驗證都重新取得角色及權限資料也沒關係
@@ -233,10 +233,10 @@ GrantedAuthority: 可以將每個 GrantedAuthority 想成是個別的 privilege�
     
     <item>
       <title>Github Flow 簡介</title>
-      <link>https://idontwannarock.github.io/tech_blog/2019/05/github_flow_intro/</link>
+      <link>https://blog.idontwannarock.me/2019/05/github_flow_intro/</link>
       <pubDate>Wed, 29 May 2019 10:52:45 +0800</pubDate>
       
-      <guid>https://idontwannarock.github.io/tech_blog/2019/05/github_flow_intro/</guid>
+      <guid>https://blog.idontwannarock.me/2019/05/github_flow_intro/</guid>
       <description>Understanding the GitHub flow
 GitHub flow 只有一條原則：
 在 master 的任何 commit 永遠都是可以被部署的
@@ -250,10 +250,10 @@ Shared Repository 模式則是直接可以對主專案開 branch 做開發</desc
     
     <item>
       <title>Hugo 入門教學</title>
-      <link>https://idontwannarock.github.io/tech_blog/2019/05/hugo_tutorial/</link>
+      <link>https://blog.idontwannarock.me/2019/05/hugo_tutorial/</link>
       <pubDate>Tue, 07 May 2019 16:03:07 +0800</pubDate>
       
-      <guid>https://idontwannarock.github.io/tech_blog/2019/05/hugo_tutorial/</guid>
+      <guid>https://blog.idontwannarock.me/2019/05/hugo_tutorial/</guid>
       <description>我個人在建立部落格的路上碰到了很多問題：
 Wordpress 要花錢，雖然好像不多，但作為一個沒有人看的部落格，這樣還要花錢就是不爽 沒有網路無法寫文章，就算寫了純文字的內容，等有網路後貼到 Wordpress 的編輯器還要重新設定字體大小等等 沒辦法在自己的電腦或電腦們很方便的做備份，而且我只是個簡單的男人簡單的部落格，不需要備份一堆只有 Wordpress 能用的東西好嗎 不能用工程師宅宅必備命令列工具裝潮，假裝駭客任務 最重要的，身為一個工程師宅宅，用 Wordpress 寫部落格說得出口嗎？很顯然可以，但要付錢我就不想用 如果你對以上絕大多數的問題都有切身之痛，那可以考慮繼續閱讀下去，否則建議還是直接使用 Wordpress 或 Wix 吧
 Hugo 與靜態網站 唉唷，還繼續，那大概不是 M 就是工程師宅宅相關種，那靜態網站不用講了，Hugo 自己研究就好啦，本篇結束
@@ -270,20 +270,20 @@ Git、GitHub 與 GitHub Pages Git 是一種版本控制工具，簡單來說就�
     
     <item>
       <title>AOP 及 Spring AOP 簡述</title>
-      <link>https://idontwannarock.github.io/tech_blog/2018/04/aop_and_spring_aop_basic/</link>
+      <link>https://blog.idontwannarock.me/2018/04/aop_and_spring_aop_basic/</link>
       <pubDate>Tue, 10 Apr 2018 13:22:52 +0800</pubDate>
       
-      <guid>https://idontwannarock.github.io/tech_blog/2018/04/aop_and_spring_aop_basic/</guid>
+      <guid>https://blog.idontwannarock.me/2018/04/aop_and_spring_aop_basic/</guid>
       <description>這篇文章是初學的時候撰寫的，其中一些觀念並不正確，步驟也可能因為更新或觀念問題而不適用或者多餘，此篇文章僅為留做紀錄
 AOP(Aspect-Oriented Programming) 是一種基於 OOP(Object-Oriented Programming) 的改進 AOP 是基於動態代理 (Dynamic Proxy) 這種 design pattern AOP 主要的設計對象是切面 (Aspect)，而切面是用來模組化橫切關注點 (Cross-Cutting Concern) 切面需要定義公共功能，但可以明確定義功能在哪裡或以什麼方式應用，而不必修改受影響的類別。如此切面關注點就可以被模組化到特殊的類別 (切面) 裡面 優點 交易相關的邏輯位於同一位置，便於維護與升級 業務邏輯更簡潔，只包含核心業務代碼 術語及概念 Cross-Cutting Concern 橫切關注點：橫跨應用系統多個流程、模組的功能，例如日誌 (Logging)、安全 (Security) 檢查、交易 (Transaction) 等動作，在許多流程的多個位置都需要執行，這種動作就被稱為橫切關注點 Aspect 切面：橫切關注點被模組化後的一種特殊物件；還未模組化前是橫切關注點，抽取後成為一組一組的切面；另一方面來說代理會將一個一個切面重組為橫切關注點 Advice 通知：切面必須要完成的工作或行為，也就是切面的實作內容。切面裡面的各個方法即是一個、一個的通知 Target 目標：被通知的物件，也就是要被橫切的業務邏輯類別 Proxy 代理：向目標物件通知之後創建的對象。容器會建立一個代理，依照設定去縫合 (weave) 切面到應用程式中 JoinPoint 連接點：程序執行的某個特定位置或時機。例如某個類別的某個方法呼叫前、呼叫後、拋出異常後等等。 連接點由兩個因素決定：以方法表示的程式執行點、相對執行點表示的方位。例如 A 類別的 a() 方法執行前的 JoinPoint 連接點決定要素為：執行點 A#a()，方位為執行前的位置 概念類比：JoinPoint 連接點相當於資料庫的紀錄，切面相當於查詢條件 Pointcut 切面定義：每個類別都有多個連接點，類別的所有方法某種程度上都可以想成是 JoinPoint 連接點。AOP通過切面定位到特定的連接點 Spring AOP AspectJ：Java 社群最完整、最廣為人知的 AOP 實作 Spring 2.0 以上，可以使用基於 AspectJ 的 annotation 註解或基於 XML 設定的 AOP Dependencies Spring commons logging spring beans spring context spring core spring expression Spring AOP aopalliance aspectj weaver spring aop spring aspects 註：Spring 框架的版本可以更動，但須一致</description>
     </item>
     
     <item>
       <title>Java 字串判定</title>
-      <link>https://idontwannarock.github.io/tech_blog/2018/02/java_string_check/</link>
+      <link>https://blog.idontwannarock.me/2018/02/java_string_check/</link>
       <pubDate>Tue, 06 Feb 2018 14:09:25 +0800</pubDate>
       
-      <guid>https://idontwannarock.github.io/tech_blog/2018/02/java_string_check/</guid>
+      <guid>https://blog.idontwannarock.me/2018/02/java_string_check/</guid>
       <description>因為開始做專題，開始要作資料檢查，首先會要碰到的就是最基本的檢查是否有輸入資料，也就是要檢查字串，記錄一下 Java 當中有關字串檢查的東西。
 去除字串空白 這主要分兩個部分，一是去掉頭尾空白，一是去掉字串中間空白。
 去掉頭尾空白就用 .trim()，去掉字串中間空白則可以用 .replaceAll(&amp;quot; &amp;quot;, &amp;quot;&amp;quot;) 的方式簡單完成。
@@ -300,10 +300,10 @@ String string; if (string != null &amp;amp;&amp;amp; string.isEmpty()) { // thin
     
     <item>
       <title>Java 樂透抽取算法初探</title>
-      <link>https://idontwannarock.github.io/tech_blog/2017/11/java_lottery_algorithm_basic/</link>
+      <link>https://blog.idontwannarock.me/2017/11/java_lottery_algorithm_basic/</link>
       <pubDate>Wed, 15 Nov 2017 14:26:17 +0800</pubDate>
       
-      <guid>https://idontwannarock.github.io/tech_blog/2017/11/java_lottery_algorithm_basic/</guid>
+      <guid>https://blog.idontwannarock.me/2017/11/java_lottery_algorithm_basic/</guid>
       <description>因為做到這個經典練習演算法的題目，雖然是非常入門級的，也是讓我想了很久，覺得都做了這麼久，不記錄下來也是蠻可惜。
 題目 請隨機從正整數 1-42當中隨機抽出 6個數字，不用排序，但不可重複。
 解法 樂透這個題目主要可以練習的有三個地方，隨機、迴圈，還有就是如何確保數字不重複。
@@ -318,10 +318,10 @@ String string; if (string != null &amp;amp;&amp;amp; string.isEmpty()) { // thin
     
     <item>
       <title>Macbook Pro 的設置 2017 版</title>
-      <link>https://idontwannarock.github.io/tech_blog/2017/11/mbp_setup_2017/</link>
+      <link>https://blog.idontwannarock.me/2017/11/mbp_setup_2017/</link>
       <pubDate>Fri, 03 Nov 2017 09:05:02 +0800</pubDate>
       
-      <guid>https://idontwannarock.github.io/tech_blog/2017/11/mbp_setup_2017/</guid>
+      <guid>https://blog.idontwannarock.me/2017/11/mbp_setup_2017/</guid>
       <description>這篇文章是初學的時候撰寫的，其中一些觀念並不正確，步驟也可能因為更新或觀念問題而不適用或者多餘，此篇文章僅為留做紀錄
 一直以來都是 PC 人，從來沒用過任何 Apple 或 Linux 的相關產品，剛好有買筆電的需求，想趁機接觸一下不同的作業系統生態，而且久聞 Apple 筆電品質很好，就添購了 Macbook Pro 來當我人生第一台筆電。
 剛拿到筆電總是需要一些設置，盡量讓 PC 跟 MBP 之間資訊同步以及應用軟體上相通或相容，以達到同步並簡化作業環境的目標，提高生產效率。
@@ -338,10 +338,10 @@ $ ruby -e &amp;#34;$(curl -fsSL https://raw.githubusercontent.com/Homebrew/insta
     
     <item>
       <title>Markdown 語法</title>
-      <link>https://idontwannarock.github.io/tech_blog/2017/10/markdown_syntax/</link>
+      <link>https://blog.idontwannarock.me/2017/10/markdown_syntax/</link>
       <pubDate>Sun, 22 Oct 2017 15:42:04 +0800</pubDate>
       
-      <guid>https://idontwannarock.github.io/tech_blog/2017/10/markdown_syntax/</guid>
+      <guid>https://blog.idontwannarock.me/2017/10/markdown_syntax/</guid>
       <description>Markdown 特色 易編寫 相對於 HTML 需要注意各種 tag、屬性、特殊字元，Markdown 是更容易編寫的方式，雖然無法像 HTML 那樣可以直接透過各種屬性，甚至 CSS 來達到各種效果，但純粹以書寫來說，Markdown 的功能已經相當夠用。
 轉換 HTML 不過如果有需要的話，Markdown 可以用各種方式轉換成 HTML，以方便我們發布成網頁或部落格文章，網路上有相當多的程式可以達到這點；相對之下，從 HTML 轉換回 Markdown 就沒這麼方便了，主要原因就是 HTML 有相當多屬性等並不被 Markdown 支援，所以有轉換回 Markdown 的困難。
 但還是有補救的辦法，在編寫 Markdown 文件的時候，其實還是可以使用 HTML 語法的，我使用過的轉換器都可以讀取 HTML 語法，並正常顯示以及轉換，所以真的有什麼 Markdown 找不到的 HTML 功能，就直接寫 HTML 吧！當然這就需要對 HTML 語法有更多認識了。
@@ -354,10 +354,10 @@ This is a sample. 所以在編寫 Markdown 的時候，最好找個可以隨時�
     
     <item>
       <title>整數溢位 Integer Overflow</title>
-      <link>https://idontwannarock.github.io/tech_blog/2017/10/integer_overflow/</link>
+      <link>https://blog.idontwannarock.me/2017/10/integer_overflow/</link>
       <pubDate>Sun, 01 Oct 2017 07:04:47 +0800</pubDate>
       
-      <guid>https://idontwannarock.github.io/tech_blog/2017/10/integer_overflow/</guid>
+      <guid>https://blog.idontwannarock.me/2017/10/integer_overflow/</guid>
       <description>這是我查到一些資料後的理解，希望能多一點對整數溢位後為何會正負循環的了解。
 數字系統 首先要了解的是數字系統，因為一般電腦是採用二進制 (Binary) 來作數字計算，而不是我們習慣的十進制 (Decimal)。
 我們一般人都是用十進制，十進制就是用 0、1、2、3、4、5、6、7、8、9 十個數字來表達，一個位數就有十種狀態，從 0 開始往上累積，超過 9 就進一位。
@@ -372,10 +372,10 @@ This is a sample. 所以在編寫 Markdown 的時候，最好找個可以隨時�
     
     <item>
       <title>4th Practice: Twitter Clone</title>
-      <link>https://idontwannarock.github.io/tech_blog/2017/09/twitter_clone/</link>
+      <link>https://blog.idontwannarock.me/2017/09/twitter_clone/</link>
       <pubDate>Fri, 15 Sep 2017 10:27:28 +0800</pubDate>
       
-      <guid>https://idontwannarock.github.io/tech_blog/2017/09/twitter_clone/</guid>
+      <guid>https://blog.idontwannarock.me/2017/09/twitter_clone/</guid>
       <description>第四個目標 練習 PHP、MySQL 跟 MVC，因為 Bootstrap 很方便，所以 HTML 跟 CSS 就這樣吧！廠廠~
 作品：史上最簡陋 Twitter 參考：這參考太多了，只能說各種參考 orz 原始碼：可以參考 我的Github 還是要先講一下，這並不是我憑空寫出來的作品，是跟著 Udemy 網路課程教學作出來的。
 遇到困難 對自己智商產生質疑 真的是這樣，之所以這麼廢的東西還能作這麼久，事後檢討的結果，絕大多數時間都浪費在因為智商太低產生的各種製造障礙，簡稱製障問題上。
@@ -388,10 +388,10 @@ AJAX 不太確定這算不算常識，但大家在使用 jQuery+AJAX 的時候�
     
     <item>
       <title>3rd Practice: Click Click Ben</title>
-      <link>https://idontwannarock.github.io/tech_blog/2017/09/click_click_ben/</link>
+      <link>https://blog.idontwannarock.me/2017/09/click_click_ben/</link>
       <pubDate>Fri, 15 Sep 2017 10:11:46 +0800</pubDate>
       
-      <guid>https://idontwannarock.github.io/tech_blog/2017/09/click_click_ben/</guid>
+      <guid>https://blog.idontwannarock.me/2017/09/click_click_ben/</guid>
       <description>第三個目標 練習 JavaScript 跟 random() 函數。
 作品：Click Click Ben 參考：大帥哥 Ben Hsieh ~ 遇到困難 帥哥阿 Ben 照片太難挑 這是我製作這個作品中碰到最大的困難！太多太帥了，我無法選擇！！我的媽！！！誰來救救我！！！！
 照片亂數出現位置及亂數間隔時間 其實這個問題我之前就有學過，所以這邊大概紀錄一下作法。
@@ -406,10 +406,10 @@ AJAX 不太確定這算不算常識，但大家在使用 jQuery+AJAX 的時候�
     
     <item>
       <title>2nd Practice: Retina Morning Post</title>
-      <link>https://idontwannarock.github.io/tech_blog/2017/09/retina_morning_post/</link>
+      <link>https://blog.idontwannarock.me/2017/09/retina_morning_post/</link>
       <pubDate>Fri, 15 Sep 2017 09:44:03 +0800</pubDate>
       
-      <guid>https://idontwannarock.github.io/tech_blog/2017/09/retina_morning_post/</guid>
+      <guid>https://blog.idontwannarock.me/2017/09/retina_morning_post/</guid>
       <description>第二個目標 練習報紙排版。
 作品：視網膜早報 參考：視網膜 Retina FB圖片 遇到困難 分散對齊 首先遇到的問題就是要讓文字分散對齊，原本以為用 text-align: justify; 可以解決，結果才發現這只能用在超過一行的文字上哭哭。
 然後查到一個 jQuery 解法如下，我大概理解原理，但細節還待研究。簡單來說就是算每個字元平均要佔該 div 多少 width 來作分散對齊。
@@ -418,10 +418,10 @@ $.fn.strech_text = function(){ var elmt = $(this), cont_width = elmt.width(), tx
     
     <item>
       <title>1st Practice: Click Click Boom</title>
-      <link>https://idontwannarock.github.io/tech_blog/2017/09/click_click_boom/</link>
+      <link>https://blog.idontwannarock.me/2017/09/click_click_boom/</link>
       <pubDate>Fri, 15 Sep 2017 07:36:23 +0800</pubDate>
       
-      <guid>https://idontwannarock.github.io/tech_blog/2017/09/click_click_boom/</guid>
+      <guid>https://blog.idontwannarock.me/2017/09/click_click_boom/</guid>
       <description>第一個目標 寫個簡單作品來練習 HTML 跟 CSS
 作品：Click Click Boom 黑白版本 粉紅大理石版本 黑色大理石版本 遇到困難 置中 左右置中很容易，但上下置中就麻煩了，還要隨瀏覽器視窗大小變動就更麻煩。
 最後在 stackoverflow 查到一種解法，就是先設定 position: absolute;，然後 top、bottom、left、right 都設 0，再用 margin: 0; 來自動對齊。
@@ -435,10 +435,10 @@ iOS相容 這個真的超哭，我整個都做完了，就只有在 iOS 裝置�
     
     <item>
       <title>Git 及 GitHub 基礎認識</title>
-      <link>https://idontwannarock.github.io/tech_blog/2017/09/git_and_github_basic/</link>
+      <link>https://blog.idontwannarock.me/2017/09/git_and_github_basic/</link>
       <pubDate>Thu, 14 Sep 2017 07:13:01 +0800</pubDate>
       
-      <guid>https://idontwannarock.github.io/tech_blog/2017/09/git_and_github_basic/</guid>
+      <guid>https://blog.idontwannarock.me/2017/09/git_and_github_basic/</guid>
       <description>這篇文章是初學的時候撰寫的，其中一些觀念並不正確，步驟也可能因為更新或觀念問題而不適用或者多餘，此篇文章僅為留做紀錄
 學習目標 因為 Git 指令一直出問題，今天就來搞清楚 Git 跟 GitHub 的各種問題吧！
 學習內容 Git 跟 GitHub 是什麼 Git Wiki 則說 Git 是一種分散式版本控制軟體。
@@ -452,10 +452,10 @@ GIT新手入門教學 – PART 1 GIT新手入門教學 – PART 2 我的理解�
     
     <item>
       <title>實作簡單登入會員系統 (1)</title>
-      <link>https://idontwannarock.github.io/tech_blog/2017/09/login_signup_function_1/</link>
+      <link>https://blog.idontwannarock.me/2017/09/login_signup_function_1/</link>
       <pubDate>Mon, 11 Sep 2017 07:11:59 +0800</pubDate>
       
-      <guid>https://idontwannarock.github.io/tech_blog/2017/09/login_signup_function_1/</guid>
+      <guid>https://blog.idontwannarock.me/2017/09/login_signup_function_1/</guid>
       <description>這篇文章是初學的時候撰寫的，其中一些觀念並不正確，步驟也可能因為更新或觀念問題而不適用或者多餘，此篇文章僅為留做紀錄
 學習目標 實作簡單會員系統，有加入會員、登入、登出 cookie 防範 SQL Injection+XSS hash 密碼 學習內容 構思 坦白說，我有自學過一點點前後端的 Udemy 網路課程，所以前端的部分，簡單的 HTML, CSS, Javascript, jQuery 我還可以，大概是不會寫也可以谷哥看別人怎麼寫的程度。後端也是學過簡單的 PHP 跟 MySQL 這樣。所以後面的說明很可能會省略很多基礎，而只記錄我不太會或不太熟的部分。
 關於會員系統，Udemy 課程的老師其實有教過這個部分，但當時似懂非懂，幾乎就是 copy 老師的程式碼，糊里糊塗就寫出來，PHP 跟 MySQL 的部分一片模糊，所以先來嘗試自己重新寫一遍，不行再來找找看網路教學。
@@ -466,10 +466,10 @@ GIT新手入門教學 – PART 1 GIT新手入門教學 – PART 2 我的理解�
     
     <item>
       <title>XAMPP 安裝設定及簡單 PHP 練習</title>
-      <link>https://idontwannarock.github.io/tech_blog/2017/09/xampp_setup_and_php_practice/</link>
+      <link>https://blog.idontwannarock.me/2017/09/xampp_setup_and_php_practice/</link>
       <pubDate>Sun, 10 Sep 2017 07:39:23 +0800</pubDate>
       
-      <guid>https://idontwannarock.github.io/tech_blog/2017/09/xampp_setup_and_php_practice/</guid>
+      <guid>https://blog.idontwannarock.me/2017/09/xampp_setup_and_php_practice/</guid>
       <description>這篇文章是初學的時候撰寫的，其中一些觀念並不正確，步驟也可能因為更新或觀念問題而不適用或者多餘，此篇文章僅為留做紀錄
 源起 之前提到的胡立大大在 Slack 群組裡發布了他擬的教學實驗計畫大綱，大概分為以下四段：
 網頁後端相關（Session, Database, Server） 網頁前端相關（HTML, JavaScript, CSS, jQuery） 程式解題相關（帶大家做一些 ACM 一二星題或是基本演算法資料結構） 資訊安全相關（SQL Injection, CSRF, XSS） 裡面還有一堆細項，總之就從頭開始練習，第一項就是「在自己的電腦上成功運行 PHP」，還有給提示可以用 XAMPP 架環境，然後用 PHP 寫 hello world，那就來試試看吧。
@@ -483,10 +483,10 @@ Apache 則是久聞其名但不知其詳。谷哥上的資料看起來是一種�
     
     <item>
       <title>Hugo 練習 (2)</title>
-      <link>https://idontwannarock.github.io/tech_blog/2017/09/hugo_practice_2/</link>
+      <link>https://blog.idontwannarock.me/2017/09/hugo_practice_2/</link>
       <pubDate>Sat, 09 Sep 2017 15:22:03 +0800</pubDate>
       
-      <guid>https://idontwannarock.github.io/tech_blog/2017/09/hugo_practice_2/</guid>
+      <guid>https://blog.idontwannarock.me/2017/09/hugo_practice_2/</guid>
       <description>這篇文章是初學的時候撰寫的，其中一些觀念並不正確，步驟也可能因為更新或觀念問題而不適用或者多餘，此篇文章僅為留做紀錄
 學習目標 學習怎麼使用 Hugo 架設網頁在 Github Pages。
 學習內容 環境設定 我並非本科，所以以下作法全都是從各官網跟谷哥研究而來。先說明我只會用 Windows，而且是 Win10，所以想用 MacOS 或 Linux 的可以左轉出去自己上官網跟谷哥研究。
@@ -499,10 +499,10 @@ Hugo 環境設定 如同上一篇所述，Hugo 雖然是 Go 語言寫的，但�
     
     <item>
       <title>Hugo 練習 (1)</title>
-      <link>https://idontwannarock.github.io/tech_blog/2017/09/hugo_practice_1/</link>
+      <link>https://blog.idontwannarock.me/2017/09/hugo_practice_1/</link>
       <pubDate>Sat, 09 Sep 2017 00:17:31 +0800</pubDate>
       
-      <guid>https://idontwannarock.github.io/tech_blog/2017/09/hugo_practice_1/</guid>
+      <guid>https://blog.idontwannarock.me/2017/09/hugo_practice_1/</guid>
       <description>這篇文章是初學的時候撰寫的，其中一些觀念並不正確，步驟也可能因為更新或觀念問題而不適用或者多餘，此篇文章僅為留做紀錄
 源起 2017 年 9 月 7 日在 ptt Soft_Job 版看到胡立大大 po 文準備作一個計劃-建立 Slack 群組來幫助大家練習討論一些網頁相關的東西，而我需要多作一些練習，並且最好能有人詢問或討論所以加入。
 而 9 月 8 日胡立大大就回信了，基本上就是解釋他想建立一個開放的群組，群組裡沒有老師，他擔任類似助教的腳色，會固定提出練習的題目，解答一些疑問跟提供一些資源這樣。

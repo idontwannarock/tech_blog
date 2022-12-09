@@ -2,18 +2,18 @@
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
     <title>hugo on Howard Tech Note</title>
-    <link>https://idontwannarock.github.io/tech_blog/tags/hugo/</link>
+    <link>https://blog.idontwannarock.me/tags/hugo/</link>
     <description>Recent content in hugo on Howard Tech Note</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
     <copyright>This website by Howard Wang is licensed under a Creative Common Attribution-ShareAlike 4.0 International License.</copyright>
-    <lastBuildDate>Wed, 03 Nov 2021 16:29:03 +0800</lastBuildDate><atom:link href="https://idontwannarock.github.io/tech_blog/tags/hugo/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Wed, 03 Nov 2021 16:29:03 +0800</lastBuildDate><atom:link href="https://blog.idontwannarock.me/tags/hugo/index.xml" rel="self" type="application/rss+xml" />
     <item>
       <title>Hugo 半自動部署</title>
-      <link>https://idontwannarock.github.io/tech_blog/2021/11/hugo_semi_auto_deploy/</link>
+      <link>https://blog.idontwannarock.me/2021/11/hugo_semi_auto_deploy/</link>
       <pubDate>Wed, 03 Nov 2021 16:29:03 +0800</pubDate>
       
-      <guid>https://idontwannarock.github.io/tech_blog/2021/11/hugo_semi_auto_deploy/</guid>
+      <guid>https://blog.idontwannarock.me/2021/11/hugo_semi_auto_deploy/</guid>
       <description>這篇主要在講將以往所有手動的步驟，包括網站建置及發佈到 GitHub Pages 等，盡量調整為一個 script 來處理
 起因是因為種種因素，所以這個 Blog 停更了很久，其實也就是懶，還有之前沒有找到符合我要求的佈景主題。所以把手動的步驟減少，懶惰的理由就少了一個
 至於佈景主題我自己是有幾個要求:
@@ -27,10 +27,10 @@
     
     <item>
       <title>Hugo 入門教學</title>
-      <link>https://idontwannarock.github.io/tech_blog/2019/05/hugo_tutorial/</link>
+      <link>https://blog.idontwannarock.me/2019/05/hugo_tutorial/</link>
       <pubDate>Tue, 07 May 2019 16:03:07 +0800</pubDate>
       
-      <guid>https://idontwannarock.github.io/tech_blog/2019/05/hugo_tutorial/</guid>
+      <guid>https://blog.idontwannarock.me/2019/05/hugo_tutorial/</guid>
       <description>我個人在建立部落格的路上碰到了很多問題：
 Wordpress 要花錢，雖然好像不多，但作為一個沒有人看的部落格，這樣還要花錢就是不爽 沒有網路無法寫文章，就算寫了純文字的內容，等有網路後貼到 Wordpress 的編輯器還要重新設定字體大小等等 沒辦法在自己的電腦或電腦們很方便的做備份，而且我只是個簡單的男人簡單的部落格，不需要備份一堆只有 Wordpress 能用的東西好嗎 不能用工程師宅宅必備命令列工具裝潮，假裝駭客任務 最重要的，身為一個工程師宅宅，用 Wordpress 寫部落格說得出口嗎？很顯然可以，但要付錢我就不想用 如果你對以上絕大多數的問題都有切身之痛，那可以考慮繼續閱讀下去，否則建議還是直接使用 Wordpress 或 Wix 吧
 Hugo 與靜態網站 唉唷，還繼續，那大概不是 M 就是工程師宅宅相關種，那靜態網站不用講了，Hugo 自己研究就好啦，本篇結束
@@ -47,10 +47,10 @@ Git、GitHub 與 GitHub Pages Git 是一種版本控制工具，簡單來說就�
     
     <item>
       <title>Hugo 練習 (2)</title>
-      <link>https://idontwannarock.github.io/tech_blog/2017/09/hugo_practice_2/</link>
+      <link>https://blog.idontwannarock.me/2017/09/hugo_practice_2/</link>
       <pubDate>Sat, 09 Sep 2017 15:22:03 +0800</pubDate>
       
-      <guid>https://idontwannarock.github.io/tech_blog/2017/09/hugo_practice_2/</guid>
+      <guid>https://blog.idontwannarock.me/2017/09/hugo_practice_2/</guid>
       <description>這篇文章是初學的時候撰寫的，其中一些觀念並不正確，步驟也可能因為更新或觀念問題而不適用或者多餘，此篇文章僅為留做紀錄
 學習目標 學習怎麼使用 Hugo 架設網頁在 Github Pages。
 學習內容 環境設定 我並非本科，所以以下作法全都是從各官網跟谷哥研究而來。先說明我只會用 Windows，而且是 Win10，所以想用 MacOS 或 Linux 的可以左轉出去自己上官網跟谷哥研究。
@@ -63,10 +63,10 @@ Hugo 環境設定 如同上一篇所述，Hugo 雖然是 Go 語言寫的，但�
     
     <item>
       <title>Hugo 練習 (1)</title>
-      <link>https://idontwannarock.github.io/tech_blog/2017/09/hugo_practice_1/</link>
+      <link>https://blog.idontwannarock.me/2017/09/hugo_practice_1/</link>
       <pubDate>Sat, 09 Sep 2017 00:17:31 +0800</pubDate>
       
-      <guid>https://idontwannarock.github.io/tech_blog/2017/09/hugo_practice_1/</guid>
+      <guid>https://blog.idontwannarock.me/2017/09/hugo_practice_1/</guid>
       <description>這篇文章是初學的時候撰寫的，其中一些觀念並不正確，步驟也可能因為更新或觀念問題而不適用或者多餘，此篇文章僅為留做紀錄
 源起 2017 年 9 月 7 日在 ptt Soft_Job 版看到胡立大大 po 文準備作一個計劃-建立 Slack 群組來幫助大家練習討論一些網頁相關的東西，而我需要多作一些練習，並且最好能有人詢問或討論所以加入。
 而 9 月 8 日胡立大大就回信了，基本上就是解釋他想建立一個開放的群組，群組裡沒有老師，他擔任類似助教的腳色，會固定提出練習的題目，解答一些疑問跟提供一些資源這樣。

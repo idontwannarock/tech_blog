@@ -2,18 +2,18 @@
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
     <title>markdown on Howard Tech Note</title>
-    <link>https://idontwannarock.github.io/tech_blog/tags/markdown/</link>
+    <link>https://blog.idontwannarock.me/tags/markdown/</link>
     <description>Recent content in markdown on Howard Tech Note</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
     <copyright>This website by Howard Wang is licensed under a Creative Common Attribution-ShareAlike 4.0 International License.</copyright>
-    <lastBuildDate>Sun, 22 Oct 2017 15:42:04 +0800</lastBuildDate><atom:link href="https://idontwannarock.github.io/tech_blog/tags/markdown/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Sun, 22 Oct 2017 15:42:04 +0800</lastBuildDate><atom:link href="https://blog.idontwannarock.me/tags/markdown/index.xml" rel="self" type="application/rss+xml" />
     <item>
       <title>Markdown 語法</title>
-      <link>https://idontwannarock.github.io/tech_blog/2017/10/markdown_syntax/</link>
+      <link>https://blog.idontwannarock.me/2017/10/markdown_syntax/</link>
       <pubDate>Sun, 22 Oct 2017 15:42:04 +0800</pubDate>
       
-      <guid>https://idontwannarock.github.io/tech_blog/2017/10/markdown_syntax/</guid>
+      <guid>https://blog.idontwannarock.me/2017/10/markdown_syntax/</guid>
       <description>Markdown 特色 易編寫 相對於 HTML 需要注意各種 tag、屬性、特殊字元，Markdown 是更容易編寫的方式，雖然無法像 HTML 那樣可以直接透過各種屬性，甚至 CSS 來達到各種效果，但純粹以書寫來說，Markdown 的功能已經相當夠用。
 轉換 HTML 不過如果有需要的話，Markdown 可以用各種方式轉換成 HTML，以方便我們發布成網頁或部落格文章，網路上有相當多的程式可以達到這點；相對之下，從 HTML 轉換回 Markdown 就沒這麼方便了，主要原因就是 HTML 有相當多屬性等並不被 Markdown 支援，所以有轉換回 Markdown 的困難。
 但還是有補救的辦法，在編寫 Markdown 文件的時候，其實還是可以使用 HTML 語法的，我使用過的轉換器都可以讀取 HTML 語法，並正常顯示以及轉換，所以真的有什麼 Markdown 找不到的 HTML 功能，就直接寫 HTML 吧！當然這就需要對 HTML 語法有更多認識了。
@@ -26,10 +26,10 @@ This is a sample. 所以在編寫 Markdown 的時候，最好找個可以隨時�
     
     <item>
       <title>Hugo 練習 (1)</title>
-      <link>https://idontwannarock.github.io/tech_blog/2017/09/hugo_practice_1/</link>
+      <link>https://blog.idontwannarock.me/2017/09/hugo_practice_1/</link>
       <pubDate>Sat, 09 Sep 2017 00:17:31 +0800</pubDate>
       
-      <guid>https://idontwannarock.github.io/tech_blog/2017/09/hugo_practice_1/</guid>
+      <guid>https://blog.idontwannarock.me/2017/09/hugo_practice_1/</guid>
       <description>這篇文章是初學的時候撰寫的，其中一些觀念並不正確，步驟也可能因為更新或觀念問題而不適用或者多餘，此篇文章僅為留做紀錄
 源起 2017 年 9 月 7 日在 ptt Soft_Job 版看到胡立大大 po 文準備作一個計劃-建立 Slack 群組來幫助大家練習討論一些網頁相關的東西，而我需要多作一些練習，並且最好能有人詢問或討論所以加入。
 而 9 月 8 日胡立大大就回信了，基本上就是解釋他想建立一個開放的群組，群組裡沒有老師，他擔任類似助教的腳色，會固定提出練習的題目，解答一些疑問跟提供一些資源這樣。

@@ -2,18 +2,18 @@
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
     <title>flatbuf on Howard Tech Note</title>
-    <link>https://idontwannarock.github.io/tech_blog/tags/flatbuf/</link>
+    <link>https://blog.idontwannarock.me/tags/flatbuf/</link>
     <description>Recent content in flatbuf on Howard Tech Note</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
     <copyright>This website by Howard Wang is licensed under a Creative Common Attribution-ShareAlike 4.0 International License.</copyright>
-    <lastBuildDate>Tue, 04 Jan 2022 15:36:17 +0800</lastBuildDate><atom:link href="https://idontwannarock.github.io/tech_blog/tags/flatbuf/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Tue, 04 Jan 2022 15:36:17 +0800</lastBuildDate><atom:link href="https://blog.idontwannarock.me/tags/flatbuf/index.xml" rel="self" type="application/rss+xml" />
     <item>
       <title>ProtoBuf FlatBuf Benchmark in Java</title>
-      <link>https://idontwannarock.github.io/tech_blog/2022/01/protobuf_flatbuf_java/</link>
+      <link>https://blog.idontwannarock.me/2022/01/protobuf_flatbuf_java/</link>
       <pubDate>Tue, 04 Jan 2022 15:36:17 +0800</pubDate>
       
-      <guid>https://idontwannarock.github.io/tech_blog/2022/01/protobuf_flatbuf_java/</guid>
+      <guid>https://blog.idontwannarock.me/2022/01/protobuf_flatbuf_java/</guid>
       <description>繼續之前研究的 gRPC，除了 HTTP/2 以外，另外一個支柱就是 Protocol Buffers (ProtoBuf)
 ProtoBuf 是一種二進制的序列化資料格式，透過介面描述語言 (Interface description language, IDL) 來描述資料結構，再利用工具依據 IDL 產生程式碼，這些程式碼可以用來生成或解析代表這些資料結構的位元組流
 ProtoBuf 是 Google 原本用來內部使用的資料格式，但現在已開源，加上被 gRPC 原生支援，現在已經是重要的序列化 library

@@ -2,18 +2,18 @@
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
     <title>string on Howard Tech Note</title>
-    <link>https://idontwannarock.github.io/tech_blog/tags/string/</link>
+    <link>https://blog.idontwannarock.me/tags/string/</link>
     <description>Recent content in string on Howard Tech Note</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
     <copyright>This website by Howard Wang is licensed under a Creative Common Attribution-ShareAlike 4.0 International License.</copyright>
-    <lastBuildDate>Tue, 06 Feb 2018 14:09:25 +0800</lastBuildDate><atom:link href="https://idontwannarock.github.io/tech_blog/tags/string/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Tue, 06 Feb 2018 14:09:25 +0800</lastBuildDate><atom:link href="https://blog.idontwannarock.me/tags/string/index.xml" rel="self" type="application/rss+xml" />
     <item>
       <title>Java 字串判定</title>
-      <link>https://idontwannarock.github.io/tech_blog/2018/02/java_string_check/</link>
+      <link>https://blog.idontwannarock.me/2018/02/java_string_check/</link>
       <pubDate>Tue, 06 Feb 2018 14:09:25 +0800</pubDate>
       
-      <guid>https://idontwannarock.github.io/tech_blog/2018/02/java_string_check/</guid>
+      <guid>https://blog.idontwannarock.me/2018/02/java_string_check/</guid>
       <description>因為開始做專題，開始要作資料檢查，首先會要碰到的就是最基本的檢查是否有輸入資料，也就是要檢查字串，記錄一下 Java 當中有關字串檢查的東西。
 去除字串空白 這主要分兩個部分，一是去掉頭尾空白，一是去掉字串中間空白。
 去掉頭尾空白就用 .trim()，去掉字串中間空白則可以用 .replaceAll(&amp;quot; &amp;quot;, &amp;quot;&amp;quot;) 的方式簡單完成。

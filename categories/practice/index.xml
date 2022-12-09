@@ -2,18 +2,18 @@
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
     <title>practice on Howard Tech Note</title>
-    <link>https://idontwannarock.github.io/tech_blog/categories/practice/</link>
+    <link>https://blog.idontwannarock.me/categories/practice/</link>
     <description>Recent content in practice on Howard Tech Note</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
     <copyright>This website by Howard Wang is licensed under a Creative Common Attribution-ShareAlike 4.0 International License.</copyright>
-    <lastBuildDate>Fri, 15 Sep 2017 10:27:28 +0800</lastBuildDate><atom:link href="https://idontwannarock.github.io/tech_blog/categories/practice/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Fri, 15 Sep 2017 10:27:28 +0800</lastBuildDate><atom:link href="https://blog.idontwannarock.me/categories/practice/index.xml" rel="self" type="application/rss+xml" />
     <item>
       <title>4th Practice: Twitter Clone</title>
-      <link>https://idontwannarock.github.io/tech_blog/2017/09/twitter_clone/</link>
+      <link>https://blog.idontwannarock.me/2017/09/twitter_clone/</link>
       <pubDate>Fri, 15 Sep 2017 10:27:28 +0800</pubDate>
       
-      <guid>https://idontwannarock.github.io/tech_blog/2017/09/twitter_clone/</guid>
+      <guid>https://blog.idontwannarock.me/2017/09/twitter_clone/</guid>
       <description>第四個目標 練習 PHP、MySQL 跟 MVC，因為 Bootstrap 很方便，所以 HTML 跟 CSS 就這樣吧！廠廠~
 作品：史上最簡陋 Twitter 參考：這參考太多了，只能說各種參考 orz 原始碼：可以參考 我的Github 還是要先講一下，這並不是我憑空寫出來的作品，是跟著 Udemy 網路課程教學作出來的。
 遇到困難 對自己智商產生質疑 真的是這樣，之所以這麼廢的東西還能作這麼久，事後檢討的結果，絕大多數時間都浪費在因為智商太低產生的各種製造障礙，簡稱製障問題上。
@@ -26,10 +26,10 @@ AJAX 不太確定這算不算常識，但大家在使用 jQuery+AJAX 的時候�
     
     <item>
       <title>3rd Practice: Click Click Ben</title>
-      <link>https://idontwannarock.github.io/tech_blog/2017/09/click_click_ben/</link>
+      <link>https://blog.idontwannarock.me/2017/09/click_click_ben/</link>
       <pubDate>Fri, 15 Sep 2017 10:11:46 +0800</pubDate>
       
-      <guid>https://idontwannarock.github.io/tech_blog/2017/09/click_click_ben/</guid>
+      <guid>https://blog.idontwannarock.me/2017/09/click_click_ben/</guid>
       <description>第三個目標 練習 JavaScript 跟 random() 函數。
 作品：Click Click Ben 參考：大帥哥 Ben Hsieh ~ 遇到困難 帥哥阿 Ben 照片太難挑 這是我製作這個作品中碰到最大的困難！太多太帥了，我無法選擇！！我的媽！！！誰來救救我！！！！
 照片亂數出現位置及亂數間隔時間 其實這個問題我之前就有學過，所以這邊大概紀錄一下作法。
@@ -44,10 +44,10 @@ AJAX 不太確定這算不算常識，但大家在使用 jQuery+AJAX 的時候�
     
     <item>
       <title>2nd Practice: Retina Morning Post</title>
-      <link>https://idontwannarock.github.io/tech_blog/2017/09/retina_morning_post/</link>
+      <link>https://blog.idontwannarock.me/2017/09/retina_morning_post/</link>
       <pubDate>Fri, 15 Sep 2017 09:44:03 +0800</pubDate>
       
-      <guid>https://idontwannarock.github.io/tech_blog/2017/09/retina_morning_post/</guid>
+      <guid>https://blog.idontwannarock.me/2017/09/retina_morning_post/</guid>
       <description>第二個目標 練習報紙排版。
 作品：視網膜早報 參考：視網膜 Retina FB圖片 遇到困難 分散對齊 首先遇到的問題就是要讓文字分散對齊，原本以為用 text-align: justify; 可以解決，結果才發現這只能用在超過一行的文字上哭哭。
 然後查到一個 jQuery 解法如下，我大概理解原理，但細節還待研究。簡單來說就是算每個字元平均要佔該 div 多少 width 來作分散對齊。
@@ -56,10 +56,10 @@ $.fn.strech_text = function(){ var elmt = $(this), cont_width = elmt.width(), tx
     
     <item>
       <title>1st Practice: Click Click Boom</title>
-      <link>https://idontwannarock.github.io/tech_blog/2017/09/click_click_boom/</link>
+      <link>https://blog.idontwannarock.me/2017/09/click_click_boom/</link>
       <pubDate>Fri, 15 Sep 2017 07:36:23 +0800</pubDate>
       
-      <guid>https://idontwannarock.github.io/tech_blog/2017/09/click_click_boom/</guid>
+      <guid>https://blog.idontwannarock.me/2017/09/click_click_boom/</guid>
       <description>第一個目標 寫個簡單作品來練習 HTML 跟 CSS
 作品：Click Click Boom 黑白版本 粉紅大理石版本 黑色大理石版本 遇到困難 置中 左右置中很容易，但上下置中就麻煩了，還要隨瀏覽器視窗大小變動就更麻煩。
 最後在 stackoverflow 查到一種解法，就是先設定 position: absolute;，然後 top、bottom、left、right 都設 0，再用 margin: 0; 來自動對齊。
@@ -73,10 +73,10 @@ iOS相容 這個真的超哭，我整個都做完了，就只有在 iOS 裝置�
     
     <item>
       <title>實作簡單登入會員系統 (1)</title>
-      <link>https://idontwannarock.github.io/tech_blog/2017/09/login_signup_function_1/</link>
+      <link>https://blog.idontwannarock.me/2017/09/login_signup_function_1/</link>
       <pubDate>Mon, 11 Sep 2017 07:11:59 +0800</pubDate>
       
-      <guid>https://idontwannarock.github.io/tech_blog/2017/09/login_signup_function_1/</guid>
+      <guid>https://blog.idontwannarock.me/2017/09/login_signup_function_1/</guid>
       <description>這篇文章是初學的時候撰寫的，其中一些觀念並不正確，步驟也可能因為更新或觀念問題而不適用或者多餘，此篇文章僅為留做紀錄
 學習目標 實作簡單會員系統，有加入會員、登入、登出 cookie 防範 SQL Injection+XSS hash 密碼 學習內容 構思 坦白說，我有自學過一點點前後端的 Udemy 網路課程，所以前端的部分，簡單的 HTML, CSS, Javascript, jQuery 我還可以，大概是不會寫也可以谷哥看別人怎麼寫的程度。後端也是學過簡單的 PHP 跟 MySQL 這樣。所以後面的說明很可能會省略很多基礎，而只記錄我不太會或不太熟的部分。
 關於會員系統，Udemy 課程的老師其實有教過這個部分，但當時似懂非懂，幾乎就是 copy 老師的程式碼，糊里糊塗就寫出來，PHP 跟 MySQL 的部分一片模糊，所以先來嘗試自己重新寫一遍，不行再來找找看網路教學。

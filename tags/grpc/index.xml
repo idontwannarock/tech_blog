@@ -2,18 +2,18 @@
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
     <title>grpc on Howard Tech Note</title>
-    <link>https://idontwannarock.github.io/tech_blog/tags/grpc/</link>
+    <link>https://blog.idontwannarock.me/tags/grpc/</link>
     <description>Recent content in grpc on Howard Tech Note</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
     <copyright>This website by Howard Wang is licensed under a Creative Common Attribution-ShareAlike 4.0 International License.</copyright>
-    <lastBuildDate>Mon, 27 Dec 2021 09:44:31 +0800</lastBuildDate><atom:link href="https://idontwannarock.github.io/tech_blog/tags/grpc/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Mon, 27 Dec 2021 09:44:31 +0800</lastBuildDate><atom:link href="https://blog.idontwannarock.me/tags/grpc/index.xml" rel="self" type="application/rss+xml" />
     <item>
       <title>gRPC 概念</title>
-      <link>https://idontwannarock.github.io/tech_blog/2021/12/grpc/</link>
+      <link>https://blog.idontwannarock.me/2021/12/grpc/</link>
       <pubDate>Mon, 27 Dec 2021 09:44:31 +0800</pubDate>
       
-      <guid>https://idontwannarock.github.io/tech_blog/2021/12/grpc/</guid>
+      <guid>https://blog.idontwannarock.me/2021/12/grpc/</guid>
       <description>在前幾篇大略了解 HTTP/2 的概念後，就可以來了解 gRPC 的運作概念了
 HTTP/2 系列:
 HTTP/2 系列 - HTTP/2 概念 HTTP/2 系列 - HTTP Server Push 技術 概念 gRPC 原本是 Google 內部的 RPC 系統，後來開源後，近年成為很熱門的 RPC 系統，採用 HTTP/2 做傳輸，ProtoBuf 作為介面描述語言 (interface description language)，提供身分驗證 (authentication)、雙向串流 (bidirectional streaming)、流量控制 (flow control)、阻塞或非阻塞綁定 (blocking or nonblocking binding)、取消 (cancellation) 及逾時 (timeouts) 等特性
