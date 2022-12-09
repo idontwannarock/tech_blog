@@ -1,4 +1,4 @@
-baseURL = "https://idontwannarock.github.io/tech_blog/"
+baseURL = "https://blog.idontwannarock.me/"
 DefaultContentLanguage = "en"
 languageCode = "en-us"
 title = "Howard Tech Note"
