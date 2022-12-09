@@ -211,4 +211,4 @@ git push origin master
 
 大 guy 4 醬。
 
-如果對 Git 指令不熟悉，可以參考我另外寫的 [這篇筆記]({{< relref "git_and_github_basic.md" >}})。
+如果對 Git 指令不熟悉，可以參考我另外寫的 [這篇筆記]({{< relref "git_and_github_basic" >}})。

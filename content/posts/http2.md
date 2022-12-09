@@ -16,7 +16,7 @@ enableLaTeX: false
 這篇是 HTTP/2 系列文章的第一篇:
 
 1. HTTP/2 系列 - HTTP/2 概念
-2. [HTTP/2 系列 - HTTP Server Push 技術](https://idontwannarock.github.io/tech_blog/2021/12/http_server_push/)
+2. [HTTP/2 系列 - HTTP Server Push 技術]({{< relref "http_server_push" >}})
 
 不過，我其實只想研究我想研究的部分，所以不見得會把 HTTP/2 所有相關的內容都研究一遍
 

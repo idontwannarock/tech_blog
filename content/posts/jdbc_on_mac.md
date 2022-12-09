@@ -22,9 +22,6 @@ MacOS 原本預設就有安裝好 MySQL，所以不用特別安裝，只需要�
 
 ## 安裝資料庫管理程式
 
-Mac 上可以考慮 MySQLWorkbench 或 Sequel Pro，免費版的功能算足夠，cask 上都找得到，不知道怎麼用 cask 安裝的可以參考我的 [這篇文章][0]。
+Mac 上可以考慮 MySQLWorkbench 或 Sequel Pro，免費版的功能算足夠，cask 上都找得到，不知道怎麼用 cask 安裝的可以參考我的 [這篇文章]({{< relref "mbp_setup_2017.md#軟體環境設置" >}})。
 
 ## 載入 MySQL JDBC connector
-
-
-[0]: {{< relref "mbp_setup_2017.md#軟體環境設置" >}}

@@ -15,7 +15,7 @@ enableLaTeX: false
 
 HTTP/2 系列:
 
-1. [HTTP/2 系列 - HTTP/2 概念](https://idontwannarock.github.io/tech_blog/2021/12/http2/)
+1. [HTTP/2 系列 - HTTP/2 概念]({{< relref "http2" >}})
 2. HTTP/2 系列 - HTTP Server Push 技術
 
 ## HTTP Server Push 技術

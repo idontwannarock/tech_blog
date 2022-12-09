@@ -13,8 +13,8 @@ enableLaTeX: false
 
 Quartz 系列：
 
-- [Quartz 介紹](https://idontwannarock.github.io/tech_blog/2022/11/quartz-intro/)
-- [Spring Boot 整合 Quartz 集群執行預設及動態排程](https://idontwannarock.github.io/tech_blog/2022/11/quartz-cluster-fixed-and-dynamic-trigger-spring-boot-integration/)
+- [Quartz 介紹]({{< relref "quartz-intro" >}})
+- [Spring Boot 整合 Quartz 集群執行預設及動態排程]({{< relref "quartz-cluster-fixed-and-dynamic-trigger-spring-boot-integration" >}})
 - Quartz Misfire Handling Instruction
 
 使用 Quartz 來幫助排程管理很方便，但還有一個需要注意的地方，就是設定 misfire handling instruction

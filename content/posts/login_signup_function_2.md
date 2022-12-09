@@ -120,4 +120,4 @@ $callVar = $callFuntions->functionName1();
 
 這次除了 cookie 以外，也加入 session。cookie 是給使用者未來再回到網頁時檢查登入狀況，session 則是處理使用者登入後在線上活動用。
 
-[1]: {{< relref "login_signup_function_1.md" >}}
+[1]: {{< relref "login_signup_function_1" >}}

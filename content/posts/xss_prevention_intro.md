@@ -14,7 +14,7 @@ enableLaTeX: false
 XSS 系列：
 
 1. XSS 防範簡介
-2. [Spring Boot 後端實作 XSS 防範](https://idontwannarock.github.io/tech_blog/2022/11/xss_prevention_spring_boot/)
+2. [Spring Boot 後端實作 XSS 防範]({{< relref "xss_prevention_spring_boot" >}})
 
 跨網站指令碼 Cross-site Scripting, XSS，是一種代碼注入的攻擊，讓攻擊者在網頁上注入代碼，而其他使用者在觀看網頁的時候就會受到影響。
 
