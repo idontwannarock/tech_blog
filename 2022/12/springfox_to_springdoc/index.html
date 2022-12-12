@@ -1,0 +1,761 @@
+<!DOCTYPE html>
+<html><head>
+<title>SpringFox to SpringDoc</title>
+
+
+
+
+<meta charset="utf-8">
+<meta name="X-UA-Compatible" content="IE=edge">
+<meta name="google-site-verification" content="">
+<meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" name="viewport">
+<meta content="telephone=no" name="format-detection">
+<meta name="description" content="Migrate from SpringFox to SpringDoc">
+<meta name="renderer" content="webkit">
+<meta name="theme-color" content="#ffffff">
+
+
+
+
+
+
+
+
+
+
+
+<script type="application/javascript">
+var doNotTrack = false;
+if (!doNotTrack) {
+	(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+	(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+	m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+	})(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+	ga('create', 'UA-106499565-1', 'auto');
+	
+	ga('send', 'pageview');
+}
+</script>
+
+
+
+
+
+  
+
+
+
+
+
+
+<link rel="stylesheet" href="https://blog.idontwannarock.me/scss/journal.min.c5d92f380bf10f6849c7ac487c7df2b22c081e0851e5339224f1ae29210b20d2.css" integrity="sha256-xdkvOAvxD2hJx6xIfH3ysiwIHghR5TOSJPGuKSELINI=" media="screen">
+
+
+
+<link rel="stylesheet" href="https://blog.idontwannarock.me/scss/dark-mode.min.9f8d8c2df9285089d141edd4a50cb7506c7948e6ab79a29968dced1bd0ab7d22.css" integrity="sha256-n42MLfkoUInRQe3UpQy3UGx5SOareaKZaNztG9CrfSI=" media="screen">
+
+
+
+
+      <script src="https://blog.idontwannarock.me/js/toc.js"></script>
+    
+    <link type="text/css" rel="stylesheet" href="https://blog.idontwannarock.me/vendor/css/bootstrap.min.css"><link rel="stylesheet"
+          href="https://fonts.googleapis.com/css?family=Material+Icons">
+
+
+
+
+
+
+
+
+
+
+
+
+<script src="https://cdn.jsdelivr.net/npm/vue-disqus@3/dist/vue-disqus.js"></script>
+
+
+
+
+
+
+
+
+</head>
+<body>
+    	<div id="app"><div id="sideContainer" class="side-container">
+    
+    <a class="a-block nav-head false" href="https://blog.idontwannarock.me/">
+    
+        <div class="nav-title">
+            Howard Tech Note
+        </div>
+        
+        <div class="nav-subtitle">
+            Share * Record * Program
+        </div>
+        
+    </a>
+
+    <div class="nav-link-list">
+        
+        
+            
+            
+            
+            
+            
+            <a class="a-block nav-link-item false" href="https://blog.idontwannarock.me/posts">
+                Archive
+            </a>
+            
+        
+            
+            
+            
+            
+            
+            <a class="a-block nav-link-item false" href="https://blog.idontwannarock.me/categories">
+                Categories
+            </a>
+            
+        
+            
+            
+            
+            
+            
+            <a class="a-block nav-link-item false" href="https://blog.idontwannarock.me/tags">
+                Tags
+            </a>
+            
+        
+            
+            
+            
+            
+            
+            <a class="a-block nav-link-item false" href="https://blog.idontwannarock.me/about">
+                About
+            </a>
+            
+        
+            
+            
+            
+            
+            
+            <a class="a-block nav-link-item false" href="https://blog.idontwannarock.me/index.xml">
+                RSS Feed
+            </a>
+            
+        
+    </div>
+
+    
+
+    <div class="nav-footer">
+        
+Hugo Theme <a href="https://github.com/amazingrise/hugo-theme-diary">Diary</a> by <a href="https://risehere.net/">Rise</a>
+<br>
+Ported from <a href="https://mak1t0.cc/" target="_blank" rel="noreferrer noopener">Makito</a>'s <a href="https://github.com/SumiMakito/hexo-theme-journal/" target="_blank" rel="noreferrer noopener">Journal.</a> <br>
+<br>
+
+&copy;
+	
+	This website by Howard Wang is licensed under a Creative Common Attribution-ShareAlike 4.0 International License.
+	
+
+    </div>
+    
+</div><div id="extraContainer" class="extra-container">
+    
+    
+    <div class="toc animated-visibility" :class="{ invisible: scrollY <= 140 }">
+
+
+	<div class="toc-content">
+	
+		
+		
+		
+		<center>- CATALOG -</center>
+		
+		
+		<ul>
+			
+				
+				
+					
+						
+						
+						
+						
+						
+							<li>
+								<a href="#%e6%af%94%e8%bc%83" onclick="onNavClick(`#比較-nav`)" id="比較-nav">
+									比較
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+						
+							<li>
+								<a href="#%e5%8d%87%e7%b4%9a%e6%ad%a5%e9%a9%9f" onclick="onNavClick(`#升級步驟-nav`)" id="升級步驟-nav">
+									升級步驟
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+						
+							<li>
+								<a href="#%e6%b3%a8%e6%84%8f%e4%ba%8b%e9%a0%85" onclick="onNavClick(`#注意事項-nav`)" id="注意事項-nav">
+									注意事項
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+							
+								
+									<ul>
+								
+							
+						
+						
+							<li>
+								<a href="#spring-security" onclick="onNavClick(`#spring-security-nav`)" id="spring-security-nav">
+									Spring Security
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+						
+							<li>
+								<a href="#%e5%8f%8d%e5%90%91%e4%bb%a3%e7%90%86" onclick="onNavClick(`#反向代理-nav`)" id="反向代理-nav">
+									反向代理
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+							
+								</ul>
+							
+						
+						
+						
+							<li>
+								<a href="#%e5%8f%83%e8%80%83" onclick="onNavClick(`#參考-nav`)" id="參考-nav">
+									參考
+								</a>
+							</li>
+						
+						
+					
+				
+			
+		</ul>
+	</div>
+
+</div>
+    
+    <div class="pagination">
+        <a id="globalBackToTop" class="pagination-action animated-visibility" href="#top" :class="{ invisible: scrollY == 0 }">
+            <i class="material-icons pagination-action-icon">
+                keyboard_arrow_up
+            </i>
+        </a>
+        
+        <a type="button" class="pagination-action" id="darkModeToggleButton">
+            <span class="material-icons pagination-action-icon" id="darkModeToggleIcon">
+                dark_mode
+            </span>
+        </a>
+        
+        
+    </div>
+</div>
+<div class="single-column-drawer-container" id="drawer"
+     v-bind:class="{ 'single-column-drawer-container-active': isDrawerOpen }">
+    <div class="drawer-content">
+        <div class="drawer-menu">
+            
+            
+            
+                
+                
+                
+                
+                
+                <a class="a-block drawer-menu-item false" href="https://blog.idontwannarock.me/posts">
+                    Archive
+                </a>
+                
+            
+                
+                
+                
+                
+                
+                <a class="a-block drawer-menu-item false" href="https://blog.idontwannarock.me/categories">
+                    Categories
+                </a>
+                
+            
+                
+                
+                
+                
+                
+                <a class="a-block drawer-menu-item false" href="https://blog.idontwannarock.me/tags">
+                    Tags
+                </a>
+                
+            
+                
+                
+                
+                
+                
+                <a class="a-block drawer-menu-item false" href="https://blog.idontwannarock.me/about">
+                    About
+                </a>
+                
+            
+                
+                
+                
+                
+                
+                <a class="a-block drawer-menu-item false" href="https://blog.idontwannarock.me/index.xml">
+                    RSS Feed
+                </a>
+                
+            
+            
+            <div class="toc">
+
+
+	<div class="toc-content">
+	
+		
+		
+		
+		<center>- CATALOG -</center>
+		
+		
+		<ul>
+			
+				
+				
+					
+						
+						
+						
+						
+						
+							<li>
+								<a href="#%e6%af%94%e8%bc%83" onclick="onNavClick(`#比較-nav`)" id="比較-nav">
+									比較
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+						
+							<li>
+								<a href="#%e5%8d%87%e7%b4%9a%e6%ad%a5%e9%a9%9f" onclick="onNavClick(`#升級步驟-nav`)" id="升級步驟-nav">
+									升級步驟
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+						
+							<li>
+								<a href="#%e6%b3%a8%e6%84%8f%e4%ba%8b%e9%a0%85" onclick="onNavClick(`#注意事項-nav`)" id="注意事項-nav">
+									注意事項
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+							
+								
+									<ul>
+								
+							
+						
+						
+							<li>
+								<a href="#spring-security" onclick="onNavClick(`#spring-security-nav`)" id="spring-security-nav">
+									Spring Security
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+						
+							<li>
+								<a href="#%e5%8f%8d%e5%90%91%e4%bb%a3%e7%90%86" onclick="onNavClick(`#反向代理-nav`)" id="反向代理-nav">
+									反向代理
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+							
+								</ul>
+							
+						
+						
+						
+							<li>
+								<a href="#%e5%8f%83%e8%80%83" onclick="onNavClick(`#參考-nav`)" id="參考-nav">
+									參考
+								</a>
+							</li>
+						
+						
+					
+				
+			
+		</ul>
+	</div>
+
+</div>
+            
+        </div>
+    </div>
+</div>
+<transition name="fade">
+    <div id="drawer-mask" v-bind:class="{ 'single-column-drawer-mask': mounted }" v-if="isDrawerOpen" v-on:click="toggleDrawer"></div>
+</transition>
+<nav id="navBar" class="navbar sticky-top navbar-light single-column-nav-container">
+    <div id="navBackground" class="nav-background"></div>
+    <div class="container container-narrow nav-content">
+        <button id="nav_dropdown_btn" class="nav-dropdown-toggle" type="button" v-on:click="toggleDrawer">
+            <i class="material-icons">
+                menu
+            </i>
+        </button>
+        <a id="navTitle" class="navbar-brand" href="https://blog.idontwannarock.me/">
+            Howard Tech Note
+        </a>
+        
+        <button type="button" class="nav-darkmode-toggle" id="darkModeToggleButton2">
+            <i class="material-icons" id="darkModeToggleIcon2">
+                dark_mode
+            </i>
+        </button>
+        
+    </div>
+</nav>
+<div class="single-column-header-container" id="pageHead"
+     v-bind:style="{ transform: 'translateZ(0px) translateY('+.3*scrollY+'px)', opacity: 1-navOpacity }">
+    <a href="https://blog.idontwannarock.me/">
+        <div class="single-column-header-title">Howard Tech Note</div>
+        
+        <div class="single-column-header-subtitle">Share * Record * Program</div>
+        
+
+    </a>
+</div>
+
+            <div id="content">
+                <div id="streamContainer" class="stream-container">
+
+    <div class="post-list-container post-list-container-shadow">
+        <div class="post">
+            
+            
+            
+
+            <div class="post-head-wrapper-text-only"
+                
+            >
+                <div class="post-title">
+                    SpringFox to SpringDoc
+                    
+                    <div class="post-subtitle">
+                        Migrate from SpringFox to SpringDoc
+                    </div>
+                    
+                    <div class="post-meta">
+                        
+                        <time itemprop="datePublished">
+                            2022-12-12 09:24
+                        </time>
+                        
+
+                        
+                            <i class="material-icons" style="">folder</i>
+                                <a href="https://blog.idontwannarock.me/categories/implementation">implementation</a>
+                                &nbsp;
+                        
+
+                        
+                            <i class="material-icons" style="">label</i>
+                            
+                                <a href="https://blog.idontwannarock.me/tags/java">java</a>
+                                &nbsp;
+                            
+                                <a href="https://blog.idontwannarock.me/tags/spring-boot">spring-boot</a>
+                                &nbsp;
+                            
+                                <a href="https://blog.idontwannarock.me/tags/springfox">springfox</a>
+                                &nbsp;
+                            
+                                <a href="https://blog.idontwannarock.me/tags/springdoc">springdoc</a>
+                                &nbsp;
+                            
+                                <a href="https://blog.idontwannarock.me/tags/swagger">swagger</a>
+                                &nbsp;
+                            
+                        
+                        
+                    </div>
+                </div>
+            </div>
+            
+            <div class="post-body-wrapper">
+                
+                <div class="post-body" v-pre>
+                
+                    <p>以 Spring Boot 生態來說，比較主流的 documentation 方式應該就是 Swagger，以往應該多數人都是使用 SpringFox library，但近幾年也漸漸興起使用 SpringDoc，所以就做了一點筆記，紀錄要怎麼從 SpringFox 轉移到 SpringDoc</p>
+<h1 id="比較">比較</h1>
+<p>這兩者同樣都有實作 OpenAPI 3.0，為什麼我們需要從 SpringFox 轉移使用 SpringDoc？</p>
+<ul>
+<li><code>springfox-boot-starter</code> 包含許多 Spring 的 transitive dependencies；<code>springdoc-openapi-ui</code> 則是 standalone 的 library，並沒有跟 Spring 的依賴</li>
+<li><code>springfox-boot-starter</code> 需要額外 dependency 才有 Swagger UI 的呈現；<code>springdoc-openapi-ui</code> 則已經內含 Swagger UI</li>
+<li>SpringDoc 在一些細節功能上更強大，例如提供陣列參數更好的 UI 做輸入</li>
+<li>最重要的一點，SpringFox 幾乎已經不再更新；而 SpringDoc 還有在常態維護，因此也能跟較新版本的 Spring 有更好的整合，也能更即時的修正 bug</li>
+</ul>
+<h1 id="升級步驟">升級步驟</h1>
+<p>相當簡單，參考 <a href="https://springdoc.org/#migrating-from-springfox">官方文件</a> 即可</p>
+<p>因為都是實作 OpenAPI，就算 SpringFox 有實作 2.0 版，但跟 3.0 其實差異也不大</p>
+<p>主要就是改一下 dependency，然後 annotation 調整一下，其他幾乎沒有不同</p>
+<h1 id="注意事項">注意事項</h1>
+<h2 id="spring-security">Spring Security</h2>
+<p>若有整合 Spring Security，則可以在 controller 透過加註 <code>@AuthenticationPrincipal</code> 註解注入驗證過的 principal 物件，但這個物件不需要呈現在 Swagger 上</p>
+<p>以往 SpringFox 的作法是用 <code>@ApiIgnore</code> 註解來隱藏；SpringDoc 也可以透過 <code>@Parameter(hidden = true)</code> 來隱藏</p>
+<p>不過 SpringDoc 還有提供另外一種做法，就是加上以下 dependency，Swagger 上就會自動忽略 <code>@AuthenticationPrincipal</code></p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-xml" data-lang="xml"><span style="display:flex;"><span><span style="color:#ff79c6">&lt;dependency&gt;</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#ff79c6">&lt;groupId&gt;</span>org.springdoc<span style="color:#ff79c6">&lt;/groupId&gt;</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#ff79c6">&lt;artifactId&gt;</span>springdoc-openapi-security<span style="color:#ff79c6">&lt;/artifactId&gt;</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#ff79c6">&lt;version&gt;</span>1.6.13<span style="color:#ff79c6">&lt;/version&gt;</span>
+</span></span><span style="display:flex;"><span><span style="color:#ff79c6">&lt;/dependency&gt;</span>
+</span></span></code></pre></div><h2 id="反向代理">反向代理</h2>
+<p>如果有使用反向代理，<a href="https://springdoc.org/#how-can-i-deploy-springdoc-openapi-ui-behind-a-reverse-proxy">官方文件</a> 中有建議可以設定 <code>server.forward-headers-strategy</code> 為 <code>framework</code> 或 <code>native</code> 的方式；但要注意的是，SpringDoc 是從以下 headers 當中取得 url，並只在第一次產生 ui 的時候取得該值：</p>
+<ul>
+<li>RFC7239 規範的 <a href="https://www.rfc-editor.org/rfc/rfc7239">Forwarded Headers</a></li>
+<li><code>X-Forwarded-Host</code></li>
+<li><code>X-Forwarded-Port</code></li>
+<li><code>X-Forwarded-Proto</code></li>
+<li><code>X-Forwarded-Ssl</code></li>
+<li><code>X-Forwarded-Prefix</code></li>
+</ul>
+<p>但萬一反向代理做 upstream 的時候沒有帶上這些 headers，或我們可能需要從 Referer header 取得真實來源的 domain，好讓 Swagger UI 做 HTTP 呼叫的時候可以使用</p>
+<p>以往在 SpringFox 我們需要從 request 當中取得 <code>Referer</code> header 並解析；但 SpringDoc 可以有更簡單的作法，也就是直接設定 <code>OpenAPI</code> 的 servers 為 <code>/</code> 或是 Spring Boot 的 <code>server.servlet.context-path</code></p>
+<p>以下為 annotation 方式設定範例</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-java" data-lang="java"><span style="display:flex;"><span>@Configuration
+</span></span><span style="display:flex;"><span>@OpenAPIDefinition<span style="color:#ff79c6">(</span>info <span style="color:#ff79c6">=</span> @Info<span style="color:#ff79c6">(</span>
+</span></span><span style="display:flex;"><span>		title <span style="color:#ff79c6">=</span> <span style="color:#f1fa8c">&#34;Product API&#34;</span><span style="color:#ff79c6">,</span>
+</span></span><span style="display:flex;"><span>		version <span style="color:#ff79c6">=</span> <span style="color:#f1fa8c">&#34;1.0.0&#34;</span><span style="color:#ff79c6">),</span>
+</span></span><span style="display:flex;"><span>		servers <span style="color:#ff79c6">=</span> @Server<span style="color:#ff79c6">(</span>url <span style="color:#ff79c6">=</span> <span style="color:#f1fa8c">&#34;${server.servlet.context-path}/&#34;</span><span style="color:#ff79c6">)</span>
+</span></span><span style="display:flex;"><span><span style="color:#ff79c6">)</span>
+</span></span><span style="display:flex;"><span><span style="color:#8be9fd;font-style:italic">public</span> <span style="color:#8be9fd;font-style:italic">class</span> <span style="color:#50fa7b">SwaggerConfig</span> <span style="color:#ff79c6">{</span>
+</span></span><span style="display:flex;"><span><span style="color:#ff79c6">}</span>
+</span></span></code></pre></div><p>或以 programmatic 方式設定：</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-java" data-lang="java"><span style="display:flex;"><span>@Configuration
+</span></span><span style="display:flex;"><span><span style="color:#8be9fd;font-style:italic">public</span> <span style="color:#8be9fd;font-style:italic">class</span> <span style="color:#50fa7b">SwaggerConfig</span> <span style="color:#ff79c6">{</span>
+</span></span><span style="display:flex;"><span>	
+</span></span><span style="display:flex;"><span>	@Value<span style="color:#ff79c6">(</span><span style="color:#f1fa8c">&#34;${server.servlet.context-path}&#34;</span><span style="color:#ff79c6">)</span>
+</span></span><span style="display:flex;"><span>	<span style="color:#8be9fd;font-style:italic">private</span> String serversUrl<span style="color:#ff79c6">;</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>	@Bean
+</span></span><span style="display:flex;"><span>	OpenAPI <span style="color:#50fa7b">openAPI</span><span style="color:#ff79c6">()</span> <span style="color:#ff79c6">{</span>
+</span></span><span style="display:flex;"><span>		<span style="color:#ff79c6">return</span> <span style="color:#ff79c6">new</span> OpenAPI<span style="color:#ff79c6">()</span>
+</span></span><span style="display:flex;"><span>				<span style="color:#ff79c6">.</span><span style="color:#50fa7b">info</span><span style="color:#ff79c6">(</span><span style="color:#ff79c6">new</span> Info<span style="color:#ff79c6">()</span>
+</span></span><span style="display:flex;"><span>						<span style="color:#ff79c6">.</span><span style="color:#50fa7b">title</span><span style="color:#ff79c6">(</span><span style="color:#f1fa8c">&#34;Product API&#34;</span><span style="color:#ff79c6">)</span>
+</span></span><span style="display:flex;"><span>						<span style="color:#ff79c6">.</span><span style="color:#50fa7b">version</span><span style="color:#ff79c6">(</span><span style="color:#f1fa8c">&#34;1.0.0&#34;</span><span style="color:#ff79c6">))</span>
+</span></span><span style="display:flex;"><span>				<span style="color:#ff79c6">.</span><span style="color:#50fa7b">servers</span><span style="color:#ff79c6">(</span>List<span style="color:#ff79c6">.</span><span style="color:#50fa7b">of</span><span style="color:#ff79c6">(</span><span style="color:#ff79c6">new</span> Server<span style="color:#ff79c6">()</span>
+</span></span><span style="display:flex;"><span>						<span style="color:#ff79c6">.</span><span style="color:#50fa7b">url</span><span style="color:#ff79c6">(</span>serversUrl <span style="color:#ff79c6">+</span> <span style="color:#f1fa8c">&#34;/&#34;</span><span style="color:#ff79c6">)));</span>
+</span></span><span style="display:flex;"><span>	<span style="color:#ff79c6">}</span>
+</span></span><span style="display:flex;"><span><span style="color:#ff79c6">}</span>
+</span></span></code></pre></div><h1 id="參考">參考</h1>
+<ul>
+<li><a href="https://springdoc.org/">官方文件</a></li>
+<li><a href="https://stackoverflow.com/a/72480207/7605040">Are there any advantages of using/migrating to springdoc-openapi from Springfox?</a></li>
+<li><a href="https://stackoverflow.com/a/65672670/7605040">Spring Boot REST API: SpringDoc + OpenAPI 3 (springdoc-openapi-ui) or Swagger2 v3 (springfox-boot-starter)</a></li>
+<li><a href="https://github.com/springfox/springfox">SpringFox GitHub</a></li>
+</ul>
+
+                    
+                    <HR width="100%" id="EOF">
+		    <p style="color:#777;">Last modified on 2022-12-12</p>
+                    
+                </div>
+            </div>
+            
+            
+            <nav class="post-pagination">
+
+                
+                <a class="newer-posts">
+			Next<br>No newer posts.
+                </a>
+                
+                
+                
+                <a class="older-posts" href="https://blog.idontwannarock.me/2022/11/quartz-misfire-handling-instruction/">
+			Previous<br>Quartz Misfire Handling Instruction
+                </a>
+                
+            </nav>
+            <div class="post-comment-wrapper">
+                
+<div id="disqus_thread"></div>
+<script>
+    
+
+    var disqus_config = function () {
+        
+        this.page.url = '\/2022\/12\/springfox_to_springdoc\/';  
+        
+        
+        this.page.identifier = '\/2022\/12\/springfox_to_springdoc\/'; 
+    };
+    (function() {
+        var d = document, s = d.createElement('script');
+        s.src = 'https://howard-tech-blog.disqus.com/embed.js';
+        s.setAttribute('data-timestamp', +new Date());
+        (d.head || d.body).appendChild(s);
+    })();
+</script>
+<noscript> Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript" rel="nofollow"> comments powered by Disqus.  </a> </noscript>
+
+
+
+
+
+
+
+
+
+
+
+            </div>
+        </div>
+    </div>
+
+
+                    </div>
+            </div><div id="single-column-footer">
+Hugo Theme <a href="https://github.com/amazingrise/hugo-theme-diary">Diary</a> by <a href="https://risehere.net/">Rise</a>
+<br>
+Ported from <a href="https://mak1t0.cc/" target="_blank" rel="noreferrer noopener">Makito</a>'s <a href="https://github.com/SumiMakito/hexo-theme-journal/" target="_blank" rel="noreferrer noopener">Journal.</a> <br>
+<br>
+
+&copy;
+	
+	This website by Howard Wang is licensed under a Creative Common Attribution-ShareAlike 4.0 International License.
+	
+</div>
+            </div>
+    
+    <script src="https://blog.idontwannarock.me/js/journal.js"></script></body>
+</html>

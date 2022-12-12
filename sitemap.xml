@@ -3,18 +3,42 @@
   xmlns:xhtml="http://www.w3.org/1999/xhtml">
   <url>
     <loc>https://blog.idontwannarock.me/categories/</loc>
-    <lastmod>2022-11-29T15:21:19+08:00</lastmod>
+    <lastmod>2022-12-12T09:24:17+08:00</lastmod>
+  </url><url>
+    <loc>https://blog.idontwannarock.me/</loc>
+    <lastmod>2022-12-12T09:24:17+08:00</lastmod>
+  </url><url>
+    <loc>https://blog.idontwannarock.me/categories/implementation/</loc>
+    <lastmod>2022-12-12T09:24:17+08:00</lastmod>
+  </url><url>
+    <loc>https://blog.idontwannarock.me/tags/java/</loc>
+    <lastmod>2022-12-12T09:24:17+08:00</lastmod>
+  </url><url>
+    <loc>https://blog.idontwannarock.me/posts/</loc>
+    <lastmod>2022-12-12T09:24:17+08:00</lastmod>
+  </url><url>
+    <loc>https://blog.idontwannarock.me/tags/spring-boot/</loc>
+    <lastmod>2022-12-12T09:24:17+08:00</lastmod>
+  </url><url>
+    <loc>https://blog.idontwannarock.me/tags/springdoc/</loc>
+    <lastmod>2022-12-12T09:24:17+08:00</lastmod>
+  </url><url>
+    <loc>https://blog.idontwannarock.me/tags/springfox/</loc>
+    <lastmod>2022-12-12T09:24:17+08:00</lastmod>
+  </url><url>
+    <loc>https://blog.idontwannarock.me/2022/12/springfox_to_springdoc/</loc>
+    <lastmod>2022-12-12T09:24:17+08:00</lastmod>
+  </url><url>
+    <loc>https://blog.idontwannarock.me/tags/swagger/</loc>
+    <lastmod>2022-12-12T09:24:17+08:00</lastmod>
+  </url><url>
+    <loc>https://blog.idontwannarock.me/tags/</loc>
+    <lastmod>2022-12-12T09:24:17+08:00</lastmod>
   </url><url>
     <loc>https://blog.idontwannarock.me/categories/concept/</loc>
     <lastmod>2022-11-29T15:21:19+08:00</lastmod>
   </url><url>
-    <loc>https://blog.idontwannarock.me/</loc>
-    <lastmod>2022-11-29T15:21:19+08:00</lastmod>
-  </url><url>
     <loc>https://blog.idontwannarock.me/tags/misfire/</loc>
-    <lastmod>2022-11-29T15:21:19+08:00</lastmod>
-  </url><url>
-    <loc>https://blog.idontwannarock.me/posts/</loc>
     <lastmod>2022-11-29T15:21:19+08:00</lastmod>
   </url><url>
     <loc>https://blog.idontwannarock.me/tags/quartz/</loc>
@@ -23,13 +47,7 @@
     <loc>https://blog.idontwannarock.me/2022/11/quartz-misfire-handling-instruction/</loc>
     <lastmod>2022-11-29T15:21:19+08:00</lastmod>
   </url><url>
-    <loc>https://blog.idontwannarock.me/tags/</loc>
-    <lastmod>2022-11-29T15:21:19+08:00</lastmod>
-  </url><url>
     <loc>https://blog.idontwannarock.me/tags/dynamic-trigger/</loc>
-    <lastmod>2022-11-15T16:54:13+08:00</lastmod>
-  </url><url>
-    <loc>https://blog.idontwannarock.me/categories/implementation/</loc>
     <lastmod>2022-11-15T16:54:13+08:00</lastmod>
   </url><url>
     <loc>https://blog.idontwannarock.me/tags/quartz-cluster/</loc>
@@ -37,12 +55,6 @@
   </url><url>
     <loc>https://blog.idontwannarock.me/2022/11/quartz-cluster-fixed-and-dynamic-trigger-spring-boot-integration/</loc>
     <lastmod>2022-11-15T16:54:13+08:00</lastmod>
-  </url><url>
-    <loc>https://blog.idontwannarock.me/tags/spring-boot/</loc>
-    <lastmod>2022-11-15T16:54:13+08:00</lastmod>
-  </url><url>
-    <loc>https://blog.idontwannarock.me/tags/java/</loc>
-    <lastmod>2022-11-15T16:24:46+08:00</lastmod>
   </url><url>
     <loc>https://blog.idontwannarock.me/2022/11/quartz-intro/</loc>
     <lastmod>2022-11-15T16:24:46+08:00</lastmod>
@@ -171,9 +183,6 @@
     <lastmod>2019-09-19T15:53:36+08:00</lastmod>
   </url><url>
     <loc>https://blog.idontwannarock.me/2019/09/spring_api_version_with_swagger_security/</loc>
-    <lastmod>2019-09-19T15:53:36+08:00</lastmod>
-  </url><url>
-    <loc>https://blog.idontwannarock.me/tags/swagger/</loc>
     <lastmod>2019-09-19T15:53:36+08:00</lastmod>
   </url><url>
     <loc>https://blog.idontwannarock.me/tags/rbac/</loc>
