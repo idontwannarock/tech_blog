@@ -1,0 +1,982 @@
+<!DOCTYPE html>
+<html><head>
+<title>Maven &#43; Docker Multi-stage Build</title>
+
+
+
+
+<meta charset="utf-8">
+<meta name="X-UA-Compatible" content="IE=edge">
+<meta name="google-site-verification" content="">
+<meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" name="viewport">
+<meta content="telephone=no" name="format-detection">
+<meta name="description" content="Explained Maven project using Docker multi-stage build">
+<meta name="renderer" content="webkit">
+<meta name="theme-color" content="#ffffff">
+
+
+
+
+
+
+
+
+
+
+
+<script type="application/javascript">
+var doNotTrack = false;
+if (!doNotTrack) {
+	(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+	(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+	m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+	})(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+	ga('create', 'UA-106499565-1', 'auto');
+	
+	ga('send', 'pageview');
+}
+</script>
+
+
+
+
+
+  
+
+
+
+
+
+
+<link rel="stylesheet" href="https://blog.idontwannarock.me/scss/journal.min.c5d92f380bf10f6849c7ac487c7df2b22c081e0851e5339224f1ae29210b20d2.css" integrity="sha256-xdkvOAvxD2hJx6xIfH3ysiwIHghR5TOSJPGuKSELINI=" media="screen">
+
+
+
+<link rel="stylesheet" href="https://blog.idontwannarock.me/scss/dark-mode.min.9f8d8c2df9285089d141edd4a50cb7506c7948e6ab79a29968dced1bd0ab7d22.css" integrity="sha256-n42MLfkoUInRQe3UpQy3UGx5SOareaKZaNztG9CrfSI=" media="screen">
+
+
+
+
+      <script src="https://blog.idontwannarock.me/js/toc.js"></script>
+    
+    <link type="text/css" rel="stylesheet" href="https://blog.idontwannarock.me/vendor/css/bootstrap.min.css"><link rel="stylesheet"
+          href="https://fonts.googleapis.com/css?family=Material+Icons">
+
+
+
+
+
+
+
+
+
+
+
+
+<script src="https://cdn.jsdelivr.net/npm/vue-disqus@3/dist/vue-disqus.js"></script>
+
+
+
+
+
+
+
+
+</head>
+<body>
+    	<div id="app"><div id="sideContainer" class="side-container">
+    
+    <a class="a-block nav-head false" href="https://blog.idontwannarock.me/">
+    
+        <div class="nav-title">
+            Howard Tech Note
+        </div>
+        
+        <div class="nav-subtitle">
+            Share * Record * Program
+        </div>
+        
+    </a>
+
+    <div class="nav-link-list">
+        
+        
+            
+            
+            
+            
+            
+            <a class="a-block nav-link-item false" href="https://blog.idontwannarock.me/posts">
+                Archive
+            </a>
+            
+        
+            
+            
+            
+            
+            
+            <a class="a-block nav-link-item false" href="https://blog.idontwannarock.me/categories">
+                Categories
+            </a>
+            
+        
+            
+            
+            
+            
+            
+            <a class="a-block nav-link-item false" href="https://blog.idontwannarock.me/tags">
+                Tags
+            </a>
+            
+        
+            
+            
+            
+            
+            
+            <a class="a-block nav-link-item false" href="https://blog.idontwannarock.me/about">
+                About
+            </a>
+            
+        
+            
+            
+            
+            
+            
+            <a class="a-block nav-link-item false" href="https://blog.idontwannarock.me/index.xml">
+                RSS Feed
+            </a>
+            
+        
+    </div>
+
+    
+
+    <div class="nav-footer">
+        
+Hugo Theme <a href="https://github.com/amazingrise/hugo-theme-diary">Diary</a> by <a href="https://risehere.net/">Rise</a>
+<br>
+Ported from <a href="https://mak1t0.cc/" target="_blank" rel="noreferrer noopener">Makito</a>'s <a href="https://github.com/SumiMakito/hexo-theme-journal/" target="_blank" rel="noreferrer noopener">Journal.</a> <br>
+<br>
+
+&copy;
+	
+	This website by Howard Wang is licensed under a Creative Common Attribution-ShareAlike 4.0 International License.
+	
+
+    </div>
+    
+</div><div id="extraContainer" class="extra-container">
+    
+    
+    <div class="toc animated-visibility" :class="{ invisible: scrollY <= 140 }">
+
+
+	<div class="toc-content">
+	
+		
+		
+		
+		<center>- CATALOG -</center>
+		
+		
+		<ul>
+			
+				
+				
+					
+						
+						
+						
+						
+						
+							<li>
+								<a href="#docker-multi-stage-build" onclick="onNavClick(`#docker-multi-stage-build-nav`)" id="docker-multi-stage-build-nav">
+									Docker Multi-stage Build
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+							
+								
+									<ul>
+								
+							
+						
+						
+							<li>
+								<a href="#%e5%bb%ba%e7%bd%ae%e6%99%82%e9%96%93" onclick="onNavClick(`#建置時間-nav`)" id="建置時間-nav">
+									建置時間
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+						
+							<li>
+								<a href="#image-%e5%a4%a7%e5%b0%8f" onclick="onNavClick(`#image-大小-nav`)" id="image-大小-nav">
+									Image 大小
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+							
+								</ul>
+							
+						
+						
+						
+							<li>
+								<a href="#%e5%84%aa%e5%8c%96" onclick="onNavClick(`#優化-nav`)" id="優化-nav">
+									優化
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+							
+								
+									<ul>
+								
+							
+						
+						
+							<li>
+								<a href="#base-image" onclick="onNavClick(`#base-image-nav`)" id="base-image-nav">
+									Base Image
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+						
+							<li>
+								<a href="#maven" onclick="onNavClick(`#maven-nav`)" id="maven-nav">
+									Maven
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+							
+								
+									<ul>
+								
+							
+						
+						
+							<li>
+								<a href="#workaround" onclick="onNavClick(`#workaround-nav`)" id="workaround-nav">
+									Workaround
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+							
+								</ul>
+							
+								</ul>
+							
+						
+						
+						
+							<li>
+								<a href="#%e5%8f%83%e8%80%83" onclick="onNavClick(`#參考-nav`)" id="參考-nav">
+									參考
+								</a>
+							</li>
+						
+						
+					
+				
+			
+		</ul>
+	</div>
+
+</div>
+    
+    <div class="pagination">
+        <a id="globalBackToTop" class="pagination-action animated-visibility" href="#top" :class="{ invisible: scrollY == 0 }">
+            <i class="material-icons pagination-action-icon">
+                keyboard_arrow_up
+            </i>
+        </a>
+        
+        <a type="button" class="pagination-action" id="darkModeToggleButton">
+            <span class="material-icons pagination-action-icon" id="darkModeToggleIcon">
+                dark_mode
+            </span>
+        </a>
+        
+        
+    </div>
+</div>
+<div class="single-column-drawer-container" id="drawer"
+     v-bind:class="{ 'single-column-drawer-container-active': isDrawerOpen }">
+    <div class="drawer-content">
+        <div class="drawer-menu">
+            
+            
+            
+                
+                
+                
+                
+                
+                <a class="a-block drawer-menu-item false" href="https://blog.idontwannarock.me/posts">
+                    Archive
+                </a>
+                
+            
+                
+                
+                
+                
+                
+                <a class="a-block drawer-menu-item false" href="https://blog.idontwannarock.me/categories">
+                    Categories
+                </a>
+                
+            
+                
+                
+                
+                
+                
+                <a class="a-block drawer-menu-item false" href="https://blog.idontwannarock.me/tags">
+                    Tags
+                </a>
+                
+            
+                
+                
+                
+                
+                
+                <a class="a-block drawer-menu-item false" href="https://blog.idontwannarock.me/about">
+                    About
+                </a>
+                
+            
+                
+                
+                
+                
+                
+                <a class="a-block drawer-menu-item false" href="https://blog.idontwannarock.me/index.xml">
+                    RSS Feed
+                </a>
+                
+            
+            
+            <div class="toc">
+
+
+	<div class="toc-content">
+	
+		
+		
+		
+		<center>- CATALOG -</center>
+		
+		
+		<ul>
+			
+				
+				
+					
+						
+						
+						
+						
+						
+							<li>
+								<a href="#docker-multi-stage-build" onclick="onNavClick(`#docker-multi-stage-build-nav`)" id="docker-multi-stage-build-nav">
+									Docker Multi-stage Build
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+							
+								
+									<ul>
+								
+							
+						
+						
+							<li>
+								<a href="#%e5%bb%ba%e7%bd%ae%e6%99%82%e9%96%93" onclick="onNavClick(`#建置時間-nav`)" id="建置時間-nav">
+									建置時間
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+						
+							<li>
+								<a href="#image-%e5%a4%a7%e5%b0%8f" onclick="onNavClick(`#image-大小-nav`)" id="image-大小-nav">
+									Image 大小
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+							
+								</ul>
+							
+						
+						
+						
+							<li>
+								<a href="#%e5%84%aa%e5%8c%96" onclick="onNavClick(`#優化-nav`)" id="優化-nav">
+									優化
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+							
+								
+									<ul>
+								
+							
+						
+						
+							<li>
+								<a href="#base-image" onclick="onNavClick(`#base-image-nav`)" id="base-image-nav">
+									Base Image
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+						
+							<li>
+								<a href="#maven" onclick="onNavClick(`#maven-nav`)" id="maven-nav">
+									Maven
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+							
+								
+									<ul>
+								
+							
+						
+						
+							<li>
+								<a href="#workaround" onclick="onNavClick(`#workaround-nav`)" id="workaround-nav">
+									Workaround
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+							
+								</ul>
+							
+								</ul>
+							
+						
+						
+						
+							<li>
+								<a href="#%e5%8f%83%e8%80%83" onclick="onNavClick(`#參考-nav`)" id="參考-nav">
+									參考
+								</a>
+							</li>
+						
+						
+					
+				
+			
+		</ul>
+	</div>
+
+</div>
+            
+        </div>
+    </div>
+</div>
+<transition name="fade">
+    <div id="drawer-mask" v-bind:class="{ 'single-column-drawer-mask': mounted }" v-if="isDrawerOpen" v-on:click="toggleDrawer"></div>
+</transition>
+<nav id="navBar" class="navbar sticky-top navbar-light single-column-nav-container">
+    <div id="navBackground" class="nav-background"></div>
+    <div class="container container-narrow nav-content">
+        <button id="nav_dropdown_btn" class="nav-dropdown-toggle" type="button" v-on:click="toggleDrawer">
+            <i class="material-icons">
+                menu
+            </i>
+        </button>
+        <a id="navTitle" class="navbar-brand" href="https://blog.idontwannarock.me/">
+            Howard Tech Note
+        </a>
+        
+        <button type="button" class="nav-darkmode-toggle" id="darkModeToggleButton2">
+            <i class="material-icons" id="darkModeToggleIcon2">
+                dark_mode
+            </i>
+        </button>
+        
+    </div>
+</nav>
+<div class="single-column-header-container" id="pageHead"
+     v-bind:style="{ transform: 'translateZ(0px) translateY('+.3*scrollY+'px)', opacity: 1-navOpacity }">
+    <a href="https://blog.idontwannarock.me/">
+        <div class="single-column-header-title">Howard Tech Note</div>
+        
+        <div class="single-column-header-subtitle">Share * Record * Program</div>
+        
+
+    </a>
+</div>
+
+            <div id="content">
+                <div id="streamContainer" class="stream-container">
+
+    <div class="post-list-container post-list-container-shadow">
+        <div class="post">
+            
+            
+            
+
+            <div class="post-head-wrapper-text-only"
+                
+            >
+                <div class="post-title">
+                    Maven &#43; Docker Multi-stage Build
+                    
+                    <div class="post-subtitle">
+                        Explained Maven project using Docker multi-stage build
+                    </div>
+                    
+                    <div class="post-meta">
+                        
+                        <time itemprop="datePublished">
+                            2022-12-14 14:14
+                        </time>
+                        
+
+                        
+                            <i class="material-icons" style="">folder</i>
+                                <a href="https://blog.idontwannarock.me/categories/implementation">implementation</a>
+                                &nbsp;
+                        
+
+                        
+                            <i class="material-icons" style="">label</i>
+                            
+                                <a href="https://blog.idontwannarock.me/tags/maven">maven</a>
+                                &nbsp;
+                            
+                                <a href="https://blog.idontwannarock.me/tags/docker">docker</a>
+                                &nbsp;
+                            
+                        
+                        
+                    </div>
+                </div>
+            </div>
+            
+            <div class="post-body-wrapper">
+                
+                <div class="post-body" v-pre>
+                
+                    <p>現代常見的 CI/CD 流程經常會使用容器化 (containerized) 的方式來幫助建置環境及部署</p>
+<p>以 Java + Maven 專案舉例，一個比較通用的 Dockerfile 可能長這樣：</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-sh" data-lang="sh"><span style="display:flex;"><span>FROM maven:3.8-openjdk-11
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>WORKDIR /opt/app
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>COPY src/main/resources /opt/app/src/main/resources
+</span></span><span style="display:flex;"><span>COPY src/main/java /opt/app/src/main/java
+</span></span><span style="display:flex;"><span>COPY pom.xml .
+</span></span><span style="display:flex;"><span>RUN mvn -B -e clean package
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>EXPOSE <span style="color:#bd93f9">8080</span>
+</span></span><span style="display:flex;"><span>ENTRYPOINT <span style="color:#ff79c6">[</span><span style="color:#f1fa8c">&#34;java&#34;</span>, <span style="color:#f1fa8c">&#34;-jar&#34;</span>, <span style="color:#f1fa8c">&#34;demo.jar&#34;</span><span style="color:#ff79c6">]</span>
+</span></span></code></pre></div><p>這個 Dockerfile 其實沒有問題，完全可以正常運行，但它使用上有一個地方不太方便，就是每次運行到 <code>RUN mvn -B -e clean package</code> 這行的時候，除非程式碼跟 <code>pom.xml</code> 都沒有變動，否則所有 dependencies 都會重新下載一遍，如果專案比較大型，那光下載 dependencies 可能就會要花很久的時間</p>
+<h1 id="docker-multi-stage-build">Docker Multi-stage Build</h1>
+<p>於是就有人使出了 Docker multi-stage build 這招</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-sh" data-lang="sh"><span style="display:flex;"><span>FROM maven:3.8-openjdk-11 as DEPENDENCIES
+</span></span><span style="display:flex;"><span>WORKDIR /opt/app
+</span></span><span style="display:flex;"><span>COPY pom.xml .
+</span></span><span style="display:flex;"><span>RUN mvn -B -e -C org.apache.maven.plugins:maven-dependency-plugin:3.3.0:go-offline
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>FROM maven:3.8-openjdk-11 as BUILDER
+</span></span><span style="display:flex;"><span>WORKDIR /opt/app
+</span></span><span style="display:flex;"><span>COPY --from<span style="color:#ff79c6">=</span>DEPENDENCIES /root/.m2 /root/.m2
+</span></span><span style="display:flex;"><span>COPY src/main/resources /opt/app/src/main/resources
+</span></span><span style="display:flex;"><span>COPY src/main/java /opt/app/src/main/java
+</span></span><span style="display:flex;"><span>COPY pom.xml .
+</span></span><span style="display:flex;"><span>RUN mvn -B -e clean package
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>FROM openjdk:11-jre
+</span></span><span style="display:flex;"><span>WORKDIR /opt/app
+</span></span><span style="display:flex;"><span>COPY --from<span style="color:#ff79c6">=</span>BUILDER /opt/app/target/*.jar app.jar
+</span></span><span style="display:flex;"><span>EXPOSE <span style="color:#bd93f9">8080</span>
+</span></span><span style="display:flex;"><span>ENTRYPOINT <span style="color:#ff79c6">[</span><span style="color:#f1fa8c">&#34;java&#34;</span>, <span style="color:#f1fa8c">&#34;-jar&#34;</span>, <span style="color:#f1fa8c">&#34;app.jar&#34;</span><span style="color:#ff79c6">]</span>
+</span></span></code></pre></div><p>簡單來說，在過程中會分成三段建置，第一段會依照 <code>pom.xml</code> 將所有 dependencies 下載下來；第二段會利用第一段下載的 dependencies 來建置專案；第三段則是運行第二段建置好的專案 jar 檔。</p>
+<p>這樣做有什麼好處呢？主要差別在於「建置時間」跟「最終 image 的大小」</p>
+<h2 id="建置時間">建置時間</h2>
+<p>Docker 的 image 是由一層一層的 layer 疊加而成，每一層其實都是一個 image，只是中間層的 image 是 read only 而且一般指令是找不到的，只有最上層的 image 是 read/write 都可以的 layer，也才能被操作</p>
+<p><img src="https://cdn.buttercms.com/CLQJN3yRRcS7oGqm7yKb" alt="Relationship between Dockerfile and layered images">
+<em>source: MetricFire <a href="https://www.metricfire.com/blog/how-to-build-optimal-docker-images/">How to Build Optimal Docker Images</a></em></p>
+<p>在 Dockerfile 當中的每一行都是一層 layer，每層 layer 都是一個 image，而 Docker 在 build 的過程是會針對 image 做 cache，也就是 Dockerfile 當中每一行運行的指令相關的資源沒有變動，Docker 就會直接使用已有的 image</p>
+<p>以前面的 Dockerfile 來說，如果第三行 <code>COPY pom.xml .</code> 複製進來的 <code>pom.xml</code> 沒有變動，則第四行 <code>RUN mvn -B -e -C org.apache.maven.plugins:maven-dependency-plugin:3.3.0:go-offline</code> 也不會實際運行，而是直接使用前一次建置出來對應 layer 的 image</p>
+<p>利用 Docker 這樣的特性，加上一般開發的時候 <code>pom.xml</code> 不太會變動的前提下，在大部分使用這份 Dockerfile 做建置的時候，第一階段的步驟都會使用 cache，從而節省每次建置都要重新下載 dependencies 的時間</p>
+<h2 id="image-大小">Image 大小</h2>
+<p>不知道有多少人留意過你 build 出來的 image 大小？</p>
+<p>前面第一種作法 build 出來的 image 本身會包含了 base image (本身就包含 maven 及 jdk)、程式碼、下載下來的所有 dependencies，以及建置出來的 jar 檔</p>
+<p>其中運行 jar 檔時並不需要 maven，也不需要 JDK 而只需要 JRE，以 Spring Boot 來說，所有運行需要的 dependencies 都已經包在 jar 檔裡面 (fat jar)，所以 image 裡面的 .m2 資料夾也是重複的</p>
+<p>這樣 build 出來的 image 動輒幾百 mb，雖然現在硬碟便宜，但有串 CI/CD 的開發流程經常 dev 分支每 push 一次就建置一個 image，那占用的空間就大了，如果是用雲端服務，那燒的就是老闆的錢</p>
+<p>所以 image 大小 matters！</p>
+<p>先重新順一下前面這份 multi-stage build 的 Dockerfile 流程：</p>
+<ol>
+<li>依照 <code>pom.xml</code> 下載所有 dependencies</li>
+<li>直接使用前一階段下載好的 dependencies 來建置專案 jar 檔</li>
+<li>直接使用前一階段建置好的 jar 檔來運行</li>
+</ol>
+<p>從流程中我們可以看到最終產出的 image 本身只帶有 base image 以及建置好的 jar 檔、base image 只包含 headless JRE、layer 只有五層、也不帶有前面階段使用到的 dependencies，甚至也不包含建置需要的 maven，因此最終的 image 的大小就會明顯的下降</p>
+<p><img src="https://res.cloudinary.com/dcvgho2zc/image/upload/v1671002088/Tech%20Blog/single-multi-stage-build-image-size.png" alt="Comparison between single-stage build and multi-stage build"></p>
+<h1 id="優化">優化</h1>
+<h2 id="base-image">Base Image</h2>
+<p>但其實前面這份 Dockerfile 還有優化空間，比較簡單的就是使用更精簡的 base image，也就是盡量選擇只包含運行該 stage 需要的最少功能的 image</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-sh" data-lang="sh"><span style="display:flex;"><span>FROM maven:3.8-openjdk-11-slim as DEPENDENCIES
+</span></span><span style="display:flex;"><span>WORKDIR /opt/app
+</span></span><span style="display:flex;"><span>COPY pom.xml .
+</span></span><span style="display:flex;"><span>RUN mvn -B -e -C org.apache.maven.plugins:maven-dependency-plugin:3.3.0:go-offline
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>FROM maven:3.8-openjdk-11-slim as BUILDER
+</span></span><span style="display:flex;"><span>WORKDIR /opt/app
+</span></span><span style="display:flex;"><span>COPY --from<span style="color:#ff79c6">=</span>DEPENDENCIES /root/.m2 /root/.m2
+</span></span><span style="display:flex;"><span>COPY src/main/resources /opt/app/src/main/resources
+</span></span><span style="display:flex;"><span>COPY src/main/java /opt/app/src/main/java
+</span></span><span style="display:flex;"><span>COPY pom.xml .
+</span></span><span style="display:flex;"><span>RUN mvn -B -e clean package
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>FROM azul/zulu-openjdk-alpine:11-jre-headless
+</span></span><span style="display:flex;"><span>WORKDIR /opt/app
+</span></span><span style="display:flex;"><span>COPY --from<span style="color:#ff79c6">=</span>BUILDER /opt/app/target/*.jar app.jar
+</span></span><span style="display:flex;"><span>EXPOSE <span style="color:#bd93f9">8080</span>
+</span></span><span style="display:flex;"><span>ENTRYPOINT <span style="color:#ff79c6">[</span><span style="color:#f1fa8c">&#34;java&#34;</span>, <span style="color:#f1fa8c">&#34;-jar&#34;</span>, <span style="color:#f1fa8c">&#34;app.jar&#34;</span><span style="color:#ff79c6">]</span>
+</span></span></code></pre></div><p>一般來說帶有 <code>alpine</code> 或 <code>slim</code> 結尾的 image 都會是相對比較好的選擇；如果只是要用來運行無 GUI 的 Java 應用程式的話，盡量選擇 <code>headless</code></p>
+<h2 id="maven">Maven</h2>
+<p>如果你有仔細觀察建置過程的 log 的話，應該會發現在運行第 12 行 <code>RUN mvn -B -e clean package</code> 的時候，maven 還是會下載一些 dependencies</p>
+<p>這就很奇怪啊，照理來說前一階段應該就把全部的 dependencies 都下載下來啦，畢竟這就是 <code>dependency:go-offline</code> 這個 goal 的目的不是嗎？</p>
+<p>但很抱歉，你要說這是 plugin 的 bug 或是原本的功能都好，總之，它只會下載 <code>pom.xml</code> 上面有明示列出的 artifact，而且甚至連 <code>&lt;plugin&gt;</code> 標籤內部的 <code>&lt;dependencies&gt;</code> 標籤當中的 artifact 都不會下載</p>
+<blockquote>
+<p>這個 issue 從 2007 年開到現在都還沒解決，可以參考 <a href="https://issues.apache.org/jira/browse/MDEP-82">MDEP-82</a></p>
+</blockquote>
+<p>再加上有些 maven 預設 lifecycle 或 goal 需要動態載入的 dependencies 也並不在下載的目標當中，就會造成在第二階段真正開始建置專案的時候會需要下載缺少的 dependencies</p>
+<p>某些 plugin 的 dependencies 甚至不是列在 <code>pom.xml</code> 當中，而是利用 class loader 的方式超級動態載入，這也是 <code>maven-dependency-plugin</code> 無能為力的部分</p>
+<p>如果建置過程都有連網還好，有些 CI/CD 的流程在建置這個階段是會跟網路隔離的，或是會利用建置這個步驟順便做測試，但為了測試環境的「乾淨」而限制連網功能，這個情況就很尷尬了，各種建置失敗</p>
+<p>在 plugin 修正之前，只能採取各種 workaround，以下介紹一種比較麻煩，但相對不會變更太多建置步驟或在建置出來的 jar 檔或甚至 git repo 中增加不必要 dependencies 的方式</p>
+<h3 id="workaround">Workaround</h3>
+<p>首先將 Dockerfile 調整如下：</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-sh" data-lang="sh"><span style="display:flex;"><span>FROM maven:3.8-openjdk-11-slim as DEPENDENCIES
+</span></span><span style="display:flex;"><span>WORKDIR /opt/app
+</span></span><span style="display:flex;"><span>COPY pom.xml .
+</span></span><span style="display:flex;"><span>RUN mvn -B -e -C clean org.apache.maven.plugins:maven-dependency-plugin:3.3.0:go-offline
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>FROM maven:3.8-openjdk-11-slim as BUILDER
+</span></span><span style="display:flex;"><span>WORKDIR /opt/app
+</span></span><span style="display:flex;"><span>COPY --from<span style="color:#ff79c6">=</span>DEPENDENCIES /root/.m2 /root/.m2
+</span></span><span style="display:flex;"><span>COPY src/main/resources /opt/app/src/main/resources
+</span></span><span style="display:flex;"><span>COPY src/main/java /opt/app/src/main/java
+</span></span><span style="display:flex;"><span>COPY pom.xml .
+</span></span><span style="display:flex;"><span>RUN mvn -B -e -o clean package
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>FROM azul/zulu-openjdk-alpine:11-jre-headless
+</span></span><span style="display:flex;"><span>WORKDIR /opt/app
+</span></span><span style="display:flex;"><span>COPY --from<span style="color:#ff79c6">=</span>BUILDER /opt/app/target/*.jar app.jar
+</span></span><span style="display:flex;"><span>EXPOSE <span style="color:#bd93f9">8080</span>
+</span></span><span style="display:flex;"><span>ENTRYPOINT <span style="color:#ff79c6">[</span><span style="color:#f1fa8c">&#34;java&#34;</span>, <span style="color:#f1fa8c">&#34;-jar&#34;</span>, <span style="color:#f1fa8c">&#34;app.jar&#34;</span><span style="color:#ff79c6">]</span>
+</span></span></code></pre></div><p>主要改動有兩個部分，一是在第一階段也運行 clean lifecycle 以下載相關的 dependencies；二是在第二階段建置加上 <code>-o</code> 參數，這是為了讓 maven 在 offline 的狀況下進行建置，也就是強制 maven 不連網</p>
+<p>第一次 build 的時候應該會發現在 <code>mvn clean package</code> 階段報錯，這時候往前找一下，應該會找到類似以下這段 log：</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-plaintext" data-lang="plaintext"><span style="display:flex;"><span>#16 1.770 [INFO] --------------------------------[ jar ]---------------------------------
+</span></span><span style="display:flex;"><span>#16 2.025 [WARNING] The POM for org.apache.tomcat:tomcat-annotations-api:jar:9.0.65 is missing, no dependency information available
+</span></span><span style="display:flex;"><span>#16 2.083 [WARNING] The POM for net.minidev:json-smart:jar:2.4.8 is missing, no dependency information available
+</span></span><span style="display:flex;"><span>#16 2.131 [WARNING] The POM for net.bytebuddy:byte-buddy:jar:1.12.13 is missing, no dependency information available
+</span></span><span style="display:flex;"><span>#16 2.131 [WARNING] The POM for net.bytebuddy:byte-buddy-agent:jar:1.12.13 is missing, no dependency information available
+</span></span><span style="display:flex;"><span>#16 2.528 [WARNING] The POM for com.rabbitmq:amqp-client:jar:5.14.2 is missing, no dependency information available
+</span></span><span style="display:flex;"><span>#16 2.589 [WARNING] The POM for org.glassfish.jaxb:jaxb-runtime:jar:2.3.6 is missing, no dependency information available
+</span></span><span style="display:flex;"><span>#16 2.823 [WARNING] The POM for com.fasterxml.jackson.dataformat:jackson-dataformat-yaml:jar:2.13.3 is missing, no dependency information available
+</span></span><span style="display:flex;"><span>#16 2.830 [WARNING] The POM for org.webjars:webjars-locator-core:jar:0.50 is missing, no dependency information available
+</span></span><span style="display:flex;"><span>#16 2.840 [WARNING] The POM for org.apache.httpcomponents:httpcore:jar:4.4.15 is missing, no dependency information available
+</span></span></code></pre></div><p>以上這段就是在說明 maven 在執行到 jar 這個 goal 的時候缺少哪些 dependencies</p>
+<p>這時候我們就會需要回到 <code>pom.xml</code>，依照上面那段 log 缺少的 artifact，在 <code>&lt;build&gt;</code> 標籤裡面加入以下這段：</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-xml" data-lang="xml"><span style="display:flex;"><span><span style="color:#ff79c6">&lt;pluginManagement&gt;</span>
+</span></span><span style="display:flex;"><span>	<span style="color:#ff79c6">&lt;plugins&gt;</span>
+</span></span><span style="display:flex;"><span>		<span style="color:#ff79c6">&lt;plugin&gt;</span>
+</span></span><span style="display:flex;"><span>			<span style="color:#ff79c6">&lt;groupId&gt;</span>org.apache.maven.plugins<span style="color:#ff79c6">&lt;/groupId&gt;</span>
+</span></span><span style="display:flex;"><span>			<span style="color:#ff79c6">&lt;artifactId&gt;</span>maven-clean-plugin<span style="color:#ff79c6">&lt;/artifactId&gt;</span>
+</span></span><span style="display:flex;"><span>			<span style="color:#ff79c6">&lt;dependencies&gt;</span>
+</span></span><span style="display:flex;"><span>				<span style="color:#ff79c6">&lt;dependency&gt;</span>
+</span></span><span style="display:flex;"><span>					<span style="color:#ff79c6">&lt;groupId&gt;</span>org.apache.tomcat<span style="color:#ff79c6">&lt;/groupId&gt;</span>
+</span></span><span style="display:flex;"><span>					<span style="color:#ff79c6">&lt;artifactId&gt;</span>tomcat-annotations-api<span style="color:#ff79c6">&lt;/artifactId&gt;</span>
+</span></span><span style="display:flex;"><span>					<span style="color:#ff79c6">&lt;version&gt;</span>9.0.65<span style="color:#ff79c6">&lt;/version&gt;</span>
+</span></span><span style="display:flex;"><span>				<span style="color:#ff79c6">&lt;/dependency&gt;</span>
+</span></span><span style="display:flex;"><span>				<span style="color:#ff79c6">&lt;dependency&gt;</span>
+</span></span><span style="display:flex;"><span>					<span style="color:#ff79c6">&lt;groupId&gt;</span>net.minidev<span style="color:#ff79c6">&lt;/groupId&gt;</span>
+</span></span><span style="display:flex;"><span>					<span style="color:#ff79c6">&lt;artifactId&gt;</span>json-smart<span style="color:#ff79c6">&lt;/artifactId&gt;</span>
+</span></span><span style="display:flex;"><span>					<span style="color:#ff79c6">&lt;version&gt;</span>2.4.8<span style="color:#ff79c6">&lt;/version&gt;</span>
+</span></span><span style="display:flex;"><span>				<span style="color:#ff79c6">&lt;/dependency&gt;</span>
+</span></span><span style="display:flex;"><span>				<span style="color:#ff79c6">&lt;dependency&gt;</span>
+</span></span><span style="display:flex;"><span>					<span style="color:#ff79c6">&lt;groupId&gt;</span>net.bytebuddy<span style="color:#ff79c6">&lt;/groupId&gt;</span>
+</span></span><span style="display:flex;"><span>					<span style="color:#ff79c6">&lt;artifactId&gt;</span>byte-buddy<span style="color:#ff79c6">&lt;/artifactId&gt;</span>
+</span></span><span style="display:flex;"><span>					<span style="color:#ff79c6">&lt;version&gt;</span>1.12.13<span style="color:#ff79c6">&lt;/version&gt;</span>
+</span></span><span style="display:flex;"><span>				<span style="color:#ff79c6">&lt;/dependency&gt;</span>
+</span></span><span style="display:flex;"><span>				<span style="color:#ff79c6">&lt;dependency&gt;</span>
+</span></span><span style="display:flex;"><span>					<span style="color:#ff79c6">&lt;groupId&gt;</span>net.bytebuddy<span style="color:#ff79c6">&lt;/groupId&gt;</span>
+</span></span><span style="display:flex;"><span>					<span style="color:#ff79c6">&lt;artifactId&gt;</span>byte-buddy-agent<span style="color:#ff79c6">&lt;/artifactId&gt;</span>
+</span></span><span style="display:flex;"><span>					<span style="color:#ff79c6">&lt;version&gt;</span>1.12.13<span style="color:#ff79c6">&lt;/version&gt;</span>
+</span></span><span style="display:flex;"><span>				<span style="color:#ff79c6">&lt;/dependency&gt;</span>
+</span></span><span style="display:flex;"><span>				<span style="color:#ff79c6">&lt;dependency&gt;</span>
+</span></span><span style="display:flex;"><span>					<span style="color:#ff79c6">&lt;groupId&gt;</span>com.rabbitmq<span style="color:#ff79c6">&lt;/groupId&gt;</span>
+</span></span><span style="display:flex;"><span>					<span style="color:#ff79c6">&lt;artifactId&gt;</span>amqp-client<span style="color:#ff79c6">&lt;/artifactId&gt;</span>
+</span></span><span style="display:flex;"><span>					<span style="color:#ff79c6">&lt;version&gt;</span>5.14.2<span style="color:#ff79c6">&lt;/version&gt;</span>
+</span></span><span style="display:flex;"><span>				<span style="color:#ff79c6">&lt;/dependency&gt;</span>
+</span></span><span style="display:flex;"><span>				<span style="color:#ff79c6">&lt;dependency&gt;</span>
+</span></span><span style="display:flex;"><span>					<span style="color:#ff79c6">&lt;groupId&gt;</span>org.glassfish.jaxb<span style="color:#ff79c6">&lt;/groupId&gt;</span>
+</span></span><span style="display:flex;"><span>					<span style="color:#ff79c6">&lt;artifactId&gt;</span>jaxb-runtime<span style="color:#ff79c6">&lt;/artifactId&gt;</span>
+</span></span><span style="display:flex;"><span>					<span style="color:#ff79c6">&lt;version&gt;</span>2.3.6<span style="color:#ff79c6">&lt;/version&gt;</span>
+</span></span><span style="display:flex;"><span>				<span style="color:#ff79c6">&lt;/dependency&gt;</span>
+</span></span><span style="display:flex;"><span>				<span style="color:#ff79c6">&lt;dependency&gt;</span>
+</span></span><span style="display:flex;"><span>					<span style="color:#ff79c6">&lt;groupId&gt;</span>com.fasterxml.jackson.dataformat<span style="color:#ff79c6">&lt;/groupId&gt;</span>
+</span></span><span style="display:flex;"><span>					<span style="color:#ff79c6">&lt;artifactId&gt;</span>jackson-dataformat-yaml<span style="color:#ff79c6">&lt;/artifactId&gt;</span>
+</span></span><span style="display:flex;"><span>					<span style="color:#ff79c6">&lt;version&gt;</span>2.13.3<span style="color:#ff79c6">&lt;/version&gt;</span>
+</span></span><span style="display:flex;"><span>				<span style="color:#ff79c6">&lt;/dependency&gt;</span>
+</span></span><span style="display:flex;"><span>				<span style="color:#ff79c6">&lt;dependency&gt;</span>
+</span></span><span style="display:flex;"><span>					<span style="color:#ff79c6">&lt;groupId&gt;</span>org.webjars<span style="color:#ff79c6">&lt;/groupId&gt;</span>
+</span></span><span style="display:flex;"><span>					<span style="color:#ff79c6">&lt;artifactId&gt;</span>webjars-locator-core<span style="color:#ff79c6">&lt;/artifactId&gt;</span>
+</span></span><span style="display:flex;"><span>					<span style="color:#ff79c6">&lt;version&gt;</span>0.50<span style="color:#ff79c6">&lt;/version&gt;</span>
+</span></span><span style="display:flex;"><span>				<span style="color:#ff79c6">&lt;/dependency&gt;</span>
+</span></span><span style="display:flex;"><span>				<span style="color:#ff79c6">&lt;dependency&gt;</span>
+</span></span><span style="display:flex;"><span>					<span style="color:#ff79c6">&lt;groupId&gt;</span>org.apache.httpcomponents<span style="color:#ff79c6">&lt;/groupId&gt;</span>
+</span></span><span style="display:flex;"><span>					<span style="color:#ff79c6">&lt;artifactId&gt;</span>httpcore<span style="color:#ff79c6">&lt;/artifactId&gt;</span>
+</span></span><span style="display:flex;"><span>					<span style="color:#ff79c6">&lt;version&gt;</span>4.4.15<span style="color:#ff79c6">&lt;/version&gt;</span>
+</span></span><span style="display:flex;"><span>				<span style="color:#ff79c6">&lt;/dependency&gt;</span>
+</span></span><span style="display:flex;"><span>			<span style="color:#ff79c6">&lt;/dependencies&gt;</span>
+</span></span><span style="display:flex;"><span>		<span style="color:#ff79c6">&lt;/plugin&gt;</span>
+</span></span><span style="display:flex;"><span>	<span style="color:#ff79c6">&lt;/plugins&gt;</span>
+</span></span><span style="display:flex;"><span><span style="color:#ff79c6">&lt;/pluginManagement&gt;</span>
+</span></span></code></pre></div><p>這段是為了告訴 maven <code>maven-clean-plugin</code> 需要指定的這些 dependencies</p>
+<p>請注意一定要掛在 <code>maven-clean-plugin</code> 底下，因為這就是 clean lifecycle 對應的 plugin，這樣我們在第一階段執行 clean 的時候才會下載這些缺少的 artifact</p>
+<h1 id="參考">參考</h1>
+<ul>
+<li><a href="https://www.metricfire.com/blog/how-to-build-optimal-docker-images/">How to Build Optimal Docker Images</a></li>
+<li><a href="https://blog.virtual7.de/pre-download-maven-dependencies-and-work-offline/">Pre-download Maven dependencies and work offline</a></li>
+<li><a href="https://stackoverflow.com/questions/1245076/maven-offline-problem-with-mvn-plugins/58767388#58767388">Maven offline - problem with mvn-plugins</a></li>
+<li><a href="https://issues.apache.org/jira/browse/MDEP-82">MDEP-82 go-offline / resolve-plugins does not resolve all plugin dependencies</a></li>
+<li><a href="https://issues.apache.org/jira/browse/MNG-6965">MNG-6965 Extensions suddenly have org.codehaus.plexus:plexus-utils:jar:1.1 on their classpath</a></li>
+<li><a href="https://github.com/qaware/go-offline-maven-plugin">Go Offline Maven Plugin</a></li>
+</ul>
+
+                    
+                    <HR width="100%" id="EOF">
+		    <p style="color:#777;">Last modified on 2022-12-14</p>
+                    
+                </div>
+            </div>
+            
+            
+            <nav class="post-pagination">
+
+                
+                <a class="newer-posts">
+			Next<br>No newer posts.
+                </a>
+                
+                
+                
+                <a class="older-posts" href="https://blog.idontwannarock.me/2022/12/springfox_to_springdoc/">
+			Previous<br>SpringFox to SpringDoc
+                </a>
+                
+            </nav>
+            <div class="post-comment-wrapper">
+                
+<div id="disqus_thread"></div>
+<script>
+    
+
+    var disqus_config = function () {
+        
+        this.page.url = '\/2022\/12\/maven_docker_multi_stage_build\/';  
+        
+        
+        this.page.identifier = '\/2022\/12\/maven_docker_multi_stage_build\/'; 
+    };
+    (function() {
+        var d = document, s = d.createElement('script');
+        s.src = 'https://howard-tech-blog.disqus.com/embed.js';
+        s.setAttribute('data-timestamp', +new Date());
+        (d.head || d.body).appendChild(s);
+    })();
+</script>
+<noscript> Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript" rel="nofollow"> comments powered by Disqus.  </a> </noscript>
+
+
+
+
+
+
+
+
+
+
+
+            </div>
+        </div>
+    </div>
+
+
+                    </div>
+            </div><div id="single-column-footer">
+Hugo Theme <a href="https://github.com/amazingrise/hugo-theme-diary">Diary</a> by <a href="https://risehere.net/">Rise</a>
+<br>
+Ported from <a href="https://mak1t0.cc/" target="_blank" rel="noreferrer noopener">Makito</a>'s <a href="https://github.com/SumiMakito/hexo-theme-journal/" target="_blank" rel="noreferrer noopener">Journal.</a> <br>
+<br>
+
+&copy;
+	
+	This website by Howard Wang is licensed under a Creative Common Attribution-ShareAlike 4.0 International License.
+	
+</div>
+            </div>
+    
+    <script src="https://blog.idontwannarock.me/js/journal.js"></script></body>
+</html>

@@ -7,9 +7,91 @@
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
     <copyright>This website by Howard Wang is licensed under a Creative Common Attribution-ShareAlike 4.0 International License.</copyright>
-    <lastBuildDate>Mon, 12 Dec 2022 09:24:17 +0800</lastBuildDate>
+    <lastBuildDate>Wed, 14 Dec 2022 14:14:44 +0800</lastBuildDate>
     
         <atom:link href="https://blog.idontwannarock.me/index.xml" rel="self" type="application/rss+xml" />
+    
+    
+    
+        <item>
+        <title>HTTP/2 系列 - HTTP Server Push 技術</title>
+        <link>https://blog.idontwannarock.me/2021/12/http_server_push/</link>
+        <pubDate>Fri, 24 Dec 2021 15:49:27 +0800</pubDate>
+        
+        <guid>https://blog.idontwannarock.me/2021/12/http_server_push/</guid>
+        <description>Howard Tech Note https://blog.idontwannarock.me/2021/12/http_server_push/ -&lt;p&gt;這篇預計是 HTTP/2 系列的最後一篇，之前在系列前面已經釐清了 HTTP/2 的概念了，其中我比較有興趣的就是 HTTP/2 的 server push 新特性，這邊就繼續來了解一下吧~&lt;/p&gt;
+&lt;p&gt;HTTP/2 系列:&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;&lt;a href=&#34;https://blog.idontwannarock.me/2021/12/http2/&#34;&gt;HTTP/2 系列 - HTTP/2 概念&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;HTTP/2 系列 - HTTP Server Push 技術&lt;/li&gt;
+&lt;/ol&gt;
+&lt;h2 id=&#34;http-server-push-技術&#34;&gt;HTTP Server Push 技術&lt;/h2&gt;
+&lt;p&gt;首先來探討一下有哪些基於 HTTP 協定的 server push 技術&lt;/p&gt;
+&lt;p&gt;相對於 request-response 模型必須要一端發出 request 後另一端再對應的發出 response，server push 一般是指不經 client 端發出指定的 request 就由 server 端發出 message 給 client 端&lt;/p&gt;
+&lt;p&gt;這種技術在某些情況是很有用的，像是需要「即時」更新資料的應用場景，例如比賽分數，當然這可以在 client 端採用定時輪詢 (polling) 的方式來實作，但這樣其實對於 client 端或 server 端都會造成資源的浪費，因為可能大多數請求實際上都沒有需要更新的資料，實際上知道資料有變動的就是 server 端，如果可以由 server 端在資料真正有變動的時候主動通知 client 端，就可以將資料元的浪費降到最低&lt;/p&gt;
+&lt;p&gt;也因為在許多需要「即時」的情況下由 server 端主動通知 client 端都可以節省大量效能浪費，所以才會一直都有追求 server push 技術的需求存在&lt;/p&gt;
+&lt;h3 id=&#34;polling&#34;&gt;Polling&lt;/h3&gt;
+&lt;p&gt;而在 HTTP 協定制定的過程以來，一直也都有追求利用 HTTP 協定的可靠性以及泛用性下實作 server push 的功能，但 HTTP 一開始就是基於 request-response 模型建構起來的，所以就有比較早期的嘗試例如 polling&lt;/p&gt;
+&lt;p&gt;Polling 其實就是前面講的 client 端定時發出 request 請求資料更新，以達到類似資料即時更新的效果&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://res.cloudinary.com/dcvgho2zc/image/upload/v1640575513/Tech%20Blog/ajax-polling.jpg&#34; alt=&#34;Polling&#34;&gt;&lt;/p&gt;
+&lt;p&gt;&lt;em&gt;Image from &lt;a href=&#34;https://stackoverflow.com/a/30259130/7605040&#34;&gt;stackoverflow&lt;/a&gt;&lt;/em&gt;&lt;/p&gt;
+&lt;h3 id=&#34;long-polling&#34;&gt;Long Polling&lt;/h3&gt;
+&lt;p&gt;但這樣其實完全不是 server push，而只是頻繁的 request-response 而已，所以後來又有 long polling 的技術出現&lt;/p&gt;
+&lt;p&gt;long polling 是由 client 發出 request 後，server 可以決定等待到有更新資料後再回傳 response，而 client 在收到 response 後再立刻發出下一次的 request，重複這個過程，以達到類似 server push 的效果&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://res.cloudinary.com/dcvgho2zc/image/upload/v1640576916/Tech%20Blog/long-polling.jpg&#34; alt=&#34;Long polling&#34;&gt;&lt;/p&gt;
+&lt;p&gt;&lt;em&gt;Image from &lt;a href=&#34;https://stackoverflow.com/a/30259130/7605040&#34;&gt;stackoverflow&lt;/a&gt;&lt;/em&gt;&lt;/p&gt;
+&lt;p&gt;但 long polling 其實只是隨時準備好一個 request 給 server 並讓 server hold 住以自行決定何時回傳 response 的技術，實際上還是需要 client 端先發出 request，而且因為需要 hold 住 request 的緣故，要使用 long polling 就必須要另外考量如何處理 timeout 的問題，不過畢竟在效果上已經蠻接近 server push 並且整體來說也的確降低了 request-response 的頻率，達到較好的效能，所以 long polling 技術也的確被使用的蠻長的時間&lt;/p&gt;
+&lt;h3 id=&#34;server-sent-event-sse&#34;&gt;Server-sent Event, SSE&lt;/h3&gt;
+&lt;p&gt;也因為 long polling 有著例如 scaling、ordering、guaranteed delivery 等等問題，所以後來又出現了 server-sent events (SSE) 的技術&lt;/p&gt;
+&lt;p&gt;SSE 實際上也是一種利用 HTTP streaming 來達成類似 server push 效果的技術&lt;/p&gt;
+&lt;p&gt;首先 client 端利用幾乎各大瀏覽器都有支援的 EventSource API 發出 request 給 server，server 端就可以開啟單向從 server 到 client 端的 streaming，讓 server 可以在任意時間點單向傳送 data 給 client&lt;/p&gt;
+&lt;p&gt;雖然 EventSource API 的支援度很高，但 SSE 最大的問題其實是它只能單向的從 server 端傳送 data 到 client 端，也就是它會占用一條 TCP connection，這點在瀏覽器對伺服器的通訊中尤其重要，因為現在多數瀏覽器針對同一域名都有限制開啟的 connection 數量，例如 Chrome 就是六條，不論開啟個 tab 都一樣&lt;/p&gt;
+&lt;p&gt;在一個 SSE 就要佔掉一條 connection 的情況下，萬一 SSE 需要多開幾個，可能到最後 client 端連發新 request 的能力都沒有了&lt;/p&gt;
+&lt;p&gt;不過這個問題在我們前一篇討論 HTTP/2 特性時，就知道 HTTP/2 有 multiplexing 特性可以讓多個 request/response 共用 connection，而 SSE 完全可以利用 HTTP/2 的這個特性來避開它的弱點，所以 SSE 在 HTTP/2 的時代還是有用武之地的，尤其某些只需要單向更新資訊的應用場景之下&lt;/p&gt;
+&lt;h2 id=&#34;http-server-push-特性&#34;&gt;HTTP Server Push 特性&lt;/h2&gt;
+&lt;h3 id=&#34;名詞解釋&#34;&gt;名詞解釋&lt;/h3&gt;
+&lt;p&gt;在討論 HTTP server push 特性之前，我想先來釐清幾個名詞的概念，bidirectional、full-duplex 跟 unsolicited communication&lt;/p&gt;
+&lt;p&gt;bidirectional 意思是可以雙向的發送 data；相對的 unidirectional 就是只能單向的傳送 data&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://res.cloudinary.com/dcvgho2zc/image/upload/v1640569881/Tech%20Blog/unidirectional-and-bidirectional-communication.png&#34; alt=&#34;Unidirectional and bidirectional communication&#34;&gt;&lt;/p&gt;
+&lt;p&gt;&lt;em&gt;Image from &lt;a href=&#34;https://switches-sensors.zf.com/energy-harvesting-faqs/what-is-the-difference-between-unidirectional-and-bidirectional-communication/#&#34;&gt;ZF&lt;/a&gt;&lt;/em&gt;&lt;/p&gt;
+&lt;p&gt;full-duplex 全雙工的意思是可以雙向「同時」傳送 data，也就是兩端都可以「同時」傳送以及接收 data；相對的還有 half-duplex (semiduplex) 半雙工，也就是容許雙向傳送 data，但不允許同時進行；最後還有相對於 duplex 雙工的 simplex 單工，定義上就是在特定時間底下只能單向傳送 data&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;p&gt;這邊討論的最多只到 Transport Layer 的邏輯傳輸，並不是討論 Data Link Layer 的傳輸，所以不討論分時雙工 (Time-Division Duplexing, TDD) 或分頻雙工 (Frequency-Division Duplexing, FDD)&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;p&gt;&lt;img src=&#34;https://res.cloudinary.com/dcvgho2zc/image/upload/v1640570115/Tech%20Blog/simplex-half-duplex-full-duplex.jpg&#34; alt=&#34;Simplex, half-duplex and full-duplex&#34;&gt;&lt;/p&gt;
+&lt;p&gt;&lt;em&gt;Image from &lt;a href=&#34;https://www.nicerf.com/articles/detail/single-and-duplex-wireless-module.html&#34;&gt;G-NiceRF&lt;/a&gt;&lt;/em&gt;&lt;/p&gt;
+&lt;p&gt;再來是 unsolicited communication，在網路通訊來說，就是指可以不經對方 request 就主動發出 message 給對方，或者說發出的 message 不是為了回覆對方某一個 request；相對應的就是基本的 request-response 模型&lt;/p&gt;
+&lt;h3 id=&#34;http-server-push-通訊特性&#34;&gt;HTTP Server Push 通訊特性&lt;/h3&gt;
+&lt;p&gt;經過名詞解釋後，就可以來討論 HTTP 的通訊特性了&lt;/p&gt;
+&lt;p&gt;因為 HTTP/2 有著 multiplexing 特性，所以 HTTP/2 的確是 bidirectional 且 full-duplex 的，只是我認為它基本上仍然還是遵循 request-response 模型，而不能達到真正 bidirectional 的 unsolicited communication&lt;/p&gt;
+&lt;p&gt;一方面是就算是像 gRPC 的 bidirectional streaming RPC 的用法，實際上也只是在同一個 request-response 的 context 底下，畢竟沒有 client 首先呼叫的這個步驟，server 端根本無法自行發出任何訊息，就算是 connection 已經建立好也一樣&lt;/p&gt;
+&lt;p&gt;另一方面則是有關 HTTP/2 的 server push 特性，實際上也是必須依賴 client 端首先發出一個 request，雖然 server 之後可以主動推送 client 端沒有請求的資源到 client 端的 cache 當中，但畢竟還是必須首先有 client 發出的那一個 request&lt;/p&gt;
+&lt;p&gt;所以雖然沒看到有哪邊有這部分的定義，但我個人認為實際上 HTTP/2 並不能做到真正的 bidirectional uncolicited communication&lt;/p&gt;
+&lt;p&gt;順便談一下，HTTP/1.x 是 bidirectional 這沒問題，但應該很多人不知道其實 HTTP/1.x 也是 full-duplex 吧？&lt;/p&gt;
+&lt;p&gt;實際上雖然 HTTP/1.x 一般的 request-response 還是 half-duplex，也就是收到 request 後再回覆 response，同時間一個 TCP connection 只會有 request 或 response，不過事實上因為 request 可以 streaming，server 端完全可以在 request streaming 還沒結束就同樣開啟 streaming 回傳給 client，達到同時上傳/下載的功能，也就是 full-duplex&lt;/p&gt;
+&lt;p&gt;另外如同前面討論過的不論是 polling、long polling 或 SSE 都還是 request-response 模型，所以我認為實際上目前包含 HTTP/2 及 HTTP/1.x 都是 bidirectional、full-duplex，但也都無法達成 bidirectional unsolicited communication，也就是都只能模擬出 server push 的效果，而不能達到真正的 server push 功能&lt;/p&gt;
+&lt;p&gt;不過這點只是需要知道就好，畢竟我們不見得需要真正的 server push，只要能達成效果就好，除非有特別的應用場景&lt;/p&gt;
+&lt;p&gt;真的要達到 bidirectional、full-duplex、unsolicited communication，應該還是要考慮 WebSocket 或 WebRTC 這類的技術&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;p&gt;WebSocket 雖然一開始是利用 HTTP 建立連線，但同時也會「升級」成為別的通訊協定，所以這邊並不把 WebSocket 列入基於 HTTP 的技術來討論&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;h2 id=&#34;參考連結&#34;&gt;參考連結&lt;/h2&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;a href=&#34;https://en.wikipedia.org/wiki/Simplex_communication&#34;&gt;Simplex communication&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;https://en.wikipedia.org/wiki/Duplex_(telecommunications)&#34;&gt;Duplex (telecommunications)&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;https://www.techtarget.com/searchnetworking/definition/full-duplex&#34;&gt;full-duplex&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;https://stackoverflow.com/a/54942254/7605040&#34;&gt;confusion regarding bidirectional and full-duplex in articles about http/2&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;https://stackoverflow.com/questions/30252471/difference-between-a-normal-ajax-and-long-polling&#34;&gt;Difference between a normal ajax and long polling&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;https://www.linuxquestions.org/questions/linux-server-73/question-about-socket-programming-for-solicited-and-unsolicited-traffic-4175583350/&#34;&gt;Question about socket programming for solicited and unsolicited traffic&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;https://stanko.io/do-you-really-need-websockets-343aed40aa9b&#34;&gt;Do you really need WebSockets?&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;https://stackoverflow.com/a/14711517/7605040&#34;&gt;WebSockets protocol vs HTTP&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;https://stackoverflow.com/a/12855533/7605040&#34;&gt;What are Long-Polling, Websockets, Server-Sent Events (SSE) and Comet?&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;https://stackoverflow.com/a/11998868/7605040&#34;&gt;How do server-sent events actually work?&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;https://stackoverflow.com/a/42560354/7605040&#34;&gt;What is the difference between HTTP streaming and server sent events?&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;https://www.infoq.com/articles/websocket-and-http2-coexist/&#34;&gt;Will WebSocket survive HTTP/2?&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+- https://blog.idontwannarock.me/2021/12/http_server_push/ - This website by Howard Wang is licensed under a Creative Common Attribution-ShareAlike 4.0 International License.</description>
+        </item>
     
     
     
@@ -1018,51 +1100,6 @@
 &lt;li&gt;其中設定的元素跟屬性都跟註解相同&lt;/li&gt;
 &lt;/ul&gt;
 - https://blog.idontwannarock.me/2018/04/aop_and_spring_aop_basic/ - This website by Howard Wang is licensed under a Creative Common Attribution-ShareAlike 4.0 International License.</description>
-        </item>
-    
-    
-    
-        <item>
-        <title>Java 字串判定</title>
-        <link>https://blog.idontwannarock.me/2018/02/java_string_check/</link>
-        <pubDate>Tue, 06 Feb 2018 14:09:25 +0800</pubDate>
-        
-        <guid>https://blog.idontwannarock.me/2018/02/java_string_check/</guid>
-        <description>Howard Tech Note https://blog.idontwannarock.me/2018/02/java_string_check/ -&lt;p&gt;因為開始做專題，開始要作資料檢查，首先會要碰到的就是最基本的檢查是否有輸入資料，也就是要檢查字串，記錄一下 Java 當中有關字串檢查的東西。&lt;/p&gt;
-&lt;h1 id=&#34;去除字串空白&#34;&gt;去除字串空白&lt;/h1&gt;
-&lt;p&gt;這主要分兩個部分，一是去掉頭尾空白，一是去掉字串中間空白。&lt;/p&gt;
-&lt;p&gt;去掉頭尾空白就用 &lt;code&gt;.trim()&lt;/code&gt;，去掉字串中間空白則可以用 &lt;code&gt;.replaceAll(&amp;quot; &amp;quot;, &amp;quot;&amp;quot;)&lt;/code&gt; 的方式簡單完成。&lt;/p&gt;
-&lt;p&gt;但用 &lt;code&gt;replaceAll()&lt;/code&gt; 方法有個小小的問題，就是萬一碰到的是空白字元，例如 &lt;code&gt;\t&lt;/code&gt;、&lt;code&gt;\r&lt;/code&gt; 這種就會有困難，所以必須要用正規表示式來去除，例如：&lt;/p&gt;
-&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;&#34;&gt;&lt;code class=&#34;language-java&#34; data-lang=&#34;java&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;String str &lt;span style=&#34;color:#ff79c6&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color:#f1fa8c&#34;&gt;&amp;#34;\t&amp;#34;&lt;/span&gt;&lt;span style=&#34;color:#ff79c6&#34;&gt;;&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;str&lt;span style=&#34;color:#ff79c6&#34;&gt;.&lt;/span&gt;&lt;span style=&#34;color:#50fa7b&#34;&gt;replaceAll&lt;/span&gt;&lt;span style=&#34;color:#ff79c6&#34;&gt;(&lt;/span&gt;&lt;span style=&#34;color:#f1fa8c&#34;&gt;&amp;#34;\\s+&amp;#34;&lt;/span&gt;&lt;span style=&#34;color:#ff79c6&#34;&gt;,&lt;/span&gt; &lt;span style=&#34;color:#f1fa8c&#34;&gt;&amp;#34;&amp;#34;&lt;/span&gt;&lt;span style=&#34;color:#ff79c6&#34;&gt;);&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h1 id=&#34;檢查空值&#34;&gt;檢查空值&lt;/h1&gt;
-&lt;p&gt;接著如果要檢查字串是否有東西，要分成檢查兩種狀態，null 或空字串。&lt;/p&gt;
-&lt;p&gt;這邊有幾個方法檢查這個部分，但要注意它們實際功能上的區別。&lt;/p&gt;
-&lt;h2 id=&#34;length--0&#34;&gt;&lt;code&gt;.length == 0&lt;/code&gt;&lt;/h2&gt;
-&lt;p&gt;這個是 Java 最原始的功能，基本上就是檢查字串長度是否為 0，回傳值型態為 boolean。&lt;/p&gt;
-&lt;h2 id=&#34;isempty&#34;&gt;&lt;code&gt;.isEmpty()&lt;/code&gt;&lt;/h2&gt;
-&lt;p&gt;這個方法是 Java 6.0 之後推出用來取代 &lt;code&gt;.length() == 0&lt;/code&gt; 的方法。&lt;code&gt;isEmpty()&lt;/code&gt; 其實也是在檢查字串長度是否為 0，回傳值型態一樣為 boolean。&lt;/p&gt;
-&lt;h2 id=&#34;equals&#34;&gt;&lt;code&gt;.equals(&amp;quot;&amp;quot;)&lt;/code&gt;&lt;/h2&gt;
-&lt;p&gt;這個功能是用字串的比對功能，比對是否為空字串，結果應該會跟前兩個方法相同。&lt;/p&gt;
-&lt;h2 id=&#34;-null&#34;&gt;&lt;code&gt;!= null&lt;/code&gt;&lt;/h2&gt;
-&lt;p&gt;前面幾個方法都有一個共同的問題：萬一字串為 null，全都來不及檢查就會跳 NullPointerException。&lt;/p&gt;
-&lt;p&gt;所以必須要用這個方式檢查是否為 Null，再檢查是否為空字串，也就是要寫成類似下面這樣：&lt;/p&gt;
-&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;&#34;&gt;&lt;code class=&#34;language-java&#34; data-lang=&#34;java&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;String string&lt;span style=&#34;color:#ff79c6&#34;&gt;;&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#ff79c6&#34;&gt;if&lt;/span&gt; &lt;span style=&#34;color:#ff79c6&#34;&gt;(&lt;/span&gt;string &lt;span style=&#34;color:#ff79c6&#34;&gt;!=&lt;/span&gt; &lt;span style=&#34;color:#ff79c6&#34;&gt;null&lt;/span&gt; &lt;span style=&#34;color:#ff79c6&#34;&gt;&amp;amp;&amp;amp;&lt;/span&gt; string&lt;span style=&#34;color:#ff79c6&#34;&gt;.&lt;/span&gt;&lt;span style=&#34;color:#50fa7b&#34;&gt;isEmpty&lt;/span&gt;&lt;span style=&#34;color:#ff79c6&#34;&gt;())&lt;/span&gt; &lt;span style=&#34;color:#ff79c6&#34;&gt;{&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    &lt;span style=&#34;color:#6272a4&#34;&gt;// things to do when string is neither null nor blank;
-&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#6272a4&#34;&gt;&lt;/span&gt;&lt;span style=&#34;color:#ff79c6&#34;&gt;}&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h2 id=&#34;equalsstring&#34;&gt;&lt;code&gt;&amp;quot;&amp;quot;.equals(string)&lt;/code&gt;&lt;/h2&gt;
-&lt;p&gt;但有一個更簡短的方法 &lt;code&gt;&amp;quot;&amp;quot;.equals(string)&lt;/code&gt;。&lt;/p&gt;
-&lt;p&gt;因為用 String 本身的 &lt;code&gt;.equals()&lt;/code&gt; 方法，會先檢查括號內參數字串是否為 null，若是 null 就會直接回傳 &lt;code&gt;false&lt;/code&gt;；若參數字串不為 null，才會繼續檢查是否跟 &lt;code&gt;&amp;quot;&amp;quot;&lt;/code&gt; 空字串相等。&lt;/p&gt;
-&lt;p&gt;所以前一段的檢查式就可以縮短如下：&lt;/p&gt;
-&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;&#34;&gt;&lt;code class=&#34;language-java&#34; data-lang=&#34;java&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;String string&lt;span style=&#34;color:#ff79c6&#34;&gt;;&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#ff79c6&#34;&gt;if&lt;/span&gt; &lt;span style=&#34;color:#ff79c6&#34;&gt;(!&lt;/span&gt;&lt;span style=&#34;color:#f1fa8c&#34;&gt;&amp;#34;&amp;#34;&lt;/span&gt;&lt;span style=&#34;color:#ff79c6&#34;&gt;.&lt;/span&gt;&lt;span style=&#34;color:#50fa7b&#34;&gt;equals&lt;/span&gt;&lt;span style=&#34;color:#ff79c6&#34;&gt;(&lt;/span&gt;string&lt;span style=&#34;color:#ff79c6&#34;&gt;))&lt;/span&gt; &lt;span style=&#34;color:#ff79c6&#34;&gt;{&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    &lt;span style=&#34;color:#6272a4&#34;&gt;// things to do when string is neither null nor blank;
-&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#6272a4&#34;&gt;&lt;/span&gt;&lt;span style=&#34;color:#ff79c6&#34;&gt;}&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h1 id=&#34;結語&#34;&gt;結語&lt;/h1&gt;
-&lt;p&gt;雖然最後一個方法最簡短，但其實可讀性不見得比較優秀；而倒數第二個方法雖然比較囉唆，但整體上可讀性比較好。&lt;/p&gt;
-&lt;p&gt;所以要用哪種方法還是要看簡潔跟可讀性怎麼取捨。&lt;/p&gt;
-- https://blog.idontwannarock.me/2018/02/java_string_check/ - This website by Howard Wang is licensed under a Creative Common Attribution-ShareAlike 4.0 International License.</description>
         </item>
     
     
