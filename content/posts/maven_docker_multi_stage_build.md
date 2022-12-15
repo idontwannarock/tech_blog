@@ -5,10 +5,17 @@ slug: "maven_docker_multi_stage_build"
 description: "Explained Maven project using Docker multi-stage build"
 tags: ["maven", "docker"]
 categories: "implementation"
-featured_image: ""
+featured_image: "https://res.cloudinary.com/dcvgho2zc/image/upload/v1671071520/Tech%20Blog/spring_boot_maven_docker.png"
 draft: false
 comment: true
 enableLaTeX: false
+---
+
+Java 專案整合 Docker multi-stage build 系列：
+
+- Maven + Docker Multi-stage build
+- [Gradle + Docker Multi-stage build]({{< relref "gradle_docker_multi_stage_build" >}})
+
 ---
 
 現代常見的 CI/CD 流程經常會使用容器化 (containerized) 的方式來幫助建置環境及部署
