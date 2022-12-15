@@ -5,7 +5,7 @@ slug: "springfox_to_springdoc"
 description: "Migrate from SpringFox to SpringDoc"
 tags: ["java", "spring-boot", "springfox", "springdoc", "swagger"]
 categories: "implementation"
-featured_image: ""
+featured_image: "https://res.cloudinary.com/dcvgho2zc/image/upload/v1671071770/Tech%20Blog/spring_boot_springdoc_swagger.webp"
 draft: false
 comment: true
 enableLaTeX: false
