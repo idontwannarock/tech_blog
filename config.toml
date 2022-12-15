@@ -8,7 +8,7 @@ licenseURL = "https://creativecommons.org/licenses/by-sa/4.0/"
 theme = "diary"
 canonifyURLs = true
 
-googleAnalytics = "UA-106499565-1"
+googleAnalytics = "G-JP1V61PPMJ"
 
 [markup]
   [markup.highlight]
