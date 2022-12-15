@@ -5,7 +5,7 @@ slug: "quartz-intro"
 description: "簡介 Quartz 這個 Java 生態圈有名的排程框架"
 tags: ["quartz", "scheduling", "java"]
 categories: "concept"
-featured_image: ""
+featured_image: "https://res.cloudinary.com/dcvgho2zc/image/upload/v1671071918/Tech%20Blog/quartz-news-Transparent-logo-png.png"
 draft: false
 comment: true
 enableLaTeX: false
