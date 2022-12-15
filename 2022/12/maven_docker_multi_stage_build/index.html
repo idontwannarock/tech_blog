@@ -671,8 +671,15 @@ Ported from <a href="https://mak1t0.cc/" target="_blank" rel="noreferrer noopene
             
             
             
+                
+            
 
-            <div class="post-head-wrapper-text-only"
+            <div class="post-head-wrapper"
+                
+                    
+                    
+                    style="background-image: url('https://res.cloudinary.com/dcvgho2zc/image/upload/v1671071520/Tech%20Blog/spring_boot_maven_docker.png')"
+                    
                 
             >
                 <div class="post-title">
@@ -714,7 +721,13 @@ Ported from <a href="https://mak1t0.cc/" target="_blank" rel="noreferrer noopene
                 
                 <div class="post-body" v-pre>
                 
-                    <p>現代常見的 CI/CD 流程經常會使用容器化 (containerized) 的方式來幫助建置環境及部署</p>
+                    <p>Java 專案整合 Docker multi-stage build 系列：</p>
+<ul>
+<li>Maven + Docker Multi-stage build</li>
+<li><a href="https://blog.idontwannarock.me/2022/12/gradle_docker_multi_stage_build/">Gradle + Docker Multi-stage build</a></li>
+</ul>
+<hr>
+<p>現代常見的 CI/CD 流程經常會使用容器化 (containerized) 的方式來幫助建置環境及部署</p>
 <p>以 Java + Maven 專案舉例，一個比較通用的 Dockerfile 可能長這樣：</p>
 <div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-sh" data-lang="sh"><span style="display:flex;"><span>FROM maven:3.8-openjdk-11
 </span></span><span style="display:flex;"><span>
@@ -916,8 +929,8 @@ Ported from <a href="https://mak1t0.cc/" target="_blank" rel="noreferrer noopene
             <nav class="post-pagination">
 
                 
-                <a class="newer-posts">
-			Next<br>No newer posts.
+                <a class="newer-posts" href="https://blog.idontwannarock.me/2022/12/gradle_docker_multi_stage_build/">
+			Next<br>Gradle &#43; Docker Multi-stage build
                 </a>
                 
                 
