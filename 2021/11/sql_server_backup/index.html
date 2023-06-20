@@ -40,6 +40,7 @@ if (!doNotTrack) {
 
 
 
+
   
 
 
@@ -50,11 +51,8 @@ if (!doNotTrack) {
       <script src="https://blog.idontwannarock.me/js/toc.js"></script>
     
     <link type="text/css" rel="stylesheet" href="https://blog.idontwannarock.me/vendor/css/bootstrap.min.css">
-<link rel="stylesheet" href="https://blog.idontwannarock.me/scss/journal.min.c5d92f380bf10f6849c7ac487c7df2b22c081e0851e5339224f1ae29210b20d2.css" integrity="sha256-xdkvOAvxD2hJx6xIfH3ysiwIHghR5TOSJPGuKSELINI=" media="screen">
 
-
-
-<link rel="stylesheet" href="https://blog.idontwannarock.me/scss/dark-mode.min.9f8d8c2df9285089d141edd4a50cb7506c7948e6ab79a29968dced1bd0ab7d22.css" integrity="sha256-n42MLfkoUInRQe3UpQy3UGx5SOareaKZaNztG9CrfSI=" media="screen">
+<link rel="stylesheet" href="https://blog.idontwannarock.me/scss/dark-mode.min.cb53f1bee2b8900cb4f082afbf00175d6618f281cf9a2fe8619e3b52d20b5721.css" integrity="sha256-y1PxvuK4kAy08IKvvwAXXWYY8oHPmi/oYZ47UtILVyE=" media="screen">
 
 
 <link rel="stylesheet"
@@ -82,307 +80,7 @@ if (!doNotTrack) {
 
 </head>
 <body>
-    	<div id="app"><div id="sideContainer" class="side-container">
-    
-    <a class="a-block nav-head false" href="https://blog.idontwannarock.me/">
-    
-        <div class="nav-title">
-            Howard Tech Note
-        </div>
-        
-        <div class="nav-subtitle">
-            Share * Record * Program
-        </div>
-        
-    </a>
-
-    <div class="nav-link-list">
-        
-        
-            
-            
-            
-            
-            
-            <a class="a-block nav-link-item false" href="https://blog.idontwannarock.me/posts">
-                Archive
-            </a>
-            
-        
-            
-            
-            
-            
-            
-            <a class="a-block nav-link-item false" href="https://blog.idontwannarock.me/categories">
-                Categories
-            </a>
-            
-        
-            
-            
-            
-            
-            
-            <a class="a-block nav-link-item false" href="https://blog.idontwannarock.me/tags">
-                Tags
-            </a>
-            
-        
-            
-            
-            
-            
-            
-            <a class="a-block nav-link-item false" href="https://blog.idontwannarock.me/about">
-                About
-            </a>
-            
-        
-            
-            
-            
-            
-            
-            <a class="a-block nav-link-item false" href="https://blog.idontwannarock.me/index.xml">
-                RSS Feed
-            </a>
-            
-        
-    </div>
-
-    
-
-    <div class="nav-footer">
-        
-Hugo Theme <a href="https://github.com/amazingrise/hugo-theme-diary">Diary</a> by <a href="https://risehere.net/">Rise</a>
-<br>
-Ported from <a href="https://mak1t0.cc/" target="_blank" rel="noreferrer noopener">Makito</a>'s <a href="https://github.com/SumiMakito/hexo-theme-journal/" target="_blank" rel="noreferrer noopener">Journal.</a> <br>
-<br>
-
-&copy;
-	
-	This website by Howard Wang is licensed under a Creative Common Attribution-ShareAlike 4.0 International License.
-	
-
-    </div>
-    
-</div><div id="extraContainer" class="extra-container">
-    
-    
-    <div class="toc animated-visibility" :class="{ invisible: scrollY <= 140 }">
-
-
-	<div class="toc-content">
-	
-		
-		
-		
-		<center>- CATALOG -</center>
-		
-		
-		<ul>
-			
-				
-				
-					
-						
-						
-						
-						
-							
-								
-									<ul>
-								
-							
-						
-						
-							<li>
-								<a href="#%e5%82%99%e4%bb%bd%e6%aa%94%e6%a1%88%e6%a0%bc%e5%bc%8f" onclick="onNavClick(`#備份檔案格式-nav`)" id="備份檔案格式-nav">
-									備份檔案格式
-								</a>
-							</li>
-						
-						
-					
-				
-			
-				
-				
-					
-						
-						
-						
-						
-						
-							<li>
-								<a href="#%e5%82%99%e4%bb%bd%e5%b7%a5%e5%85%b7" onclick="onNavClick(`#備份工具-nav`)" id="備份工具-nav">
-									備份工具
-								</a>
-							</li>
-						
-						
-					
-				
-			
-				
-				
-					
-						
-						
-						
-						
-							
-								
-									<ul>
-								
-							
-						
-						
-							<li>
-								<a href="#sqlcmd-%e5%ae%98%e6%96%b9" onclick="onNavClick(`#sqlcmd-官方-nav`)" id="sqlcmd-官方-nav">
-									SqlCmd (官方)
-								</a>
-							</li>
-						
-						
-					
-				
-			
-				
-				
-					
-						
-						
-						
-						
-						
-							<li>
-								<a href="#bcp-%e5%ae%98%e6%96%b9" onclick="onNavClick(`#bcp-官方-nav`)" id="bcp-官方-nav">
-									BCP (官方)
-								</a>
-							</li>
-						
-						
-					
-				
-			
-				
-				
-					
-						
-						
-						
-						
-						
-							<li>
-								<a href="#smo-%e5%ae%98%e6%96%b9" onclick="onNavClick(`#smo-官方-nav`)" id="smo-官方-nav">
-									SMO (官方)
-								</a>
-							</li>
-						
-						
-					
-				
-			
-				
-				
-					
-						
-						
-						
-						
-						
-							<li>
-								<a href="#sqlpackageexe-%e5%ae%98%e6%96%b9" onclick="onNavClick(`#sqlpackageexe-官方-nav`)" id="sqlpackageexe-官方-nav">
-									SqlPackage.exe (官方)
-								</a>
-							</li>
-						
-						
-					
-				
-			
-				
-				
-					
-						
-						
-						
-						
-						
-							<li>
-								<a href="#dbatools" onclick="onNavClick(`#dbatools-nav`)" id="dbatools-nav">
-									dbatools
-								</a>
-							</li>
-						
-						
-					
-				
-			
-				
-				
-					
-						
-						
-						
-						
-						
-							<li>
-								<a href="#mssql-scripter" onclick="onNavClick(`#mssql-scripter-nav`)" id="mssql-scripter-nav">
-									mssql-scripter
-								</a>
-							</li>
-						
-						
-					
-				
-			
-				
-				
-					
-						
-						
-						
-							
-								</ul>
-							
-						
-						
-						
-							<li>
-								<a href="#%e7%b5%90%e8%ab%96" onclick="onNavClick(`#結論-nav`)" id="結論-nav">
-									結論
-								</a>
-							</li>
-						
-						
-					
-				
-			
-		</ul>
-	</div>
-
-</div>
-    
-    <div class="pagination">
-        <a id="globalBackToTop" class="pagination-action animated-visibility" href="#top" :class="{ invisible: scrollY == 0 }">
-            <i class="material-icons pagination-action-icon">
-                keyboard_arrow_up
-            </i>
-        </a>
-        
-        <a type="button" class="pagination-action" id="darkModeToggleButton">
-            <span class="material-icons pagination-action-icon" id="darkModeToggleIcon">
-                dark_mode
-            </span>
-        </a>
-        
-        
-    </div>
-</div>
-<div class="single-column-drawer-container" id="drawer"
+    	<div id="app"><div class="single-column-drawer-container" id="drawer"
      v-bind:class="{ 'single-column-drawer-container-active': isDrawerOpen }">
     <div class="drawer-content">
         <div class="drawer-menu">
@@ -468,7 +166,7 @@ Ported from <a href="https://mak1t0.cc/" target="_blank" rel="noreferrer noopene
 						
 						
 							<li>
-								<a href="#%e5%82%99%e4%bb%bd%e6%aa%94%e6%a1%88%e6%a0%bc%e5%bc%8f" onclick="onNavClick(`#備份檔案格式-nav`)" id="備份檔案格式-nav">
+								<a href="#%e5%82%99%e4%bb%bd%e6%aa%94%e6%a1%88%e6%a0%bc%e5%bc%8f" class="nav-備份檔案格式">
 									備份檔案格式
 								</a>
 							</li>
@@ -486,7 +184,7 @@ Ported from <a href="https://mak1t0.cc/" target="_blank" rel="noreferrer noopene
 						
 						
 							<li>
-								<a href="#%e5%82%99%e4%bb%bd%e5%b7%a5%e5%85%b7" onclick="onNavClick(`#備份工具-nav`)" id="備份工具-nav">
+								<a href="#%e5%82%99%e4%bb%bd%e5%b7%a5%e5%85%b7" class="nav-備份工具">
 									備份工具
 								</a>
 							</li>
@@ -510,7 +208,7 @@ Ported from <a href="https://mak1t0.cc/" target="_blank" rel="noreferrer noopene
 						
 						
 							<li>
-								<a href="#sqlcmd-%e5%ae%98%e6%96%b9" onclick="onNavClick(`#sqlcmd-官方-nav`)" id="sqlcmd-官方-nav">
+								<a href="#sqlcmd-%e5%ae%98%e6%96%b9" class="nav-sqlcmd-官方">
 									SqlCmd (官方)
 								</a>
 							</li>
@@ -528,7 +226,7 @@ Ported from <a href="https://mak1t0.cc/" target="_blank" rel="noreferrer noopene
 						
 						
 							<li>
-								<a href="#bcp-%e5%ae%98%e6%96%b9" onclick="onNavClick(`#bcp-官方-nav`)" id="bcp-官方-nav">
+								<a href="#bcp-%e5%ae%98%e6%96%b9" class="nav-bcp-官方">
 									BCP (官方)
 								</a>
 							</li>
@@ -546,7 +244,7 @@ Ported from <a href="https://mak1t0.cc/" target="_blank" rel="noreferrer noopene
 						
 						
 							<li>
-								<a href="#smo-%e5%ae%98%e6%96%b9" onclick="onNavClick(`#smo-官方-nav`)" id="smo-官方-nav">
+								<a href="#smo-%e5%ae%98%e6%96%b9" class="nav-smo-官方">
 									SMO (官方)
 								</a>
 							</li>
@@ -564,7 +262,7 @@ Ported from <a href="https://mak1t0.cc/" target="_blank" rel="noreferrer noopene
 						
 						
 							<li>
-								<a href="#sqlpackageexe-%e5%ae%98%e6%96%b9" onclick="onNavClick(`#sqlpackageexe-官方-nav`)" id="sqlpackageexe-官方-nav">
+								<a href="#sqlpackageexe-%e5%ae%98%e6%96%b9" class="nav-sqlpackageexe-官方">
 									SqlPackage.exe (官方)
 								</a>
 							</li>
@@ -582,7 +280,7 @@ Ported from <a href="https://mak1t0.cc/" target="_blank" rel="noreferrer noopene
 						
 						
 							<li>
-								<a href="#dbatools" onclick="onNavClick(`#dbatools-nav`)" id="dbatools-nav">
+								<a href="#dbatools" class="nav-dbatools">
 									dbatools
 								</a>
 							</li>
@@ -600,7 +298,7 @@ Ported from <a href="https://mak1t0.cc/" target="_blank" rel="noreferrer noopene
 						
 						
 							<li>
-								<a href="#mssql-scripter" onclick="onNavClick(`#mssql-scripter-nav`)" id="mssql-scripter-nav">
+								<a href="#mssql-scripter" class="nav-mssql-scripter">
 									mssql-scripter
 								</a>
 							</li>
@@ -622,7 +320,7 @@ Ported from <a href="https://mak1t0.cc/" target="_blank" rel="noreferrer noopene
 						
 						
 							<li>
-								<a href="#%e7%b5%90%e8%ab%96" onclick="onNavClick(`#結論-nav`)" id="結論-nav">
+								<a href="#%e7%b5%90%e8%ab%96" class="nav-結論">
 									結論
 								</a>
 							</li>
@@ -937,13 +635,318 @@ Ported from <a href="https://mak1t0.cc/" target="_blank" rel="noreferrer noopene
 
 
 
+
+
             </div>
         </div>
     </div>
 
 
                     </div>
-            </div><div id="single-column-footer">
+            </div><div id="sideContainer" class="side-container">
+    
+    <a class="a-block nav-head false" href="https://blog.idontwannarock.me/">
+    
+        <div class="nav-title">
+            Howard Tech Note
+        </div>
+        
+        <div class="nav-subtitle">
+            Share * Record * Program
+        </div>
+        
+    </a>
+
+    <div class="nav-link-list">
+        
+        
+            
+            
+            
+            
+            
+            <a class="a-block nav-link-item false" href="https://blog.idontwannarock.me/posts">
+                Archive
+            </a>
+            
+        
+            
+            
+            
+            
+            
+            <a class="a-block nav-link-item false" href="https://blog.idontwannarock.me/categories">
+                Categories
+            </a>
+            
+        
+            
+            
+            
+            
+            
+            <a class="a-block nav-link-item false" href="https://blog.idontwannarock.me/tags">
+                Tags
+            </a>
+            
+        
+            
+            
+            
+            
+            
+            <a class="a-block nav-link-item false" href="https://blog.idontwannarock.me/about">
+                About
+            </a>
+            
+        
+            
+            
+            
+            
+            
+            <a class="a-block nav-link-item false" href="https://blog.idontwannarock.me/index.xml">
+                RSS Feed
+            </a>
+            
+        
+    </div>
+
+    
+
+    <div class="nav-footer">
+        
+Hugo Theme <a href="https://github.com/amazingrise/hugo-theme-diary">Diary</a> by <a href="https://risehere.net/">Rise</a>
+<br>
+Ported from <a href="https://mak1t0.cc/" target="_blank" rel="noreferrer noopener">Makito</a>'s <a href="https://github.com/SumiMakito/hexo-theme-journal/" target="_blank" rel="noreferrer noopener">Journal.</a> <br>
+<br>
+
+&copy;
+	
+	This website by Howard Wang is licensed under a Creative Common Attribution-ShareAlike 4.0 International License.
+	
+
+    </div>
+    
+</div><div id="extraContainer" class="extra-container">
+    <div class="toc-wrapper">
+        
+
+        
+        <div class="toc">
+
+
+	<div class="toc-content">
+	
+		
+		
+		
+		<center>- CATALOG -</center>
+		
+		
+		<ul>
+			
+				
+				
+					
+						
+						
+						
+						
+							
+								
+									<ul>
+								
+							
+						
+						
+							<li>
+								<a href="#%e5%82%99%e4%bb%bd%e6%aa%94%e6%a1%88%e6%a0%bc%e5%bc%8f" class="nav-備份檔案格式">
+									備份檔案格式
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+						
+							<li>
+								<a href="#%e5%82%99%e4%bb%bd%e5%b7%a5%e5%85%b7" class="nav-備份工具">
+									備份工具
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+							
+								
+									<ul>
+								
+							
+						
+						
+							<li>
+								<a href="#sqlcmd-%e5%ae%98%e6%96%b9" class="nav-sqlcmd-官方">
+									SqlCmd (官方)
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+						
+							<li>
+								<a href="#bcp-%e5%ae%98%e6%96%b9" class="nav-bcp-官方">
+									BCP (官方)
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+						
+							<li>
+								<a href="#smo-%e5%ae%98%e6%96%b9" class="nav-smo-官方">
+									SMO (官方)
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+						
+							<li>
+								<a href="#sqlpackageexe-%e5%ae%98%e6%96%b9" class="nav-sqlpackageexe-官方">
+									SqlPackage.exe (官方)
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+						
+							<li>
+								<a href="#dbatools" class="nav-dbatools">
+									dbatools
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+						
+							<li>
+								<a href="#mssql-scripter" class="nav-mssql-scripter">
+									mssql-scripter
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+							
+								</ul>
+							
+						
+						
+						
+							<li>
+								<a href="#%e7%b5%90%e8%ab%96" class="nav-結論">
+									結論
+								</a>
+							</li>
+						
+						
+					
+				
+			
+		</ul>
+	</div>
+
+</div>
+        
+    </div>
+    <div class="pagination">
+        <a id="globalBackToTop" class="pagination-action animated-visibility" href="#top"
+            :class="{ invisible: scrollY == 0 }">
+            <i class="material-icons pagination-action-icon">
+                keyboard_arrow_up
+            </i>
+        </a>
+        
+        <a type="button" class="pagination-action" id="darkModeToggleButton">
+            <span class="material-icons pagination-action-icon" id="darkModeToggleIcon">
+                dark_mode
+            </span>
+        </a>
+        
+        
+    </div>
+</div><div id="single-column-footer">
 Hugo Theme <a href="https://github.com/amazingrise/hugo-theme-diary">Diary</a> by <a href="https://risehere.net/">Rise</a>
 <br>
 Ported from <a href="https://mak1t0.cc/" target="_blank" rel="noreferrer noopener">Makito</a>'s <a href="https://github.com/SumiMakito/hexo-theme-journal/" target="_blank" rel="noreferrer noopener">Journal.</a> <br>

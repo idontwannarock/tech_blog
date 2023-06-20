@@ -40,6 +40,7 @@ if (!doNotTrack) {
 
 
 
+
   
 
 
@@ -50,11 +51,8 @@ if (!doNotTrack) {
       <script src="https://blog.idontwannarock.me/js/toc.js"></script>
     
     <link type="text/css" rel="stylesheet" href="https://blog.idontwannarock.me/vendor/css/bootstrap.min.css">
-<link rel="stylesheet" href="https://blog.idontwannarock.me/scss/journal.min.c5d92f380bf10f6849c7ac487c7df2b22c081e0851e5339224f1ae29210b20d2.css" integrity="sha256-xdkvOAvxD2hJx6xIfH3ysiwIHghR5TOSJPGuKSELINI=" media="screen">
 
-
-
-<link rel="stylesheet" href="https://blog.idontwannarock.me/scss/dark-mode.min.9f8d8c2df9285089d141edd4a50cb7506c7948e6ab79a29968dced1bd0ab7d22.css" integrity="sha256-n42MLfkoUInRQe3UpQy3UGx5SOareaKZaNztG9CrfSI=" media="screen">
+<link rel="stylesheet" href="https://blog.idontwannarock.me/scss/dark-mode.min.cb53f1bee2b8900cb4f082afbf00175d6618f281cf9a2fe8619e3b52d20b5721.css" integrity="sha256-y1PxvuK4kAy08IKvvwAXXWYY8oHPmi/oYZ47UtILVyE=" media="screen">
 
 
 <link rel="stylesheet"
@@ -82,433 +80,7 @@ if (!doNotTrack) {
 
 </head>
 <body>
-    	<div id="app"><div id="sideContainer" class="side-container">
-    
-    <a class="a-block nav-head false" href="https://blog.idontwannarock.me/">
-    
-        <div class="nav-title">
-            Howard Tech Note
-        </div>
-        
-        <div class="nav-subtitle">
-            Share * Record * Program
-        </div>
-        
-    </a>
-
-    <div class="nav-link-list">
-        
-        
-            
-            
-            
-            
-            
-            <a class="a-block nav-link-item false" href="https://blog.idontwannarock.me/posts">
-                Archive
-            </a>
-            
-        
-            
-            
-            
-            
-            
-            <a class="a-block nav-link-item false" href="https://blog.idontwannarock.me/categories">
-                Categories
-            </a>
-            
-        
-            
-            
-            
-            
-            
-            <a class="a-block nav-link-item false" href="https://blog.idontwannarock.me/tags">
-                Tags
-            </a>
-            
-        
-            
-            
-            
-            
-            
-            <a class="a-block nav-link-item false" href="https://blog.idontwannarock.me/about">
-                About
-            </a>
-            
-        
-            
-            
-            
-            
-            
-            <a class="a-block nav-link-item false" href="https://blog.idontwannarock.me/index.xml">
-                RSS Feed
-            </a>
-            
-        
-    </div>
-
-    
-
-    <div class="nav-footer">
-        
-Hugo Theme <a href="https://github.com/amazingrise/hugo-theme-diary">Diary</a> by <a href="https://risehere.net/">Rise</a>
-<br>
-Ported from <a href="https://mak1t0.cc/" target="_blank" rel="noreferrer noopener">Makito</a>'s <a href="https://github.com/SumiMakito/hexo-theme-journal/" target="_blank" rel="noreferrer noopener">Journal.</a> <br>
-<br>
-
-&copy;
-	
-	This website by Howard Wang is licensed under a Creative Common Attribution-ShareAlike 4.0 International License.
-	
-
-    </div>
-    
-</div><div id="extraContainer" class="extra-container">
-    
-    
-    <div class="toc animated-visibility" :class="{ invisible: scrollY <= 140 }">
-
-
-	<div class="toc-content">
-	
-		
-		
-		
-		<center>- CATALOG -</center>
-		
-		
-		<ul>
-			
-				
-				
-					
-						
-						
-						
-						
-							
-								
-									<ul>
-								
-							
-						
-						
-							<li>
-								<a href="#%e5%be%9e%e9%81%a0%e5%8f%a4-http10-%e9%96%8b%e5%a7%8b" onclick="onNavClick(`#從遠古-http10-開始-nav`)" id="從遠古-http10-開始-nav">
-									從遠古 HTTP/1.0 開始
-								</a>
-							</li>
-						
-						
-					
-				
-			
-				
-				
-					
-						
-						
-						
-						
-						
-							<li>
-								<a href="#%e9%80%b2%e5%8c%96%e5%88%b0-http11" onclick="onNavClick(`#進化到-http11-nav`)" id="進化到-http11-nav">
-									進化到 HTTP/1.1
-								</a>
-							</li>
-						
-						
-					
-				
-			
-				
-				
-					
-						
-						
-						
-						
-						
-							<li>
-								<a href="#%e7%b5%82%e6%96%bc%e8%a6%81%e8%ac%9b%e5%88%b0-http2" onclick="onNavClick(`#終於要講到-http2-nav`)" id="終於要講到-http2-nav">
-									終於要講到 HTTP/2
-								</a>
-							</li>
-						
-						
-					
-				
-			
-				
-				
-					
-						
-						
-						
-						
-							
-								
-									<ul>
-								
-							
-						
-						
-							<li>
-								<a href="#http2-new-feature" onclick="onNavClick(`#http2-new-feature-nav`)" id="http2-new-feature-nav">
-									HTTP/2 New Feature
-								</a>
-							</li>
-						
-						
-					
-				
-			
-				
-				
-					
-						
-						
-						
-						
-							
-								
-									<ul>
-								
-							
-						
-						
-							<li>
-								<a href="#binary-protocol" onclick="onNavClick(`#binary-protocol-nav`)" id="binary-protocol-nav">
-									Binary Protocol
-								</a>
-							</li>
-						
-						
-					
-				
-			
-				
-				
-					
-						
-						
-						
-						
-						
-							<li>
-								<a href="#multiplexing" onclick="onNavClick(`#multiplexing-nav`)" id="multiplexing-nav">
-									Multiplexing
-								</a>
-							</li>
-						
-						
-					
-				
-			
-				
-				
-					
-						
-						
-						
-						
-						
-							<li>
-								<a href="#stream-prioritization" onclick="onNavClick(`#stream-prioritization-nav`)" id="stream-prioritization-nav">
-									Stream Prioritization
-								</a>
-							</li>
-						
-						
-					
-				
-			
-				
-				
-					
-						
-						
-						
-						
-						
-							<li>
-								<a href="#header-compression" onclick="onNavClick(`#header-compression-nav`)" id="header-compression-nav">
-									Header Compression
-								</a>
-							</li>
-						
-						
-					
-				
-			
-				
-				
-					
-						
-						
-						
-						
-						
-							<li>
-								<a href="#server-push" onclick="onNavClick(`#server-push-nav`)" id="server-push-nav">
-									Server Push
-								</a>
-							</li>
-						
-						
-					
-				
-			
-				
-				
-					
-						
-						
-						
-							
-								</ul>
-							
-						
-						
-						
-							<li>
-								<a href="#http2-problem" onclick="onNavClick(`#http2-problem-nav`)" id="http2-problem-nav">
-									HTTP/2 Problem
-								</a>
-							</li>
-						
-						
-					
-				
-			
-				
-				
-					
-						
-						
-						
-						
-							
-								
-									<ul>
-								
-							
-						
-						
-							<li>
-								<a href="#mandate-tls-encryption" onclick="onNavClick(`#mandate-tls-encryption-nav`)" id="mandate-tls-encryption-nav">
-									Mandate TLS Encryption
-								</a>
-							</li>
-						
-						
-					
-				
-			
-				
-				
-					
-						
-						
-						
-						
-						
-							<li>
-								<a href="#opportunistic-encryption" onclick="onNavClick(`#opportunistic-encryption-nav`)" id="opportunistic-encryption-nav">
-									Opportunistic Encryption
-								</a>
-							</li>
-						
-						
-					
-				
-			
-				
-				
-					
-						
-						
-						
-						
-						
-							<li>
-								<a href="#tcp-hol-blocking" onclick="onNavClick(`#tcp-hol-blocking-nav`)" id="tcp-hol-blocking-nav">
-									TCP HOL Blocking
-								</a>
-							</li>
-						
-						
-					
-				
-			
-				
-				
-					
-						
-						
-						
-							
-								</ul>
-							
-								</ul>
-							
-						
-						
-						
-							<li>
-								<a href="#whats-next" onclick="onNavClick(`#whats-next-nav`)" id="whats-next-nav">
-									What’s Next?
-								</a>
-							</li>
-						
-						
-					
-				
-			
-				
-				
-					
-						
-						
-						
-						
-						
-							<li>
-								<a href="#%e5%8f%83%e8%80%83%e9%80%a3%e7%b5%90" onclick="onNavClick(`#參考連結-nav`)" id="參考連結-nav">
-									參考連結
-								</a>
-							</li>
-						
-						
-					
-				
-			
-		</ul>
-	</div>
-
-</div>
-    
-    <div class="pagination">
-        <a id="globalBackToTop" class="pagination-action animated-visibility" href="#top" :class="{ invisible: scrollY == 0 }">
-            <i class="material-icons pagination-action-icon">
-                keyboard_arrow_up
-            </i>
-        </a>
-        
-        <a type="button" class="pagination-action" id="darkModeToggleButton">
-            <span class="material-icons pagination-action-icon" id="darkModeToggleIcon">
-                dark_mode
-            </span>
-        </a>
-        
-        
-    </div>
-</div>
-<div class="single-column-drawer-container" id="drawer"
+    	<div id="app"><div class="single-column-drawer-container" id="drawer"
      v-bind:class="{ 'single-column-drawer-container-active': isDrawerOpen }">
     <div class="drawer-content">
         <div class="drawer-menu">
@@ -594,7 +166,7 @@ Ported from <a href="https://mak1t0.cc/" target="_blank" rel="noreferrer noopene
 						
 						
 							<li>
-								<a href="#%e5%be%9e%e9%81%a0%e5%8f%a4-http10-%e9%96%8b%e5%a7%8b" onclick="onNavClick(`#從遠古-http10-開始-nav`)" id="從遠古-http10-開始-nav">
+								<a href="#%e5%be%9e%e9%81%a0%e5%8f%a4-http10-%e9%96%8b%e5%a7%8b" class="nav-從遠古-http10-開始">
 									從遠古 HTTP/1.0 開始
 								</a>
 							</li>
@@ -612,7 +184,7 @@ Ported from <a href="https://mak1t0.cc/" target="_blank" rel="noreferrer noopene
 						
 						
 							<li>
-								<a href="#%e9%80%b2%e5%8c%96%e5%88%b0-http11" onclick="onNavClick(`#進化到-http11-nav`)" id="進化到-http11-nav">
+								<a href="#%e9%80%b2%e5%8c%96%e5%88%b0-http11" class="nav-進化到-http11">
 									進化到 HTTP/1.1
 								</a>
 							</li>
@@ -630,7 +202,7 @@ Ported from <a href="https://mak1t0.cc/" target="_blank" rel="noreferrer noopene
 						
 						
 							<li>
-								<a href="#%e7%b5%82%e6%96%bc%e8%a6%81%e8%ac%9b%e5%88%b0-http2" onclick="onNavClick(`#終於要講到-http2-nav`)" id="終於要講到-http2-nav">
+								<a href="#%e7%b5%82%e6%96%bc%e8%a6%81%e8%ac%9b%e5%88%b0-http2" class="nav-終於要講到-http2">
 									終於要講到 HTTP/2
 								</a>
 							</li>
@@ -654,7 +226,7 @@ Ported from <a href="https://mak1t0.cc/" target="_blank" rel="noreferrer noopene
 						
 						
 							<li>
-								<a href="#http2-new-feature" onclick="onNavClick(`#http2-new-feature-nav`)" id="http2-new-feature-nav">
+								<a href="#http2-new-feature" class="nav-http2-new-feature">
 									HTTP/2 New Feature
 								</a>
 							</li>
@@ -678,7 +250,7 @@ Ported from <a href="https://mak1t0.cc/" target="_blank" rel="noreferrer noopene
 						
 						
 							<li>
-								<a href="#binary-protocol" onclick="onNavClick(`#binary-protocol-nav`)" id="binary-protocol-nav">
+								<a href="#binary-protocol" class="nav-binary-protocol">
 									Binary Protocol
 								</a>
 							</li>
@@ -696,7 +268,7 @@ Ported from <a href="https://mak1t0.cc/" target="_blank" rel="noreferrer noopene
 						
 						
 							<li>
-								<a href="#multiplexing" onclick="onNavClick(`#multiplexing-nav`)" id="multiplexing-nav">
+								<a href="#multiplexing" class="nav-multiplexing">
 									Multiplexing
 								</a>
 							</li>
@@ -714,7 +286,7 @@ Ported from <a href="https://mak1t0.cc/" target="_blank" rel="noreferrer noopene
 						
 						
 							<li>
-								<a href="#stream-prioritization" onclick="onNavClick(`#stream-prioritization-nav`)" id="stream-prioritization-nav">
+								<a href="#stream-prioritization" class="nav-stream-prioritization">
 									Stream Prioritization
 								</a>
 							</li>
@@ -732,7 +304,7 @@ Ported from <a href="https://mak1t0.cc/" target="_blank" rel="noreferrer noopene
 						
 						
 							<li>
-								<a href="#header-compression" onclick="onNavClick(`#header-compression-nav`)" id="header-compression-nav">
+								<a href="#header-compression" class="nav-header-compression">
 									Header Compression
 								</a>
 							</li>
@@ -750,7 +322,7 @@ Ported from <a href="https://mak1t0.cc/" target="_blank" rel="noreferrer noopene
 						
 						
 							<li>
-								<a href="#server-push" onclick="onNavClick(`#server-push-nav`)" id="server-push-nav">
+								<a href="#server-push" class="nav-server-push">
 									Server Push
 								</a>
 							</li>
@@ -772,7 +344,7 @@ Ported from <a href="https://mak1t0.cc/" target="_blank" rel="noreferrer noopene
 						
 						
 							<li>
-								<a href="#http2-problem" onclick="onNavClick(`#http2-problem-nav`)" id="http2-problem-nav">
+								<a href="#http2-problem" class="nav-http2-problem">
 									HTTP/2 Problem
 								</a>
 							</li>
@@ -796,7 +368,7 @@ Ported from <a href="https://mak1t0.cc/" target="_blank" rel="noreferrer noopene
 						
 						
 							<li>
-								<a href="#mandate-tls-encryption" onclick="onNavClick(`#mandate-tls-encryption-nav`)" id="mandate-tls-encryption-nav">
+								<a href="#mandate-tls-encryption" class="nav-mandate-tls-encryption">
 									Mandate TLS Encryption
 								</a>
 							</li>
@@ -814,7 +386,7 @@ Ported from <a href="https://mak1t0.cc/" target="_blank" rel="noreferrer noopene
 						
 						
 							<li>
-								<a href="#opportunistic-encryption" onclick="onNavClick(`#opportunistic-encryption-nav`)" id="opportunistic-encryption-nav">
+								<a href="#opportunistic-encryption" class="nav-opportunistic-encryption">
 									Opportunistic Encryption
 								</a>
 							</li>
@@ -832,7 +404,7 @@ Ported from <a href="https://mak1t0.cc/" target="_blank" rel="noreferrer noopene
 						
 						
 							<li>
-								<a href="#tcp-hol-blocking" onclick="onNavClick(`#tcp-hol-blocking-nav`)" id="tcp-hol-blocking-nav">
+								<a href="#tcp-hol-blocking" class="nav-tcp-hol-blocking">
 									TCP HOL Blocking
 								</a>
 							</li>
@@ -856,7 +428,7 @@ Ported from <a href="https://mak1t0.cc/" target="_blank" rel="noreferrer noopene
 						
 						
 							<li>
-								<a href="#whats-next" onclick="onNavClick(`#whats-next-nav`)" id="whats-next-nav">
+								<a href="#whats-next" class="nav-whats-next">
 									What’s Next?
 								</a>
 							</li>
@@ -874,7 +446,7 @@ Ported from <a href="https://mak1t0.cc/" target="_blank" rel="noreferrer noopene
 						
 						
 							<li>
-								<a href="#%e5%8f%83%e8%80%83%e9%80%a3%e7%b5%90" onclick="onNavClick(`#參考連結-nav`)" id="參考連結-nav">
+								<a href="#%e5%8f%83%e8%80%83%e9%80%a3%e7%b5%90" class="nav-參考連結">
 									參考連結
 								</a>
 							</li>
@@ -1210,13 +782,444 @@ Ported from <a href="https://mak1t0.cc/" target="_blank" rel="noreferrer noopene
 
 
 
+
+
             </div>
         </div>
     </div>
 
 
                     </div>
-            </div><div id="single-column-footer">
+            </div><div id="sideContainer" class="side-container">
+    
+    <a class="a-block nav-head false" href="https://blog.idontwannarock.me/">
+    
+        <div class="nav-title">
+            Howard Tech Note
+        </div>
+        
+        <div class="nav-subtitle">
+            Share * Record * Program
+        </div>
+        
+    </a>
+
+    <div class="nav-link-list">
+        
+        
+            
+            
+            
+            
+            
+            <a class="a-block nav-link-item false" href="https://blog.idontwannarock.me/posts">
+                Archive
+            </a>
+            
+        
+            
+            
+            
+            
+            
+            <a class="a-block nav-link-item false" href="https://blog.idontwannarock.me/categories">
+                Categories
+            </a>
+            
+        
+            
+            
+            
+            
+            
+            <a class="a-block nav-link-item false" href="https://blog.idontwannarock.me/tags">
+                Tags
+            </a>
+            
+        
+            
+            
+            
+            
+            
+            <a class="a-block nav-link-item false" href="https://blog.idontwannarock.me/about">
+                About
+            </a>
+            
+        
+            
+            
+            
+            
+            
+            <a class="a-block nav-link-item false" href="https://blog.idontwannarock.me/index.xml">
+                RSS Feed
+            </a>
+            
+        
+    </div>
+
+    
+
+    <div class="nav-footer">
+        
+Hugo Theme <a href="https://github.com/amazingrise/hugo-theme-diary">Diary</a> by <a href="https://risehere.net/">Rise</a>
+<br>
+Ported from <a href="https://mak1t0.cc/" target="_blank" rel="noreferrer noopener">Makito</a>'s <a href="https://github.com/SumiMakito/hexo-theme-journal/" target="_blank" rel="noreferrer noopener">Journal.</a> <br>
+<br>
+
+&copy;
+	
+	This website by Howard Wang is licensed under a Creative Common Attribution-ShareAlike 4.0 International License.
+	
+
+    </div>
+    
+</div><div id="extraContainer" class="extra-container">
+    <div class="toc-wrapper">
+        
+
+        
+        <div class="toc">
+
+
+	<div class="toc-content">
+	
+		
+		
+		
+		<center>- CATALOG -</center>
+		
+		
+		<ul>
+			
+				
+				
+					
+						
+						
+						
+						
+							
+								
+									<ul>
+								
+							
+						
+						
+							<li>
+								<a href="#%e5%be%9e%e9%81%a0%e5%8f%a4-http10-%e9%96%8b%e5%a7%8b" class="nav-從遠古-http10-開始">
+									從遠古 HTTP/1.0 開始
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+						
+							<li>
+								<a href="#%e9%80%b2%e5%8c%96%e5%88%b0-http11" class="nav-進化到-http11">
+									進化到 HTTP/1.1
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+						
+							<li>
+								<a href="#%e7%b5%82%e6%96%bc%e8%a6%81%e8%ac%9b%e5%88%b0-http2" class="nav-終於要講到-http2">
+									終於要講到 HTTP/2
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+							
+								
+									<ul>
+								
+							
+						
+						
+							<li>
+								<a href="#http2-new-feature" class="nav-http2-new-feature">
+									HTTP/2 New Feature
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+							
+								
+									<ul>
+								
+							
+						
+						
+							<li>
+								<a href="#binary-protocol" class="nav-binary-protocol">
+									Binary Protocol
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+						
+							<li>
+								<a href="#multiplexing" class="nav-multiplexing">
+									Multiplexing
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+						
+							<li>
+								<a href="#stream-prioritization" class="nav-stream-prioritization">
+									Stream Prioritization
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+						
+							<li>
+								<a href="#header-compression" class="nav-header-compression">
+									Header Compression
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+						
+							<li>
+								<a href="#server-push" class="nav-server-push">
+									Server Push
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+							
+								</ul>
+							
+						
+						
+						
+							<li>
+								<a href="#http2-problem" class="nav-http2-problem">
+									HTTP/2 Problem
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+							
+								
+									<ul>
+								
+							
+						
+						
+							<li>
+								<a href="#mandate-tls-encryption" class="nav-mandate-tls-encryption">
+									Mandate TLS Encryption
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+						
+							<li>
+								<a href="#opportunistic-encryption" class="nav-opportunistic-encryption">
+									Opportunistic Encryption
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+						
+							<li>
+								<a href="#tcp-hol-blocking" class="nav-tcp-hol-blocking">
+									TCP HOL Blocking
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+							
+								</ul>
+							
+								</ul>
+							
+						
+						
+						
+							<li>
+								<a href="#whats-next" class="nav-whats-next">
+									What’s Next?
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+						
+							<li>
+								<a href="#%e5%8f%83%e8%80%83%e9%80%a3%e7%b5%90" class="nav-參考連結">
+									參考連結
+								</a>
+							</li>
+						
+						
+					
+				
+			
+		</ul>
+	</div>
+
+</div>
+        
+    </div>
+    <div class="pagination">
+        <a id="globalBackToTop" class="pagination-action animated-visibility" href="#top"
+            :class="{ invisible: scrollY == 0 }">
+            <i class="material-icons pagination-action-icon">
+                keyboard_arrow_up
+            </i>
+        </a>
+        
+        <a type="button" class="pagination-action" id="darkModeToggleButton">
+            <span class="material-icons pagination-action-icon" id="darkModeToggleIcon">
+                dark_mode
+            </span>
+        </a>
+        
+        
+    </div>
+</div><div id="single-column-footer">
 Hugo Theme <a href="https://github.com/amazingrise/hugo-theme-diary">Diary</a> by <a href="https://risehere.net/">Rise</a>
 <br>
 Ported from <a href="https://mak1t0.cc/" target="_blank" rel="noreferrer noopener">Makito</a>'s <a href="https://github.com/SumiMakito/hexo-theme-journal/" target="_blank" rel="noreferrer noopener">Journal.</a> <br>

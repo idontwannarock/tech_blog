@@ -40,6 +40,7 @@ if (!doNotTrack) {
 
 
 
+
   
 
 
@@ -50,11 +51,8 @@ if (!doNotTrack) {
       <script src="https://blog.idontwannarock.me/js/toc.js"></script>
     
     <link type="text/css" rel="stylesheet" href="https://blog.idontwannarock.me/vendor/css/bootstrap.min.css">
-<link rel="stylesheet" href="https://blog.idontwannarock.me/scss/journal.min.c5d92f380bf10f6849c7ac487c7df2b22c081e0851e5339224f1ae29210b20d2.css" integrity="sha256-xdkvOAvxD2hJx6xIfH3ysiwIHghR5TOSJPGuKSELINI=" media="screen">
 
-
-
-<link rel="stylesheet" href="https://blog.idontwannarock.me/scss/dark-mode.min.9f8d8c2df9285089d141edd4a50cb7506c7948e6ab79a29968dced1bd0ab7d22.css" integrity="sha256-n42MLfkoUInRQe3UpQy3UGx5SOareaKZaNztG9CrfSI=" media="screen">
+<link rel="stylesheet" href="https://blog.idontwannarock.me/scss/dark-mode.min.cb53f1bee2b8900cb4f082afbf00175d6618f281cf9a2fe8619e3b52d20b5721.css" integrity="sha256-y1PxvuK4kAy08IKvvwAXXWYY8oHPmi/oYZ47UtILVyE=" media="screen">
 
 
 <link rel="stylesheet"
@@ -82,297 +80,7 @@ if (!doNotTrack) {
 
 </head>
 <body>
-    	<div id="app"><div id="sideContainer" class="side-container">
-    
-    <a class="a-block nav-head false" href="https://blog.idontwannarock.me/">
-    
-        <div class="nav-title">
-            Howard Tech Note
-        </div>
-        
-        <div class="nav-subtitle">
-            Share * Record * Program
-        </div>
-        
-    </a>
-
-    <div class="nav-link-list">
-        
-        
-            
-            
-            
-            
-            
-            <a class="a-block nav-link-item false" href="https://blog.idontwannarock.me/posts">
-                Archive
-            </a>
-            
-        
-            
-            
-            
-            
-            
-            <a class="a-block nav-link-item false" href="https://blog.idontwannarock.me/categories">
-                Categories
-            </a>
-            
-        
-            
-            
-            
-            
-            
-            <a class="a-block nav-link-item false" href="https://blog.idontwannarock.me/tags">
-                Tags
-            </a>
-            
-        
-            
-            
-            
-            
-            
-            <a class="a-block nav-link-item false" href="https://blog.idontwannarock.me/about">
-                About
-            </a>
-            
-        
-            
-            
-            
-            
-            
-            <a class="a-block nav-link-item false" href="https://blog.idontwannarock.me/index.xml">
-                RSS Feed
-            </a>
-            
-        
-    </div>
-
-    
-
-    <div class="nav-footer">
-        
-Hugo Theme <a href="https://github.com/amazingrise/hugo-theme-diary">Diary</a> by <a href="https://risehere.net/">Rise</a>
-<br>
-Ported from <a href="https://mak1t0.cc/" target="_blank" rel="noreferrer noopener">Makito</a>'s <a href="https://github.com/SumiMakito/hexo-theme-journal/" target="_blank" rel="noreferrer noopener">Journal.</a> <br>
-<br>
-
-&copy;
-	
-	This website by Howard Wang is licensed under a Creative Common Attribution-ShareAlike 4.0 International License.
-	
-
-    </div>
-    
-</div><div id="extraContainer" class="extra-container">
-    
-    
-    <div class="toc animated-visibility" :class="{ invisible: scrollY <= 140 }">
-
-
-	<div class="toc-content">
-	
-		
-		
-		
-		<center>- CATALOG -</center>
-		
-		
-		<ul>
-			
-				
-				
-					
-						
-						
-						
-						
-							
-								
-									<ul>
-								
-							
-						
-						
-							<li>
-								<a href="#%e6%94%bb%e6%93%8a%e6%a8%a1%e5%bc%8f" onclick="onNavClick(`#攻擊模式-nav`)" id="攻擊模式-nav">
-									攻擊模式
-								</a>
-							</li>
-						
-						
-					
-				
-			
-				
-				
-					
-						
-						
-						
-						
-						
-							<li>
-								<a href="#%e8%b7%9f-csrf-%e7%9a%84%e5%8d%80%e5%88%a5" onclick="onNavClick(`#跟-csrf-的區別-nav`)" id="跟-csrf-的區別-nav">
-									跟 CSRF 的區別
-								</a>
-							</li>
-						
-						
-					
-				
-			
-				
-				
-					
-						
-						
-						
-						
-						
-							<li>
-								<a href="#%e9%98%b2%e7%af%84%e6%8e%aa%e6%96%bd" onclick="onNavClick(`#防範措施-nav`)" id="防範措施-nav">
-									防範措施
-								</a>
-							</li>
-						
-						
-					
-				
-			
-				
-				
-					
-						
-						
-						
-						
-							
-								
-									<ul>
-								
-							
-						
-						
-							<li>
-								<a href="#output-encoding" onclick="onNavClick(`#output-encoding-nav`)" id="output-encoding-nav">
-									Output Encoding
-								</a>
-							</li>
-						
-						
-					
-				
-			
-				
-				
-					
-						
-						
-						
-						
-						
-							<li>
-								<a href="#html-sanitization" onclick="onNavClick(`#html-sanitization-nav`)" id="html-sanitization-nav">
-									HTML Sanitization
-								</a>
-							</li>
-						
-						
-					
-				
-			
-				
-				
-					
-						
-						
-						
-						
-						
-							<li>
-								<a href="#content-security-policy-header" onclick="onNavClick(`#content-security-policy-header-nav`)" id="content-security-policy-header-nav">
-									Content-Security-Policy Header
-								</a>
-							</li>
-						
-						
-					
-				
-			
-				
-				
-					
-						
-						
-						
-						
-							
-								
-									<ul>
-								
-							
-						
-						
-							<li>
-								<a href="#restful-api-with-content-security-policy-header" onclick="onNavClick(`#restful-api-with-content-security-policy-header-nav`)" id="restful-api-with-content-security-policy-header-nav">
-									RESTful API with Content-Security-Policy Header
-								</a>
-							</li>
-						
-						
-					
-				
-			
-				
-				
-					
-						
-						
-						
-							
-								</ul>
-							
-								</ul>
-							
-						
-						
-						
-							<li>
-								<a href="#%e5%8f%83%e8%80%83" onclick="onNavClick(`#參考-nav`)" id="參考-nav">
-									參考
-								</a>
-							</li>
-						
-						
-					
-				
-			
-		</ul>
-	</div>
-
-</div>
-    
-    <div class="pagination">
-        <a id="globalBackToTop" class="pagination-action animated-visibility" href="#top" :class="{ invisible: scrollY == 0 }">
-            <i class="material-icons pagination-action-icon">
-                keyboard_arrow_up
-            </i>
-        </a>
-        
-        <a type="button" class="pagination-action" id="darkModeToggleButton">
-            <span class="material-icons pagination-action-icon" id="darkModeToggleIcon">
-                dark_mode
-            </span>
-        </a>
-        
-        
-    </div>
-</div>
-<div class="single-column-drawer-container" id="drawer"
+    	<div id="app"><div class="single-column-drawer-container" id="drawer"
      v-bind:class="{ 'single-column-drawer-container-active': isDrawerOpen }">
     <div class="drawer-content">
         <div class="drawer-menu">
@@ -458,7 +166,7 @@ Ported from <a href="https://mak1t0.cc/" target="_blank" rel="noreferrer noopene
 						
 						
 							<li>
-								<a href="#%e6%94%bb%e6%93%8a%e6%a8%a1%e5%bc%8f" onclick="onNavClick(`#攻擊模式-nav`)" id="攻擊模式-nav">
+								<a href="#%e6%94%bb%e6%93%8a%e6%a8%a1%e5%bc%8f" class="nav-攻擊模式">
 									攻擊模式
 								</a>
 							</li>
@@ -476,7 +184,7 @@ Ported from <a href="https://mak1t0.cc/" target="_blank" rel="noreferrer noopene
 						
 						
 							<li>
-								<a href="#%e8%b7%9f-csrf-%e7%9a%84%e5%8d%80%e5%88%a5" onclick="onNavClick(`#跟-csrf-的區別-nav`)" id="跟-csrf-的區別-nav">
+								<a href="#%e8%b7%9f-csrf-%e7%9a%84%e5%8d%80%e5%88%a5" class="nav-跟-csrf-的區別">
 									跟 CSRF 的區別
 								</a>
 							</li>
@@ -494,7 +202,7 @@ Ported from <a href="https://mak1t0.cc/" target="_blank" rel="noreferrer noopene
 						
 						
 							<li>
-								<a href="#%e9%98%b2%e7%af%84%e6%8e%aa%e6%96%bd" onclick="onNavClick(`#防範措施-nav`)" id="防範措施-nav">
+								<a href="#%e9%98%b2%e7%af%84%e6%8e%aa%e6%96%bd" class="nav-防範措施">
 									防範措施
 								</a>
 							</li>
@@ -518,7 +226,7 @@ Ported from <a href="https://mak1t0.cc/" target="_blank" rel="noreferrer noopene
 						
 						
 							<li>
-								<a href="#output-encoding" onclick="onNavClick(`#output-encoding-nav`)" id="output-encoding-nav">
+								<a href="#output-encoding" class="nav-output-encoding">
 									Output Encoding
 								</a>
 							</li>
@@ -536,7 +244,7 @@ Ported from <a href="https://mak1t0.cc/" target="_blank" rel="noreferrer noopene
 						
 						
 							<li>
-								<a href="#html-sanitization" onclick="onNavClick(`#html-sanitization-nav`)" id="html-sanitization-nav">
+								<a href="#html-sanitization" class="nav-html-sanitization">
 									HTML Sanitization
 								</a>
 							</li>
@@ -554,7 +262,7 @@ Ported from <a href="https://mak1t0.cc/" target="_blank" rel="noreferrer noopene
 						
 						
 							<li>
-								<a href="#content-security-policy-header" onclick="onNavClick(`#content-security-policy-header-nav`)" id="content-security-policy-header-nav">
+								<a href="#content-security-policy-header" class="nav-content-security-policy-header">
 									Content-Security-Policy Header
 								</a>
 							</li>
@@ -578,7 +286,7 @@ Ported from <a href="https://mak1t0.cc/" target="_blank" rel="noreferrer noopene
 						
 						
 							<li>
-								<a href="#restful-api-with-content-security-policy-header" onclick="onNavClick(`#restful-api-with-content-security-policy-header-nav`)" id="restful-api-with-content-security-policy-header-nav">
+								<a href="#restful-api-with-content-security-policy-header" class="nav-restful-api-with-content-security-policy-header">
 									RESTful API with Content-Security-Policy Header
 								</a>
 							</li>
@@ -602,7 +310,7 @@ Ported from <a href="https://mak1t0.cc/" target="_blank" rel="noreferrer noopene
 						
 						
 							<li>
-								<a href="#%e5%8f%83%e8%80%83" onclick="onNavClick(`#參考-nav`)" id="參考-nav">
+								<a href="#%e5%8f%83%e8%80%83" class="nav-參考">
 									參考
 								</a>
 							</li>
@@ -818,13 +526,308 @@ Ported from <a href="https://mak1t0.cc/" target="_blank" rel="noreferrer noopene
 
 
 
+
+
             </div>
         </div>
     </div>
 
 
                     </div>
-            </div><div id="single-column-footer">
+            </div><div id="sideContainer" class="side-container">
+    
+    <a class="a-block nav-head false" href="https://blog.idontwannarock.me/">
+    
+        <div class="nav-title">
+            Howard Tech Note
+        </div>
+        
+        <div class="nav-subtitle">
+            Share * Record * Program
+        </div>
+        
+    </a>
+
+    <div class="nav-link-list">
+        
+        
+            
+            
+            
+            
+            
+            <a class="a-block nav-link-item false" href="https://blog.idontwannarock.me/posts">
+                Archive
+            </a>
+            
+        
+            
+            
+            
+            
+            
+            <a class="a-block nav-link-item false" href="https://blog.idontwannarock.me/categories">
+                Categories
+            </a>
+            
+        
+            
+            
+            
+            
+            
+            <a class="a-block nav-link-item false" href="https://blog.idontwannarock.me/tags">
+                Tags
+            </a>
+            
+        
+            
+            
+            
+            
+            
+            <a class="a-block nav-link-item false" href="https://blog.idontwannarock.me/about">
+                About
+            </a>
+            
+        
+            
+            
+            
+            
+            
+            <a class="a-block nav-link-item false" href="https://blog.idontwannarock.me/index.xml">
+                RSS Feed
+            </a>
+            
+        
+    </div>
+
+    
+
+    <div class="nav-footer">
+        
+Hugo Theme <a href="https://github.com/amazingrise/hugo-theme-diary">Diary</a> by <a href="https://risehere.net/">Rise</a>
+<br>
+Ported from <a href="https://mak1t0.cc/" target="_blank" rel="noreferrer noopener">Makito</a>'s <a href="https://github.com/SumiMakito/hexo-theme-journal/" target="_blank" rel="noreferrer noopener">Journal.</a> <br>
+<br>
+
+&copy;
+	
+	This website by Howard Wang is licensed under a Creative Common Attribution-ShareAlike 4.0 International License.
+	
+
+    </div>
+    
+</div><div id="extraContainer" class="extra-container">
+    <div class="toc-wrapper">
+        
+
+        
+        <div class="toc">
+
+
+	<div class="toc-content">
+	
+		
+		
+		
+		<center>- CATALOG -</center>
+		
+		
+		<ul>
+			
+				
+				
+					
+						
+						
+						
+						
+							
+								
+									<ul>
+								
+							
+						
+						
+							<li>
+								<a href="#%e6%94%bb%e6%93%8a%e6%a8%a1%e5%bc%8f" class="nav-攻擊模式">
+									攻擊模式
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+						
+							<li>
+								<a href="#%e8%b7%9f-csrf-%e7%9a%84%e5%8d%80%e5%88%a5" class="nav-跟-csrf-的區別">
+									跟 CSRF 的區別
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+						
+							<li>
+								<a href="#%e9%98%b2%e7%af%84%e6%8e%aa%e6%96%bd" class="nav-防範措施">
+									防範措施
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+							
+								
+									<ul>
+								
+							
+						
+						
+							<li>
+								<a href="#output-encoding" class="nav-output-encoding">
+									Output Encoding
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+						
+							<li>
+								<a href="#html-sanitization" class="nav-html-sanitization">
+									HTML Sanitization
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+						
+							<li>
+								<a href="#content-security-policy-header" class="nav-content-security-policy-header">
+									Content-Security-Policy Header
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+							
+								
+									<ul>
+								
+							
+						
+						
+							<li>
+								<a href="#restful-api-with-content-security-policy-header" class="nav-restful-api-with-content-security-policy-header">
+									RESTful API with Content-Security-Policy Header
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+							
+								</ul>
+							
+								</ul>
+							
+						
+						
+						
+							<li>
+								<a href="#%e5%8f%83%e8%80%83" class="nav-參考">
+									參考
+								</a>
+							</li>
+						
+						
+					
+				
+			
+		</ul>
+	</div>
+
+</div>
+        
+    </div>
+    <div class="pagination">
+        <a id="globalBackToTop" class="pagination-action animated-visibility" href="#top"
+            :class="{ invisible: scrollY == 0 }">
+            <i class="material-icons pagination-action-icon">
+                keyboard_arrow_up
+            </i>
+        </a>
+        
+        <a type="button" class="pagination-action" id="darkModeToggleButton">
+            <span class="material-icons pagination-action-icon" id="darkModeToggleIcon">
+                dark_mode
+            </span>
+        </a>
+        
+        
+    </div>
+</div><div id="single-column-footer">
 Hugo Theme <a href="https://github.com/amazingrise/hugo-theme-diary">Diary</a> by <a href="https://risehere.net/">Rise</a>
 <br>
 Ported from <a href="https://mak1t0.cc/" target="_blank" rel="noreferrer noopener">Makito</a>'s <a href="https://github.com/SumiMakito/hexo-theme-journal/" target="_blank" rel="noreferrer noopener">Journal.</a> <br>

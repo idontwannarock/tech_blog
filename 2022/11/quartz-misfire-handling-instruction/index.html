@@ -40,6 +40,7 @@ if (!doNotTrack) {
 
 
 
+
   
 
 
@@ -50,11 +51,8 @@ if (!doNotTrack) {
       <script src="https://blog.idontwannarock.me/js/toc.js"></script>
     
     <link type="text/css" rel="stylesheet" href="https://blog.idontwannarock.me/vendor/css/bootstrap.min.css">
-<link rel="stylesheet" href="https://blog.idontwannarock.me/scss/journal.min.c5d92f380bf10f6849c7ac487c7df2b22c081e0851e5339224f1ae29210b20d2.css" integrity="sha256-xdkvOAvxD2hJx6xIfH3ysiwIHghR5TOSJPGuKSELINI=" media="screen">
 
-
-
-<link rel="stylesheet" href="https://blog.idontwannarock.me/scss/dark-mode.min.9f8d8c2df9285089d141edd4a50cb7506c7948e6ab79a29968dced1bd0ab7d22.css" integrity="sha256-n42MLfkoUInRQe3UpQy3UGx5SOareaKZaNztG9CrfSI=" media="screen">
+<link rel="stylesheet" href="https://blog.idontwannarock.me/scss/dark-mode.min.cb53f1bee2b8900cb4f082afbf00175d6618f281cf9a2fe8619e3b52d20b5721.css" integrity="sha256-y1PxvuK4kAy08IKvvwAXXWYY8oHPmi/oYZ47UtILVyE=" media="screen">
 
 
 <link rel="stylesheet"
@@ -82,293 +80,7 @@ if (!doNotTrack) {
 
 </head>
 <body>
-    	<div id="app"><div id="sideContainer" class="side-container">
-    
-    <a class="a-block nav-head false" href="https://blog.idontwannarock.me/">
-    
-        <div class="nav-title">
-            Howard Tech Note
-        </div>
-        
-        <div class="nav-subtitle">
-            Share * Record * Program
-        </div>
-        
-    </a>
-
-    <div class="nav-link-list">
-        
-        
-            
-            
-            
-            
-            
-            <a class="a-block nav-link-item false" href="https://blog.idontwannarock.me/posts">
-                Archive
-            </a>
-            
-        
-            
-            
-            
-            
-            
-            <a class="a-block nav-link-item false" href="https://blog.idontwannarock.me/categories">
-                Categories
-            </a>
-            
-        
-            
-            
-            
-            
-            
-            <a class="a-block nav-link-item false" href="https://blog.idontwannarock.me/tags">
-                Tags
-            </a>
-            
-        
-            
-            
-            
-            
-            
-            <a class="a-block nav-link-item false" href="https://blog.idontwannarock.me/about">
-                About
-            </a>
-            
-        
-            
-            
-            
-            
-            
-            <a class="a-block nav-link-item false" href="https://blog.idontwannarock.me/index.xml">
-                RSS Feed
-            </a>
-            
-        
-    </div>
-
-    
-
-    <div class="nav-footer">
-        
-Hugo Theme <a href="https://github.com/amazingrise/hugo-theme-diary">Diary</a> by <a href="https://risehere.net/">Rise</a>
-<br>
-Ported from <a href="https://mak1t0.cc/" target="_blank" rel="noreferrer noopener">Makito</a>'s <a href="https://github.com/SumiMakito/hexo-theme-journal/" target="_blank" rel="noreferrer noopener">Journal.</a> <br>
-<br>
-
-&copy;
-	
-	This website by Howard Wang is licensed under a Creative Common Attribution-ShareAlike 4.0 International License.
-	
-
-    </div>
-    
-</div><div id="extraContainer" class="extra-container">
-    
-    
-    <div class="toc animated-visibility" :class="{ invisible: scrollY <= 140 }">
-
-
-	<div class="toc-content">
-	
-		
-		
-		
-		<center>- CATALOG -</center>
-		
-		
-		<ul>
-			
-				
-				
-					
-						
-						
-						
-						
-						
-							<li>
-								<a href="#misfire-%e6%a6%82%e5%bf%b5" onclick="onNavClick(`#misfire-概念-nav`)" id="misfire-概念-nav">
-									Misfire 概念
-								</a>
-							</li>
-						
-						
-					
-				
-			
-				
-				
-					
-						
-						
-						
-						
-						
-							<li>
-								<a href="#misfire-handling-instruction" onclick="onNavClick(`#misfire-handling-instruction-nav`)" id="misfire-handling-instruction-nav">
-									Misfire Handling Instruction
-								</a>
-							</li>
-						
-						
-					
-				
-			
-				
-				
-					
-						
-						
-						
-						
-							
-								
-									<ul>
-								
-							
-						
-						
-							<li>
-								<a href="#simpletrigger" onclick="onNavClick(`#simpletrigger-nav`)" id="simpletrigger-nav">
-									SimpleTrigger
-								</a>
-							</li>
-						
-						
-					
-				
-			
-				
-				
-					
-						
-						
-						
-						
-							
-								
-									<ul>
-								
-							
-						
-						
-							<li>
-								<a href="#%e4%b8%8d%e9%87%8d%e8%a4%87%e5%9f%b7%e8%a1%8c" onclick="onNavClick(`#不重複執行-nav`)" id="不重複執行-nav">
-									不重複執行
-								</a>
-							</li>
-						
-						
-					
-				
-			
-				
-				
-					
-						
-						
-						
-						
-						
-							<li>
-								<a href="#%e5%9f%b7%e8%a1%8c%e5%9b%ba%e5%ae%9a%e6%ac%a1%e6%95%b8" onclick="onNavClick(`#執行固定次數-nav`)" id="執行固定次數-nav">
-									執行固定次數
-								</a>
-							</li>
-						
-						
-					
-				
-			
-				
-				
-					
-						
-						
-						
-						
-						
-							<li>
-								<a href="#%e7%84%a1%e9%99%90%e6%ac%a1%e5%9f%b7%e8%a1%8c" onclick="onNavClick(`#無限次執行-nav`)" id="無限次執行-nav">
-									無限次執行
-								</a>
-							</li>
-						
-						
-					
-				
-			
-				
-				
-					
-						
-						
-						
-							
-								</ul>
-							
-						
-						
-						
-							<li>
-								<a href="#crontrigger" onclick="onNavClick(`#crontrigger-nav`)" id="crontrigger-nav">
-									CronTrigger
-								</a>
-							</li>
-						
-						
-					
-				
-			
-				
-				
-					
-						
-						
-						
-							
-								</ul>
-							
-						
-						
-						
-							<li>
-								<a href="#%e5%8f%83%e8%80%83" onclick="onNavClick(`#參考-nav`)" id="參考-nav">
-									參考
-								</a>
-							</li>
-						
-						
-					
-				
-			
-		</ul>
-	</div>
-
-</div>
-    
-    <div class="pagination">
-        <a id="globalBackToTop" class="pagination-action animated-visibility" href="#top" :class="{ invisible: scrollY == 0 }">
-            <i class="material-icons pagination-action-icon">
-                keyboard_arrow_up
-            </i>
-        </a>
-        
-        <a type="button" class="pagination-action" id="darkModeToggleButton">
-            <span class="material-icons pagination-action-icon" id="darkModeToggleIcon">
-                dark_mode
-            </span>
-        </a>
-        
-        
-    </div>
-</div>
-<div class="single-column-drawer-container" id="drawer"
+    	<div id="app"><div class="single-column-drawer-container" id="drawer"
      v-bind:class="{ 'single-column-drawer-container-active': isDrawerOpen }">
     <div class="drawer-content">
         <div class="drawer-menu">
@@ -448,7 +160,7 @@ Ported from <a href="https://mak1t0.cc/" target="_blank" rel="noreferrer noopene
 						
 						
 							<li>
-								<a href="#misfire-%e6%a6%82%e5%bf%b5" onclick="onNavClick(`#misfire-概念-nav`)" id="misfire-概念-nav">
+								<a href="#misfire-%e6%a6%82%e5%bf%b5" class="nav-misfire-概念">
 									Misfire 概念
 								</a>
 							</li>
@@ -466,7 +178,7 @@ Ported from <a href="https://mak1t0.cc/" target="_blank" rel="noreferrer noopene
 						
 						
 							<li>
-								<a href="#misfire-handling-instruction" onclick="onNavClick(`#misfire-handling-instruction-nav`)" id="misfire-handling-instruction-nav">
+								<a href="#misfire-handling-instruction" class="nav-misfire-handling-instruction">
 									Misfire Handling Instruction
 								</a>
 							</li>
@@ -490,7 +202,7 @@ Ported from <a href="https://mak1t0.cc/" target="_blank" rel="noreferrer noopene
 						
 						
 							<li>
-								<a href="#simpletrigger" onclick="onNavClick(`#simpletrigger-nav`)" id="simpletrigger-nav">
+								<a href="#simpletrigger" class="nav-simpletrigger">
 									SimpleTrigger
 								</a>
 							</li>
@@ -514,7 +226,7 @@ Ported from <a href="https://mak1t0.cc/" target="_blank" rel="noreferrer noopene
 						
 						
 							<li>
-								<a href="#%e4%b8%8d%e9%87%8d%e8%a4%87%e5%9f%b7%e8%a1%8c" onclick="onNavClick(`#不重複執行-nav`)" id="不重複執行-nav">
+								<a href="#%e4%b8%8d%e9%87%8d%e8%a4%87%e5%9f%b7%e8%a1%8c" class="nav-不重複執行">
 									不重複執行
 								</a>
 							</li>
@@ -532,7 +244,7 @@ Ported from <a href="https://mak1t0.cc/" target="_blank" rel="noreferrer noopene
 						
 						
 							<li>
-								<a href="#%e5%9f%b7%e8%a1%8c%e5%9b%ba%e5%ae%9a%e6%ac%a1%e6%95%b8" onclick="onNavClick(`#執行固定次數-nav`)" id="執行固定次數-nav">
+								<a href="#%e5%9f%b7%e8%a1%8c%e5%9b%ba%e5%ae%9a%e6%ac%a1%e6%95%b8" class="nav-執行固定次數">
 									執行固定次數
 								</a>
 							</li>
@@ -550,7 +262,7 @@ Ported from <a href="https://mak1t0.cc/" target="_blank" rel="noreferrer noopene
 						
 						
 							<li>
-								<a href="#%e7%84%a1%e9%99%90%e6%ac%a1%e5%9f%b7%e8%a1%8c" onclick="onNavClick(`#無限次執行-nav`)" id="無限次執行-nav">
+								<a href="#%e7%84%a1%e9%99%90%e6%ac%a1%e5%9f%b7%e8%a1%8c" class="nav-無限次執行">
 									無限次執行
 								</a>
 							</li>
@@ -572,7 +284,7 @@ Ported from <a href="https://mak1t0.cc/" target="_blank" rel="noreferrer noopene
 						
 						
 							<li>
-								<a href="#crontrigger" onclick="onNavClick(`#crontrigger-nav`)" id="crontrigger-nav">
+								<a href="#crontrigger" class="nav-crontrigger">
 									CronTrigger
 								</a>
 							</li>
@@ -594,7 +306,7 @@ Ported from <a href="https://mak1t0.cc/" target="_blank" rel="noreferrer noopene
 						
 						
 							<li>
-								<a href="#%e5%8f%83%e8%80%83" onclick="onNavClick(`#參考-nav`)" id="參考-nav">
+								<a href="#%e5%8f%83%e8%80%83" class="nav-參考">
 									參考
 								</a>
 							</li>
@@ -974,13 +686,304 @@ Ported from <a href="https://mak1t0.cc/" target="_blank" rel="noreferrer noopene
 
 
 
+
+
             </div>
         </div>
     </div>
 
 
                     </div>
-            </div><div id="single-column-footer">
+            </div><div id="sideContainer" class="side-container">
+    
+    <a class="a-block nav-head false" href="https://blog.idontwannarock.me/">
+    
+        <div class="nav-title">
+            Howard Tech Note
+        </div>
+        
+        <div class="nav-subtitle">
+            Share * Record * Program
+        </div>
+        
+    </a>
+
+    <div class="nav-link-list">
+        
+        
+            
+            
+            
+            
+            
+            <a class="a-block nav-link-item false" href="https://blog.idontwannarock.me/posts">
+                Archive
+            </a>
+            
+        
+            
+            
+            
+            
+            
+            <a class="a-block nav-link-item false" href="https://blog.idontwannarock.me/categories">
+                Categories
+            </a>
+            
+        
+            
+            
+            
+            
+            
+            <a class="a-block nav-link-item false" href="https://blog.idontwannarock.me/tags">
+                Tags
+            </a>
+            
+        
+            
+            
+            
+            
+            
+            <a class="a-block nav-link-item false" href="https://blog.idontwannarock.me/about">
+                About
+            </a>
+            
+        
+            
+            
+            
+            
+            
+            <a class="a-block nav-link-item false" href="https://blog.idontwannarock.me/index.xml">
+                RSS Feed
+            </a>
+            
+        
+    </div>
+
+    
+
+    <div class="nav-footer">
+        
+Hugo Theme <a href="https://github.com/amazingrise/hugo-theme-diary">Diary</a> by <a href="https://risehere.net/">Rise</a>
+<br>
+Ported from <a href="https://mak1t0.cc/" target="_blank" rel="noreferrer noopener">Makito</a>'s <a href="https://github.com/SumiMakito/hexo-theme-journal/" target="_blank" rel="noreferrer noopener">Journal.</a> <br>
+<br>
+
+&copy;
+	
+	This website by Howard Wang is licensed under a Creative Common Attribution-ShareAlike 4.0 International License.
+	
+
+    </div>
+    
+</div><div id="extraContainer" class="extra-container">
+    <div class="toc-wrapper">
+        
+
+        
+        <div class="toc">
+
+
+	<div class="toc-content">
+	
+		
+		
+		
+		<center>- CATALOG -</center>
+		
+		
+		<ul>
+			
+				
+				
+					
+						
+						
+						
+						
+						
+							<li>
+								<a href="#misfire-%e6%a6%82%e5%bf%b5" class="nav-misfire-概念">
+									Misfire 概念
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+						
+							<li>
+								<a href="#misfire-handling-instruction" class="nav-misfire-handling-instruction">
+									Misfire Handling Instruction
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+							
+								
+									<ul>
+								
+							
+						
+						
+							<li>
+								<a href="#simpletrigger" class="nav-simpletrigger">
+									SimpleTrigger
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+							
+								
+									<ul>
+								
+							
+						
+						
+							<li>
+								<a href="#%e4%b8%8d%e9%87%8d%e8%a4%87%e5%9f%b7%e8%a1%8c" class="nav-不重複執行">
+									不重複執行
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+						
+							<li>
+								<a href="#%e5%9f%b7%e8%a1%8c%e5%9b%ba%e5%ae%9a%e6%ac%a1%e6%95%b8" class="nav-執行固定次數">
+									執行固定次數
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+						
+							<li>
+								<a href="#%e7%84%a1%e9%99%90%e6%ac%a1%e5%9f%b7%e8%a1%8c" class="nav-無限次執行">
+									無限次執行
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+							
+								</ul>
+							
+						
+						
+						
+							<li>
+								<a href="#crontrigger" class="nav-crontrigger">
+									CronTrigger
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+							
+								</ul>
+							
+						
+						
+						
+							<li>
+								<a href="#%e5%8f%83%e8%80%83" class="nav-參考">
+									參考
+								</a>
+							</li>
+						
+						
+					
+				
+			
+		</ul>
+	</div>
+
+</div>
+        
+    </div>
+    <div class="pagination">
+        <a id="globalBackToTop" class="pagination-action animated-visibility" href="#top"
+            :class="{ invisible: scrollY == 0 }">
+            <i class="material-icons pagination-action-icon">
+                keyboard_arrow_up
+            </i>
+        </a>
+        
+        <a type="button" class="pagination-action" id="darkModeToggleButton">
+            <span class="material-icons pagination-action-icon" id="darkModeToggleIcon">
+                dark_mode
+            </span>
+        </a>
+        
+        
+    </div>
+</div><div id="single-column-footer">
 Hugo Theme <a href="https://github.com/amazingrise/hugo-theme-diary">Diary</a> by <a href="https://risehere.net/">Rise</a>
 <br>
 Ported from <a href="https://mak1t0.cc/" target="_blank" rel="noreferrer noopener">Makito</a>'s <a href="https://github.com/SumiMakito/hexo-theme-journal/" target="_blank" rel="noreferrer noopener">Journal.</a> <br>
