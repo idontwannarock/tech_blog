@@ -7,9 +7,98 @@
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
     <copyright>This website by Howard Wang is licensed under a Creative Common Attribution-ShareAlike 4.0 International License.</copyright>
-    <lastBuildDate>Thu, 15 Dec 2022 10:18:10 +0800</lastBuildDate>
+    <lastBuildDate>Tue, 20 Jun 2023 10:51:39 +0800</lastBuildDate>
     
         <atom:link href="https://blog.idontwannarock.me/index.xml" rel="self" type="application/rss+xml" />
+    
+    
+    
+        <item>
+        <title>Scoop 介紹及用法</title>
+        <link>https://blog.idontwannarock.me/2023/06/scoop/</link>
+        <pubDate>Tue, 20 Jun 2023 10:51:39 +0800</pubDate>
+        
+        <guid>https://blog.idontwannarock.me/2023/06/scoop/</guid>
+        <description>Howard Tech Note https://blog.idontwannarock.me/2023/06/scoop/ -&lt;p&gt;Linux 有 &lt;a href=&#34;https://salsa.debian.org/apt-team/apt&#34;&gt;apt&lt;/a&gt;, &lt;a href=&#34;http://yum.baseurl.org/gitweb/&#34;&gt;yum&lt;/a&gt;、MacOS 有 &lt;a href=&#34;https://brew.sh/&#34;&gt;Homebrew&lt;/a&gt;、Windows 有 &lt;a href=&#34;https://chocolatey.org/&#34;&gt;Chocolatey&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;但今天要介紹 Windows 環境的另外一個 command line 套件管理工具 &lt;a href=&#34;https://scoop.sh/&#34;&gt;Scoop&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;在 Windows 環境，比較有名的 command line 套件管理工具是 Chocolatey，但今天要介紹的 Scoop 有一項 Chocolatey 沒辦法做到的好處，就是可以切換 Path Environment Variable&lt;/p&gt;
+&lt;h1 id=&#34;安裝&#34;&gt;安裝&lt;/h1&gt;
+&lt;p&gt;Scoop 的安裝非常簡單，打開 &lt;strong&gt;非&lt;/strong&gt; Administrator (系統管理員) 的 Powershell，並輸入以下指令即可安裝&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;&#34;&gt;&lt;code class=&#34;language-powershell&#34; data-lang=&#34;powershell&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#8be9fd;font-style:italic&#34;&gt;Set-ExecutionPolicy&lt;/span&gt; RemoteSigned -Scope CurrentUser
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#8be9fd;font-style:italic&#34;&gt;irm &lt;/span&gt;get.scoop.sh | &lt;span style=&#34;color:#8be9fd;font-style:italic&#34;&gt;iex
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h1 id=&#34;使用&#34;&gt;使用&lt;/h1&gt;
+&lt;p&gt;Scoop 既然是套件管理工具，那重要的工作就是安裝套件，而 Scoop 有支援什麼套件固然可以直接 Google 的到，但其實也不是沒有方式直接在 command line 搜尋&lt;/p&gt;
+&lt;p&gt;例如想安裝 7zip 壓縮工具，可以在 powershell 當中這樣搜尋&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;&#34;&gt;&lt;code class=&#34;language-powershell&#34; data-lang=&#34;powershell&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;scoop search 7zip
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;應該會出現如下的結果&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://res.cloudinary.com/dcvgho2zc/image/upload/v1687230278/Tech%20Blog/Scoop/image-20230620-014307.png&#34; alt=&#34;Scoop Search Result&#34;&gt;&lt;/p&gt;
+&lt;p&gt;第一行說明代表這次結果是在本地的 bucket 當中搜尋到的，表格當中的 Name 就是套件名稱，之後所有操作都要輸入 Name 當中顯示的完整名稱，Source 就是指套件所在的 bucket&lt;/p&gt;
+&lt;p&gt;這邊如果你不確定是哪個套件名稱，也可以用以下指令看一下簡介，例如&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;&#34;&gt;&lt;code class=&#34;language-powershell&#34; data-lang=&#34;powershell&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;scoop info 7zip
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;&lt;img src=&#34;https://res.cloudinary.com/dcvgho2zc/image/upload/v1687230369/Tech%20Blog/Scoop/image-20230620-014436.png&#34; alt=&#34;Scoop Info Result&#34;&gt;&lt;/p&gt;
+&lt;p&gt;這時候確定要安裝哪一個套件名稱，這時候就可以輸入以下指令做安裝&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;&#34;&gt;&lt;code class=&#34;language-powershell&#34; data-lang=&#34;powershell&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;scoop install 7zip
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;這時候 console 會顯示經過一連串的操作，最後看到這一行就代表安裝成功&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://res.cloudinary.com/dcvgho2zc/image/upload/v1687230433/Tech%20Blog/Scoop/image-20230620-014915.png&#34; alt=&#34;Scoop Installation Result&#34;&gt;&lt;/p&gt;
+&lt;p&gt;如果要解除安裝也是簡單輸入以下指令&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;&#34;&gt;&lt;code class=&#34;language-powershell&#34; data-lang=&#34;powershell&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;scoop uninstall 7zip
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;&lt;img src=&#34;https://res.cloudinary.com/dcvgho2zc/image/upload/v1687230487/Tech%20Blog/Scoop/image-20230620-015010.png&#34; alt=&#34;Scoop Uninstallation Result&#34;&gt;&lt;/p&gt;
+&lt;p&gt;如果想查詢本地安裝了哪些套件&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;&#34;&gt;&lt;code class=&#34;language-powershell&#34; data-lang=&#34;powershell&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;scoop list
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;&lt;img src=&#34;https://res.cloudinary.com/dcvgho2zc/image/upload/v1687230536/Tech%20Blog/Scoop/image-20230620-021418.png&#34; alt=&#34;Scoop Local Installed App Result&#34;&gt;&lt;/p&gt;
+&lt;p&gt;也可以搜尋本地安裝的套件名稱&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;&#34;&gt;&lt;code class=&#34;language-powershell&#34; data-lang=&#34;powershell&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;scoop list maven
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;&lt;img src=&#34;https://res.cloudinary.com/dcvgho2zc/image/upload/v1687230599/Tech%20Blog/Scoop/image-20230620-021507.png&#34; alt=&#34;Scoop Search Local Installed App Result&#34;&gt;&lt;/p&gt;
+&lt;p&gt;最後如果要更新某個套件，可以輸入&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;&#34;&gt;&lt;code class=&#34;language-powershell&#34; data-lang=&#34;powershell&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;scoop update maven
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h2 id=&#34;bucket&#34;&gt;Bucket&lt;/h2&gt;
+&lt;p&gt;接著這邊要了解的是 Scoop 並不像 Chocolatey 的搜尋是在網路上對所有套件做即時搜尋，Scoop 有 bucket 的概念，每個 bucket 都像是一組套件的資料夾&lt;/p&gt;
+&lt;p&gt;在安裝 Scoop 時就會預設安裝 main bucket，裡面應該預設就有一千多種常用套件，而 Scoop 的搜尋也是優先在本地已安裝的 bucket 裡面做搜尋，如果本地的 bucket 搜尋不到，才會到網路上其他已知 (known) 的 bucket 中做搜尋&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://res.cloudinary.com/dcvgho2zc/image/upload/v1687230679/Tech%20Blog/Scoop/image-20230620-020010.png&#34; alt=&#34;Scoop Remote Search Result&#34;&gt;&lt;/p&gt;
+&lt;p&gt;所以首先想要確認本地安裝了哪些 bucket 就輸入以下指令&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;&#34;&gt;&lt;code class=&#34;language-powershell&#34; data-lang=&#34;powershell&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;scoop bucket list
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;&lt;img src=&#34;https://res.cloudinary.com/dcvgho2zc/image/upload/v1687230729/Tech%20Blog/Scoop/image-20230620-015142.png&#34; alt=&#34;Scoop Local Installed Bucket Result&#34;&gt;&lt;/p&gt;
+&lt;p&gt;如果想查詢有哪些已知的 bucket (本地及遠端)&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;&#34;&gt;&lt;code class=&#34;language-powershell&#34; data-lang=&#34;powershell&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;scoop bucket known
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;&lt;img src=&#34;https://res.cloudinary.com/dcvgho2zc/image/upload/v1687230786/Tech%20Blog/Scoop/image-20230620-015400.png&#34; alt=&#34;Scoop Known Bucket Result&#34;&gt;&lt;/p&gt;
+&lt;p&gt;但這個列表也許已過時，這時候可以輸入以下指令更新 Scoop 後，再做查詢&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;&#34;&gt;&lt;code class=&#34;language-powershell&#34; data-lang=&#34;powershell&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;scoop update
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;&lt;img src=&#34;https://res.cloudinary.com/dcvgho2zc/image/upload/v1687230834/Tech%20Blog/Scoop/image-20230620-015513.png&#34; alt=&#34;Scoop Update Result&#34;&gt;&lt;/p&gt;
+&lt;p&gt;如果想安裝指定 bucket 到本地&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;&#34;&gt;&lt;code class=&#34;language-powershell&#34; data-lang=&#34;powershell&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;scoop bucket add games
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;&lt;img src=&#34;https://res.cloudinary.com/dcvgho2zc/image/upload/v1687230885/Tech%20Blog/Scoop/image-20230620-020309.png&#34; alt=&#34;Scoop Add Bucket Result&#34;&gt;&lt;/p&gt;
+&lt;p&gt;移除 bucket&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;&#34;&gt;&lt;code class=&#34;language-powershell&#34; data-lang=&#34;powershell&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;scoop bucket &lt;span style=&#34;color:#8be9fd;font-style:italic&#34;&gt;rm &lt;/span&gt;games
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;以上差不多就是 Scoop 常見的基本用法&lt;/p&gt;
+&lt;h1 id=&#34;jdk-切換&#34;&gt;JDK 切換&lt;/h1&gt;
+&lt;p&gt;有一種情境我們會安裝某一種套件，但要同時安裝多種版本，使用的時候需要切換不同的版本，例如安裝 JDK，可能會需要同時安裝 1.8、11 甚至 17，但使用的時候會需要按照需要執行的專案來切換不同版本的環境變數&lt;/p&gt;
+&lt;p&gt;在 Unix-like 的環境，大多都可以使用 &lt;a href=&#34;https://sdkman.io/&#34;&gt;SDKMAN&lt;/a&gt;，但偏偏 SDKMAN 原生並不支援在 Powershell 操作，只能透過 &lt;a href=&#34;https://www.cygwin.com/&#34;&gt;Cygwin&lt;/a&gt; 等方式 workaround，但同時也限制環境變數只在 Cygwin 當中生效，而無法使用 Powershell 操作&lt;/p&gt;
+&lt;p&gt;如果要在 Powershell 中操作，以往只能安裝好 JDK 後，再設定環境變數 JAVA_HOME 指定到安裝好的位置，然後每次要使用不同 JDK 版本，就要手動修改 JAVA_HOME 環境變數，或輸入不太好記的指令去操作，如果 JDK 版本更新，又要整個重頭再來，相當的麻煩&lt;/p&gt;
+&lt;p&gt;但 Scoop 本身提供了相當方便的指令，可以如 SDKMAN 一樣簡單的安裝多種不同版本的 JDK，並且在需要的時候非常簡單的切換不同的版本&lt;/p&gt;
+&lt;p&gt;首先我們可以先安裝幾種不同版本的 JDK&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;&#34;&gt;&lt;code class=&#34;language-powershell&#34; data-lang=&#34;powershell&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;scoop bucket add java
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;scoop install &lt;span style=&#34;color:#8be9fd;font-style:italic&#34;&gt;zulu-jdk&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;scoop install &lt;span style=&#34;color:#8be9fd;font-style:italic&#34;&gt;zulu11-jdk&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;&lt;img src=&#34;https://res.cloudinary.com/dcvgho2zc/image/upload/v1687230995/Tech%20Blog/Scoop/image-20230620-021710.png&#34; alt=&#34;Scoop List Local JDK Result&#34;&gt;&lt;/p&gt;
+&lt;p&gt;此時我們本地已安裝了 11 及 20 兩種版本的 JDK，在安裝的時候就會自動設定好環境變數&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://res.cloudinary.com/dcvgho2zc/image/upload/v1687231043/Tech%20Blog/Scoop/image-20230620-021833.png&#34; alt=&#34;Java Version after JDKs Installation&#34;&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://res.cloudinary.com/dcvgho2zc/image/upload/v1687231095/Tech%20Blog/Scoop/image-20230620-022019.png&#34; alt=&#34;JDK Position after JDKs Installation&#34;&gt;&lt;/p&gt;
+&lt;p&gt;接著如果我們要切換使用 JDK 20&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;&#34;&gt;&lt;code class=&#34;language-powershell&#34; data-lang=&#34;powershell&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;scoop reset &lt;span style=&#34;color:#8be9fd;font-style:italic&#34;&gt;zulu-jdk&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;&lt;img src=&#34;https://res.cloudinary.com/dcvgho2zc/image/upload/v1687231153/Tech%20Blog/Scoop/image-20230620-022207.png&#34; alt=&#34;Scoop Reset JDK Version Result&#34;&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://res.cloudinary.com/dcvgho2zc/image/upload/v1687231188/Tech%20Blog/Scoop/image-20230620-022226.png&#34; alt=&#34;Java Version after Scoop Reset&#34;&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://res.cloudinary.com/dcvgho2zc/image/upload/v1687231222/Tech%20Blog/Scoop/image-20230620-022245.png&#34; alt=&#34;JDK Position after Scoop Reset&#34;&gt;&lt;/p&gt;
+&lt;p&gt;這時我們就可以看到 Java 的版本被改變了&lt;/p&gt;
+&lt;h1 id=&#34;reference&#34;&gt;Reference&lt;/h1&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;a href=&#34;https://scoop.sh/&#34;&gt;Scoop&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;https://adamtheautomator.com/scoop-windows/&#34;&gt;How to Install and Use the Scoop Windows Package Manager&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;https://sdkman.io/&#34;&gt;SDKMAN&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;https://www.cygwin.com/&#34;&gt;Cygwin&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;https://www.thisfaner.com/p/install-and-switch-versions-of-java-python-ruby-via-scoop/&#34;&gt;通过Scoop安装和切换Java(JDK)、Python、Ruby的版本&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+- https://blog.idontwannarock.me/2023/06/scoop/ - This website by Howard Wang is licensed under a Creative Common Attribution-ShareAlike 4.0 International License.</description>
+        </item>
     
     
     
@@ -1642,200 +1731,6 @@
 &lt;li&gt;&lt;a href=&#34;https://projectlombok.org/features/EqualsAndHashCode&#34;&gt;Lombok &lt;code&gt;@EqualsAndHashCode&lt;/code&gt;&lt;/a&gt;&lt;/li&gt;
 &lt;/ul&gt;
 - https://blog.idontwannarock.me/2022/10/java_optional_not_recommand_as_field/ - This website by Howard Wang is licensed under a Creative Common Attribution-ShareAlike 4.0 International License.</description>
-        </item>
-    
-    
-    
-        <item>
-        <title>ProtoBuf FlatBuf Benchmark in Java</title>
-        <link>https://blog.idontwannarock.me/2022/01/protobuf_flatbuf_java/</link>
-        <pubDate>Tue, 04 Jan 2022 15:36:17 +0800</pubDate>
-        
-        <guid>https://blog.idontwannarock.me/2022/01/protobuf_flatbuf_java/</guid>
-        <description>Howard Tech Note https://blog.idontwannarock.me/2022/01/protobuf_flatbuf_java/ -&lt;p&gt;繼續之前研究的 gRPC，除了 HTTP/2 以外，另外一個支柱就是 Protocol Buffers (ProtoBuf)&lt;/p&gt;
-&lt;p&gt;ProtoBuf 是一種二進制的序列化資料格式，透過介面描述語言 (Interface description language, IDL) 來描述資料結構，再利用工具依據 IDL 產生程式碼，這些程式碼可以用來生成或解析代表這些資料結構的位元組流&lt;/p&gt;
-&lt;p&gt;ProtoBuf 是 Google 原本用來內部使用的資料格式，但現在已開源，加上被 gRPC 原生支援，現在已經是重要的序列化 library&lt;/p&gt;
-&lt;p&gt;Google 官方支援了許多語言的工具用來轉換 IDL 為代碼，但其中很不巧的不包含我目前工作上避不開的 Lua 或 TypeScript，所以我又另外找到同樣也是 Google 推出的 FlatBuffers (FlatBuf)，同樣也是二進制的序列化 library，但官方支援的語系就很多了，正好也包括 Lua 及 TypeScript&lt;/p&gt;
-&lt;p&gt;雖然 Google 官方已經在努力讓 FlatBuf 也被 gRPC 支援，但目前官方文件上還只有 C++ 的版本，並沒有我日常使用的語言&lt;/p&gt;
-&lt;p&gt;不過沒關係，我工作上的專案目前並不是一定要使用 gRPC，我完全可以利用其他傳輸協定例如 HTTP, WebSocket 或甚至 Socket 來傳輸資料，我只需要一種能夠讓各語系通用的資料格式，並且盡可能有官方長期支援即可&lt;/p&gt;
-&lt;h2 id=&#34;benchmark-方法&#34;&gt;Benchmark 方法&lt;/h2&gt;
-&lt;p&gt;雖然剛好 FlatBuf 都符合我的需求，但 FlatBuf 使用的人似乎還不多，雖然官方文件上說 Facebook 已經將 FlatBuf 使用在 Android App 上，不過總是沒有自己親身試驗來的準，也一併試驗開發的困難度&lt;/p&gt;
-&lt;p&gt;所以乾脆來做 ProtoBuf 跟 FlatBuf 的 benchmark 來比較一下各自序列化的速度以及記憶體大致用量&lt;/p&gt;
-&lt;p&gt;因為要順帶試驗開發的困難度，所以只要是各自有支援的資料格式，我都盡量加入測試的資料結構當中，以下為我用來建立測資的 Java 物件&lt;/p&gt;
-&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;&#34;&gt;&lt;code class=&#34;language-java&#34; data-lang=&#34;java&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;@Value
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;@Builder
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#8be9fd;font-style:italic&#34;&gt;public&lt;/span&gt; &lt;span style=&#34;color:#8be9fd;font-style:italic&#34;&gt;class&lt;/span&gt; &lt;span style=&#34;color:#50fa7b&#34;&gt;Passenger&lt;/span&gt; &lt;span style=&#34;color:#ff79c6&#34;&gt;{&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    Integer id&lt;span style=&#34;color:#ff79c6&#34;&gt;;&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    String firstName&lt;span style=&#34;color:#ff79c6&#34;&gt;;&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    String lastName&lt;span style=&#34;color:#ff79c6&#34;&gt;;&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    Boolean isMale&lt;span style=&#34;color:#ff79c6&#34;&gt;;&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    List&lt;span style=&#34;color:#ff79c6&#34;&gt;&amp;lt;&lt;/span&gt;Belonging&lt;span style=&#34;color:#ff79c6&#34;&gt;&amp;gt;&lt;/span&gt; belongings&lt;span style=&#34;color:#ff79c6&#34;&gt;;&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    Ticket ticket&lt;span style=&#34;color:#ff79c6&#34;&gt;;&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#ff79c6&#34;&gt;}&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;@Value
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;@Builder
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#8be9fd;font-style:italic&#34;&gt;public&lt;/span&gt; &lt;span style=&#34;color:#8be9fd;font-style:italic&#34;&gt;class&lt;/span&gt; &lt;span style=&#34;color:#50fa7b&#34;&gt;Belonging&lt;/span&gt; &lt;span style=&#34;color:#ff79c6&#34;&gt;{&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    Integer id&lt;span style=&#34;color:#ff79c6&#34;&gt;;&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    BelongingType type&lt;span style=&#34;color:#ff79c6&#34;&gt;;&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    Float weightInKilogram&lt;span style=&#34;color:#ff79c6&#34;&gt;;&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    &lt;span style=&#34;color:#8be9fd;font-style:italic&#34;&gt;public&lt;/span&gt; &lt;span style=&#34;color:#8be9fd;font-style:italic&#34;&gt;enum&lt;/span&gt; BelongingType &lt;span style=&#34;color:#ff79c6&#34;&gt;{&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;        SUITCASE&lt;span style=&#34;color:#ff79c6&#34;&gt;,&lt;/span&gt; BACKPACK
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    &lt;span style=&#34;color:#ff79c6&#34;&gt;}&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#ff79c6&#34;&gt;}&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;@Value
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;@Builder
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#8be9fd;font-style:italic&#34;&gt;public&lt;/span&gt; &lt;span style=&#34;color:#8be9fd;font-style:italic&#34;&gt;class&lt;/span&gt; &lt;span style=&#34;color:#50fa7b&#34;&gt;Ticket&lt;/span&gt; &lt;span style=&#34;color:#ff79c6&#34;&gt;{&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    Integer id&lt;span style=&#34;color:#ff79c6&#34;&gt;;&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    Transportation transportation&lt;span style=&#34;color:#ff79c6&#34;&gt;;&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    Currency currency&lt;span style=&#34;color:#ff79c6&#34;&gt;;&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    BigDecimal price&lt;span style=&#34;color:#ff79c6&#34;&gt;;&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    Location departure&lt;span style=&#34;color:#ff79c6&#34;&gt;;&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    OffsetDateTime departureTime&lt;span style=&#34;color:#ff79c6&#34;&gt;;&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    Location arrival&lt;span style=&#34;color:#ff79c6&#34;&gt;;&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    OffsetDateTime arrivalTime&lt;span style=&#34;color:#ff79c6&#34;&gt;;&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    &lt;span style=&#34;color:#8be9fd;font-style:italic&#34;&gt;public&lt;/span&gt; &lt;span style=&#34;color:#8be9fd;font-style:italic&#34;&gt;enum&lt;/span&gt; Transportation &lt;span style=&#34;color:#ff79c6&#34;&gt;{&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;        AIRLINE&lt;span style=&#34;color:#ff79c6&#34;&gt;,&lt;/span&gt; TRAIN
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    &lt;span style=&#34;color:#ff79c6&#34;&gt;}&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    &lt;span style=&#34;color:#8be9fd;font-style:italic&#34;&gt;public&lt;/span&gt; &lt;span style=&#34;color:#8be9fd;font-style:italic&#34;&gt;enum&lt;/span&gt; Currency &lt;span style=&#34;color:#ff79c6&#34;&gt;{&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;        USD&lt;span style=&#34;color:#ff79c6&#34;&gt;,&lt;/span&gt; NTD
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    &lt;span style=&#34;color:#ff79c6&#34;&gt;}&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    &lt;span style=&#34;color:#8be9fd;font-style:italic&#34;&gt;public&lt;/span&gt; &lt;span style=&#34;color:#8be9fd;font-style:italic&#34;&gt;enum&lt;/span&gt; Location &lt;span style=&#34;color:#ff79c6&#34;&gt;{&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;        TPE&lt;span style=&#34;color:#ff79c6&#34;&gt;,&lt;/span&gt; TSA&lt;span style=&#34;color:#ff79c6&#34;&gt;,&lt;/span&gt; NRT&lt;span style=&#34;color:#ff79c6&#34;&gt;,&lt;/span&gt; LAX
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    &lt;span style=&#34;color:#ff79c6&#34;&gt;}&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#ff79c6&#34;&gt;}&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;我也盡量將 Java 常用的資料型別加入其中來試驗各序列化 Library 的支援度&lt;/p&gt;
-&lt;p&gt;以下是 ProtoBuf 對應的 .proto 檔&lt;/p&gt;
-&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;&#34;&gt;&lt;code class=&#34;language-proto&#34; data-lang=&#34;proto&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;syntax &lt;span style=&#34;color:#ff79c6&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color:#f1fa8c&#34;&gt;&amp;#34;proto3&amp;#34;&lt;/span&gt;;
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#ff79c6&#34;&gt;package&lt;/span&gt; protobuf;
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#ff79c6&#34;&gt;option&lt;/span&gt; java_multiple_files &lt;span style=&#34;color:#ff79c6&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color:#ff79c6&#34;&gt;true&lt;/span&gt;;
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#ff79c6&#34;&gt;option&lt;/span&gt; java_package &lt;span style=&#34;color:#ff79c6&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color:#f1fa8c&#34;&gt;&amp;#34;org.example.serialization.benchmark.protobuf&amp;#34;&lt;/span&gt;;
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#ff79c6&#34;&gt;option&lt;/span&gt; java_generate_equals_and_hash &lt;span style=&#34;color:#ff79c6&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color:#ff79c6&#34;&gt;true&lt;/span&gt;;
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#ff79c6&#34;&gt;option&lt;/span&gt; java_string_check_utf8 &lt;span style=&#34;color:#ff79c6&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color:#ff79c6&#34;&gt;true&lt;/span&gt;;
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#ff79c6&#34;&gt;option&lt;/span&gt; java_outer_classname &lt;span style=&#34;color:#ff79c6&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color:#f1fa8c&#34;&gt;&amp;#34;PassengerProto&amp;#34;&lt;/span&gt;;
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#8be9fd;font-style:italic&#34;&gt;message&lt;/span&gt; &lt;span style=&#34;color:#50fa7b&#34;&gt;ProtoPassenger&lt;/span&gt; {
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;  &lt;span style=&#34;color:#8be9fd&#34;&gt;int32&lt;/span&gt; id &lt;span style=&#34;color:#ff79c6&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color:#bd93f9&#34;&gt;1&lt;/span&gt;;
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;  &lt;span style=&#34;color:#8be9fd&#34;&gt;string&lt;/span&gt; firstName &lt;span style=&#34;color:#ff79c6&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color:#bd93f9&#34;&gt;2&lt;/span&gt;;
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;  &lt;span style=&#34;color:#8be9fd&#34;&gt;string&lt;/span&gt; lastName &lt;span style=&#34;color:#ff79c6&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color:#bd93f9&#34;&gt;3&lt;/span&gt;;
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;  &lt;span style=&#34;color:#8be9fd&#34;&gt;bool&lt;/span&gt; isMale &lt;span style=&#34;color:#ff79c6&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color:#bd93f9&#34;&gt;4&lt;/span&gt;;
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;  ProtoTicket ticket &lt;span style=&#34;color:#ff79c6&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color:#bd93f9&#34;&gt;5&lt;/span&gt;;
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;  &lt;span style=&#34;color:#ff79c6&#34;&gt;repeated&lt;/span&gt; ProtoBelonging belongings &lt;span style=&#34;color:#ff79c6&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color:#bd93f9&#34;&gt;6&lt;/span&gt;;
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;}
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#8be9fd;font-style:italic&#34;&gt;message&lt;/span&gt; &lt;span style=&#34;color:#50fa7b&#34;&gt;ProtoBelonging&lt;/span&gt; {
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;  &lt;span style=&#34;color:#8be9fd&#34;&gt;int32&lt;/span&gt; id &lt;span style=&#34;color:#ff79c6&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color:#bd93f9&#34;&gt;1&lt;/span&gt;;
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;  BelongingType type &lt;span style=&#34;color:#ff79c6&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color:#bd93f9&#34;&gt;2&lt;/span&gt;;
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;  &lt;span style=&#34;color:#8be9fd&#34;&gt;float&lt;/span&gt; weightInKilogram &lt;span style=&#34;color:#ff79c6&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color:#bd93f9&#34;&gt;3&lt;/span&gt;;
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;  &lt;span style=&#34;color:#8be9fd;font-style:italic&#34;&gt;enum&lt;/span&gt; BelongingType {
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    SUITCASE &lt;span style=&#34;color:#ff79c6&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color:#bd93f9&#34;&gt;0&lt;/span&gt;;
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    BACKPACK &lt;span style=&#34;color:#ff79c6&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color:#bd93f9&#34;&gt;1&lt;/span&gt;;
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;  }
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;}
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#8be9fd;font-style:italic&#34;&gt;message&lt;/span&gt; &lt;span style=&#34;color:#50fa7b&#34;&gt;ProtoTicket&lt;/span&gt; {
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;  &lt;span style=&#34;color:#8be9fd&#34;&gt;int32&lt;/span&gt; id &lt;span style=&#34;color:#ff79c6&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color:#bd93f9&#34;&gt;1&lt;/span&gt;;
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;  Transportation transportation &lt;span style=&#34;color:#ff79c6&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color:#bd93f9&#34;&gt;2&lt;/span&gt;;
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;  Currency currency &lt;span style=&#34;color:#ff79c6&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color:#bd93f9&#34;&gt;3&lt;/span&gt;;
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;  &lt;span style=&#34;color:#8be9fd&#34;&gt;string&lt;/span&gt; price &lt;span style=&#34;color:#ff79c6&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color:#bd93f9&#34;&gt;4&lt;/span&gt;;
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;  Location departure &lt;span style=&#34;color:#ff79c6&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color:#bd93f9&#34;&gt;5&lt;/span&gt;;
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;  &lt;span style=&#34;color:#8be9fd&#34;&gt;string&lt;/span&gt; departureTime &lt;span style=&#34;color:#ff79c6&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color:#bd93f9&#34;&gt;6&lt;/span&gt;;
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;  Location arrival &lt;span style=&#34;color:#ff79c6&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color:#bd93f9&#34;&gt;7&lt;/span&gt;;
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;  &lt;span style=&#34;color:#8be9fd&#34;&gt;string&lt;/span&gt; arrivalTime &lt;span style=&#34;color:#ff79c6&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color:#bd93f9&#34;&gt;8&lt;/span&gt;;
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;  &lt;span style=&#34;color:#8be9fd;font-style:italic&#34;&gt;enum&lt;/span&gt; Transportation {
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    AIRLINE &lt;span style=&#34;color:#ff79c6&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color:#bd93f9&#34;&gt;0&lt;/span&gt;;
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    TRAIN &lt;span style=&#34;color:#ff79c6&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color:#bd93f9&#34;&gt;1&lt;/span&gt;;
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;  }
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;  &lt;span style=&#34;color:#8be9fd;font-style:italic&#34;&gt;enum&lt;/span&gt; Currency {
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    USD &lt;span style=&#34;color:#ff79c6&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color:#bd93f9&#34;&gt;0&lt;/span&gt;;
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    NTD &lt;span style=&#34;color:#ff79c6&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color:#bd93f9&#34;&gt;1&lt;/span&gt;;
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;  }
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;  &lt;span style=&#34;color:#8be9fd;font-style:italic&#34;&gt;enum&lt;/span&gt; Location {
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    TPE &lt;span style=&#34;color:#ff79c6&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color:#bd93f9&#34;&gt;0&lt;/span&gt;;
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    TSA &lt;span style=&#34;color:#ff79c6&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color:#bd93f9&#34;&gt;1&lt;/span&gt;;
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    NRT &lt;span style=&#34;color:#ff79c6&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color:#bd93f9&#34;&gt;2&lt;/span&gt;;
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    LAX &lt;span style=&#34;color:#ff79c6&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color:#bd93f9&#34;&gt;3&lt;/span&gt;;
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;  }
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;}
-&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;接著是 FlatBuf 對應的 fbs 檔&lt;/p&gt;
-&lt;pre tabindex=&#34;0&#34;&gt;&lt;code class=&#34;language-fbs&#34; data-lang=&#34;fbs&#34;&gt;namespace org.example.serialization.benchmark.flatbuf;
-
-enum FlatBelongingType : ubyte {SUITCASE, BACKPACK}
-
-table FlatBelonging {
-    id:int;
-    type:FlatBelongingType;
-    weight_in_kilogram:float;
-}
-
-enum FlatTransportation : ubyte {AIRLINE, TRAIN}
-
-enum FlatCurrency : ubyte {USD, NTD}
-
-enum FlatLocation : ubyte {TPE, TSA, NRT, LAX}
-
-table FlatTicket {
-    id:int;
-    transportation:FlatTransportation;
-    currency:FlatCurrency;
-    price:string;
-    departure:FlatLocation;
-    departure_time:string;
-    arrival:FlatLocation;
-    arrival_time:string;
-}
-
-table FlatPassenger {
-    id:int;
-    first_name:string;
-    last_name:string;
-    is_male:bool;
-    ticket:FlatTicket;
-    belongings:[FlatBelonging];
-}
-
-root_type FlatPassenger;
-&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;測試的過程大致上為將自動產生的 Passenger 物件 map 到各自的物件中並進行序列化 (serialization)，接著再進行反序列化 (deserialization) 並 map 回 Passenger 物件，最後會進行 assert 以確保反序列化回來的物件與一開始產生的一致&lt;/p&gt;
-&lt;p&gt;之所以 mapping 階段也要計入，一是這樣貼近真實世界應用，二來 FlatBuf 並沒有單獨「反序列化」的過程，所以將 mapping 階段都一併計入比較公平&lt;/p&gt;
-&lt;p&gt;然後就是將序列化反序列化的回合執行一百萬次，以避免有 warm up 問題&lt;/p&gt;
-&lt;h2 id=&#34;benchmark-結果&#34;&gt;Benchmark 結果&lt;/h2&gt;
-&lt;p&gt;直接上測試結果&lt;/p&gt;
-&lt;p&gt;&lt;img src=&#34;https://res.cloudinary.com/dcvgho2zc/image/upload/v1641285735/Tech%20Blog/gson-protobuf-flatbuf-benchmark.png&#34; alt=&#34;Gson, ProtoBuf, and FlatBuf Benchmark&#34;&gt;&lt;/p&gt;
-&lt;p&gt;從圖中可以得知其實 ProtoBuf 與 FlatBuf 在速度上其實差不多，頂多 ProtoBuf 在序列化上稍微快一點點，相對 FlatBuf 在反序列化上也稍微快一點點，但整體上相差不是很大&lt;/p&gt;
-&lt;p&gt;不過在最大記憶體用量上，FlatBuf 完勝 ProtoBuf，以 FlatBuf 的特性而言這當然也是可預期的結果&lt;/p&gt;
-&lt;p&gt;至於 Gson 嘛&amp;hellip;全都墊底也是可預期的結果，畢竟 JSON 強項本來就不在效能上，可讀性、跨平台、廣泛支援度等才是它的主戰場&lt;/p&gt;
-&lt;h2 id=&#34;結論&#34;&gt;結論&lt;/h2&gt;
-&lt;p&gt;其實在撰寫的過程可以感受到 Gson 的程式碼撰寫絕對是最容易的，即使是 mapper 也幾乎不用額外多寫太多程式碼，portable 方面絕對是最強的，被廣泛使用還是有道理的&lt;/p&gt;
-&lt;p&gt;而 ProtoBuf 也是相對成熟的 library，雖然也不需要寫太多額外的程式碼，但它支援的資料型別就少很多了，像是不支援日期相關型別或 &lt;code&gt;BigDecimal&lt;/code&gt; 這種&lt;/p&gt;
-&lt;blockquote&gt;
-&lt;p&gt;當然，JSON 其實原生支援的型別也不多，但成熟的 library 讓你不需要考慮資料型別問題，幾乎 Java 所有原生型別全都能夠順利序列化再反序列化；而 ProtoBuf 轉換的程式碼是由工具自動產生，所以有很多型別是不可能會自動產生的&lt;/p&gt;
-&lt;/blockquote&gt;
-&lt;p&gt;至於 FlatBuf 則是三者當中最不成熟的 library，沒辦法，這個專案 2014 才開始，不像 ProtoBuf 是從 2001 開始&lt;/p&gt;
-&lt;p&gt;FlatBuf 在序列化上是相對最麻煩的一個，因為它其實在設定物件各 properties 的過程中就一併開始轉換二進制格式的機制；反序列化後的使用上倒是與其他 library 相同，可以直接從從物件取得 property，但受限於它原生支援的資料型別比 ProtoBuf 更少，所以不做 mapping 的話就更難使用一點&lt;/p&gt;
-&lt;p&gt;最後，附上測試專案的程式碼以供參考&lt;/p&gt;
-&lt;p&gt;&lt;a href=&#34;https://github.com/idontwannarock/serialization-lib-benchmark&#34;&gt;Serialization Libraries Benchmark&lt;/a&gt;&lt;/p&gt;
-&lt;h2 id=&#34;參考連結&#34;&gt;參考連結&lt;/h2&gt;
-&lt;ul&gt;
-&lt;li&gt;&lt;a href=&#34;https://developers.google.com/protocol-buffers/&#34;&gt;Protocol Buffers&lt;/a&gt;&lt;/li&gt;
-&lt;li&gt;&lt;a href=&#34;https://en.wikipedia.org/wiki/Protocol_Buffers&#34;&gt;Protocol Buffers Wiki&lt;/a&gt;&lt;/li&gt;
-&lt;li&gt;&lt;a href=&#34;https://google.github.io/flatbuffers/index.html&#34;&gt;FlatBuffers&lt;/a&gt;&lt;/li&gt;
-&lt;li&gt;&lt;a href=&#34;https://en.wikipedia.org/wiki/FlatBuffers&#34;&gt;FlatBuffers Wiki&lt;/a&gt;&lt;/li&gt;
-&lt;/ul&gt;
-- https://blog.idontwannarock.me/2022/01/protobuf_flatbuf_java/ - This website by Howard Wang is licensed under a Creative Common Attribution-ShareAlike 4.0 International License.</description>
         </item>
     
     

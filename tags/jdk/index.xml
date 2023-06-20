@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>jdk on Howard Tech Note</title>
+    <link>https://blog.idontwannarock.me/tags/jdk/</link>
+    <description>Recent content in jdk on Howard Tech Note</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-us</language>
+    <copyright>This website by Howard Wang is licensed under a Creative Common Attribution-ShareAlike 4.0 International License.</copyright>
+    <lastBuildDate>Tue, 20 Jun 2023 10:51:39 +0800</lastBuildDate><atom:link href="https://blog.idontwannarock.me/tags/jdk/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Scoop 介紹及用法</title>
+      <link>https://blog.idontwannarock.me/2023/06/scoop/</link>
+      <pubDate>Tue, 20 Jun 2023 10:51:39 +0800</pubDate>
+      
+      <guid>https://blog.idontwannarock.me/2023/06/scoop/</guid>
+      <description>Linux 有 apt, yum、MacOS 有 Homebrew、Windows 有 Chocolatey
+但今天要介紹 Windows 環境的另外一個 command line 套件管理工具 Scoop
+在 Windows 環境，比較有名的 command line 套件管理工具是 Chocolatey，但今天要介紹的 Scoop 有一項 Chocolatey 沒辦法做到的好處，就是可以切換 Path Environment Variable
+安裝 Scoop 的安裝非常簡單，打開 非 Administrator (系統管理員) 的 Powershell，並輸入以下指令即可安裝
+Set-ExecutionPolicy RemoteSigned -Scope CurrentUser irm get.scoop.sh | iex 使用 Scoop 既然是套件管理工具，那重要的工作就是安裝套件，而 Scoop 有支援什麼套件固然可以直接 Google 的到，但其實也不是沒有方式直接在 command line 搜尋
+例如想安裝 7zip 壓縮工具，可以在 powershell 當中這樣搜尋
+scoop search 7zip 應該會出現如下的結果
+第一行說明代表這次結果是在本地的 bucket 當中搜尋到的，表格當中的 Name 就是套件名稱，之後所有操作都要輸入 Name 當中顯示的完整名稱，Source 就是指套件所在的 bucket</description>
+    </item>
+    
+  </channel>
+</rss>

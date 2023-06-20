@@ -1,0 +1,731 @@
+<!DOCTYPE html>
+<html><head>
+<title>Scoop 介紹及用法</title>
+
+
+
+
+<meta charset="utf-8">
+<meta name="X-UA-Compatible" content="IE=edge">
+<meta name="google-site-verification" content="">
+<meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" name="viewport">
+<meta content="telephone=no" name="format-detection">
+<meta name="description" content="簡介 Scoop 及使用 Scoop 切換 JDK 版本">
+<meta name="renderer" content="webkit">
+<meta name="theme-color" content="#ffffff">
+
+
+
+
+
+
+
+
+
+
+
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-JP1V61PPMJ"></script>
+<script>
+var doNotTrack = false;
+if (!doNotTrack) {
+	window.dataLayer = window.dataLayer || [];
+	function gtag(){dataLayer.push(arguments);}
+	gtag('js', new Date());
+	gtag('config', 'G-JP1V61PPMJ', { 'anonymize_ip': false });
+}
+</script>
+
+
+
+
+
+
+  
+
+
+
+
+
+
+      <script src="https://blog.idontwannarock.me/js/toc.js"></script>
+    
+    <link type="text/css" rel="stylesheet" href="https://blog.idontwannarock.me/vendor/css/bootstrap.min.css">
+<link rel="stylesheet" href="https://blog.idontwannarock.me/scss/journal.min.c5d92f380bf10f6849c7ac487c7df2b22c081e0851e5339224f1ae29210b20d2.css" integrity="sha256-xdkvOAvxD2hJx6xIfH3ysiwIHghR5TOSJPGuKSELINI=" media="screen">
+
+
+
+<link rel="stylesheet" href="https://blog.idontwannarock.me/scss/dark-mode.min.9f8d8c2df9285089d141edd4a50cb7506c7948e6ab79a29968dced1bd0ab7d22.css" integrity="sha256-n42MLfkoUInRQe3UpQy3UGx5SOareaKZaNztG9CrfSI=" media="screen">
+
+
+<link rel="stylesheet"
+          href="https://fonts.googleapis.com/css?family=Material+Icons">
+
+
+
+
+
+
+
+
+
+
+
+
+<script src="https://cdn.jsdelivr.net/npm/vue-disqus@3/dist/vue-disqus.js"></script>
+
+
+
+
+
+
+
+
+</head>
+<body>
+    	<div id="app"><div id="sideContainer" class="side-container">
+    
+    <a class="a-block nav-head false" href="https://blog.idontwannarock.me/">
+    
+        <div class="nav-title">
+            Howard Tech Note
+        </div>
+        
+        <div class="nav-subtitle">
+            Share * Record * Program
+        </div>
+        
+    </a>
+
+    <div class="nav-link-list">
+        
+        
+            
+            
+            
+            
+            
+            <a class="a-block nav-link-item false" href="https://blog.idontwannarock.me/posts">
+                Archive
+            </a>
+            
+        
+            
+            
+            
+            
+            
+            <a class="a-block nav-link-item false" href="https://blog.idontwannarock.me/categories">
+                Categories
+            </a>
+            
+        
+            
+            
+            
+            
+            
+            <a class="a-block nav-link-item false" href="https://blog.idontwannarock.me/tags">
+                Tags
+            </a>
+            
+        
+            
+            
+            
+            
+            
+            <a class="a-block nav-link-item false" href="https://blog.idontwannarock.me/about">
+                About
+            </a>
+            
+        
+            
+            
+            
+            
+            
+            <a class="a-block nav-link-item false" href="https://blog.idontwannarock.me/index.xml">
+                RSS Feed
+            </a>
+            
+        
+    </div>
+
+    
+
+    <div class="nav-footer">
+        
+Hugo Theme <a href="https://github.com/amazingrise/hugo-theme-diary">Diary</a> by <a href="https://risehere.net/">Rise</a>
+<br>
+Ported from <a href="https://mak1t0.cc/" target="_blank" rel="noreferrer noopener">Makito</a>'s <a href="https://github.com/SumiMakito/hexo-theme-journal/" target="_blank" rel="noreferrer noopener">Journal.</a> <br>
+<br>
+
+&copy;
+	
+	This website by Howard Wang is licensed under a Creative Common Attribution-ShareAlike 4.0 International License.
+	
+
+    </div>
+    
+</div><div id="extraContainer" class="extra-container">
+    
+    
+    <div class="toc animated-visibility" :class="{ invisible: scrollY <= 140 }">
+
+
+	<div class="toc-content">
+	
+		
+		
+		
+		<center>- CATALOG -</center>
+		
+		
+		<ul>
+			
+				
+				
+					
+						
+						
+						
+						
+						
+							<li>
+								<a href="#%e5%ae%89%e8%a3%9d" onclick="onNavClick(`#安裝-nav`)" id="安裝-nav">
+									安裝
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+						
+							<li>
+								<a href="#%e4%bd%bf%e7%94%a8" onclick="onNavClick(`#使用-nav`)" id="使用-nav">
+									使用
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+							
+								
+									<ul>
+								
+							
+						
+						
+							<li>
+								<a href="#bucket" onclick="onNavClick(`#bucket-nav`)" id="bucket-nav">
+									Bucket
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+							
+								</ul>
+							
+						
+						
+						
+							<li>
+								<a href="#jdk-%e5%88%87%e6%8f%9b" onclick="onNavClick(`#jdk-切換-nav`)" id="jdk-切換-nav">
+									JDK 切換
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+						
+							<li>
+								<a href="#reference" onclick="onNavClick(`#reference-nav`)" id="reference-nav">
+									Reference
+								</a>
+							</li>
+						
+						
+					
+				
+			
+		</ul>
+	</div>
+
+</div>
+    
+    <div class="pagination">
+        <a id="globalBackToTop" class="pagination-action animated-visibility" href="#top" :class="{ invisible: scrollY == 0 }">
+            <i class="material-icons pagination-action-icon">
+                keyboard_arrow_up
+            </i>
+        </a>
+        
+        <a type="button" class="pagination-action" id="darkModeToggleButton">
+            <span class="material-icons pagination-action-icon" id="darkModeToggleIcon">
+                dark_mode
+            </span>
+        </a>
+        
+        
+    </div>
+</div>
+<div class="single-column-drawer-container" id="drawer"
+     v-bind:class="{ 'single-column-drawer-container-active': isDrawerOpen }">
+    <div class="drawer-content">
+        <div class="drawer-menu">
+            
+            
+            
+                
+                
+                
+                
+                
+                <a class="a-block drawer-menu-item false" href="https://blog.idontwannarock.me/posts">
+                    Archive
+                </a>
+                
+            
+                
+                
+                
+                
+                
+                <a class="a-block drawer-menu-item false" href="https://blog.idontwannarock.me/categories">
+                    Categories
+                </a>
+                
+            
+                
+                
+                
+                
+                
+                <a class="a-block drawer-menu-item false" href="https://blog.idontwannarock.me/tags">
+                    Tags
+                </a>
+                
+            
+                
+                
+                
+                
+                
+                <a class="a-block drawer-menu-item false" href="https://blog.idontwannarock.me/about">
+                    About
+                </a>
+                
+            
+                
+                
+                
+                
+                
+                <a class="a-block drawer-menu-item false" href="https://blog.idontwannarock.me/index.xml">
+                    RSS Feed
+                </a>
+                
+            
+            
+            <div class="toc">
+
+
+	<div class="toc-content">
+	
+		
+		
+		
+		<center>- CATALOG -</center>
+		
+		
+		<ul>
+			
+				
+				
+					
+						
+						
+						
+						
+						
+							<li>
+								<a href="#%e5%ae%89%e8%a3%9d" onclick="onNavClick(`#安裝-nav`)" id="安裝-nav">
+									安裝
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+						
+							<li>
+								<a href="#%e4%bd%bf%e7%94%a8" onclick="onNavClick(`#使用-nav`)" id="使用-nav">
+									使用
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+							
+								
+									<ul>
+								
+							
+						
+						
+							<li>
+								<a href="#bucket" onclick="onNavClick(`#bucket-nav`)" id="bucket-nav">
+									Bucket
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+							
+								</ul>
+							
+						
+						
+						
+							<li>
+								<a href="#jdk-%e5%88%87%e6%8f%9b" onclick="onNavClick(`#jdk-切換-nav`)" id="jdk-切換-nav">
+									JDK 切換
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+						
+							<li>
+								<a href="#reference" onclick="onNavClick(`#reference-nav`)" id="reference-nav">
+									Reference
+								</a>
+							</li>
+						
+						
+					
+				
+			
+		</ul>
+	</div>
+
+</div>
+            
+        </div>
+    </div>
+</div>
+<transition name="fade">
+    <div id="drawer-mask" v-bind:class="{ 'single-column-drawer-mask': mounted }" v-if="isDrawerOpen" v-on:click="toggleDrawer"></div>
+</transition>
+<nav id="navBar" class="navbar sticky-top navbar-light single-column-nav-container">
+    <div id="navBackground" class="nav-background"></div>
+    <div class="container container-narrow nav-content">
+        <button id="nav_dropdown_btn" class="nav-dropdown-toggle" type="button" v-on:click="toggleDrawer">
+            <i class="material-icons">
+                menu
+            </i>
+        </button>
+        <a id="navTitle" class="navbar-brand" href="https://blog.idontwannarock.me/">
+            Howard Tech Note
+        </a>
+        
+        <button type="button" class="nav-darkmode-toggle" id="darkModeToggleButton2">
+            <i class="material-icons" id="darkModeToggleIcon2">
+                dark_mode
+            </i>
+        </button>
+        
+    </div>
+</nav>
+<div class="single-column-header-container" id="pageHead"
+     v-bind:style="{ transform: 'translateZ(0px) translateY('+.3*scrollY+'px)', opacity: 1-navOpacity }">
+    <a href="https://blog.idontwannarock.me/">
+        <div class="single-column-header-title">Howard Tech Note</div>
+        
+        <div class="single-column-header-subtitle">Share * Record * Program</div>
+        
+
+    </a>
+</div>
+
+            <div id="content">
+                <div id="streamContainer" class="stream-container">
+
+    <div class="post-list-container post-list-container-shadow">
+        <div class="post">
+            
+            
+            
+                
+            
+
+            <div class="post-head-wrapper"
+                
+                    
+                    
+                    style="background-image: url('https://avatars.githubusercontent.com/u/16618068?v=4')"
+                    
+                
+            >
+                <div class="post-title">
+                    Scoop 介紹及用法
+                    
+                    <div class="post-subtitle">
+                        簡介 Scoop 及使用 Scoop 切換 JDK 版本
+                    </div>
+                    
+                    <div class="post-meta">
+                        
+                        <time itemprop="datePublished">
+                            2023-06-20 10:51
+                        </time>
+                        
+
+                        
+                            <i class="material-icons" style="">folder</i>
+                                <a href="https://blog.idontwannarock.me/categories/implementation">implementation</a>
+                                &nbsp;
+                        
+
+                        
+                            <i class="material-icons" style="">label</i>
+                            
+                                <a href="https://blog.idontwannarock.me/tags/scoop">scoop</a>
+                                &nbsp;
+                            
+                                <a href="https://blog.idontwannarock.me/tags/jdk">jdk</a>
+                                &nbsp;
+                            
+                        
+                        
+                    </div>
+                </div>
+            </div>
+            
+            <div class="post-body-wrapper">
+                
+                <div class="post-body" v-pre>
+                
+                    <p>Linux 有 <a href="https://salsa.debian.org/apt-team/apt">apt</a>, <a href="http://yum.baseurl.org/gitweb/">yum</a>、MacOS 有 <a href="https://brew.sh/">Homebrew</a>、Windows 有 <a href="https://chocolatey.org/">Chocolatey</a></p>
+<p>但今天要介紹 Windows 環境的另外一個 command line 套件管理工具 <a href="https://scoop.sh/">Scoop</a></p>
+<p>在 Windows 環境，比較有名的 command line 套件管理工具是 Chocolatey，但今天要介紹的 Scoop 有一項 Chocolatey 沒辦法做到的好處，就是可以切換 Path Environment Variable</p>
+<h1 id="安裝">安裝</h1>
+<p>Scoop 的安裝非常簡單，打開 <strong>非</strong> Administrator (系統管理員) 的 Powershell，並輸入以下指令即可安裝</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-powershell" data-lang="powershell"><span style="display:flex;"><span><span style="color:#8be9fd;font-style:italic">Set-ExecutionPolicy</span> RemoteSigned -Scope CurrentUser
+</span></span><span style="display:flex;"><span><span style="color:#8be9fd;font-style:italic">irm </span>get.scoop.sh | <span style="color:#8be9fd;font-style:italic">iex
+</span></span></span></code></pre></div><h1 id="使用">使用</h1>
+<p>Scoop 既然是套件管理工具，那重要的工作就是安裝套件，而 Scoop 有支援什麼套件固然可以直接 Google 的到，但其實也不是沒有方式直接在 command line 搜尋</p>
+<p>例如想安裝 7zip 壓縮工具，可以在 powershell 當中這樣搜尋</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-powershell" data-lang="powershell"><span style="display:flex;"><span>scoop search 7zip
+</span></span></code></pre></div><p>應該會出現如下的結果</p>
+<p><img src="https://res.cloudinary.com/dcvgho2zc/image/upload/v1687230278/Tech%20Blog/Scoop/image-20230620-014307.png" alt="Scoop Search Result"></p>
+<p>第一行說明代表這次結果是在本地的 bucket 當中搜尋到的，表格當中的 Name 就是套件名稱，之後所有操作都要輸入 Name 當中顯示的完整名稱，Source 就是指套件所在的 bucket</p>
+<p>這邊如果你不確定是哪個套件名稱，也可以用以下指令看一下簡介，例如</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-powershell" data-lang="powershell"><span style="display:flex;"><span>scoop info 7zip
+</span></span></code></pre></div><p><img src="https://res.cloudinary.com/dcvgho2zc/image/upload/v1687230369/Tech%20Blog/Scoop/image-20230620-014436.png" alt="Scoop Info Result"></p>
+<p>這時候確定要安裝哪一個套件名稱，這時候就可以輸入以下指令做安裝</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-powershell" data-lang="powershell"><span style="display:flex;"><span>scoop install 7zip
+</span></span></code></pre></div><p>這時候 console 會顯示經過一連串的操作，最後看到這一行就代表安裝成功</p>
+<p><img src="https://res.cloudinary.com/dcvgho2zc/image/upload/v1687230433/Tech%20Blog/Scoop/image-20230620-014915.png" alt="Scoop Installation Result"></p>
+<p>如果要解除安裝也是簡單輸入以下指令</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-powershell" data-lang="powershell"><span style="display:flex;"><span>scoop uninstall 7zip
+</span></span></code></pre></div><p><img src="https://res.cloudinary.com/dcvgho2zc/image/upload/v1687230487/Tech%20Blog/Scoop/image-20230620-015010.png" alt="Scoop Uninstallation Result"></p>
+<p>如果想查詢本地安裝了哪些套件</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-powershell" data-lang="powershell"><span style="display:flex;"><span>scoop list
+</span></span></code></pre></div><p><img src="https://res.cloudinary.com/dcvgho2zc/image/upload/v1687230536/Tech%20Blog/Scoop/image-20230620-021418.png" alt="Scoop Local Installed App Result"></p>
+<p>也可以搜尋本地安裝的套件名稱</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-powershell" data-lang="powershell"><span style="display:flex;"><span>scoop list maven
+</span></span></code></pre></div><p><img src="https://res.cloudinary.com/dcvgho2zc/image/upload/v1687230599/Tech%20Blog/Scoop/image-20230620-021507.png" alt="Scoop Search Local Installed App Result"></p>
+<p>最後如果要更新某個套件，可以輸入</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-powershell" data-lang="powershell"><span style="display:flex;"><span>scoop update maven
+</span></span></code></pre></div><h2 id="bucket">Bucket</h2>
+<p>接著這邊要了解的是 Scoop 並不像 Chocolatey 的搜尋是在網路上對所有套件做即時搜尋，Scoop 有 bucket 的概念，每個 bucket 都像是一組套件的資料夾</p>
+<p>在安裝 Scoop 時就會預設安裝 main bucket，裡面應該預設就有一千多種常用套件，而 Scoop 的搜尋也是優先在本地已安裝的 bucket 裡面做搜尋，如果本地的 bucket 搜尋不到，才會到網路上其他已知 (known) 的 bucket 中做搜尋</p>
+<p><img src="https://res.cloudinary.com/dcvgho2zc/image/upload/v1687230679/Tech%20Blog/Scoop/image-20230620-020010.png" alt="Scoop Remote Search Result"></p>
+<p>所以首先想要確認本地安裝了哪些 bucket 就輸入以下指令</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-powershell" data-lang="powershell"><span style="display:flex;"><span>scoop bucket list
+</span></span></code></pre></div><p><img src="https://res.cloudinary.com/dcvgho2zc/image/upload/v1687230729/Tech%20Blog/Scoop/image-20230620-015142.png" alt="Scoop Local Installed Bucket Result"></p>
+<p>如果想查詢有哪些已知的 bucket (本地及遠端)</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-powershell" data-lang="powershell"><span style="display:flex;"><span>scoop bucket known
+</span></span></code></pre></div><p><img src="https://res.cloudinary.com/dcvgho2zc/image/upload/v1687230786/Tech%20Blog/Scoop/image-20230620-015400.png" alt="Scoop Known Bucket Result"></p>
+<p>但這個列表也許已過時，這時候可以輸入以下指令更新 Scoop 後，再做查詢</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-powershell" data-lang="powershell"><span style="display:flex;"><span>scoop update
+</span></span></code></pre></div><p><img src="https://res.cloudinary.com/dcvgho2zc/image/upload/v1687230834/Tech%20Blog/Scoop/image-20230620-015513.png" alt="Scoop Update Result"></p>
+<p>如果想安裝指定 bucket 到本地</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-powershell" data-lang="powershell"><span style="display:flex;"><span>scoop bucket add games
+</span></span></code></pre></div><p><img src="https://res.cloudinary.com/dcvgho2zc/image/upload/v1687230885/Tech%20Blog/Scoop/image-20230620-020309.png" alt="Scoop Add Bucket Result"></p>
+<p>移除 bucket</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-powershell" data-lang="powershell"><span style="display:flex;"><span>scoop bucket <span style="color:#8be9fd;font-style:italic">rm </span>games
+</span></span></code></pre></div><p>以上差不多就是 Scoop 常見的基本用法</p>
+<h1 id="jdk-切換">JDK 切換</h1>
+<p>有一種情境我們會安裝某一種套件，但要同時安裝多種版本，使用的時候需要切換不同的版本，例如安裝 JDK，可能會需要同時安裝 1.8、11 甚至 17，但使用的時候會需要按照需要執行的專案來切換不同版本的環境變數</p>
+<p>在 Unix-like 的環境，大多都可以使用 <a href="https://sdkman.io/">SDKMAN</a>，但偏偏 SDKMAN 原生並不支援在 Powershell 操作，只能透過 <a href="https://www.cygwin.com/">Cygwin</a> 等方式 workaround，但同時也限制環境變數只在 Cygwin 當中生效，而無法使用 Powershell 操作</p>
+<p>如果要在 Powershell 中操作，以往只能安裝好 JDK 後，再設定環境變數 JAVA_HOME 指定到安裝好的位置，然後每次要使用不同 JDK 版本，就要手動修改 JAVA_HOME 環境變數，或輸入不太好記的指令去操作，如果 JDK 版本更新，又要整個重頭再來，相當的麻煩</p>
+<p>但 Scoop 本身提供了相當方便的指令，可以如 SDKMAN 一樣簡單的安裝多種不同版本的 JDK，並且在需要的時候非常簡單的切換不同的版本</p>
+<p>首先我們可以先安裝幾種不同版本的 JDK</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-powershell" data-lang="powershell"><span style="display:flex;"><span>scoop bucket add java
+</span></span><span style="display:flex;"><span>scoop install <span style="color:#8be9fd;font-style:italic">zulu-jdk</span>
+</span></span><span style="display:flex;"><span>scoop install <span style="color:#8be9fd;font-style:italic">zulu11-jdk</span>
+</span></span></code></pre></div><p><img src="https://res.cloudinary.com/dcvgho2zc/image/upload/v1687230995/Tech%20Blog/Scoop/image-20230620-021710.png" alt="Scoop List Local JDK Result"></p>
+<p>此時我們本地已安裝了 11 及 20 兩種版本的 JDK，在安裝的時候就會自動設定好環境變數</p>
+<p><img src="https://res.cloudinary.com/dcvgho2zc/image/upload/v1687231043/Tech%20Blog/Scoop/image-20230620-021833.png" alt="Java Version after JDKs Installation"></p>
+<p><img src="https://res.cloudinary.com/dcvgho2zc/image/upload/v1687231095/Tech%20Blog/Scoop/image-20230620-022019.png" alt="JDK Position after JDKs Installation"></p>
+<p>接著如果我們要切換使用 JDK 20</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-powershell" data-lang="powershell"><span style="display:flex;"><span>scoop reset <span style="color:#8be9fd;font-style:italic">zulu-jdk</span>
+</span></span></code></pre></div><p><img src="https://res.cloudinary.com/dcvgho2zc/image/upload/v1687231153/Tech%20Blog/Scoop/image-20230620-022207.png" alt="Scoop Reset JDK Version Result"></p>
+<p><img src="https://res.cloudinary.com/dcvgho2zc/image/upload/v1687231188/Tech%20Blog/Scoop/image-20230620-022226.png" alt="Java Version after Scoop Reset"></p>
+<p><img src="https://res.cloudinary.com/dcvgho2zc/image/upload/v1687231222/Tech%20Blog/Scoop/image-20230620-022245.png" alt="JDK Position after Scoop Reset"></p>
+<p>這時我們就可以看到 Java 的版本被改變了</p>
+<h1 id="reference">Reference</h1>
+<ul>
+<li><a href="https://scoop.sh/">Scoop</a></li>
+<li><a href="https://adamtheautomator.com/scoop-windows/">How to Install and Use the Scoop Windows Package Manager</a></li>
+<li><a href="https://sdkman.io/">SDKMAN</a></li>
+<li><a href="https://www.cygwin.com/">Cygwin</a></li>
+<li><a href="https://www.thisfaner.com/p/install-and-switch-versions-of-java-python-ruby-via-scoop/">通过Scoop安装和切换Java(JDK)、Python、Ruby的版本</a></li>
+</ul>
+
+                    
+                    <HR width="100%" id="EOF">
+		    <p style="color:#777;">Last modified on 2023-06-20</p>
+                    
+                </div>
+            </div>
+            
+            
+            <nav class="post-pagination">
+
+                
+                <a class="newer-posts">
+			Next<br>No newer posts.
+                </a>
+                
+                
+                
+                <a class="older-posts" href="https://blog.idontwannarock.me/2022/12/gradle_docker_multi_stage_build/">
+			Previous<br>Gradle &#43; Docker Multi-stage build
+                </a>
+                
+            </nav>
+            <div class="post-comment-wrapper">
+                
+<div id="disqus_thread"></div>
+<script>
+    
+
+    var disqus_config = function () {
+        
+        this.page.url = '\/2023\/06\/scoop\/';  
+        
+        
+        this.page.identifier = '\/2023\/06\/scoop\/'; 
+    };
+    (function() {
+        var d = document, s = d.createElement('script');
+        s.src = 'https://howard-tech-blog.disqus.com/embed.js';
+        s.setAttribute('data-timestamp', +new Date());
+        (d.head || d.body).appendChild(s);
+    })();
+</script>
+<noscript> Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript" rel="nofollow"> comments powered by Disqus.  </a> </noscript>
+
+
+
+
+
+
+
+
+
+
+
+            </div>
+        </div>
+    </div>
+
+
+                    </div>
+            </div><div id="single-column-footer">
+Hugo Theme <a href="https://github.com/amazingrise/hugo-theme-diary">Diary</a> by <a href="https://risehere.net/">Rise</a>
+<br>
+Ported from <a href="https://mak1t0.cc/" target="_blank" rel="noreferrer noopener">Makito</a>'s <a href="https://github.com/SumiMakito/hexo-theme-journal/" target="_blank" rel="noreferrer noopener">Journal.</a> <br>
+<br>
+
+&copy;
+	
+	This website by Howard Wang is licensed under a Creative Common Attribution-ShareAlike 4.0 International License.
+	
+</div>
+            </div>
+    
+    <script src="https://blog.idontwannarock.me/js/journal.js"></script></body>
+</html>
