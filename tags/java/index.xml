@@ -7,7 +7,21 @@
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
     <copyright>This website by Howard Wang is licensed under a Creative Common Attribution-ShareAlike 4.0 International License.</copyright>
-    <lastBuildDate>Mon, 12 Dec 2022 09:24:17 +0800</lastBuildDate><atom:link href="https://blog.idontwannarock.me/tags/java/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Wed, 20 Sep 2023 09:37:21 +0800</lastBuildDate><atom:link href="https://blog.idontwannarock.me/tags/java/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Spring JPA Projection with Converter</title>
+      <link>https://blog.idontwannarock.me/2023/09/spring_jpa_projection_converter/</link>
+      <pubDate>Wed, 20 Sep 2023 09:37:21 +0800</pubDate>
+      
+      <guid>https://blog.idontwannarock.me/2023/09/spring_jpa_projection_converter/</guid>
+      <description>Pre-requisite JDK 11+ Spring Boot 2+ 情境描述 使用 JPA 做單表查詢非常方便，但有時候因為效能考量，會出現 DB data type 與 Java data type 無法直接對應或需要做一些客製化調整
+例如在保存狀態時，因為狀態通常有固定且少量的值，所以會考慮採用 int 而非 varchar 來保存，在存儲大小跟查詢效能上都較優
+CREATE TABLE CHATROOM ( ... `STATUS` INT NOT NULL, ... ); 但在程式面都採用 Java 的 int 來操作狀態，可讀性相對較低，所以可能會考慮採用 enum 來操作，可讀性較佳且有 type check
+public enum ChatroomStatus { CLOSED, ACTIVE } 設定 Converter 但 JPA 預設並不能將 Java enum 與 MySQL int 做 mapping，所以會需要提供 converter 讓 JPA 知道怎麼做轉換
+首先需要調整 enum 如下
+public enum ChatroomStatus { CLOSED(0), ACTIVE(1); private final int value; ChatroomStatus(int value) { this.</description>
+    </item>
+    
     <item>
       <title>SpringFox to SpringDoc</title>
       <link>https://blog.idontwannarock.me/2022/12/springfox_to_springdoc/</link>

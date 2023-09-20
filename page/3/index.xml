@@ -7,9 +7,40 @@
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
     <copyright>This website by Howard Wang is licensed under a Creative Common Attribution-ShareAlike 4.0 International License.</copyright>
-    <lastBuildDate>Tue, 20 Jun 2023 10:51:39 +0800</lastBuildDate>
+    <lastBuildDate>Wed, 20 Sep 2023 09:37:21 +0800</lastBuildDate>
     
         <atom:link href="https://blog.idontwannarock.me/index.xml" rel="self" type="application/rss+xml" />
+    
+    
+    
+        <item>
+        <title>Github Flow 簡介</title>
+        <link>https://blog.idontwannarock.me/2019/05/github_flow_intro/</link>
+        <pubDate>Wed, 29 May 2019 10:52:45 +0800</pubDate>
+        
+        <guid>https://blog.idontwannarock.me/2019/05/github_flow_intro/</guid>
+        <description>Howard Tech Note https://blog.idontwannarock.me/2019/05/github_flow_intro/ -&lt;p&gt;&lt;a href=&#34;https://guides.github.com/introduction/flow/&#34;&gt;Understanding the GitHub flow&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;GitHub flow 只有一條原則：&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;p&gt;&lt;strong&gt;在 master 的任何 commit 永遠都是可以被部署的&lt;/strong&gt;&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;p&gt;所以所有要做開發的 branch 都直接從 master 分支出去，不論是 feature 或 fix&lt;/p&gt;
+&lt;p&gt;開發的每個 commit 都要寫清楚 message，註明該 commit 做的變動以及理由等等&lt;/p&gt;
+&lt;p&gt;當開發到一定階段後，就可以對 master 開 Pull Request, PR，這在 GitHub flow 很重要&lt;/p&gt;
+&lt;p&gt;如果是用 Fork &amp;amp; Pull 模式，PR 就是用來通知專案維護者關於你希望他們考慮的變更；如果是用 Shared Repository 模式，則 PR 就像是用來開一個討論空間，在 merge 到 master 之前來做 code review 或針對特定變更的討論&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;p&gt;Fork &amp;amp; Pull 模式就是需要先 fork 後再 pull 到本機做開發，完成並 push 後，開 PR 要求合併到主專案&lt;/p&gt;
+&lt;p&gt;Shared Repository 模式則是直接可以對主專案開 branch 做開發&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;p&gt;在開 PR 之後，還是可以在該分支繼續開發，可以是有關討論的變更或 fix 等，重要的是要在 commit message 寫清楚變更以及變更的理由或決策的脈絡&lt;/p&gt;
+&lt;p&gt;在變更經過討論並測試完畢後，在 merge 到 master 之前，直接用分支的 commit 部署到 production 做最後的驗證，如果有問題，則用 master 上的 commit 重新部署到 production 來回復&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;p&gt;所以在 GitHub flow 中，測試是很重要的部分&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;p&gt;當變更通過部署在 production 的驗證後，就可以將該變更 merge 到 master，此時 PR 就結束，並會留下該變更的整個紀錄，讓其他人了解整個變更的流程以及脈絡&lt;/p&gt;
+&lt;p&gt;而且因為 PR 可以連結 Issue，當 PR 被 merge 後，關聯到的 Issue 也會同時關閉&lt;/p&gt;
+- https://blog.idontwannarock.me/2019/05/github_flow_intro/ - This website by Howard Wang is licensed under a Creative Common Attribution-ShareAlike 4.0 International License.</description>
+        </item>
     
     
     
@@ -309,14 +340,14 @@
 &lt;h2 id=&#34;暴力解重複檢查&#34;&gt;暴力解：重複檢查&lt;/h2&gt;
 &lt;p&gt;最簡單的寫法肯定就是暴力解：每抽出一個數字就存到結果陣列，然後每抽一次，就跟陣列裡每個數字都比對一次，一有重複就重抽。&lt;/p&gt;
 &lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;&#34;&gt;&lt;code class=&#34;language-java&#34; data-lang=&#34;java&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#6272a4&#34;&gt;// 設定存儲樂透數字陣列
-&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#6272a4&#34;&gt;&lt;/span&gt;&lt;span style=&#34;color:#8be9fd&#34;&gt;int&lt;/span&gt;&lt;span style=&#34;color:#ff79c6&#34;&gt;[]&lt;/span&gt; randomArray &lt;span style=&#34;color:#ff79c6&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color:#ff79c6&#34;&gt;new&lt;/span&gt; &lt;span style=&#34;color:#8be9fd&#34;&gt;int&lt;/span&gt;&lt;span style=&#34;color:#ff79c6&#34;&gt;[&lt;/span&gt;&lt;span style=&#34;color:#bd93f9&#34;&gt;6&lt;/span&gt;&lt;span style=&#34;color:#ff79c6&#34;&gt;];&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#6272a4&#34;&gt;&lt;/span&gt;&lt;span style=&#34;color:#8be9fd&#34;&gt;int&lt;/span&gt;&lt;span style=&#34;color:#ff79c6&#34;&gt;[]&lt;/span&gt; randomArray &lt;span style=&#34;color:#ff79c6&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color:#ff79c6&#34;&gt;new&lt;/span&gt; &lt;span style=&#34;color:#8be9fd&#34;&gt;int&lt;/span&gt;&lt;span style=&#34;color:#ff79c6&#34;&gt;[&lt;/span&gt;6&lt;span style=&#34;color:#ff79c6&#34;&gt;];&lt;/span&gt;
 &lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;
 &lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#6272a4&#34;&gt;// 執行抽取樂透數字的動作 6次
-&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#6272a4&#34;&gt;&lt;/span&gt;&lt;span style=&#34;color:#ff79c6&#34;&gt;for&lt;/span&gt; &lt;span style=&#34;color:#ff79c6&#34;&gt;(&lt;/span&gt;&lt;span style=&#34;color:#8be9fd&#34;&gt;int&lt;/span&gt; i &lt;span style=&#34;color:#ff79c6&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color:#bd93f9&#34;&gt;0&lt;/span&gt;&lt;span style=&#34;color:#ff79c6&#34;&gt;;&lt;/span&gt; i &lt;span style=&#34;color:#ff79c6&#34;&gt;&amp;lt;&lt;/span&gt; randomArray&lt;span style=&#34;color:#ff79c6&#34;&gt;.&lt;/span&gt;&lt;span style=&#34;color:#50fa7b&#34;&gt;length&lt;/span&gt;&lt;span style=&#34;color:#ff79c6&#34;&gt;;&lt;/span&gt; i&lt;span style=&#34;color:#ff79c6&#34;&gt;++)&lt;/span&gt; &lt;span style=&#34;color:#ff79c6&#34;&gt;{&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#6272a4&#34;&gt;&lt;/span&gt;&lt;span style=&#34;color:#ff79c6&#34;&gt;for&lt;/span&gt; &lt;span style=&#34;color:#ff79c6&#34;&gt;(&lt;/span&gt;&lt;span style=&#34;color:#8be9fd&#34;&gt;int&lt;/span&gt; i &lt;span style=&#34;color:#ff79c6&#34;&gt;=&lt;/span&gt; 0&lt;span style=&#34;color:#ff79c6&#34;&gt;;&lt;/span&gt; i &lt;span style=&#34;color:#ff79c6&#34;&gt;&amp;lt;&lt;/span&gt; randomArray&lt;span style=&#34;color:#ff79c6&#34;&gt;.&lt;/span&gt;&lt;span style=&#34;color:#50fa7b&#34;&gt;length&lt;/span&gt;&lt;span style=&#34;color:#ff79c6&#34;&gt;;&lt;/span&gt; i&lt;span style=&#34;color:#ff79c6&#34;&gt;++)&lt;/span&gt; &lt;span style=&#34;color:#ff79c6&#34;&gt;{&lt;/span&gt;
 &lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    &lt;span style=&#34;color:#6272a4&#34;&gt;// 先將亂數出來的數字存入陣列第 i個位置
-&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#6272a4&#34;&gt;&lt;/span&gt;     randomArray&lt;span style=&#34;color:#ff79c6&#34;&gt;[&lt;/span&gt;i&lt;span style=&#34;color:#ff79c6&#34;&gt;]&lt;/span&gt; &lt;span style=&#34;color:#ff79c6&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color:#ff79c6&#34;&gt;(&lt;/span&gt;&lt;span style=&#34;color:#8be9fd&#34;&gt;int&lt;/span&gt;&lt;span style=&#34;color:#ff79c6&#34;&gt;)(&lt;/span&gt;Math&lt;span style=&#34;color:#ff79c6&#34;&gt;.&lt;/span&gt;&lt;span style=&#34;color:#50fa7b&#34;&gt;random&lt;/span&gt;&lt;span style=&#34;color:#ff79c6&#34;&gt;()&lt;/span&gt; &lt;span style=&#34;color:#ff79c6&#34;&gt;*&lt;/span&gt; &lt;span style=&#34;color:#bd93f9&#34;&gt;42&lt;/span&gt;&lt;span style=&#34;color:#ff79c6&#34;&gt;)&lt;/span&gt; &lt;span style=&#34;color:#ff79c6&#34;&gt;+&lt;/span&gt; &lt;span style=&#34;color:#bd93f9&#34;&gt;1&lt;/span&gt;&lt;span style=&#34;color:#ff79c6&#34;&gt;;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#6272a4&#34;&gt;&lt;/span&gt;     randomArray&lt;span style=&#34;color:#ff79c6&#34;&gt;[&lt;/span&gt;i&lt;span style=&#34;color:#ff79c6&#34;&gt;]&lt;/span&gt; &lt;span style=&#34;color:#ff79c6&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color:#ff79c6&#34;&gt;(&lt;/span&gt;&lt;span style=&#34;color:#8be9fd&#34;&gt;int&lt;/span&gt;&lt;span style=&#34;color:#ff79c6&#34;&gt;)(&lt;/span&gt;Math&lt;span style=&#34;color:#ff79c6&#34;&gt;.&lt;/span&gt;&lt;span style=&#34;color:#50fa7b&#34;&gt;random&lt;/span&gt;&lt;span style=&#34;color:#ff79c6&#34;&gt;()&lt;/span&gt; &lt;span style=&#34;color:#ff79c6&#34;&gt;*&lt;/span&gt; 42&lt;span style=&#34;color:#ff79c6&#34;&gt;)&lt;/span&gt; &lt;span style=&#34;color:#ff79c6&#34;&gt;+&lt;/span&gt; 1&lt;span style=&#34;color:#ff79c6&#34;&gt;;&lt;/span&gt;
 &lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    &lt;span style=&#34;color:#6272a4&#34;&gt;// 接著執行檢查迴圈
-&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#6272a4&#34;&gt;&lt;/span&gt;    &lt;span style=&#34;color:#ff79c6&#34;&gt;for&lt;/span&gt; &lt;span style=&#34;color:#ff79c6&#34;&gt;(&lt;/span&gt;&lt;span style=&#34;color:#8be9fd&#34;&gt;int&lt;/span&gt; j &lt;span style=&#34;color:#ff79c6&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color:#bd93f9&#34;&gt;0&lt;/span&gt;&lt;span style=&#34;color:#ff79c6&#34;&gt;;&lt;/span&gt; j &lt;span style=&#34;color:#ff79c6&#34;&gt;&amp;lt;&lt;/span&gt; i&lt;span style=&#34;color:#ff79c6&#34;&gt;;&lt;/span&gt; j&lt;span style=&#34;color:#ff79c6&#34;&gt;++)&lt;/span&gt; &lt;span style=&#34;color:#ff79c6&#34;&gt;{&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#6272a4&#34;&gt;&lt;/span&gt;    &lt;span style=&#34;color:#ff79c6&#34;&gt;for&lt;/span&gt; &lt;span style=&#34;color:#ff79c6&#34;&gt;(&lt;/span&gt;&lt;span style=&#34;color:#8be9fd&#34;&gt;int&lt;/span&gt; j &lt;span style=&#34;color:#ff79c6&#34;&gt;=&lt;/span&gt; 0&lt;span style=&#34;color:#ff79c6&#34;&gt;;&lt;/span&gt; j &lt;span style=&#34;color:#ff79c6&#34;&gt;&amp;lt;&lt;/span&gt; i&lt;span style=&#34;color:#ff79c6&#34;&gt;;&lt;/span&gt; j&lt;span style=&#34;color:#ff79c6&#34;&gt;++)&lt;/span&gt; &lt;span style=&#34;color:#ff79c6&#34;&gt;{&lt;/span&gt;
 &lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;        &lt;span style=&#34;color:#6272a4&#34;&gt;// 輪流跟陣列中目前存在的其他元素比對
 &lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#6272a4&#34;&gt;&lt;/span&gt;        &lt;span style=&#34;color:#ff79c6&#34;&gt;if&lt;/span&gt; &lt;span style=&#34;color:#ff79c6&#34;&gt;(&lt;/span&gt;randomArray&lt;span style=&#34;color:#ff79c6&#34;&gt;[&lt;/span&gt;i&lt;span style=&#34;color:#ff79c6&#34;&gt;]&lt;/span&gt; &lt;span style=&#34;color:#ff79c6&#34;&gt;==&lt;/span&gt; randomArray&lt;span style=&#34;color:#ff79c6&#34;&gt;[&lt;/span&gt;j&lt;span style=&#34;color:#ff79c6&#34;&gt;])&lt;/span&gt; &lt;span style=&#34;color:#ff79c6&#34;&gt;{&lt;/span&gt;
 &lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;            &lt;span style=&#34;color:#6272a4&#34;&gt;// 如果有找到重複數字，就將計數器 i減 1，然後重抽
@@ -347,20 +378,20 @@
 &lt;p&gt;而且因為不用每次都檢查，所以可以大幅提升效率。&lt;/p&gt;
 &lt;p&gt;我們利用這個算法不會抽取到重複數字的特性，可以延伸出解法如下：&lt;/p&gt;
 &lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;&#34;&gt;&lt;code class=&#34;language-java&#34; data-lang=&#34;java&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#6272a4&#34;&gt;// 設定要抽取個數
-&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#6272a4&#34;&gt;&lt;/span&gt;&lt;span style=&#34;color:#8be9fd&#34;&gt;int&lt;/span&gt; picks &lt;span style=&#34;color:#ff79c6&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color:#bd93f9&#34;&gt;6&lt;/span&gt;&lt;span style=&#34;color:#ff79c6&#34;&gt;;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#6272a4&#34;&gt;&lt;/span&gt;&lt;span style=&#34;color:#8be9fd&#34;&gt;int&lt;/span&gt; picks &lt;span style=&#34;color:#ff79c6&#34;&gt;=&lt;/span&gt; 6&lt;span style=&#34;color:#ff79c6&#34;&gt;;&lt;/span&gt;
 &lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#6272a4&#34;&gt;// 設定樂透數字範圍起始數字及結束數字
-&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#6272a4&#34;&gt;&lt;/span&gt;&lt;span style=&#34;color:#8be9fd&#34;&gt;int&lt;/span&gt; startNumber &lt;span style=&#34;color:#ff79c6&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color:#bd93f9&#34;&gt;1&lt;/span&gt;&lt;span style=&#34;color:#ff79c6&#34;&gt;,&lt;/span&gt; endNumber &lt;span style=&#34;color:#ff79c6&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color:#bd93f9&#34;&gt;42&lt;/span&gt;&lt;span style=&#34;color:#ff79c6&#34;&gt;;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#6272a4&#34;&gt;&lt;/span&gt;&lt;span style=&#34;color:#8be9fd&#34;&gt;int&lt;/span&gt; startNumber &lt;span style=&#34;color:#ff79c6&#34;&gt;=&lt;/span&gt; 1&lt;span style=&#34;color:#ff79c6&#34;&gt;,&lt;/span&gt; endNumber &lt;span style=&#34;color:#ff79c6&#34;&gt;=&lt;/span&gt; 42&lt;span style=&#34;color:#ff79c6&#34;&gt;;&lt;/span&gt;
 &lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#6272a4&#34;&gt;// 設定儲存數字的陣列
-&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#6272a4&#34;&gt;&lt;/span&gt;&lt;span style=&#34;color:#8be9fd&#34;&gt;int&lt;/span&gt;&lt;span style=&#34;color:#ff79c6&#34;&gt;[]&lt;/span&gt; randomArray &lt;span style=&#34;color:#ff79c6&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color:#ff79c6&#34;&gt;new&lt;/span&gt; &lt;span style=&#34;color:#8be9fd&#34;&gt;int&lt;/span&gt;&lt;span style=&#34;color:#ff79c6&#34;&gt;[&lt;/span&gt;endNumber &lt;span style=&#34;color:#ff79c6&#34;&gt;-&lt;/span&gt; startNumber &lt;span style=&#34;color:#ff79c6&#34;&gt;+&lt;/span&gt; &lt;span style=&#34;color:#bd93f9&#34;&gt;1&lt;/span&gt;&lt;span style=&#34;color:#ff79c6&#34;&gt;];&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#6272a4&#34;&gt;&lt;/span&gt;&lt;span style=&#34;color:#8be9fd&#34;&gt;int&lt;/span&gt;&lt;span style=&#34;color:#ff79c6&#34;&gt;[]&lt;/span&gt; randomArray &lt;span style=&#34;color:#ff79c6&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color:#ff79c6&#34;&gt;new&lt;/span&gt; &lt;span style=&#34;color:#8be9fd&#34;&gt;int&lt;/span&gt;&lt;span style=&#34;color:#ff79c6&#34;&gt;[&lt;/span&gt;endNumber &lt;span style=&#34;color:#ff79c6&#34;&gt;-&lt;/span&gt; startNumber &lt;span style=&#34;color:#ff79c6&#34;&gt;+&lt;/span&gt; 1&lt;span style=&#34;color:#ff79c6&#34;&gt;];&lt;/span&gt;
 &lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#6272a4&#34;&gt;// 產生按照數值大小排序好的數列
 &lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#6272a4&#34;&gt;&lt;/span&gt;&lt;span style=&#34;color:#ff79c6&#34;&gt;for&lt;/span&gt; &lt;span style=&#34;color:#ff79c6&#34;&gt;(&lt;/span&gt;&lt;span style=&#34;color:#8be9fd&#34;&gt;int&lt;/span&gt; i &lt;span style=&#34;color:#ff79c6&#34;&gt;=&lt;/span&gt; startNumber&lt;span style=&#34;color:#ff79c6&#34;&gt;;&lt;/span&gt; i &lt;span style=&#34;color:#ff79c6&#34;&gt;&amp;lt;=&lt;/span&gt; endNumber&lt;span style=&#34;color:#ff79c6&#34;&gt;;&lt;/span&gt; i&lt;span style=&#34;color:#ff79c6&#34;&gt;++)&lt;/span&gt; &lt;span style=&#34;color:#ff79c6&#34;&gt;{&lt;/span&gt;
 &lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    randomArray&lt;span style=&#34;color:#ff79c6&#34;&gt;[&lt;/span&gt;i&lt;span style=&#34;color:#ff79c6&#34;&gt;]&lt;/span&gt; &lt;span style=&#34;color:#ff79c6&#34;&gt;=&lt;/span&gt; i&lt;span style=&#34;color:#ff79c6&#34;&gt;;&lt;/span&gt;
 &lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#ff79c6&#34;&gt;}&lt;/span&gt;
 &lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;
 &lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#6272a4&#34;&gt;// 開始亂數程序，但我們不用將整個數列都亂數shuffle，只需要做我們要抽取個數，也就是 6次
-&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#6272a4&#34;&gt;&lt;/span&gt;&lt;span style=&#34;color:#ff79c6&#34;&gt;for&lt;/span&gt; &lt;span style=&#34;color:#ff79c6&#34;&gt;(&lt;/span&gt;&lt;span style=&#34;color:#8be9fd&#34;&gt;int&lt;/span&gt; j &lt;span style=&#34;color:#ff79c6&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color:#bd93f9&#34;&gt;0&lt;/span&gt;&lt;span style=&#34;color:#ff79c6&#34;&gt;;&lt;/span&gt; j &lt;span style=&#34;color:#ff79c6&#34;&gt;&amp;lt;&lt;/span&gt; picks&lt;span style=&#34;color:#ff79c6&#34;&gt;;&lt;/span&gt; j&lt;span style=&#34;color:#ff79c6&#34;&gt;++)&lt;/span&gt; &lt;span style=&#34;color:#ff79c6&#34;&gt;{&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#6272a4&#34;&gt;&lt;/span&gt;&lt;span style=&#34;color:#ff79c6&#34;&gt;for&lt;/span&gt; &lt;span style=&#34;color:#ff79c6&#34;&gt;(&lt;/span&gt;&lt;span style=&#34;color:#8be9fd&#34;&gt;int&lt;/span&gt; j &lt;span style=&#34;color:#ff79c6&#34;&gt;=&lt;/span&gt; 0&lt;span style=&#34;color:#ff79c6&#34;&gt;;&lt;/span&gt; j &lt;span style=&#34;color:#ff79c6&#34;&gt;&amp;lt;&lt;/span&gt; picks&lt;span style=&#34;color:#ff79c6&#34;&gt;;&lt;/span&gt; j&lt;span style=&#34;color:#ff79c6&#34;&gt;++)&lt;/span&gt; &lt;span style=&#34;color:#ff79c6&#34;&gt;{&lt;/span&gt;
 &lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    &lt;span style=&#34;color:#6272a4&#34;&gt;// 先設定一個暫存亂數數字的變數 randomIndex，這是要用來當指標指向陣列元素用的
-&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#6272a4&#34;&gt;&lt;/span&gt;    &lt;span style=&#34;color:#8be9fd&#34;&gt;int&lt;/span&gt; randomIndex &lt;span style=&#34;color:#ff79c6&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color:#ff79c6&#34;&gt;(&lt;/span&gt;&lt;span style=&#34;color:#8be9fd&#34;&gt;int&lt;/span&gt;&lt;span style=&#34;color:#ff79c6&#34;&gt;)(&lt;/span&gt;Math&lt;span style=&#34;color:#ff79c6&#34;&gt;.&lt;/span&gt;&lt;span style=&#34;color:#50fa7b&#34;&gt;random&lt;/span&gt;&lt;span style=&#34;color:#ff79c6&#34;&gt;()&lt;/span&gt; &lt;span style=&#34;color:#ff79c6&#34;&gt;*&lt;/span&gt; &lt;span style=&#34;color:#ff79c6&#34;&gt;(&lt;/span&gt;endNumber &lt;span style=&#34;color:#ff79c6&#34;&gt;-&lt;/span&gt; startNumber &lt;span style=&#34;color:#ff79c6&#34;&gt;+&lt;/span&gt; &lt;span style=&#34;color:#bd93f9&#34;&gt;1&lt;/span&gt;&lt;span style=&#34;color:#ff79c6&#34;&gt;))&lt;/span&gt; &lt;span style=&#34;color:#ff79c6&#34;&gt;+&lt;/span&gt; &lt;span style=&#34;color:#bd93f9&#34;&gt;1&lt;/span&gt;&lt;span style=&#34;color:#ff79c6&#34;&gt;;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#6272a4&#34;&gt;&lt;/span&gt;    &lt;span style=&#34;color:#8be9fd&#34;&gt;int&lt;/span&gt; randomIndex &lt;span style=&#34;color:#ff79c6&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color:#ff79c6&#34;&gt;(&lt;/span&gt;&lt;span style=&#34;color:#8be9fd&#34;&gt;int&lt;/span&gt;&lt;span style=&#34;color:#ff79c6&#34;&gt;)(&lt;/span&gt;Math&lt;span style=&#34;color:#ff79c6&#34;&gt;.&lt;/span&gt;&lt;span style=&#34;color:#50fa7b&#34;&gt;random&lt;/span&gt;&lt;span style=&#34;color:#ff79c6&#34;&gt;()&lt;/span&gt; &lt;span style=&#34;color:#ff79c6&#34;&gt;*&lt;/span&gt; &lt;span style=&#34;color:#ff79c6&#34;&gt;(&lt;/span&gt;endNumber &lt;span style=&#34;color:#ff79c6&#34;&gt;-&lt;/span&gt; startNumber &lt;span style=&#34;color:#ff79c6&#34;&gt;+&lt;/span&gt; 1&lt;span style=&#34;color:#ff79c6&#34;&gt;))&lt;/span&gt; &lt;span style=&#34;color:#ff79c6&#34;&gt;+&lt;/span&gt; 1&lt;span style=&#34;color:#ff79c6&#34;&gt;;&lt;/span&gt;
 &lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    &lt;span style=&#34;color:#6272a4&#34;&gt;// 然後再設定一個暫存數字的變數 temp，暫存陣列中指標 randomIndex對應的數字
 &lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#6272a4&#34;&gt;&lt;/span&gt;    &lt;span style=&#34;color:#8be9fd&#34;&gt;int&lt;/span&gt; temp &lt;span style=&#34;color:#ff79c6&#34;&gt;=&lt;/span&gt; randomArray&lt;span style=&#34;color:#ff79c6&#34;&gt;[&lt;/span&gt;randomIndex&lt;span style=&#34;color:#ff79c6&#34;&gt;];&lt;/span&gt;
 &lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    &lt;span style=&#34;color:#6272a4&#34;&gt;// 將 randomArray[randomIndex]跟第 j個元素對調位置
@@ -369,7 +400,7 @@
 &lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#ff79c6&#34;&gt;}&lt;/span&gt;
 &lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;
 &lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#6272a4&#34;&gt;// 印出樂透數字陣列中的數字
-&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#6272a4&#34;&gt;&lt;/span&gt;&lt;span style=&#34;color:#ff79c6&#34;&gt;for&lt;/span&gt; &lt;span style=&#34;color:#ff79c6&#34;&gt;(&lt;/span&gt;&lt;span style=&#34;color:#8be9fd&#34;&gt;int&lt;/span&gt; k &lt;span style=&#34;color:#ff79c6&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color:#bd93f9&#34;&gt;0&lt;/span&gt;&lt;span style=&#34;color:#ff79c6&#34;&gt;;&lt;/span&gt; k &lt;span style=&#34;color:#ff79c6&#34;&gt;&amp;lt;&lt;/span&gt; picks&lt;span style=&#34;color:#ff79c6&#34;&gt;;&lt;/span&gt; k&lt;span style=&#34;color:#ff79c6&#34;&gt;++)&lt;/span&gt; &lt;span style=&#34;color:#ff79c6&#34;&gt;{&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#6272a4&#34;&gt;&lt;/span&gt;&lt;span style=&#34;color:#ff79c6&#34;&gt;for&lt;/span&gt; &lt;span style=&#34;color:#ff79c6&#34;&gt;(&lt;/span&gt;&lt;span style=&#34;color:#8be9fd&#34;&gt;int&lt;/span&gt; k &lt;span style=&#34;color:#ff79c6&#34;&gt;=&lt;/span&gt; 0&lt;span style=&#34;color:#ff79c6&#34;&gt;;&lt;/span&gt; k &lt;span style=&#34;color:#ff79c6&#34;&gt;&amp;lt;&lt;/span&gt; picks&lt;span style=&#34;color:#ff79c6&#34;&gt;;&lt;/span&gt; k&lt;span style=&#34;color:#ff79c6&#34;&gt;++)&lt;/span&gt; &lt;span style=&#34;color:#ff79c6&#34;&gt;{&lt;/span&gt;
 &lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    System&lt;span style=&#34;color:#ff79c6&#34;&gt;.&lt;/span&gt;&lt;span style=&#34;color:#50fa7b&#34;&gt;out&lt;/span&gt;&lt;span style=&#34;color:#ff79c6&#34;&gt;.&lt;/span&gt;&lt;span style=&#34;color:#50fa7b&#34;&gt;print&lt;/span&gt;&lt;span style=&#34;color:#ff79c6&#34;&gt;(&lt;/span&gt;num &lt;span style=&#34;color:#ff79c6&#34;&gt;+&lt;/span&gt; &lt;span style=&#34;color:#f1fa8c&#34;&gt;&amp;#34; &amp;#34;&lt;/span&gt;&lt;span style=&#34;color:#ff79c6&#34;&gt;);&lt;/span&gt;
 &lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#ff79c6&#34;&gt;}&lt;/span&gt;
 &lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;我有特別設定要樂透的數字個數，以及抽取範圍的起始及終止值，以便將來更動這三個參數就可以做各種不同範圍個數的樂透，甚至也可以利用 &lt;code&gt;java.util.Scanner&lt;/code&gt; 的功能讓使用者能直接用鍵盤輸入這三個參數，不過那就不在這個題目要討論的重點。&lt;/p&gt;
@@ -712,7 +743,7 @@ This is a code block.
 &lt;h2 id=&#34;強調&#34;&gt;強調&lt;/h2&gt;
 &lt;p&gt;將想要強調的文字用 &lt;code&gt;*&lt;/code&gt; 或 &lt;code&gt;_&lt;/code&gt; 包起來，就可以呈現三種強調的方式。例如：&lt;/p&gt;
 &lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;&#34;&gt;&lt;code class=&#34;language-md&#34; data-lang=&#34;md&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;***粗斜體***  
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;text-decoration:underline&#34;&gt;__&lt;/span&gt;粗體__  
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;__粗體__  
 &lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;text-decoration:underline&#34;&gt;*斜體*&lt;/span&gt;
 &lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;會呈現如下：&lt;/p&gt;
 &lt;blockquote&gt;
@@ -1192,75 +1223,6 @@ con(no)-&amp;gt;op
 &lt;p&gt;最基礎的做法就是設一個變數，然後用 &lt;code&gt;if&lt;/code&gt; 判斷來控制次數。&lt;/p&gt;
 &lt;p&gt;控制次數感覺可以用 &lt;code&gt;for&lt;/code&gt; 或 &lt;code&gt;while&lt;/code&gt; loop 來寫，但中間要卡一個按的功能，不知道能不能行？&lt;/p&gt;
 - https://blog.idontwannarock.me/2017/09/click_click_ben/ - This website by Howard Wang is licensed under a Creative Common Attribution-ShareAlike 4.0 International License.</description>
-        </item>
-    
-    
-    
-        <item>
-        <title>2nd Practice: Retina Morning Post</title>
-        <link>https://blog.idontwannarock.me/2017/09/retina_morning_post/</link>
-        <pubDate>Fri, 15 Sep 2017 09:44:03 +0800</pubDate>
-        
-        <guid>https://blog.idontwannarock.me/2017/09/retina_morning_post/</guid>
-        <description>Howard Tech Note https://blog.idontwannarock.me/2017/09/retina_morning_post/ -&lt;h1 id=&#34;第二個目標&#34;&gt;第二個目標&lt;/h1&gt;
-&lt;p&gt;練習報紙排版。&lt;/p&gt;
-&lt;ul&gt;
-&lt;li&gt;作品：&lt;a href=&#34;https://goo.gl/ZEByGt&#34;&gt;視網膜早報&lt;/a&gt;&lt;/li&gt;
-&lt;li&gt;參考：&lt;a href=&#34;https://www.facebook.com/EYECTVretina/&#34;&gt;視網膜 Retina&lt;/a&gt; &lt;a href=&#34;https://goo.gl/iy9tFF&#34;&gt;FB圖片&lt;/a&gt;&lt;/li&gt;
-&lt;/ul&gt;
-&lt;h1 id=&#34;遇到困難&#34;&gt;遇到困難&lt;/h1&gt;
-&lt;h2 id=&#34;分散對齊&#34;&gt;分散對齊&lt;/h2&gt;
-&lt;p&gt;首先遇到的問題就是要讓文字分散對齊，原本以為用 &lt;code&gt;text-align: justify;&lt;/code&gt; 可以解決，結果才發現這只能用在超過一行的文字上哭哭。&lt;/p&gt;
-&lt;p&gt;然後查到一個 jQuery 解法如下，我大概理解原理，但細節還待研究。簡單來說就是算每個字元平均要佔該 &lt;code&gt;div&lt;/code&gt; 多少 &lt;code&gt;width&lt;/code&gt; 來作分散對齊。&lt;/p&gt;
-&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;&#34;&gt;&lt;code class=&#34;language-javascript&#34; data-lang=&#34;javascript&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;$.fn.strech_text &lt;span style=&#34;color:#ff79c6&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color:#8be9fd;font-style:italic&#34;&gt;function&lt;/span&gt;(){
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    &lt;span style=&#34;color:#8be9fd;font-style:italic&#34;&gt;var&lt;/span&gt; elmt &lt;span style=&#34;color:#ff79c6&#34;&gt;=&lt;/span&gt; $(&lt;span style=&#34;color:#ff79c6&#34;&gt;this&lt;/span&gt;),
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    cont_width &lt;span style=&#34;color:#ff79c6&#34;&gt;=&lt;/span&gt; elmt.width(),
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    txt &lt;span style=&#34;color:#ff79c6&#34;&gt;=&lt;/span&gt; elmt.html(),
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    one_line &lt;span style=&#34;color:#ff79c6&#34;&gt;=&lt;/span&gt; $(&lt;span style=&#34;color:#f1fa8c&#34;&gt;&amp;#39;&amp;#39;&lt;/span&gt; &lt;span style=&#34;color:#ff79c6&#34;&gt;+&lt;/span&gt; txt &lt;span style=&#34;color:#ff79c6&#34;&gt;+&lt;/span&gt; &lt;span style=&#34;color:#f1fa8c&#34;&gt;&amp;#39;&amp;#39;&lt;/span&gt;),
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    nb_char &lt;span style=&#34;color:#ff79c6&#34;&gt;=&lt;/span&gt; elmt.text().length,
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    spacing &lt;span style=&#34;color:#ff79c6&#34;&gt;=&lt;/span&gt; cont_width&lt;span style=&#34;color:#ff79c6&#34;&gt;/&lt;/span&gt;nb_char,
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    txt_width;
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    elmt.html(one_line);
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    txt_width &lt;span style=&#34;color:#ff79c6&#34;&gt;=&lt;/span&gt; one_line.width();
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    &lt;span style=&#34;color:#ff79c6&#34;&gt;if&lt;/span&gt; (txt_width &lt;span style=&#34;color:#ff79c6&#34;&gt;&amp;lt;&lt;/span&gt; cont_width){
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;        &lt;span style=&#34;color:#8be9fd;font-style:italic&#34;&gt;var&lt;/span&gt; char_width &lt;span style=&#34;color:#ff79c6&#34;&gt;=&lt;/span&gt; txt_width&lt;span style=&#34;color:#ff79c6&#34;&gt;/&lt;/span&gt;nb_char,
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;        ltr_spacing &lt;span style=&#34;color:#ff79c6&#34;&gt;=&lt;/span&gt; spacing &lt;span style=&#34;color:#ff79c6&#34;&gt;-&lt;/span&gt; char_width &lt;span style=&#34;color:#ff79c6&#34;&gt;+&lt;/span&gt; (spacing &lt;span style=&#34;color:#ff79c6&#34;&gt;-&lt;/span&gt; char_width)&lt;span style=&#34;color:#ff79c6&#34;&gt;/&lt;/span&gt;nb_char;
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;        one_line.css({&lt;span style=&#34;color:#f1fa8c&#34;&gt;&amp;#39;letter-spacing&amp;#39;&lt;/span&gt;&lt;span style=&#34;color:#ff79c6&#34;&gt;:&lt;/span&gt; ltr_spacing});
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    } &lt;span style=&#34;color:#ff79c6&#34;&gt;else&lt;/span&gt; {
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;        one_line.contents().unwrap();
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;        elmt.addClass(&lt;span style=&#34;color:#f1fa8c&#34;&gt;&amp;#39;justify&amp;#39;&lt;/span&gt;);
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    }
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;};
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;$(&lt;span style=&#34;color:#8be9fd;font-style:italic&#34;&gt;document&lt;/span&gt;).ready(&lt;span style=&#34;color:#8be9fd;font-style:italic&#34;&gt;function&lt;/span&gt; () {
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    $(&lt;span style=&#34;color:#f1fa8c&#34;&gt;&amp;#39;.stretch&amp;#39;&lt;/span&gt;).each(&lt;span style=&#34;color:#8be9fd;font-style:italic&#34;&gt;function&lt;/span&gt;(){
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;        $(&lt;span style=&#34;color:#ff79c6&#34;&gt;this&lt;/span&gt;).strech_text();
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    });
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;});
-&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;然後幫各 &lt;code&gt;div&lt;/code&gt; 設定 &lt;code&gt;class=&amp;quot;stretch&amp;quot;&lt;/code&gt;，並且一定要設定 &lt;code&gt;width&lt;/code&gt; 才能算。&lt;/p&gt;
-&lt;h2 id=&#34;水平向下對齊&#34;&gt;水平向下對齊&lt;/h2&gt;
-&lt;p&gt;然後碰到第二個問題是水平的欄位如何向下對齊，其實後來查了一下。這個問題好像並不應該很難，只能說我觀念不夠清晰。&lt;/p&gt;
-&lt;p&gt;總之解決的辦法是針對包住水平欄位的 &lt;code&gt;container&lt;/code&gt; 設定 &lt;code&gt;position: relative;&lt;/code&gt;，然後各欄位設定 &lt;code&gt;position: absolute;&lt;/code&gt;，再用 &lt;code&gt;top&lt;/code&gt;、&lt;code&gt;right&lt;/code&gt;、&lt;code&gt;bottom&lt;/code&gt;、&lt;code&gt;left&lt;/code&gt; 去調位置就可以了。&lt;/p&gt;
-&lt;p&gt;&lt;code&gt;position&lt;/code&gt; 的 &lt;code&gt;absolute&lt;/code&gt; 跟 &lt;code&gt;relative&lt;/code&gt; 好難懂 R 囧&amp;gt;&lt;/p&gt;
-&lt;h2 id=&#34;分隔線加粗&#34;&gt;分隔線加粗&lt;/h2&gt;
-&lt;p&gt;好，這其實不算問題，只是我忘了加粗的敘述去 google 發現了一種可以相容舊 IE 的方法，藉此作個紀錄，如下：&lt;/p&gt;
-&lt;pre tabindex=&#34;0&#34;&gt;&lt;code&gt;hr {
-    border: none;
-    height: 1px;
-    /* Set the hr color */
-    color: #333; /* old IE */
-    background-color: #333; /* Modern Browsers */
-}
-&lt;/code&gt;&lt;/pre&gt;&lt;h2 id=&#34;縱排文字&#34;&gt;縱排文字&lt;/h2&gt;
-&lt;p&gt;這本來是我認為這個 project 最難的部分，結果 google 到好幾種做法，其中一種解法我覺得超級天才！是開發商 cmonos 作的 taketori-js，還開源！&lt;/p&gt;
-&lt;p&gt;先用 CSS 的 &lt;code&gt;transform&lt;/code&gt; 把整個 &lt;code&gt;block&lt;/code&gt; 轉 +90 度，然後偵測裡面的漢字分別用 &lt;code&gt;span&lt;/code&gt; 包起來轉 -90 度，再處理斷行與標點等等。這個解法真的太強，實用！&lt;/p&gt;
-&lt;p&gt;Github 開源：&lt;a href=&#34;https://github.com/cmonos/TAKETORI-JS&#34;&gt;TAKETORI-JS&lt;/a&gt;&lt;/p&gt;
-&lt;h1 id=&#34;感想&#34;&gt;感想&lt;/h1&gt;
-&lt;p&gt;切版真的麻煩，而且我還沒做適應手機大小的版本，不過考慮到這是舊報紙版型，沒有也很正常對吧？（其實只是懶）&lt;/p&gt;
-- https://blog.idontwannarock.me/2017/09/retina_morning_post/ - This website by Howard Wang is licensed under a Creative Common Attribution-ShareAlike 4.0 International License.</description>
         </item>
     
     
