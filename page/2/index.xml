@@ -7,9 +7,79 @@
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
     <copyright>This website by Howard Wang is licensed under a Creative Common Attribution-ShareAlike 4.0 International License.</copyright>
-    <lastBuildDate>Wed, 20 Sep 2023 09:37:21 +0800</lastBuildDate>
+    <lastBuildDate>Tue, 31 Oct 2023 11:59:03 +0800</lastBuildDate>
     
         <atom:link href="https://blog.idontwannarock.me/index.xml" rel="self" type="application/rss+xml" />
+    
+    
+    
+        <item>
+        <title>XSS 防範簡介</title>
+        <link>https://blog.idontwannarock.me/2022/11/xss_prevention_intro/</link>
+        <pubDate>Tue, 01 Nov 2022 14:00:26 +0800</pubDate>
+        
+        <guid>https://blog.idontwannarock.me/2022/11/xss_prevention_intro/</guid>
+        <description>Howard Tech Note https://blog.idontwannarock.me/2022/11/xss_prevention_intro/ -&lt;p&gt;XSS 系列：&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;XSS 防範簡介&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;https://blog.idontwannarock.me/2022/11/xss_prevention_spring_boot/&#34;&gt;Spring Boot 後端實作 XSS 防範&lt;/a&gt;&lt;/li&gt;
+&lt;/ol&gt;
+&lt;p&gt;跨網站指令碼 Cross-site Scripting, XSS，是一種代碼注入的攻擊，讓攻擊者在網頁上注入代碼，而其他使用者在觀看網頁的時候就會受到影響。&lt;/p&gt;
+&lt;h2 id=&#34;攻擊模式&#34;&gt;攻擊模式&lt;/h2&gt;
+&lt;p&gt;以電商系統舉例，例如管理後台網頁表單的商品描述輸入欄位 Input 在沒有進行相對應防範的前提下，攻擊者可以藉由輸入 &lt;code&gt;&amp;lt;script&amp;gt;alert(document.cookie)&amp;lt;/script&amp;gt;&lt;/code&gt; 這段內容，並透過 API 保存到資料庫，如此一來下次其他使用者在瀏覽該商品的時候，也同樣從後端取得資料庫中的這段描述內容，並且顯示在網頁上，則使用者在載入網頁的時候，瀏覽器就可能會跳出彈窗並把使用者當下的 cookie 直接顯示出來。&lt;/p&gt;
+&lt;p&gt;當然實際的攻擊不會只有跳出彈窗並印出資料這麼簡單，可能是竊取 cookie 或任何 JavaScript 可以存取的敏感資料、側錄使用者行為，或跳轉惡意網址等等行為。&lt;/p&gt;
+&lt;p&gt;當然注入的代碼也不僅限於 JavaScript，也可以是 Java、VBScript 等，甚至是普通的 HTML。&lt;/p&gt;
+&lt;h2 id=&#34;跟-csrf-的區別&#34;&gt;跟 CSRF 的區別&lt;/h2&gt;
+&lt;p&gt;另一種常搞混的攻擊是跨站請求偽造 Cross-site Request Forgery, CSRF，是一種挾制使用者在當前已登入的 Web 應用程式上執行非本意的操作的攻擊方法。&lt;/p&gt;
+&lt;p&gt;例如使用者可能使用某網路銀行做轉帳，當使用者不小心存取到惡意的網址，就可能因為瀏覽器中之前登錄該網路銀行的登錄資訊尚未過期，所以被存取的網路銀行因為信任瀏覽器保存的登錄資訊，而認為是真正的使用者在進行操作而去執行某些動作。&lt;/p&gt;
+&lt;p&gt;跟 XSS 相比，XSS 利用的是「&lt;strong&gt;使用者對指定網站的信任&lt;/strong&gt;」，CSRF 利用的則是「&lt;strong&gt;網站對使用者網頁瀏覽器的信任&lt;/strong&gt;」。&lt;/p&gt;
+&lt;h2 id=&#34;防範措施&#34;&gt;防範措施&lt;/h2&gt;
+&lt;p&gt;&lt;a href=&#34;https://cheatsheetseries.owasp.org/cheatsheets/Cross_Site_Scripting_Prevention_Cheat_Sheet.html&#34;&gt;OWASP 網站&lt;/a&gt; 有提出一些基本的防範措施，但要能真正達到成效，是需要多種手段結合、前後端合作才能達到。並且攻擊手段常常是並用，所以採取防範措施的時候，也要考慮並防範其他種攻擊手段。&lt;/p&gt;
+&lt;h3 id=&#34;output-encoding&#34;&gt;Output Encoding&lt;/h3&gt;
+&lt;p&gt;這部分首先會需要了解使用的 Web Framework 的安全措施跟限制在哪。&lt;/p&gt;
+&lt;p&gt;例如 React 預設會對 render 內容進行跳脫處理 (escape)，將所有的資料都視為文字字串，等同使用原生的 &lt;code&gt;textContent&lt;/code&gt;；但有些時候我們就是需要 React 將內容也 render 成 HTML，因此需要使用 &lt;code&gt;dangerouslySetInnerHTML&lt;/code&gt; 來做 render，那可能就沒辦法依靠框架預設的方式去阻止 XSS，而是要使用其他手段來做處理。&lt;/p&gt;
+&lt;p&gt;而 React 這種預設對 render 內容作跳脫處理就是一種 Output Encoding 的手法。而跳脫處理並不僅是針對 HTML 內容，也會需要對 HTML 屬性 (Attribute)、JavaScript、CSS、URL 或其他惠可能會造成危險的部分進行處理。&lt;/p&gt;
+&lt;p&gt;這種手法可能前後端都可以做、也都需要做，但也同樣需要前後端互相的配合，以免處理之後，反而網頁的顯示不如預期。&lt;/p&gt;
+&lt;h3 id=&#34;html-sanitization&#34;&gt;HTML Sanitization&lt;/h3&gt;
+&lt;p&gt;在前一段我們有說到一種情況，就是需要將某些內容 render 成 HTML 來做顯示，例如可能網頁有提供簡單的編輯功能，而編輯的內容可能不只是純文字，例如可能會要標記某段文字粗體，或甚至插入圖片等等；因此需要利用 tag 來標註某些特性，而且之後也需要將 tag 正確 render 成 HTML 以做顯示。&lt;/p&gt;
+&lt;p&gt;在這種情況下如果採用 encoding 的方式，則很可能造成畫面顯示不如預期，但如果如實保存內容，又可能會產生 XSS 漏洞。&lt;/p&gt;
+&lt;p&gt;此時可以採取另一種方式叫做 HTML Sanitization，也就是對可疑的內容進行移除，只留下安全的內容，這部分通常有黑名單跟白名單兩種做法。&lt;/p&gt;
+&lt;p&gt;黑名單就是過濾某些不允許的元素或性質，例如只是靜態文字圖片顯示，所以不允許內容包含 &lt;code&gt;&amp;lt;script&amp;gt;&lt;/code&gt; 標籤；白名單相對就是只留下某些允許的元素或內容，例如雖然允許 &lt;code&gt;&amp;lt;img&amp;gt;&lt;/code&gt; 標籤做圖片插入，但 &lt;code&gt;&amp;lt;img&amp;gt;&lt;/code&gt; 標籤的屬性只允許 href 等等，並且此時也要結合 Output Encoding 方法對 href 內容作跳脫處理等等。&lt;/p&gt;
+&lt;p&gt;但因為大家需求不同的因素，不論是白名單還是黑名單都會需要依照需求確認來做調整，以避免不該擋的擋掉，該擋的卻沒擋掉，反而造成 XSS 漏洞或跟需求不符。&lt;/p&gt;
+&lt;h3 id=&#34;content-security-policy-header&#34;&gt;Content-Security-Policy Header&lt;/h3&gt;
+&lt;p&gt;以上都是我們寫代碼的實作面去做防範，但其實各家主流瀏覽器也都有通用的標準來協助我們阻擋 XSS 攻擊。但須要注意的是，這些瀏覽器的功能都可能可以被關閉 (例如用 Tampermonkey)，所以只是防君子不防小人，不可以僅依賴瀏覽器的防範功能。&lt;/p&gt;
+&lt;p&gt;比較早期的就是在 Header 中加入 &lt;code&gt;x-xss-protection&lt;/code&gt; 來指定瀏覽器針對 XSS 內容如何做 filtering，但比較近代的瀏覽器已經不太支援此 Header；當前主流瀏覽器普遍支援的是 &lt;code&gt;Content-Security-Policy&lt;/code&gt; 這個 Header。&lt;/p&gt;
+&lt;p&gt;&lt;code&gt;Content-Security-Policy&lt;/code&gt; 這個 Header 主要是用來控制各種資源 (包含對外部的請求跟內部 inline script 或 css) 的載入，這個資源可以包括 css, js, img, video, iframe等等。&lt;/p&gt;
+&lt;p&gt;例如 &lt;code&gt;Content-Security-Policy: script-src &#39;self&#39;&lt;/code&gt; 表示在此頁面可以載入的合法 JavaScript 或 WebAssembly 來源只有 self，也就是同個來源 (schema + domain + port) 的 script 才可以載入及執行。&lt;/p&gt;
+&lt;p&gt;詳細設定細節可以參考 &lt;a href=&#34;https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Content-Security-Policy&#34;&gt;MDN Content-Security-Policy&lt;/a&gt; 的說明，或乾脆參考例如 Facebook 等網站是怎麼配置。&lt;/p&gt;
+&lt;p&gt;因為 &lt;code&gt;Content-Security-Policy&lt;/code&gt; Header 是放在 response header 當中以告訴瀏覽器要如何控制資源載入，所以一般是由伺服器端加上；如果是 server side render 的網站沒有問題，就是在例如 php、jsp 或 cshtml 這種頁面上的 &lt;code&gt;&amp;lt;head&amp;gt;&lt;/code&gt; 裡面加上例如 &lt;code&gt;&amp;lt;meta http-equiv=&amp;quot;Content-Security-Policy&amp;quot; content=&amp;quot;default-src &#39;self&#39;; img-src *&amp;quot;&amp;gt;&lt;/code&gt;；但如果是前後端分離，則是在前端 web server serving 的 html 等檔案上加入，或由 web server 設定在 response header 中加入。&lt;/p&gt;
+&lt;h4 id=&#34;restful-api-with-content-security-policy-header&#34;&gt;RESTful API with Content-Security-Policy Header&lt;/h4&gt;
+&lt;p&gt;這邊額外研究一下如果是 RESTful API 還有需要加上 &lt;code&gt;Content-Security-Policy&lt;/code&gt; header 嗎？&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;p&gt;這邊特別指定討論 RESTful API，其實是想表達後端 API 僅提供資料與前端溝通，而不負責提供待 render 的 HTML、CSS、JavaScript 等資源的情況，所以其他相同功能但並不特別遵守 REST 的 API 其實也適用此處的情況。&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;p&gt;通常這種情況多發生在前後端分離架構，前端透過 Ajax 呼叫後端 RESTful API 來取得資料進行畫面 render 的場景下，CSP 一般會直接配置在頁面 &lt;code&gt;&amp;lt;head&amp;gt;&lt;/code&gt; 中。所以原則上不需要後端回傳的 response 來提供 CSP 限制。&lt;/p&gt;
+&lt;p&gt;但若是硬要在後端 RESTful API 的 response header 中加入 CSP 會對前端造成什麼影響嗎？&lt;/p&gt;
+&lt;p&gt;我們可以從 W3C 提供的 CSP 文件中 &lt;a href=&#34;https://www.w3.org/TR/CSP2/#which-policy-applies&#34;&gt;3.5 Policy applicability&lt;/a&gt; 這段可以看到：&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;p&gt;&amp;hellip;If a resource does not create a new execution context (for example, when including a script, image, or stylesheet into a document), then any policies delivered with that resource are discarded without effect. Its execution is subject to the policy or policies of the including context&amp;hellip;&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;p&gt;CSP 是否 apply 的關鍵是回傳的資源是否會產生新的執行上下文 (execution context)，這樣講很抽象，但可以參考 W3C 文件 &lt;a href=&#34;https://www.w3.org/TR/CSP2/#which-policy-applies&#34;&gt;3.5 Policy applicability&lt;/a&gt; 列出的表格來參照哪些資源回傳後 CSP 是否會 apply。&lt;/p&gt;
+&lt;p&gt;但同時也要注意，W3C 文件中同時也有指出其列出的 applicability 並非規範標準，所以實際各家瀏覽器如何實作可能並不一定相同。&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;p&gt;&lt;em&gt;This section is not normative.&lt;/em&gt;&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;h2 id=&#34;參考&#34;&gt;參考&lt;/h2&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;a href=&#34;https://en.wikipedia.org/wiki/Cross-site_scripting&#34;&gt;Cross-site scripting&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;https://en.wikipedia.org/wiki/Cross-site_request_forgery&#34;&gt;Cross-site request forgery&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;https://cheatsheetseries.owasp.org/cheatsheets/Cross_Site_Scripting_Prevention_Cheat_Sheet.html&#34;&gt;OWASP XSS Prevention Cheat Sheet&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/X-XSS-Protection&#34;&gt;MDN X-XSS-Protection&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Content-Security-Policy&#34;&gt;MDN Content-Security-Policy&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;https://www.w3.org/TR/CSP2/&#34;&gt;W3C Content Security Policy Level 2&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+- https://blog.idontwannarock.me/2022/11/xss_prevention_intro/ - This website by Howard Wang is licensed under a Creative Common Attribution-ShareAlike 4.0 International License.</description>
+        </item>
     
     
     
@@ -1017,7 +1087,7 @@ root_type FlatPassenger;
 &lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;@Retention&lt;span style=&#34;color:#ff79c6&#34;&gt;(&lt;/span&gt;RetentionPolicy&lt;span style=&#34;color:#ff79c6&#34;&gt;.&lt;/span&gt;&lt;span style=&#34;color:#50fa7b&#34;&gt;RUNTIME&lt;/span&gt;&lt;span style=&#34;color:#ff79c6&#34;&gt;)&lt;/span&gt;
 &lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#8be9fd;font-style:italic&#34;&gt;public&lt;/span&gt; @interface ApiVersion &lt;span style=&#34;color:#ff79c6&#34;&gt;{&lt;/span&gt;
 &lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    &lt;span style=&#34;color:#8be9fd&#34;&gt;int&lt;/span&gt; &lt;span style=&#34;color:#50fa7b&#34;&gt;value&lt;/span&gt;&lt;span style=&#34;color:#ff79c6&#34;&gt;()&lt;/span&gt; &lt;span style=&#34;color:#ff79c6&#34;&gt;default&lt;/span&gt; 1&lt;span style=&#34;color:#ff79c6&#34;&gt;;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    &lt;span style=&#34;color:#8be9fd&#34;&gt;int&lt;/span&gt; &lt;span style=&#34;color:#50fa7b&#34;&gt;value&lt;/span&gt;&lt;span style=&#34;color:#ff79c6&#34;&gt;()&lt;/span&gt; &lt;span style=&#34;color:#ff79c6&#34;&gt;default&lt;/span&gt; &lt;span style=&#34;color:#bd93f9&#34;&gt;1&lt;/span&gt;&lt;span style=&#34;color:#ff79c6&#34;&gt;;&lt;/span&gt;
 &lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#ff79c6&#34;&gt;}&lt;/span&gt;
 &lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;再來寫 &lt;code&gt;ApiVersionCondition&lt;/code&gt; 實作 &lt;code&gt;RequestCondition&lt;/code&gt; 介面來判斷 request 跟 handler mapping 的條件&lt;/p&gt;
 &lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;&#34;&gt;&lt;code class=&#34;language-java&#34; data-lang=&#34;java&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#ff79c6&#34;&gt;import&lt;/span&gt; org.springframework.web.servlet.mvc.condition.RequestCondition&lt;span style=&#34;color:#ff79c6&#34;&gt;;&lt;/span&gt;
@@ -1045,7 +1115,7 @@ root_type FlatPassenger;
 &lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    &lt;span style=&#34;color:#8be9fd;font-style:italic&#34;&gt;public&lt;/span&gt; ApiVersionCondition &lt;span style=&#34;color:#50fa7b&#34;&gt;getMatchingCondition&lt;/span&gt;&lt;span style=&#34;color:#ff79c6&#34;&gt;(&lt;/span&gt;HttpServletRequest request&lt;span style=&#34;color:#ff79c6&#34;&gt;)&lt;/span&gt; &lt;span style=&#34;color:#ff79c6&#34;&gt;{&lt;/span&gt;
 &lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;        Matcher m &lt;span style=&#34;color:#ff79c6&#34;&gt;=&lt;/span&gt; VERSION_PREFIX_PATTERN&lt;span style=&#34;color:#ff79c6&#34;&gt;.&lt;/span&gt;&lt;span style=&#34;color:#50fa7b&#34;&gt;matcher&lt;/span&gt;&lt;span style=&#34;color:#ff79c6&#34;&gt;(&lt;/span&gt;request&lt;span style=&#34;color:#ff79c6&#34;&gt;.&lt;/span&gt;&lt;span style=&#34;color:#50fa7b&#34;&gt;getRequestURI&lt;/span&gt;&lt;span style=&#34;color:#ff79c6&#34;&gt;());&lt;/span&gt;
 &lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;        &lt;span style=&#34;color:#ff79c6&#34;&gt;if&lt;/span&gt; &lt;span style=&#34;color:#ff79c6&#34;&gt;(&lt;/span&gt;m&lt;span style=&#34;color:#ff79c6&#34;&gt;.&lt;/span&gt;&lt;span style=&#34;color:#50fa7b&#34;&gt;find&lt;/span&gt;&lt;span style=&#34;color:#ff79c6&#34;&gt;())&lt;/span&gt; &lt;span style=&#34;color:#ff79c6&#34;&gt;{&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;            &lt;span style=&#34;color:#8be9fd&#34;&gt;int&lt;/span&gt; version &lt;span style=&#34;color:#ff79c6&#34;&gt;=&lt;/span&gt; Integer&lt;span style=&#34;color:#ff79c6&#34;&gt;.&lt;/span&gt;&lt;span style=&#34;color:#50fa7b&#34;&gt;parseInt&lt;/span&gt;&lt;span style=&#34;color:#ff79c6&#34;&gt;(&lt;/span&gt;m&lt;span style=&#34;color:#ff79c6&#34;&gt;.&lt;/span&gt;&lt;span style=&#34;color:#50fa7b&#34;&gt;group&lt;/span&gt;&lt;span style=&#34;color:#ff79c6&#34;&gt;(&lt;/span&gt;1&lt;span style=&#34;color:#ff79c6&#34;&gt;));&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;            &lt;span style=&#34;color:#8be9fd&#34;&gt;int&lt;/span&gt; version &lt;span style=&#34;color:#ff79c6&#34;&gt;=&lt;/span&gt; Integer&lt;span style=&#34;color:#ff79c6&#34;&gt;.&lt;/span&gt;&lt;span style=&#34;color:#50fa7b&#34;&gt;parseInt&lt;/span&gt;&lt;span style=&#34;color:#ff79c6&#34;&gt;(&lt;/span&gt;m&lt;span style=&#34;color:#ff79c6&#34;&gt;.&lt;/span&gt;&lt;span style=&#34;color:#50fa7b&#34;&gt;group&lt;/span&gt;&lt;span style=&#34;color:#ff79c6&#34;&gt;(&lt;/span&gt;&lt;span style=&#34;color:#bd93f9&#34;&gt;1&lt;/span&gt;&lt;span style=&#34;color:#ff79c6&#34;&gt;));&lt;/span&gt;
 &lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;            &lt;span style=&#34;color:#ff79c6&#34;&gt;if&lt;/span&gt; &lt;span style=&#34;color:#ff79c6&#34;&gt;(&lt;/span&gt;version &lt;span style=&#34;color:#ff79c6&#34;&gt;&amp;gt;=&lt;/span&gt; getApiVersion&lt;span style=&#34;color:#ff79c6&#34;&gt;())&lt;/span&gt; &lt;span style=&#34;color:#ff79c6&#34;&gt;{&lt;/span&gt;
 &lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;                &lt;span style=&#34;color:#ff79c6&#34;&gt;return&lt;/span&gt; &lt;span style=&#34;color:#ff79c6&#34;&gt;this&lt;/span&gt;&lt;span style=&#34;color:#ff79c6&#34;&gt;;&lt;/span&gt;
 &lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;            &lt;span style=&#34;color:#ff79c6&#34;&gt;}&lt;/span&gt;
@@ -1089,7 +1159,7 @@ root_type FlatPassenger;
 &lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    &lt;span style=&#34;color:#ff79c6&#34;&gt;}&lt;/span&gt;
 &lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;
 &lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    &lt;span style=&#34;color:#8be9fd;font-style:italic&#34;&gt;private&lt;/span&gt; RequestCondition&lt;span style=&#34;color:#ff79c6&#34;&gt;&amp;lt;&lt;/span&gt;ApiVersionCondition&lt;span style=&#34;color:#ff79c6&#34;&gt;&amp;gt;&lt;/span&gt; &lt;span style=&#34;color:#50fa7b&#34;&gt;createRequestCondition&lt;/span&gt;&lt;span style=&#34;color:#ff79c6&#34;&gt;(&lt;/span&gt;ApiVersion apiVersion&lt;span style=&#34;color:#ff79c6&#34;&gt;)&lt;/span&gt; &lt;span style=&#34;color:#ff79c6&#34;&gt;{&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;        &lt;span style=&#34;color:#ff79c6&#34;&gt;if&lt;/span&gt; &lt;span style=&#34;color:#ff79c6&#34;&gt;(&lt;/span&gt;apiVersion &lt;span style=&#34;color:#ff79c6&#34;&gt;==&lt;/span&gt; &lt;span style=&#34;color:#ff79c6&#34;&gt;null&lt;/span&gt; &lt;span style=&#34;color:#ff79c6&#34;&gt;||&lt;/span&gt; apiVersion&lt;span style=&#34;color:#ff79c6&#34;&gt;.&lt;/span&gt;&lt;span style=&#34;color:#50fa7b&#34;&gt;value&lt;/span&gt;&lt;span style=&#34;color:#ff79c6&#34;&gt;()&lt;/span&gt; &lt;span style=&#34;color:#ff79c6&#34;&gt;&amp;lt;&lt;/span&gt; 1&lt;span style=&#34;color:#ff79c6&#34;&gt;)&lt;/span&gt; &lt;span style=&#34;color:#ff79c6&#34;&gt;{&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;        &lt;span style=&#34;color:#ff79c6&#34;&gt;if&lt;/span&gt; &lt;span style=&#34;color:#ff79c6&#34;&gt;(&lt;/span&gt;apiVersion &lt;span style=&#34;color:#ff79c6&#34;&gt;==&lt;/span&gt; &lt;span style=&#34;color:#ff79c6&#34;&gt;null&lt;/span&gt; &lt;span style=&#34;color:#ff79c6&#34;&gt;||&lt;/span&gt; apiVersion&lt;span style=&#34;color:#ff79c6&#34;&gt;.&lt;/span&gt;&lt;span style=&#34;color:#50fa7b&#34;&gt;value&lt;/span&gt;&lt;span style=&#34;color:#ff79c6&#34;&gt;()&lt;/span&gt; &lt;span style=&#34;color:#ff79c6&#34;&gt;&amp;lt;&lt;/span&gt; &lt;span style=&#34;color:#bd93f9&#34;&gt;1&lt;/span&gt;&lt;span style=&#34;color:#ff79c6&#34;&gt;)&lt;/span&gt; &lt;span style=&#34;color:#ff79c6&#34;&gt;{&lt;/span&gt;
 &lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;            &lt;span style=&#34;color:#ff79c6&#34;&gt;return&lt;/span&gt; &lt;span style=&#34;color:#ff79c6&#34;&gt;null&lt;/span&gt;&lt;span style=&#34;color:#ff79c6&#34;&gt;;&lt;/span&gt;
 &lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;        &lt;span style=&#34;color:#ff79c6&#34;&gt;}&lt;/span&gt;
 &lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;        &lt;span style=&#34;color:#ff79c6&#34;&gt;return&lt;/span&gt; &lt;span style=&#34;color:#ff79c6&#34;&gt;new&lt;/span&gt; ApiVersionCondition&lt;span style=&#34;color:#ff79c6&#34;&gt;(&lt;/span&gt;apiVersion&lt;span style=&#34;color:#ff79c6&#34;&gt;.&lt;/span&gt;&lt;span style=&#34;color:#50fa7b&#34;&gt;value&lt;/span&gt;&lt;span style=&#34;color:#ff79c6&#34;&gt;());&lt;/span&gt;
@@ -1106,7 +1176,7 @@ root_type FlatPassenger;
 &lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    @Override
 &lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    &lt;span style=&#34;color:#8be9fd;font-style:italic&#34;&gt;public&lt;/span&gt; RequestMappingHandlerMapping &lt;span style=&#34;color:#50fa7b&#34;&gt;requestMappingHandlerMapping&lt;/span&gt;&lt;span style=&#34;color:#ff79c6&#34;&gt;()&lt;/span&gt; &lt;span style=&#34;color:#ff79c6&#34;&gt;{&lt;/span&gt;
 &lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;        ApiVersionHandlerMapping handlerMapping &lt;span style=&#34;color:#ff79c6&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color:#ff79c6&#34;&gt;new&lt;/span&gt; ApiVersionHandlerMapping&lt;span style=&#34;color:#ff79c6&#34;&gt;();&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;        handlerMapping&lt;span style=&#34;color:#ff79c6&#34;&gt;.&lt;/span&gt;&lt;span style=&#34;color:#50fa7b&#34;&gt;setOrder&lt;/span&gt;&lt;span style=&#34;color:#ff79c6&#34;&gt;(&lt;/span&gt;0&lt;span style=&#34;color:#ff79c6&#34;&gt;);&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;        handlerMapping&lt;span style=&#34;color:#ff79c6&#34;&gt;.&lt;/span&gt;&lt;span style=&#34;color:#50fa7b&#34;&gt;setOrder&lt;/span&gt;&lt;span style=&#34;color:#ff79c6&#34;&gt;(&lt;/span&gt;&lt;span style=&#34;color:#bd93f9&#34;&gt;0&lt;/span&gt;&lt;span style=&#34;color:#ff79c6&#34;&gt;);&lt;/span&gt;
 &lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;        handlerMapping&lt;span style=&#34;color:#ff79c6&#34;&gt;.&lt;/span&gt;&lt;span style=&#34;color:#50fa7b&#34;&gt;setInterceptors&lt;/span&gt;&lt;span style=&#34;color:#ff79c6&#34;&gt;(&lt;/span&gt;getInterceptors&lt;span style=&#34;color:#ff79c6&#34;&gt;());&lt;/span&gt;
 &lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;        &lt;span style=&#34;color:#ff79c6&#34;&gt;return&lt;/span&gt; handlerMapping&lt;span style=&#34;color:#ff79c6&#34;&gt;;&lt;/span&gt;
 &lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    &lt;span style=&#34;color:#ff79c6&#34;&gt;}&lt;/span&gt;
@@ -1125,7 +1195,7 @@ root_type FlatPassenger;
 &lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;        &lt;span style=&#34;color:#ff79c6&#34;&gt;return&lt;/span&gt; ResponseEntity&lt;span style=&#34;color:#ff79c6&#34;&gt;.&lt;/span&gt;&lt;span style=&#34;color:#50fa7b&#34;&gt;ok&lt;/span&gt;&lt;span style=&#34;color:#ff79c6&#34;&gt;(&lt;/span&gt;&lt;span style=&#34;color:#f1fa8c&#34;&gt;&amp;#34;Hello world!&amp;#34;&lt;/span&gt;&lt;span style=&#34;color:#ff79c6&#34;&gt;);&lt;/span&gt;
 &lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    &lt;span style=&#34;color:#ff79c6&#34;&gt;}&lt;/span&gt;
 &lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    @ApiVersion&lt;span style=&#34;color:#ff79c6&#34;&gt;(&lt;/span&gt;2&lt;span style=&#34;color:#ff79c6&#34;&gt;)&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    @ApiVersion&lt;span style=&#34;color:#ff79c6&#34;&gt;(&lt;/span&gt;&lt;span style=&#34;color:#bd93f9&#34;&gt;2&lt;/span&gt;&lt;span style=&#34;color:#ff79c6&#34;&gt;)&lt;/span&gt;
 &lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    @GetMapping&lt;span style=&#34;color:#ff79c6&#34;&gt;(&lt;/span&gt;&lt;span style=&#34;color:#f1fa8c&#34;&gt;&amp;#34;hello&amp;#34;&lt;/span&gt;&lt;span style=&#34;color:#ff79c6&#34;&gt;)&lt;/span&gt;
 &lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    &lt;span style=&#34;color:#8be9fd;font-style:italic&#34;&gt;public&lt;/span&gt; ResponseEntity&lt;span style=&#34;color:#ff79c6&#34;&gt;&amp;lt;?&amp;gt;&lt;/span&gt; helloV2&lt;span style=&#34;color:#ff79c6&#34;&gt;()&lt;/span&gt; &lt;span style=&#34;color:#ff79c6&#34;&gt;{&lt;/span&gt;
 &lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;        &lt;span style=&#34;color:#ff79c6&#34;&gt;return&lt;/span&gt; ResponseEntity&lt;span style=&#34;color:#ff79c6&#34;&gt;.&lt;/span&gt;&lt;span style=&#34;color:#50fa7b&#34;&gt;ok&lt;/span&gt;&lt;span style=&#34;color:#ff79c6&#34;&gt;(&lt;/span&gt;&lt;span style=&#34;color:#f1fa8c&#34;&gt;&amp;#34;Nice to meet you!&amp;#34;&lt;/span&gt;&lt;span style=&#34;color:#ff79c6&#34;&gt;);&lt;/span&gt;
@@ -1205,67 +1275,6 @@ root_type FlatPassenger;
 &lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;至此就可以把前面寫的 &lt;code&gt;WebMvcConfig&lt;/code&gt; 刪掉啦&lt;/p&gt;
 &lt;p&gt;至於沒找到 &lt;code&gt;WebMvcRegistrations&lt;/code&gt; 介面的朋友，要不就是你 Spring Boot 版本太低，不然就只能改用 &lt;code&gt;WebMvcRegistrationsAdpater&lt;/code&gt; 試試看了 (攤手)&lt;/p&gt;
 - https://blog.idontwannarock.me/2019/09/spring_api_version_with_swagger_security/ - This website by Howard Wang is licensed under a Creative Common Attribution-ShareAlike 4.0 International License.</description>
-        </item>
-    
-    
-    
-        <item>
-        <title>Spring Security 整合 RBAC</title>
-        <link>https://blog.idontwannarock.me/2019/05/spring_security_rbac/</link>
-        <pubDate>Thu, 30 May 2019 15:33:07 +0800</pubDate>
-        
-        <guid>https://blog.idontwannarock.me/2019/05/spring_security_rbac/</guid>
-        <description>Howard Tech Note https://blog.idontwannarock.me/2019/05/spring_security_rbac/ -&lt;p&gt;目前比較主流的 &lt;a href=&#34;https://en.wikipedia.org/wiki/Role-based_access_control&#34;&gt;Role-based Access Control, RBAC&lt;/a&gt; 算是比較成熟且彈性的權限架構，若要在 Spring Security 實作 RBAC 並搭配 JWT 或 OAuth 2.0，大概要探討兩個問題&lt;/p&gt;
-&lt;ol&gt;
-&lt;li&gt;是否值得為了減少查詢資料源的次數，而將角色或權限直接置入 JWT 或 Authorization Server 回傳的 token&lt;/li&gt;
-&lt;li&gt;是否採取 Spring Security 原生只使用最細粒度的權限來進行存取控制&lt;/li&gt;
-&lt;/ol&gt;
-&lt;p&gt;關於第一個問題，目前的思考點大概就是考量系統的併發度跟使用者總數&lt;/p&gt;
-&lt;p&gt;如果需要高併發，那自然希望盡量減少查詢資料的次數或資料量，盡量避免同時大量消耗 DB 資源；相反的，如果不需要高併發，那每次驗證都重新取得角色及權限資料也沒關係&lt;/p&gt;
-&lt;p&gt;使用者數量的考量也是類似，如果每次查詢的成本太高，則盡量減少查詢的次數&lt;/p&gt;
-&lt;p&gt;而第二個問題，則是要考量實際的業務場景&lt;/p&gt;
-&lt;p&gt;如果角色跟權限很大量且複雜，或可能要考慮角色分層甚至使用者群組，或不同 Domain 有不同的權限邏輯，則可能用 Spring Security 原生方式會不敷使用，相對如果角色權限結構簡單，則直接使用原生方式可能成本較低&lt;/p&gt;
-&lt;p&gt;所以以下探討主要專注於使用 Spring Security 提供的自訂空間來實作較為複雜的存取控制&lt;/p&gt;
-&lt;h1 id=&#34;spring-security-權限架構&#34;&gt;Spring Security 權限架構&lt;/h1&gt;
-&lt;p&gt;首先要探討 Spring Security 原生提供的權限架構&lt;/p&gt;
-&lt;ul&gt;
-&lt;li&gt;GrantedAuthority: 可以將每個 GrantedAuthority 想成是個別的 privilege，所以在 Spring Security 中，authority 就是 privilege 的概念&lt;/li&gt;
-&lt;li&gt;Role: 在 Spring Security 中為了保持彈性，Role 可以當作 Authority 也可以當作一組 Authority 的組合
-&lt;ul&gt;
-&lt;li&gt;Role as Authority: 直接把 Role 當成一種 Authority 的情況，就是將 Role 當作一個有 ROLE_ 前綴的字串，這種情況下 Role 跟 Authority 就只是語意上的差別&lt;/li&gt;
-&lt;li&gt;Role as Container: Role 可以包含一組 Authority，Spring Security 在這個概念上沒有提供太多指引說明，需要自行實作&lt;/li&gt;
-&lt;/ul&gt;
-&lt;/li&gt;
-&lt;/ul&gt;
-&lt;blockquote&gt;
-&lt;p&gt;&lt;a href=&#34;https://www.baeldung.com/spring-security-granted-authority-vs-role&#34;&gt;Granted Authority Versus Role in Spring Security&lt;/a&gt;&lt;/p&gt;
-&lt;/blockquote&gt;
-&lt;p&gt;所以概念上 Spring Security 的 Role 比較像是有特別命名方式 (ROLE_ 前綴) 的一種 Authority，因此在預設中，&lt;code&gt;hasAuthority(&#39;ROLE_ADMIN&#39;)&lt;/code&gt; 跟 &lt;code&gt;hasRole(&#39;ADMIN&#39;)&lt;/code&gt; 是一樣的&lt;/p&gt;
-&lt;p&gt;在 Spring Security 中 Role as Authority 最明顯的例子就是 SimpleGrantedAuthority，建構子直接吃 role 字串，&lt;code&gt;getAuthority()&lt;/code&gt; 方法也直接吐回 role 字串屬性&lt;/p&gt;
-&lt;p&gt;因此，如果要建立 Role 跟 Authority 分離的權限架構，首先要確認的是在設定 access control 時，&lt;code&gt;hasRole()&lt;/code&gt; 跟 &lt;code&gt;hasAuthority()&lt;/code&gt; 兩個方法到底是用什麼機制、從哪裡取得&lt;/p&gt;
-&lt;p&gt;Spring Security 的整體架構分成驗證跟存取控制兩個部分，由於驗證部分會由 API 搭配 JWT 做掉大部分，甚至未來整合 OAuth 2.0，所以需要探討的只有如何在驗證過程將使用者資料及權限放入 SecurityContext 中讓後續的存取控制使用，並且存取控制部分如何依照使用者資料及權限進行控制&lt;/p&gt;
-&lt;h2 id=&#34;userdetailsservice&#34;&gt;&lt;code&gt;UserDetailsService&lt;/code&gt;&lt;/h2&gt;
-&lt;p&gt;要在驗證過程將使用者資料及權限放入 SecurityContext 中，最簡單就是實作 &lt;code&gt;UserDetailsService&lt;/code&gt; 的 &lt;code&gt;loadUserByUsername&lt;/code&gt; 方法，然後將自訂的 &lt;code&gt;UserDetailsService&lt;/code&gt; 提供給 &lt;code&gt;AuthenticationManager&lt;/code&gt; 即可&lt;/p&gt;
-&lt;p&gt;這部分主要還是要考慮繼承 &lt;code&gt;UserDetails&lt;/code&gt; 物件後，如何設定權限部分以及該將什麼樣的資料放入 Authentication 的 authorities 中&lt;/p&gt;
-&lt;h2 id=&#34;accessdecisionvoter-及-accessdecisionmanager&#34;&gt;&lt;code&gt;AccessDecisionVoter&lt;/code&gt; 及 &lt;code&gt;AccessDecisionManager&lt;/code&gt;&lt;/h2&gt;
-&lt;p&gt;而存取控制的邏輯部分就要實作 &lt;code&gt;AccessDecisionVoter&lt;/code&gt; 的 &lt;code&gt;vote&lt;/code&gt; 方法&lt;/p&gt;
-&lt;p&gt;voter 可以選擇回傳三種決策:&lt;/p&gt;
-&lt;ul&gt;
-&lt;li&gt;&lt;code&gt;ACCESS_GRANTED&lt;/code&gt;: 通過&lt;/li&gt;
-&lt;li&gt;&lt;code&gt;ACCESS_DENIED&lt;/code&gt;: 否決&lt;/li&gt;
-&lt;li&gt;&lt;code&gt;ACCESS_ABSTAIN&lt;/code&gt;: 棄權&lt;/li&gt;
-&lt;/ul&gt;
-&lt;p&gt;實作完 voter 後，要將 voter 加入 &lt;code&gt;AccessDecisionManager&lt;/code&gt;，而 &lt;code&gt;AccessDecisionManager&lt;/code&gt; 預設有三種決策策略&lt;/p&gt;
-&lt;ul&gt;
-&lt;li&gt;&lt;code&gt;AffirmativeBased&lt;/code&gt;: 任何 voter 回傳通過即可&lt;/li&gt;
-&lt;li&gt;&lt;code&gt;ConsensusBased&lt;/code&gt;: 通過數大於否決數，忽略棄權&lt;/li&gt;
-&lt;li&gt;&lt;code&gt;UnanimousBased&lt;/code&gt;: 所有 voter 通過或棄權，也就是不能有任何否決&lt;/li&gt;
-&lt;/ul&gt;
-&lt;blockquote&gt;
-&lt;p&gt;&lt;a href=&#34;https://www.baeldung.com/spring-security-custom-voter&#34;&gt;Custom AccessDecisionVoters in Spring Security&lt;/a&gt;&lt;/p&gt;
-&lt;/blockquote&gt;
-&lt;p&gt;這部分就只能基於實際業務邏輯做考量&lt;/p&gt;
-- https://blog.idontwannarock.me/2019/05/spring_security_rbac/ - This website by Howard Wang is licensed under a Creative Common Attribution-ShareAlike 4.0 International License.</description>
         </item>
     
     

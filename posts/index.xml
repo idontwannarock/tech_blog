@@ -7,7 +7,21 @@
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
     <copyright>This website by Howard Wang is licensed under a Creative Common Attribution-ShareAlike 4.0 International License.</copyright>
-    <lastBuildDate>Wed, 20 Sep 2023 09:37:21 +0800</lastBuildDate><atom:link href="https://blog.idontwannarock.me/posts/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Tue, 31 Oct 2023 11:59:03 +0800</lastBuildDate><atom:link href="https://blog.idontwannarock.me/posts/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>MySQL 8.0 使用 UTC_TIMESTAMP() 當作 DATETIME 欄位預設值 bug</title>
+      <link>https://blog.idontwannarock.me/2023/10/mysql_8_utc_timestamp_as_datetime_default_bug/</link>
+      <pubDate>Tue, 31 Oct 2023 11:59:03 +0800</pubDate>
+      
+      <guid>https://blog.idontwannarock.me/2023/10/mysql_8_utc_timestamp_as_datetime_default_bug/</guid>
+      <description>情境描述 最近在處理 MySQL 的時候採到一個坑
+我的使用情境是需要一個 create date 紀錄資料產生時的 UTC 時間精準到 millisecond
+首先考慮到 MySQL 的 TIMESTAMP 資料型態是採用 epoch second 加上額外的 fractional seconds 精準到 microseconds，也就是最多記錄到 &amp;lsquo;2038-01-19 03:14:07.999999&amp;rsquo; 就會 overflow，如果採用 DATETIME(3) 可以記錄到 &amp;lsquo;9999-12-31 23:59:59.999&amp;rsquo;
+接著因為欄位必填，所以考慮設定預設值，此時有幾種選擇，NOW()、CURRENT_TIMESTAMP、UTC_TIMESTAMP，其中 NOW() 與 CURRENT_TIMESTAMP 都會依照 MySQL 系統時區產生時間，但是 DATETIME 並不保存時區資訊，所以為了避免時區問題，所以選擇預設值設定為 (UTC_TIMESTAMP(3))，剛好在 8.0.13 開始可以將 DATETIME 資料型態的欄位預設值設為 function (UTC_TIMESTAMP())
+但是設定完後發生了很奇怪的問題，後續進行的 ALTER TABLE DDL 操作都會失敗並拋出 ERROR 1067: Invalid default value for &amp;lt;columnName&amp;gt; 錯誤，例如執行以下 sql
+ALTER TABLE tableName ADD COLUMN newColumnName BIGINT NULL; 明明新增的是 BIGINT 而且沒有預設值，卻拋出 ERROR 1067: Invalid default value for createdDateColumn 的錯誤，簡直莫名其妙讓人丈二和尚摸不著頭腦</description>
+    </item>
+    
     <item>
       <title>Spring JPA Projection with Converter</title>
       <link>https://blog.idontwannarock.me/2023/09/spring_jpa_projection_converter/</link>

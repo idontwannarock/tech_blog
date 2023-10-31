@@ -1,0 +1,670 @@
+<!DOCTYPE html>
+<html><head>
+<title>MySQL 8.0 使用 UTC_TIMESTAMP() 當作 DATETIME 欄位預設值 bug</title>
+
+
+
+
+<meta charset="utf-8">
+<meta name="X-UA-Compatible" content="IE=edge">
+<meta name="google-site-verification" content="">
+<meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" name="viewport">
+<meta content="telephone=no" name="format-detection">
+<meta name="description" content="描述在使用 MySQL 8.0 早期版本當中，採用 UTC_TIMESTAMP() function 當作 DATETIME 型態欄位預設值的 bug">
+<meta name="renderer" content="webkit">
+<meta name="theme-color" content="#ffffff">
+
+
+
+
+
+
+
+
+
+
+
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-JP1V61PPMJ"></script>
+<script>
+var doNotTrack = false;
+if (!doNotTrack) {
+	window.dataLayer = window.dataLayer || [];
+	function gtag(){dataLayer.push(arguments);}
+	gtag('js', new Date());
+	gtag('config', 'G-JP1V61PPMJ', { 'anonymize_ip': false });
+}
+</script>
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+      <script src="https://blog.idontwannarock.me/js/toc.js"></script>
+    
+    <link type="text/css" rel="stylesheet" href="https://blog.idontwannarock.me/vendor/css/bootstrap.min.css">
+
+<link rel="stylesheet" href="https://blog.idontwannarock.me/scss/dark-mode.min.cb53f1bee2b8900cb4f082afbf00175d6618f281cf9a2fe8619e3b52d20b5721.css" integrity="sha256-y1PxvuK4kAy08IKvvwAXXWYY8oHPmi/oYZ47UtILVyE=" media="screen">
+
+
+<link rel="stylesheet"
+          href="https://fonts.googleapis.com/css?family=Material+Icons">
+
+
+
+
+
+
+
+
+
+
+
+
+<script src="https://cdn.jsdelivr.net/npm/vue-disqus@3/dist/vue-disqus.js"></script>
+
+
+
+
+
+
+
+
+</head>
+<body>
+    	<div id="app"><div class="single-column-drawer-container" id="drawer"
+     v-bind:class="{ 'single-column-drawer-container-active': isDrawerOpen }">
+    <div class="drawer-content">
+        <div class="drawer-menu">
+            
+            
+            
+                
+                
+                
+                
+                
+                <a class="a-block drawer-menu-item false" href="https://blog.idontwannarock.me/posts">
+                    Archive
+                </a>
+                
+            
+                
+                
+                
+                
+                
+                <a class="a-block drawer-menu-item false" href="https://blog.idontwannarock.me/categories">
+                    Categories
+                </a>
+                
+            
+                
+                
+                
+                
+                
+                <a class="a-block drawer-menu-item false" href="https://blog.idontwannarock.me/tags">
+                    Tags
+                </a>
+                
+            
+                
+                
+                
+                
+                
+                <a class="a-block drawer-menu-item false" href="https://blog.idontwannarock.me/about">
+                    About
+                </a>
+                
+            
+                
+                
+                
+                
+                
+                <a class="a-block drawer-menu-item false" href="https://blog.idontwannarock.me/index.xml">
+                    RSS Feed
+                </a>
+                
+            
+            
+            <div class="toc">
+
+
+	<div class="toc-content">
+	
+		
+		
+		
+		<center>- CATALOG -</center>
+		
+		
+		<ul>
+			
+				
+				
+					
+						
+						
+						
+						
+						
+							<li>
+								<a href="#%e6%83%85%e5%a2%83%e6%8f%8f%e8%bf%b0" class="nav-情境描述">
+									情境描述
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+						
+							<li>
+								<a href="#bug-%e7%8b%80%e6%b3%81" class="nav-bug-狀況">
+									Bug 狀況
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+						
+							<li>
+								<a href="#%e9%87%8d%e7%8f%be%e6%ad%a5%e9%a9%9f" class="nav-重現步驟">
+									重現步驟
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+						
+							<li>
+								<a href="#%e8%a7%a3%e6%b1%ba%e6%96%b9%e5%bc%8f" class="nav-解決方式">
+									解決方式
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+						
+							<li>
+								<a href="#reference" class="nav-reference">
+									Reference
+								</a>
+							</li>
+						
+						
+					
+				
+			
+		</ul>
+	</div>
+
+</div>
+            
+        </div>
+    </div>
+</div>
+<transition name="fade">
+    <div id="drawer-mask" v-bind:class="{ 'single-column-drawer-mask': mounted }" v-if="isDrawerOpen" v-on:click="toggleDrawer"></div>
+</transition>
+<nav id="navBar" class="navbar sticky-top navbar-light single-column-nav-container">
+    <div id="navBackground" class="nav-background"></div>
+    <div class="container container-narrow nav-content">
+        <button id="nav_dropdown_btn" class="nav-dropdown-toggle" type="button" v-on:click="toggleDrawer">
+            <i class="material-icons">
+                menu
+            </i>
+        </button>
+        <a id="navTitle" class="navbar-brand" href="https://blog.idontwannarock.me/">
+            Howard Tech Note
+        </a>
+        
+        <button type="button" class="nav-darkmode-toggle" id="darkModeToggleButton2">
+            <i class="material-icons" id="darkModeToggleIcon2">
+                dark_mode
+            </i>
+        </button>
+        
+    </div>
+</nav>
+<div class="single-column-header-container" id="pageHead"
+     v-bind:style="{ transform: 'translateZ(0px) translateY('+.3*scrollY+'px)', opacity: 1-navOpacity }">
+    <a href="https://blog.idontwannarock.me/">
+        <div class="single-column-header-title">Howard Tech Note</div>
+        
+        <div class="single-column-header-subtitle">Share * Record * Program</div>
+        
+
+    </a>
+</div>
+
+            <div id="content">
+                <div id="streamContainer" class="stream-container">
+
+    <div class="post-list-container post-list-container-shadow">
+        <div class="post">
+            
+            
+            
+
+            <div class="post-head-wrapper-text-only"
+                
+            >
+                <div class="post-title">
+                    MySQL 8.0 使用 UTC_TIMESTAMP() 當作 DATETIME 欄位預設值 bug
+                    
+                    <div class="post-subtitle">
+                        描述在使用 MySQL 8.0 早期版本當中，採用 UTC_TIMESTAMP() function 當作 DATETIME 型態欄位預設值的 bug
+                    </div>
+                    
+                    <div class="post-meta">
+                        
+                        <time itemprop="datePublished">
+                            2023-10-31 11:59
+                        </time>
+                        
+
+                        
+                            <i class="material-icons" style="">folder</i>
+                                <a href="https://blog.idontwannarock.me/categories/bug">bug</a>
+                                &nbsp;
+                        
+
+                        
+                            <i class="material-icons" style="">label</i>
+                            
+                                <a href="https://blog.idontwannarock.me/tags/mysql">mysql</a>
+                                &nbsp;
+                            
+                                <a href="https://blog.idontwannarock.me/tags/utc_timestamp">utc_timestamp</a>
+                                &nbsp;
+                            
+                                <a href="https://blog.idontwannarock.me/tags/datetime">datetime</a>
+                                &nbsp;
+                            
+                        
+                        
+                    </div>
+                </div>
+            </div>
+            
+            <div class="post-body-wrapper">
+                
+                <div class="post-body" v-pre>
+                
+                    <h1 id="情境描述">情境描述</h1>
+<p>最近在處理 MySQL 的時候採到一個坑</p>
+<p>我的使用情境是需要一個 create date 紀錄資料產生時的 UTC 時間精準到 millisecond</p>
+<p>首先考慮到 MySQL 的 <code>TIMESTAMP</code> 資料型態是採用 epoch second 加上額外的 fractional seconds 精準到 microseconds，也就是最多記錄到 &lsquo;2038-01-19 03:14:07.999999&rsquo; 就會 overflow，如果採用 <code>DATETIME(3)</code> 可以記錄到 &lsquo;9999-12-31 23:59:59.999&rsquo;</p>
+<p>接著因為欄位必填，所以考慮設定預設值，此時有幾種選擇，<code>NOW()</code>、<code>CURRENT_TIMESTAMP</code>、<code>UTC_TIMESTAMP</code>，其中 <code>NOW()</code> 與 <code>CURRENT_TIMESTAMP</code> 都會依照 MySQL 系統時區產生時間，但是 <code>DATETIME</code> 並不保存時區資訊，所以為了避免時區問題，所以選擇預設值設定為 <code>(UTC_TIMESTAMP(3))</code>，剛好在 8.0.13 開始可以將 <code>DATETIME</code> 資料型態的欄位預設值設為 function <code>(UTC_TIMESTAMP())</code></p>
+<p>但是設定完後發生了很奇怪的問題，後續進行的 <code>ALTER TABLE</code> DDL 操作都會失敗並拋出 <code>ERROR 1067: Invalid default value for &lt;columnName&gt;</code> 錯誤，例如執行以下 sql</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-sql" data-lang="sql"><span style="display:flex;"><span><span style="color:#ff79c6">ALTER</span> <span style="color:#ff79c6">TABLE</span> tableName <span style="color:#ff79c6">ADD</span> <span style="color:#ff79c6">COLUMN</span> newColumnName <span style="color:#8be9fd;font-style:italic">BIGINT</span> <span style="color:#ff79c6">NULL</span>;
+</span></span></code></pre></div><p>明明新增的是 <code>BIGINT</code> 而且沒有預設值，卻拋出 <code>ERROR 1067: Invalid default value for createdDateColumn</code> 的錯誤，簡直莫名其妙讓人丈二和尚摸不著頭腦</p>
+<h1 id="bug-狀況">Bug 狀況</h1>
+<p>經過確認是 MySQL 在 8.0.23 以前的 bug，在 8.0.24 之後已經修正，可以參考這張 <a href="https://bugs.mysql.com/bug.php?id=101486">bug report</a> 的描述</p>
+<p>簡單來說就是如果在 table 中有欄位的預設值不是 constant，例如我使用的 <code>(UTC_TIMESTAMP(3))</code>，則後續的 <code>ALTER TABLE</code> DDL 操作都會失敗並拋出 1067 錯誤</p>
+<h1 id="重現步驟">重現步驟</h1>
+<p>建議使用 docker 啟動一個 8.0.13-8.0.23 之間版本的 MySQL</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-sh" data-lang="sh"><span style="display:flex;"><span>docker run --name some-mysql -e <span style="color:#8be9fd;font-style:italic">MYSQL_ROOT_PASSWORD</span><span style="color:#ff79c6">=</span>my-secret-pw -d mysql:8.0.23
+</span></span></code></pre></div><p>然後連上 MySQL</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-sh" data-lang="sh"><span style="display:flex;"><span>docker <span style="color:#8be9fd;font-style:italic">exec</span> -it some-mysql bash
+</span></span><span style="display:flex;"><span>mysql -uroot -p
+</span></span></code></pre></div><p>建立 table</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-sql" data-lang="sql"><span style="display:flex;"><span>use test;
+</span></span><span style="display:flex;"><span><span style="color:#ff79c6">create</span> <span style="color:#ff79c6">table</span> test_timestamp (id <span style="color:#8be9fd;font-style:italic">int</span> <span style="color:#ff79c6">not</span> <span style="color:#ff79c6">null</span> auto_increment, created datetime <span style="color:#ff79c6">not</span> <span style="color:#ff79c6">null</span> <span style="color:#ff79c6">default</span> (utc_timestamp()), <span style="color:#ff79c6">primary</span> <span style="color:#ff79c6">key</span> (id));
+</span></span></code></pre></div><p>此時執行 <code>ALTER TABLE</code> DDL</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-sql" data-lang="sql"><span style="display:flex;"><span><span style="color:#ff79c6">alter</span> <span style="color:#ff79c6">table</span> test_timestamp <span style="color:#ff79c6">add</span> <span style="color:#ff79c6">column</span> test <span style="color:#8be9fd;font-style:italic">varchar</span>(<span style="color:#bd93f9">63</span>) <span style="color:#ff79c6">null</span>;
+</span></span></code></pre></div><p>應該就會看到 <code>ERROR 1067: Invalid default value for created</code> 的錯誤訊息</p>
+<h1 id="解決方式">解決方式</h1>
+<p>以我碰到的情況而言其實有兩種解決方式</p>
+<p>第一種就是乖乖升級，bug 自解</p>
+<p>第二種就是 bug report 裡面有人提出來的 workaround 方式</p>
+<p>流程大致上就是把原本設定為 <code>UTC_TIMESTAMP()</code> function 的欄位預設值改為 <code>CURRENT_TIMESTAMP()</code> function，然後執行原本預定要執行的 <code>ALTER TABLE</code> DDL，最後再把 <code>CURRENT_TIMESTAMP()</code> 的欄位型態改回 <code>UTC_TIMESTAMP()</code> function 即可</p>
+<p>這兩個方式我都實測過可行，但各有需要考慮的狀況</p>
+<p>第一種方式當然是怕升級過程有 downtime 或甚至其他升級失敗的狀況，這主要就考驗公司 SRE 之類單位的強度</p>
+<p>第二種方式則是要自己考量在改成 <code>CURRENT_TIMESTAMP()</code> 期間產生髒資料的處理，例如可能新增的一筆資料時區可能不是 UTC 的問題，如果時區是 UTC+X 的還好處理，如果是 UTC-X 的就會很麻煩，可能要預先做其他處理，例如可能要額外新增時區欄位</p>
+<h1 id="reference">Reference</h1>
+<ul>
+<li><a href="https://dev.mysql.com/doc/refman/8.0/en/datetime.html">11.2.2 The DATE, DATETIME, and TIMESTAMP Types</a></li>
+<li><a href="https://dev.mysql.com/doc/relnotes/mysql/8.0/en/news-8-0-13.html#mysqld-8-0-13-data-types">Changes in MySQL 8.0.13 (2018-10-22, General Availability)#Data Type Notes</a></li>
+<li><a href="https://bugs.mysql.com/bug.php?id=101486">Error when UTC_TIMESTAMP set as default value</a></li>
+<li><a href="https://dev.mysql.com/doc/relnotes/mysql/8.0/en/news-8-0-24.html#mysqld-8-0-24-bug">Changes in MySQL 8.0.24 (2021-04-20, General Availability)#Bug Fixed</a></li>
+</ul>
+
+                    
+                    <HR width="100%" id="EOF">
+		    <p style="color:#777;">Last modified on 2023-10-31</p>
+                    
+                </div>
+            </div>
+            
+            
+            <nav class="post-pagination">
+
+                
+                <a class="newer-posts">
+			Next<br>No newer posts.
+                </a>
+                
+                
+                
+                <a class="older-posts" href="https://blog.idontwannarock.me/2023/09/spring_jpa_projection_converter/">
+			Previous<br>Spring JPA Projection with Converter
+                </a>
+                
+            </nav>
+            <div class="post-comment-wrapper">
+                
+<div id="disqus_thread"></div>
+<script>
+    
+
+    var disqus_config = function () {
+        
+        this.page.url = 'https:\/\/blog.idontwannarock.me\/2023\/10\/mysql_8_utc_timestamp_as_datetime_default_bug\/';  
+        
+        
+        this.page.identifier = '\/2023\/10\/mysql_8_utc_timestamp_as_datetime_default_bug\/'; 
+    };
+    (function() {
+        var d = document, s = d.createElement('script');
+        s.src = 'https://howard-tech-blog.disqus.com/embed.js';
+        s.setAttribute('data-timestamp', +new Date());
+        (d.head || d.body).appendChild(s);
+    })();
+</script>
+<noscript> Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript" rel="nofollow"> comments powered by Disqus.  </a> </noscript>
+
+
+
+
+
+
+
+
+
+
+
+
+
+            </div>
+        </div>
+    </div>
+
+
+                    </div>
+            </div><div id="sideContainer" class="side-container">
+    
+    <a class="a-block nav-head false" href="https://blog.idontwannarock.me/">
+    
+        <div class="nav-title">
+            Howard Tech Note
+        </div>
+        
+        <div class="nav-subtitle">
+            Share * Record * Program
+        </div>
+        
+    </a>
+
+    <div class="nav-link-list">
+        
+        
+            
+            
+            
+            
+            
+            <a class="a-block nav-link-item false" href="https://blog.idontwannarock.me/posts">
+                Archive
+            </a>
+            
+        
+            
+            
+            
+            
+            
+            <a class="a-block nav-link-item false" href="https://blog.idontwannarock.me/categories">
+                Categories
+            </a>
+            
+        
+            
+            
+            
+            
+            
+            <a class="a-block nav-link-item false" href="https://blog.idontwannarock.me/tags">
+                Tags
+            </a>
+            
+        
+            
+            
+            
+            
+            
+            <a class="a-block nav-link-item false" href="https://blog.idontwannarock.me/about">
+                About
+            </a>
+            
+        
+            
+            
+            
+            
+            
+            <a class="a-block nav-link-item false" href="https://blog.idontwannarock.me/index.xml">
+                RSS Feed
+            </a>
+            
+        
+    </div>
+
+    
+
+    <div class="nav-footer">
+        
+Hugo Theme <a href="https://github.com/amazingrise/hugo-theme-diary">Diary</a> by <a href="https://risehere.net/">Rise</a>
+<br>
+Ported from <a href="https://mak1t0.cc/" target="_blank" rel="noreferrer noopener">Makito</a>'s <a href="https://github.com/SumiMakito/hexo-theme-journal/" target="_blank" rel="noreferrer noopener">Journal.</a> <br>
+<br>
+
+&copy;
+	
+	This website by Howard Wang is licensed under a Creative Common Attribution-ShareAlike 4.0 International License.
+	
+
+    </div>
+    
+</div><div id="extraContainer" class="extra-container">
+    <div class="toc-wrapper">
+        
+
+        
+        <div class="toc">
+
+
+	<div class="toc-content">
+	
+		
+		
+		
+		<center>- CATALOG -</center>
+		
+		
+		<ul>
+			
+				
+				
+					
+						
+						
+						
+						
+						
+							<li>
+								<a href="#%e6%83%85%e5%a2%83%e6%8f%8f%e8%bf%b0" class="nav-情境描述">
+									情境描述
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+						
+							<li>
+								<a href="#bug-%e7%8b%80%e6%b3%81" class="nav-bug-狀況">
+									Bug 狀況
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+						
+							<li>
+								<a href="#%e9%87%8d%e7%8f%be%e6%ad%a5%e9%a9%9f" class="nav-重現步驟">
+									重現步驟
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+						
+							<li>
+								<a href="#%e8%a7%a3%e6%b1%ba%e6%96%b9%e5%bc%8f" class="nav-解決方式">
+									解決方式
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+						
+							<li>
+								<a href="#reference" class="nav-reference">
+									Reference
+								</a>
+							</li>
+						
+						
+					
+				
+			
+		</ul>
+	</div>
+
+</div>
+        
+    </div>
+    <div class="pagination">
+        <a id="globalBackToTop" class="pagination-action animated-visibility" href="#top"
+            :class="{ invisible: scrollY == 0 }">
+            <i class="material-icons pagination-action-icon">
+                keyboard_arrow_up
+            </i>
+        </a>
+        
+        <a type="button" class="pagination-action" id="darkModeToggleButton">
+            <span class="material-icons pagination-action-icon" id="darkModeToggleIcon">
+                dark_mode
+            </span>
+        </a>
+        
+        
+    </div>
+</div><div id="single-column-footer">
+Hugo Theme <a href="https://github.com/amazingrise/hugo-theme-diary">Diary</a> by <a href="https://risehere.net/">Rise</a>
+<br>
+Ported from <a href="https://mak1t0.cc/" target="_blank" rel="noreferrer noopener">Makito</a>'s <a href="https://github.com/SumiMakito/hexo-theme-journal/" target="_blank" rel="noreferrer noopener">Journal.</a> <br>
+<br>
+
+&copy;
+	
+	This website by Howard Wang is licensed under a Creative Common Attribution-ShareAlike 4.0 International License.
+	
+</div>
+            </div>
+    
+    <script src="https://blog.idontwannarock.me/js/journal.js"></script></body>
+</html>

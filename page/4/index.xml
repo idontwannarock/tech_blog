@@ -7,9 +7,40 @@
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
     <copyright>This website by Howard Wang is licensed under a Creative Common Attribution-ShareAlike 4.0 International License.</copyright>
-    <lastBuildDate>Wed, 20 Sep 2023 09:37:21 +0800</lastBuildDate>
+    <lastBuildDate>Tue, 31 Oct 2023 11:59:03 +0800</lastBuildDate>
     
         <atom:link href="https://blog.idontwannarock.me/index.xml" rel="self" type="application/rss+xml" />
+    
+    
+    
+        <item>
+        <title>3rd Practice: Click Click Ben</title>
+        <link>https://blog.idontwannarock.me/2017/09/click_click_ben/</link>
+        <pubDate>Fri, 15 Sep 2017 10:11:46 +0800</pubDate>
+        
+        <guid>https://blog.idontwannarock.me/2017/09/click_click_ben/</guid>
+        <description>Howard Tech Note https://blog.idontwannarock.me/2017/09/click_click_ben/ -&lt;h1 id=&#34;第三個目標&#34;&gt;第三個目標&lt;/h1&gt;
+&lt;p&gt;練習 JavaScript 跟 &lt;code&gt;random()&lt;/code&gt; 函數。&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;作品：&lt;a href=&#34;https://goo.gl/sgAjR3&#34;&gt;Click Click Ben&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;參考：大帥哥 &lt;a href=&#34;https://www.facebook.com/ben.shieh.3&#34;&gt;Ben Hsieh&lt;/a&gt; ~&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h1 id=&#34;遇到困難&#34;&gt;遇到困難&lt;/h1&gt;
+&lt;h2 id=&#34;帥哥阿-ben-照片太難挑&#34;&gt;帥哥阿 Ben 照片太難挑&lt;/h2&gt;
+&lt;p&gt;這是我製作這個作品中碰到最大的困難！太多太帥了，我無法選擇！！我的媽！！！誰來救救我！！！！&lt;/p&gt;
+&lt;h2 id=&#34;照片亂數出現位置及亂數間隔時間&#34;&gt;照片亂數出現位置及亂數間隔時間&lt;/h2&gt;
+&lt;p&gt;其實這個問題我之前就有學過，所以這邊大概紀錄一下作法。&lt;/p&gt;
+&lt;p&gt;先用 JavaScript 的 &lt;code&gt;Math.random()&lt;/code&gt; 來亂數產生 0-1 的浮點數，然後為了適應各種大小的視窗，要乘上 &lt;code&gt;document.documentElement.clientHeight&lt;/code&gt; 或 &lt;code&gt;document.documentElement.clientWidth&lt;/code&gt; 來亂數產生要往右或往下多少 px 的數字。&lt;/p&gt;
+&lt;p&gt;然後用 &lt;code&gt;document.getElementById(&amp;quot;id&amp;quot;).style.top&lt;/code&gt; 或 &lt;code&gt;document.getElementById(&amp;quot;id&amp;quot;).style.left&lt;/code&gt; 來設定位置。&lt;/p&gt;
+&lt;p&gt;亂數間隔時間則用 &lt;code&gt;setTimeout()&lt;/code&gt; 來作，記得括號的兩個參數要用逗點分隔，第一個參數是暫停後要執行的程式，第二個是暫停的時間，單位是千分之一秒。&lt;/p&gt;
+&lt;h2 id=&#34;控制照片出現或消失&#34;&gt;控制照片出現或消失&lt;/h2&gt;
+&lt;p&gt;原本想都用 JavaScript 控制，但發現直接寫好所有 HTML+CSS 後，用 &lt;code&gt;display: block;&lt;/code&gt; 跟 &lt;code&gt;display: none;&lt;/code&gt; 來控制最方便。&lt;/p&gt;
+&lt;h2 id=&#34;控制次數&#34;&gt;控制次數&lt;/h2&gt;
+&lt;p&gt;這也沒什麼好說的，只是做個記錄。&lt;/p&gt;
+&lt;p&gt;最基礎的做法就是設一個變數，然後用 &lt;code&gt;if&lt;/code&gt; 判斷來控制次數。&lt;/p&gt;
+&lt;p&gt;控制次數感覺可以用 &lt;code&gt;for&lt;/code&gt; 或 &lt;code&gt;while&lt;/code&gt; loop 來寫，但中間要卡一個按的功能，不知道能不能行？&lt;/p&gt;
+- https://blog.idontwannarock.me/2017/09/click_click_ben/ - This website by Howard Wang is licensed under a Creative Common Attribution-ShareAlike 4.0 International License.</description>
+        </item>
     
     
     

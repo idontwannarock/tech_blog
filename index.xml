@@ -7,9 +7,58 @@
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
     <copyright>This website by Howard Wang is licensed under a Creative Common Attribution-ShareAlike 4.0 International License.</copyright>
-    <lastBuildDate>Wed, 20 Sep 2023 09:37:21 +0800</lastBuildDate>
+    <lastBuildDate>Tue, 31 Oct 2023 11:59:03 +0800</lastBuildDate>
     
         <atom:link href="https://blog.idontwannarock.me/index.xml" rel="self" type="application/rss+xml" />
+    
+    
+    
+        <item>
+        <title>MySQL 8.0 使用 UTC_TIMESTAMP() 當作 DATETIME 欄位預設值 bug</title>
+        <link>https://blog.idontwannarock.me/2023/10/mysql_8_utc_timestamp_as_datetime_default_bug/</link>
+        <pubDate>Tue, 31 Oct 2023 11:59:03 +0800</pubDate>
+        
+        <guid>https://blog.idontwannarock.me/2023/10/mysql_8_utc_timestamp_as_datetime_default_bug/</guid>
+        <description>Howard Tech Note https://blog.idontwannarock.me/2023/10/mysql_8_utc_timestamp_as_datetime_default_bug/ -&lt;h1 id=&#34;情境描述&#34;&gt;情境描述&lt;/h1&gt;
+&lt;p&gt;最近在處理 MySQL 的時候採到一個坑&lt;/p&gt;
+&lt;p&gt;我的使用情境是需要一個 create date 紀錄資料產生時的 UTC 時間精準到 millisecond&lt;/p&gt;
+&lt;p&gt;首先考慮到 MySQL 的 &lt;code&gt;TIMESTAMP&lt;/code&gt; 資料型態是採用 epoch second 加上額外的 fractional seconds 精準到 microseconds，也就是最多記錄到 &amp;lsquo;2038-01-19 03:14:07.999999&amp;rsquo; 就會 overflow，如果採用 &lt;code&gt;DATETIME(3)&lt;/code&gt; 可以記錄到 &amp;lsquo;9999-12-31 23:59:59.999&amp;rsquo;&lt;/p&gt;
+&lt;p&gt;接著因為欄位必填，所以考慮設定預設值，此時有幾種選擇，&lt;code&gt;NOW()&lt;/code&gt;、&lt;code&gt;CURRENT_TIMESTAMP&lt;/code&gt;、&lt;code&gt;UTC_TIMESTAMP&lt;/code&gt;，其中 &lt;code&gt;NOW()&lt;/code&gt; 與 &lt;code&gt;CURRENT_TIMESTAMP&lt;/code&gt; 都會依照 MySQL 系統時區產生時間，但是 &lt;code&gt;DATETIME&lt;/code&gt; 並不保存時區資訊，所以為了避免時區問題，所以選擇預設值設定為 &lt;code&gt;(UTC_TIMESTAMP(3))&lt;/code&gt;，剛好在 8.0.13 開始可以將 &lt;code&gt;DATETIME&lt;/code&gt; 資料型態的欄位預設值設為 function &lt;code&gt;(UTC_TIMESTAMP())&lt;/code&gt;&lt;/p&gt;
+&lt;p&gt;但是設定完後發生了很奇怪的問題，後續進行的 &lt;code&gt;ALTER TABLE&lt;/code&gt; DDL 操作都會失敗並拋出 &lt;code&gt;ERROR 1067: Invalid default value for &amp;lt;columnName&amp;gt;&lt;/code&gt; 錯誤，例如執行以下 sql&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;&#34;&gt;&lt;code class=&#34;language-sql&#34; data-lang=&#34;sql&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#ff79c6&#34;&gt;ALTER&lt;/span&gt; &lt;span style=&#34;color:#ff79c6&#34;&gt;TABLE&lt;/span&gt; tableName &lt;span style=&#34;color:#ff79c6&#34;&gt;ADD&lt;/span&gt; &lt;span style=&#34;color:#ff79c6&#34;&gt;COLUMN&lt;/span&gt; newColumnName &lt;span style=&#34;color:#8be9fd;font-style:italic&#34;&gt;BIGINT&lt;/span&gt; &lt;span style=&#34;color:#ff79c6&#34;&gt;NULL&lt;/span&gt;;
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;明明新增的是 &lt;code&gt;BIGINT&lt;/code&gt; 而且沒有預設值，卻拋出 &lt;code&gt;ERROR 1067: Invalid default value for createdDateColumn&lt;/code&gt; 的錯誤，簡直莫名其妙讓人丈二和尚摸不著頭腦&lt;/p&gt;
+&lt;h1 id=&#34;bug-狀況&#34;&gt;Bug 狀況&lt;/h1&gt;
+&lt;p&gt;經過確認是 MySQL 在 8.0.23 以前的 bug，在 8.0.24 之後已經修正，可以參考這張 &lt;a href=&#34;https://bugs.mysql.com/bug.php?id=101486&#34;&gt;bug report&lt;/a&gt; 的描述&lt;/p&gt;
+&lt;p&gt;簡單來說就是如果在 table 中有欄位的預設值不是 constant，例如我使用的 &lt;code&gt;(UTC_TIMESTAMP(3))&lt;/code&gt;，則後續的 &lt;code&gt;ALTER TABLE&lt;/code&gt; DDL 操作都會失敗並拋出 1067 錯誤&lt;/p&gt;
+&lt;h1 id=&#34;重現步驟&#34;&gt;重現步驟&lt;/h1&gt;
+&lt;p&gt;建議使用 docker 啟動一個 8.0.13-8.0.23 之間版本的 MySQL&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;&#34;&gt;&lt;code class=&#34;language-sh&#34; data-lang=&#34;sh&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;docker run --name some-mysql -e &lt;span style=&#34;color:#8be9fd;font-style:italic&#34;&gt;MYSQL_ROOT_PASSWORD&lt;/span&gt;&lt;span style=&#34;color:#ff79c6&#34;&gt;=&lt;/span&gt;my-secret-pw -d mysql:8.0.23
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;然後連上 MySQL&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;&#34;&gt;&lt;code class=&#34;language-sh&#34; data-lang=&#34;sh&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;docker &lt;span style=&#34;color:#8be9fd;font-style:italic&#34;&gt;exec&lt;/span&gt; -it some-mysql bash
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;mysql -uroot -p
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;建立 table&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;&#34;&gt;&lt;code class=&#34;language-sql&#34; data-lang=&#34;sql&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;use test;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#ff79c6&#34;&gt;create&lt;/span&gt; &lt;span style=&#34;color:#ff79c6&#34;&gt;table&lt;/span&gt; test_timestamp (id &lt;span style=&#34;color:#8be9fd;font-style:italic&#34;&gt;int&lt;/span&gt; &lt;span style=&#34;color:#ff79c6&#34;&gt;not&lt;/span&gt; &lt;span style=&#34;color:#ff79c6&#34;&gt;null&lt;/span&gt; auto_increment, created datetime &lt;span style=&#34;color:#ff79c6&#34;&gt;not&lt;/span&gt; &lt;span style=&#34;color:#ff79c6&#34;&gt;null&lt;/span&gt; &lt;span style=&#34;color:#ff79c6&#34;&gt;default&lt;/span&gt; (utc_timestamp()), &lt;span style=&#34;color:#ff79c6&#34;&gt;primary&lt;/span&gt; &lt;span style=&#34;color:#ff79c6&#34;&gt;key&lt;/span&gt; (id));
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;此時執行 &lt;code&gt;ALTER TABLE&lt;/code&gt; DDL&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;&#34;&gt;&lt;code class=&#34;language-sql&#34; data-lang=&#34;sql&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#ff79c6&#34;&gt;alter&lt;/span&gt; &lt;span style=&#34;color:#ff79c6&#34;&gt;table&lt;/span&gt; test_timestamp &lt;span style=&#34;color:#ff79c6&#34;&gt;add&lt;/span&gt; &lt;span style=&#34;color:#ff79c6&#34;&gt;column&lt;/span&gt; test &lt;span style=&#34;color:#8be9fd;font-style:italic&#34;&gt;varchar&lt;/span&gt;(&lt;span style=&#34;color:#bd93f9&#34;&gt;63&lt;/span&gt;) &lt;span style=&#34;color:#ff79c6&#34;&gt;null&lt;/span&gt;;
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;應該就會看到 &lt;code&gt;ERROR 1067: Invalid default value for created&lt;/code&gt; 的錯誤訊息&lt;/p&gt;
+&lt;h1 id=&#34;解決方式&#34;&gt;解決方式&lt;/h1&gt;
+&lt;p&gt;以我碰到的情況而言其實有兩種解決方式&lt;/p&gt;
+&lt;p&gt;第一種就是乖乖升級，bug 自解&lt;/p&gt;
+&lt;p&gt;第二種就是 bug report 裡面有人提出來的 workaround 方式&lt;/p&gt;
+&lt;p&gt;流程大致上就是把原本設定為 &lt;code&gt;UTC_TIMESTAMP()&lt;/code&gt; function 的欄位預設值改為 &lt;code&gt;CURRENT_TIMESTAMP()&lt;/code&gt; function，然後執行原本預定要執行的 &lt;code&gt;ALTER TABLE&lt;/code&gt; DDL，最後再把 &lt;code&gt;CURRENT_TIMESTAMP()&lt;/code&gt; 的欄位型態改回 &lt;code&gt;UTC_TIMESTAMP()&lt;/code&gt; function 即可&lt;/p&gt;
+&lt;p&gt;這兩個方式我都實測過可行，但各有需要考慮的狀況&lt;/p&gt;
+&lt;p&gt;第一種方式當然是怕升級過程有 downtime 或甚至其他升級失敗的狀況，這主要就考驗公司 SRE 之類單位的強度&lt;/p&gt;
+&lt;p&gt;第二種方式則是要自己考量在改成 &lt;code&gt;CURRENT_TIMESTAMP()&lt;/code&gt; 期間產生髒資料的處理，例如可能新增的一筆資料時區可能不是 UTC 的問題，如果時區是 UTC+X 的還好處理，如果是 UTC-X 的就會很麻煩，可能要預先做其他處理，例如可能要額外新增時區欄位&lt;/p&gt;
+&lt;h1 id=&#34;reference&#34;&gt;Reference&lt;/h1&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;a href=&#34;https://dev.mysql.com/doc/refman/8.0/en/datetime.html&#34;&gt;11.2.2 The DATE, DATETIME, and TIMESTAMP Types&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;https://dev.mysql.com/doc/relnotes/mysql/8.0/en/news-8-0-13.html#mysqld-8-0-13-data-types&#34;&gt;Changes in MySQL 8.0.13 (2018-10-22, General Availability)#Data Type Notes&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;https://bugs.mysql.com/bug.php?id=101486&#34;&gt;Error when UTC_TIMESTAMP set as default value&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;https://dev.mysql.com/doc/relnotes/mysql/8.0/en/news-8-0-24.html#mysqld-8-0-24-bug&#34;&gt;Changes in MySQL 8.0.24 (2021-04-20, General Availability)#Bug Fixed&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+- https://blog.idontwannarock.me/2023/10/mysql_8_utc_timestamp_as_datetime_default_bug/ - This website by Howard Wang is licensed under a Creative Common Attribution-ShareAlike 4.0 International License.</description>
+        </item>
     
     
     
@@ -41,8 +90,8 @@
 &lt;p&gt;但 JPA 預設並不能將 Java &lt;code&gt;enum&lt;/code&gt; 與 MySQL &lt;code&gt;int&lt;/code&gt; 做 mapping，所以會需要提供 converter 讓 JPA 知道怎麼做轉換&lt;/p&gt;
 &lt;p&gt;首先需要調整 &lt;code&gt;enum&lt;/code&gt; 如下&lt;/p&gt;
 &lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;&#34;&gt;&lt;code class=&#34;language-java&#34; data-lang=&#34;java&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#8be9fd;font-style:italic&#34;&gt;public&lt;/span&gt; &lt;span style=&#34;color:#8be9fd;font-style:italic&#34;&gt;enum&lt;/span&gt; ChatroomStatus &lt;span style=&#34;color:#ff79c6&#34;&gt;{&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    CLOSED&lt;span style=&#34;color:#ff79c6&#34;&gt;(&lt;/span&gt;0&lt;span style=&#34;color:#ff79c6&#34;&gt;),&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    ACTIVE&lt;span style=&#34;color:#ff79c6&#34;&gt;(&lt;/span&gt;1&lt;span style=&#34;color:#ff79c6&#34;&gt;);&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    CLOSED&lt;span style=&#34;color:#ff79c6&#34;&gt;(&lt;/span&gt;&lt;span style=&#34;color:#bd93f9&#34;&gt;0&lt;/span&gt;&lt;span style=&#34;color:#ff79c6&#34;&gt;),&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    ACTIVE&lt;span style=&#34;color:#ff79c6&#34;&gt;(&lt;/span&gt;&lt;span style=&#34;color:#bd93f9&#34;&gt;1&lt;/span&gt;&lt;span style=&#34;color:#ff79c6&#34;&gt;);&lt;/span&gt;
 &lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;  
 &lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    &lt;span style=&#34;color:#8be9fd;font-style:italic&#34;&gt;private&lt;/span&gt; &lt;span style=&#34;color:#8be9fd;font-style:italic&#34;&gt;final&lt;/span&gt; &lt;span style=&#34;color:#8be9fd&#34;&gt;int&lt;/span&gt; value&lt;span style=&#34;color:#ff79c6&#34;&gt;;&lt;/span&gt;
 &lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;  
@@ -123,8 +172,8 @@
 &lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#ff79c6&#34;&gt;}&lt;/span&gt;
 &lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;其中 &lt;code&gt;MessageType&lt;/code&gt; 如下&lt;/p&gt;
 &lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;&#34;&gt;&lt;code class=&#34;language-java&#34; data-lang=&#34;java&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#8be9fd;font-style:italic&#34;&gt;public&lt;/span&gt; &lt;span style=&#34;color:#8be9fd;font-style:italic&#34;&gt;enum&lt;/span&gt; MessageType &lt;span style=&#34;color:#ff79c6&#34;&gt;{&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    TEXT&lt;span style=&#34;color:#ff79c6&#34;&gt;(&lt;/span&gt;1&lt;span style=&#34;color:#ff79c6&#34;&gt;),&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    IMAGE&lt;span style=&#34;color:#ff79c6&#34;&gt;(&lt;/span&gt;2&lt;span style=&#34;color:#ff79c6&#34;&gt;),&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    TEXT&lt;span style=&#34;color:#ff79c6&#34;&gt;(&lt;/span&gt;&lt;span style=&#34;color:#bd93f9&#34;&gt;1&lt;/span&gt;&lt;span style=&#34;color:#ff79c6&#34;&gt;),&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    IMAGE&lt;span style=&#34;color:#ff79c6&#34;&gt;(&lt;/span&gt;&lt;span style=&#34;color:#bd93f9&#34;&gt;2&lt;/span&gt;&lt;span style=&#34;color:#ff79c6&#34;&gt;),&lt;/span&gt;
 &lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    &lt;span style=&#34;color:#ff79c6&#34;&gt;...&lt;/span&gt;
 &lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    
 &lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    &lt;span style=&#34;color:#8be9fd;font-style:italic&#34;&gt;private&lt;/span&gt; &lt;span style=&#34;color:#8be9fd;font-style:italic&#34;&gt;final&lt;/span&gt; &lt;span style=&#34;color:#8be9fd&#34;&gt;int&lt;/span&gt; value&lt;span style=&#34;color:#ff79c6&#34;&gt;;&lt;/span&gt;
@@ -1065,7 +1114,7 @@
 &lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;        schedulerFactoryBean&lt;span style=&#34;color:#ff79c6&#34;&gt;.&lt;/span&gt;&lt;span style=&#34;color:#50fa7b&#34;&gt;setTaskExecutor&lt;/span&gt;&lt;span style=&#34;color:#ff79c6&#34;&gt;(&lt;/span&gt;schedulerExecutor&lt;span style=&#34;color:#ff79c6&#34;&gt;);&lt;/span&gt;
 &lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;        schedulerFactoryBean&lt;span style=&#34;color:#ff79c6&#34;&gt;.&lt;/span&gt;&lt;span style=&#34;color:#50fa7b&#34;&gt;setJobFactory&lt;/span&gt;&lt;span style=&#34;color:#ff79c6&#34;&gt;(&lt;/span&gt;jobFactory&lt;span style=&#34;color:#ff79c6&#34;&gt;);&lt;/span&gt;
 &lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;        schedulerFactoryBean&lt;span style=&#34;color:#ff79c6&#34;&gt;.&lt;/span&gt;&lt;span style=&#34;color:#50fa7b&#34;&gt;setWaitForJobsToCompleteOnShutdown&lt;/span&gt;&lt;span style=&#34;color:#ff79c6&#34;&gt;(&lt;/span&gt;&lt;span style=&#34;color:#ff79c6&#34;&gt;true&lt;/span&gt;&lt;span style=&#34;color:#ff79c6&#34;&gt;);&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;        schedulerFactoryBean&lt;span style=&#34;color:#ff79c6&#34;&gt;.&lt;/span&gt;&lt;span style=&#34;color:#50fa7b&#34;&gt;setStartupDelay&lt;/span&gt;&lt;span style=&#34;color:#ff79c6&#34;&gt;(&lt;/span&gt;5&lt;span style=&#34;color:#ff79c6&#34;&gt;);&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;        schedulerFactoryBean&lt;span style=&#34;color:#ff79c6&#34;&gt;.&lt;/span&gt;&lt;span style=&#34;color:#50fa7b&#34;&gt;setStartupDelay&lt;/span&gt;&lt;span style=&#34;color:#ff79c6&#34;&gt;(&lt;/span&gt;&lt;span style=&#34;color:#bd93f9&#34;&gt;5&lt;/span&gt;&lt;span style=&#34;color:#ff79c6&#34;&gt;);&lt;/span&gt;
 &lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    &lt;span style=&#34;color:#ff79c6&#34;&gt;}&lt;/span&gt;
 &lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#ff79c6&#34;&gt;}&lt;/span&gt;
 &lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;其中因為要讓 Quartz 保存資料到 database，所以需要提供 &lt;code&gt;DataSource&lt;/code&gt;；然後如果想要控制 Quartz 運行使用的 thread pool，也可以提供自訂的 &lt;code&gt;Executor&lt;/code&gt;，預設 Quartz 會自己使用 &lt;code&gt;SimpleThreadPool&lt;/code&gt; 來操作&lt;/p&gt;
@@ -1265,7 +1314,7 @@
 &lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;                &lt;span style=&#34;color:#ff79c6&#34;&gt;.&lt;/span&gt;&lt;span style=&#34;color:#50fa7b&#34;&gt;forJob&lt;/span&gt;&lt;span style=&#34;color:#ff79c6&#34;&gt;(&lt;/span&gt;createNotificationSchedulerJobDetail&lt;span style=&#34;color:#ff79c6&#34;&gt;)&lt;/span&gt;
 &lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;                &lt;span style=&#34;color:#ff79c6&#34;&gt;.&lt;/span&gt;&lt;span style=&#34;color:#50fa7b&#34;&gt;withIdentity&lt;/span&gt;&lt;span style=&#34;color:#ff79c6&#34;&gt;(&lt;/span&gt;&lt;span style=&#34;color:#f1fa8c&#34;&gt;&amp;#34;create_notification_scheduler&amp;#34;&lt;/span&gt;&lt;span style=&#34;color:#ff79c6&#34;&gt;,&lt;/span&gt; &lt;span style=&#34;color:#f1fa8c&#34;&gt;&amp;#34;scheduler_creator&amp;#34;&lt;/span&gt;&lt;span style=&#34;color:#ff79c6&#34;&gt;)&lt;/span&gt;
 &lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;                &lt;span style=&#34;color:#ff79c6&#34;&gt;.&lt;/span&gt;&lt;span style=&#34;color:#50fa7b&#34;&gt;startNow&lt;/span&gt;&lt;span style=&#34;color:#ff79c6&#34;&gt;()&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;                &lt;span style=&#34;color:#ff79c6&#34;&gt;.&lt;/span&gt;&lt;span style=&#34;color:#50fa7b&#34;&gt;withSchedule&lt;/span&gt;&lt;span style=&#34;color:#ff79c6&#34;&gt;(&lt;/span&gt;SimpleScheduleBuilder&lt;span style=&#34;color:#ff79c6&#34;&gt;.&lt;/span&gt;&lt;span style=&#34;color:#50fa7b&#34;&gt;repeatSecondlyForever&lt;/span&gt;&lt;span style=&#34;color:#ff79c6&#34;&gt;(&lt;/span&gt;30&lt;span style=&#34;color:#ff79c6&#34;&gt;))&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;                &lt;span style=&#34;color:#ff79c6&#34;&gt;.&lt;/span&gt;&lt;span style=&#34;color:#50fa7b&#34;&gt;withSchedule&lt;/span&gt;&lt;span style=&#34;color:#ff79c6&#34;&gt;(&lt;/span&gt;SimpleScheduleBuilder&lt;span style=&#34;color:#ff79c6&#34;&gt;.&lt;/span&gt;&lt;span style=&#34;color:#50fa7b&#34;&gt;repeatSecondlyForever&lt;/span&gt;&lt;span style=&#34;color:#ff79c6&#34;&gt;(&lt;/span&gt;&lt;span style=&#34;color:#bd93f9&#34;&gt;30&lt;/span&gt;&lt;span style=&#34;color:#ff79c6&#34;&gt;))&lt;/span&gt;
 &lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;                &lt;span style=&#34;color:#ff79c6&#34;&gt;.&lt;/span&gt;&lt;span style=&#34;color:#50fa7b&#34;&gt;build&lt;/span&gt;&lt;span style=&#34;color:#ff79c6&#34;&gt;();&lt;/span&gt;
 &lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    &lt;span style=&#34;color:#ff79c6&#34;&gt;}&lt;/span&gt;
 &lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#ff79c6&#34;&gt;}&lt;/span&gt;
@@ -1422,12 +1471,12 @@
 &lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;	&lt;span style=&#34;color:#ff79c6&#34;&gt;return&lt;/span&gt; rec&lt;span style=&#34;color:#ff79c6&#34;&gt;.&lt;/span&gt;&lt;span style=&#34;color:#50fa7b&#34;&gt;getCheckinTimestamp&lt;/span&gt;&lt;span style=&#34;color:#ff79c6&#34;&gt;()&lt;/span&gt; &lt;span style=&#34;color:#ff79c6&#34;&gt;+&lt;/span&gt;
 &lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;		Math&lt;span style=&#34;color:#ff79c6&#34;&gt;.&lt;/span&gt;&lt;span style=&#34;color:#50fa7b&#34;&gt;max&lt;/span&gt;&lt;span style=&#34;color:#ff79c6&#34;&gt;(&lt;/span&gt;rec&lt;span style=&#34;color:#ff79c6&#34;&gt;.&lt;/span&gt;&lt;span style=&#34;color:#50fa7b&#34;&gt;getCheckinInterval&lt;/span&gt;&lt;span style=&#34;color:#ff79c6&#34;&gt;(),&lt;/span&gt; 
 &lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;			&lt;span style=&#34;color:#ff79c6&#34;&gt;(&lt;/span&gt;System&lt;span style=&#34;color:#ff79c6&#34;&gt;.&lt;/span&gt;&lt;span style=&#34;color:#50fa7b&#34;&gt;currentTimeMillis&lt;/span&gt;&lt;span style=&#34;color:#ff79c6&#34;&gt;()&lt;/span&gt; &lt;span style=&#34;color:#ff79c6&#34;&gt;-&lt;/span&gt; lastCheckin&lt;span style=&#34;color:#ff79c6&#34;&gt;))&lt;/span&gt; &lt;span style=&#34;color:#ff79c6&#34;&gt;+&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;		7500L&lt;span style=&#34;color:#ff79c6&#34;&gt;;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;		&lt;span style=&#34;color:#bd93f9&#34;&gt;7500L&lt;/span&gt;&lt;span style=&#34;color:#ff79c6&#34;&gt;;&lt;/span&gt;
 &lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#ff79c6&#34;&gt;}&lt;/span&gt;
 &lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;接著就會依照檢查到的 fail 節點列表去取得那些實例在處理的 &lt;code&gt;Trigger&lt;/code&gt;，並將那些 &lt;code&gt;Trigger&lt;/code&gt; 從 &lt;code&gt;QRTZ_FIRED_TRIGGERS&lt;/code&gt; 表中刪除，再從 &lt;code&gt;QRTZ_SCHEDULER_STATE&lt;/code&gt; 表中刪除那些 fail 的節點，即可達成 failover：&lt;/p&gt;
 &lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;&#34;&gt;&lt;code class=&#34;language-java&#34; data-lang=&#34;java&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#8be9fd;font-style:italic&#34;&gt;protected&lt;/span&gt; &lt;span style=&#34;color:#8be9fd&#34;&gt;void&lt;/span&gt; &lt;span style=&#34;color:#50fa7b&#34;&gt;clusterRecover&lt;/span&gt;&lt;span style=&#34;color:#ff79c6&#34;&gt;(&lt;/span&gt;Connection conn&lt;span style=&#34;color:#ff79c6&#34;&gt;,&lt;/span&gt; List&lt;span style=&#34;color:#ff79c6&#34;&gt;&amp;lt;&lt;/span&gt;SchedulerStateRecord&lt;span style=&#34;color:#ff79c6&#34;&gt;&amp;gt;&lt;/span&gt; failedInstances&lt;span style=&#34;color:#ff79c6&#34;&gt;)&lt;/span&gt; &lt;span style=&#34;color:#8be9fd;font-style:italic&#34;&gt;throws&lt;/span&gt; JobPersistenceException &lt;span style=&#34;color:#ff79c6&#34;&gt;{&lt;/span&gt;
 &lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;	&lt;span style=&#34;color:#ff79c6&#34;&gt;if&lt;/span&gt; &lt;span style=&#34;color:#ff79c6&#34;&gt;(&lt;/span&gt;failedInstances&lt;span style=&#34;color:#ff79c6&#34;&gt;.&lt;/span&gt;&lt;span style=&#34;color:#50fa7b&#34;&gt;size&lt;/span&gt;&lt;span style=&#34;color:#ff79c6&#34;&gt;()&lt;/span&gt; &lt;span style=&#34;color:#ff79c6&#34;&gt;&amp;gt;&lt;/span&gt; 0&lt;span style=&#34;color:#ff79c6&#34;&gt;)&lt;/span&gt; &lt;span style=&#34;color:#ff79c6&#34;&gt;{&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;	&lt;span style=&#34;color:#ff79c6&#34;&gt;if&lt;/span&gt; &lt;span style=&#34;color:#ff79c6&#34;&gt;(&lt;/span&gt;failedInstances&lt;span style=&#34;color:#ff79c6&#34;&gt;.&lt;/span&gt;&lt;span style=&#34;color:#50fa7b&#34;&gt;size&lt;/span&gt;&lt;span style=&#34;color:#ff79c6&#34;&gt;()&lt;/span&gt; &lt;span style=&#34;color:#ff79c6&#34;&gt;&amp;gt;&lt;/span&gt; &lt;span style=&#34;color:#bd93f9&#34;&gt;0&lt;/span&gt;&lt;span style=&#34;color:#ff79c6&#34;&gt;)&lt;/span&gt; &lt;span style=&#34;color:#ff79c6&#34;&gt;{&lt;/span&gt;
 &lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;		&lt;span style=&#34;color:#ff79c6&#34;&gt;...&lt;/span&gt;
 &lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;
 &lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;		&lt;span style=&#34;color:#6272a4&#34;&gt;// release acquired triggers..
@@ -1584,7 +1633,7 @@
 &lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;
 &lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;        &lt;span style=&#34;color:#ff79c6&#34;&gt;if&lt;/span&gt; &lt;span style=&#34;color:#ff79c6&#34;&gt;(&lt;/span&gt;parameterValues &lt;span style=&#34;color:#ff79c6&#34;&gt;==&lt;/span&gt; &lt;span style=&#34;color:#ff79c6&#34;&gt;null&lt;/span&gt;&lt;span style=&#34;color:#ff79c6&#34;&gt;)&lt;/span&gt; &lt;span style=&#34;color:#ff79c6&#34;&gt;return&lt;/span&gt; &lt;span style=&#34;color:#ff79c6&#34;&gt;null&lt;/span&gt;&lt;span style=&#34;color:#ff79c6&#34;&gt;;&lt;/span&gt;
 &lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;        &lt;span style=&#34;color:#ff79c6&#34;&gt;for&lt;/span&gt; &lt;span style=&#34;color:#ff79c6&#34;&gt;(&lt;/span&gt;&lt;span style=&#34;color:#8be9fd&#34;&gt;int&lt;/span&gt; index &lt;span style=&#34;color:#ff79c6&#34;&gt;=&lt;/span&gt; 0&lt;span style=&#34;color:#ff79c6&#34;&gt;;&lt;/span&gt; index &lt;span style=&#34;color:#ff79c6&#34;&gt;&amp;lt;&lt;/span&gt; parameterValues&lt;span style=&#34;color:#ff79c6&#34;&gt;.&lt;/span&gt;&lt;span style=&#34;color:#50fa7b&#34;&gt;length&lt;/span&gt;&lt;span style=&#34;color:#ff79c6&#34;&gt;;&lt;/span&gt; index&lt;span style=&#34;color:#ff79c6&#34;&gt;++)&lt;/span&gt; &lt;span style=&#34;color:#ff79c6&#34;&gt;{&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;        &lt;span style=&#34;color:#ff79c6&#34;&gt;for&lt;/span&gt; &lt;span style=&#34;color:#ff79c6&#34;&gt;(&lt;/span&gt;&lt;span style=&#34;color:#8be9fd&#34;&gt;int&lt;/span&gt; index &lt;span style=&#34;color:#ff79c6&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color:#bd93f9&#34;&gt;0&lt;/span&gt;&lt;span style=&#34;color:#ff79c6&#34;&gt;;&lt;/span&gt; index &lt;span style=&#34;color:#ff79c6&#34;&gt;&amp;lt;&lt;/span&gt; parameterValues&lt;span style=&#34;color:#ff79c6&#34;&gt;.&lt;/span&gt;&lt;span style=&#34;color:#50fa7b&#34;&gt;length&lt;/span&gt;&lt;span style=&#34;color:#ff79c6&#34;&gt;;&lt;/span&gt; index&lt;span style=&#34;color:#ff79c6&#34;&gt;++)&lt;/span&gt; &lt;span style=&#34;color:#ff79c6&#34;&gt;{&lt;/span&gt;
 &lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;            parameterValues&lt;span style=&#34;color:#ff79c6&#34;&gt;[&lt;/span&gt;index&lt;span style=&#34;color:#ff79c6&#34;&gt;]&lt;/span&gt; &lt;span style=&#34;color:#ff79c6&#34;&gt;=&lt;/span&gt; StringEscapeUtils&lt;span style=&#34;color:#ff79c6&#34;&gt;.&lt;/span&gt;&lt;span style=&#34;color:#50fa7b&#34;&gt;escapeHtml4&lt;/span&gt;&lt;span style=&#34;color:#ff79c6&#34;&gt;(&lt;/span&gt;parameterValues&lt;span style=&#34;color:#ff79c6&#34;&gt;[&lt;/span&gt;index&lt;span style=&#34;color:#ff79c6&#34;&gt;]);&lt;/span&gt;
 &lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;        &lt;span style=&#34;color:#ff79c6&#34;&gt;}&lt;/span&gt;
 &lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;
@@ -1746,7 +1795,7 @@
 &lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;接著也是要將這個客製的 converter 註冊起來，同樣在 &lt;code&gt;WebMvcConfigurer&lt;/code&gt; 的 &lt;code&gt;extendMessageConverters&lt;/code&gt; 方法裡面加上這兩行：&lt;/p&gt;
 &lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;&#34;&gt;&lt;code class=&#34;language-java&#34; data-lang=&#34;java&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#6272a4&#34;&gt;// replace with customized StringHttpMessageConverter
 &lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#6272a4&#34;&gt;&lt;/span&gt;converters&lt;span style=&#34;color:#ff79c6&#34;&gt;.&lt;/span&gt;&lt;span style=&#34;color:#50fa7b&#34;&gt;removeIf&lt;/span&gt;&lt;span style=&#34;color:#ff79c6&#34;&gt;(&lt;/span&gt;converter &lt;span style=&#34;color:#ff79c6&#34;&gt;-&amp;gt;&lt;/span&gt; converter&lt;span style=&#34;color:#ff79c6&#34;&gt;.&lt;/span&gt;&lt;span style=&#34;color:#50fa7b&#34;&gt;getClass&lt;/span&gt;&lt;span style=&#34;color:#ff79c6&#34;&gt;().&lt;/span&gt;&lt;span style=&#34;color:#50fa7b&#34;&gt;getSimpleName&lt;/span&gt;&lt;span style=&#34;color:#ff79c6&#34;&gt;().&lt;/span&gt;&lt;span style=&#34;color:#50fa7b&#34;&gt;equals&lt;/span&gt;&lt;span style=&#34;color:#ff79c6&#34;&gt;(&lt;/span&gt;&lt;span style=&#34;color:#f1fa8c&#34;&gt;&amp;#34;StringHttpMessageConverter&amp;#34;&lt;/span&gt;&lt;span style=&#34;color:#ff79c6&#34;&gt;));&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;converters&lt;span style=&#34;color:#ff79c6&#34;&gt;.&lt;/span&gt;&lt;span style=&#34;color:#50fa7b&#34;&gt;add&lt;/span&gt;&lt;span style=&#34;color:#ff79c6&#34;&gt;(&lt;/span&gt;1&lt;span style=&#34;color:#ff79c6&#34;&gt;,&lt;/span&gt; &lt;span style=&#34;color:#ff79c6&#34;&gt;new&lt;/span&gt; XssStringHttpMessageConverter&lt;span style=&#34;color:#ff79c6&#34;&gt;());&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;converters&lt;span style=&#34;color:#ff79c6&#34;&gt;.&lt;/span&gt;&lt;span style=&#34;color:#50fa7b&#34;&gt;add&lt;/span&gt;&lt;span style=&#34;color:#ff79c6&#34;&gt;(&lt;/span&gt;&lt;span style=&#34;color:#bd93f9&#34;&gt;1&lt;/span&gt;&lt;span style=&#34;color:#ff79c6&#34;&gt;,&lt;/span&gt; &lt;span style=&#34;color:#ff79c6&#34;&gt;new&lt;/span&gt; XssStringHttpMessageConverter&lt;span style=&#34;color:#ff79c6&#34;&gt;());&lt;/span&gt;
 &lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;注意 converters 是有順序的，Spring Boot Web 預設第一個 converter 是 &lt;code&gt;ByteArrayHttpMessageConverter&lt;/code&gt;，第二個就是原本的 &lt;code&gt;StringHttpMessageConverter&lt;/code&gt;，所以我們這邊直接用客製的 converter 取代原位置的 &lt;code&gt;StringHttpMessageConverter&lt;/code&gt;。&lt;/p&gt;
 &lt;h2 id=&#34;結論&#34;&gt;結論&lt;/h2&gt;
 &lt;p&gt;XSS 攻擊的手段有很多種，而且因為各網站需求不同的關係，也沒有一個統一的方式可以做絕對的防範，其核心的防範概念主要就圍繞在對於各種 Input 的檢查是否符合預期。&lt;/p&gt;
@@ -1759,76 +1808,6 @@
 &lt;li&gt;&lt;a href=&#34;https://www.baeldung.com/spring-httpmessageconverter-rest&#34;&gt;Http Message Converters with the Spring Framework&lt;/a&gt;&lt;/li&gt;
 &lt;/ul&gt;
 - https://blog.idontwannarock.me/2022/11/xss_prevention_spring_boot/ - This website by Howard Wang is licensed under a Creative Common Attribution-ShareAlike 4.0 International License.</description>
-        </item>
-    
-    
-    
-        <item>
-        <title>XSS 防範簡介</title>
-        <link>https://blog.idontwannarock.me/2022/11/xss_prevention_intro/</link>
-        <pubDate>Tue, 01 Nov 2022 14:00:26 +0800</pubDate>
-        
-        <guid>https://blog.idontwannarock.me/2022/11/xss_prevention_intro/</guid>
-        <description>Howard Tech Note https://blog.idontwannarock.me/2022/11/xss_prevention_intro/ -&lt;p&gt;XSS 系列：&lt;/p&gt;
-&lt;ol&gt;
-&lt;li&gt;XSS 防範簡介&lt;/li&gt;
-&lt;li&gt;&lt;a href=&#34;https://blog.idontwannarock.me/2022/11/xss_prevention_spring_boot/&#34;&gt;Spring Boot 後端實作 XSS 防範&lt;/a&gt;&lt;/li&gt;
-&lt;/ol&gt;
-&lt;p&gt;跨網站指令碼 Cross-site Scripting, XSS，是一種代碼注入的攻擊，讓攻擊者在網頁上注入代碼，而其他使用者在觀看網頁的時候就會受到影響。&lt;/p&gt;
-&lt;h2 id=&#34;攻擊模式&#34;&gt;攻擊模式&lt;/h2&gt;
-&lt;p&gt;以電商系統舉例，例如管理後台網頁表單的商品描述輸入欄位 Input 在沒有進行相對應防範的前提下，攻擊者可以藉由輸入 &lt;code&gt;&amp;lt;script&amp;gt;alert(document.cookie)&amp;lt;/script&amp;gt;&lt;/code&gt; 這段內容，並透過 API 保存到資料庫，如此一來下次其他使用者在瀏覽該商品的時候，也同樣從後端取得資料庫中的這段描述內容，並且顯示在網頁上，則使用者在載入網頁的時候，瀏覽器就可能會跳出彈窗並把使用者當下的 cookie 直接顯示出來。&lt;/p&gt;
-&lt;p&gt;當然實際的攻擊不會只有跳出彈窗並印出資料這麼簡單，可能是竊取 cookie 或任何 JavaScript 可以存取的敏感資料、側錄使用者行為，或跳轉惡意網址等等行為。&lt;/p&gt;
-&lt;p&gt;當然注入的代碼也不僅限於 JavaScript，也可以是 Java、VBScript 等，甚至是普通的 HTML。&lt;/p&gt;
-&lt;h2 id=&#34;跟-csrf-的區別&#34;&gt;跟 CSRF 的區別&lt;/h2&gt;
-&lt;p&gt;另一種常搞混的攻擊是跨站請求偽造 Cross-site Request Forgery, CSRF，是一種挾制使用者在當前已登入的 Web 應用程式上執行非本意的操作的攻擊方法。&lt;/p&gt;
-&lt;p&gt;例如使用者可能使用某網路銀行做轉帳，當使用者不小心存取到惡意的網址，就可能因為瀏覽器中之前登錄該網路銀行的登錄資訊尚未過期，所以被存取的網路銀行因為信任瀏覽器保存的登錄資訊，而認為是真正的使用者在進行操作而去執行某些動作。&lt;/p&gt;
-&lt;p&gt;跟 XSS 相比，XSS 利用的是「&lt;strong&gt;使用者對指定網站的信任&lt;/strong&gt;」，CSRF 利用的則是「&lt;strong&gt;網站對使用者網頁瀏覽器的信任&lt;/strong&gt;」。&lt;/p&gt;
-&lt;h2 id=&#34;防範措施&#34;&gt;防範措施&lt;/h2&gt;
-&lt;p&gt;&lt;a href=&#34;https://cheatsheetseries.owasp.org/cheatsheets/Cross_Site_Scripting_Prevention_Cheat_Sheet.html&#34;&gt;OWASP 網站&lt;/a&gt; 有提出一些基本的防範措施，但要能真正達到成效，是需要多種手段結合、前後端合作才能達到。並且攻擊手段常常是並用，所以採取防範措施的時候，也要考慮並防範其他種攻擊手段。&lt;/p&gt;
-&lt;h3 id=&#34;output-encoding&#34;&gt;Output Encoding&lt;/h3&gt;
-&lt;p&gt;這部分首先會需要了解使用的 Web Framework 的安全措施跟限制在哪。&lt;/p&gt;
-&lt;p&gt;例如 React 預設會對 render 內容進行跳脫處理 (escape)，將所有的資料都視為文字字串，等同使用原生的 &lt;code&gt;textContent&lt;/code&gt;；但有些時候我們就是需要 React 將內容也 render 成 HTML，因此需要使用 &lt;code&gt;dangerouslySetInnerHTML&lt;/code&gt; 來做 render，那可能就沒辦法依靠框架預設的方式去阻止 XSS，而是要使用其他手段來做處理。&lt;/p&gt;
-&lt;p&gt;而 React 這種預設對 render 內容作跳脫處理就是一種 Output Encoding 的手法。而跳脫處理並不僅是針對 HTML 內容，也會需要對 HTML 屬性 (Attribute)、JavaScript、CSS、URL 或其他惠可能會造成危險的部分進行處理。&lt;/p&gt;
-&lt;p&gt;這種手法可能前後端都可以做、也都需要做，但也同樣需要前後端互相的配合，以免處理之後，反而網頁的顯示不如預期。&lt;/p&gt;
-&lt;h3 id=&#34;html-sanitization&#34;&gt;HTML Sanitization&lt;/h3&gt;
-&lt;p&gt;在前一段我們有說到一種情況，就是需要將某些內容 render 成 HTML 來做顯示，例如可能網頁有提供簡單的編輯功能，而編輯的內容可能不只是純文字，例如可能會要標記某段文字粗體，或甚至插入圖片等等；因此需要利用 tag 來標註某些特性，而且之後也需要將 tag 正確 render 成 HTML 以做顯示。&lt;/p&gt;
-&lt;p&gt;在這種情況下如果採用 encoding 的方式，則很可能造成畫面顯示不如預期，但如果如實保存內容，又可能會產生 XSS 漏洞。&lt;/p&gt;
-&lt;p&gt;此時可以採取另一種方式叫做 HTML Sanitization，也就是對可疑的內容進行移除，只留下安全的內容，這部分通常有黑名單跟白名單兩種做法。&lt;/p&gt;
-&lt;p&gt;黑名單就是過濾某些不允許的元素或性質，例如只是靜態文字圖片顯示，所以不允許內容包含 &lt;code&gt;&amp;lt;script&amp;gt;&lt;/code&gt; 標籤；白名單相對就是只留下某些允許的元素或內容，例如雖然允許 &lt;code&gt;&amp;lt;img&amp;gt;&lt;/code&gt; 標籤做圖片插入，但 &lt;code&gt;&amp;lt;img&amp;gt;&lt;/code&gt; 標籤的屬性只允許 href 等等，並且此時也要結合 Output Encoding 方法對 href 內容作跳脫處理等等。&lt;/p&gt;
-&lt;p&gt;但因為大家需求不同的因素，不論是白名單還是黑名單都會需要依照需求確認來做調整，以避免不該擋的擋掉，該擋的卻沒擋掉，反而造成 XSS 漏洞或跟需求不符。&lt;/p&gt;
-&lt;h3 id=&#34;content-security-policy-header&#34;&gt;Content-Security-Policy Header&lt;/h3&gt;
-&lt;p&gt;以上都是我們寫代碼的實作面去做防範，但其實各家主流瀏覽器也都有通用的標準來協助我們阻擋 XSS 攻擊。但須要注意的是，這些瀏覽器的功能都可能可以被關閉 (例如用 Tampermonkey)，所以只是防君子不防小人，不可以僅依賴瀏覽器的防範功能。&lt;/p&gt;
-&lt;p&gt;比較早期的就是在 Header 中加入 &lt;code&gt;x-xss-protection&lt;/code&gt; 來指定瀏覽器針對 XSS 內容如何做 filtering，但比較近代的瀏覽器已經不太支援此 Header；當前主流瀏覽器普遍支援的是 &lt;code&gt;Content-Security-Policy&lt;/code&gt; 這個 Header。&lt;/p&gt;
-&lt;p&gt;&lt;code&gt;Content-Security-Policy&lt;/code&gt; 這個 Header 主要是用來控制各種資源 (包含對外部的請求跟內部 inline script 或 css) 的載入，這個資源可以包括 css, js, img, video, iframe等等。&lt;/p&gt;
-&lt;p&gt;例如 &lt;code&gt;Content-Security-Policy: script-src &#39;self&#39;&lt;/code&gt; 表示在此頁面可以載入的合法 JavaScript 或 WebAssembly 來源只有 self，也就是同個來源 (schema + domain + port) 的 script 才可以載入及執行。&lt;/p&gt;
-&lt;p&gt;詳細設定細節可以參考 &lt;a href=&#34;https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Content-Security-Policy&#34;&gt;MDN Content-Security-Policy&lt;/a&gt; 的說明，或乾脆參考例如 Facebook 等網站是怎麼配置。&lt;/p&gt;
-&lt;p&gt;因為 &lt;code&gt;Content-Security-Policy&lt;/code&gt; Header 是放在 response header 當中以告訴瀏覽器要如何控制資源載入，所以一般是由伺服器端加上；如果是 server side render 的網站沒有問題，就是在例如 php、jsp 或 cshtml 這種頁面上的 &lt;code&gt;&amp;lt;head&amp;gt;&lt;/code&gt; 裡面加上例如 &lt;code&gt;&amp;lt;meta http-equiv=&amp;quot;Content-Security-Policy&amp;quot; content=&amp;quot;default-src &#39;self&#39;; img-src *&amp;quot;&amp;gt;&lt;/code&gt;；但如果是前後端分離，則是在前端 web server serving 的 html 等檔案上加入，或由 web server 設定在 response header 中加入。&lt;/p&gt;
-&lt;h4 id=&#34;restful-api-with-content-security-policy-header&#34;&gt;RESTful API with Content-Security-Policy Header&lt;/h4&gt;
-&lt;p&gt;這邊額外研究一下如果是 RESTful API 還有需要加上 &lt;code&gt;Content-Security-Policy&lt;/code&gt; header 嗎？&lt;/p&gt;
-&lt;blockquote&gt;
-&lt;p&gt;這邊特別指定討論 RESTful API，其實是想表達後端 API 僅提供資料與前端溝通，而不負責提供待 render 的 HTML、CSS、JavaScript 等資源的情況，所以其他相同功能但並不特別遵守 REST 的 API 其實也適用此處的情況。&lt;/p&gt;
-&lt;/blockquote&gt;
-&lt;p&gt;通常這種情況多發生在前後端分離架構，前端透過 Ajax 呼叫後端 RESTful API 來取得資料進行畫面 render 的場景下，CSP 一般會直接配置在頁面 &lt;code&gt;&amp;lt;head&amp;gt;&lt;/code&gt; 中。所以原則上不需要後端回傳的 response 來提供 CSP 限制。&lt;/p&gt;
-&lt;p&gt;但若是硬要在後端 RESTful API 的 response header 中加入 CSP 會對前端造成什麼影響嗎？&lt;/p&gt;
-&lt;p&gt;我們可以從 W3C 提供的 CSP 文件中 &lt;a href=&#34;https://www.w3.org/TR/CSP2/#which-policy-applies&#34;&gt;3.5 Policy applicability&lt;/a&gt; 這段可以看到：&lt;/p&gt;
-&lt;blockquote&gt;
-&lt;p&gt;&amp;hellip;If a resource does not create a new execution context (for example, when including a script, image, or stylesheet into a document), then any policies delivered with that resource are discarded without effect. Its execution is subject to the policy or policies of the including context&amp;hellip;&lt;/p&gt;
-&lt;/blockquote&gt;
-&lt;p&gt;CSP 是否 apply 的關鍵是回傳的資源是否會產生新的執行上下文 (execution context)，這樣講很抽象，但可以參考 W3C 文件 &lt;a href=&#34;https://www.w3.org/TR/CSP2/#which-policy-applies&#34;&gt;3.5 Policy applicability&lt;/a&gt; 列出的表格來參照哪些資源回傳後 CSP 是否會 apply。&lt;/p&gt;
-&lt;p&gt;但同時也要注意，W3C 文件中同時也有指出其列出的 applicability 並非規範標準，所以實際各家瀏覽器如何實作可能並不一定相同。&lt;/p&gt;
-&lt;blockquote&gt;
-&lt;p&gt;&lt;em&gt;This section is not normative.&lt;/em&gt;&lt;/p&gt;
-&lt;/blockquote&gt;
-&lt;h2 id=&#34;參考&#34;&gt;參考&lt;/h2&gt;
-&lt;ul&gt;
-&lt;li&gt;&lt;a href=&#34;https://en.wikipedia.org/wiki/Cross-site_scripting&#34;&gt;Cross-site scripting&lt;/a&gt;&lt;/li&gt;
-&lt;li&gt;&lt;a href=&#34;https://en.wikipedia.org/wiki/Cross-site_request_forgery&#34;&gt;Cross-site request forgery&lt;/a&gt;&lt;/li&gt;
-&lt;li&gt;&lt;a href=&#34;https://cheatsheetseries.owasp.org/cheatsheets/Cross_Site_Scripting_Prevention_Cheat_Sheet.html&#34;&gt;OWASP XSS Prevention Cheat Sheet&lt;/a&gt;&lt;/li&gt;
-&lt;li&gt;&lt;a href=&#34;https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/X-XSS-Protection&#34;&gt;MDN X-XSS-Protection&lt;/a&gt;&lt;/li&gt;
-&lt;li&gt;&lt;a href=&#34;https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Content-Security-Policy&#34;&gt;MDN Content-Security-Policy&lt;/a&gt;&lt;/li&gt;
-&lt;li&gt;&lt;a href=&#34;https://www.w3.org/TR/CSP2/&#34;&gt;W3C Content Security Policy Level 2&lt;/a&gt;&lt;/li&gt;
-&lt;/ul&gt;
-- https://blog.idontwannarock.me/2022/11/xss_prevention_intro/ - This website by Howard Wang is licensed under a Creative Common Attribution-ShareAlike 4.0 International License.</description>
         </item>
     
     
