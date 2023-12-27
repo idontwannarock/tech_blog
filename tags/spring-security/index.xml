@@ -7,54 +7,28 @@
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
     <copyright>This website by Howard Wang is licensed under a Creative Common Attribution-ShareAlike 4.0 International License.</copyright>
-    <lastBuildDate>Tue, 01 Nov 2022 15:28:32 +0800</lastBuildDate><atom:link href="https://blog.idontwannarock.me/tags/spring-security/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Tue, 01 Nov 2022 15:28:32 +0800</lastBuildDate>
+    <atom:link href="https://blog.idontwannarock.me/tags/spring-security/index.xml" rel="self" type="application/rss+xml" />
     <item>
       <title>Spring Boot 後端實作 XSS 防範</title>
       <link>https://blog.idontwannarock.me/2022/11/xss_prevention_spring_boot/</link>
       <pubDate>Tue, 01 Nov 2022 15:28:32 +0800</pubDate>
-      
       <guid>https://blog.idontwannarock.me/2022/11/xss_prevention_spring_boot/</guid>
-      <description>XSS 系列：
-XSS 防範簡介 Spring Boot 後端實作 XSS 防範 身為一個 Java 後端工程師，今天要來討論如何在 Spring Boot 的後端專案進行 general 的 XSS 防範。
-請還是注意，general 的手段並不能很良好的防範 XSS 攻擊，而只是提供一個基本程度的防範。
-CSP Header 如果專案有整合 Spring Security，Spring Security 原生就已經預設在 response header 中加入 X-XSS-Protection: 1; mode=block，但因為 CSP 需要自行設定資源允許的來源，所以 Spring Security 並沒有預設，需要在 SecurityFilterChain 當中設定，舉例如下：
-@Bean SecurityFilterChain filterChain(HttpSecurity httpSecurity) throws Exception { httpSecurity.headers().contentSecurityPolicy(&amp;#34;script-src &amp;#39;self&amp;#39;&amp;#34;); ... } 如此就會在 response header 中加入 Content-Security-Policy: script-src &#39;self&#39;。
-Output Encoding 再來，後端也可以對接收到或回傳的資料做 escape，例如採取將內容都做 escape，將符號都轉換成 HTML Entities 的方式。
-首先可以加入 Apache Commons Text dependency，有現成的方法可以處理文字中符號轉換的部分：</description>
+      <description>XSS 系列：&#xA;XSS 防範簡介 Spring Boot 後端實作 XSS 防範 身為一個 Java 後端工程師，今天要來討論如何在 Spring Boot 的後端專案進行 general 的 XSS 防範。&#xA;請還是注意，general 的手段並不能很良好的防範 XSS 攻擊，而只是提供一個基本程度的防範。&#xA;CSP Header 如果專案有整合 Spring Security，Spring Security 原生就已經預設在 response header 中加入 X-XSS-Protection: 1; mode=block，但因為 CSP 需要自行設定資源允許的來源，所以 Spring Security 並沒有預設，需要在 SecurityFilterChain 當中設定，舉例如下：&#xA;@Bean SecurityFilterChain filterChain(HttpSecurity httpSecurity) throws Exception { httpSecurity.headers().contentSecurityPolicy(&amp;#34;script-src &amp;#39;self&amp;#39;&amp;#34;); ... } 如此就會在 response header 中加入 Content-Security-Policy: script-src &#39;self&#39;。&#xA;Output Encoding 再來，後端也可以對接收到或回傳的資料做 escape，例如採取將內容都做 escape，將符號都轉換成 HTML Entities 的方式。&#xA;首先可以加入 Apache Commons Text dependency，有現成的方法可以處理文字中符號轉換的部分：</description>
     </item>
-    
     <item>
       <title>Spring Boot 實作 API 版本控制</title>
       <link>https://blog.idontwannarock.me/2019/09/spring_api_version_with_swagger_security/</link>
       <pubDate>Thu, 19 Sep 2019 15:53:36 +0800</pubDate>
-      
       <guid>https://blog.idontwannarock.me/2019/09/spring_api_version_with_swagger_security/</guid>
-      <description>本文目的是為了探討在 Spring Boot Web 專案中，實作 API 版本控制，並兼容 Swagger 及 Spring Security 的解決方式
-需要有 Spring Boot、Spring MVC、Spring Security 及 Swagger 的基礎概念會比較好理解
-API 版本控制 常見的 API 版本控制方式有三種: URI, header, content-type
-考量到 RESTful API 其中的一個好處是方便快取，使用 header 跟 content-type 的方式則可能無法正確的快取以及達成 idempotent，所以我個人採用的是在 URI 中加入版本號的方式
-再來因為有時候面對的專案有數量眾多的 handler，導致每次修改版本號都要手動修改每一支 handler 對應的 uri，這樣既麻煩又不潮，所以一定要研究一下怎麼在 Spring Boot 專案中利用註解的方式自動幫 handler 對應的 uri 自動插入版本號
-Tech Stack 專案採用的是 Spring Boot 2.0 架構，Java 1.8 版本
-有關 Maven 依賴如下:
-org.springframework.boot:spring-boot-starter-web:2.1.x org.springframework.boot:spring-boot-starter-security:2.1.x io.springfox:springfox-swagger2:2.9.2 io.springfox:springfox-swagger-ui:2.9.2 這邊強調要採用 Spring Boot 主要是因為想要利用 Spring Boot auto configuration 的功能，也因為想要利用這個功能，所以過程才會這麼曲折&amp;hellip;</description>
+      <description>本文目的是為了探討在 Spring Boot Web 專案中，實作 API 版本控制，並兼容 Swagger 及 Spring Security 的解決方式&#xA;需要有 Spring Boot、Spring MVC、Spring Security 及 Swagger 的基礎概念會比較好理解&#xA;API 版本控制 常見的 API 版本控制方式有三種: URI, header, content-type&#xA;考量到 RESTful API 其中的一個好處是方便快取，使用 header 跟 content-type 的方式則可能無法正確的快取以及達成 idempotent，所以我個人採用的是在 URI 中加入版本號的方式&#xA;再來因為有時候面對的專案有數量眾多的 handler，導致每次修改版本號都要手動修改每一支 handler 對應的 uri，這樣既麻煩又不潮，所以一定要研究一下怎麼在 Spring Boot 專案中利用註解的方式自動幫 handler 對應的 uri 自動插入版本號&#xA;Tech Stack 專案採用的是 Spring Boot 2.0 架構，Java 1.8 版本&#xA;有關 Maven 依賴如下:&#xA;org.springframework.boot:spring-boot-starter-web:2.1.x org.springframework.boot:spring-boot-starter-security:2.1.x io.springfox:springfox-swagger2:2.9.2 io.springfox:springfox-swagger-ui:2.9.2 這邊強調要採用 Spring Boot 主要是因為想要利用 Spring Boot auto configuration 的功能，也因為想要利用這個功能，所以過程才會這麼曲折&amp;hellip;</description>
     </item>
-    
     <item>
       <title>Spring Security 整合 RBAC</title>
       <link>https://blog.idontwannarock.me/2019/05/spring_security_rbac/</link>
       <pubDate>Thu, 30 May 2019 15:33:07 +0800</pubDate>
-      
       <guid>https://blog.idontwannarock.me/2019/05/spring_security_rbac/</guid>
-      <description>目前比較主流的 Role-based Access Control, RBAC 算是比較成熟且彈性的權限架構，若要在 Spring Security 實作 RBAC 並搭配 JWT 或 OAuth 2.0，大概要探討兩個問題
-是否值得為了減少查詢資料源的次數，而將角色或權限直接置入 JWT 或 Authorization Server 回傳的 token 是否採取 Spring Security 原生只使用最細粒度的權限來進行存取控制 關於第一個問題，目前的思考點大概就是考量系統的併發度跟使用者總數
-如果需要高併發，那自然希望盡量減少查詢資料的次數或資料量，盡量避免同時大量消耗 DB 資源；相反的，如果不需要高併發，那每次驗證都重新取得角色及權限資料也沒關係
-使用者數量的考量也是類似，如果每次查詢的成本太高，則盡量減少查詢的次數
-而第二個問題，則是要考量實際的業務場景
-如果角色跟權限很大量且複雜，或可能要考慮角色分層甚至使用者群組，或不同 Domain 有不同的權限邏輯，則可能用 Spring Security 原生方式會不敷使用，相對如果角色權限結構簡單，則直接使用原生方式可能成本較低
-所以以下探討主要專注於使用 Spring Security 提供的自訂空間來實作較為複雜的存取控制
-Spring Security 權限架構 首先要探討 Spring Security 原生提供的權限架構
-GrantedAuthority: 可以將每個 GrantedAuthority 想成是個別的 privilege，所以在 Spring Security 中，authority 就是 privilege 的概念 Role: 在 Spring Security 中為了保持彈性，Role 可以當作 Authority 也可以當作一組 Authority 的組合 Role as Authority: 直接把 Role 當成一種 Authority 的情況，就是將 Role 當作一個有 ROLE_ 前綴的字串，這種情況下 Role 跟 Authority 就只是語意上的差別 Role as Container: Role 可以包含一組 Authority，Spring Security 在這個概念上沒有提供太多指引說明，需要自行實作 Granted Authority Versus Role in Spring Security</description>
+      <description>目前比較主流的 Role-based Access Control, RBAC 算是比較成熟且彈性的權限架構，若要在 Spring Security 實作 RBAC 並搭配 JWT 或 OAuth 2.0，大概要探討兩個問題&#xA;是否值得為了減少查詢資料源的次數，而將角色或權限直接置入 JWT 或 Authorization Server 回傳的 token 是否採取 Spring Security 原生只使用最細粒度的權限來進行存取控制 關於第一個問題，目前的思考點大概就是考量系統的併發度跟使用者總數&#xA;如果需要高併發，那自然希望盡量減少查詢資料的次數或資料量，盡量避免同時大量消耗 DB 資源；相反的，如果不需要高併發，那每次驗證都重新取得角色及權限資料也沒關係&#xA;使用者數量的考量也是類似，如果每次查詢的成本太高，則盡量減少查詢的次數&#xA;而第二個問題，則是要考量實際的業務場景&#xA;如果角色跟權限很大量且複雜，或可能要考慮角色分層甚至使用者群組，或不同 Domain 有不同的權限邏輯，則可能用 Spring Security 原生方式會不敷使用，相對如果角色權限結構簡單，則直接使用原生方式可能成本較低&#xA;所以以下探討主要專注於使用 Spring Security 提供的自訂空間來實作較為複雜的存取控制&#xA;Spring Security 權限架構 首先要探討 Spring Security 原生提供的權限架構&#xA;GrantedAuthority: 可以將每個 GrantedAuthority 想成是個別的 privilege，所以在 Spring Security 中，authority 就是 privilege 的概念 Role: 在 Spring Security 中為了保持彈性，Role 可以當作 Authority 也可以當作一組 Authority 的組合 Role as Authority: 直接把 Role 當成一種 Authority 的情況，就是將 Role 當作一個有 ROLE_ 前綴的字串，這種情況下 Role 跟 Authority 就只是語意上的差別 Role as Container: Role 可以包含一組 Authority，Spring Security 在這個概念上沒有提供太多指引說明，需要自行實作 Granted Authority Versus Role in Spring Security</description>
     </item>
-    
   </channel>
 </rss>

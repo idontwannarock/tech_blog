@@ -7,50 +7,35 @@
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
     <copyright>This website by Howard Wang is licensed under a Creative Common Attribution-ShareAlike 4.0 International License.</copyright>
-    <lastBuildDate>Tue, 31 Oct 2023 11:59:03 +0800</lastBuildDate><atom:link href="https://blog.idontwannarock.me/tags/mysql/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Wed, 27 Dec 2023 09:26:23 +0800</lastBuildDate>
+    <atom:link href="https://blog.idontwannarock.me/tags/mysql/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Java Time 保存到 MySQL DATETIME 時區問題</title>
+      <link>https://blog.idontwannarock.me/2023/12/java_time_mapping_mysql_datetime_timezone/</link>
+      <pubDate>Wed, 27 Dec 2023 09:26:23 +0800</pubDate>
+      <guid>https://blog.idontwannarock.me/2023/12/java_time_mapping_mysql_datetime_timezone/</guid>
+      <description>最近開發遇到一個對我的系統需求來說很合適，但我感覺不合理的狀況&#xA;目前有 Spring Boot 系統在 JPA 是用 OffsetDateTime 在 Entity 中對應 MySQL 表中的 DATETIME 欄位，JVM 時區以及 MySQL 的系統時區都是 +8，沒有特別在任何地方進行時區設定，也就是所有地方應該都是預設設定&#xA;然而當 OffsetDateTime 保存到 DATETIME 當中時，卻會被自動轉換成 UTC 時區的時間保存，並且之後再用 JPA 重新取出後，OffsetDateTime 也依然是 UTC 時區&#xA;這就讓人感覺很奇怪了，感覺要馬就應該是 MySQL DATETIME 保存時用 JVM 跟 MySQL 相同的系統 +8 時區時間保存，取出也是 +8 時間；要馬就是保存時會轉成 UTC，但取出應該會自動轉換回 JVM 的 +8 才合理，畢竟 DATETIME 欄位資料格式不保存時區資訊，所以要馬就是完全不轉換，要馬就是會依照某種機制保存時用 UTC，但使用時會自動轉換成 JVM 時區之類的模式才對&#xA;雖然我原本就希望在系統中盡量都使用 UTC 時區而不要隨著 MySQL/JVM 時區變動以避免造成資料錯誤的問題，但機制不如預期就應該要弄清楚，免得其實是有什麼未知的狀況造成日後踩到坑&#xA;Pre-requisite 首先要先說明這篇文章的研究都是基於下列版本，不同的版本「可能」會有不同的行為，請查詢官網文件或自行測試&#xA;Spring Boot Data JPA 3.1.4 Hibernate 6.2.9.Final MySQL JDBC Driver 8.</description>
+    </item>
     <item>
       <title>MySQL 8.0 使用 UTC_TIMESTAMP() 當作 DATETIME 欄位預設值 bug</title>
       <link>https://blog.idontwannarock.me/2023/10/mysql_8_utc_timestamp_as_datetime_default_bug/</link>
       <pubDate>Tue, 31 Oct 2023 11:59:03 +0800</pubDate>
-      
       <guid>https://blog.idontwannarock.me/2023/10/mysql_8_utc_timestamp_as_datetime_default_bug/</guid>
-      <description>情境描述 最近在處理 MySQL 的時候採到一個坑
-我的使用情境是需要一個 create date 紀錄資料產生時的 UTC 時間精準到 millisecond
-首先考慮到 MySQL 的 TIMESTAMP 資料型態是採用 epoch second 加上額外的 fractional seconds 精準到 microseconds，也就是最多記錄到 &amp;lsquo;2038-01-19 03:14:07.999999&amp;rsquo; 就會 overflow，如果採用 DATETIME(3) 可以記錄到 &amp;lsquo;9999-12-31 23:59:59.999&amp;rsquo;
-接著因為欄位必填，所以考慮設定預設值，此時有幾種選擇，NOW()、CURRENT_TIMESTAMP、UTC_TIMESTAMP，其中 NOW() 與 CURRENT_TIMESTAMP 都會依照 MySQL 系統時區產生時間，但是 DATETIME 並不保存時區資訊，所以為了避免時區問題，所以選擇預設值設定為 (UTC_TIMESTAMP(3))，剛好在 8.0.13 開始可以將 DATETIME 資料型態的欄位預設值設為 function (UTC_TIMESTAMP())
-但是設定完後發生了很奇怪的問題，後續進行的 ALTER TABLE DDL 操作都會失敗並拋出 ERROR 1067: Invalid default value for &amp;lt;columnName&amp;gt; 錯誤，例如執行以下 sql
-ALTER TABLE tableName ADD COLUMN newColumnName BIGINT NULL; 明明新增的是 BIGINT 而且沒有預設值，卻拋出 ERROR 1067: Invalid default value for createdDateColumn 的錯誤，簡直莫名其妙讓人丈二和尚摸不著頭腦</description>
+      <description>情境描述 最近在處理 MySQL 的時候採到一個坑&#xA;我的使用情境是需要一個 create date 紀錄資料產生時的 UTC 時間精準到 millisecond&#xA;首先考慮到 MySQL 的 TIMESTAMP 資料型態是採用 epoch second 加上額外的 fractional seconds 精準到 microseconds，也就是最多記錄到 &amp;lsquo;2038-01-19 03:14:07.999999&amp;rsquo; 就會 overflow，如果採用 DATETIME(3) 可以記錄到 &amp;lsquo;9999-12-31 23:59:59.999&amp;rsquo;&#xA;接著因為欄位必填，所以考慮設定預設值，此時有幾種選擇，NOW()、CURRENT_TIMESTAMP、UTC_TIMESTAMP，其中 NOW() 與 CURRENT_TIMESTAMP 都會依照 MySQL 系統時區產生時間，但是 DATETIME 並不保存時區資訊，所以為了避免時區問題，所以選擇預設值設定為 (UTC_TIMESTAMP(3))，剛好在 8.0.13 開始可以將 DATETIME 資料型態的欄位預設值設為 function (UTC_TIMESTAMP())&#xA;但是設定完後發生了很奇怪的問題，後續進行的 ALTER TABLE DDL 操作都會失敗並拋出 ERROR 1067: Invalid default value for &amp;lt;columnName&amp;gt; 錯誤，例如執行以下 sql&#xA;ALTER TABLE tableName ADD COLUMN newColumnName BIGINT NULL; 明明新增的是 BIGINT 而且沒有預設值，卻拋出 ERROR 1067: Invalid default value for createdDateColumn 的錯誤，簡直莫名其妙讓人丈二和尚摸不著頭腦</description>
     </item>
-    
     <item>
       <title>4th Practice: Twitter Clone</title>
       <link>https://blog.idontwannarock.me/2017/09/twitter_clone/</link>
       <pubDate>Fri, 15 Sep 2017 10:27:28 +0800</pubDate>
-      
       <guid>https://blog.idontwannarock.me/2017/09/twitter_clone/</guid>
-      <description>第四個目標 練習 PHP、MySQL 跟 MVC，因為 Bootstrap 很方便，所以 HTML 跟 CSS 就這樣吧！廠廠~
-作品：史上最簡陋 Twitter 參考：這參考太多了，只能說各種參考 orz 原始碼：可以參考 我的Github 還是要先講一下，這並不是我憑空寫出來的作品，是跟著 Udemy 網路課程教學作出來的。
-遇到困難 對自己智商產生質疑 真的是這樣，之所以這麼廢的東西還能作這麼久，事後檢討的結果，絕大多數時間都浪費在因為智商太低產生的各種製造障礙，簡稱製障問題上。
-譬如說出現什麼 404 或 500 錯誤訊息，花了三個多小時觀看 stackoverflow 上高手討論，最後發現是 PHP 某一行少加了一個 ;，當天直接氣到作不下去之類的…
-debug 作這個真心受教了，要馬每一步都先作測試，要馬就要會查 bug，人生就是要接受 bug 的出現，沒 bug 絕對是陰德值爆滿。
-所以我目前領悟到的順序是：
-先查 code 有沒有漏加什麼 ; 或 ,或者哪裡括號沒關好，這些出現的頻率超乎你想像，即使有 autocomplete 功能也是一樣 再來用 Chrome 的 Inspect 或 Firefox 的 Inspector 來查錯誤訊息，運氣好就會跟你說你程式碼哪一行有問題 還找不到，先不要急著 google，先查 Log！先查 Log！先查 Log！很重要，所以講三次。通常 Log 也會跟你講執行到哪一行有問題 最後真的都不行，再拿錯誤訊息去拜 google 大神 以上是我的切身之痛，其他的難點在這兩個困難底下，都已經不再重要…喔不是啦，還是補充一個。
-AJAX 不太確定這算不算常識，但大家在使用 jQuery+AJAX 的時候要注意 jQuery 的版本，請不要用到 slim 版的喔， jQuery slim 版把 AJAX 功能拿掉了，所以最起碼要用 minified 或更完整的版本，切記切記！</description>
+      <description>第四個目標 練習 PHP、MySQL 跟 MVC，因為 Bootstrap 很方便，所以 HTML 跟 CSS 就這樣吧！廠廠~&#xA;作品：史上最簡陋 Twitter 參考：這參考太多了，只能說各種參考 orz 原始碼：可以參考 我的Github 還是要先講一下，這並不是我憑空寫出來的作品，是跟著 Udemy 網路課程教學作出來的。&#xA;遇到困難 對自己智商產生質疑 真的是這樣，之所以這麼廢的東西還能作這麼久，事後檢討的結果，絕大多數時間都浪費在因為智商太低產生的各種製造障礙，簡稱製障問題上。&#xA;譬如說出現什麼 404 或 500 錯誤訊息，花了三個多小時觀看 stackoverflow 上高手討論，最後發現是 PHP 某一行少加了一個 ;，當天直接氣到作不下去之類的…&#xA;debug 作這個真心受教了，要馬每一步都先作測試，要馬就要會查 bug，人生就是要接受 bug 的出現，沒 bug 絕對是陰德值爆滿。&#xA;所以我目前領悟到的順序是：&#xA;先查 code 有沒有漏加什麼 ; 或 ,或者哪裡括號沒關好，這些出現的頻率超乎你想像，即使有 autocomplete 功能也是一樣 再來用 Chrome 的 Inspect 或 Firefox 的 Inspector 來查錯誤訊息，運氣好就會跟你說你程式碼哪一行有問題 還找不到，先不要急著 google，先查 Log！先查 Log！先查 Log！很重要，所以講三次。通常 Log 也會跟你講執行到哪一行有問題 最後真的都不行，再拿錯誤訊息去拜 google 大神 以上是我的切身之痛，其他的難點在這兩個困難底下，都已經不再重要…喔不是啦，還是補充一個。&#xA;AJAX 不太確定這算不算常識，但大家在使用 jQuery+AJAX 的時候要注意 jQuery 的版本，請不要用到 slim 版的喔， jQuery slim 版把 AJAX 功能拿掉了，所以最起碼要用 minified 或更完整的版本，切記切記！</description>
     </item>
-    
     <item>
       <title>實作簡單登入會員系統 (1)</title>
       <link>https://blog.idontwannarock.me/2017/09/login_signup_function_1/</link>
       <pubDate>Mon, 11 Sep 2017 07:11:59 +0800</pubDate>
-      
       <guid>https://blog.idontwannarock.me/2017/09/login_signup_function_1/</guid>
-      <description>這篇文章是初學的時候撰寫的，其中一些觀念並不正確，步驟也可能因為更新或觀念問題而不適用或者多餘，此篇文章僅為留做紀錄
-學習目標 實作簡單會員系統，有加入會員、登入、登出 cookie 防範 SQL Injection+XSS hash 密碼 學習內容 構思 坦白說，我有自學過一點點前後端的 Udemy 網路課程，所以前端的部分，簡單的 HTML, CSS, Javascript, jQuery 我還可以，大概是不會寫也可以谷哥看別人怎麼寫的程度。後端也是學過簡單的 PHP 跟 MySQL 這樣。所以後面的說明很可能會省略很多基礎，而只記錄我不太會或不太熟的部分。
-關於會員系統，Udemy 課程的老師其實有教過這個部分，但當時似懂非懂，幾乎就是 copy 老師的程式碼，糊里糊塗就寫出來，PHP 跟 MySQL 的部分一片模糊，所以先來嘗試自己重新寫一遍，不行再來找找看網路教學。
-要寫登入登出的功能，我第一個想到就是要用 HTML 的 form 先做三個 input 跟一個 button，若要串接資料庫，應該還要再作一個 button 切換 Sign Up 跟 Login 畫面來作區別。預計應該要用 jQuery 控制切換 Sign Up/Login 的功能。
-然後後端邏輯應該就是先作 Sign Up/Login 資料的驗證部分，用 ajax 傳輸資料到後端，檢查輸入的 username、email 跟 password 是否空白、格式是否正確以及是否重複，用 echo 輸出錯誤提示訊息給前端。
-接著作 Sign Up 部分，接著剛剛驗證完資料正確後，檢查資料庫有無重複資料後，再把 username、email 跟 password 存進資料庫。</description>
+      <description>這篇文章是初學的時候撰寫的，其中一些觀念並不正確，步驟也可能因為更新或觀念問題而不適用或者多餘，此篇文章僅為留做紀錄&#xA;學習目標 實作簡單會員系統，有加入會員、登入、登出 cookie 防範 SQL Injection+XSS hash 密碼 學習內容 構思 坦白說，我有自學過一點點前後端的 Udemy 網路課程，所以前端的部分，簡單的 HTML, CSS, Javascript, jQuery 我還可以，大概是不會寫也可以谷哥看別人怎麼寫的程度。後端也是學過簡單的 PHP 跟 MySQL 這樣。所以後面的說明很可能會省略很多基礎，而只記錄我不太會或不太熟的部分。&#xA;關於會員系統，Udemy 課程的老師其實有教過這個部分，但當時似懂非懂，幾乎就是 copy 老師的程式碼，糊里糊塗就寫出來，PHP 跟 MySQL 的部分一片模糊，所以先來嘗試自己重新寫一遍，不行再來找找看網路教學。&#xA;要寫登入登出的功能，我第一個想到就是要用 HTML 的 form 先做三個 input 跟一個 button，若要串接資料庫，應該還要再作一個 button 切換 Sign Up 跟 Login 畫面來作區別。預計應該要用 jQuery 控制切換 Sign Up/Login 的功能。&#xA;然後後端邏輯應該就是先作 Sign Up/Login 資料的驗證部分，用 ajax 傳輸資料到後端，檢查輸入的 username、email 跟 password 是否空白、格式是否正確以及是否重複，用 echo 輸出錯誤提示訊息給前端。&#xA;接著作 Sign Up 部分，接著剛剛驗證完資料正確後，檢查資料庫有無重複資料後，再把 username、email 跟 password 存進資料庫。</description>
     </item>
-    
   </channel>
 </rss>

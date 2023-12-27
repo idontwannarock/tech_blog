@@ -7,20 +7,14 @@
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
     <copyright>This website by Howard Wang is licensed under a Creative Common Attribution-ShareAlike 4.0 International License.</copyright>
-    <lastBuildDate>Mon, 12 Dec 2022 09:24:17 +0800</lastBuildDate><atom:link href="https://blog.idontwannarock.me/tags/springfox/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Mon, 12 Dec 2022 09:24:17 +0800</lastBuildDate>
+    <atom:link href="https://blog.idontwannarock.me/tags/springfox/index.xml" rel="self" type="application/rss+xml" />
     <item>
       <title>SpringFox to SpringDoc</title>
       <link>https://blog.idontwannarock.me/2022/12/springfox_to_springdoc/</link>
       <pubDate>Mon, 12 Dec 2022 09:24:17 +0800</pubDate>
-      
       <guid>https://blog.idontwannarock.me/2022/12/springfox_to_springdoc/</guid>
-      <description>以 Spring Boot 生態來說，比較主流的 documentation 方式應該就是 Swagger，以往應該多數人都是使用 SpringFox library，但近幾年也漸漸興起使用 SpringDoc，所以就做了一點筆記，紀錄要怎麼從 SpringFox 轉移到 SpringDoc
-比較 這兩者同樣都有實作 OpenAPI 3.0，為什麼我們需要從 SpringFox 轉移使用 SpringDoc？
-springfox-boot-starter 包含許多 Spring 的 transitive dependencies；springdoc-openapi-ui 則是 standalone 的 library，並沒有跟 Spring 的依賴 springfox-boot-starter 需要額外 dependency 才有 Swagger UI 的呈現；springdoc-openapi-ui 則已經內含 Swagger UI SpringDoc 在一些細節功能上更強大，例如提供陣列參數更好的 UI 做輸入 最重要的一點，SpringFox 幾乎已經不再更新；而 SpringDoc 還有在常態維護，因此也能跟較新版本的 Spring 有更好的整合，也能更即時的修正 bug 升級步驟 相當簡單，參考 官方文件 即可
-因為都是實作 OpenAPI，就算 SpringFox 有實作 2.0 版，但跟 3.0 其實差異也不大
-主要就是改一下 dependency，然後 annotation 調整一下，其他幾乎沒有不同
-注意事項 Spring Security 若有整合 Spring Security，則可以在 controller 透過加註 @AuthenticationPrincipal 註解注入驗證過的 principal 物件，但這個物件不需要呈現在 Swagger 上</description>
+      <description>以 Spring Boot 生態來說，比較主流的 documentation 方式應該就是 Swagger，以往應該多數人都是使用 SpringFox library，但近幾年也漸漸興起使用 SpringDoc，所以就做了一點筆記，紀錄要怎麼從 SpringFox 轉移到 SpringDoc&#xA;比較 這兩者同樣都有實作 OpenAPI 3.0，為什麼我們需要從 SpringFox 轉移使用 SpringDoc？&#xA;springfox-boot-starter 包含許多 Spring 的 transitive dependencies；springdoc-openapi-ui 則是 standalone 的 library，並沒有跟 Spring 的依賴 springfox-boot-starter 需要額外 dependency 才有 Swagger UI 的呈現；springdoc-openapi-ui 則已經內含 Swagger UI SpringDoc 在一些細節功能上更強大，例如提供陣列參數更好的 UI 做輸入 最重要的一點，SpringFox 幾乎已經不再更新；而 SpringDoc 還有在常態維護，因此也能跟較新版本的 Spring 有更好的整合，也能更即時的修正 bug 升級步驟 相當簡單，參考 官方文件 即可&#xA;因為都是實作 OpenAPI，就算 SpringFox 有實作 2.0 版，但跟 3.0 其實差異也不大&#xA;主要就是改一下 dependency，然後 annotation 調整一下，其他幾乎沒有不同&#xA;注意事項 Spring Security 若有整合 Spring Security，則可以在 controller 透過加註 @AuthenticationPrincipal 註解注入驗證過的 principal 物件，但這個物件不需要呈現在 Swagger 上</description>
     </item>
-    
   </channel>
 </rss>

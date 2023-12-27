@@ -7,137 +7,77 @@
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
     <copyright>This website by Howard Wang is licensed under a Creative Common Attribution-ShareAlike 4.0 International License.</copyright>
-    <lastBuildDate>Wed, 20 Sep 2023 09:37:21 +0800</lastBuildDate><atom:link href="https://blog.idontwannarock.me/tags/java/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Wed, 27 Dec 2023 09:26:23 +0800</lastBuildDate>
+    <atom:link href="https://blog.idontwannarock.me/tags/java/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Java Time 保存到 MySQL DATETIME 時區問題</title>
+      <link>https://blog.idontwannarock.me/2023/12/java_time_mapping_mysql_datetime_timezone/</link>
+      <pubDate>Wed, 27 Dec 2023 09:26:23 +0800</pubDate>
+      <guid>https://blog.idontwannarock.me/2023/12/java_time_mapping_mysql_datetime_timezone/</guid>
+      <description>最近開發遇到一個對我的系統需求來說很合適，但我感覺不合理的狀況&#xA;目前有 Spring Boot 系統在 JPA 是用 OffsetDateTime 在 Entity 中對應 MySQL 表中的 DATETIME 欄位，JVM 時區以及 MySQL 的系統時區都是 +8，沒有特別在任何地方進行時區設定，也就是所有地方應該都是預設設定&#xA;然而當 OffsetDateTime 保存到 DATETIME 當中時，卻會被自動轉換成 UTC 時區的時間保存，並且之後再用 JPA 重新取出後，OffsetDateTime 也依然是 UTC 時區&#xA;這就讓人感覺很奇怪了，感覺要馬就應該是 MySQL DATETIME 保存時用 JVM 跟 MySQL 相同的系統 +8 時區時間保存，取出也是 +8 時間；要馬就是保存時會轉成 UTC，但取出應該會自動轉換回 JVM 的 +8 才合理，畢竟 DATETIME 欄位資料格式不保存時區資訊，所以要馬就是完全不轉換，要馬就是會依照某種機制保存時用 UTC，但使用時會自動轉換成 JVM 時區之類的模式才對&#xA;雖然我原本就希望在系統中盡量都使用 UTC 時區而不要隨著 MySQL/JVM 時區變動以避免造成資料錯誤的問題，但機制不如預期就應該要弄清楚，免得其實是有什麼未知的狀況造成日後踩到坑&#xA;Pre-requisite 首先要先說明這篇文章的研究都是基於下列版本，不同的版本「可能」會有不同的行為，請查詢官網文件或自行測試&#xA;Spring Boot Data JPA 3.1.4 Hibernate 6.2.9.Final MySQL JDBC Driver 8.</description>
+    </item>
     <item>
       <title>Spring JPA Projection with Converter</title>
       <link>https://blog.idontwannarock.me/2023/09/spring_jpa_projection_converter/</link>
       <pubDate>Wed, 20 Sep 2023 09:37:21 +0800</pubDate>
-      
       <guid>https://blog.idontwannarock.me/2023/09/spring_jpa_projection_converter/</guid>
-      <description>Pre-requisite JDK 11+ Spring Boot 2+ 情境描述 使用 JPA 做單表查詢非常方便，但有時候因為效能考量，會出現 DB data type 與 Java data type 無法直接對應或需要做一些客製化調整
-例如在保存狀態時，因為狀態通常有固定且少量的值，所以會考慮採用 int 而非 varchar 來保存，在存儲大小跟查詢效能上都較優
-CREATE TABLE CHATROOM ( ... `STATUS` INT NOT NULL, ... ); 但在程式面都採用 Java 的 int 來操作狀態，可讀性相對較低，所以可能會考慮採用 enum 來操作，可讀性較佳且有 type check
-public enum ChatroomStatus { CLOSED, ACTIVE } 設定 Converter 但 JPA 預設並不能將 Java enum 與 MySQL int 做 mapping，所以會需要提供 converter 讓 JPA 知道怎麼做轉換
-首先需要調整 enum 如下
-public enum ChatroomStatus { CLOSED(0), ACTIVE(1); private final int value; ChatroomStatus(int value) { this.</description>
+      <description>Pre-requisite JDK 11+ Spring Boot 2+ 情境描述 使用 JPA 做單表查詢非常方便，但有時候因為效能考量，會出現 DB data type 與 Java data type 無法直接對應或需要做一些客製化調整&#xA;例如在保存狀態時，因為狀態通常有固定且少量的值，所以會考慮採用 int 而非 varchar 來保存，在存儲大小跟查詢效能上都較優&#xA;CREATE TABLE CHATROOM ( ... `STATUS` INT NOT NULL, ... ); 但在程式面都採用 Java 的 int 來操作狀態，可讀性相對較低，所以可能會考慮採用 enum 來操作，可讀性較佳且有 type check&#xA;public enum ChatroomStatus { CLOSED, ACTIVE } 設定 Converter 但 JPA 預設並不能將 Java enum 與 MySQL int 做 mapping，所以會需要提供 converter 讓 JPA 知道怎麼做轉換&#xA;首先需要調整 enum 如下&#xA;public enum ChatroomStatus { CLOSED(0), ACTIVE(1); private final int value; ChatroomStatus(int value) { this.</description>
     </item>
-    
     <item>
       <title>SpringFox to SpringDoc</title>
       <link>https://blog.idontwannarock.me/2022/12/springfox_to_springdoc/</link>
       <pubDate>Mon, 12 Dec 2022 09:24:17 +0800</pubDate>
-      
       <guid>https://blog.idontwannarock.me/2022/12/springfox_to_springdoc/</guid>
-      <description>以 Spring Boot 生態來說，比較主流的 documentation 方式應該就是 Swagger，以往應該多數人都是使用 SpringFox library，但近幾年也漸漸興起使用 SpringDoc，所以就做了一點筆記，紀錄要怎麼從 SpringFox 轉移到 SpringDoc
-比較 這兩者同樣都有實作 OpenAPI 3.0，為什麼我們需要從 SpringFox 轉移使用 SpringDoc？
-springfox-boot-starter 包含許多 Spring 的 transitive dependencies；springdoc-openapi-ui 則是 standalone 的 library，並沒有跟 Spring 的依賴 springfox-boot-starter 需要額外 dependency 才有 Swagger UI 的呈現；springdoc-openapi-ui 則已經內含 Swagger UI SpringDoc 在一些細節功能上更強大，例如提供陣列參數更好的 UI 做輸入 最重要的一點，SpringFox 幾乎已經不再更新；而 SpringDoc 還有在常態維護，因此也能跟較新版本的 Spring 有更好的整合，也能更即時的修正 bug 升級步驟 相當簡單，參考 官方文件 即可
-因為都是實作 OpenAPI，就算 SpringFox 有實作 2.0 版，但跟 3.0 其實差異也不大
-主要就是改一下 dependency，然後 annotation 調整一下，其他幾乎沒有不同
-注意事項 Spring Security 若有整合 Spring Security，則可以在 controller 透過加註 @AuthenticationPrincipal 註解注入驗證過的 principal 物件，但這個物件不需要呈現在 Swagger 上</description>
+      <description>以 Spring Boot 生態來說，比較主流的 documentation 方式應該就是 Swagger，以往應該多數人都是使用 SpringFox library，但近幾年也漸漸興起使用 SpringDoc，所以就做了一點筆記，紀錄要怎麼從 SpringFox 轉移到 SpringDoc&#xA;比較 這兩者同樣都有實作 OpenAPI 3.0，為什麼我們需要從 SpringFox 轉移使用 SpringDoc？&#xA;springfox-boot-starter 包含許多 Spring 的 transitive dependencies；springdoc-openapi-ui 則是 standalone 的 library，並沒有跟 Spring 的依賴 springfox-boot-starter 需要額外 dependency 才有 Swagger UI 的呈現；springdoc-openapi-ui 則已經內含 Swagger UI SpringDoc 在一些細節功能上更強大，例如提供陣列參數更好的 UI 做輸入 最重要的一點，SpringFox 幾乎已經不再更新；而 SpringDoc 還有在常態維護，因此也能跟較新版本的 Spring 有更好的整合，也能更即時的修正 bug 升級步驟 相當簡單，參考 官方文件 即可&#xA;因為都是實作 OpenAPI，就算 SpringFox 有實作 2.0 版，但跟 3.0 其實差異也不大&#xA;主要就是改一下 dependency，然後 annotation 調整一下，其他幾乎沒有不同&#xA;注意事項 Spring Security 若有整合 Spring Security，則可以在 controller 透過加註 @AuthenticationPrincipal 註解注入驗證過的 principal 物件，但這個物件不需要呈現在 Swagger 上</description>
     </item>
-    
     <item>
       <title>Quartz 介紹</title>
       <link>https://blog.idontwannarock.me/2022/11/quartz-intro/</link>
       <pubDate>Tue, 15 Nov 2022 16:24:46 +0800</pubDate>
-      
       <guid>https://blog.idontwannarock.me/2022/11/quartz-intro/</guid>
-      <description>Quartz 系列：
-Quartz 介紹 Spring Boot 整合 Quartz 集群執行預設及動態排程 Quartz Misfire Handling Instruction Quartz 是 Java 生態中一套成熟的開源排程框架，其完整的排程功能包含多樣排程設定、自動任務調度、任務持久化，以及支援分散式排程調度、自動負載平衡，讓排程可以輕鬆運行、應用可以輕鬆 scale out
-概念 核心元件 Job: 任務需要執行的內容；Job 有區分是否可併行執行，不能併行執行意思是只有上一次觸發的任務執行完後才能觸發下一次執行；另外，一個 Job 可以關聯到多個 Trigger，也就是同一個 Job 可以以不同時間規則多次觸發，但一個 Trigger 只能關聯一個 Job JobDetail: 包含任務的設定，也就是要實例化 Job 時的相關設定；由 JobKey (Job 名稱 name 和分組 group)、JobClass、JobDataMap (任務相關數據)、JobBuilder 組成，並可以設定任務調度的方案和策略，並指定要調度的 Job 類別 Trigger: 設定觸發執行 Job 實例的時間規則；Scheduler 負責掃描需要執行的 Job 任務，而 Trigger 負責告訴 Scheduler 何時執行；Quartz 2.3.2 版提供 SimpleTrigger、CronTrigger、DailyTimeIntervalTrigger 及 CalendarIntervalTrigger 等 Trigger Scheduler: 任務調度器，會讀取 Trigger 從而觸發以 JobDetail 產生的 Job 實例；一個調度器中可以註冊多個 JobDetail 及 Trigger，只要 JobDetail 與 Trigger 組合，就可以被 Scheduler 調度 單體 stand-alone 模式運作 流程很簡單，就是 Scheduler 負責管理 Trigger 及 Job，會讀取 Trigger 並按照設定觸發時間規則，到時間就依照 JobDetail 設定產生跟該 Trigger 關聯的 Job 實例並運行</description>
+      <description>Quartz 系列：&#xA;Quartz 介紹 Spring Boot 整合 Quartz 集群執行預設及動態排程 Quartz Misfire Handling Instruction Quartz 是 Java 生態中一套成熟的開源排程框架，其完整的排程功能包含多樣排程設定、自動任務調度、任務持久化，以及支援分散式排程調度、自動負載平衡，讓排程可以輕鬆運行、應用可以輕鬆 scale out&#xA;概念 核心元件 Job: 任務需要執行的內容；Job 有區分是否可併行執行，不能併行執行意思是只有上一次觸發的任務執行完後才能觸發下一次執行；另外，一個 Job 可以關聯到多個 Trigger，也就是同一個 Job 可以以不同時間規則多次觸發，但一個 Trigger 只能關聯一個 Job JobDetail: 包含任務的設定，也就是要實例化 Job 時的相關設定；由 JobKey (Job 名稱 name 和分組 group)、JobClass、JobDataMap (任務相關數據)、JobBuilder 組成，並可以設定任務調度的方案和策略，並指定要調度的 Job 類別 Trigger: 設定觸發執行 Job 實例的時間規則；Scheduler 負責掃描需要執行的 Job 任務，而 Trigger 負責告訴 Scheduler 何時執行；Quartz 2.3.2 版提供 SimpleTrigger、CronTrigger、DailyTimeIntervalTrigger 及 CalendarIntervalTrigger 等 Trigger Scheduler: 任務調度器，會讀取 Trigger 從而觸發以 JobDetail 產生的 Job 實例；一個調度器中可以註冊多個 JobDetail 及 Trigger，只要 JobDetail 與 Trigger 組合，就可以被 Scheduler 調度 單體 stand-alone 模式運作 流程很簡單，就是 Scheduler 負責管理 Trigger 及 Job，會讀取 Trigger 並按照設定觸發時間規則，到時間就依照 JobDetail 設定產生跟該 Trigger 關聯的 Job 實例並運行</description>
     </item>
-    
     <item>
       <title>Java Optional 為何不推薦做為類別屬性</title>
       <link>https://blog.idontwannarock.me/2022/10/java_optional_not_recommand_as_field/</link>
       <pubDate>Sat, 01 Oct 2022 21:44:34 +0800</pubDate>
-      
       <guid>https://blog.idontwannarock.me/2022/10/java_optional_not_recommand_as_field/</guid>
-      <description>大家有在寫 Java 1.8+ 的時候使用新出的 Optional 類別來處理 null 的問題嗎？
-那在使用的時候有沒有碰到 IntelliJ 提示 Optional 不推薦用來當作類別的 field 的黃色警告 (warning) 呢？訊息應該大致如下
-/** * A container object which may or may not contain a non-{@code null} value. * If a value is present, {@code isPresent()} returns {@code true}. If no * value is present, the object is considered &amp;lt;i&amp;gt;empty&amp;lt;/i&amp;gt; and * {@code isPresent()} returns {@code false}. * * &amp;lt;p&amp;gt;Additional methods that depend on the presence or absence of a contained * value are provided, such as {@link #orElse(Object) orElse()} * (returns a default value if no value is present) and * {@link #ifPresent(Consumer) ifPresent()} (performs an * action if a value is present).</description>
+      <description>大家有在寫 Java 1.8+ 的時候使用新出的 Optional 類別來處理 null 的問題嗎？&#xA;那在使用的時候有沒有碰到 IntelliJ 提示 Optional 不推薦用來當作類別的 field 的黃色警告 (warning) 呢？訊息應該大致如下&#xA;/** * A container object which may or may not contain a non-{@code null} value. * If a value is present, {@code isPresent()} returns {@code true}. If no * value is present, the object is considered &amp;lt;i&amp;gt;empty&amp;lt;/i&amp;gt; and * {@code isPresent()} returns {@code false}. * * &amp;lt;p&amp;gt;Additional methods that depend on the presence or absence of a contained * value are provided, such as {@link #orElse(Object) orElse()} * (returns a default value if no value is present) and * {@link #ifPresent(Consumer) ifPresent()} (performs an * action if a value is present).</description>
     </item>
-    
     <item>
       <title>Spring Boot 實作 API 版本控制</title>
       <link>https://blog.idontwannarock.me/2019/09/spring_api_version_with_swagger_security/</link>
       <pubDate>Thu, 19 Sep 2019 15:53:36 +0800</pubDate>
-      
       <guid>https://blog.idontwannarock.me/2019/09/spring_api_version_with_swagger_security/</guid>
-      <description>本文目的是為了探討在 Spring Boot Web 專案中，實作 API 版本控制，並兼容 Swagger 及 Spring Security 的解決方式
-需要有 Spring Boot、Spring MVC、Spring Security 及 Swagger 的基礎概念會比較好理解
-API 版本控制 常見的 API 版本控制方式有三種: URI, header, content-type
-考量到 RESTful API 其中的一個好處是方便快取，使用 header 跟 content-type 的方式則可能無法正確的快取以及達成 idempotent，所以我個人採用的是在 URI 中加入版本號的方式
-再來因為有時候面對的專案有數量眾多的 handler，導致每次修改版本號都要手動修改每一支 handler 對應的 uri，這樣既麻煩又不潮，所以一定要研究一下怎麼在 Spring Boot 專案中利用註解的方式自動幫 handler 對應的 uri 自動插入版本號
-Tech Stack 專案採用的是 Spring Boot 2.0 架構，Java 1.8 版本
-有關 Maven 依賴如下:
-org.springframework.boot:spring-boot-starter-web:2.1.x org.springframework.boot:spring-boot-starter-security:2.1.x io.springfox:springfox-swagger2:2.9.2 io.springfox:springfox-swagger-ui:2.9.2 這邊強調要採用 Spring Boot 主要是因為想要利用 Spring Boot auto configuration 的功能，也因為想要利用這個功能，所以過程才會這麼曲折&amp;hellip;</description>
+      <description>本文目的是為了探討在 Spring Boot Web 專案中，實作 API 版本控制，並兼容 Swagger 及 Spring Security 的解決方式&#xA;需要有 Spring Boot、Spring MVC、Spring Security 及 Swagger 的基礎概念會比較好理解&#xA;API 版本控制 常見的 API 版本控制方式有三種: URI, header, content-type&#xA;考量到 RESTful API 其中的一個好處是方便快取，使用 header 跟 content-type 的方式則可能無法正確的快取以及達成 idempotent，所以我個人採用的是在 URI 中加入版本號的方式&#xA;再來因為有時候面對的專案有數量眾多的 handler，導致每次修改版本號都要手動修改每一支 handler 對應的 uri，這樣既麻煩又不潮，所以一定要研究一下怎麼在 Spring Boot 專案中利用註解的方式自動幫 handler 對應的 uri 自動插入版本號&#xA;Tech Stack 專案採用的是 Spring Boot 2.0 架構，Java 1.8 版本&#xA;有關 Maven 依賴如下:&#xA;org.springframework.boot:spring-boot-starter-web:2.1.x org.springframework.boot:spring-boot-starter-security:2.1.x io.springfox:springfox-swagger2:2.9.2 io.springfox:springfox-swagger-ui:2.9.2 這邊強調要採用 Spring Boot 主要是因為想要利用 Spring Boot auto configuration 的功能，也因為想要利用這個功能，所以過程才會這麼曲折&amp;hellip;</description>
     </item>
-    
     <item>
       <title>Spring Security 整合 RBAC</title>
       <link>https://blog.idontwannarock.me/2019/05/spring_security_rbac/</link>
       <pubDate>Thu, 30 May 2019 15:33:07 +0800</pubDate>
-      
       <guid>https://blog.idontwannarock.me/2019/05/spring_security_rbac/</guid>
-      <description>目前比較主流的 Role-based Access Control, RBAC 算是比較成熟且彈性的權限架構，若要在 Spring Security 實作 RBAC 並搭配 JWT 或 OAuth 2.0，大概要探討兩個問題
-是否值得為了減少查詢資料源的次數，而將角色或權限直接置入 JWT 或 Authorization Server 回傳的 token 是否採取 Spring Security 原生只使用最細粒度的權限來進行存取控制 關於第一個問題，目前的思考點大概就是考量系統的併發度跟使用者總數
-如果需要高併發，那自然希望盡量減少查詢資料的次數或資料量，盡量避免同時大量消耗 DB 資源；相反的，如果不需要高併發，那每次驗證都重新取得角色及權限資料也沒關係
-使用者數量的考量也是類似，如果每次查詢的成本太高，則盡量減少查詢的次數
-而第二個問題，則是要考量實際的業務場景
-如果角色跟權限很大量且複雜，或可能要考慮角色分層甚至使用者群組，或不同 Domain 有不同的權限邏輯，則可能用 Spring Security 原生方式會不敷使用，相對如果角色權限結構簡單，則直接使用原生方式可能成本較低
-所以以下探討主要專注於使用 Spring Security 提供的自訂空間來實作較為複雜的存取控制
-Spring Security 權限架構 首先要探討 Spring Security 原生提供的權限架構
-GrantedAuthority: 可以將每個 GrantedAuthority 想成是個別的 privilege，所以在 Spring Security 中，authority 就是 privilege 的概念 Role: 在 Spring Security 中為了保持彈性，Role 可以當作 Authority 也可以當作一組 Authority 的組合 Role as Authority: 直接把 Role 當成一種 Authority 的情況，就是將 Role 當作一個有 ROLE_ 前綴的字串，這種情況下 Role 跟 Authority 就只是語意上的差別 Role as Container: Role 可以包含一組 Authority，Spring Security 在這個概念上沒有提供太多指引說明，需要自行實作 Granted Authority Versus Role in Spring Security</description>
+      <description>目前比較主流的 Role-based Access Control, RBAC 算是比較成熟且彈性的權限架構，若要在 Spring Security 實作 RBAC 並搭配 JWT 或 OAuth 2.0，大概要探討兩個問題&#xA;是否值得為了減少查詢資料源的次數，而將角色或權限直接置入 JWT 或 Authorization Server 回傳的 token 是否採取 Spring Security 原生只使用最細粒度的權限來進行存取控制 關於第一個問題，目前的思考點大概就是考量系統的併發度跟使用者總數&#xA;如果需要高併發，那自然希望盡量減少查詢資料的次數或資料量，盡量避免同時大量消耗 DB 資源；相反的，如果不需要高併發，那每次驗證都重新取得角色及權限資料也沒關係&#xA;使用者數量的考量也是類似，如果每次查詢的成本太高，則盡量減少查詢的次數&#xA;而第二個問題，則是要考量實際的業務場景&#xA;如果角色跟權限很大量且複雜，或可能要考慮角色分層甚至使用者群組，或不同 Domain 有不同的權限邏輯，則可能用 Spring Security 原生方式會不敷使用，相對如果角色權限結構簡單，則直接使用原生方式可能成本較低&#xA;所以以下探討主要專注於使用 Spring Security 提供的自訂空間來實作較為複雜的存取控制&#xA;Spring Security 權限架構 首先要探討 Spring Security 原生提供的權限架構&#xA;GrantedAuthority: 可以將每個 GrantedAuthority 想成是個別的 privilege，所以在 Spring Security 中，authority 就是 privilege 的概念 Role: 在 Spring Security 中為了保持彈性，Role 可以當作 Authority 也可以當作一組 Authority 的組合 Role as Authority: 直接把 Role 當成一種 Authority 的情況，就是將 Role 當作一個有 ROLE_ 前綴的字串，這種情況下 Role 跟 Authority 就只是語意上的差別 Role as Container: Role 可以包含一組 Authority，Spring Security 在這個概念上沒有提供太多指引說明，需要自行實作 Granted Authority Versus Role in Spring Security</description>
     </item>
-    
     <item>
       <title>AOP 及 Spring AOP 簡述</title>
       <link>https://blog.idontwannarock.me/2018/04/aop_and_spring_aop_basic/</link>
       <pubDate>Tue, 10 Apr 2018 13:22:52 +0800</pubDate>
-      
       <guid>https://blog.idontwannarock.me/2018/04/aop_and_spring_aop_basic/</guid>
-      <description>這篇文章是初學的時候撰寫的，其中一些觀念並不正確，步驟也可能因為更新或觀念問題而不適用或者多餘，此篇文章僅為留做紀錄
-AOP(Aspect-Oriented Programming) 是一種基於 OOP(Object-Oriented Programming) 的改進 AOP 是基於動態代理 (Dynamic Proxy) 這種 design pattern AOP 主要的設計對象是切面 (Aspect)，而切面是用來模組化橫切關注點 (Cross-Cutting Concern) 切面需要定義公共功能，但可以明確定義功能在哪裡或以什麼方式應用，而不必修改受影響的類別。如此切面關注點就可以被模組化到特殊的類別 (切面) 裡面 優點 交易相關的邏輯位於同一位置，便於維護與升級 業務邏輯更簡潔，只包含核心業務代碼 術語及概念 Cross-Cutting Concern 橫切關注點：橫跨應用系統多個流程、模組的功能，例如日誌 (Logging)、安全 (Security) 檢查、交易 (Transaction) 等動作，在許多流程的多個位置都需要執行，這種動作就被稱為橫切關注點 Aspect 切面：橫切關注點被模組化後的一種特殊物件；還未模組化前是橫切關注點，抽取後成為一組一組的切面；另一方面來說代理會將一個一個切面重組為橫切關注點 Advice 通知：切面必須要完成的工作或行為，也就是切面的實作內容。切面裡面的各個方法即是一個、一個的通知 Target 目標：被通知的物件，也就是要被橫切的業務邏輯類別 Proxy 代理：向目標物件通知之後創建的對象。容器會建立一個代理，依照設定去縫合 (weave) 切面到應用程式中 JoinPoint 連接點：程序執行的某個特定位置或時機。例如某個類別的某個方法呼叫前、呼叫後、拋出異常後等等。 連接點由兩個因素決定：以方法表示的程式執行點、相對執行點表示的方位。例如 A 類別的 a() 方法執行前的 JoinPoint 連接點決定要素為：執行點 A#a()，方位為執行前的位置 概念類比：JoinPoint 連接點相當於資料庫的紀錄，切面相當於查詢條件 Pointcut 切面定義：每個類別都有多個連接點，類別的所有方法某種程度上都可以想成是 JoinPoint 連接點。AOP通過切面定位到特定的連接點 Spring AOP AspectJ：Java 社群最完整、最廣為人知的 AOP 實作 Spring 2.0 以上，可以使用基於 AspectJ 的 annotation 註解或基於 XML 設定的 AOP Dependencies Spring commons logging spring beans spring context spring core spring expression Spring AOP aopalliance aspectj weaver spring aop spring aspects 註：Spring 框架的版本可以更動，但須一致</description>
+      <description>這篇文章是初學的時候撰寫的，其中一些觀念並不正確，步驟也可能因為更新或觀念問題而不適用或者多餘，此篇文章僅為留做紀錄&#xA;AOP(Aspect-Oriented Programming) 是一種基於 OOP(Object-Oriented Programming) 的改進 AOP 是基於動態代理 (Dynamic Proxy) 這種 design pattern AOP 主要的設計對象是切面 (Aspect)，而切面是用來模組化橫切關注點 (Cross-Cutting Concern) 切面需要定義公共功能，但可以明確定義功能在哪裡或以什麼方式應用，而不必修改受影響的類別。如此切面關注點就可以被模組化到特殊的類別 (切面) 裡面 優點 交易相關的邏輯位於同一位置，便於維護與升級 業務邏輯更簡潔，只包含核心業務代碼 術語及概念 Cross-Cutting Concern 橫切關注點：橫跨應用系統多個流程、模組的功能，例如日誌 (Logging)、安全 (Security) 檢查、交易 (Transaction) 等動作，在許多流程的多個位置都需要執行，這種動作就被稱為橫切關注點 Aspect 切面：橫切關注點被模組化後的一種特殊物件；還未模組化前是橫切關注點，抽取後成為一組一組的切面；另一方面來說代理會將一個一個切面重組為橫切關注點 Advice 通知：切面必須要完成的工作或行為，也就是切面的實作內容。切面裡面的各個方法即是一個、一個的通知 Target 目標：被通知的物件，也就是要被橫切的業務邏輯類別 Proxy 代理：向目標物件通知之後創建的對象。容器會建立一個代理，依照設定去縫合 (weave) 切面到應用程式中 JoinPoint 連接點：程序執行的某個特定位置或時機。例如某個類別的某個方法呼叫前、呼叫後、拋出異常後等等。 連接點由兩個因素決定：以方法表示的程式執行點、相對執行點表示的方位。例如 A 類別的 a() 方法執行前的 JoinPoint 連接點決定要素為：執行點 A#a()，方位為執行前的位置 概念類比：JoinPoint 連接點相當於資料庫的紀錄，切面相當於查詢條件 Pointcut 切面定義：每個類別都有多個連接點，類別的所有方法某種程度上都可以想成是 JoinPoint 連接點。AOP通過切面定位到特定的連接點 Spring AOP AspectJ：Java 社群最完整、最廣為人知的 AOP 實作 Spring 2.0 以上，可以使用基於 AspectJ 的 annotation 註解或基於 XML 設定的 AOP Dependencies Spring commons logging spring beans spring context spring core spring expression Spring AOP aopalliance aspectj weaver spring aop spring aspects 註：Spring 框架的版本可以更動，但須一致</description>
     </item>
-    
     <item>
       <title>Java 字串判定</title>
       <link>https://blog.idontwannarock.me/2018/02/java_string_check/</link>
       <pubDate>Tue, 06 Feb 2018 14:09:25 +0800</pubDate>
-      
       <guid>https://blog.idontwannarock.me/2018/02/java_string_check/</guid>
-      <description>因為開始做專題，開始要作資料檢查，首先會要碰到的就是最基本的檢查是否有輸入資料，也就是要檢查字串，記錄一下 Java 當中有關字串檢查的東西。
-去除字串空白 這主要分兩個部分，一是去掉頭尾空白，一是去掉字串中間空白。
-去掉頭尾空白就用 .trim()，去掉字串中間空白則可以用 .replaceAll(&amp;quot; &amp;quot;, &amp;quot;&amp;quot;) 的方式簡單完成。
-但用 replaceAll() 方法有個小小的問題，就是萬一碰到的是空白字元，例如 \t、\r 這種就會有困難，所以必須要用正規表示式來去除，例如：
-String str = &amp;#34;\t&amp;#34;; str.replaceAll(&amp;#34;\\s+&amp;#34;, &amp;#34;&amp;#34;); 檢查空值 接著如果要檢查字串是否有東西，要分成檢查兩種狀態，null 或空字串。
-這邊有幾個方法檢查這個部分，但要注意它們實際功能上的區別。
-.length == 0 這個是 Java 最原始的功能，基本上就是檢查字串長度是否為 0，回傳值型態為 boolean。
-.isEmpty() 這個方法是 Java 6.0 之後推出用來取代 .length() == 0 的方法。isEmpty() 其實也是在檢查字串長度是否為 0，回傳值型態一樣為 boolean。
-.equals(&amp;quot;&amp;quot;) 這個功能是用字串的比對功能，比對是否為空字串，結果應該會跟前兩個方法相同。
-!= null 前面幾個方法都有一個共同的問題：萬一字串為 null，全都來不及檢查就會跳 NullPointerException。
-所以必須要用這個方式檢查是否為 Null，再檢查是否為空字串，也就是要寫成類似下面這樣：
-String string; if (string != null &amp;amp;&amp;amp; string.isEmpty()) { // things to do when string is neither null nor blank; } &amp;quot;&amp;quot;.</description>
+      <description>因為開始做專題，開始要作資料檢查，首先會要碰到的就是最基本的檢查是否有輸入資料，也就是要檢查字串，記錄一下 Java 當中有關字串檢查的東西。&#xA;去除字串空白 這主要分兩個部分，一是去掉頭尾空白，一是去掉字串中間空白。&#xA;去掉頭尾空白就用 .trim()，去掉字串中間空白則可以用 .replaceAll(&amp;quot; &amp;quot;, &amp;quot;&amp;quot;) 的方式簡單完成。&#xA;但用 replaceAll() 方法有個小小的問題，就是萬一碰到的是空白字元，例如 \t、\r 這種就會有困難，所以必須要用正規表示式來去除，例如：&#xA;String str = &amp;#34;\t&amp;#34;; str.replaceAll(&amp;#34;\\s+&amp;#34;, &amp;#34;&amp;#34;); 檢查空值 接著如果要檢查字串是否有東西，要分成檢查兩種狀態，null 或空字串。&#xA;這邊有幾個方法檢查這個部分，但要注意它們實際功能上的區別。&#xA;.length == 0 這個是 Java 最原始的功能，基本上就是檢查字串長度是否為 0，回傳值型態為 boolean。&#xA;.isEmpty() 這個方法是 Java 6.0 之後推出用來取代 .length() == 0 的方法。isEmpty() 其實也是在檢查字串長度是否為 0，回傳值型態一樣為 boolean。&#xA;.equals(&amp;quot;&amp;quot;) 這個功能是用字串的比對功能，比對是否為空字串，結果應該會跟前兩個方法相同。&#xA;!= null 前面幾個方法都有一個共同的問題：萬一字串為 null，全都來不及檢查就會跳 NullPointerException。&#xA;所以必須要用這個方式檢查是否為 Null，再檢查是否為空字串，也就是要寫成類似下面這樣：&#xA;String string; if (string != null &amp;amp;&amp;amp; string.isEmpty()) { // things to do when string is neither null nor blank; } &amp;quot;&amp;quot;.</description>
     </item>
-    
     <item>
       <title>Java 樂透抽取算法初探</title>
       <link>https://blog.idontwannarock.me/2017/11/java_lottery_algorithm_basic/</link>
       <pubDate>Wed, 15 Nov 2017 14:26:17 +0800</pubDate>
-      
       <guid>https://blog.idontwannarock.me/2017/11/java_lottery_algorithm_basic/</guid>
-      <description>因為做到這個經典練習演算法的題目，雖然是非常入門級的，也是讓我想了很久，覺得都做了這麼久，不記錄下來也是蠻可惜。
-題目 請隨機從正整數 1-42當中隨機抽出 6個數字，不用排序，但不可重複。
-解法 樂透這個題目主要可以練習的有三個地方，隨機、迴圈，還有就是如何確保數字不重複。
-以 Java 來說，隨機就是使用 java.lang.Math 類別裡的靜態方法 random()，但要注意Math.random() 之後產生的是大於等於 0、小於 1，也就是 0 &amp;lt;= Math.random() &amp;lt; 1 的 double 型態浮點常數。
-因此，以這題來說，還要記得利用 (int) 轉換型態成整數型態的常數。
-另外，若不放心浮點數轉換為整數後的值，可以利用一樣是 Math 類別裡的靜態方法 floor() 或 ceiling() 來取無條件進位或無條件捨去後的整數值。 而產生指定範圍內的亂數的公式為 Math.random() * 範圍個數 + 初值
-然後因為已經確定要抽出的數目，所以可以使用元素個數不能變動的陣列，當然也可以用可以變動個數的 Collection 或其子介面去解決。關鍵就在於不可重複。
-這篇只討論陣列的解法。
-暴力解：重複檢查 最簡單的寫法肯定就是暴力解：每抽出一個數字就存到結果陣列，然後每抽一次，就跟陣列裡每個數字都比對一次，一有重複就重抽。
-// 設定存儲樂透數字陣列 int[] randomArray = new int[6]; // 執行抽取樂透數字的動作 6次 for (int i = 0; i &amp;lt; randomArray.length; i++) { // 先將亂數出來的數字存入陣列第 i個位置 randomArray[i] = (int)(Math.</description>
+      <description>因為做到這個經典練習演算法的題目，雖然是非常入門級的，也是讓我想了很久，覺得都做了這麼久，不記錄下來也是蠻可惜。&#xA;題目 請隨機從正整數 1-42當中隨機抽出 6個數字，不用排序，但不可重複。&#xA;解法 樂透這個題目主要可以練習的有三個地方，隨機、迴圈，還有就是如何確保數字不重複。&#xA;以 Java 來說，隨機就是使用 java.lang.Math 類別裡的靜態方法 random()，但要注意Math.random() 之後產生的是大於等於 0、小於 1，也就是 0 &amp;lt;= Math.random() &amp;lt; 1 的 double 型態浮點常數。&#xA;因此，以這題來說，還要記得利用 (int) 轉換型態成整數型態的常數。&#xA;另外，若不放心浮點數轉換為整數後的值，可以利用一樣是 Math 類別裡的靜態方法 floor() 或 ceiling() 來取無條件進位或無條件捨去後的整數值。 而產生指定範圍內的亂數的公式為 Math.random() * 範圍個數 + 初值&#xA;然後因為已經確定要抽出的數目，所以可以使用元素個數不能變動的陣列，當然也可以用可以變動個數的 Collection 或其子介面去解決。關鍵就在於不可重複。&#xA;這篇只討論陣列的解法。&#xA;暴力解：重複檢查 最簡單的寫法肯定就是暴力解：每抽出一個數字就存到結果陣列，然後每抽一次，就跟陣列裡每個數字都比對一次，一有重複就重抽。&#xA;// 設定存儲樂透數字陣列 int[] randomArray = new int[6]; // 執行抽取樂透數字的動作 6次 for (int i = 0; i &amp;lt; randomArray.length; i++) { // 先將亂數出來的數字存入陣列第 i個位置 randomArray[i] = (int)(Math.</description>
     </item>
-    
   </channel>
 </rss>

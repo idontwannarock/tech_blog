@@ -347,54 +347,54 @@ if (!doNotTrack) {
 <p>因為要順帶試驗開發的困難度，所以只要是各自有支援的資料格式，我都盡量加入測試的資料結構當中，以下為我用來建立測資的 Java 物件</p>
 <div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-java" data-lang="java"><span style="display:flex;"><span>@Value
 </span></span><span style="display:flex;"><span>@Builder
-</span></span><span style="display:flex;"><span><span style="color:#8be9fd;font-style:italic">public</span> <span style="color:#8be9fd;font-style:italic">class</span> <span style="color:#50fa7b">Passenger</span> <span style="color:#ff79c6">{</span>
+</span></span><span style="display:flex;"><span><span style="color:#8be9fd;font-style:italic">public</span> <span style="color:#8be9fd;font-style:italic">class</span> <span style="color:#50fa7b">Passenger</span> {
 </span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span>    Integer id<span style="color:#ff79c6">;</span>
-</span></span><span style="display:flex;"><span>    String firstName<span style="color:#ff79c6">;</span>
-</span></span><span style="display:flex;"><span>    String lastName<span style="color:#ff79c6">;</span>
-</span></span><span style="display:flex;"><span>    Boolean isMale<span style="color:#ff79c6">;</span>
-</span></span><span style="display:flex;"><span>    List<span style="color:#ff79c6">&lt;</span>Belonging<span style="color:#ff79c6">&gt;</span> belongings<span style="color:#ff79c6">;</span>
-</span></span><span style="display:flex;"><span>    Ticket ticket<span style="color:#ff79c6">;</span>
-</span></span><span style="display:flex;"><span><span style="color:#ff79c6">}</span>
-</span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span>@Value
-</span></span><span style="display:flex;"><span>@Builder
-</span></span><span style="display:flex;"><span><span style="color:#8be9fd;font-style:italic">public</span> <span style="color:#8be9fd;font-style:italic">class</span> <span style="color:#50fa7b">Belonging</span> <span style="color:#ff79c6">{</span>
-</span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span>    Integer id<span style="color:#ff79c6">;</span>
-</span></span><span style="display:flex;"><span>    BelongingType type<span style="color:#ff79c6">;</span>
-</span></span><span style="display:flex;"><span>    Float weightInKilogram<span style="color:#ff79c6">;</span>
-</span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span>    <span style="color:#8be9fd;font-style:italic">public</span> <span style="color:#8be9fd;font-style:italic">enum</span> BelongingType <span style="color:#ff79c6">{</span>
-</span></span><span style="display:flex;"><span>        SUITCASE<span style="color:#ff79c6">,</span> BACKPACK
-</span></span><span style="display:flex;"><span>    <span style="color:#ff79c6">}</span>
-</span></span><span style="display:flex;"><span><span style="color:#ff79c6">}</span>
+</span></span><span style="display:flex;"><span>    Integer id;
+</span></span><span style="display:flex;"><span>    String firstName;
+</span></span><span style="display:flex;"><span>    String lastName;
+</span></span><span style="display:flex;"><span>    Boolean isMale;
+</span></span><span style="display:flex;"><span>    List<span style="color:#ff79c6">&lt;</span>Belonging<span style="color:#ff79c6">&gt;</span> belongings;
+</span></span><span style="display:flex;"><span>    Ticket ticket;
+</span></span><span style="display:flex;"><span>}
 </span></span><span style="display:flex;"><span>
 </span></span><span style="display:flex;"><span>@Value
 </span></span><span style="display:flex;"><span>@Builder
-</span></span><span style="display:flex;"><span><span style="color:#8be9fd;font-style:italic">public</span> <span style="color:#8be9fd;font-style:italic">class</span> <span style="color:#50fa7b">Ticket</span> <span style="color:#ff79c6">{</span>
+</span></span><span style="display:flex;"><span><span style="color:#8be9fd;font-style:italic">public</span> <span style="color:#8be9fd;font-style:italic">class</span> <span style="color:#50fa7b">Belonging</span> {
 </span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span>    Integer id<span style="color:#ff79c6">;</span>
-</span></span><span style="display:flex;"><span>    Transportation transportation<span style="color:#ff79c6">;</span>
-</span></span><span style="display:flex;"><span>    Currency currency<span style="color:#ff79c6">;</span>
-</span></span><span style="display:flex;"><span>    BigDecimal price<span style="color:#ff79c6">;</span>
-</span></span><span style="display:flex;"><span>    Location departure<span style="color:#ff79c6">;</span>
-</span></span><span style="display:flex;"><span>    OffsetDateTime departureTime<span style="color:#ff79c6">;</span>
-</span></span><span style="display:flex;"><span>    Location arrival<span style="color:#ff79c6">;</span>
-</span></span><span style="display:flex;"><span>    OffsetDateTime arrivalTime<span style="color:#ff79c6">;</span>
+</span></span><span style="display:flex;"><span>    Integer id;
+</span></span><span style="display:flex;"><span>    BelongingType type;
+</span></span><span style="display:flex;"><span>    Float weightInKilogram;
 </span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span>    <span style="color:#8be9fd;font-style:italic">public</span> <span style="color:#8be9fd;font-style:italic">enum</span> Transportation <span style="color:#ff79c6">{</span>
-</span></span><span style="display:flex;"><span>        AIRLINE<span style="color:#ff79c6">,</span> TRAIN
-</span></span><span style="display:flex;"><span>    <span style="color:#ff79c6">}</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#8be9fd;font-style:italic">public</span> <span style="color:#8be9fd;font-style:italic">enum</span> BelongingType {
+</span></span><span style="display:flex;"><span>        SUITCASE, BACKPACK
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>}
 </span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span>    <span style="color:#8be9fd;font-style:italic">public</span> <span style="color:#8be9fd;font-style:italic">enum</span> Currency <span style="color:#ff79c6">{</span>
-</span></span><span style="display:flex;"><span>        USD<span style="color:#ff79c6">,</span> NTD
-</span></span><span style="display:flex;"><span>    <span style="color:#ff79c6">}</span>
+</span></span><span style="display:flex;"><span>@Value
+</span></span><span style="display:flex;"><span>@Builder
+</span></span><span style="display:flex;"><span><span style="color:#8be9fd;font-style:italic">public</span> <span style="color:#8be9fd;font-style:italic">class</span> <span style="color:#50fa7b">Ticket</span> {
 </span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span>    <span style="color:#8be9fd;font-style:italic">public</span> <span style="color:#8be9fd;font-style:italic">enum</span> Location <span style="color:#ff79c6">{</span>
-</span></span><span style="display:flex;"><span>        TPE<span style="color:#ff79c6">,</span> TSA<span style="color:#ff79c6">,</span> NRT<span style="color:#ff79c6">,</span> LAX
-</span></span><span style="display:flex;"><span>    <span style="color:#ff79c6">}</span>
-</span></span><span style="display:flex;"><span><span style="color:#ff79c6">}</span>
+</span></span><span style="display:flex;"><span>    Integer id;
+</span></span><span style="display:flex;"><span>    Transportation transportation;
+</span></span><span style="display:flex;"><span>    Currency currency;
+</span></span><span style="display:flex;"><span>    BigDecimal price;
+</span></span><span style="display:flex;"><span>    Location departure;
+</span></span><span style="display:flex;"><span>    OffsetDateTime departureTime;
+</span></span><span style="display:flex;"><span>    Location arrival;
+</span></span><span style="display:flex;"><span>    OffsetDateTime arrivalTime;
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#8be9fd;font-style:italic">public</span> <span style="color:#8be9fd;font-style:italic">enum</span> Transportation {
+</span></span><span style="display:flex;"><span>        AIRLINE, TRAIN
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#8be9fd;font-style:italic">public</span> <span style="color:#8be9fd;font-style:italic">enum</span> Currency {
+</span></span><span style="display:flex;"><span>        USD, NTD
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#8be9fd;font-style:italic">public</span> <span style="color:#8be9fd;font-style:italic">enum</span> Location {
+</span></span><span style="display:flex;"><span>        TPE, TSA, NRT, LAX
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>}
 </span></span></code></pre></div><p>我也盡量將 Java 常用的資料型別加入其中來試驗各序列化 Library 的支援度</p>
 <p>以下是 ProtoBuf 對應的 .proto 檔</p>
 <div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-proto" data-lang="proto"><span style="display:flex;"><span>syntax <span style="color:#ff79c6">=</span> <span style="color:#f1fa8c">&#34;proto3&#34;</span>;

@@ -554,104 +554,104 @@ if (!doNotTrack) {
 <h3 id="節點狀態更新及-failover">節點狀態更新及 Failover</h3>
 <p>前面有提到 Quartz 並不需要節點之間互相通訊，而是透過各節點自行定時保持心跳更新 <code>QRTZ_SCHEDULER_STATE</code> 當中的 <code>LAST_CHECKIN_TIME</code></p>
 <p>再來是每個節點都會檢查所有其他節點的 <code>LAST_CHECKIN_TIME</code> 是否過期，如果過期就認為該節點失效：</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-java" data-lang="java"><span style="display:flex;"><span><span style="color:#8be9fd;font-style:italic">protected</span> List<span style="color:#ff79c6">&lt;</span>SchedulerStateRecord<span style="color:#ff79c6">&gt;</span> <span style="color:#50fa7b">findFailedInstances</span><span style="color:#ff79c6">(</span>Connection conn<span style="color:#ff79c6">)</span> <span style="color:#8be9fd;font-style:italic">throws</span> JobPersistenceException <span style="color:#ff79c6">{</span>
-</span></span><span style="display:flex;"><span>	<span style="color:#ff79c6">try</span> <span style="color:#ff79c6">{</span>
-</span></span><span style="display:flex;"><span>		<span style="color:#ff79c6">...</span>
-</span></span><span style="display:flex;"><span>		List<span style="color:#ff79c6">&lt;</span>SchedulerStateRecord<span style="color:#ff79c6">&gt;</span> states <span style="color:#ff79c6">=</span> getDelegate<span style="color:#ff79c6">().</span><span style="color:#50fa7b">selectSchedulerStateRecords</span><span style="color:#ff79c6">(</span>conn<span style="color:#ff79c6">,</span> <span style="color:#ff79c6">null</span><span style="color:#ff79c6">);</span>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-java" data-lang="java"><span style="display:flex;"><span><span style="color:#8be9fd;font-style:italic">protected</span> List<span style="color:#ff79c6">&lt;</span>SchedulerStateRecord<span style="color:#ff79c6">&gt;</span> <span style="color:#50fa7b">findFailedInstances</span>(Connection conn) <span style="color:#8be9fd;font-style:italic">throws</span> JobPersistenceException {
+</span></span><span style="display:flex;"><span>	<span style="color:#ff79c6">try</span> {
+</span></span><span style="display:flex;"><span>		...
+</span></span><span style="display:flex;"><span>		List<span style="color:#ff79c6">&lt;</span>SchedulerStateRecord<span style="color:#ff79c6">&gt;</span> states <span style="color:#ff79c6">=</span> getDelegate().<span style="color:#50fa7b">selectSchedulerStateRecords</span>(conn, <span style="color:#ff79c6">null</span>);
 </span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span>		<span style="color:#ff79c6">for</span><span style="color:#ff79c6">(</span>SchedulerStateRecord rec<span style="color:#ff79c6">:</span> states<span style="color:#ff79c6">)</span> <span style="color:#ff79c6">{</span>
+</span></span><span style="display:flex;"><span>		<span style="color:#ff79c6">for</span>(SchedulerStateRecord rec: states) {
 </span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span>			<span style="color:#6272a4">// find own record...
-</span></span></span><span style="display:flex;"><span><span style="color:#6272a4"></span>			<span style="color:#ff79c6">if</span> <span style="color:#ff79c6">(</span>rec<span style="color:#ff79c6">.</span><span style="color:#50fa7b">getSchedulerInstanceId</span><span style="color:#ff79c6">().</span><span style="color:#50fa7b">equals</span><span style="color:#ff79c6">(</span>getInstanceId<span style="color:#ff79c6">()))</span> <span style="color:#ff79c6">{</span>
-</span></span><span style="display:flex;"><span>				foundThisScheduler <span style="color:#ff79c6">=</span> <span style="color:#ff79c6">true</span><span style="color:#ff79c6">;</span>
-</span></span><span style="display:flex;"><span>				<span style="color:#ff79c6">if</span> <span style="color:#ff79c6">(</span>firstCheckIn<span style="color:#ff79c6">)</span> <span style="color:#ff79c6">{</span>
-</span></span><span style="display:flex;"><span>					failedInstances<span style="color:#ff79c6">.</span><span style="color:#50fa7b">add</span><span style="color:#ff79c6">(</span>rec<span style="color:#ff79c6">);</span>
-</span></span><span style="display:flex;"><span>				<span style="color:#ff79c6">}</span>
-</span></span><span style="display:flex;"><span>			<span style="color:#ff79c6">}</span> <span style="color:#ff79c6">else</span> <span style="color:#ff79c6">{</span>
-</span></span><span style="display:flex;"><span>				<span style="color:#6272a4">// find failed instances...
-</span></span></span><span style="display:flex;"><span><span style="color:#6272a4"></span>				<span style="color:#ff79c6">if</span> <span style="color:#ff79c6">(</span>calcFailedIfAfter<span style="color:#ff79c6">(</span>rec<span style="color:#ff79c6">)</span> <span style="color:#ff79c6">&lt;</span> timeNow<span style="color:#ff79c6">)</span> <span style="color:#ff79c6">{</span>
-</span></span><span style="display:flex;"><span>					failedInstances<span style="color:#ff79c6">.</span><span style="color:#50fa7b">add</span><span style="color:#ff79c6">(</span>rec<span style="color:#ff79c6">);</span>
-</span></span><span style="display:flex;"><span>				<span style="color:#ff79c6">}</span>
-</span></span><span style="display:flex;"><span>			<span style="color:#ff79c6">}</span>
-</span></span><span style="display:flex;"><span>		<span style="color:#ff79c6">}</span>
-</span></span><span style="display:flex;"><span>		<span style="color:#ff79c6">...</span>
-</span></span><span style="display:flex;"><span>	<span style="color:#ff79c6">}</span>
-</span></span><span style="display:flex;"><span>	<span style="color:#ff79c6">...</span>
-</span></span><span style="display:flex;"><span><span style="color:#ff79c6">}</span>
+</span></span><span style="display:flex;"><span>			<span style="color:#6272a4">// find own record...</span>
+</span></span><span style="display:flex;"><span>			<span style="color:#ff79c6">if</span> (rec.<span style="color:#50fa7b">getSchedulerInstanceId</span>().<span style="color:#50fa7b">equals</span>(getInstanceId())) {
+</span></span><span style="display:flex;"><span>				foundThisScheduler <span style="color:#ff79c6">=</span> <span style="color:#ff79c6">true</span>;
+</span></span><span style="display:flex;"><span>				<span style="color:#ff79c6">if</span> (firstCheckIn) {
+</span></span><span style="display:flex;"><span>					failedInstances.<span style="color:#50fa7b">add</span>(rec);
+</span></span><span style="display:flex;"><span>				}
+</span></span><span style="display:flex;"><span>			} <span style="color:#ff79c6">else</span> {
+</span></span><span style="display:flex;"><span>				<span style="color:#6272a4">// find failed instances...</span>
+</span></span><span style="display:flex;"><span>				<span style="color:#ff79c6">if</span> (calcFailedIfAfter(rec) <span style="color:#ff79c6">&lt;</span> timeNow) {
+</span></span><span style="display:flex;"><span>					failedInstances.<span style="color:#50fa7b">add</span>(rec);
+</span></span><span style="display:flex;"><span>				}
+</span></span><span style="display:flex;"><span>			}
+</span></span><span style="display:flex;"><span>		}
+</span></span><span style="display:flex;"><span>		...
+</span></span><span style="display:flex;"><span>	}
+</span></span><span style="display:flex;"><span>	...
+</span></span><span style="display:flex;"><span>}
 </span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span><span style="color:#8be9fd;font-style:italic">protected</span> <span style="color:#8be9fd">long</span> <span style="color:#50fa7b">calcFailedIfAfter</span><span style="color:#ff79c6">(</span>SchedulerStateRecord rec<span style="color:#ff79c6">)</span> <span style="color:#ff79c6">{</span>
-</span></span><span style="display:flex;"><span>	<span style="color:#ff79c6">return</span> rec<span style="color:#ff79c6">.</span><span style="color:#50fa7b">getCheckinTimestamp</span><span style="color:#ff79c6">()</span> <span style="color:#ff79c6">+</span>
-</span></span><span style="display:flex;"><span>		Math<span style="color:#ff79c6">.</span><span style="color:#50fa7b">max</span><span style="color:#ff79c6">(</span>rec<span style="color:#ff79c6">.</span><span style="color:#50fa7b">getCheckinInterval</span><span style="color:#ff79c6">(),</span> 
-</span></span><span style="display:flex;"><span>			<span style="color:#ff79c6">(</span>System<span style="color:#ff79c6">.</span><span style="color:#50fa7b">currentTimeMillis</span><span style="color:#ff79c6">()</span> <span style="color:#ff79c6">-</span> lastCheckin<span style="color:#ff79c6">))</span> <span style="color:#ff79c6">+</span>
-</span></span><span style="display:flex;"><span>		<span style="color:#bd93f9">7500L</span><span style="color:#ff79c6">;</span>
-</span></span><span style="display:flex;"><span><span style="color:#ff79c6">}</span>
+</span></span><span style="display:flex;"><span><span style="color:#8be9fd;font-style:italic">protected</span> <span style="color:#8be9fd">long</span> <span style="color:#50fa7b">calcFailedIfAfter</span>(SchedulerStateRecord rec) {
+</span></span><span style="display:flex;"><span>	<span style="color:#ff79c6">return</span> rec.<span style="color:#50fa7b">getCheckinTimestamp</span>() <span style="color:#ff79c6">+</span>
+</span></span><span style="display:flex;"><span>		Math.<span style="color:#50fa7b">max</span>(rec.<span style="color:#50fa7b">getCheckinInterval</span>(), 
+</span></span><span style="display:flex;"><span>			(System.<span style="color:#50fa7b">currentTimeMillis</span>() <span style="color:#ff79c6">-</span> lastCheckin)) <span style="color:#ff79c6">+</span>
+</span></span><span style="display:flex;"><span>		7500L;
+</span></span><span style="display:flex;"><span>}
 </span></span></code></pre></div><p>接著就會依照檢查到的 fail 節點列表去取得那些實例在處理的 <code>Trigger</code>，並將那些 <code>Trigger</code> 從 <code>QRTZ_FIRED_TRIGGERS</code> 表中刪除，再從 <code>QRTZ_SCHEDULER_STATE</code> 表中刪除那些 fail 的節點，即可達成 failover：</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-java" data-lang="java"><span style="display:flex;"><span><span style="color:#8be9fd;font-style:italic">protected</span> <span style="color:#8be9fd">void</span> <span style="color:#50fa7b">clusterRecover</span><span style="color:#ff79c6">(</span>Connection conn<span style="color:#ff79c6">,</span> List<span style="color:#ff79c6">&lt;</span>SchedulerStateRecord<span style="color:#ff79c6">&gt;</span> failedInstances<span style="color:#ff79c6">)</span> <span style="color:#8be9fd;font-style:italic">throws</span> JobPersistenceException <span style="color:#ff79c6">{</span>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-java" data-lang="java"><span style="display:flex;"><span><span style="color:#8be9fd;font-style:italic">protected</span> <span style="color:#8be9fd">void</span> <span style="color:#50fa7b">clusterRecover</span>(Connection conn, List<span style="color:#ff79c6">&lt;</span>SchedulerStateRecord<span style="color:#ff79c6">&gt;</span> failedInstances) <span style="color:#8be9fd;font-style:italic">throws</span> JobPersistenceException {
 </span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span>	<span style="color:#ff79c6">if</span> <span style="color:#ff79c6">(</span>failedInstances<span style="color:#ff79c6">.</span><span style="color:#50fa7b">size</span><span style="color:#ff79c6">()</span> <span style="color:#ff79c6">&gt;</span> <span style="color:#bd93f9">0</span><span style="color:#ff79c6">)</span> <span style="color:#ff79c6">{</span>
-</span></span><span style="display:flex;"><span>		<span style="color:#ff79c6">...</span>
+</span></span><span style="display:flex;"><span>	<span style="color:#ff79c6">if</span> (failedInstances.<span style="color:#50fa7b">size</span>() <span style="color:#ff79c6">&gt;</span> 0) {
+</span></span><span style="display:flex;"><span>		...
 </span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span>		<span style="color:#6272a4">// release acquired triggers..
-</span></span></span><span style="display:flex;"><span><span style="color:#6272a4"></span>		getDelegate<span style="color:#ff79c6">().</span><span style="color:#50fa7b">updateTriggerStateFromOtherState</span><span style="color:#ff79c6">(</span>
-</span></span><span style="display:flex;"><span>				conn<span style="color:#ff79c6">,</span> tKey<span style="color:#ff79c6">,</span> STATE_WAITING<span style="color:#ff79c6">,</span>
-</span></span><span style="display:flex;"><span>				STATE_ACQUIRED<span style="color:#ff79c6">);</span>
-</span></span><span style="display:flex;"><span>		<span style="color:#ff79c6">...</span>
+</span></span><span style="display:flex;"><span>		<span style="color:#6272a4">// release acquired triggers..</span>
+</span></span><span style="display:flex;"><span>		getDelegate().<span style="color:#50fa7b">updateTriggerStateFromOtherState</span>(
+</span></span><span style="display:flex;"><span>				conn, tKey, STATE_WAITING,
+</span></span><span style="display:flex;"><span>				STATE_ACQUIRED);
+</span></span><span style="display:flex;"><span>		...
 </span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span>		getDelegate<span style="color:#ff79c6">().</span><span style="color:#50fa7b">deleteFiredTriggers</span><span style="color:#ff79c6">(</span>conn<span style="color:#ff79c6">,</span> rec<span style="color:#ff79c6">.</span><span style="color:#50fa7b">getSchedulerInstanceId</span><span style="color:#ff79c6">());</span>
-</span></span><span style="display:flex;"><span>		<span style="color:#ff79c6">...</span>
+</span></span><span style="display:flex;"><span>		getDelegate().<span style="color:#50fa7b">deleteFiredTriggers</span>(conn, rec.<span style="color:#50fa7b">getSchedulerInstanceId</span>());
+</span></span><span style="display:flex;"><span>		...
 </span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span>		<span style="color:#ff79c6">if</span> <span style="color:#ff79c6">(!</span>rec<span style="color:#ff79c6">.</span><span style="color:#50fa7b">getSchedulerInstanceId</span><span style="color:#ff79c6">().</span><span style="color:#50fa7b">equals</span><span style="color:#ff79c6">(</span>getInstanceId<span style="color:#ff79c6">()))</span> <span style="color:#ff79c6">{</span>
-</span></span><span style="display:flex;"><span>			getDelegate<span style="color:#ff79c6">().</span><span style="color:#50fa7b">deleteSchedulerState</span><span style="color:#ff79c6">(</span>conn<span style="color:#ff79c6">,</span> rec<span style="color:#ff79c6">.</span><span style="color:#50fa7b">getSchedulerInstanceId</span><span style="color:#ff79c6">());</span>
-</span></span><span style="display:flex;"><span>		<span style="color:#ff79c6">}</span>
-</span></span><span style="display:flex;"><span>		<span style="color:#ff79c6">...</span>
-</span></span><span style="display:flex;"><span>	<span style="color:#ff79c6">}</span>
-</span></span><span style="display:flex;"><span><span style="color:#ff79c6">}</span>
+</span></span><span style="display:flex;"><span>		<span style="color:#ff79c6">if</span> (<span style="color:#ff79c6">!</span>rec.<span style="color:#50fa7b">getSchedulerInstanceId</span>().<span style="color:#50fa7b">equals</span>(getInstanceId())) {
+</span></span><span style="display:flex;"><span>			getDelegate().<span style="color:#50fa7b">deleteSchedulerState</span>(conn, rec.<span style="color:#50fa7b">getSchedulerInstanceId</span>());
+</span></span><span style="display:flex;"><span>		}
+</span></span><span style="display:flex;"><span>		...
+</span></span><span style="display:flex;"><span>	}
+</span></span><span style="display:flex;"><span>}
 </span></span></code></pre></div><p>所以我們可以得知 Quartz 更新節點狀態是依靠運行環境的時間來進行同步，所以實際情況下，如果各節點運行在不同環境，需要注意各環境之間時間的同步</p>
 <h3 id="保證任務執行的一致性">保證任務執行的一致性</h3>
 <blockquote>
 <p>以下討論皆以採用 <code>JobStroeTX</code> 並配合 MySQL 來繼續討論 Quartz 集群機制，可以比較清楚看到 Quartz 實作的步驟；若是採用 <code>JobStoreCMT</code> 則要看應用本身提供怎樣的 transaction 機制，例如 JTA，但除了 transaction 的部分，其他概念大致上還是相同，所以其餘步驟也是大致相同</p>
 </blockquote>
 <p>Quartz 保證任務執行一致性的方式實際上是在各節點認領 <code>Trigger</code> 時，先透過 database 本身支援的 row lock，例如 MySQL 在開啟 transaction 後，可透過 <code>select * from QRTZ_LOCKS where SCHED_NAME = &lt;scheduleName&gt; AND LOCK_NAME = ? for update</code> 語句取得 row lock 實作悲觀鎖，以確保任務不會被重複執行：</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-java" data-lang="java"><span style="display:flex;"><span><span style="color:#8be9fd;font-style:italic">protected</span> <span style="color:#ff79c6">&lt;</span>T<span style="color:#ff79c6">&gt;</span> T <span style="color:#50fa7b">executeInNonManagedTXLock</span><span style="color:#ff79c6">(</span>
-</span></span><span style="display:flex;"><span>	String lockName<span style="color:#ff79c6">,</span> 
-</span></span><span style="display:flex;"><span>	TransactionCallback<span style="color:#ff79c6">&lt;</span>T<span style="color:#ff79c6">&gt;</span> txCallback<span style="color:#ff79c6">,</span> <span style="color:#8be9fd;font-style:italic">final</span> TransactionValidator<span style="color:#ff79c6">&lt;</span>T<span style="color:#ff79c6">&gt;</span> txValidator<span style="color:#ff79c6">)</span> <span style="color:#8be9fd;font-style:italic">throws</span> JobPersistenceException <span style="color:#ff79c6">{</span>
-</span></span><span style="display:flex;"><span>	<span style="color:#ff79c6">...</span>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-java" data-lang="java"><span style="display:flex;"><span><span style="color:#8be9fd;font-style:italic">protected</span> <span style="color:#ff79c6">&lt;</span>T<span style="color:#ff79c6">&gt;</span> T <span style="color:#50fa7b">executeInNonManagedTXLock</span>(
+</span></span><span style="display:flex;"><span>	String lockName, 
+</span></span><span style="display:flex;"><span>	TransactionCallback<span style="color:#ff79c6">&lt;</span>T<span style="color:#ff79c6">&gt;</span> txCallback, <span style="color:#8be9fd;font-style:italic">final</span> TransactionValidator<span style="color:#ff79c6">&lt;</span>T<span style="color:#ff79c6">&gt;</span> txValidator) <span style="color:#8be9fd;font-style:italic">throws</span> JobPersistenceException {
+</span></span><span style="display:flex;"><span>	...
 </span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span>	transOwner <span style="color:#ff79c6">=</span> getLockHandler<span style="color:#ff79c6">().</span><span style="color:#50fa7b">obtainLock</span><span style="color:#ff79c6">(</span>conn<span style="color:#ff79c6">,</span> lockName<span style="color:#ff79c6">);</span>
-</span></span><span style="display:flex;"><span>	<span style="color:#ff79c6">...</span>
+</span></span><span style="display:flex;"><span>	transOwner <span style="color:#ff79c6">=</span> getLockHandler().<span style="color:#50fa7b">obtainLock</span>(conn, lockName);
+</span></span><span style="display:flex;"><span>	...
 </span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span>	<span style="color:#8be9fd;font-style:italic">final</span> T result <span style="color:#ff79c6">=</span> txCallback<span style="color:#ff79c6">.</span><span style="color:#50fa7b">execute</span><span style="color:#ff79c6">(</span>conn<span style="color:#ff79c6">);</span>
-</span></span><span style="display:flex;"><span>	<span style="color:#ff79c6">...</span>
+</span></span><span style="display:flex;"><span>	<span style="color:#8be9fd;font-style:italic">final</span> T result <span style="color:#ff79c6">=</span> txCallback.<span style="color:#50fa7b">execute</span>(conn);
+</span></span><span style="display:flex;"><span>	...
 </span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span>	releaseLock<span style="color:#ff79c6">(</span>lockName<span style="color:#ff79c6">,</span> transOwner<span style="color:#ff79c6">);</span>
-</span></span><span style="display:flex;"><span>	<span style="color:#ff79c6">...</span>
-</span></span><span style="display:flex;"><span><span style="color:#ff79c6">}</span>
+</span></span><span style="display:flex;"><span>	releaseLock(lockName, transOwner);
+</span></span><span style="display:flex;"><span>	...
+</span></span><span style="display:flex;"><span>}
 </span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span><span style="color:#8be9fd;font-style:italic">protected</span> List<span style="color:#ff79c6">&lt;</span>OperableTrigger<span style="color:#ff79c6">&gt;</span> <span style="color:#50fa7b">acquireNextTrigger</span><span style="color:#ff79c6">(</span>Connection conn<span style="color:#ff79c6">,</span> <span style="color:#8be9fd">long</span> noLaterThan<span style="color:#ff79c6">,</span> <span style="color:#8be9fd">int</span> maxCount<span style="color:#ff79c6">,</span> <span style="color:#8be9fd">long</span> timeWindow<span style="color:#ff79c6">)</span> <span style="color:#8be9fd;font-style:italic">throws</span> JobPersistenceException <span style="color:#ff79c6">{</span>
-</span></span><span style="display:flex;"><span>	<span style="color:#ff79c6">...</span>
+</span></span><span style="display:flex;"><span><span style="color:#8be9fd;font-style:italic">protected</span> List<span style="color:#ff79c6">&lt;</span>OperableTrigger<span style="color:#ff79c6">&gt;</span> <span style="color:#50fa7b">acquireNextTrigger</span>(Connection conn, <span style="color:#8be9fd">long</span> noLaterThan, <span style="color:#8be9fd">int</span> maxCount, <span style="color:#8be9fd">long</span> timeWindow) <span style="color:#8be9fd;font-style:italic">throws</span> JobPersistenceException {
+</span></span><span style="display:flex;"><span>	...
 </span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span>	List<span style="color:#ff79c6">&lt;</span>TriggerKey<span style="color:#ff79c6">&gt;</span> keys <span style="color:#ff79c6">=</span> getDelegate<span style="color:#ff79c6">().</span><span style="color:#50fa7b">selectTriggerToAcquire</span><span style="color:#ff79c6">(</span>conn<span style="color:#ff79c6">,</span> noLaterThan <span style="color:#ff79c6">+</span> timeWindow<span style="color:#ff79c6">,</span> getMisfireTime<span style="color:#ff79c6">(),</span> maxCount<span style="color:#ff79c6">);</span>  
-</span></span><span style="display:flex;"><span>	<span style="color:#ff79c6">...</span>
+</span></span><span style="display:flex;"><span>	List<span style="color:#ff79c6">&lt;</span>TriggerKey<span style="color:#ff79c6">&gt;</span> keys <span style="color:#ff79c6">=</span> getDelegate().<span style="color:#50fa7b">selectTriggerToAcquire</span>(conn, noLaterThan <span style="color:#ff79c6">+</span> timeWindow, getMisfireTime(), maxCount);  
+</span></span><span style="display:flex;"><span>	...
 </span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span>	<span style="color:#ff79c6">for</span><span style="color:#ff79c6">(</span>TriggerKey triggerKey<span style="color:#ff79c6">:</span> keys<span style="color:#ff79c6">)</span> <span style="color:#ff79c6">{</span>
-</span></span><span style="display:flex;"><span>		<span style="color:#ff79c6">...</span>
+</span></span><span style="display:flex;"><span>	<span style="color:#ff79c6">for</span>(TriggerKey triggerKey: keys) {
+</span></span><span style="display:flex;"><span>		...
 </span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span>		JobDetail job <span style="color:#ff79c6">=</span> <span style="color:#ff79c6">=</span> retrieveJob<span style="color:#ff79c6">(</span>conn<span style="color:#ff79c6">,</span> jobKey<span style="color:#ff79c6">);</span>
-</span></span><span style="display:flex;"><span>		<span style="color:#ff79c6">...</span>
+</span></span><span style="display:flex;"><span>		JobDetail job <span style="color:#ff79c6">=</span> <span style="color:#ff79c6">=</span> retrieveJob(conn, jobKey);
+</span></span><span style="display:flex;"><span>		...
 </span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span>		<span style="color:#8be9fd">int</span> rowsUpdated <span style="color:#ff79c6">=</span> getDelegate<span style="color:#ff79c6">().</span><span style="color:#50fa7b">updateTriggerStateFromOtherState</span><span style="color:#ff79c6">(</span>conn<span style="color:#ff79c6">,</span> triggerKey<span style="color:#ff79c6">,</span> STATE_ACQUIRED<span style="color:#ff79c6">,</span> STATE_WAITING<span style="color:#ff79c6">);</span>
-</span></span><span style="display:flex;"><span>		<span style="color:#ff79c6">...</span>
+</span></span><span style="display:flex;"><span>		<span style="color:#8be9fd">int</span> rowsUpdated <span style="color:#ff79c6">=</span> getDelegate().<span style="color:#50fa7b">updateTriggerStateFromOtherState</span>(conn, triggerKey, STATE_ACQUIRED, STATE_WAITING);
+</span></span><span style="display:flex;"><span>		...
 </span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span>		getDelegate<span style="color:#ff79c6">().</span><span style="color:#50fa7b">insertFiredTrigger</span><span style="color:#ff79c6">(</span>conn<span style="color:#ff79c6">,</span> nextTrigger<span style="color:#ff79c6">,</span> STATE_ACQUIRED<span style="color:#ff79c6">,</span> <span style="color:#ff79c6">null</span><span style="color:#ff79c6">);</span>
-</span></span><span style="display:flex;"><span>		<span style="color:#ff79c6">...</span>
+</span></span><span style="display:flex;"><span>		getDelegate().<span style="color:#50fa7b">insertFiredTrigger</span>(conn, nextTrigger, STATE_ACQUIRED, <span style="color:#ff79c6">null</span>);
+</span></span><span style="display:flex;"><span>		...
 </span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span>		acquiredTriggers<span style="color:#ff79c6">.</span><span style="color:#50fa7b">add</span><span style="color:#ff79c6">(</span>nextTrigger<span style="color:#ff79c6">);</span>
-</span></span><span style="display:flex;"><span>		<span style="color:#ff79c6">...</span>
-</span></span><span style="display:flex;"><span>	<span style="color:#ff79c6">}</span>
-</span></span><span style="display:flex;"><span>	<span style="color:#ff79c6">...</span>
+</span></span><span style="display:flex;"><span>		acquiredTriggers.<span style="color:#50fa7b">add</span>(nextTrigger);
+</span></span><span style="display:flex;"><span>		...
+</span></span><span style="display:flex;"><span>	}
+</span></span><span style="display:flex;"><span>	...
 </span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span>	<span style="color:#ff79c6">return</span> acquiredTriggers<span style="color:#ff79c6">;</span>
-</span></span><span style="display:flex;"><span><span style="color:#ff79c6">}</span>
+</span></span><span style="display:flex;"><span>	<span style="color:#ff79c6">return</span> acquiredTriggers;
+</span></span><span style="display:flex;"><span>}
 </span></span></code></pre></div><h1 id="結語">結語</h1>
 <p>這篇簡單探討過 Quartz 單體跟集群的任務分配機制後，下一篇就要進入實作部分</p>
 <h1 id="reference">Reference</h1>

@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>timezone on Howard Tech Note</title>
+    <link>https://blog.idontwannarock.me/tags/timezone/</link>
+    <description>Recent content in timezone on Howard Tech Note</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-us</language>
+    <copyright>This website by Howard Wang is licensed under a Creative Common Attribution-ShareAlike 4.0 International License.</copyright>
+    <lastBuildDate>Wed, 27 Dec 2023 09:26:23 +0800</lastBuildDate>
+    <atom:link href="https://blog.idontwannarock.me/tags/timezone/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Java Time 保存到 MySQL DATETIME 時區問題</title>
+      <link>https://blog.idontwannarock.me/2023/12/java_time_mapping_mysql_datetime_timezone/</link>
+      <pubDate>Wed, 27 Dec 2023 09:26:23 +0800</pubDate>
+      <guid>https://blog.idontwannarock.me/2023/12/java_time_mapping_mysql_datetime_timezone/</guid>
+      <description>最近開發遇到一個對我的系統需求來說很合適，但我感覺不合理的狀況&#xA;目前有 Spring Boot 系統在 JPA 是用 OffsetDateTime 在 Entity 中對應 MySQL 表中的 DATETIME 欄位，JVM 時區以及 MySQL 的系統時區都是 +8，沒有特別在任何地方進行時區設定，也就是所有地方應該都是預設設定&#xA;然而當 OffsetDateTime 保存到 DATETIME 當中時，卻會被自動轉換成 UTC 時區的時間保存，並且之後再用 JPA 重新取出後，OffsetDateTime 也依然是 UTC 時區&#xA;這就讓人感覺很奇怪了，感覺要馬就應該是 MySQL DATETIME 保存時用 JVM 跟 MySQL 相同的系統 +8 時區時間保存，取出也是 +8 時間；要馬就是保存時會轉成 UTC，但取出應該會自動轉換回 JVM 的 +8 才合理，畢竟 DATETIME 欄位資料格式不保存時區資訊，所以要馬就是完全不轉換，要馬就是會依照某種機制保存時用 UTC，但使用時會自動轉換成 JVM 時區之類的模式才對&#xA;雖然我原本就希望在系統中盡量都使用 UTC 時區而不要隨著 MySQL/JVM 時區變動以避免造成資料錯誤的問題，但機制不如預期就應該要弄清楚，免得其實是有什麼未知的狀況造成日後踩到坑&#xA;Pre-requisite 首先要先說明這篇文章的研究都是基於下列版本，不同的版本「可能」會有不同的行為，請查詢官網文件或自行測試&#xA;Spring Boot Data JPA 3.1.4 Hibernate 6.2.9.Final MySQL JDBC Driver 8.</description>
+    </item>
+  </channel>
+</rss>

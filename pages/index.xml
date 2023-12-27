@@ -7,32 +7,21 @@
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
     <copyright>This website by Howard Wang is licensed under a Creative Common Attribution-ShareAlike 4.0 International License.</copyright>
-    <lastBuildDate>Mon, 08 May 2017 09:43:46 +0800</lastBuildDate><atom:link href="https://blog.idontwannarock.me/pages/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Mon, 08 May 2017 09:43:46 +0800</lastBuildDate>
+    <atom:link href="https://blog.idontwannarock.me/pages/index.xml" rel="self" type="application/rss+xml" />
     <item>
       <title>作品介紹</title>
       <link>https://blog.idontwannarock.me/works/</link>
       <pubDate>Mon, 08 May 2017 09:43:46 +0800</pubDate>
-      
       <guid>https://blog.idontwannarock.me/works/</guid>
       <description>正在整理過去的作品，見諒</description>
     </item>
-    
     <item>
       <title>About</title>
       <link>https://blog.idontwannarock.me/about/</link>
       <pubDate>Sun, 07 May 2017 17:32:00 +0800</pubDate>
-      
       <guid>https://blog.idontwannarock.me/about/</guid>
-      <description>從自學 PHP 到北科上課學習 Java 入門，從事軟體工程師三年有餘，目前主要工作內容為網路應用開發
-過去接觸過的技術包括
-語言: Java, JavaScript, C#, Lua
-框架: Spring, .Net Framework, NodeJS
-資料庫: MySQL, Oracle, MongoDB, PostgresSQL, Sql Server, Redis, Elasticsearch
-測試: JUnit, Mockito, NUnit
-CI/CD: Git, GitHub, GitLab, Jenkins
-其他: Docker, Docker Compose, Kafka, Zabbix
-最熟練的是 Java 及 Spring 全家桶，Git Flow 或 GitHub Flow 版控，JUnit 及 Mockito 做單元測試及整合測試，Jenkins 搭配 GitHub/GitLab WebHook 做 CI/CD，同時也能利用 shell script、batch script 或 powershell script 搭配 docker-compose 達成基礎的 Infrastructure as Code</description>
+      <description>從自學 PHP 到北科上課學習 Java 入門，從事軟體工程師三年有餘，目前主要工作內容為網路應用開發&#xA;過去接觸過的技術包括&#xA;語言: Java, JavaScript, C#, Lua&#xA;框架: Spring, .Net Framework, NodeJS&#xA;資料庫: MySQL, Oracle, MongoDB, PostgresSQL, Sql Server, Redis, Elasticsearch&#xA;測試: JUnit, Mockito, NUnit&#xA;CI/CD: Git, GitHub, GitLab, Jenkins&#xA;其他: Docker, Docker Compose, Kafka, Zabbix&#xA;最熟練的是 Java 及 Spring 全家桶，Git Flow 或 GitHub Flow 版控，JUnit 及 Mockito 做單元測試及整合測試，Jenkins 搭配 GitHub/GitLab WebHook 做 CI/CD，同時也能利用 shell script、batch script 或 powershell script 搭配 docker-compose 達成基礎的 Infrastructure as Code</description>
     </item>
-    
   </channel>
 </rss>

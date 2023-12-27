@@ -7,20 +7,21 @@
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
     <copyright>This website by Howard Wang is licensed under a Creative Common Attribution-ShareAlike 4.0 International License.</copyright>
-    <lastBuildDate>Tue, 31 Oct 2023 11:59:03 +0800</lastBuildDate><atom:link href="https://blog.idontwannarock.me/tags/datetime/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Wed, 27 Dec 2023 09:26:23 +0800</lastBuildDate>
+    <atom:link href="https://blog.idontwannarock.me/tags/datetime/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Java Time 保存到 MySQL DATETIME 時區問題</title>
+      <link>https://blog.idontwannarock.me/2023/12/java_time_mapping_mysql_datetime_timezone/</link>
+      <pubDate>Wed, 27 Dec 2023 09:26:23 +0800</pubDate>
+      <guid>https://blog.idontwannarock.me/2023/12/java_time_mapping_mysql_datetime_timezone/</guid>
+      <description>最近開發遇到一個對我的系統需求來說很合適，但我感覺不合理的狀況&#xA;目前有 Spring Boot 系統在 JPA 是用 OffsetDateTime 在 Entity 中對應 MySQL 表中的 DATETIME 欄位，JVM 時區以及 MySQL 的系統時區都是 +8，沒有特別在任何地方進行時區設定，也就是所有地方應該都是預設設定&#xA;然而當 OffsetDateTime 保存到 DATETIME 當中時，卻會被自動轉換成 UTC 時區的時間保存，並且之後再用 JPA 重新取出後，OffsetDateTime 也依然是 UTC 時區&#xA;這就讓人感覺很奇怪了，感覺要馬就應該是 MySQL DATETIME 保存時用 JVM 跟 MySQL 相同的系統 +8 時區時間保存，取出也是 +8 時間；要馬就是保存時會轉成 UTC，但取出應該會自動轉換回 JVM 的 +8 才合理，畢竟 DATETIME 欄位資料格式不保存時區資訊，所以要馬就是完全不轉換，要馬就是會依照某種機制保存時用 UTC，但使用時會自動轉換成 JVM 時區之類的模式才對&#xA;雖然我原本就希望在系統中盡量都使用 UTC 時區而不要隨著 MySQL/JVM 時區變動以避免造成資料錯誤的問題，但機制不如預期就應該要弄清楚，免得其實是有什麼未知的狀況造成日後踩到坑&#xA;Pre-requisite 首先要先說明這篇文章的研究都是基於下列版本，不同的版本「可能」會有不同的行為，請查詢官網文件或自行測試&#xA;Spring Boot Data JPA 3.1.4 Hibernate 6.2.9.Final MySQL JDBC Driver 8.</description>
+    </item>
     <item>
       <title>MySQL 8.0 使用 UTC_TIMESTAMP() 當作 DATETIME 欄位預設值 bug</title>
       <link>https://blog.idontwannarock.me/2023/10/mysql_8_utc_timestamp_as_datetime_default_bug/</link>
       <pubDate>Tue, 31 Oct 2023 11:59:03 +0800</pubDate>
-      
       <guid>https://blog.idontwannarock.me/2023/10/mysql_8_utc_timestamp_as_datetime_default_bug/</guid>
-      <description>情境描述 最近在處理 MySQL 的時候採到一個坑
-我的使用情境是需要一個 create date 紀錄資料產生時的 UTC 時間精準到 millisecond
-首先考慮到 MySQL 的 TIMESTAMP 資料型態是採用 epoch second 加上額外的 fractional seconds 精準到 microseconds，也就是最多記錄到 &amp;lsquo;2038-01-19 03:14:07.999999&amp;rsquo; 就會 overflow，如果採用 DATETIME(3) 可以記錄到 &amp;lsquo;9999-12-31 23:59:59.999&amp;rsquo;
-接著因為欄位必填，所以考慮設定預設值，此時有幾種選擇，NOW()、CURRENT_TIMESTAMP、UTC_TIMESTAMP，其中 NOW() 與 CURRENT_TIMESTAMP 都會依照 MySQL 系統時區產生時間，但是 DATETIME 並不保存時區資訊，所以為了避免時區問題，所以選擇預設值設定為 (UTC_TIMESTAMP(3))，剛好在 8.0.13 開始可以將 DATETIME 資料型態的欄位預設值設為 function (UTC_TIMESTAMP())
-但是設定完後發生了很奇怪的問題，後續進行的 ALTER TABLE DDL 操作都會失敗並拋出 ERROR 1067: Invalid default value for &amp;lt;columnName&amp;gt; 錯誤，例如執行以下 sql
-ALTER TABLE tableName ADD COLUMN newColumnName BIGINT NULL; 明明新增的是 BIGINT 而且沒有預設值，卻拋出 ERROR 1067: Invalid default value for createdDateColumn 的錯誤，簡直莫名其妙讓人丈二和尚摸不著頭腦</description>
+      <description>情境描述 最近在處理 MySQL 的時候採到一個坑&#xA;我的使用情境是需要一個 create date 紀錄資料產生時的 UTC 時間精準到 millisecond&#xA;首先考慮到 MySQL 的 TIMESTAMP 資料型態是採用 epoch second 加上額外的 fractional seconds 精準到 microseconds，也就是最多記錄到 &amp;lsquo;2038-01-19 03:14:07.999999&amp;rsquo; 就會 overflow，如果採用 DATETIME(3) 可以記錄到 &amp;lsquo;9999-12-31 23:59:59.999&amp;rsquo;&#xA;接著因為欄位必填，所以考慮設定預設值，此時有幾種選擇，NOW()、CURRENT_TIMESTAMP、UTC_TIMESTAMP，其中 NOW() 與 CURRENT_TIMESTAMP 都會依照 MySQL 系統時區產生時間，但是 DATETIME 並不保存時區資訊，所以為了避免時區問題，所以選擇預設值設定為 (UTC_TIMESTAMP(3))，剛好在 8.0.13 開始可以將 DATETIME 資料型態的欄位預設值設為 function (UTC_TIMESTAMP())&#xA;但是設定完後發生了很奇怪的問題，後續進行的 ALTER TABLE DDL 操作都會失敗並拋出 ERROR 1067: Invalid default value for &amp;lt;columnName&amp;gt; 錯誤，例如執行以下 sql&#xA;ALTER TABLE tableName ADD COLUMN newColumnName BIGINT NULL; 明明新增的是 BIGINT 而且沒有預設值，卻拋出 ERROR 1067: Invalid default value for createdDateColumn 的錯誤，簡直莫名其妙讓人丈二和尚摸不著頭腦</description>
     </item>
-    
   </channel>
 </rss>

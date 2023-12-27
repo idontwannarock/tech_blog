@@ -7,66 +7,35 @@
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
     <copyright>This website by Howard Wang is licensed under a Creative Common Attribution-ShareAlike 4.0 International License.</copyright>
-    <lastBuildDate>Mon, 12 Dec 2022 09:24:17 +0800</lastBuildDate><atom:link href="https://blog.idontwannarock.me/tags/spring-boot/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Mon, 12 Dec 2022 09:24:17 +0800</lastBuildDate>
+    <atom:link href="https://blog.idontwannarock.me/tags/spring-boot/index.xml" rel="self" type="application/rss+xml" />
     <item>
       <title>SpringFox to SpringDoc</title>
       <link>https://blog.idontwannarock.me/2022/12/springfox_to_springdoc/</link>
       <pubDate>Mon, 12 Dec 2022 09:24:17 +0800</pubDate>
-      
       <guid>https://blog.idontwannarock.me/2022/12/springfox_to_springdoc/</guid>
-      <description>以 Spring Boot 生態來說，比較主流的 documentation 方式應該就是 Swagger，以往應該多數人都是使用 SpringFox library，但近幾年也漸漸興起使用 SpringDoc，所以就做了一點筆記，紀錄要怎麼從 SpringFox 轉移到 SpringDoc
-比較 這兩者同樣都有實作 OpenAPI 3.0，為什麼我們需要從 SpringFox 轉移使用 SpringDoc？
-springfox-boot-starter 包含許多 Spring 的 transitive dependencies；springdoc-openapi-ui 則是 standalone 的 library，並沒有跟 Spring 的依賴 springfox-boot-starter 需要額外 dependency 才有 Swagger UI 的呈現；springdoc-openapi-ui 則已經內含 Swagger UI SpringDoc 在一些細節功能上更強大，例如提供陣列參數更好的 UI 做輸入 最重要的一點，SpringFox 幾乎已經不再更新；而 SpringDoc 還有在常態維護，因此也能跟較新版本的 Spring 有更好的整合，也能更即時的修正 bug 升級步驟 相當簡單，參考 官方文件 即可
-因為都是實作 OpenAPI，就算 SpringFox 有實作 2.0 版，但跟 3.0 其實差異也不大
-主要就是改一下 dependency，然後 annotation 調整一下，其他幾乎沒有不同
-注意事項 Spring Security 若有整合 Spring Security，則可以在 controller 透過加註 @AuthenticationPrincipal 註解注入驗證過的 principal 物件，但這個物件不需要呈現在 Swagger 上</description>
+      <description>以 Spring Boot 生態來說，比較主流的 documentation 方式應該就是 Swagger，以往應該多數人都是使用 SpringFox library，但近幾年也漸漸興起使用 SpringDoc，所以就做了一點筆記，紀錄要怎麼從 SpringFox 轉移到 SpringDoc&#xA;比較 這兩者同樣都有實作 OpenAPI 3.0，為什麼我們需要從 SpringFox 轉移使用 SpringDoc？&#xA;springfox-boot-starter 包含許多 Spring 的 transitive dependencies；springdoc-openapi-ui 則是 standalone 的 library，並沒有跟 Spring 的依賴 springfox-boot-starter 需要額外 dependency 才有 Swagger UI 的呈現；springdoc-openapi-ui 則已經內含 Swagger UI SpringDoc 在一些細節功能上更強大，例如提供陣列參數更好的 UI 做輸入 最重要的一點，SpringFox 幾乎已經不再更新；而 SpringDoc 還有在常態維護，因此也能跟較新版本的 Spring 有更好的整合，也能更即時的修正 bug 升級步驟 相當簡單，參考 官方文件 即可&#xA;因為都是實作 OpenAPI，就算 SpringFox 有實作 2.0 版，但跟 3.0 其實差異也不大&#xA;主要就是改一下 dependency，然後 annotation 調整一下，其他幾乎沒有不同&#xA;注意事項 Spring Security 若有整合 Spring Security，則可以在 controller 透過加註 @AuthenticationPrincipal 註解注入驗證過的 principal 物件，但這個物件不需要呈現在 Swagger 上</description>
     </item>
-    
     <item>
       <title>Spring Boot 整合 Quartz 集群執行預設及動態排程</title>
       <link>https://blog.idontwannarock.me/2022/11/quartz-cluster-fixed-and-dynamic-trigger-spring-boot-integration/</link>
       <pubDate>Tue, 15 Nov 2022 16:54:13 +0800</pubDate>
-      
       <guid>https://blog.idontwannarock.me/2022/11/quartz-cluster-fixed-and-dynamic-trigger-spring-boot-integration/</guid>
-      <description>Quartz 系列：
-Quartz 介紹 Spring Boot 整合 Quartz 集群執行預設及動態排程 Quartz Misfire Handling Instruction Spring Boot 官方本身就有 spring-boot-starter-quartz 來提供 Quartz 整合，所以在 Spring Boot 當中使用基本 Quartz 功能已經非常簡單
-至於動態產生排程，網路上也很多教學，只是大多是採用 API 呼叫的方式去動態產生、運行、暫停、刪除排程等功能，而幾乎沒看到利用預設排程定時從 database 取得動態排程設定，並動態產生或移除排程的功能
-接下來探討如何在 Spring Boot 整合 Quartz 的框架中實作以上需求，來達成依照自訂動態排程來發通知的需求
-以下討論採用 Spring Boot 2.7.5 及 Quartz 2.3.2 版本並搭配 MySQL 做持久化
-Database Schema 首先需要在 MySQL 內建立相關的 schema，可以利用官方提供的這個 script 來建立，並額外依照以下 sql 建立動態通知排程的 table：
-create table if not exist NOTIFICATION_SCHEDULE ( ID int auto_increment primary key, CRON varchar(100) not null comment &amp;#39;Quartz type cron&amp;#39;, TIMEZONE varchar(64) default &amp;#39;Asia/Taipei&amp;#39; null, TEMPLATE_ID int not null, IS_ONLINE tinyint(1) default 1 null, IS_DELETED tinyint(1) default 0 null, CREATE_TIME datetime default CURRENT_TIMESTAMP null, UPDATE_TIME datetime null on update CURRENT_TIMESTAMP ) comment &amp;#39;紀錄通知排程資訊&amp;#39;; Dependency 接著在 pom 檔引用以下依賴：</description>
+      <description>Quartz 系列：&#xA;Quartz 介紹 Spring Boot 整合 Quartz 集群執行預設及動態排程 Quartz Misfire Handling Instruction Spring Boot 官方本身就有 spring-boot-starter-quartz 來提供 Quartz 整合，所以在 Spring Boot 當中使用基本 Quartz 功能已經非常簡單&#xA;至於動態產生排程，網路上也很多教學，只是大多是採用 API 呼叫的方式去動態產生、運行、暫停、刪除排程等功能，而幾乎沒看到利用預設排程定時從 database 取得動態排程設定，並動態產生或移除排程的功能&#xA;接下來探討如何在 Spring Boot 整合 Quartz 的框架中實作以上需求，來達成依照自訂動態排程來發通知的需求&#xA;以下討論採用 Spring Boot 2.7.5 及 Quartz 2.3.2 版本並搭配 MySQL 做持久化&#xA;Database Schema 首先需要在 MySQL 內建立相關的 schema，可以利用官方提供的這個 script 來建立，並額外依照以下 sql 建立動態通知排程的 table：&#xA;create table if not exist NOTIFICATION_SCHEDULE ( ID int auto_increment primary key, CRON varchar(100) not null comment &amp;#39;Quartz type cron&amp;#39;, TIMEZONE varchar(64) default &amp;#39;Asia/Taipei&amp;#39; null, TEMPLATE_ID int not null, IS_ONLINE tinyint(1) default 1 null, IS_DELETED tinyint(1) default 0 null, CREATE_TIME datetime default CURRENT_TIMESTAMP null, UPDATE_TIME datetime null on update CURRENT_TIMESTAMP ) comment &amp;#39;紀錄通知排程資訊&amp;#39;; Dependency 接著在 pom 檔引用以下依賴：</description>
     </item>
-    
     <item>
       <title>Spring Boot 後端實作 XSS 防範</title>
       <link>https://blog.idontwannarock.me/2022/11/xss_prevention_spring_boot/</link>
       <pubDate>Tue, 01 Nov 2022 15:28:32 +0800</pubDate>
-      
       <guid>https://blog.idontwannarock.me/2022/11/xss_prevention_spring_boot/</guid>
-      <description>XSS 系列：
-XSS 防範簡介 Spring Boot 後端實作 XSS 防範 身為一個 Java 後端工程師，今天要來討論如何在 Spring Boot 的後端專案進行 general 的 XSS 防範。
-請還是注意，general 的手段並不能很良好的防範 XSS 攻擊，而只是提供一個基本程度的防範。
-CSP Header 如果專案有整合 Spring Security，Spring Security 原生就已經預設在 response header 中加入 X-XSS-Protection: 1; mode=block，但因為 CSP 需要自行設定資源允許的來源，所以 Spring Security 並沒有預設，需要在 SecurityFilterChain 當中設定，舉例如下：
-@Bean SecurityFilterChain filterChain(HttpSecurity httpSecurity) throws Exception { httpSecurity.headers().contentSecurityPolicy(&amp;#34;script-src &amp;#39;self&amp;#39;&amp;#34;); ... } 如此就會在 response header 中加入 Content-Security-Policy: script-src &#39;self&#39;。
-Output Encoding 再來，後端也可以對接收到或回傳的資料做 escape，例如採取將內容都做 escape，將符號都轉換成 HTML Entities 的方式。
-首先可以加入 Apache Commons Text dependency，有現成的方法可以處理文字中符號轉換的部分：</description>
+      <description>XSS 系列：&#xA;XSS 防範簡介 Spring Boot 後端實作 XSS 防範 身為一個 Java 後端工程師，今天要來討論如何在 Spring Boot 的後端專案進行 general 的 XSS 防範。&#xA;請還是注意，general 的手段並不能很良好的防範 XSS 攻擊，而只是提供一個基本程度的防範。&#xA;CSP Header 如果專案有整合 Spring Security，Spring Security 原生就已經預設在 response header 中加入 X-XSS-Protection: 1; mode=block，但因為 CSP 需要自行設定資源允許的來源，所以 Spring Security 並沒有預設，需要在 SecurityFilterChain 當中設定，舉例如下：&#xA;@Bean SecurityFilterChain filterChain(HttpSecurity httpSecurity) throws Exception { httpSecurity.headers().contentSecurityPolicy(&amp;#34;script-src &amp;#39;self&amp;#39;&amp;#34;); ... } 如此就會在 response header 中加入 Content-Security-Policy: script-src &#39;self&#39;。&#xA;Output Encoding 再來，後端也可以對接收到或回傳的資料做 escape，例如採取將內容都做 escape，將符號都轉換成 HTML Entities 的方式。&#xA;首先可以加入 Apache Commons Text dependency，有現成的方法可以處理文字中符號轉換的部分：</description>
     </item>
-    
     <item>
       <title>Spring Boot 實作 API 版本控制</title>
       <link>https://blog.idontwannarock.me/2019/09/spring_api_version_with_swagger_security/</link>
       <pubDate>Thu, 19 Sep 2019 15:53:36 +0800</pubDate>
-      
       <guid>https://blog.idontwannarock.me/2019/09/spring_api_version_with_swagger_security/</guid>
-      <description>本文目的是為了探討在 Spring Boot Web 專案中，實作 API 版本控制，並兼容 Swagger 及 Spring Security 的解決方式
-需要有 Spring Boot、Spring MVC、Spring Security 及 Swagger 的基礎概念會比較好理解
-API 版本控制 常見的 API 版本控制方式有三種: URI, header, content-type
-考量到 RESTful API 其中的一個好處是方便快取，使用 header 跟 content-type 的方式則可能無法正確的快取以及達成 idempotent，所以我個人採用的是在 URI 中加入版本號的方式
-再來因為有時候面對的專案有數量眾多的 handler，導致每次修改版本號都要手動修改每一支 handler 對應的 uri，這樣既麻煩又不潮，所以一定要研究一下怎麼在 Spring Boot 專案中利用註解的方式自動幫 handler 對應的 uri 自動插入版本號
-Tech Stack 專案採用的是 Spring Boot 2.0 架構，Java 1.8 版本
-有關 Maven 依賴如下:
-org.springframework.boot:spring-boot-starter-web:2.1.x org.springframework.boot:spring-boot-starter-security:2.1.x io.springfox:springfox-swagger2:2.9.2 io.springfox:springfox-swagger-ui:2.9.2 這邊強調要採用 Spring Boot 主要是因為想要利用 Spring Boot auto configuration 的功能，也因為想要利用這個功能，所以過程才會這麼曲折&amp;hellip;</description>
+      <description>本文目的是為了探討在 Spring Boot Web 專案中，實作 API 版本控制，並兼容 Swagger 及 Spring Security 的解決方式&#xA;需要有 Spring Boot、Spring MVC、Spring Security 及 Swagger 的基礎概念會比較好理解&#xA;API 版本控制 常見的 API 版本控制方式有三種: URI, header, content-type&#xA;考量到 RESTful API 其中的一個好處是方便快取，使用 header 跟 content-type 的方式則可能無法正確的快取以及達成 idempotent，所以我個人採用的是在 URI 中加入版本號的方式&#xA;再來因為有時候面對的專案有數量眾多的 handler，導致每次修改版本號都要手動修改每一支 handler 對應的 uri，這樣既麻煩又不潮，所以一定要研究一下怎麼在 Spring Boot 專案中利用註解的方式自動幫 handler 對應的 uri 自動插入版本號&#xA;Tech Stack 專案採用的是 Spring Boot 2.0 架構，Java 1.8 版本&#xA;有關 Maven 依賴如下:&#xA;org.springframework.boot:spring-boot-starter-web:2.1.x org.springframework.boot:spring-boot-starter-security:2.1.x io.springfox:springfox-swagger2:2.9.2 io.springfox:springfox-swagger-ui:2.9.2 這邊強調要採用 Spring Boot 主要是因為想要利用 Spring Boot auto configuration 的功能，也因為想要利用這個功能，所以過程才會這麼曲折&amp;hellip;</description>
     </item>
-    
   </channel>
 </rss>

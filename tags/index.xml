@@ -7,699 +7,560 @@
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
     <copyright>This website by Howard Wang is licensed under a Creative Common Attribution-ShareAlike 4.0 International License.</copyright>
-    <lastBuildDate>Tue, 31 Oct 2023 11:59:03 +0800</lastBuildDate><atom:link href="https://blog.idontwannarock.me/tags/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Wed, 27 Dec 2023 09:26:23 +0800</lastBuildDate>
+    <atom:link href="https://blog.idontwannarock.me/tags/index.xml" rel="self" type="application/rss+xml" />
     <item>
       <title>datetime</title>
       <link>https://blog.idontwannarock.me/tags/datetime/</link>
-      <pubDate>Tue, 31 Oct 2023 11:59:03 +0800</pubDate>
-      
+      <pubDate>Wed, 27 Dec 2023 09:26:23 +0800</pubDate>
       <guid>https://blog.idontwannarock.me/tags/datetime/</guid>
       <description></description>
     </item>
-    
+    <item>
+      <title>java</title>
+      <link>https://blog.idontwannarock.me/tags/java/</link>
+      <pubDate>Wed, 27 Dec 2023 09:26:23 +0800</pubDate>
+      <guid>https://blog.idontwannarock.me/tags/java/</guid>
+      <description></description>
+    </item>
     <item>
       <title>mysql</title>
       <link>https://blog.idontwannarock.me/tags/mysql/</link>
-      <pubDate>Tue, 31 Oct 2023 11:59:03 +0800</pubDate>
-      
+      <pubDate>Wed, 27 Dec 2023 09:26:23 +0800</pubDate>
       <guid>https://blog.idontwannarock.me/tags/mysql/</guid>
       <description></description>
     </item>
-    
+    <item>
+      <title>time</title>
+      <link>https://blog.idontwannarock.me/tags/time/</link>
+      <pubDate>Wed, 27 Dec 2023 09:26:23 +0800</pubDate>
+      <guid>https://blog.idontwannarock.me/tags/time/</guid>
+      <description></description>
+    </item>
+    <item>
+      <title>timezone</title>
+      <link>https://blog.idontwannarock.me/tags/timezone/</link>
+      <pubDate>Wed, 27 Dec 2023 09:26:23 +0800</pubDate>
+      <guid>https://blog.idontwannarock.me/tags/timezone/</guid>
+      <description></description>
+    </item>
     <item>
       <title>utc_timestamp</title>
       <link>https://blog.idontwannarock.me/tags/utc_timestamp/</link>
       <pubDate>Tue, 31 Oct 2023 11:59:03 +0800</pubDate>
-      
       <guid>https://blog.idontwannarock.me/tags/utc_timestamp/</guid>
       <description></description>
     </item>
-    
-    <item>
-      <title>java</title>
-      <link>https://blog.idontwannarock.me/tags/java/</link>
-      <pubDate>Wed, 20 Sep 2023 09:37:21 +0800</pubDate>
-      
-      <guid>https://blog.idontwannarock.me/tags/java/</guid>
-      <description></description>
-    </item>
-    
     <item>
       <title>spring-jpa</title>
       <link>https://blog.idontwannarock.me/tags/spring-jpa/</link>
       <pubDate>Wed, 20 Sep 2023 09:37:21 +0800</pubDate>
-      
       <guid>https://blog.idontwannarock.me/tags/spring-jpa/</guid>
       <description></description>
     </item>
-    
     <item>
       <title>jdk</title>
       <link>https://blog.idontwannarock.me/tags/jdk/</link>
       <pubDate>Tue, 20 Jun 2023 10:51:39 +0800</pubDate>
-      
       <guid>https://blog.idontwannarock.me/tags/jdk/</guid>
       <description></description>
     </item>
-    
     <item>
       <title>scoop</title>
       <link>https://blog.idontwannarock.me/tags/scoop/</link>
       <pubDate>Tue, 20 Jun 2023 10:51:39 +0800</pubDate>
-      
       <guid>https://blog.idontwannarock.me/tags/scoop/</guid>
       <description></description>
     </item>
-    
     <item>
       <title>docker</title>
       <link>https://blog.idontwannarock.me/tags/docker/</link>
       <pubDate>Thu, 15 Dec 2022 10:18:10 +0800</pubDate>
-      
       <guid>https://blog.idontwannarock.me/tags/docker/</guid>
       <description></description>
     </item>
-    
     <item>
       <title>gradle</title>
       <link>https://blog.idontwannarock.me/tags/gradle/</link>
       <pubDate>Thu, 15 Dec 2022 10:18:10 +0800</pubDate>
-      
       <guid>https://blog.idontwannarock.me/tags/gradle/</guid>
       <description></description>
     </item>
-    
     <item>
       <title>maven</title>
       <link>https://blog.idontwannarock.me/tags/maven/</link>
       <pubDate>Wed, 14 Dec 2022 14:14:44 +0800</pubDate>
-      
       <guid>https://blog.idontwannarock.me/tags/maven/</guid>
       <description></description>
     </item>
-    
     <item>
       <title>spring-boot</title>
       <link>https://blog.idontwannarock.me/tags/spring-boot/</link>
       <pubDate>Mon, 12 Dec 2022 09:24:17 +0800</pubDate>
-      
       <guid>https://blog.idontwannarock.me/tags/spring-boot/</guid>
       <description></description>
     </item>
-    
     <item>
       <title>springdoc</title>
       <link>https://blog.idontwannarock.me/tags/springdoc/</link>
       <pubDate>Mon, 12 Dec 2022 09:24:17 +0800</pubDate>
-      
       <guid>https://blog.idontwannarock.me/tags/springdoc/</guid>
       <description></description>
     </item>
-    
     <item>
       <title>springfox</title>
       <link>https://blog.idontwannarock.me/tags/springfox/</link>
       <pubDate>Mon, 12 Dec 2022 09:24:17 +0800</pubDate>
-      
       <guid>https://blog.idontwannarock.me/tags/springfox/</guid>
       <description></description>
     </item>
-    
     <item>
       <title>swagger</title>
       <link>https://blog.idontwannarock.me/tags/swagger/</link>
       <pubDate>Mon, 12 Dec 2022 09:24:17 +0800</pubDate>
-      
       <guid>https://blog.idontwannarock.me/tags/swagger/</guid>
       <description></description>
     </item>
-    
     <item>
       <title>misfire</title>
       <link>https://blog.idontwannarock.me/tags/misfire/</link>
       <pubDate>Tue, 29 Nov 2022 15:21:19 +0800</pubDate>
-      
       <guid>https://blog.idontwannarock.me/tags/misfire/</guid>
       <description></description>
     </item>
-    
     <item>
       <title>quartz</title>
       <link>https://blog.idontwannarock.me/tags/quartz/</link>
       <pubDate>Tue, 29 Nov 2022 15:21:19 +0800</pubDate>
-      
       <guid>https://blog.idontwannarock.me/tags/quartz/</guid>
       <description></description>
     </item>
-    
     <item>
       <title>dynamic-trigger</title>
       <link>https://blog.idontwannarock.me/tags/dynamic-trigger/</link>
       <pubDate>Tue, 15 Nov 2022 16:54:13 +0800</pubDate>
-      
       <guid>https://blog.idontwannarock.me/tags/dynamic-trigger/</guid>
       <description></description>
     </item>
-    
     <item>
       <title>quartz-cluster</title>
       <link>https://blog.idontwannarock.me/tags/quartz-cluster/</link>
       <pubDate>Tue, 15 Nov 2022 16:54:13 +0800</pubDate>
-      
       <guid>https://blog.idontwannarock.me/tags/quartz-cluster/</guid>
       <description></description>
     </item>
-    
     <item>
       <title>scheduling</title>
       <link>https://blog.idontwannarock.me/tags/scheduling/</link>
       <pubDate>Tue, 15 Nov 2022 16:24:46 +0800</pubDate>
-      
       <guid>https://blog.idontwannarock.me/tags/scheduling/</guid>
       <description></description>
     </item>
-    
     <item>
       <title>owasp</title>
       <link>https://blog.idontwannarock.me/tags/owasp/</link>
       <pubDate>Tue, 01 Nov 2022 15:28:32 +0800</pubDate>
-      
       <guid>https://blog.idontwannarock.me/tags/owasp/</guid>
       <description></description>
     </item>
-    
     <item>
       <title>spring-security</title>
       <link>https://blog.idontwannarock.me/tags/spring-security/</link>
       <pubDate>Tue, 01 Nov 2022 15:28:32 +0800</pubDate>
-      
       <guid>https://blog.idontwannarock.me/tags/spring-security/</guid>
       <description></description>
     </item>
-    
     <item>
       <title>xss</title>
       <link>https://blog.idontwannarock.me/tags/xss/</link>
       <pubDate>Tue, 01 Nov 2022 15:28:32 +0800</pubDate>
-      
       <guid>https://blog.idontwannarock.me/tags/xss/</guid>
       <description></description>
     </item>
-    
     <item>
       <title>optional</title>
       <link>https://blog.idontwannarock.me/tags/optional/</link>
       <pubDate>Sat, 01 Oct 2022 21:44:34 +0800</pubDate>
-      
       <guid>https://blog.idontwannarock.me/tags/optional/</guid>
       <description></description>
     </item>
-    
     <item>
       <title>flat buffers</title>
       <link>https://blog.idontwannarock.me/tags/flat-buffers/</link>
       <pubDate>Tue, 04 Jan 2022 15:36:17 +0800</pubDate>
-      
       <guid>https://blog.idontwannarock.me/tags/flat-buffers/</guid>
       <description></description>
     </item>
-    
     <item>
       <title>flatbuf</title>
       <link>https://blog.idontwannarock.me/tags/flatbuf/</link>
       <pubDate>Tue, 04 Jan 2022 15:36:17 +0800</pubDate>
-      
       <guid>https://blog.idontwannarock.me/tags/flatbuf/</guid>
       <description></description>
     </item>
-    
     <item>
       <title>protobuf</title>
       <link>https://blog.idontwannarock.me/tags/protobuf/</link>
       <pubDate>Tue, 04 Jan 2022 15:36:17 +0800</pubDate>
-      
       <guid>https://blog.idontwannarock.me/tags/protobuf/</guid>
       <description></description>
     </item>
-    
     <item>
       <title>protocol buffers</title>
       <link>https://blog.idontwannarock.me/tags/protocol-buffers/</link>
       <pubDate>Tue, 04 Jan 2022 15:36:17 +0800</pubDate>
-      
       <guid>https://blog.idontwannarock.me/tags/protocol-buffers/</guid>
       <description></description>
     </item>
-    
     <item>
       <title>grpc</title>
       <link>https://blog.idontwannarock.me/tags/grpc/</link>
       <pubDate>Mon, 27 Dec 2021 09:44:31 +0800</pubDate>
-      
       <guid>https://blog.idontwannarock.me/tags/grpc/</guid>
       <description></description>
     </item>
-    
     <item>
       <title>http2</title>
       <link>https://blog.idontwannarock.me/tags/http2/</link>
       <pubDate>Mon, 27 Dec 2021 09:44:31 +0800</pubDate>
-      
       <guid>https://blog.idontwannarock.me/tags/http2/</guid>
       <description></description>
     </item>
-    
     <item>
       <title>http</title>
       <link>https://blog.idontwannarock.me/tags/http/</link>
       <pubDate>Fri, 24 Dec 2021 15:49:27 +0800</pubDate>
-      
       <guid>https://blog.idontwannarock.me/tags/http/</guid>
       <description></description>
     </item>
-    
     <item>
       <title>long polling</title>
       <link>https://blog.idontwannarock.me/tags/long-polling/</link>
       <pubDate>Fri, 24 Dec 2021 15:49:27 +0800</pubDate>
-      
       <guid>https://blog.idontwannarock.me/tags/long-polling/</guid>
       <description></description>
     </item>
-    
     <item>
       <title>server push</title>
       <link>https://blog.idontwannarock.me/tags/server-push/</link>
       <pubDate>Fri, 24 Dec 2021 15:49:27 +0800</pubDate>
-      
       <guid>https://blog.idontwannarock.me/tags/server-push/</guid>
       <description></description>
     </item>
-    
     <item>
       <title>server sent event</title>
       <link>https://blog.idontwannarock.me/tags/server-sent-event/</link>
       <pubDate>Fri, 24 Dec 2021 15:49:27 +0800</pubDate>
-      
       <guid>https://blog.idontwannarock.me/tags/server-sent-event/</guid>
       <description></description>
     </item>
-    
     <item>
       <title>sse</title>
       <link>https://blog.idontwannarock.me/tags/sse/</link>
       <pubDate>Fri, 24 Dec 2021 15:49:27 +0800</pubDate>
-      
       <guid>https://blog.idontwannarock.me/tags/sse/</guid>
       <description></description>
     </item>
-    
     <item>
       <title>websocket</title>
       <link>https://blog.idontwannarock.me/tags/websocket/</link>
       <pubDate>Fri, 24 Dec 2021 15:49:27 +0800</pubDate>
-      
       <guid>https://blog.idontwannarock.me/tags/websocket/</guid>
       <description></description>
     </item>
-    
     <item>
       <title>http3</title>
       <link>https://blog.idontwannarock.me/tags/http3/</link>
       <pubDate>Tue, 21 Dec 2021 09:06:29 +0800</pubDate>
-      
       <guid>https://blog.idontwannarock.me/tags/http3/</guid>
       <description></description>
     </item>
-    
     <item>
       <title>quic</title>
       <link>https://blog.idontwannarock.me/tags/quic/</link>
       <pubDate>Tue, 21 Dec 2021 09:06:29 +0800</pubDate>
-      
       <guid>https://blog.idontwannarock.me/tags/quic/</guid>
       <description></description>
     </item>
-    
     <item>
       <title>tcp</title>
       <link>https://blog.idontwannarock.me/tags/tcp/</link>
       <pubDate>Tue, 21 Dec 2021 09:06:29 +0800</pubDate>
-      
       <guid>https://blog.idontwannarock.me/tags/tcp/</guid>
       <description></description>
     </item>
-    
     <item>
       <title>udp</title>
       <link>https://blog.idontwannarock.me/tags/udp/</link>
       <pubDate>Tue, 21 Dec 2021 09:06:29 +0800</pubDate>
-      
       <guid>https://blog.idontwannarock.me/tags/udp/</guid>
       <description></description>
     </item>
-    
     <item>
       <title>batch</title>
       <link>https://blog.idontwannarock.me/tags/batch/</link>
       <pubDate>Thu, 16 Dec 2021 15:32:25 +0800</pubDate>
-      
       <guid>https://blog.idontwannarock.me/tags/batch/</guid>
       <description></description>
     </item>
-    
     <item>
       <title>compression</title>
       <link>https://blog.idontwannarock.me/tags/compression/</link>
       <pubDate>Thu, 16 Dec 2021 15:32:25 +0800</pubDate>
-      
       <guid>https://blog.idontwannarock.me/tags/compression/</guid>
       <description></description>
     </item>
-    
     <item>
       <title>database</title>
       <link>https://blog.idontwannarock.me/tags/database/</link>
       <pubDate>Tue, 16 Nov 2021 11:58:47 +0800</pubDate>
-      
       <guid>https://blog.idontwannarock.me/tags/database/</guid>
       <description></description>
     </item>
-    
     <item>
       <title>sql-server</title>
       <link>https://blog.idontwannarock.me/tags/sql-server/</link>
       <pubDate>Tue, 16 Nov 2021 11:58:47 +0800</pubDate>
-      
       <guid>https://blog.idontwannarock.me/tags/sql-server/</guid>
       <description></description>
     </item>
-    
     <item>
       <title>git</title>
       <link>https://blog.idontwannarock.me/tags/git/</link>
       <pubDate>Wed, 03 Nov 2021 16:29:03 +0800</pubDate>
-      
       <guid>https://blog.idontwannarock.me/tags/git/</guid>
       <description></description>
     </item>
-    
     <item>
       <title>github</title>
       <link>https://blog.idontwannarock.me/tags/github/</link>
       <pubDate>Wed, 03 Nov 2021 16:29:03 +0800</pubDate>
-      
       <guid>https://blog.idontwannarock.me/tags/github/</guid>
       <description></description>
     </item>
-    
     <item>
       <title>github-pages</title>
       <link>https://blog.idontwannarock.me/tags/github-pages/</link>
       <pubDate>Wed, 03 Nov 2021 16:29:03 +0800</pubDate>
-      
       <guid>https://blog.idontwannarock.me/tags/github-pages/</guid>
       <description></description>
     </item>
-    
     <item>
       <title>hugo</title>
       <link>https://blog.idontwannarock.me/tags/hugo/</link>
       <pubDate>Wed, 03 Nov 2021 16:29:03 +0800</pubDate>
-      
       <guid>https://blog.idontwannarock.me/tags/hugo/</guid>
       <description></description>
     </item>
-    
     <item>
       <title>api-versioning</title>
       <link>https://blog.idontwannarock.me/tags/api-versioning/</link>
       <pubDate>Thu, 19 Sep 2019 15:53:36 +0800</pubDate>
-      
       <guid>https://blog.idontwannarock.me/tags/api-versioning/</guid>
       <description></description>
     </item>
-    
     <item>
       <title>rbac</title>
       <link>https://blog.idontwannarock.me/tags/rbac/</link>
       <pubDate>Thu, 30 May 2019 15:33:07 +0800</pubDate>
-      
       <guid>https://blog.idontwannarock.me/tags/rbac/</guid>
       <description></description>
     </item>
-    
     <item>
       <title>github-flow</title>
       <link>https://blog.idontwannarock.me/tags/github-flow/</link>
       <pubDate>Wed, 29 May 2019 10:52:45 +0800</pubDate>
-      
       <guid>https://blog.idontwannarock.me/tags/github-flow/</guid>
       <description></description>
     </item>
-    
     <item>
       <title>aop</title>
       <link>https://blog.idontwannarock.me/tags/aop/</link>
       <pubDate>Tue, 10 Apr 2018 13:22:52 +0800</pubDate>
-      
       <guid>https://blog.idontwannarock.me/tags/aop/</guid>
       <description></description>
     </item>
-    
     <item>
       <title>spring</title>
       <link>https://blog.idontwannarock.me/tags/spring/</link>
       <pubDate>Tue, 10 Apr 2018 13:22:52 +0800</pubDate>
-      
       <guid>https://blog.idontwannarock.me/tags/spring/</guid>
       <description></description>
     </item>
-    
     <item>
       <title>string</title>
       <link>https://blog.idontwannarock.me/tags/string/</link>
       <pubDate>Tue, 06 Feb 2018 14:09:25 +0800</pubDate>
-      
       <guid>https://blog.idontwannarock.me/tags/string/</guid>
       <description></description>
     </item>
-    
     <item>
       <title>algorithm</title>
       <link>https://blog.idontwannarock.me/tags/algorithm/</link>
       <pubDate>Wed, 15 Nov 2017 14:26:17 +0800</pubDate>
-      
       <guid>https://blog.idontwannarock.me/tags/algorithm/</guid>
       <description></description>
     </item>
-    
     <item>
       <title>brew</title>
       <link>https://blog.idontwannarock.me/tags/brew/</link>
       <pubDate>Fri, 03 Nov 2017 09:05:02 +0800</pubDate>
-      
       <guid>https://blog.idontwannarock.me/tags/brew/</guid>
       <description></description>
     </item>
-    
     <item>
       <title>cask</title>
       <link>https://blog.idontwannarock.me/tags/cask/</link>
       <pubDate>Fri, 03 Nov 2017 09:05:02 +0800</pubDate>
-      
       <guid>https://blog.idontwannarock.me/tags/cask/</guid>
       <description></description>
     </item>
-    
     <item>
       <title>mac</title>
       <link>https://blog.idontwannarock.me/tags/mac/</link>
       <pubDate>Fri, 03 Nov 2017 09:05:02 +0800</pubDate>
-      
       <guid>https://blog.idontwannarock.me/tags/mac/</guid>
       <description></description>
     </item>
-    
     <item>
       <title>oh-my-zsh</title>
       <link>https://blog.idontwannarock.me/tags/oh-my-zsh/</link>
       <pubDate>Fri, 03 Nov 2017 09:05:02 +0800</pubDate>
-      
       <guid>https://blog.idontwannarock.me/tags/oh-my-zsh/</guid>
       <description></description>
     </item>
-    
     <item>
       <title>zsh</title>
       <link>https://blog.idontwannarock.me/tags/zsh/</link>
       <pubDate>Fri, 03 Nov 2017 09:05:02 +0800</pubDate>
-      
       <guid>https://blog.idontwannarock.me/tags/zsh/</guid>
       <description></description>
     </item>
-    
     <item>
       <title>html</title>
       <link>https://blog.idontwannarock.me/tags/html/</link>
       <pubDate>Sun, 22 Oct 2017 15:42:04 +0800</pubDate>
-      
       <guid>https://blog.idontwannarock.me/tags/html/</guid>
       <description></description>
     </item>
-    
     <item>
       <title>markdown</title>
       <link>https://blog.idontwannarock.me/tags/markdown/</link>
       <pubDate>Sun, 22 Oct 2017 15:42:04 +0800</pubDate>
-      
       <guid>https://blog.idontwannarock.me/tags/markdown/</guid>
       <description></description>
     </item>
-    
     <item>
       <title>binary</title>
       <link>https://blog.idontwannarock.me/tags/binary/</link>
       <pubDate>Sun, 01 Oct 2017 07:04:47 +0800</pubDate>
-      
       <guid>https://blog.idontwannarock.me/tags/binary/</guid>
       <description></description>
     </item>
-    
     <item>
       <title>integer</title>
       <link>https://blog.idontwannarock.me/tags/integer/</link>
       <pubDate>Sun, 01 Oct 2017 07:04:47 +0800</pubDate>
-      
       <guid>https://blog.idontwannarock.me/tags/integer/</guid>
       <description></description>
     </item>
-    
     <item>
       <title>overflow</title>
       <link>https://blog.idontwannarock.me/tags/overflow/</link>
       <pubDate>Sun, 01 Oct 2017 07:04:47 +0800</pubDate>
-      
       <guid>https://blog.idontwannarock.me/tags/overflow/</guid>
       <description></description>
     </item>
-    
     <item>
       <title>bootstrap</title>
       <link>https://blog.idontwannarock.me/tags/bootstrap/</link>
       <pubDate>Fri, 15 Sep 2017 10:27:28 +0800</pubDate>
-      
       <guid>https://blog.idontwannarock.me/tags/bootstrap/</guid>
       <description></description>
     </item>
-    
     <item>
       <title>mvc</title>
       <link>https://blog.idontwannarock.me/tags/mvc/</link>
       <pubDate>Fri, 15 Sep 2017 10:27:28 +0800</pubDate>
-      
       <guid>https://blog.idontwannarock.me/tags/mvc/</guid>
       <description></description>
     </item>
-    
     <item>
       <title>php</title>
       <link>https://blog.idontwannarock.me/tags/php/</link>
       <pubDate>Fri, 15 Sep 2017 10:27:28 +0800</pubDate>
-      
       <guid>https://blog.idontwannarock.me/tags/php/</guid>
       <description></description>
     </item>
-    
     <item>
       <title>javascript</title>
       <link>https://blog.idontwannarock.me/tags/javascript/</link>
       <pubDate>Fri, 15 Sep 2017 10:11:46 +0800</pubDate>
-      
       <guid>https://blog.idontwannarock.me/tags/javascript/</guid>
       <description></description>
     </item>
-    
     <item>
       <title>css</title>
       <link>https://blog.idontwannarock.me/tags/css/</link>
       <pubDate>Fri, 15 Sep 2017 09:44:03 +0800</pubDate>
-      
       <guid>https://blog.idontwannarock.me/tags/css/</guid>
       <description></description>
     </item>
-    
     <item>
       <title>git-bash</title>
       <link>https://blog.idontwannarock.me/tags/git-bash/</link>
       <pubDate>Thu, 14 Sep 2017 07:13:01 +0800</pubDate>
-      
       <guid>https://blog.idontwannarock.me/tags/git-bash/</guid>
       <description></description>
     </item>
-    
     <item>
       <title>macos</title>
       <link>https://blog.idontwannarock.me/tags/macos/</link>
       <pubDate>Thu, 14 Sep 2017 07:13:01 +0800</pubDate>
-      
       <guid>https://blog.idontwannarock.me/tags/macos/</guid>
       <description></description>
     </item>
-    
     <item>
       <title>ssh</title>
       <link>https://blog.idontwannarock.me/tags/ssh/</link>
       <pubDate>Thu, 14 Sep 2017 07:13:01 +0800</pubDate>
-      
       <guid>https://blog.idontwannarock.me/tags/ssh/</guid>
       <description></description>
     </item>
-    
     <item>
       <title>win10</title>
       <link>https://blog.idontwannarock.me/tags/win10/</link>
       <pubDate>Thu, 14 Sep 2017 07:13:01 +0800</pubDate>
-      
       <guid>https://blog.idontwannarock.me/tags/win10/</guid>
       <description></description>
     </item>
-    
     <item>
       <title>hash</title>
       <link>https://blog.idontwannarock.me/tags/hash/</link>
       <pubDate>Mon, 11 Sep 2017 07:11:59 +0800</pubDate>
-      
       <guid>https://blog.idontwannarock.me/tags/hash/</guid>
       <description></description>
     </item>
-    
     <item>
       <title>apache</title>
       <link>https://blog.idontwannarock.me/tags/apache/</link>
       <pubDate>Sun, 10 Sep 2017 07:39:23 +0800</pubDate>
-      
       <guid>https://blog.idontwannarock.me/tags/apache/</guid>
       <description></description>
     </item>
-    
     <item>
       <title>xampp</title>
       <link>https://blog.idontwannarock.me/tags/xampp/</link>
       <pubDate>Sun, 10 Sep 2017 07:39:23 +0800</pubDate>
-      
       <guid>https://blog.idontwannarock.me/tags/xampp/</guid>
       <description></description>
     </item>
-    
     <item>
       <title>ssg</title>
       <link>https://blog.idontwannarock.me/tags/ssg/</link>
       <pubDate>Sat, 09 Sep 2017 00:17:31 +0800</pubDate>
-      
       <guid>https://blog.idontwannarock.me/tags/ssg/</guid>
       <description></description>
     </item>
-    
   </channel>
 </rss>

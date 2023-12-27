@@ -395,68 +395,68 @@ if (!doNotTrack) {
 </span></span><span style="display:flex;"><span>  ...
 </span></span><span style="display:flex;"><span>);
 </span></span></code></pre></div><p>但在程式面都採用 Java 的 <code>int</code> 來操作狀態，可讀性相對較低，所以可能會考慮採用 <code>enum</code> 來操作，可讀性較佳且有 type check</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-java" data-lang="java"><span style="display:flex;"><span><span style="color:#8be9fd;font-style:italic">public</span> <span style="color:#8be9fd;font-style:italic">enum</span> ChatroomStatus <span style="color:#ff79c6">{</span>
-</span></span><span style="display:flex;"><span>    CLOSED<span style="color:#ff79c6">,</span> ACTIVE
-</span></span><span style="display:flex;"><span><span style="color:#ff79c6">}</span>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-java" data-lang="java"><span style="display:flex;"><span><span style="color:#8be9fd;font-style:italic">public</span> <span style="color:#8be9fd;font-style:italic">enum</span> ChatroomStatus {
+</span></span><span style="display:flex;"><span>    CLOSED, ACTIVE
+</span></span><span style="display:flex;"><span>}
 </span></span></code></pre></div><h1 id="設定-converter">設定 Converter</h1>
 <p>但 JPA 預設並不能將 Java <code>enum</code> 與 MySQL <code>int</code> 做 mapping，所以會需要提供 converter 讓 JPA 知道怎麼做轉換</p>
 <p>首先需要調整 <code>enum</code> 如下</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-java" data-lang="java"><span style="display:flex;"><span><span style="color:#8be9fd;font-style:italic">public</span> <span style="color:#8be9fd;font-style:italic">enum</span> ChatroomStatus <span style="color:#ff79c6">{</span>
-</span></span><span style="display:flex;"><span>    CLOSED<span style="color:#ff79c6">(</span><span style="color:#bd93f9">0</span><span style="color:#ff79c6">),</span>
-</span></span><span style="display:flex;"><span>    ACTIVE<span style="color:#ff79c6">(</span><span style="color:#bd93f9">1</span><span style="color:#ff79c6">);</span>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-java" data-lang="java"><span style="display:flex;"><span><span style="color:#8be9fd;font-style:italic">public</span> <span style="color:#8be9fd;font-style:italic">enum</span> ChatroomStatus {
+</span></span><span style="display:flex;"><span>    CLOSED(0),
+</span></span><span style="display:flex;"><span>    ACTIVE(1);
 </span></span><span style="display:flex;"><span>  
-</span></span><span style="display:flex;"><span>    <span style="color:#8be9fd;font-style:italic">private</span> <span style="color:#8be9fd;font-style:italic">final</span> <span style="color:#8be9fd">int</span> value<span style="color:#ff79c6">;</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#8be9fd;font-style:italic">private</span> <span style="color:#8be9fd;font-style:italic">final</span> <span style="color:#8be9fd">int</span> value;
 </span></span><span style="display:flex;"><span>  
-</span></span><span style="display:flex;"><span>    ChatroomStatus<span style="color:#ff79c6">(</span><span style="color:#8be9fd">int</span> value<span style="color:#ff79c6">)</span> <span style="color:#ff79c6">{</span>
-</span></span><span style="display:flex;"><span>        <span style="color:#ff79c6">this</span><span style="color:#ff79c6">.</span><span style="color:#50fa7b">value</span> <span style="color:#ff79c6">=</span> value<span style="color:#ff79c6">;</span>
-</span></span><span style="display:flex;"><span>    <span style="color:#ff79c6">}</span>
+</span></span><span style="display:flex;"><span>    ChatroomStatus(<span style="color:#8be9fd">int</span> value) {
+</span></span><span style="display:flex;"><span>        <span style="color:#ff79c6">this</span>.<span style="color:#50fa7b">value</span> <span style="color:#ff79c6">=</span> value;
+</span></span><span style="display:flex;"><span>    }
 </span></span><span style="display:flex;"><span>  
-</span></span><span style="display:flex;"><span>    <span style="color:#8be9fd;font-style:italic">public</span> <span style="color:#8be9fd">int</span> <span style="color:#50fa7b">value</span><span style="color:#ff79c6">()</span> <span style="color:#ff79c6">{</span>
-</span></span><span style="display:flex;"><span>        <span style="color:#ff79c6">return</span> <span style="color:#ff79c6">this</span><span style="color:#ff79c6">.</span><span style="color:#50fa7b">value</span><span style="color:#ff79c6">;</span>
-</span></span><span style="display:flex;"><span>    <span style="color:#ff79c6">}</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#8be9fd;font-style:italic">public</span> <span style="color:#8be9fd">int</span> <span style="color:#50fa7b">value</span>() {
+</span></span><span style="display:flex;"><span>        <span style="color:#ff79c6">return</span> <span style="color:#ff79c6">this</span>.<span style="color:#50fa7b">value</span>;
+</span></span><span style="display:flex;"><span>    }
 </span></span><span style="display:flex;"><span>  
-</span></span><span style="display:flex;"><span>    <span style="color:#8be9fd;font-style:italic">public</span> <span style="color:#8be9fd;font-style:italic">static</span> ChatroomStatus <span style="color:#50fa7b">of</span><span style="color:#ff79c6">(</span><span style="color:#8be9fd">int</span> value<span style="color:#ff79c6">)</span> <span style="color:#ff79c6">{</span>
-</span></span><span style="display:flex;"><span>        <span style="color:#ff79c6">for</span> <span style="color:#ff79c6">(</span>ChatroomStatus target <span style="color:#ff79c6">:</span> ChatroomStatus<span style="color:#ff79c6">.</span><span style="color:#50fa7b">values</span><span style="color:#ff79c6">())</span> <span style="color:#ff79c6">{</span>
-</span></span><span style="display:flex;"><span>            <span style="color:#ff79c6">if</span> <span style="color:#ff79c6">(</span>target<span style="color:#ff79c6">.</span><span style="color:#50fa7b">value</span> <span style="color:#ff79c6">==</span> value<span style="color:#ff79c6">)</span> <span style="color:#ff79c6">{</span>
-</span></span><span style="display:flex;"><span>                <span style="color:#ff79c6">return</span> target<span style="color:#ff79c6">;</span>
-</span></span><span style="display:flex;"><span>            <span style="color:#ff79c6">}</span>
-</span></span><span style="display:flex;"><span>        <span style="color:#ff79c6">}</span>
-</span></span><span style="display:flex;"><span>        <span style="color:#ff79c6">return</span> <span style="color:#ff79c6">null</span><span style="color:#ff79c6">;</span>
-</span></span><span style="display:flex;"><span>    <span style="color:#ff79c6">}</span>
-</span></span><span style="display:flex;"><span><span style="color:#ff79c6">}</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#8be9fd;font-style:italic">public</span> <span style="color:#8be9fd;font-style:italic">static</span> ChatroomStatus <span style="color:#50fa7b">of</span>(<span style="color:#8be9fd">int</span> value) {
+</span></span><span style="display:flex;"><span>        <span style="color:#ff79c6">for</span> (ChatroomStatus target : ChatroomStatus.<span style="color:#50fa7b">values</span>()) {
+</span></span><span style="display:flex;"><span>            <span style="color:#ff79c6">if</span> (target.<span style="color:#50fa7b">value</span> <span style="color:#ff79c6">==</span> value) {
+</span></span><span style="display:flex;"><span>                <span style="color:#ff79c6">return</span> target;
+</span></span><span style="display:flex;"><span>            }
+</span></span><span style="display:flex;"><span>        }
+</span></span><span style="display:flex;"><span>        <span style="color:#ff79c6">return</span> <span style="color:#ff79c6">null</span>;
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>}
 </span></span></code></pre></div><p>接著要提供 converter</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-java" data-lang="java"><span style="display:flex;"><span><span style="color:#ff79c6">import</span> jakarta.persistence.AttributeConverter<span style="color:#ff79c6">;</span>
-</span></span><span style="display:flex;"><span><span style="color:#ff79c6">import</span> jakarta.persistence.Converter<span style="color:#ff79c6">;</span>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-java" data-lang="java"><span style="display:flex;"><span><span style="color:#ff79c6">import</span> jakarta.persistence.AttributeConverter;
+</span></span><span style="display:flex;"><span><span style="color:#ff79c6">import</span> jakarta.persistence.Converter;
 </span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span>@Converter<span style="color:#ff79c6">(</span>autoApply <span style="color:#ff79c6">=</span> <span style="color:#ff79c6">true</span><span style="color:#ff79c6">)</span>
-</span></span><span style="display:flex;"><span><span style="color:#8be9fd;font-style:italic">public</span> <span style="color:#8be9fd;font-style:italic">class</span> <span style="color:#50fa7b">ChatroomStatusConverter</span> <span style="color:#8be9fd;font-style:italic">implements</span> AttributeConverter<span style="color:#ff79c6">&lt;</span>ChatroomStatus<span style="color:#ff79c6">,</span> Integer<span style="color:#ff79c6">&gt;</span> <span style="color:#ff79c6">{</span>
-</span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span>	@Override
-</span></span><span style="display:flex;"><span>	<span style="color:#8be9fd;font-style:italic">public</span> Integer <span style="color:#50fa7b">convertToDatabaseColumn</span><span style="color:#ff79c6">(</span>ChatroomStatus attribute<span style="color:#ff79c6">)</span> <span style="color:#ff79c6">{</span>
-</span></span><span style="display:flex;"><span>		<span style="color:#ff79c6">if</span> <span style="color:#ff79c6">(</span>attribute <span style="color:#ff79c6">==</span> <span style="color:#ff79c6">null</span><span style="color:#ff79c6">)</span> <span style="color:#ff79c6">{</span>
-</span></span><span style="display:flex;"><span>			<span style="color:#ff79c6">return</span> <span style="color:#ff79c6">null</span><span style="color:#ff79c6">;</span>
-</span></span><span style="display:flex;"><span>		<span style="color:#ff79c6">}</span>
-</span></span><span style="display:flex;"><span>		<span style="color:#ff79c6">return</span> attribute<span style="color:#ff79c6">.</span><span style="color:#50fa7b">value</span><span style="color:#ff79c6">();</span>
-</span></span><span style="display:flex;"><span>	<span style="color:#ff79c6">}</span>
+</span></span><span style="display:flex;"><span>@Converter(autoApply <span style="color:#ff79c6">=</span> <span style="color:#ff79c6">true</span>)
+</span></span><span style="display:flex;"><span><span style="color:#8be9fd;font-style:italic">public</span> <span style="color:#8be9fd;font-style:italic">class</span> <span style="color:#50fa7b">ChatroomStatusConverter</span> <span style="color:#8be9fd;font-style:italic">implements</span> AttributeConverter<span style="color:#ff79c6">&lt;</span>ChatroomStatus, Integer<span style="color:#ff79c6">&gt;</span> {
 </span></span><span style="display:flex;"><span>
 </span></span><span style="display:flex;"><span>	@Override
-</span></span><span style="display:flex;"><span>	<span style="color:#8be9fd;font-style:italic">public</span> ChatroomStatus <span style="color:#50fa7b">convertToEntityAttribute</span><span style="color:#ff79c6">(</span>Integer dbData<span style="color:#ff79c6">)</span> <span style="color:#ff79c6">{</span>
-</span></span><span style="display:flex;"><span>		<span style="color:#ff79c6">if</span> <span style="color:#ff79c6">(</span>dbData <span style="color:#ff79c6">==</span> <span style="color:#ff79c6">null</span><span style="color:#ff79c6">)</span> <span style="color:#ff79c6">{</span>
-</span></span><span style="display:flex;"><span>			<span style="color:#ff79c6">return</span> <span style="color:#ff79c6">null</span><span style="color:#ff79c6">;</span>
-</span></span><span style="display:flex;"><span>		<span style="color:#ff79c6">}</span>
-</span></span><span style="display:flex;"><span>		<span style="color:#ff79c6">return</span> ChatroomStatus<span style="color:#ff79c6">.</span><span style="color:#50fa7b">of</span><span style="color:#ff79c6">(</span>dbData<span style="color:#ff79c6">);</span>
-</span></span><span style="display:flex;"><span>	<span style="color:#ff79c6">}</span>
-</span></span><span style="display:flex;"><span><span style="color:#ff79c6">}</span>
+</span></span><span style="display:flex;"><span>	<span style="color:#8be9fd;font-style:italic">public</span> Integer <span style="color:#50fa7b">convertToDatabaseColumn</span>(ChatroomStatus attribute) {
+</span></span><span style="display:flex;"><span>		<span style="color:#ff79c6">if</span> (attribute <span style="color:#ff79c6">==</span> <span style="color:#ff79c6">null</span>) {
+</span></span><span style="display:flex;"><span>			<span style="color:#ff79c6">return</span> <span style="color:#ff79c6">null</span>;
+</span></span><span style="display:flex;"><span>		}
+</span></span><span style="display:flex;"><span>		<span style="color:#ff79c6">return</span> attribute.<span style="color:#50fa7b">value</span>();
+</span></span><span style="display:flex;"><span>	}
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>	@Override
+</span></span><span style="display:flex;"><span>	<span style="color:#8be9fd;font-style:italic">public</span> ChatroomStatus <span style="color:#50fa7b">convertToEntityAttribute</span>(Integer dbData) {
+</span></span><span style="display:flex;"><span>		<span style="color:#ff79c6">if</span> (dbData <span style="color:#ff79c6">==</span> <span style="color:#ff79c6">null</span>) {
+</span></span><span style="display:flex;"><span>			<span style="color:#ff79c6">return</span> <span style="color:#ff79c6">null</span>;
+</span></span><span style="display:flex;"><span>		}
+</span></span><span style="display:flex;"><span>		<span style="color:#ff79c6">return</span> ChatroomStatus.<span style="color:#50fa7b">of</span>(dbData);
+</span></span><span style="display:flex;"><span>	}
+</span></span><span style="display:flex;"><span>}
 </span></span></code></pre></div><p>最後提供 entity</p>
 <div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-java" data-lang="java"><span style="display:flex;"><span>@Entity
-</span></span><span style="display:flex;"><span>@Table<span style="color:#ff79c6">(</span>name <span style="color:#ff79c6">=</span> <span style="color:#f1fa8c">&#34;CHATROOM&#34;</span><span style="color:#ff79c6">)</span>
-</span></span><span style="display:flex;"><span><span style="color:#8be9fd;font-style:italic">public</span> <span style="color:#8be9fd;font-style:italic">class</span> <span style="color:#50fa7b">ChatroomDo</span> <span style="color:#ff79c6">{</span>
-</span></span><span style="display:flex;"><span>    <span style="color:#ff79c6">...</span>
+</span></span><span style="display:flex;"><span>@Table(name <span style="color:#ff79c6">=</span> <span style="color:#f1fa8c">&#34;CHATROOM&#34;</span>)
+</span></span><span style="display:flex;"><span><span style="color:#8be9fd;font-style:italic">public</span> <span style="color:#8be9fd;font-style:italic">class</span> <span style="color:#50fa7b">ChatroomDo</span> {
+</span></span><span style="display:flex;"><span>    ...
 </span></span><span style="display:flex;"><span>    @NotNull
-</span></span><span style="display:flex;"><span>	@Column<span style="color:#ff79c6">(</span>name <span style="color:#ff79c6">=</span> <span style="color:#f1fa8c">&#34;STATUS&#34;</span><span style="color:#ff79c6">,</span> nullable <span style="color:#ff79c6">=</span> <span style="color:#ff79c6">false</span><span style="color:#ff79c6">)</span>
-</span></span><span style="display:flex;"><span>	<span style="color:#8be9fd;font-style:italic">private</span> ChatroomStatus status<span style="color:#ff79c6">;</span>
-</span></span><span style="display:flex;"><span>	<span style="color:#ff79c6">...</span>
-</span></span><span style="display:flex;"><span><span style="color:#ff79c6">}</span>
+</span></span><span style="display:flex;"><span>	@Column(name <span style="color:#ff79c6">=</span> <span style="color:#f1fa8c">&#34;STATUS&#34;</span>, nullable <span style="color:#ff79c6">=</span> <span style="color:#ff79c6">false</span>)
+</span></span><span style="display:flex;"><span>	<span style="color:#8be9fd;font-style:italic">private</span> ChatroomStatus status;
+</span></span><span style="display:flex;"><span>	...
+</span></span><span style="display:flex;"><span>}
 </span></span></code></pre></div><p>就可以正常使用 repository 做 CRUD 操作，而同時在 DB 當中 STATUS 為 <code>0</code> 代表 chatroom closed、<code>1</code> 代表 chatroom active</p>
 <h1 id="第二種情境描述">第二種情境描述</h1>
 <p>有時候我們會需要做一些複雜查詢，尤其是使用到其他 table 做 join 查詢，而且 select 的欄位不一定只選擇一個 entity 包含的欄位，此時就會需要利用 JPA 的 projection 功能</p>
@@ -473,143 +473,143 @@ if (!doNotTrack) {
 </span></span><span style="display:flex;"><span>)
 </span></span></code></pre></div><p>對應的 <code>MessageDo</code> entity 如下</p>
 <div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-java" data-lang="java"><span style="display:flex;"><span>@Entity
-</span></span><span style="display:flex;"><span>@Table<span style="color:#ff79c6">(</span>name <span style="color:#ff79c6">=</span> <span style="color:#f1fa8c">&#34;MESSAGE&#34;</span><span style="color:#ff79c6">)</span>
-</span></span><span style="display:flex;"><span><span style="color:#8be9fd;font-style:italic">public</span> <span style="color:#8be9fd;font-style:italic">class</span> <span style="color:#50fa7b">MessageDo</span> <span style="color:#ff79c6">{</span>
-</span></span><span style="display:flex;"><span>    <span style="color:#ff79c6">...</span>
-</span></span><span style="display:flex;"><span>    @Column<span style="color:#ff79c6">(</span>name <span style="color:#ff79c6">=</span> <span style="color:#f1fa8c">&#34;TYPE&#34;</span><span style="color:#ff79c6">)</span>
-</span></span><span style="display:flex;"><span>    <span style="color:#8be9fd;font-style:italic">private</span> MessageType type<span style="color:#ff79c6">;</span>
-</span></span><span style="display:flex;"><span>    @Column<span style="color:#ff79c6">(</span>name <span style="color:#ff79c6">=</span> <span style="color:#f1fa8c">&#34;REPLIED_MESSAGE_ID&#34;</span><span style="color:#ff79c6">)</span>
-</span></span><span style="display:flex;"><span>    <span style="color:#8be9fd;font-style:italic">private</span> Long repliedMessageId<span style="color:#ff79c6">;</span>
-</span></span><span style="display:flex;"><span>    <span style="color:#ff79c6">...</span>
-</span></span><span style="display:flex;"><span><span style="color:#ff79c6">}</span>
+</span></span><span style="display:flex;"><span>@Table(name <span style="color:#ff79c6">=</span> <span style="color:#f1fa8c">&#34;MESSAGE&#34;</span>)
+</span></span><span style="display:flex;"><span><span style="color:#8be9fd;font-style:italic">public</span> <span style="color:#8be9fd;font-style:italic">class</span> <span style="color:#50fa7b">MessageDo</span> {
+</span></span><span style="display:flex;"><span>    ...
+</span></span><span style="display:flex;"><span>    @Column(name <span style="color:#ff79c6">=</span> <span style="color:#f1fa8c">&#34;TYPE&#34;</span>)
+</span></span><span style="display:flex;"><span>    <span style="color:#8be9fd;font-style:italic">private</span> MessageType type;
+</span></span><span style="display:flex;"><span>    @Column(name <span style="color:#ff79c6">=</span> <span style="color:#f1fa8c">&#34;REPLIED_MESSAGE_ID&#34;</span>)
+</span></span><span style="display:flex;"><span>    <span style="color:#8be9fd;font-style:italic">private</span> Long repliedMessageId;
+</span></span><span style="display:flex;"><span>    ...
+</span></span><span style="display:flex;"><span>}
 </span></span></code></pre></div><p>其中 <code>MessageType</code> 如下</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-java" data-lang="java"><span style="display:flex;"><span><span style="color:#8be9fd;font-style:italic">public</span> <span style="color:#8be9fd;font-style:italic">enum</span> MessageType <span style="color:#ff79c6">{</span>
-</span></span><span style="display:flex;"><span>    TEXT<span style="color:#ff79c6">(</span><span style="color:#bd93f9">1</span><span style="color:#ff79c6">),</span>
-</span></span><span style="display:flex;"><span>    IMAGE<span style="color:#ff79c6">(</span><span style="color:#bd93f9">2</span><span style="color:#ff79c6">),</span>
-</span></span><span style="display:flex;"><span>    <span style="color:#ff79c6">...</span>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-java" data-lang="java"><span style="display:flex;"><span><span style="color:#8be9fd;font-style:italic">public</span> <span style="color:#8be9fd;font-style:italic">enum</span> MessageType {
+</span></span><span style="display:flex;"><span>    TEXT(1),
+</span></span><span style="display:flex;"><span>    IMAGE(2),
+</span></span><span style="display:flex;"><span>    ...
 </span></span><span style="display:flex;"><span>    
-</span></span><span style="display:flex;"><span>    <span style="color:#8be9fd;font-style:italic">private</span> <span style="color:#8be9fd;font-style:italic">final</span> <span style="color:#8be9fd">int</span> value<span style="color:#ff79c6">;</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#8be9fd;font-style:italic">private</span> <span style="color:#8be9fd;font-style:italic">final</span> <span style="color:#8be9fd">int</span> value;
 </span></span><span style="display:flex;"><span>    
-</span></span><span style="display:flex;"><span>    MessageType<span style="color:#ff79c6">(</span><span style="color:#8be9fd">int</span> value<span style="color:#ff79c6">)</span> <span style="color:#ff79c6">{</span>
-</span></span><span style="display:flex;"><span>        <span style="color:#ff79c6">this</span><span style="color:#ff79c6">.</span><span style="color:#50fa7b">value</span> <span style="color:#ff79c6">=</span> value<span style="color:#ff79c6">;</span>
-</span></span><span style="display:flex;"><span>    <span style="color:#ff79c6">}</span>
+</span></span><span style="display:flex;"><span>    MessageType(<span style="color:#8be9fd">int</span> value) {
+</span></span><span style="display:flex;"><span>        <span style="color:#ff79c6">this</span>.<span style="color:#50fa7b">value</span> <span style="color:#ff79c6">=</span> value;
+</span></span><span style="display:flex;"><span>    }
 </span></span><span style="display:flex;"><span>    
-</span></span><span style="display:flex;"><span>    <span style="color:#8be9fd;font-style:italic">public</span> <span style="color:#8be9fd">int</span> <span style="color:#50fa7b">value</span><span style="color:#ff79c6">()</span> <span style="color:#ff79c6">{</span>
-</span></span><span style="display:flex;"><span>        <span style="color:#ff79c6">return</span> <span style="color:#ff79c6">this</span><span style="color:#ff79c6">.</span><span style="color:#50fa7b">value</span><span style="color:#ff79c6">;</span>
-</span></span><span style="display:flex;"><span>    <span style="color:#ff79c6">}</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#8be9fd;font-style:italic">public</span> <span style="color:#8be9fd">int</span> <span style="color:#50fa7b">value</span>() {
+</span></span><span style="display:flex;"><span>        <span style="color:#ff79c6">return</span> <span style="color:#ff79c6">this</span>.<span style="color:#50fa7b">value</span>;
+</span></span><span style="display:flex;"><span>    }
 </span></span><span style="display:flex;"><span>    
-</span></span><span style="display:flex;"><span>    <span style="color:#8be9fd;font-style:italic">public</span> <span style="color:#8be9fd;font-style:italic">static</span> MessageType <span style="color:#50fa7b">of</span><span style="color:#ff79c6">(</span><span style="color:#8be9fd">int</span> value<span style="color:#ff79c6">)</span> <span style="color:#ff79c6">{</span>
-</span></span><span style="display:flex;"><span>		<span style="color:#ff79c6">for</span> <span style="color:#ff79c6">(</span>MessageType target <span style="color:#ff79c6">:</span> MessageType<span style="color:#ff79c6">.</span><span style="color:#50fa7b">values</span><span style="color:#ff79c6">())</span> <span style="color:#ff79c6">{</span>
-</span></span><span style="display:flex;"><span>			<span style="color:#ff79c6">if</span> <span style="color:#ff79c6">(</span>target<span style="color:#ff79c6">.</span><span style="color:#50fa7b">value</span><span style="color:#ff79c6">()</span> <span style="color:#ff79c6">==</span> value<span style="color:#ff79c6">)</span> <span style="color:#ff79c6">{</span>
-</span></span><span style="display:flex;"><span>				<span style="color:#ff79c6">return</span> target<span style="color:#ff79c6">;</span>
-</span></span><span style="display:flex;"><span>			<span style="color:#ff79c6">}</span>
-</span></span><span style="display:flex;"><span>		<span style="color:#ff79c6">}</span>
-</span></span><span style="display:flex;"><span>		<span style="color:#ff79c6">return</span> <span style="color:#ff79c6">null</span><span style="color:#ff79c6">;</span>
-</span></span><span style="display:flex;"><span>	<span style="color:#ff79c6">}</span>
-</span></span><span style="display:flex;"><span><span style="color:#ff79c6">}</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#8be9fd;font-style:italic">public</span> <span style="color:#8be9fd;font-style:italic">static</span> MessageType <span style="color:#50fa7b">of</span>(<span style="color:#8be9fd">int</span> value) {
+</span></span><span style="display:flex;"><span>		<span style="color:#ff79c6">for</span> (MessageType target : MessageType.<span style="color:#50fa7b">values</span>()) {
+</span></span><span style="display:flex;"><span>			<span style="color:#ff79c6">if</span> (target.<span style="color:#50fa7b">value</span>() <span style="color:#ff79c6">==</span> value) {
+</span></span><span style="display:flex;"><span>				<span style="color:#ff79c6">return</span> target;
+</span></span><span style="display:flex;"><span>			}
+</span></span><span style="display:flex;"><span>		}
+</span></span><span style="display:flex;"><span>		<span style="color:#ff79c6">return</span> <span style="color:#ff79c6">null</span>;
+</span></span><span style="display:flex;"><span>	}
+</span></span><span style="display:flex;"><span>}
 </span></span></code></pre></div><p>按照慣例，提供 converter 如下</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-java" data-lang="java"><span style="display:flex;"><span><span style="color:#ff79c6">import</span> jakarta.persistence.AttributeConverter<span style="color:#ff79c6">;</span>
-</span></span><span style="display:flex;"><span><span style="color:#ff79c6">import</span> jakarta.persistence.Converter<span style="color:#ff79c6">;</span>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-java" data-lang="java"><span style="display:flex;"><span><span style="color:#ff79c6">import</span> jakarta.persistence.AttributeConverter;
+</span></span><span style="display:flex;"><span><span style="color:#ff79c6">import</span> jakarta.persistence.Converter;
 </span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span>@Converter<span style="color:#ff79c6">(</span>autoApply <span style="color:#ff79c6">=</span> <span style="color:#ff79c6">true</span><span style="color:#ff79c6">)</span>
-</span></span><span style="display:flex;"><span><span style="color:#8be9fd;font-style:italic">public</span> <span style="color:#8be9fd;font-style:italic">class</span> <span style="color:#50fa7b">MessageTypeConverter</span> <span style="color:#8be9fd;font-style:italic">implements</span> AttributeConverter<span style="color:#ff79c6">&lt;</span>MessageType<span style="color:#ff79c6">,</span> Integer<span style="color:#ff79c6">&gt;</span> <span style="color:#ff79c6">{</span>
-</span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span>	@Override
-</span></span><span style="display:flex;"><span>	<span style="color:#8be9fd;font-style:italic">public</span> Integer <span style="color:#50fa7b">convertToDatabaseColumn</span><span style="color:#ff79c6">(</span>MessageType attribute<span style="color:#ff79c6">)</span> <span style="color:#ff79c6">{</span>
-</span></span><span style="display:flex;"><span>		<span style="color:#ff79c6">if</span> <span style="color:#ff79c6">(</span>attribute <span style="color:#ff79c6">==</span> <span style="color:#ff79c6">null</span><span style="color:#ff79c6">)</span> <span style="color:#ff79c6">{</span>
-</span></span><span style="display:flex;"><span>			<span style="color:#ff79c6">return</span> <span style="color:#ff79c6">null</span><span style="color:#ff79c6">;</span>
-</span></span><span style="display:flex;"><span>		<span style="color:#ff79c6">}</span>
-</span></span><span style="display:flex;"><span>		<span style="color:#ff79c6">return</span> attribute<span style="color:#ff79c6">.</span><span style="color:#50fa7b">value</span><span style="color:#ff79c6">();</span>
-</span></span><span style="display:flex;"><span>	<span style="color:#ff79c6">}</span>
+</span></span><span style="display:flex;"><span>@Converter(autoApply <span style="color:#ff79c6">=</span> <span style="color:#ff79c6">true</span>)
+</span></span><span style="display:flex;"><span><span style="color:#8be9fd;font-style:italic">public</span> <span style="color:#8be9fd;font-style:italic">class</span> <span style="color:#50fa7b">MessageTypeConverter</span> <span style="color:#8be9fd;font-style:italic">implements</span> AttributeConverter<span style="color:#ff79c6">&lt;</span>MessageType, Integer<span style="color:#ff79c6">&gt;</span> {
 </span></span><span style="display:flex;"><span>
 </span></span><span style="display:flex;"><span>	@Override
-</span></span><span style="display:flex;"><span>	<span style="color:#8be9fd;font-style:italic">public</span> MessageType <span style="color:#50fa7b">convertToEntityAttribute</span><span style="color:#ff79c6">(</span>Integer dbData<span style="color:#ff79c6">)</span> <span style="color:#ff79c6">{</span>
-</span></span><span style="display:flex;"><span>		<span style="color:#ff79c6">if</span> <span style="color:#ff79c6">(</span>dbData <span style="color:#ff79c6">==</span> <span style="color:#ff79c6">null</span><span style="color:#ff79c6">)</span> <span style="color:#ff79c6">{</span>
-</span></span><span style="display:flex;"><span>			<span style="color:#ff79c6">return</span> <span style="color:#ff79c6">null</span><span style="color:#ff79c6">;</span>
-</span></span><span style="display:flex;"><span>		<span style="color:#ff79c6">}</span>
-</span></span><span style="display:flex;"><span>		<span style="color:#ff79c6">return</span> MessageType<span style="color:#ff79c6">.</span><span style="color:#50fa7b">of</span><span style="color:#ff79c6">(</span>dbData<span style="color:#ff79c6">);</span>
-</span></span><span style="display:flex;"><span>	<span style="color:#ff79c6">}</span>
-</span></span><span style="display:flex;"><span><span style="color:#ff79c6">}</span>
+</span></span><span style="display:flex;"><span>	<span style="color:#8be9fd;font-style:italic">public</span> Integer <span style="color:#50fa7b">convertToDatabaseColumn</span>(MessageType attribute) {
+</span></span><span style="display:flex;"><span>		<span style="color:#ff79c6">if</span> (attribute <span style="color:#ff79c6">==</span> <span style="color:#ff79c6">null</span>) {
+</span></span><span style="display:flex;"><span>			<span style="color:#ff79c6">return</span> <span style="color:#ff79c6">null</span>;
+</span></span><span style="display:flex;"><span>		}
+</span></span><span style="display:flex;"><span>		<span style="color:#ff79c6">return</span> attribute.<span style="color:#50fa7b">value</span>();
+</span></span><span style="display:flex;"><span>	}
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>	@Override
+</span></span><span style="display:flex;"><span>	<span style="color:#8be9fd;font-style:italic">public</span> MessageType <span style="color:#50fa7b">convertToEntityAttribute</span>(Integer dbData) {
+</span></span><span style="display:flex;"><span>		<span style="color:#ff79c6">if</span> (dbData <span style="color:#ff79c6">==</span> <span style="color:#ff79c6">null</span>) {
+</span></span><span style="display:flex;"><span>			<span style="color:#ff79c6">return</span> <span style="color:#ff79c6">null</span>;
+</span></span><span style="display:flex;"><span>		}
+</span></span><span style="display:flex;"><span>		<span style="color:#ff79c6">return</span> MessageType.<span style="color:#50fa7b">of</span>(dbData);
+</span></span><span style="display:flex;"><span>	}
+</span></span><span style="display:flex;"><span>}
 </span></span></code></pre></div><p>此時若需要取得一個 message 以及其回覆 message 的內容，則 JPA query method 就無法 return MessageDo，所以此時我們採用 JPA interface-based projection 來達成此操作，首先按照官方 doc 提供 interface 如下</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-java" data-lang="java"><span style="display:flex;"><span><span style="color:#8be9fd;font-style:italic">public</span> <span style="color:#8be9fd;font-style:italic">interface</span> <span style="color:#50fa7b">MessageViewDo</span> <span style="color:#ff79c6">{</span>
-</span></span><span style="display:flex;"><span>    <span style="color:#ff79c6">...</span>
-</span></span><span style="display:flex;"><span>    MessageType <span style="color:#50fa7b">getType</span><span style="color:#ff79c6">();</span>
-</span></span><span style="display:flex;"><span>    Long <span style="color:#50fa7b">getRepliedMessageId</span><span style="color:#ff79c6">();</span>
-</span></span><span style="display:flex;"><span>    MessageType <span style="color:#50fa7b">getRepliedMessageType</span><span style="color:#ff79c6">();</span>
-</span></span><span style="display:flex;"><span>    <span style="color:#ff79c6">...</span>
-</span></span><span style="display:flex;"><span><span style="color:#ff79c6">}</span>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-java" data-lang="java"><span style="display:flex;"><span><span style="color:#8be9fd;font-style:italic">public</span> <span style="color:#8be9fd;font-style:italic">interface</span> <span style="color:#50fa7b">MessageViewDo</span> {
+</span></span><span style="display:flex;"><span>    ...
+</span></span><span style="display:flex;"><span>    MessageType <span style="color:#50fa7b">getType</span>();
+</span></span><span style="display:flex;"><span>    Long <span style="color:#50fa7b">getRepliedMessageId</span>();
+</span></span><span style="display:flex;"><span>    MessageType <span style="color:#50fa7b">getRepliedMessageType</span>();
+</span></span><span style="display:flex;"><span>    ...
+</span></span><span style="display:flex;"><span>}
 </span></span></code></pre></div><p>然後是 query 如下</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-java" data-lang="java"><span style="display:flex;"><span><span style="color:#8be9fd;font-style:italic">public</span> <span style="color:#8be9fd;font-style:italic">interface</span> <span style="color:#50fa7b">MessageDao</span> <span style="color:#8be9fd;font-style:italic">extends</span> JpaRepository<span style="color:#ff79c6">&lt;</span>MessageDo<span style="color:#ff79c6">,</span> Long<span style="color:#ff79c6">&gt;</span> <span style="color:#ff79c6">{</span>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-java" data-lang="java"><span style="display:flex;"><span><span style="color:#8be9fd;font-style:italic">public</span> <span style="color:#8be9fd;font-style:italic">interface</span> <span style="color:#50fa7b">MessageDao</span> <span style="color:#8be9fd;font-style:italic">extends</span> JpaRepository<span style="color:#ff79c6">&lt;</span>MessageDo, Long<span style="color:#ff79c6">&gt;</span> {
 </span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span>    @Query<span style="color:#ff79c6">(</span>value <span style="color:#ff79c6">=</span> <span style="color:#f1fa8c">&#34;SELECT &#34;</span> <span style="color:#ff79c6">+</span>
-</span></span><span style="display:flex;"><span>    <span style="color:#ff79c6">...</span>
+</span></span><span style="display:flex;"><span>    @Query(value <span style="color:#ff79c6">=</span> <span style="color:#f1fa8c">&#34;SELECT &#34;</span> <span style="color:#ff79c6">+</span>
+</span></span><span style="display:flex;"><span>    ...
 </span></span><span style="display:flex;"><span>    <span style="color:#f1fa8c">&#34;  m.TYPE, &#34;</span> <span style="color:#ff79c6">+</span>
 </span></span><span style="display:flex;"><span>    <span style="color:#f1fa8c">&#34;  rm.ID AS repliedMessageId, &#34;</span>
 </span></span><span style="display:flex;"><span>    <span style="color:#f1fa8c">&#34;  rm.TYPE AS repliedMessageType, &#34;</span>
-</span></span><span style="display:flex;"><span>    <span style="color:#ff79c6">...</span>
+</span></span><span style="display:flex;"><span>    ...
 </span></span><span style="display:flex;"><span>    <span style="color:#f1fa8c">&#34;FROM MESSAGE m &#34;</span> <span style="color:#ff79c6">+</span>
 </span></span><span style="display:flex;"><span>    <span style="color:#f1fa8c">&#34;LEFT JOIN MESSAGE rm ON m.REPLIED_MESSAGE_ID = rm.ID &#34;</span> <span style="color:#ff79c6">+</span>
-</span></span><span style="display:flex;"><span>    <span style="color:#f1fa8c">&#34;WHERE m.ID = :id&#34;</span><span style="color:#ff79c6">,</span> nativeQuery <span style="color:#ff79c6">=</span> <span style="color:#ff79c6">true</span><span style="color:#ff79c6">)</span>
-</span></span><span style="display:flex;"><span>    Optional<span style="color:#ff79c6">&lt;</span>MessageViewDo<span style="color:#ff79c6">&gt;</span> <span style="color:#50fa7b">findMessageViewById</span><span style="color:#ff79c6">(</span>Long id<span style="color:#ff79c6">);</span>
-</span></span><span style="display:flex;"><span><span style="color:#ff79c6">}</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#f1fa8c">&#34;WHERE m.ID = :id&#34;</span>, nativeQuery <span style="color:#ff79c6">=</span> <span style="color:#ff79c6">true</span>)
+</span></span><span style="display:flex;"><span>    Optional<span style="color:#ff79c6">&lt;</span>MessageViewDo<span style="color:#ff79c6">&gt;</span> <span style="color:#50fa7b">findMessageViewById</span>(Long id);
+</span></span><span style="display:flex;"><span>}
 </span></span></code></pre></div><p>此時當我們使用的時候，會開心地發現取出來的 <code>MessageType</code> 值有問題，要不是取出來的值不對，就是會報 <code>org.springframework.core.convert.ConversionFailedException</code> 的錯誤，仔細看 cause 還是 <code>Caused by: java.lang.ArrayIndexOutOfBoundsException</code>？</p>
 <p>這是因為 JPA 的 interface-based projection 實際上是用 proxy 來包住取得的 result，等到使用者要使用到物件的時候才做轉換，而且因為我們做的是 open projection (projection 的結果並非基於 entity class)，所以 JPA 無法像 closed projection (projection 結果基於 entity) 那樣從原始的 entity 身上取得 metadata 做轉換，所以只能用 Spring 預設的 converter 來做轉換</p>
 <p>是的，因為無法取得 entity 的 metadata，所以此時使用的不是 JPA 的 converter 而是 Spring Core 自帶的 converter，而我們並沒有將我們自定義的 Spring converter 註冊給 Spring DI container，所以它只會用預設的方式去做 <code>int</code> -&gt; <code>enum</code> 的轉換</p>
 <p>而 Spring 預設對 <code>int</code> -&gt; <code>enum</code> 的轉換是依照 <code>enum</code> 的 ordinal (順序) 做轉換，而且 ordinal 是從 0 開始，所以你可能會很容易看到轉換出來的 <code>MessageType</code> 比 DB 中的剛好大一號，例如 DB 中的 <code>TYPE</code> 是 <code>1</code> 應該代表的是 <code>TEXT</code>，但取出來卻變成 <code>IMAGE</code> 這樣的情況；更甚者，如果 DB 的值剛好大於等於 <code>enum</code> 的 size 就會報 <code>org.springframework.core.convert.ConversionFailedException</code></p>
 <p>因此，很自然的我們就應該要提供 converter 給 Spring</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-java" data-lang="java"><span style="display:flex;"><span><span style="color:#ff79c6">import</span> org.springframework.core.convert.converter.Converter<span style="color:#ff79c6">;</span>
-</span></span><span style="display:flex;"><span><span style="color:#ff79c6">import</span> org.springframework.lang.NonNull<span style="color:#ff79c6">;</span>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-java" data-lang="java"><span style="display:flex;"><span><span style="color:#ff79c6">import</span> org.springframework.core.convert.converter.Converter;
+</span></span><span style="display:flex;"><span><span style="color:#ff79c6">import</span> org.springframework.lang.NonNull;
 </span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span><span style="color:#ff79c6">import</span> java.util.Arrays<span style="color:#ff79c6">;</span>
+</span></span><span style="display:flex;"><span><span style="color:#ff79c6">import</span> java.util.Arrays;
 </span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span><span style="color:#8be9fd;font-style:italic">public</span> <span style="color:#8be9fd;font-style:italic">class</span> <span style="color:#50fa7b">MessageTypeConverter</span> <span style="color:#8be9fd;font-style:italic">implements</span> Converter<span style="color:#ff79c6">&lt;</span>Integer<span style="color:#ff79c6">,</span> MessageType<span style="color:#ff79c6">&gt;</span> <span style="color:#ff79c6">{</span>
+</span></span><span style="display:flex;"><span><span style="color:#8be9fd;font-style:italic">public</span> <span style="color:#8be9fd;font-style:italic">class</span> <span style="color:#50fa7b">MessageTypeConverter</span> <span style="color:#8be9fd;font-style:italic">implements</span> Converter<span style="color:#ff79c6">&lt;</span>Integer, MessageType<span style="color:#ff79c6">&gt;</span> {
 </span></span><span style="display:flex;"><span>
 </span></span><span style="display:flex;"><span>	@Override
-</span></span><span style="display:flex;"><span>	<span style="color:#8be9fd;font-style:italic">public</span> MessageType <span style="color:#50fa7b">convert</span><span style="color:#ff79c6">(</span>@NonNull Integer source<span style="color:#ff79c6">)</span> <span style="color:#ff79c6">{</span>
-</span></span><span style="display:flex;"><span>		<span style="color:#ff79c6">if</span> <span style="color:#ff79c6">(</span>Arrays<span style="color:#ff79c6">.</span><span style="color:#50fa7b">stream</span><span style="color:#ff79c6">(</span>MessageType<span style="color:#ff79c6">.</span><span style="color:#50fa7b">values</span><span style="color:#ff79c6">()).</span><span style="color:#50fa7b">anyMatch</span><span style="color:#ff79c6">(</span>target <span style="color:#ff79c6">-&gt;</span> target<span style="color:#ff79c6">.</span><span style="color:#50fa7b">value</span> <span style="color:#ff79c6">==</span> source<span style="color:#ff79c6">))</span> <span style="color:#ff79c6">{</span>
-</span></span><span style="display:flex;"><span>			<span style="color:#ff79c6">return</span> MessageType<span style="color:#ff79c6">.</span><span style="color:#50fa7b">of</span><span style="color:#ff79c6">(</span>source<span style="color:#ff79c6">);</span>
-</span></span><span style="display:flex;"><span>		<span style="color:#ff79c6">}</span>
-</span></span><span style="display:flex;"><span>		<span style="color:#ff79c6">return</span> <span style="color:#ff79c6">null</span><span style="color:#ff79c6">;</span>
-</span></span><span style="display:flex;"><span>	<span style="color:#ff79c6">}</span>
-</span></span><span style="display:flex;"><span><span style="color:#ff79c6">}</span>
+</span></span><span style="display:flex;"><span>	<span style="color:#8be9fd;font-style:italic">public</span> MessageType <span style="color:#50fa7b">convert</span>(@NonNull Integer source) {
+</span></span><span style="display:flex;"><span>		<span style="color:#ff79c6">if</span> (Arrays.<span style="color:#50fa7b">stream</span>(MessageType.<span style="color:#50fa7b">values</span>()).<span style="color:#50fa7b">anyMatch</span>(target <span style="color:#ff79c6">-&gt;</span> target.<span style="color:#50fa7b">value</span> <span style="color:#ff79c6">==</span> source)) {
+</span></span><span style="display:flex;"><span>			<span style="color:#ff79c6">return</span> MessageType.<span style="color:#50fa7b">of</span>(source);
+</span></span><span style="display:flex;"><span>		}
+</span></span><span style="display:flex;"><span>		<span style="color:#ff79c6">return</span> <span style="color:#ff79c6">null</span>;
+</span></span><span style="display:flex;"><span>	}
+</span></span><span style="display:flex;"><span>}
 </span></span></code></pre></div><p>但這時候問題就來了，要怎麼註冊這個 converter？這個時候就要看 Spring Boot 的版本了</p>
 <h2 id="spring-boot-240-以前">Spring Boot 2.4.0 以前</h2>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-java" data-lang="java"><span style="display:flex;"><span><span style="color:#ff79c6">import</span> org.springframework.boot.context.event.ApplicationReadyEvent<span style="color:#ff79c6">;</span>
-</span></span><span style="display:flex;"><span><span style="color:#ff79c6">import</span> org.springframework.context.annotation.Configuration<span style="color:#ff79c6">;</span>
-</span></span><span style="display:flex;"><span><span style="color:#ff79c6">import</span> org.springframework.context.event.EventListener<span style="color:#ff79c6">;</span>
-</span></span><span style="display:flex;"><span><span style="color:#ff79c6">import</span> org.springframework.core.convert.support.DefaultConversionService<span style="color:#ff79c6">;</span>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-java" data-lang="java"><span style="display:flex;"><span><span style="color:#ff79c6">import</span> org.springframework.boot.context.event.ApplicationReadyEvent;
+</span></span><span style="display:flex;"><span><span style="color:#ff79c6">import</span> org.springframework.context.annotation.Configuration;
+</span></span><span style="display:flex;"><span><span style="color:#ff79c6">import</span> org.springframework.context.event.EventListener;
+</span></span><span style="display:flex;"><span><span style="color:#ff79c6">import</span> org.springframework.core.convert.support.DefaultConversionService;
 </span></span><span style="display:flex;"><span>
 </span></span><span style="display:flex;"><span>@Configuration
-</span></span><span style="display:flex;"><span><span style="color:#8be9fd;font-style:italic">public</span> <span style="color:#8be9fd;font-style:italic">class</span> <span style="color:#50fa7b">ConverterConfig</span> <span style="color:#ff79c6">{</span>
+</span></span><span style="display:flex;"><span><span style="color:#8be9fd;font-style:italic">public</span> <span style="color:#8be9fd;font-style:italic">class</span> <span style="color:#50fa7b">ConverterConfig</span> {
 </span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span>    @EventListener<span style="color:#ff79c6">(</span>ApplicationReadyEvent<span style="color:#ff79c6">.</span><span style="color:#50fa7b">class</span><span style="color:#ff79c6">)</span>
-</span></span><span style="display:flex;"><span>    <span style="color:#8be9fd;font-style:italic">public</span> <span style="color:#8be9fd">void</span> <span style="color:#50fa7b">config</span><span style="color:#ff79c6">()</span> <span style="color:#ff79c6">{</span>
-</span></span><span style="display:flex;"><span>        DefaultConversionService conversionService <span style="color:#ff79c6">=</span> <span style="color:#ff79c6">(</span>DefaultConversionService<span style="color:#ff79c6">)</span> DefaultConversionService<span style="color:#ff79c6">.</span><span style="color:#50fa7b">getSharedInstance</span><span style="color:#ff79c6">();</span>
-</span></span><span style="display:flex;"><span>        conversionService<span style="color:#ff79c6">.</span><span style="color:#50fa7b">addConverter</span><span style="color:#ff79c6">(</span><span style="color:#ff79c6">new</span> MessageTypeConverter<span style="color:#ff79c6">());</span>
-</span></span><span style="display:flex;"><span>    <span style="color:#ff79c6">}</span>
-</span></span><span style="display:flex;"><span><span style="color:#ff79c6">}</span>
+</span></span><span style="display:flex;"><span>    @EventListener(ApplicationReadyEvent.<span style="color:#50fa7b">class</span>)
+</span></span><span style="display:flex;"><span>    <span style="color:#8be9fd;font-style:italic">public</span> <span style="color:#8be9fd">void</span> <span style="color:#50fa7b">config</span>() {
+</span></span><span style="display:flex;"><span>        DefaultConversionService conversionService <span style="color:#ff79c6">=</span> (DefaultConversionService) DefaultConversionService.<span style="color:#50fa7b">getSharedInstance</span>();
+</span></span><span style="display:flex;"><span>        conversionService.<span style="color:#50fa7b">addConverter</span>(<span style="color:#ff79c6">new</span> MessageTypeConverter());
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>}
 </span></span></code></pre></div><h2 id="spring-boot-240-以後">Spring Boot 2.4.0 以後</h2>
 <p>因為 Spring Boot 2.4.0 以後沒辦法用 <code>DefaultConversionService.getSharedInstance()</code> 的方式，所以最後參考了 <a href="https://stackoverflow.com/a/65355897">這裡</a> 提供的方式，用反射來註冊 converter</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-java" data-lang="java"><span style="display:flex;"><span><span style="color:#ff79c6">import</span> org.springframework.boot.context.event.ApplicationReadyEvent<span style="color:#ff79c6">;</span>
-</span></span><span style="display:flex;"><span><span style="color:#ff79c6">import</span> org.springframework.context.annotation.Configuration<span style="color:#ff79c6">;</span>
-</span></span><span style="display:flex;"><span><span style="color:#ff79c6">import</span> org.springframework.context.event.EventListener<span style="color:#ff79c6">;</span>
-</span></span><span style="display:flex;"><span><span style="color:#ff79c6">import</span> org.springframework.core.convert.support.GenericConversionService<span style="color:#ff79c6">;</span>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-java" data-lang="java"><span style="display:flex;"><span><span style="color:#ff79c6">import</span> org.springframework.boot.context.event.ApplicationReadyEvent;
+</span></span><span style="display:flex;"><span><span style="color:#ff79c6">import</span> org.springframework.context.annotation.Configuration;
+</span></span><span style="display:flex;"><span><span style="color:#ff79c6">import</span> org.springframework.context.event.EventListener;
+</span></span><span style="display:flex;"><span><span style="color:#ff79c6">import</span> org.springframework.core.convert.support.GenericConversionService;
 </span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span><span style="color:#ff79c6">import</span> java.lang.reflect.Field<span style="color:#ff79c6">;</span>
+</span></span><span style="display:flex;"><span><span style="color:#ff79c6">import</span> java.lang.reflect.Field;
 </span></span><span style="display:flex;"><span>
 </span></span><span style="display:flex;"><span>@Configuration
-</span></span><span style="display:flex;"><span><span style="color:#8be9fd;font-style:italic">public</span> <span style="color:#8be9fd;font-style:italic">class</span> <span style="color:#50fa7b">JpaProjectionConverterConfig</span> <span style="color:#ff79c6">{</span>
+</span></span><span style="display:flex;"><span><span style="color:#8be9fd;font-style:italic">public</span> <span style="color:#8be9fd;font-style:italic">class</span> <span style="color:#50fa7b">JpaProjectionConverterConfig</span> {
 </span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span>	@EventListener<span style="color:#ff79c6">(</span>ApplicationReadyEvent<span style="color:#ff79c6">.</span><span style="color:#50fa7b">class</span><span style="color:#ff79c6">)</span>
-</span></span><span style="display:flex;"><span>	<span style="color:#8be9fd;font-style:italic">public</span> <span style="color:#8be9fd">void</span> <span style="color:#50fa7b">offsetDateTimeConversion</span><span style="color:#ff79c6">()</span> <span style="color:#8be9fd;font-style:italic">throws</span> ClassNotFoundException<span style="color:#ff79c6">,</span> NoSuchFieldException<span style="color:#ff79c6">,</span> IllegalAccessException <span style="color:#ff79c6">{</span>
-</span></span><span style="display:flex;"><span>		Class<span style="color:#ff79c6">&lt;?&gt;</span> aClass <span style="color:#ff79c6">=</span> Class<span style="color:#ff79c6">.</span><span style="color:#50fa7b">forName</span><span style="color:#ff79c6">(</span><span style="color:#f1fa8c">&#34;org.springframework.data.projection.ProxyProjectionFactory&#34;</span><span style="color:#ff79c6">);</span>
-</span></span><span style="display:flex;"><span>		Field field <span style="color:#ff79c6">=</span> aClass<span style="color:#ff79c6">.</span><span style="color:#50fa7b">getDeclaredField</span><span style="color:#ff79c6">(</span><span style="color:#f1fa8c">&#34;CONVERSION_SERVICE&#34;</span><span style="color:#ff79c6">);</span>
-</span></span><span style="display:flex;"><span>		field<span style="color:#ff79c6">.</span><span style="color:#50fa7b">setAccessible</span><span style="color:#ff79c6">(</span><span style="color:#ff79c6">true</span><span style="color:#ff79c6">);</span>
-</span></span><span style="display:flex;"><span>		GenericConversionService service <span style="color:#ff79c6">=</span> <span style="color:#ff79c6">(</span>GenericConversionService<span style="color:#ff79c6">)</span> field<span style="color:#ff79c6">.</span><span style="color:#50fa7b">get</span><span style="color:#ff79c6">(</span><span style="color:#ff79c6">null</span><span style="color:#ff79c6">);</span>
+</span></span><span style="display:flex;"><span>	@EventListener(ApplicationReadyEvent.<span style="color:#50fa7b">class</span>)
+</span></span><span style="display:flex;"><span>	<span style="color:#8be9fd;font-style:italic">public</span> <span style="color:#8be9fd">void</span> <span style="color:#50fa7b">offsetDateTimeConversion</span>() <span style="color:#8be9fd;font-style:italic">throws</span> ClassNotFoundException, NoSuchFieldException, IllegalAccessException {
+</span></span><span style="display:flex;"><span>		Class<span style="color:#ff79c6">&lt;?&gt;</span> aClass <span style="color:#ff79c6">=</span> Class.<span style="color:#50fa7b">forName</span>(<span style="color:#f1fa8c">&#34;org.springframework.data.projection.ProxyProjectionFactory&#34;</span>);
+</span></span><span style="display:flex;"><span>		Field field <span style="color:#ff79c6">=</span> aClass.<span style="color:#50fa7b">getDeclaredField</span>(<span style="color:#f1fa8c">&#34;CONVERSION_SERVICE&#34;</span>);
+</span></span><span style="display:flex;"><span>		field.<span style="color:#50fa7b">setAccessible</span>(<span style="color:#ff79c6">true</span>);
+</span></span><span style="display:flex;"><span>		GenericConversionService service <span style="color:#ff79c6">=</span> (GenericConversionService) field.<span style="color:#50fa7b">get</span>(<span style="color:#ff79c6">null</span>);
 </span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span>		service<span style="color:#ff79c6">.</span><span style="color:#50fa7b">addConverter</span><span style="color:#ff79c6">(</span><span style="color:#ff79c6">new</span> MessageTypeConverter<span style="color:#ff79c6">());</span>
-</span></span><span style="display:flex;"><span>	<span style="color:#ff79c6">}</span>
-</span></span><span style="display:flex;"><span><span style="color:#ff79c6">}</span>
+</span></span><span style="display:flex;"><span>		service.<span style="color:#50fa7b">addConverter</span>(<span style="color:#ff79c6">new</span> MessageTypeConverter());
+</span></span><span style="display:flex;"><span>	}
+</span></span><span style="display:flex;"><span>}
 </span></span></code></pre></div><p>如此就可以利用框架自動 mapping Java <code>enum</code> 與 MySQL <code>int</code></p>
 <p>另外提一下，Java 的 <code>Instant</code> 或 <code>OffsetDateTime</code> 與 MySQL <code>datetime</code> 之間也有類似的問題，所以也需要提供一個 converter 做 <code>Instant</code> 或 <code>OffsetDateTime</code> 與 <code>java.sql.Timestamp</code> 之間做轉換</p>
 <blockquote>

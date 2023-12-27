@@ -1,0 +1,1138 @@
+<!DOCTYPE html>
+<html><head>
+<title>Java Time 保存到 MySQL DATETIME 時區問題</title>
+
+
+
+
+<meta charset="utf-8">
+<meta name="X-UA-Compatible" content="IE=edge">
+<meta name="google-site-verification" content="">
+<meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" name="viewport">
+<meta content="telephone=no" name="format-detection">
+<meta name="description" content="研究 JPA/JDBC 如何對 Java Time 與 MySQL DATETIME 資料型態 mapping 時做時區轉換的機制">
+<meta name="renderer" content="webkit">
+<meta name="theme-color" content="#ffffff">
+
+
+
+
+
+
+
+
+
+
+
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-JP1V61PPMJ"></script>
+<script>
+var doNotTrack = false;
+if (!doNotTrack) {
+	window.dataLayer = window.dataLayer || [];
+	function gtag(){dataLayer.push(arguments);}
+	gtag('js', new Date());
+	gtag('config', 'G-JP1V61PPMJ', { 'anonymize_ip': false });
+}
+</script>
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+      <script src="https://blog.idontwannarock.me/js/toc.js"></script>
+    
+    <link type="text/css" rel="stylesheet" href="https://blog.idontwannarock.me/vendor/css/bootstrap.min.css">
+
+<link rel="stylesheet" href="https://blog.idontwannarock.me/scss/dark-mode.min.cb53f1bee2b8900cb4f082afbf00175d6618f281cf9a2fe8619e3b52d20b5721.css" integrity="sha256-y1PxvuK4kAy08IKvvwAXXWYY8oHPmi/oYZ47UtILVyE=" media="screen">
+
+
+<link rel="stylesheet"
+          href="https://fonts.googleapis.com/css?family=Material+Icons">
+
+
+
+
+
+
+
+
+
+
+
+
+<script src="https://cdn.jsdelivr.net/npm/vue-disqus@3/dist/vue-disqus.js"></script>
+
+
+
+
+
+
+
+
+</head>
+<body>
+    	<div id="app"><div class="single-column-drawer-container" id="drawer"
+     v-bind:class="{ 'single-column-drawer-container-active': isDrawerOpen }">
+    <div class="drawer-content">
+        <div class="drawer-menu">
+            
+            
+            
+                
+                
+                
+                
+                
+                <a class="a-block drawer-menu-item false" href="https://blog.idontwannarock.me/posts">
+                    Archive
+                </a>
+                
+            
+                
+                
+                
+                
+                
+                <a class="a-block drawer-menu-item false" href="https://blog.idontwannarock.me/categories">
+                    Categories
+                </a>
+                
+            
+                
+                
+                
+                
+                
+                <a class="a-block drawer-menu-item false" href="https://blog.idontwannarock.me/tags">
+                    Tags
+                </a>
+                
+            
+                
+                
+                
+                
+                
+                <a class="a-block drawer-menu-item false" href="https://blog.idontwannarock.me/about">
+                    About
+                </a>
+                
+            
+                
+                
+                
+                
+                
+                <a class="a-block drawer-menu-item false" href="https://blog.idontwannarock.me/index.xml">
+                    RSS Feed
+                </a>
+                
+            
+            
+            <div class="toc">
+
+
+	<div class="toc-content">
+	
+		
+		
+		
+		<center>- CATALOG -</center>
+		
+		
+		<ul>
+			
+				
+				
+					
+						
+						
+						
+						
+						
+							<li>
+								<a href="#pre-requisite" class="nav-pre-requisite">
+									Pre-requisite
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+						
+							<li>
+								<a href="#%e8%b3%87%e6%96%99%e9%a1%9e%e5%9e%8b%e9%81%b8%e6%93%87%e7%9a%84%e8%80%83%e9%87%8f" class="nav-資料類型選擇的考量">
+									資料類型選擇的考量
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+						
+							<li>
+								<a href="#%e6%99%82%e5%8d%80%e8%bd%89%e6%8f%9b%e6%a9%9f%e5%88%b6" class="nav-時區轉換機制">
+									時區轉換機制
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+							
+								
+									<ul>
+								
+							
+						
+						
+							<li>
+								<a href="#mysql-jdbc-driver-%e7%9a%84%e6%99%82%e5%8d%80%e8%bd%89%e6%8f%9b" class="nav-mysql-jdbc-driver-的時區轉換">
+									MySQL JDBC Driver 的時區轉換
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+						
+							<li>
+								<a href="#hibernate-%e7%9a%84%e6%99%82%e5%8d%80%e8%bd%89%e6%8f%9b" class="nav-hibernate-的時區轉換">
+									Hibernate 的時區轉換
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+							
+								
+									<ul>
+								
+							
+						
+						
+							<li>
+								<a href="#jdbc-42-%e6%99%82%e9%96%93%e6%a0%bc%e5%bc%8f%e8%a6%8f%e7%af%84" class="nav-jdbc-42-時間格式規範">
+									JDBC 4.2 時間格式規範
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+						
+							<li>
+								<a href="#mysql-jdbc-driver-%e6%99%82%e9%96%93%e6%a0%bc%e5%bc%8f%e6%94%af%e6%8f%b4" class="nav-mysql-jdbc-driver-時間格式支援">
+									MySQL JDBC Driver 時間格式支援
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+						
+							<li>
+								<a href="#hibernate-5-%e7%9a%84-normalization" class="nav-hibernate-5-的-normalization">
+									Hibernate 5 的 normalization
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+						
+							<li>
+								<a href="#hibernate-6-%e7%9a%84-timezonestoragetype-%e8%a8%ad%e5%ae%9a" class="nav-hibernate-6-的-timezonestoragetype-設定">
+									Hibernate 6 的 TimeZoneStorageType 設定
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+							
+								</ul>
+							
+								</ul>
+							
+						
+						
+						
+							<li>
+								<a href="#%e6%b8%ac%e8%a9%a6" class="nav-測試">
+									測試
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+						
+							<li>
+								<a href="#%e7%b5%90%e8%ab%96" class="nav-結論">
+									結論
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+						
+							<li>
+								<a href="#reference" class="nav-reference">
+									Reference
+								</a>
+							</li>
+						
+						
+					
+				
+			
+		</ul>
+	</div>
+
+</div>
+            
+        </div>
+    </div>
+</div>
+<transition name="fade">
+    <div id="drawer-mask" v-bind:class="{ 'single-column-drawer-mask': mounted }" v-if="isDrawerOpen" v-on:click="toggleDrawer"></div>
+</transition>
+<nav id="navBar" class="navbar sticky-top navbar-light single-column-nav-container">
+    <div id="navBackground" class="nav-background"></div>
+    <div class="container container-narrow nav-content">
+        <button id="nav_dropdown_btn" class="nav-dropdown-toggle" type="button" v-on:click="toggleDrawer">
+            <i class="material-icons">
+                menu
+            </i>
+        </button>
+        <a id="navTitle" class="navbar-brand" href="https://blog.idontwannarock.me/">
+            Howard Tech Note
+        </a>
+        
+        <button type="button" class="nav-darkmode-toggle" id="darkModeToggleButton2">
+            <i class="material-icons" id="darkModeToggleIcon2">
+                dark_mode
+            </i>
+        </button>
+        
+    </div>
+</nav>
+<div class="single-column-header-container" id="pageHead"
+     v-bind:style="{ transform: 'translateZ(0px) translateY('+.3*scrollY+'px)', opacity: 1-navOpacity }">
+    <a href="https://blog.idontwannarock.me/">
+        <div class="single-column-header-title">Howard Tech Note</div>
+        
+        <div class="single-column-header-subtitle">Share * Record * Program</div>
+        
+
+    </a>
+</div>
+
+            <div id="content">
+                <div id="streamContainer" class="stream-container">
+
+    <div class="post-list-container post-list-container-shadow">
+        <div class="post">
+            
+            
+            
+                
+            
+
+            <div class="post-head-wrapper"
+                
+                    
+                    
+                    style="background-image: url('https://res.cloudinary.com/dcvgho2zc/image/upload/v1703640991/Tech%20Blog/its-about-time.jpg')"
+                    
+                
+            >
+                <div class="post-title">
+                    Java Time 保存到 MySQL DATETIME 時區問題
+                    
+                    <div class="post-subtitle">
+                        研究 JPA/JDBC 如何對 Java Time 與 MySQL DATETIME 資料型態 mapping 時做時區轉換的機制
+                    </div>
+                    
+                    <div class="post-meta">
+                        
+                        <time itemprop="datePublished">
+                            2023-12-27 09:26
+                        </time>
+                        
+
+                        
+                            <i class="material-icons" style="">folder</i>
+                                <a href="https://blog.idontwannarock.me/categories/application">application</a>
+                                &nbsp;
+                        
+
+                        
+                            <i class="material-icons" style="">label</i>
+                            
+                                <a href="https://blog.idontwannarock.me/tags/java">java</a>
+                                &nbsp;
+                            
+                                <a href="https://blog.idontwannarock.me/tags/time">time</a>
+                                &nbsp;
+                            
+                                <a href="https://blog.idontwannarock.me/tags/mysql">mysql</a>
+                                &nbsp;
+                            
+                                <a href="https://blog.idontwannarock.me/tags/datetime">datetime</a>
+                                &nbsp;
+                            
+                                <a href="https://blog.idontwannarock.me/tags/timezone">timezone</a>
+                                &nbsp;
+                            
+                        
+                        
+                    </div>
+                </div>
+            </div>
+            
+            <div class="post-body-wrapper">
+                
+                <div class="post-body" v-pre>
+                
+                    <p>最近開發遇到一個對我的系統需求來說很合適，但我感覺不合理的狀況</p>
+<p>目前有 Spring Boot 系統在 JPA 是用 <code>OffsetDateTime</code> 在 Entity 中對應 MySQL 表中的 <code>DATETIME</code> 欄位，JVM 時區以及 MySQL 的系統時區都是 +8，沒有特別在任何地方進行時區設定，也就是所有地方應該都是預設設定</p>
+<p>然而當 <code>OffsetDateTime</code> 保存到 <code>DATETIME</code> 當中時，卻會被自動轉換成 UTC 時區的時間保存，並且之後再用 JPA 重新取出後，<code>OffsetDateTime</code> 也依然是 UTC 時區</p>
+<p>這就讓人感覺很奇怪了，感覺要馬就應該是 MySQL <code>DATETIME</code> 保存時用 JVM 跟 MySQL 相同的系統 +8 時區時間保存，取出也是 +8 時間；要馬就是保存時會轉成 UTC，但取出應該會自動轉換回 JVM 的 +8 才合理，畢竟 <code>DATETIME</code> 欄位資料格式不保存時區資訊，所以要馬就是完全不轉換，要馬就是會依照某種機制保存時用 UTC，但使用時會自動轉換成 JVM 時區之類的模式才對</p>
+<p>雖然我原本就希望在系統中盡量都使用 UTC 時區而不要隨著 MySQL/JVM 時區變動以避免造成資料錯誤的問題，但機制不如預期就應該要弄清楚，免得其實是有什麼未知的狀況造成日後踩到坑</p>
+<h1 id="pre-requisite">Pre-requisite</h1>
+<p>首先要先說明這篇文章的研究都是基於下列版本，不同的版本「可能」會有不同的行為，請查詢官網文件或自行測試</p>
+<ul>
+<li>Spring Boot Data JPA 3.1.4</li>
+<li>Hibernate 6.2.9.Final</li>
+<li>MySQL JDBC Driver 8.0.33</li>
+<li>MySQL server 8.0.33</li>
+</ul>
+<h1 id="資料類型選擇的考量">資料類型選擇的考量</h1>
+<p>首先說明為什麼要選擇用 <code>OffsetDateTime</code> 對應 MySQL <code>DATETIME</code> 的考量</p>
+<p>在 MySQL 當中可以同時保存日期及時間的格式只有 <code>TIMESTAMP</code> 及 <code>DATETIME</code> 兩種，其中 <code>TIMESTAMP</code> 資料格式只支援到 <code>2038-01-19 03:14:07</code> UTC，而 <code>DATETIME</code> 格式可以支援到 <code>9999-12-31 23:59:59</code></p>
+<blockquote>
+<p>MySQL 因為用 signed 32-bit integer 來保存 <code>TIMESTAMP</code> 資料格式包含秒以上的資料，因此最多只能記錄到從 <code>1970-01-01 00:00:01</code> UTC 開始後的 2147483647 秒，也就是 <code>2038-01-19 03:14:07</code> UTC，超過一秒就會 stackoverflow；而 <code>DATETIME</code> 則採用完全不同的保存策略，所以可以支援到 <code>9999-12-31 23:59:59</code></p>
+</blockquote>
+<p>另外 <code>TIMESTAMP</code> 資料格式可能不見得適合在高併發的情況下使用，因為在 MySQL 官方文件的「<a href="https://dev.mysql.com/doc/refman/8.0/en/time-zone-support.html#time-zone-variables">5.1.15 MySQL Server Time Zone Support#Time Zone Variables</a>」中有以下這段</p>
+<blockquote>
+<p><strong>Note</strong></p>
+<p>If set to SYSTEM, every MySQL function call that requires a time zone calculation makes a system library call to determine the current system time zone. This call may be protected by a global mutex, resulting in contention.</p>
+</blockquote>
+<p>這段是在說 MySQL 系統的 <code>time_zone</code> 變數如果是預設的 <code>SYSTEM</code>，在每次需要做時區運算的時候，MySQL 系統就會取得全域鎖 (global mutex) 來做資料正確性的確保，導致鎖爭用 (lock contention)</p>
+<p>而因為 <code>TIMESTAMP</code> 的時區自動轉換功能雖然能確保時間時區的正確性，卻容易導致每次存取都需要做時區轉換運算，進而導致鎖爭用發生，而對效能有影響</p>
+<p>但另一方面來說，雖然 <code>DATETIME</code> 並不記錄時區而避免鎖爭用的問題，但卻相對容易衍生時區相關的問題</p>
+<p>因為我的系統流量不小，加上不想在未來面對資料搬遷的問題，所以才選擇 <code>DATETIME</code></p>
+<p>而說到在 Java 這邊，因為舊的 <code>java.sql.Timestamp</code> 等時間相關的類別有許多問題，所以從 Java 8 開始推出了 <code>java.time</code> 系列的類別來處理時間相關的資料</p>
+<p>當遇到要處理帶時區的時間時，比較常用到的類別就是 <code>Instant</code> 及 <code>OffsetDateTime</code>，而 Hibernate 官方文件中「<a href="https://docs.jboss.org/hibernate/orm/6.2/userguide/html_single/Hibernate_User_Guide.html#basic-temporal">2.2.48. Handling temporal data</a>」有列出帶時區時間支援的類別只有 <code>java.time.OffsetDateTime</code> 及 <code>java.time.ZonedDateTime</code> 這兩個</p>
+<p>而因為我的系統並沒有需要針對不同地方的時間做運算的需求，尤其是不需要計算日光節約時間，而只需要用 UTC 計算即可，所以才選用 <code>OffsetDateTime</code></p>
+<p>談完選用資料型態的考量後，就開始研究時區轉換的機制吧</p>
+<h1 id="時區轉換機制">時區轉換機制</h1>
+<p>在研究時區轉換機制之前，要先了解 JPA 是怎麼跟 MySQL 互動的</p>
+<p>首先 Spring Boot Data JPA 是 Spring Boot 實作方便整合到 Spring Boot 系統並且符合 JPA 規範的介面，主要機制還是圍繞在操作預設使用的 Hibernate 實作，而 Hibernate 這個 ORM 則會透過內部機制去操作 JDBC Driver 最終跟 MySQL server 進行互動</p>
+<p>在這個流程中，MySQL <code>DATETIME</code> 並不保存時區也不對保存的時間進行時區轉換，而 Spring Boot Data JPA 只是介接符合 JPA 實作的 ORM 框架以及 Spring Boot 系統，所以時區轉換的機制比較大的可能發生在 Hibernate 或 MySQL JDBC Driver 這兩者當中</p>
+<h2 id="mysql-jdbc-driver-的時區轉換">MySQL JDBC Driver 的時區轉換</h2>
+<p>這邊我首先懷疑的是 JDBC Driver，因為 MySQL 的官網上很容易就能找到這份文件「<a href="https://dev.mysql.com/doc/connector-j/en/connector-j-time-instants.html">6.6.1 Preserving Time Instants</a>」有以下說明</p>
+<blockquote>
+<p>The situation is less straightforward with the <code>DATETIME</code> data type: it does not represent an instant and, when no time zone offset is specified, there is no time zone conversion for <code>DATETIME</code> values, so they are stored and retrieved as they are. However, with a specified time zone offset, the input value is converted to the session time zone before it is stored; the result is that, when retrieved in a different session with a different time zone offset as the specified one, the <code>DATETIME</code> value becomes different from the original input value.</p>
+</blockquote>
+<p>也就是說 <code>DATETIME</code> 資料格式不會做時區轉換，所以怎麼保存就怎麼取出來；但是如果保存的時候有帶上時區，會先將時間轉換成 session timezone 後再保存，因此當取出時，是在不同 timezone 的 session 中，取得的值會跟原先保存的原始值不同</p>
+<blockquote>
+<p>MySQL 依照 session timezone 轉換時區的效果可以參考官網這份文件「<a href="https://dev.mysql.com/doc/refman/8.0/en/date-and-time-literals.html">9.1.3 Date and Time Literals</a>」</p>
+</blockquote>
+<p>這聽起來好像有可能符合我遇到的狀況，所以問題就在於 session timezone 是怎麼決定的</p>
+<p>MySQL server timezone 的設定可以在這份文件「<a href="https://dev.mysql.com/doc/refman/8.0/en/time-zone-support.html">5.1.15 MySQL Server Time Zone Support</a>」，但在使用 ORM 的時候這裡面提到的方式都不是合適的方法，因為其中要不是全域設定就是要額外下 sql 去變動，而且我也沒有做任何類似的設定</p>
+<p>另外還有一種方式就是在 JDBC Driver connection url 上加上設定參數去調整連線的 timezone，如這份文件「<a href="https://dev.mysql.com/doc/connector-j/en/connector-j-connp-props-datetime-types-processing.html">6.3.11 Datetime types processing</a>」說的 <code>connectionTimeZone</code> 及 <code>forceConnectionTimeZoneToSession</code> 參數也可以調整 session timezone，但是我也沒有做這個設定</p>
+<p>這邊我透過 <code>select @@system_time_zone, @@time_zone, @@global.time_zone, @@session.time_zone;</code> 實際去查 timezone 的結果如下</p>
+<table>
+<thead>
+<tr>
+<th style="text-align:left">@@system_time_zone</th>
+<th style="text-align:left">@@time_zone</th>
+<th style="text-align:left">@@global.time_zone</th>
+<th style="text-align:left">@@session.time_zone</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left">CST</td>
+<td style="text-align:left">SYSTEM</td>
+<td style="text-align:left">SYSTEM</td>
+<td style="text-align:left">SYSTEM</td>
+</tr>
+</tbody>
+</table>
+<p>可以看到基本上全部 timezone 都是比照 <code>SYSTEM</code> 也就是 MySQL 的系統時區 CST(+8)</p>
+<p>那就很奇怪了，因為按照前面文件描述，<code>DATETIME</code> 欄位型態在面對插入的時間帶有時區的時候會按照 session timezone 來轉換時區後保存，但我面對的 session timezone 明明就是 +8，它到底是怎麼保存成 UTC 的呢？</p>
+<h2 id="hibernate-的時區轉換">Hibernate 的時區轉換</h2>
+<p>於是我們轉向另外一個嫌疑人 Hibernate，Hibernate 到底是怎麼做時區轉換的呢？或者說有沒有做時區轉換呢？</p>
+<p>首先就是 Hibernate 有提供一個參數 <code>hibernate.jdbc.time_zone</code> 可以設定，這會讓 Hibernate 在將時間傳送到 DB 之前就先將時區轉換成參數設定的時區，取出來的時候也是會將時間轉回參數設定的時區</p>
+<p>如果我設定這個參數為 UTC 的話，其行為就與我觀測到的相同，但是我並沒有設定這個參數，而這個參數的預設值是 JVM 時區，所以看來應該還有別的機制在作用</p>
+<h3 id="jdbc-42-時間格式規範">JDBC 4.2 時間格式規範</h3>
+<p>在講到 Hibernate 另外一個機制之前，要先提一下 JDBC 4.2 對於時間的規範</p>
+<p>JDBC 4.2 新增了 <a href="https://docs.oracle.com/javase/8/docs/api/java/sql/JDBCType.html">JDBCType</a>，其中對於時間資料規範了以下四種類型</p>
+<ul>
+<li><code>DATE</code>: 代表日期，保存年月日</li>
+<li><code>TIME</code>: 代表時間，保存時分秒</li>
+<li><code>TIMESATMP</code>: 代表日期及時間，保存年月日時分秒加上奈秒 (nanosecond)</li>
+<li><code>TIMESTAMP_WITH_TIMEZONE</code>: 代表日期及時間以及時區，保存年月日時分秒加上奈秒 (nanosecond) 以及時區 id 或 offset</li>
+</ul>
+<h3 id="mysql-jdbc-driver-時間格式支援">MySQL JDBC Driver 時間格式支援</h3>
+<p>但是就如我們所知道的，MySQL 對於保存完整日期及時間的資料格式只有兩種，<code>TIMESTAMP</code> 及 <code>DATETIME</code></p>
+<p>其中 <code>TIMESATMP</code> 會把所有時間轉成 UTC 後再保存成 unix timestamp，而我們也知道 <code>DATETIME</code> 則是不保存時區的，所以 MySQL JDBC Driver 實際上是不支援 <code>TIMESTAMP_WITH_TIMEZONE</code> 這個 jdbc type 的，它實際上都會先處理好時間的時區後，再用 <code>TIMESTAMP</code> 這個 jdbc type 來傳送時間資料</p>
+<p>至於 driver 內部怎麼處理時區，我們前面一段也已經講過，並不如我觀測到的狀況，所以現在才會要來看 Hibernate 是怎麼處理這個問題</p>
+<h3 id="hibernate-5-的-normalization">Hibernate 5 的 normalization</h3>
+<p>但畢竟 Hibernate 還是要透過 JDBC Driver 才能真正跟 DB 互動，所以針對 MySQL JDBC Driver 不支援 <code>TIMESTAMP_WITH_TIMEZONE</code> 的問題，從 Hibernate 5 開始採取了一種策略，就是先將帶有時區資訊的時間先 normalize 成沒有時區的時間後再保存，normalize 的過程其實就是會將時間轉換成 JVM 的時區，而取出來的無時區時間再加上 JVM 時區做還原</p>
+<p>例如今天 JVM 時區為 +8，而你要將時間為 <code>2023-12-25 11:30:00+6</code> 的 <code>OffsetDateTime</code> 保存起來，Hibernate 5 會先將 <code>2023-12-25 11:30:00+6</code> 轉換成 JVM 的時區並去掉時區資訊，也就是變成 <code>2023-12-25 13:30:00</code> 後再保存起來；而取出來後的 <code>2023-12-25 13:30:00</code> 則會直接加上 JVM 的時區 +8 後還原成時間為 <code>2023-12-25 13:30:00+8</code> 的 <code>OffsetDateTime</code></p>
+<p>採取這樣的機制的確可以避開 MySQL JDBC Driver 不支援 <code>TIMESTAMP_WITH_TIMEZONE</code> 的問題，但除非符合以下三個條件，否則時區資訊還是有可能會混亂</p>
+<ul>
+<li>不使用有日光節約 (daylight saving) 的時區</li>
+<li>所有 JVM instance 的時區都一致</li>
+<li>永遠不會改變時區</li>
+</ul>
+<h3 id="hibernate-6-的-timezonestoragetype-設定">Hibernate 6 的 <code>TimeZoneStorageType</code> 設定</h3>
+<p>這三個條件其實某種程度上是很嚴苛的，畢竟仍然有很多地區在使用日光節約時間，所以 Hibernate 6 就提出更進階的設定，讓使用者可以自己決定要如何將帶時區的時間 mapping 到資料庫的無時區時間資料欄位上</p>
+<p>這裡我們可以直接參考 <code>org.hibernate.annotations.TimeZoneStorageType</code> 這個 enum，其中提供了六種設定選項</p>
+<ul>
+<li><code>NATIVE</code></li>
+<li><code>NORMALIZE</code></li>
+<li><code>NORMALIZE_UTC</code></li>
+<li><code>COLUMN</code></li>
+<li><code>AUTO</code></li>
+<li><code>DEFAULT</code></li>
+</ul>
+<p>首先看名稱就知道是預設值的 <code>DEFAULT</code>，而 <code>DEFAULT</code> 到底是採取怎樣的策略呢？這邊我們可以直接參考 <code>DEFAULT</code> 的說明</p>
+<blockquote>
+<p>Stores the time zone either with <code>NATIVE</code> if <code>Dialect.getTimeZoneSupport()</code> is <code>org.hibernate.dialect.TimeZoneSupport.NATIVE</code>, otherwise uses the <code>NORMALIZE_UTC</code> strategy.</p>
+</blockquote>
+<p>簡單來說就是除非有特別設定，預設就是 <code>NORMALIZE_UTC</code></p>
+<p>那 <code>NORMALIZE_UTC</code> 又是怎麼運作呢？這邊先講 <code>NORMALIZE</code> 是怎麼運作的</p>
+<p><code>NORMALIZE</code> 的機制基本上就跟 Hibernate 5 的處理方式一樣，只差在可以透過 <code>hibernate.jdbc.time_zone</code> 這個參數設定 normalize 過程中要轉換的時區，也就是將帶時區時間轉換成無時區時間時，如果沒有設定 <code>hibernate.jdbc.time_zone</code> 則一樣轉成 JVM 時區；若是有設定 <code>hibernate.jdbc.time_zone</code> 就轉成 <code>hibernate.jdbc.time_zone</code> 設定的時區；反過來要將無時區時間轉回帶時區時間的時候，沒有設定 <code>hibernate.jdbc.time_zone</code> 就一樣直接帶上 JVM 時區，若是有設定則直接帶上 <code>hibernate.jdbc.time_zone</code> 設定的時區</p>
+<blockquote>
+<p>這就是設定 <code>hibernate.jdbc.time_zone</code> 這個參數後的實際運作機制，如果使用 Spring Boot Data JPA 則是設定 <code>spring.jpa.properties.hibernate.jdbc.time_zone</code></p>
+</blockquote>
+<p>但這樣的機制仍然不能避免處理日光節約時間以及換時區的問題</p>
+<p>所以就有 <code>NORMALIZE_UTC</code> 的出現，其實機制跟 <code>NORMALIZE</code> 非常相似，只差在它會強制將帶時區時間轉成 UTC 時間後再去掉時區資訊，轉回來的時候同樣也是直接將無時區資訊加上 UTC 時區</p>
+<p>而因為任何時間在保存的時候都是保存成 UTC 的時間，取出來的時候也是一律轉換成 UTC 時間，所以就解決了日光節約時間以及換時區的問題</p>
+<blockquote>
+<p>注意 <code>NORMALIZE_UTC</code> 直到 Hibernate 6.0.1.Final 才修正成為以上機制，並且直到 Hibernate 6.2+ 後才成為預設處理 database 不支援帶時區時間的機制</p>
+</blockquote>
+<p>至此，這個機制的描述已經完全符合我觀測到的現象，但是盡信書不如無書，這邊還是要寫個測試來驗證一下</p>
+<h1 id="測試">測試</h1>
+<p>首先建立測試的 schema 如下</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-sql" data-lang="sql"><span style="display:flex;"><span><span style="color:#ff79c6">create</span> <span style="color:#ff79c6">table</span> dt
+</span></span><span style="display:flex;"><span>(
+</span></span><span style="display:flex;"><span>    id        <span style="color:#8be9fd;font-style:italic">bigint</span> auto_increment <span style="color:#ff79c6">primary</span> <span style="color:#ff79c6">key</span>,
+</span></span><span style="display:flex;"><span>    <span style="color:#ff79c6">timestamp</span> <span style="color:#ff79c6">timestamp</span>(<span style="color:#bd93f9">3</span>) <span style="color:#ff79c6">not</span> <span style="color:#ff79c6">null</span>,
+</span></span><span style="display:flex;"><span>    datetime  datetime(<span style="color:#bd93f9">3</span>)  <span style="color:#ff79c6">not</span> <span style="color:#ff79c6">null</span>
+</span></span><span style="display:flex;"><span>);
+</span></span></code></pre></div><p>設定 Entity 如下</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-java" data-lang="java"><span style="display:flex;"><span><span style="color:#ff79c6">import</span> jakarta.persistence.*;
+</span></span><span style="display:flex;"><span><span style="color:#ff79c6">import</span> org.hibernate.annotations.CreationTimestamp;
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#ff79c6">import</span> java.time.OffsetDateTime;
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>@Entity
+</span></span><span style="display:flex;"><span>@Table(name <span style="color:#ff79c6">=</span> <span style="color:#f1fa8c">&#34;dt&#34;</span>)
+</span></span><span style="display:flex;"><span><span style="color:#8be9fd;font-style:italic">public</span> <span style="color:#8be9fd;font-style:italic">class</span> <span style="color:#50fa7b">DtEntity</span> {
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    @Id
+</span></span><span style="display:flex;"><span>    @GeneratedValue(strategy <span style="color:#ff79c6">=</span> GenerationType.<span style="color:#50fa7b">IDENTITY</span>)
+</span></span><span style="display:flex;"><span>    <span style="color:#8be9fd;font-style:italic">private</span> Long id;
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    @CreationTimestamp
+</span></span><span style="display:flex;"><span>    <span style="color:#8be9fd;font-style:italic">private</span> OffsetDateTime timestamp;
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    @CreationTimestamp
+</span></span><span style="display:flex;"><span>    <span style="color:#8be9fd;font-style:italic">private</span> OffsetDateTime datetime;
+</span></span><span style="display:flex;"><span>    
+</span></span><span style="display:flex;"><span>    <span style="color:#6272a4">// getter, setter omitted...</span>
+</span></span><span style="display:flex;"><span>}
+</span></span></code></pre></div><p>Repository</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-java" data-lang="java"><span style="display:flex;"><span><span style="color:#ff79c6">import</span> com.example.lab.spring.boot.jpa.persistent.data.DtEntity;
+</span></span><span style="display:flex;"><span><span style="color:#ff79c6">import</span> org.springframework.data.jpa.repository.JpaRepository;
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#8be9fd;font-style:italic">public</span> <span style="color:#8be9fd;font-style:italic">interface</span> <span style="color:#50fa7b">DtRepository</span> <span style="color:#8be9fd;font-style:italic">extends</span> JpaRepository<span style="color:#ff79c6">&lt;</span>DtEntity, Long<span style="color:#ff79c6">&gt;</span> {
+</span></span><span style="display:flex;"><span>}
+</span></span></code></pre></div><p>然後透過正常的 JPA <code>save()</code> 方式新增記錄</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-java" data-lang="java"><span style="display:flex;"><span><span style="color:#8be9fd;font-style:italic">var</span> newDt <span style="color:#ff79c6">=</span> <span style="color:#ff79c6">new</span> DtEntity();
+</span></span><span style="display:flex;"><span>dtRepository.<span style="color:#50fa7b">save</span>(newDt);
+</span></span></code></pre></div><p>也透過正常的 JPA <code>findById()</code> 方式取得資料</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-java" data-lang="java"><span style="display:flex;"><span>dtRepository.<span style="color:#50fa7b">findById</span>(id).<span style="color:#50fa7b">ifPresent</span>(dt <span style="color:#ff79c6">-&gt;</span> System.<span style="color:#50fa7b">out</span>.<span style="color:#50fa7b">println</span>(dt));
+</span></span></code></pre></div><p>我在執行的時候 JVM 跟 MySQL 的時區都是 +8，但這邊印出取得的資料確定是 UTC 時間如下</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-plaintext" data-lang="plaintext"><span style="display:flex;"><span>DtEntity(id=1, timestamp=2023-12-25T03:30:27.660Z, datetime=2023-12-25T03:30:27.660Z)
+</span></span></code></pre></div><p>但我們想更進一步確定運作得是我們前面提到的機制，所以要在 <code>application.properties</code> 中再加上以下 log 設定</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-properties" data-lang="properties"><span style="display:flex;"><span><span style="color:#50fa7b">logging.level.org.hibernate.SQL</span><span style="color:#ff79c6">=</span><span style="color:#f1fa8c">DEBUG</span>
+</span></span><span style="display:flex;"><span><span style="color:#50fa7b">logging.level.org.hibernate.type</span><span style="color:#ff79c6">=</span><span style="color:#f1fa8c">TRACE</span>
+</span></span><span style="display:flex;"><span><span style="color:#50fa7b">logging.level.org.hibernate.orm.jdbc.bind</span><span style="color:#ff79c6">=</span><span style="color:#f1fa8c">DEBUG</span>
+</span></span><span style="display:flex;"><span><span style="color:#50fa7b">logging.level.org.hibernate.orm.results</span><span style="color:#ff79c6">=</span><span style="color:#f1fa8c">DEBUG</span>
+</span></span><span style="display:flex;"><span><span style="color:#50fa7b">logging.level.org.hibernate.resource.jdbc.internal.ResourceRegistryStandardImpl</span><span style="color:#ff79c6">=</span><span style="color:#f1fa8c">TRACE</span>
+</span></span></code></pre></div><p>於是我們可以在 console 中看到以下這行 log 可以證實在 Hibernate 這層處理的時候就已經將時間轉換成 UTC 時間並轉成字串做 insert</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-plaintext" data-lang="plaintext"><span style="display:flex;"><span>2023-12-25T11:31:52.418+08:00 TRACE 29184 --- [nio-8080-exec-1] o.h.r.j.i.ResourceRegistryStandardImpl   : Releasing statement [HikariProxyPreparedStatement@1053261670 wrapping com.mysql.cj.jdbc.ClientPreparedStatement: insert into dt (datetime,timestamp) values (&#39;2023-12-25 03:31:52.399456&#39;,&#39;2023-12-25 03:31:52.399456&#39;)]
+</span></span></code></pre></div><p>另外還可以看到以下幾行 log，此處即可證明 Hibernate 取出來的時候同樣是取得 UTC 時間做綁定</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-plaintext" data-lang="plaintext"><span style="display:flex;"><span>2023-12-25T11:31:56.682+08:00 DEBUG 29184 --- [nio-8080-exec-2] org.hibernate.SQL                        : select d1_0.id,d1_0.datetime,d1_0.timestamp from dt d1_0 where d1_0.id=?
+</span></span><span style="display:flex;"><span>2023-12-25T11:31:56.682+08:00 TRACE 29184 --- [nio-8080-exec-2] o.h.r.j.i.ResourceRegistryStandardImpl   : Registering statement [HikariProxyPreparedStatement@2074824531 wrapping com.mysql.cj.jdbc.ClientPreparedStatement: select d1_0.id,d1_0.datetime,d1_0.timestamp from dt d1_0 where d1_0.id=** NOT SPECIFIED **]
+</span></span><span style="display:flex;"><span>2023-12-25T11:31:56.684+08:00 TRACE 29184 --- [nio-8080-exec-2] o.h.r.j.i.ResourceRegistryStandardImpl   : Registering result set [HikariProxyResultSet@310872211 wrapping com.mysql.cj.jdbc.result.ResultSetImpl@5b842ce6]
+</span></span><span style="display:flex;"><span>2023-12-25T11:31:56.685+08:00 DEBUG 29184 --- [nio-8080-exec-2] o.hibernate.orm.results.loading.entity   : (EntityResultInitializer) Hydrated EntityKey (com.example.lab.spring.boot.jpa.persistent.data.DtEntity): 2
+</span></span><span style="display:flex;"><span>2023-12-25T11:31:56.686+08:00 DEBUG 29184 --- [nio-8080-exec-2] o.hibernate.orm.results.loading.entity   : (EntityResultInitializer) Created new entity instance [com.example.lab.spring.boot.jpa.persistent.data.DtEntity#2] : 1223328396
+</span></span><span style="display:flex;"><span>2023-12-25T11:31:56.686+08:00 DEBUG 29184 --- [nio-8080-exec-2] org.hibernate.orm.results                : Extracted JDBC value [1] - [2023-12-25T03:31:52.399Z]
+</span></span><span style="display:flex;"><span>2023-12-25T11:31:56.686+08:00 DEBUG 29184 --- [nio-8080-exec-2] org.hibernate.orm.results                : Extracted JDBC value [2] - [2023-12-25T03:31:52.399Z]
+</span></span></code></pre></div><p>可以參考我寫的 <a href="https://github.com/idontwannarock/lab-spring-boot-datetime-with-timezone">lab-spring-boot-datetime-with-timezon</a> 範例專案</p>
+<h1 id="結論">結論</h1>
+<p>原則上最好的情況就是 server 端不論接收、傳送或是計算時間都採用 UTC 時區為準，才能最大程度保證時間資料的正確性，而不同時區的變換則在 client 端依照需求自行轉換；除非有需要依照不同 client 端時區做相對時間 (例如本週、本月等) 的計算才會需要依照 client 提供的時區做某種程度的轉換，但也應該最終都要轉成 UTC 時區時間做最終計算，因此不論在後端或 DB 保存上，也都最好一致採用 UTC 做交互及保存</p>
+<p>而由前面的討論可以得知原則上 Hibernate 預設已經是採取這樣的方案，但如果有需要越過 JPA/Hibernate 去使用到 JDBC API 的話，建議依照 MySQL JDBC Driver 不同的版本，在 JDBC Url 上加上設定 session timezone 的參數，如在 MySQL JDBC Driver 8.0.23 之後的版本可以加上 <code>connectionTimeZone=UTC</code> 及 <code>forceConnectionTimeZoneToSession=TRUE</code> 兩項參數，來確保 JDBC 在保存及取得 <code>TIMESTAMP</code> 或 <code>DATETIME</code> 資料型態時都會維持 UTC 時區時間</p>
+<p>而 server 端最好也能設定 JVM 時區為 UTC，而不要依賴 OS 的時區，比較能保證運行的穩定性</p>
+<p>另外就是要考量是否會直接使用到 JDBC API 或只會只用 JPA 介面，如果要使用到 JDBC API 則考慮使用 <code>ZonedDateTime</code> 或 <code>OffsetDateTime</code> 來做 MySQL <code>TIMESTAMP</code> 或 <code>DATETIME</code> 的 mapping，如果只使用到 JPA，那可以考慮選用 <code>Instant</code> 會讓時區轉換更單純</p>
+<p>但以上設定最好都是在專案或環境剛開始的時候就能設定好，如果是 legacy 專案環境，就只能視狀況做不同的調整，而不能一概而論</p>
+<h1 id="reference">Reference</h1>
+<ul>
+<li><a href="https://dev.mysql.com/doc/refman/8.0/en/datetime.html">11.2.2 The DATE, DATETIME, and TIMESTAMP Types</a></li>
+<li><a href="https://dev.mysql.com/doc/refman/8.0/en/time-zone-support.html#time-zone-variables">5.1.15 MySQL Server Time Zone Support#Time Zone Variables</a></li>
+<li><a href="https://docs.jboss.org/hibernate/orm/6.2/userguide/html_single/Hibernate_User_Guide.html#basic-temporal">2.2.48. Handling temporal data</a></li>
+<li><a href="https://dev.mysql.com/doc/connector-j/en/connector-j-time-instants.html">6.6.1 Preserving Time Instants</a></li>
+<li><a href="https://dev.mysql.com/doc/refman/8.0/en/date-and-time-literals.html">9.1.3 Date and Time Literals</a></li>
+<li><a href="https://dev.mysql.com/doc/refman/8.0/en/time-zone-support.html">5.1.15 MySQL Server Time Zone Support</a></li>
+<li><a href="https://dev.mysql.com/doc/connector-j/en/connector-j-connp-props-datetime-types-processing.html">6.3.11 Datetime types processing</a></li>
+<li><a href="https://docs.jboss.org/hibernate/orm/6.2/userguide/html_single/Hibernate_User_Guide.html#settings-jdbc">A.3 JDBC Settings</a></li>
+<li><a href="https://docs.jboss.org/hibernate/orm/6.2/javadocs/org/hibernate/cfg/JdbcSettings.html#JDBC_TIME_ZONE">JDBC_TIME_ZONE</a></li>
+<li><a href="https://docs.oracle.com/javase/8/docs/api/java/sql/JDBCType.html">JDBCType</a></li>
+<li><a href="https://in.relation.to/2016/09/12/jdbc-time-zone-configuration-property/">How to store timestamps in UTC using the new hibernate.jdbc.time_zone configuration property</a></li>
+<li><a href="https://thorben-janssen.com/hibernate-jpa-date-and-time/#Working_with_ZonedDateTime">Working with ZonedDateTime</a></li>
+<li><a href="https://thorben-janssen.com/hibernate-6-offsetdatetime-and-zoneddatetime/">TimezoneStorageType – Hibernate’s improved timezone mapping</a></li>
+</ul>
+
+                    
+                    <HR width="100%" id="EOF">
+		    <p style="color:#777;">Last modified on 2023-12-27</p>
+                    
+                </div>
+            </div>
+            
+            
+            <nav class="post-pagination">
+
+                
+                <a class="newer-posts">
+			Next<br>No newer posts.
+                </a>
+                
+                
+                
+                <a class="older-posts" href="https://blog.idontwannarock.me/2023/10/mysql_8_utc_timestamp_as_datetime_default_bug/">
+			Previous<br>MySQL 8.0 使用 UTC_TIMESTAMP() 當作 DATETIME 欄位預設值 bug
+                </a>
+                
+            </nav>
+            <div class="post-comment-wrapper">
+                
+<div id="disqus_thread"></div>
+<script>
+    
+
+    var disqus_config = function () {
+        
+        this.page.url = 'https:\/\/blog.idontwannarock.me\/2023\/12\/java_time_mapping_mysql_datetime_timezone\/';  
+        
+        
+        this.page.identifier = '\/2023\/12\/java_time_mapping_mysql_datetime_timezone\/'; 
+    };
+    (function() {
+        var d = document, s = d.createElement('script');
+        s.src = 'https://howard-tech-blog.disqus.com/embed.js';
+        s.setAttribute('data-timestamp', +new Date());
+        (d.head || d.body).appendChild(s);
+    })();
+</script>
+<noscript> Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript" rel="nofollow"> comments powered by Disqus.  </a> </noscript>
+
+
+
+
+
+
+
+
+
+
+
+
+
+            </div>
+        </div>
+    </div>
+
+
+                    </div>
+            </div><div id="sideContainer" class="side-container">
+    
+    <a class="a-block nav-head false" href="https://blog.idontwannarock.me/">
+    
+        <div class="nav-title">
+            Howard Tech Note
+        </div>
+        
+        <div class="nav-subtitle">
+            Share * Record * Program
+        </div>
+        
+    </a>
+
+    <div class="nav-link-list">
+        
+        
+            
+            
+            
+            
+            
+            <a class="a-block nav-link-item false" href="https://blog.idontwannarock.me/posts">
+                Archive
+            </a>
+            
+        
+            
+            
+            
+            
+            
+            <a class="a-block nav-link-item false" href="https://blog.idontwannarock.me/categories">
+                Categories
+            </a>
+            
+        
+            
+            
+            
+            
+            
+            <a class="a-block nav-link-item false" href="https://blog.idontwannarock.me/tags">
+                Tags
+            </a>
+            
+        
+            
+            
+            
+            
+            
+            <a class="a-block nav-link-item false" href="https://blog.idontwannarock.me/about">
+                About
+            </a>
+            
+        
+            
+            
+            
+            
+            
+            <a class="a-block nav-link-item false" href="https://blog.idontwannarock.me/index.xml">
+                RSS Feed
+            </a>
+            
+        
+    </div>
+
+    
+
+    <div class="nav-footer">
+        
+Hugo Theme <a href="https://github.com/amazingrise/hugo-theme-diary">Diary</a> by <a href="https://risehere.net/">Rise</a>
+<br>
+Ported from <a href="https://mak1t0.cc/" target="_blank" rel="noreferrer noopener">Makito</a>'s <a href="https://github.com/SumiMakito/hexo-theme-journal/" target="_blank" rel="noreferrer noopener">Journal.</a> <br>
+<br>
+
+&copy;
+	
+	This website by Howard Wang is licensed under a Creative Common Attribution-ShareAlike 4.0 International License.
+	
+
+    </div>
+    
+</div><div id="extraContainer" class="extra-container">
+    <div class="toc-wrapper">
+        
+
+        
+        <div class="toc">
+
+
+	<div class="toc-content">
+	
+		
+		
+		
+		<center>- CATALOG -</center>
+		
+		
+		<ul>
+			
+				
+				
+					
+						
+						
+						
+						
+						
+							<li>
+								<a href="#pre-requisite" class="nav-pre-requisite">
+									Pre-requisite
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+						
+							<li>
+								<a href="#%e8%b3%87%e6%96%99%e9%a1%9e%e5%9e%8b%e9%81%b8%e6%93%87%e7%9a%84%e8%80%83%e9%87%8f" class="nav-資料類型選擇的考量">
+									資料類型選擇的考量
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+						
+							<li>
+								<a href="#%e6%99%82%e5%8d%80%e8%bd%89%e6%8f%9b%e6%a9%9f%e5%88%b6" class="nav-時區轉換機制">
+									時區轉換機制
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+							
+								
+									<ul>
+								
+							
+						
+						
+							<li>
+								<a href="#mysql-jdbc-driver-%e7%9a%84%e6%99%82%e5%8d%80%e8%bd%89%e6%8f%9b" class="nav-mysql-jdbc-driver-的時區轉換">
+									MySQL JDBC Driver 的時區轉換
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+						
+							<li>
+								<a href="#hibernate-%e7%9a%84%e6%99%82%e5%8d%80%e8%bd%89%e6%8f%9b" class="nav-hibernate-的時區轉換">
+									Hibernate 的時區轉換
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+							
+								
+									<ul>
+								
+							
+						
+						
+							<li>
+								<a href="#jdbc-42-%e6%99%82%e9%96%93%e6%a0%bc%e5%bc%8f%e8%a6%8f%e7%af%84" class="nav-jdbc-42-時間格式規範">
+									JDBC 4.2 時間格式規範
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+						
+							<li>
+								<a href="#mysql-jdbc-driver-%e6%99%82%e9%96%93%e6%a0%bc%e5%bc%8f%e6%94%af%e6%8f%b4" class="nav-mysql-jdbc-driver-時間格式支援">
+									MySQL JDBC Driver 時間格式支援
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+						
+							<li>
+								<a href="#hibernate-5-%e7%9a%84-normalization" class="nav-hibernate-5-的-normalization">
+									Hibernate 5 的 normalization
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+						
+							<li>
+								<a href="#hibernate-6-%e7%9a%84-timezonestoragetype-%e8%a8%ad%e5%ae%9a" class="nav-hibernate-6-的-timezonestoragetype-設定">
+									Hibernate 6 的 TimeZoneStorageType 設定
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+							
+								</ul>
+							
+								</ul>
+							
+						
+						
+						
+							<li>
+								<a href="#%e6%b8%ac%e8%a9%a6" class="nav-測試">
+									測試
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+						
+							<li>
+								<a href="#%e7%b5%90%e8%ab%96" class="nav-結論">
+									結論
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+						
+							<li>
+								<a href="#reference" class="nav-reference">
+									Reference
+								</a>
+							</li>
+						
+						
+					
+				
+			
+		</ul>
+	</div>
+
+</div>
+        
+    </div>
+    <div class="pagination">
+        <a id="globalBackToTop" class="pagination-action animated-visibility" href="#top"
+            :class="{ invisible: scrollY == 0 }">
+            <i class="material-icons pagination-action-icon">
+                keyboard_arrow_up
+            </i>
+        </a>
+        
+        <a type="button" class="pagination-action" id="darkModeToggleButton">
+            <span class="material-icons pagination-action-icon" id="darkModeToggleIcon">
+                dark_mode
+            </span>
+        </a>
+        
+        
+    </div>
+</div><div id="single-column-footer">
+Hugo Theme <a href="https://github.com/amazingrise/hugo-theme-diary">Diary</a> by <a href="https://risehere.net/">Rise</a>
+<br>
+Ported from <a href="https://mak1t0.cc/" target="_blank" rel="noreferrer noopener">Makito</a>'s <a href="https://github.com/SumiMakito/hexo-theme-journal/" target="_blank" rel="noreferrer noopener">Journal.</a> <br>
+<br>
+
+&copy;
+	
+	This website by Howard Wang is licensed under a Creative Common Attribution-ShareAlike 4.0 International License.
+	
+</div>
+            </div>
+    
+    <script src="https://blog.idontwannarock.me/js/journal.js"></script></body>
+</html>

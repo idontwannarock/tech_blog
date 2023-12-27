@@ -456,276 +456,276 @@ if (!doNotTrack) {
 <p>另外 <code>spring.quartz.properties.org.quartz.jobStore.isClustered=true</code> 則是開啟 Quartz 集群功能</p>
 <h1 id="autowire-configuration">Autowire Configuration</h1>
 <p>接著要來設定在我們動態產生 <code>Trigger</code> 及相關的 <code>Job</code> 時能同樣利用 Spring 的 autowire 功能，要先建立一個繼承 <code>SpringBeanJobFactory</code> 的類別：</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-java" data-lang="java"><span style="display:flex;"><span><span style="color:#ff79c6">import</span> org.quartz.spi.TriggerFiredBundle<span style="color:#ff79c6">;</span>
-</span></span><span style="display:flex;"><span><span style="color:#ff79c6">import</span> org.springframework.beans.factory.config.AutowireCapableBeanFactory<span style="color:#ff79c6">;</span>
-</span></span><span style="display:flex;"><span><span style="color:#ff79c6">import</span> org.springframework.scheduling.quartz.SpringBeanJobFactory<span style="color:#ff79c6">;</span>
-</span></span><span style="display:flex;"><span><span style="color:#ff79c6">import</span> org.springframework.util.Assert<span style="color:#ff79c6">;</span>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-java" data-lang="java"><span style="display:flex;"><span><span style="color:#ff79c6">import</span> org.quartz.spi.TriggerFiredBundle;
+</span></span><span style="display:flex;"><span><span style="color:#ff79c6">import</span> org.springframework.beans.factory.config.AutowireCapableBeanFactory;
+</span></span><span style="display:flex;"><span><span style="color:#ff79c6">import</span> org.springframework.scheduling.quartz.SpringBeanJobFactory;
+</span></span><span style="display:flex;"><span><span style="color:#ff79c6">import</span> org.springframework.util.Assert;
 </span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span><span style="color:#8be9fd;font-style:italic">public</span> <span style="color:#8be9fd;font-style:italic">class</span> <span style="color:#50fa7b">AutowireCapableBeanJobFactory</span> <span style="color:#8be9fd;font-style:italic">extends</span> SpringBeanJobFactory <span style="color:#ff79c6">{</span>
+</span></span><span style="display:flex;"><span><span style="color:#8be9fd;font-style:italic">public</span> <span style="color:#8be9fd;font-style:italic">class</span> <span style="color:#50fa7b">AutowireCapableBeanJobFactory</span> <span style="color:#8be9fd;font-style:italic">extends</span> SpringBeanJobFactory {
 </span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span>    <span style="color:#8be9fd;font-style:italic">private</span> <span style="color:#8be9fd;font-style:italic">final</span> AutowireCapableBeanFactory beanFactory<span style="color:#ff79c6">;</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#8be9fd;font-style:italic">private</span> <span style="color:#8be9fd;font-style:italic">final</span> AutowireCapableBeanFactory beanFactory;
 </span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span>    <span style="color:#8be9fd;font-style:italic">public</span> <span style="color:#50fa7b">AutowireCapableBeanJobFactory</span><span style="color:#ff79c6">(</span>AutowireCapableBeanFactory beanFactory<span style="color:#ff79c6">)</span> <span style="color:#ff79c6">{</span>
-</span></span><span style="display:flex;"><span>        Assert<span style="color:#ff79c6">.</span><span style="color:#50fa7b">notNull</span><span style="color:#ff79c6">(</span>beanFactory<span style="color:#ff79c6">,</span> <span style="color:#f1fa8c">&#34;Bean factory must not be null&#34;</span><span style="color:#ff79c6">);</span>
-</span></span><span style="display:flex;"><span>        <span style="color:#ff79c6">this</span><span style="color:#ff79c6">.</span><span style="color:#50fa7b">beanFactory</span> <span style="color:#ff79c6">=</span> beanFactory<span style="color:#ff79c6">;</span>
-</span></span><span style="display:flex;"><span>    <span style="color:#ff79c6">}</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#8be9fd;font-style:italic">public</span> <span style="color:#50fa7b">AutowireCapableBeanJobFactory</span>(AutowireCapableBeanFactory beanFactory) {
+</span></span><span style="display:flex;"><span>        Assert.<span style="color:#50fa7b">notNull</span>(beanFactory, <span style="color:#f1fa8c">&#34;Bean factory must not be null&#34;</span>);
+</span></span><span style="display:flex;"><span>        <span style="color:#ff79c6">this</span>.<span style="color:#50fa7b">beanFactory</span> <span style="color:#ff79c6">=</span> beanFactory;
+</span></span><span style="display:flex;"><span>    }
 </span></span><span style="display:flex;"><span>
 </span></span><span style="display:flex;"><span>    @Override
-</span></span><span style="display:flex;"><span>    <span style="color:#8be9fd;font-style:italic">protected</span> Object <span style="color:#50fa7b">createJobInstance</span><span style="color:#ff79c6">(</span>TriggerFiredBundle bundle<span style="color:#ff79c6">)</span> <span style="color:#8be9fd;font-style:italic">throws</span> Exception <span style="color:#ff79c6">{</span>
-</span></span><span style="display:flex;"><span>        <span style="color:#8be9fd;font-style:italic">final</span> Object job <span style="color:#ff79c6">=</span> <span style="color:#8be9fd;font-style:italic">super</span><span style="color:#ff79c6">.</span><span style="color:#50fa7b">createJobInstance</span><span style="color:#ff79c6">(</span>bundle<span style="color:#ff79c6">);</span>
-</span></span><span style="display:flex;"><span>        <span style="color:#ff79c6">this</span><span style="color:#ff79c6">.</span><span style="color:#50fa7b">beanFactory</span><span style="color:#ff79c6">.</span><span style="color:#50fa7b">autowireBean</span><span style="color:#ff79c6">(</span>job<span style="color:#ff79c6">);</span>
-</span></span><span style="display:flex;"><span>        <span style="color:#ff79c6">return</span> job<span style="color:#ff79c6">;</span>
-</span></span><span style="display:flex;"><span>    <span style="color:#ff79c6">}</span>
-</span></span><span style="display:flex;"><span><span style="color:#ff79c6">}</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#8be9fd;font-style:italic">protected</span> Object <span style="color:#50fa7b">createJobInstance</span>(TriggerFiredBundle bundle) <span style="color:#8be9fd;font-style:italic">throws</span> Exception {
+</span></span><span style="display:flex;"><span>        <span style="color:#8be9fd;font-style:italic">final</span> Object job <span style="color:#ff79c6">=</span> <span style="color:#8be9fd;font-style:italic">super</span>.<span style="color:#50fa7b">createJobInstance</span>(bundle);
+</span></span><span style="display:flex;"><span>        <span style="color:#ff79c6">this</span>.<span style="color:#50fa7b">beanFactory</span>.<span style="color:#50fa7b">autowireBean</span>(job);
+</span></span><span style="display:flex;"><span>        <span style="color:#ff79c6">return</span> job;
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>}
 </span></span></code></pre></div><p>再來要將這個 JobFactory 設定到 <code>SchedulerFactoryBean</code> 裡面，但這邊很多網路文章都教直接 <code>new</code> 一個 <code>SchedulerFactoryBean</code> 出來後再標記 <code>@Bean</code> 的做法，但 <a href="https://docs.spring.io/spring-boot/docs/current/reference/html/io.html#io.quartz">官方文件</a> (雖然只有短短幾行) 有提到</p>
 <blockquote>
 <p>Quartz Scheduler configuration can be customized using <code>spring.quartz</code> properties and <code>SchedulerFactoryBeanCustomizer</code> beans, which allow programmatic <code>SchedulerFactoryBean</code> customization.</p>
 </blockquote>
 <p>所以我們要利用 Spring Boot 整合 Quartz 提供的 <code>SchedulerFactoryBeanCustomizer</code> 來做設定</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-java" data-lang="java"><span style="display:flex;"><span><span style="color:#ff79c6">import</span> lombok.RequiredArgsConstructor<span style="color:#ff79c6">;</span>
-</span></span><span style="display:flex;"><span><span style="color:#ff79c6">import</span> org.springframework.boot.autoconfigure.quartz.SchedulerFactoryBeanCustomizer<span style="color:#ff79c6">;</span>
-</span></span><span style="display:flex;"><span><span style="color:#ff79c6">import</span> org.springframework.context.ApplicationContext<span style="color:#ff79c6">;</span>
-</span></span><span style="display:flex;"><span><span style="color:#ff79c6">import</span> org.springframework.context.annotation.Configuration<span style="color:#ff79c6">;</span>
-</span></span><span style="display:flex;"><span><span style="color:#ff79c6">import</span> org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor<span style="color:#ff79c6">;</span>
-</span></span><span style="display:flex;"><span><span style="color:#ff79c6">import</span> org.springframework.scheduling.quartz.SchedulerFactoryBean<span style="color:#ff79c6">;</span>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-java" data-lang="java"><span style="display:flex;"><span><span style="color:#ff79c6">import</span> lombok.RequiredArgsConstructor;
+</span></span><span style="display:flex;"><span><span style="color:#ff79c6">import</span> org.springframework.boot.autoconfigure.quartz.SchedulerFactoryBeanCustomizer;
+</span></span><span style="display:flex;"><span><span style="color:#ff79c6">import</span> org.springframework.context.ApplicationContext;
+</span></span><span style="display:flex;"><span><span style="color:#ff79c6">import</span> org.springframework.context.annotation.Configuration;
+</span></span><span style="display:flex;"><span><span style="color:#ff79c6">import</span> org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor;
+</span></span><span style="display:flex;"><span><span style="color:#ff79c6">import</span> org.springframework.scheduling.quartz.SchedulerFactoryBean;
 </span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span><span style="color:#ff79c6">import</span> javax.sql.DataSource<span style="color:#ff79c6">;</span>
+</span></span><span style="display:flex;"><span><span style="color:#ff79c6">import</span> javax.sql.DataSource;
 </span></span><span style="display:flex;"><span>
 </span></span><span style="display:flex;"><span>@RequiredArgsConstructor
 </span></span><span style="display:flex;"><span>@Configuration
-</span></span><span style="display:flex;"><span><span style="color:#8be9fd;font-style:italic">public</span> <span style="color:#8be9fd;font-style:italic">class</span> <span style="color:#50fa7b">CustomSchedulerFactoryBeanCustomizer</span> <span style="color:#8be9fd;font-style:italic">implements</span> SchedulerFactoryBeanCustomizer <span style="color:#ff79c6">{</span>
+</span></span><span style="display:flex;"><span><span style="color:#8be9fd;font-style:italic">public</span> <span style="color:#8be9fd;font-style:italic">class</span> <span style="color:#50fa7b">CustomSchedulerFactoryBeanCustomizer</span> <span style="color:#8be9fd;font-style:italic">implements</span> SchedulerFactoryBeanCustomizer {
 </span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span>    <span style="color:#8be9fd;font-style:italic">private</span> <span style="color:#8be9fd;font-style:italic">final</span> DataSource dataSource<span style="color:#ff79c6">;</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#8be9fd;font-style:italic">private</span> <span style="color:#8be9fd;font-style:italic">final</span> DataSource dataSource;
 </span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span>    <span style="color:#8be9fd;font-style:italic">private</span> <span style="color:#8be9fd;font-style:italic">final</span> ThreadPoolTaskExecutor schedulerExecutor<span style="color:#ff79c6">;</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#8be9fd;font-style:italic">private</span> <span style="color:#8be9fd;font-style:italic">final</span> ThreadPoolTaskExecutor schedulerExecutor;
 </span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span>    <span style="color:#8be9fd;font-style:italic">private</span> <span style="color:#8be9fd;font-style:italic">final</span> ApplicationContext applicationContext<span style="color:#ff79c6">;</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#8be9fd;font-style:italic">private</span> <span style="color:#8be9fd;font-style:italic">final</span> ApplicationContext applicationContext;
 </span></span><span style="display:flex;"><span>    
 </span></span><span style="display:flex;"><span>    @Override
-</span></span><span style="display:flex;"><span>    <span style="color:#8be9fd;font-style:italic">public</span> <span style="color:#8be9fd">void</span> <span style="color:#50fa7b">customize</span><span style="color:#ff79c6">(</span>SchedulerFactoryBean schedulerFactoryBean<span style="color:#ff79c6">)</span> <span style="color:#ff79c6">{</span>
-</span></span><span style="display:flex;"><span>        var jobFactory <span style="color:#ff79c6">=</span> <span style="color:#ff79c6">new</span> AutowireCapableBeanJobFactory<span style="color:#ff79c6">(</span>applicationContext<span style="color:#ff79c6">.</span><span style="color:#50fa7b">getAutowireCapableBeanFactory</span><span style="color:#ff79c6">());</span>
-</span></span><span style="display:flex;"><span>        schedulerFactoryBean<span style="color:#ff79c6">.</span><span style="color:#50fa7b">setDataSource</span><span style="color:#ff79c6">(</span>dataSource<span style="color:#ff79c6">);</span>
-</span></span><span style="display:flex;"><span>        schedulerFactoryBean<span style="color:#ff79c6">.</span><span style="color:#50fa7b">setTaskExecutor</span><span style="color:#ff79c6">(</span>schedulerExecutor<span style="color:#ff79c6">);</span>
-</span></span><span style="display:flex;"><span>        schedulerFactoryBean<span style="color:#ff79c6">.</span><span style="color:#50fa7b">setJobFactory</span><span style="color:#ff79c6">(</span>jobFactory<span style="color:#ff79c6">);</span>
-</span></span><span style="display:flex;"><span>        schedulerFactoryBean<span style="color:#ff79c6">.</span><span style="color:#50fa7b">setWaitForJobsToCompleteOnShutdown</span><span style="color:#ff79c6">(</span><span style="color:#ff79c6">true</span><span style="color:#ff79c6">);</span>
-</span></span><span style="display:flex;"><span>        schedulerFactoryBean<span style="color:#ff79c6">.</span><span style="color:#50fa7b">setStartupDelay</span><span style="color:#ff79c6">(</span><span style="color:#bd93f9">5</span><span style="color:#ff79c6">);</span>
-</span></span><span style="display:flex;"><span>    <span style="color:#ff79c6">}</span>
-</span></span><span style="display:flex;"><span><span style="color:#ff79c6">}</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#8be9fd;font-style:italic">public</span> <span style="color:#8be9fd">void</span> <span style="color:#50fa7b">customize</span>(SchedulerFactoryBean schedulerFactoryBean) {
+</span></span><span style="display:flex;"><span>        <span style="color:#8be9fd;font-style:italic">var</span> jobFactory <span style="color:#ff79c6">=</span> <span style="color:#ff79c6">new</span> AutowireCapableBeanJobFactory(applicationContext.<span style="color:#50fa7b">getAutowireCapableBeanFactory</span>());
+</span></span><span style="display:flex;"><span>        schedulerFactoryBean.<span style="color:#50fa7b">setDataSource</span>(dataSource);
+</span></span><span style="display:flex;"><span>        schedulerFactoryBean.<span style="color:#50fa7b">setTaskExecutor</span>(schedulerExecutor);
+</span></span><span style="display:flex;"><span>        schedulerFactoryBean.<span style="color:#50fa7b">setJobFactory</span>(jobFactory);
+</span></span><span style="display:flex;"><span>        schedulerFactoryBean.<span style="color:#50fa7b">setWaitForJobsToCompleteOnShutdown</span>(<span style="color:#ff79c6">true</span>);
+</span></span><span style="display:flex;"><span>        schedulerFactoryBean.<span style="color:#50fa7b">setStartupDelay</span>(5);
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>}
 </span></span></code></pre></div><p>其中因為要讓 Quartz 保存資料到 database，所以需要提供 <code>DataSource</code>；然後如果想要控制 Quartz 運行使用的 thread pool，也可以提供自訂的 <code>Executor</code>，預設 Quartz 會自己使用 <code>SimpleThreadPool</code> 來操作</p>
 <p>最後就是要注入 <code>ApplicationContext</code>，因為我們需要取得 <code>AutowireCapableBeanFactory</code> 來給我們前面建立的 <code>AutowireCapableBeanJobFactory</code> 提供必需的 <code>BeanFactory</code> 以在建立 <code>Job</code> 實例時做 autowire</p>
 <p>至此，基本架構設定已經完成</p>
 <h1 id="建立任務">建立任務</h1>
 <p>接著要來建立會定時掃描 <code>NOTIFICATION_SCHEDULE</code> 並建立、更新、刪除對應排程的 <code>Job</code></p>
 <p>但首先先建立對應的 entity 及 repository</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-java" data-lang="java"><span style="display:flex;"><span><span style="color:#ff79c6">import</span> lombok.Data<span style="color:#ff79c6">;</span>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-java" data-lang="java"><span style="display:flex;"><span><span style="color:#ff79c6">import</span> lombok.Data;
 </span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span><span style="color:#ff79c6">import</span> javax.persistence.*<span style="color:#ff79c6">;</span>
-</span></span><span style="display:flex;"><span><span style="color:#ff79c6">import</span> java.io.Serializable<span style="color:#ff79c6">;</span>
+</span></span><span style="display:flex;"><span><span style="color:#ff79c6">import</span> javax.persistence.*;
+</span></span><span style="display:flex;"><span><span style="color:#ff79c6">import</span> java.io.Serializable;
 </span></span><span style="display:flex;"><span>
 </span></span><span style="display:flex;"><span>@Data
 </span></span><span style="display:flex;"><span>@Entity
-</span></span><span style="display:flex;"><span>@Table<span style="color:#ff79c6">(</span>name <span style="color:#ff79c6">=</span> <span style="color:#f1fa8c">&#34;NOTIFICATION_SCHEDULE&#34;</span><span style="color:#ff79c6">)</span>
-</span></span><span style="display:flex;"><span><span style="color:#8be9fd;font-style:italic">public</span> <span style="color:#8be9fd;font-style:italic">class</span> <span style="color:#50fa7b">NotificationScheduleDo</span> <span style="color:#8be9fd;font-style:italic">implements</span> Serializable <span style="color:#ff79c6">{</span>
+</span></span><span style="display:flex;"><span>@Table(name <span style="color:#ff79c6">=</span> <span style="color:#f1fa8c">&#34;NOTIFICATION_SCHEDULE&#34;</span>)
+</span></span><span style="display:flex;"><span><span style="color:#8be9fd;font-style:italic">public</span> <span style="color:#8be9fd;font-style:italic">class</span> <span style="color:#50fa7b">NotificationScheduleDo</span> <span style="color:#8be9fd;font-style:italic">implements</span> Serializable {
 </span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span>    @GeneratedValue<span style="color:#ff79c6">(</span>strategy <span style="color:#ff79c6">=</span> GenerationType<span style="color:#ff79c6">.</span><span style="color:#50fa7b">IDENTITY</span><span style="color:#ff79c6">)</span>
+</span></span><span style="display:flex;"><span>    @GeneratedValue(strategy <span style="color:#ff79c6">=</span> GenerationType.<span style="color:#50fa7b">IDENTITY</span>)
 </span></span><span style="display:flex;"><span>    @Id
-</span></span><span style="display:flex;"><span>    @Column<span style="color:#ff79c6">(</span>name <span style="color:#ff79c6">=</span> <span style="color:#f1fa8c">&#34;ID&#34;</span><span style="color:#ff79c6">)</span>
-</span></span><span style="display:flex;"><span>    <span style="color:#8be9fd;font-style:italic">private</span> Integer id<span style="color:#ff79c6">;</span>
-</span></span><span style="display:flex;"><span>    @Column<span style="color:#ff79c6">(</span>name <span style="color:#ff79c6">=</span> <span style="color:#f1fa8c">&#34;CRON&#34;</span><span style="color:#ff79c6">,</span> columnDefinition <span style="color:#ff79c6">=</span> <span style="color:#f1fa8c">&#34;VARCHAR(100)&#34;</span><span style="color:#ff79c6">,</span> nullable <span style="color:#ff79c6">=</span> <span style="color:#ff79c6">false</span><span style="color:#ff79c6">)</span>
-</span></span><span style="display:flex;"><span>    <span style="color:#8be9fd;font-style:italic">private</span> String cron<span style="color:#ff79c6">;</span>
-</span></span><span style="display:flex;"><span>    @Column<span style="color:#ff79c6">(</span>name <span style="color:#ff79c6">=</span> <span style="color:#f1fa8c">&#34;TIMEZONE&#34;</span><span style="color:#ff79c6">,</span> columnDefinition <span style="color:#ff79c6">=</span> <span style="color:#f1fa8c">&#34;VARCHAR(64) DEFAULT &#39;Asia/Taipei&#39;&#34;</span><span style="color:#ff79c6">)</span>
-</span></span><span style="display:flex;"><span>    <span style="color:#8be9fd;font-style:italic">private</span> String timezone<span style="color:#ff79c6">;</span>
-</span></span><span style="display:flex;"><span>    @Column<span style="color:#ff79c6">(</span>name <span style="color:#ff79c6">=</span> <span style="color:#f1fa8c">&#34;TEMPLATE_ID&#34;</span><span style="color:#ff79c6">,</span> nullable <span style="color:#ff79c6">=</span> <span style="color:#ff79c6">false</span><span style="color:#ff79c6">)</span>
-</span></span><span style="display:flex;"><span>    <span style="color:#8be9fd;font-style:italic">private</span> Integer templateId<span style="color:#ff79c6">;</span>
-</span></span><span style="display:flex;"><span>    @Column<span style="color:#ff79c6">(</span>name <span style="color:#ff79c6">=</span> <span style="color:#f1fa8c">&#34;IS_ONLINE&#34;</span><span style="color:#ff79c6">)</span>
-</span></span><span style="display:flex;"><span>    <span style="color:#8be9fd;font-style:italic">private</span> Boolean online<span style="color:#ff79c6">;</span>
-</span></span><span style="display:flex;"><span>    @Column<span style="color:#ff79c6">(</span>name <span style="color:#ff79c6">=</span> <span style="color:#f1fa8c">&#34;IS_DELETED&#34;</span><span style="color:#ff79c6">)</span>
-</span></span><span style="display:flex;"><span>    <span style="color:#8be9fd;font-style:italic">private</span> Boolean deleted<span style="color:#ff79c6">;</span>
-</span></span><span style="display:flex;"><span><span style="color:#ff79c6">}</span>
+</span></span><span style="display:flex;"><span>    @Column(name <span style="color:#ff79c6">=</span> <span style="color:#f1fa8c">&#34;ID&#34;</span>)
+</span></span><span style="display:flex;"><span>    <span style="color:#8be9fd;font-style:italic">private</span> Integer id;
+</span></span><span style="display:flex;"><span>    @Column(name <span style="color:#ff79c6">=</span> <span style="color:#f1fa8c">&#34;CRON&#34;</span>, columnDefinition <span style="color:#ff79c6">=</span> <span style="color:#f1fa8c">&#34;VARCHAR(100)&#34;</span>, nullable <span style="color:#ff79c6">=</span> <span style="color:#ff79c6">false</span>)
+</span></span><span style="display:flex;"><span>    <span style="color:#8be9fd;font-style:italic">private</span> String cron;
+</span></span><span style="display:flex;"><span>    @Column(name <span style="color:#ff79c6">=</span> <span style="color:#f1fa8c">&#34;TIMEZONE&#34;</span>, columnDefinition <span style="color:#ff79c6">=</span> <span style="color:#f1fa8c">&#34;VARCHAR(64) DEFAULT &#39;Asia/Taipei&#39;&#34;</span>)
+</span></span><span style="display:flex;"><span>    <span style="color:#8be9fd;font-style:italic">private</span> String timezone;
+</span></span><span style="display:flex;"><span>    @Column(name <span style="color:#ff79c6">=</span> <span style="color:#f1fa8c">&#34;TEMPLATE_ID&#34;</span>, nullable <span style="color:#ff79c6">=</span> <span style="color:#ff79c6">false</span>)
+</span></span><span style="display:flex;"><span>    <span style="color:#8be9fd;font-style:italic">private</span> Integer templateId;
+</span></span><span style="display:flex;"><span>    @Column(name <span style="color:#ff79c6">=</span> <span style="color:#f1fa8c">&#34;IS_ONLINE&#34;</span>)
+</span></span><span style="display:flex;"><span>    <span style="color:#8be9fd;font-style:italic">private</span> Boolean online;
+</span></span><span style="display:flex;"><span>    @Column(name <span style="color:#ff79c6">=</span> <span style="color:#f1fa8c">&#34;IS_DELETED&#34;</span>)
+</span></span><span style="display:flex;"><span>    <span style="color:#8be9fd;font-style:italic">private</span> Boolean deleted;
+</span></span><span style="display:flex;"><span>}
 </span></span></code></pre></div><p>這裡有個細節要注意，因為在設定 <code>JobDetail</code> 的時候，可以設定在建立 <code>Job</code> 實例時動態帶上的資料，只是要放在 <code>JobDataMap</code> 裡面，它本質是個 <code>Map&lt;String, Object&gt;</code></p>
 <p>如果你想把這整個 entity 保存到 <code>JobDataMap</code> 裡面的話，就必須要實作 <code>Serializable</code> 介面</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-java" data-lang="java"><span style="display:flex;"><span><span style="color:#ff79c6">import</span> com.example.demospringbootquartzcluster.adapter.dao.entity.NotificationScheduleDo<span style="color:#ff79c6">;</span>
-</span></span><span style="display:flex;"><span><span style="color:#ff79c6">import</span> org.springframework.data.jpa.repository.JpaRepository<span style="color:#ff79c6">;</span>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-java" data-lang="java"><span style="display:flex;"><span><span style="color:#ff79c6">import</span> com.example.demospringbootquartzcluster.adapter.dao.entity.NotificationScheduleDo;
+</span></span><span style="display:flex;"><span><span style="color:#ff79c6">import</span> org.springframework.data.jpa.repository.JpaRepository;
 </span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span><span style="color:#8be9fd;font-style:italic">public</span> <span style="color:#8be9fd;font-style:italic">interface</span> <span style="color:#50fa7b">NotificationScheduleRepository</span> <span style="color:#8be9fd;font-style:italic">extends</span> JpaRepository<span style="color:#ff79c6">&lt;</span>NotificationScheduleDo<span style="color:#ff79c6">,</span> Integer<span style="color:#ff79c6">&gt;</span> <span style="color:#ff79c6">{</span>
-</span></span><span style="display:flex;"><span><span style="color:#ff79c6">}</span>
+</span></span><span style="display:flex;"><span><span style="color:#8be9fd;font-style:italic">public</span> <span style="color:#8be9fd;font-style:italic">interface</span> <span style="color:#50fa7b">NotificationScheduleRepository</span> <span style="color:#8be9fd;font-style:italic">extends</span> JpaRepository<span style="color:#ff79c6">&lt;</span>NotificationScheduleDo, Integer<span style="color:#ff79c6">&gt;</span> {
+</span></span><span style="display:flex;"><span>}
 </span></span></code></pre></div><p>接著要建立 <code>CreateNotificationSchedulerJob</code></p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-java" data-lang="java"><span style="display:flex;"><span><span style="color:#ff79c6">import</span> com.example.demospringbootquartzcluster.adapter.dao.entity.NotificationScheduleDo<span style="color:#ff79c6">;</span>
-</span></span><span style="display:flex;"><span><span style="color:#ff79c6">import</span> com.example.demospringbootquartzcluster.adapter.dao.repository.NotificationScheduleRepository<span style="color:#ff79c6">;</span>
-</span></span><span style="display:flex;"><span><span style="color:#ff79c6">import</span> lombok.RequiredArgsConstructor<span style="color:#ff79c6">;</span>
-</span></span><span style="display:flex;"><span><span style="color:#ff79c6">import</span> lombok.extern.slf4j.Slf4j<span style="color:#ff79c6">;</span>
-</span></span><span style="display:flex;"><span><span style="color:#ff79c6">import</span> org.quartz.*<span style="color:#ff79c6">;</span>
-</span></span><span style="display:flex;"><span><span style="color:#ff79c6">import</span> org.springframework.scheduling.quartz.QuartzJobBean<span style="color:#ff79c6">;</span>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-java" data-lang="java"><span style="display:flex;"><span><span style="color:#ff79c6">import</span> com.example.demospringbootquartzcluster.adapter.dao.entity.NotificationScheduleDo;
+</span></span><span style="display:flex;"><span><span style="color:#ff79c6">import</span> com.example.demospringbootquartzcluster.adapter.dao.repository.NotificationScheduleRepository;
+</span></span><span style="display:flex;"><span><span style="color:#ff79c6">import</span> lombok.RequiredArgsConstructor;
+</span></span><span style="display:flex;"><span><span style="color:#ff79c6">import</span> lombok.extern.slf4j.Slf4j;
+</span></span><span style="display:flex;"><span><span style="color:#ff79c6">import</span> org.quartz.*;
+</span></span><span style="display:flex;"><span><span style="color:#ff79c6">import</span> org.springframework.scheduling.quartz.QuartzJobBean;
 </span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span><span style="color:#ff79c6">import</span> java.time.ZoneId<span style="color:#ff79c6">;</span>
-</span></span><span style="display:flex;"><span><span style="color:#ff79c6">import</span> java.util.List<span style="color:#ff79c6">;</span>
-</span></span><span style="display:flex;"><span><span style="color:#ff79c6">import</span> java.util.TimeZone<span style="color:#ff79c6">;</span>
+</span></span><span style="display:flex;"><span><span style="color:#ff79c6">import</span> java.time.ZoneId;
+</span></span><span style="display:flex;"><span><span style="color:#ff79c6">import</span> java.util.List;
+</span></span><span style="display:flex;"><span><span style="color:#ff79c6">import</span> java.util.TimeZone;
 </span></span><span style="display:flex;"><span>
 </span></span><span style="display:flex;"><span>@Slf4j
 </span></span><span style="display:flex;"><span>@RequiredArgsConstructor
 </span></span><span style="display:flex;"><span>@DisallowConcurrentExecution
-</span></span><span style="display:flex;"><span><span style="color:#8be9fd;font-style:italic">public</span> <span style="color:#8be9fd;font-style:italic">class</span> <span style="color:#50fa7b">CreateNotificationSchedulerJob</span> <span style="color:#8be9fd;font-style:italic">extends</span> QuartzJobBean <span style="color:#ff79c6">{</span>
+</span></span><span style="display:flex;"><span><span style="color:#8be9fd;font-style:italic">public</span> <span style="color:#8be9fd;font-style:italic">class</span> <span style="color:#50fa7b">CreateNotificationSchedulerJob</span> <span style="color:#8be9fd;font-style:italic">extends</span> QuartzJobBean {
 </span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span>    <span style="color:#8be9fd;font-style:italic">private</span> <span style="color:#8be9fd;font-style:italic">final</span> NotificationScheduleRepository notificationScheduleRepository<span style="color:#ff79c6">;</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#8be9fd;font-style:italic">private</span> <span style="color:#8be9fd;font-style:italic">final</span> NotificationScheduleRepository notificationScheduleRepository;
 </span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span>    <span style="color:#8be9fd;font-style:italic">private</span> <span style="color:#8be9fd;font-style:italic">final</span> Scheduler scheduler<span style="color:#ff79c6">;</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#8be9fd;font-style:italic">private</span> <span style="color:#8be9fd;font-style:italic">final</span> Scheduler scheduler;
 </span></span><span style="display:flex;"><span>
 </span></span><span style="display:flex;"><span>    @Override
-</span></span><span style="display:flex;"><span>    <span style="color:#8be9fd;font-style:italic">protected</span> <span style="color:#8be9fd">void</span> <span style="color:#50fa7b">executeInternal</span><span style="color:#ff79c6">(</span>JobExecutionContext context<span style="color:#ff79c6">)</span> <span style="color:#ff79c6">{</span>
-</span></span><span style="display:flex;"><span>        <span style="color:#ff79c6">for</span> <span style="color:#ff79c6">(</span>NotificationScheduleDo schedule <span style="color:#ff79c6">:</span> retrieveNotificationSchedules<span style="color:#ff79c6">())</span> <span style="color:#ff79c6">{</span>
-</span></span><span style="display:flex;"><span>            <span style="color:#ff79c6">try</span> <span style="color:#ff79c6">{</span>
-</span></span><span style="display:flex;"><span>                String name <span style="color:#ff79c6">=</span> getName<span style="color:#ff79c6">(</span>schedule<span style="color:#ff79c6">);</span>
-</span></span><span style="display:flex;"><span>                String group <span style="color:#ff79c6">=</span> getGroup<span style="color:#ff79c6">(</span>schedule<span style="color:#ff79c6">);</span>
-</span></span><span style="display:flex;"><span>                <span style="color:#ff79c6">if</span> <span style="color:#ff79c6">(</span>checkIfTriggerExist<span style="color:#ff79c6">(</span>name<span style="color:#ff79c6">,</span> group<span style="color:#ff79c6">))</span> <span style="color:#ff79c6">{</span>
-</span></span><span style="display:flex;"><span>                    <span style="color:#ff79c6">if</span> <span style="color:#ff79c6">(</span>scheduleDisabledOrDeleted<span style="color:#ff79c6">(</span>schedule<span style="color:#ff79c6">))</span> <span style="color:#ff79c6">{</span>
-</span></span><span style="display:flex;"><span>                        deleteTrigger<span style="color:#ff79c6">(</span>name<span style="color:#ff79c6">,</span> group<span style="color:#ff79c6">);</span>
-</span></span><span style="display:flex;"><span>                    <span style="color:#ff79c6">}</span> <span style="color:#ff79c6">else</span> <span style="color:#ff79c6">if</span> <span style="color:#ff79c6">(</span>checkIfScheduleModified<span style="color:#ff79c6">(</span>name<span style="color:#ff79c6">,</span> group<span style="color:#ff79c6">,</span> schedule<span style="color:#ff79c6">))</span> <span style="color:#ff79c6">{</span>
-</span></span><span style="display:flex;"><span>                        updateTrigger<span style="color:#ff79c6">(</span>name<span style="color:#ff79c6">,</span> group<span style="color:#ff79c6">,</span> schedule<span style="color:#ff79c6">);</span>
-</span></span><span style="display:flex;"><span>                    <span style="color:#ff79c6">}</span>
-</span></span><span style="display:flex;"><span>                <span style="color:#ff79c6">}</span> <span style="color:#ff79c6">else</span> <span style="color:#ff79c6">{</span>
-</span></span><span style="display:flex;"><span>                    createTrigger<span style="color:#ff79c6">(</span>name<span style="color:#ff79c6">,</span> group<span style="color:#ff79c6">,</span> schedule<span style="color:#ff79c6">);</span>
-</span></span><span style="display:flex;"><span>                <span style="color:#ff79c6">}</span>
-</span></span><span style="display:flex;"><span>            <span style="color:#ff79c6">}</span> <span style="color:#ff79c6">catch</span> <span style="color:#ff79c6">(</span>SchedulerException e<span style="color:#ff79c6">)</span> <span style="color:#ff79c6">{</span>
-</span></span><span style="display:flex;"><span>                log<span style="color:#ff79c6">.</span><span style="color:#50fa7b">error</span><span style="color:#ff79c6">(</span>e<span style="color:#ff79c6">.</span><span style="color:#50fa7b">getMessage</span><span style="color:#ff79c6">(),</span> e<span style="color:#ff79c6">);</span>
-</span></span><span style="display:flex;"><span>            <span style="color:#ff79c6">}</span>
-</span></span><span style="display:flex;"><span>        <span style="color:#ff79c6">}</span>
-</span></span><span style="display:flex;"><span>    <span style="color:#ff79c6">}</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#8be9fd;font-style:italic">protected</span> <span style="color:#8be9fd">void</span> <span style="color:#50fa7b">executeInternal</span>(JobExecutionContext context) {
+</span></span><span style="display:flex;"><span>        <span style="color:#ff79c6">for</span> (NotificationScheduleDo schedule : retrieveNotificationSchedules()) {
+</span></span><span style="display:flex;"><span>            <span style="color:#ff79c6">try</span> {
+</span></span><span style="display:flex;"><span>                String name <span style="color:#ff79c6">=</span> getName(schedule);
+</span></span><span style="display:flex;"><span>                String group <span style="color:#ff79c6">=</span> getGroup(schedule);
+</span></span><span style="display:flex;"><span>                <span style="color:#ff79c6">if</span> (checkIfTriggerExist(name, group)) {
+</span></span><span style="display:flex;"><span>                    <span style="color:#ff79c6">if</span> (scheduleDisabledOrDeleted(schedule)) {
+</span></span><span style="display:flex;"><span>                        deleteTrigger(name, group);
+</span></span><span style="display:flex;"><span>                    } <span style="color:#ff79c6">else</span> <span style="color:#ff79c6">if</span> (checkIfScheduleModified(name, group, schedule)) {
+</span></span><span style="display:flex;"><span>                        updateTrigger(name, group, schedule);
+</span></span><span style="display:flex;"><span>                    }
+</span></span><span style="display:flex;"><span>                } <span style="color:#ff79c6">else</span> {
+</span></span><span style="display:flex;"><span>                    createTrigger(name, group, schedule);
+</span></span><span style="display:flex;"><span>                }
+</span></span><span style="display:flex;"><span>            } <span style="color:#ff79c6">catch</span> (SchedulerException e) {
+</span></span><span style="display:flex;"><span>                log.<span style="color:#50fa7b">error</span>(e.<span style="color:#50fa7b">getMessage</span>(), e);
+</span></span><span style="display:flex;"><span>            }
+</span></span><span style="display:flex;"><span>        }
+</span></span><span style="display:flex;"><span>    }
 </span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span>    <span style="color:#8be9fd;font-style:italic">private</span> List<span style="color:#ff79c6">&lt;</span>NotificationScheduleDo<span style="color:#ff79c6">&gt;</span> <span style="color:#50fa7b">retrieveNotificationSchedules</span><span style="color:#ff79c6">()</span> <span style="color:#ff79c6">{</span>
-</span></span><span style="display:flex;"><span>        <span style="color:#ff79c6">return</span> notificationScheduleRepository<span style="color:#ff79c6">.</span><span style="color:#50fa7b">findAll</span><span style="color:#ff79c6">();</span>
-</span></span><span style="display:flex;"><span>    <span style="color:#ff79c6">}</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#8be9fd;font-style:italic">private</span> List<span style="color:#ff79c6">&lt;</span>NotificationScheduleDo<span style="color:#ff79c6">&gt;</span> <span style="color:#50fa7b">retrieveNotificationSchedules</span>() {
+</span></span><span style="display:flex;"><span>        <span style="color:#ff79c6">return</span> notificationScheduleRepository.<span style="color:#50fa7b">findAll</span>();
+</span></span><span style="display:flex;"><span>    }
 </span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span>    <span style="color:#8be9fd;font-style:italic">private</span> <span style="color:#8be9fd">boolean</span> <span style="color:#50fa7b">checkIfTriggerExist</span><span style="color:#ff79c6">(</span>String name<span style="color:#ff79c6">,</span> String group<span style="color:#ff79c6">)</span> <span style="color:#ff79c6">{</span>
-</span></span><span style="display:flex;"><span>        <span style="color:#ff79c6">try</span> <span style="color:#ff79c6">{</span>
-</span></span><span style="display:flex;"><span>            <span style="color:#ff79c6">return</span> scheduler<span style="color:#ff79c6">.</span><span style="color:#50fa7b">checkExists</span><span style="color:#ff79c6">(</span>TriggerKey<span style="color:#ff79c6">.</span><span style="color:#50fa7b">triggerKey</span><span style="color:#ff79c6">(</span>name<span style="color:#ff79c6">,</span> group<span style="color:#ff79c6">));</span>
-</span></span><span style="display:flex;"><span>        <span style="color:#ff79c6">}</span> <span style="color:#ff79c6">catch</span> <span style="color:#ff79c6">(</span>SchedulerException e<span style="color:#ff79c6">)</span> <span style="color:#ff79c6">{</span>
-</span></span><span style="display:flex;"><span>            <span style="color:#ff79c6">return</span> <span style="color:#ff79c6">false</span><span style="color:#ff79c6">;</span>
-</span></span><span style="display:flex;"><span>        <span style="color:#ff79c6">}</span>
-</span></span><span style="display:flex;"><span>    <span style="color:#ff79c6">}</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#8be9fd;font-style:italic">private</span> <span style="color:#8be9fd">boolean</span> <span style="color:#50fa7b">checkIfTriggerExist</span>(String name, String group) {
+</span></span><span style="display:flex;"><span>        <span style="color:#ff79c6">try</span> {
+</span></span><span style="display:flex;"><span>            <span style="color:#ff79c6">return</span> scheduler.<span style="color:#50fa7b">checkExists</span>(TriggerKey.<span style="color:#50fa7b">triggerKey</span>(name, group));
+</span></span><span style="display:flex;"><span>        } <span style="color:#ff79c6">catch</span> (SchedulerException e) {
+</span></span><span style="display:flex;"><span>            <span style="color:#ff79c6">return</span> <span style="color:#ff79c6">false</span>;
+</span></span><span style="display:flex;"><span>        }
+</span></span><span style="display:flex;"><span>    }
 </span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span>    <span style="color:#8be9fd;font-style:italic">private</span> <span style="color:#8be9fd">boolean</span> <span style="color:#50fa7b">scheduleDisabledOrDeleted</span><span style="color:#ff79c6">(</span>NotificationScheduleDo schedule<span style="color:#ff79c6">)</span> <span style="color:#ff79c6">{</span>
-</span></span><span style="display:flex;"><span>        <span style="color:#ff79c6">return</span> <span style="color:#ff79c6">!</span>schedule<span style="color:#ff79c6">.</span><span style="color:#50fa7b">getOnline</span><span style="color:#ff79c6">()</span> <span style="color:#ff79c6">||</span> schedule<span style="color:#ff79c6">.</span><span style="color:#50fa7b">getDeleted</span><span style="color:#ff79c6">();</span>
-</span></span><span style="display:flex;"><span>    <span style="color:#ff79c6">}</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#8be9fd;font-style:italic">private</span> <span style="color:#8be9fd">boolean</span> <span style="color:#50fa7b">scheduleDisabledOrDeleted</span>(NotificationScheduleDo schedule) {
+</span></span><span style="display:flex;"><span>        <span style="color:#ff79c6">return</span> <span style="color:#ff79c6">!</span>schedule.<span style="color:#50fa7b">getOnline</span>() <span style="color:#ff79c6">||</span> schedule.<span style="color:#50fa7b">getDeleted</span>();
+</span></span><span style="display:flex;"><span>    }
 </span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span>    <span style="color:#8be9fd;font-style:italic">private</span> <span style="color:#8be9fd">void</span> <span style="color:#50fa7b">deleteTrigger</span><span style="color:#ff79c6">(</span>String name<span style="color:#ff79c6">,</span> String group<span style="color:#ff79c6">)</span> <span style="color:#ff79c6">{</span>
-</span></span><span style="display:flex;"><span>        <span style="color:#ff79c6">try</span> <span style="color:#ff79c6">{</span>
-</span></span><span style="display:flex;"><span>            scheduler<span style="color:#ff79c6">.</span><span style="color:#50fa7b">unscheduleJob</span><span style="color:#ff79c6">(</span>TriggerKey<span style="color:#ff79c6">.</span><span style="color:#50fa7b">triggerKey</span><span style="color:#ff79c6">(</span>name<span style="color:#ff79c6">,</span> group<span style="color:#ff79c6">));</span>
-</span></span><span style="display:flex;"><span>        <span style="color:#ff79c6">}</span> <span style="color:#ff79c6">catch</span> <span style="color:#ff79c6">(</span>SchedulerException ignored<span style="color:#ff79c6">)</span> <span style="color:#ff79c6">{</span> <span style="color:#ff79c6">}</span>
-</span></span><span style="display:flex;"><span>    <span style="color:#ff79c6">}</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#8be9fd;font-style:italic">private</span> <span style="color:#8be9fd">void</span> <span style="color:#50fa7b">deleteTrigger</span>(String name, String group) {
+</span></span><span style="display:flex;"><span>        <span style="color:#ff79c6">try</span> {
+</span></span><span style="display:flex;"><span>            scheduler.<span style="color:#50fa7b">unscheduleJob</span>(TriggerKey.<span style="color:#50fa7b">triggerKey</span>(name, group));
+</span></span><span style="display:flex;"><span>        } <span style="color:#ff79c6">catch</span> (SchedulerException ignored) { }
+</span></span><span style="display:flex;"><span>    }
 </span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span>    <span style="color:#8be9fd;font-style:italic">private</span> <span style="color:#8be9fd">boolean</span> <span style="color:#50fa7b">checkIfScheduleModified</span><span style="color:#ff79c6">(</span>String name<span style="color:#ff79c6">,</span> String group<span style="color:#ff79c6">,</span> NotificationScheduleDo schedule<span style="color:#ff79c6">)</span> <span style="color:#ff79c6">{</span>
-</span></span><span style="display:flex;"><span>        <span style="color:#ff79c6">try</span> <span style="color:#ff79c6">{</span>
-</span></span><span style="display:flex;"><span>            CronTrigger trigger <span style="color:#ff79c6">=</span> <span style="color:#ff79c6">(</span>CronTrigger<span style="color:#ff79c6">)</span> scheduler<span style="color:#ff79c6">.</span><span style="color:#50fa7b">getTrigger</span><span style="color:#ff79c6">(</span>TriggerKey<span style="color:#ff79c6">.</span><span style="color:#50fa7b">triggerKey</span><span style="color:#ff79c6">(</span>name<span style="color:#ff79c6">,</span> group<span style="color:#ff79c6">));</span>
-</span></span><span style="display:flex;"><span>            <span style="color:#ff79c6">return</span> <span style="color:#ff79c6">!</span>trigger<span style="color:#ff79c6">.</span><span style="color:#50fa7b">getCronExpression</span><span style="color:#ff79c6">().</span><span style="color:#50fa7b">equals</span><span style="color:#ff79c6">(</span>schedule<span style="color:#ff79c6">.</span><span style="color:#50fa7b">getCron</span><span style="color:#ff79c6">())</span>
-</span></span><span style="display:flex;"><span>                    <span style="color:#ff79c6">||</span> <span style="color:#ff79c6">!</span>trigger<span style="color:#ff79c6">.</span><span style="color:#50fa7b">getTimeZone</span><span style="color:#ff79c6">().</span><span style="color:#50fa7b">getID</span><span style="color:#ff79c6">().</span><span style="color:#50fa7b">equals</span><span style="color:#ff79c6">(</span>schedule<span style="color:#ff79c6">.</span><span style="color:#50fa7b">getTimezone</span><span style="color:#ff79c6">());</span>
-</span></span><span style="display:flex;"><span>        <span style="color:#ff79c6">}</span> <span style="color:#ff79c6">catch</span> <span style="color:#ff79c6">(</span>SchedulerException e<span style="color:#ff79c6">)</span> <span style="color:#ff79c6">{</span>
-</span></span><span style="display:flex;"><span>            <span style="color:#ff79c6">return</span> <span style="color:#ff79c6">false</span><span style="color:#ff79c6">;</span>
-</span></span><span style="display:flex;"><span>        <span style="color:#ff79c6">}</span>
-</span></span><span style="display:flex;"><span>    <span style="color:#ff79c6">}</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#8be9fd;font-style:italic">private</span> <span style="color:#8be9fd">boolean</span> <span style="color:#50fa7b">checkIfScheduleModified</span>(String name, String group, NotificationScheduleDo schedule) {
+</span></span><span style="display:flex;"><span>        <span style="color:#ff79c6">try</span> {
+</span></span><span style="display:flex;"><span>            CronTrigger trigger <span style="color:#ff79c6">=</span> (CronTrigger) scheduler.<span style="color:#50fa7b">getTrigger</span>(TriggerKey.<span style="color:#50fa7b">triggerKey</span>(name, group));
+</span></span><span style="display:flex;"><span>            <span style="color:#ff79c6">return</span> <span style="color:#ff79c6">!</span>trigger.<span style="color:#50fa7b">getCronExpression</span>().<span style="color:#50fa7b">equals</span>(schedule.<span style="color:#50fa7b">getCron</span>())
+</span></span><span style="display:flex;"><span>                    <span style="color:#ff79c6">||</span> <span style="color:#ff79c6">!</span>trigger.<span style="color:#50fa7b">getTimeZone</span>().<span style="color:#50fa7b">getID</span>().<span style="color:#50fa7b">equals</span>(schedule.<span style="color:#50fa7b">getTimezone</span>());
+</span></span><span style="display:flex;"><span>        } <span style="color:#ff79c6">catch</span> (SchedulerException e) {
+</span></span><span style="display:flex;"><span>            <span style="color:#ff79c6">return</span> <span style="color:#ff79c6">false</span>;
+</span></span><span style="display:flex;"><span>        }
+</span></span><span style="display:flex;"><span>    }
 </span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span>    <span style="color:#8be9fd;font-style:italic">private</span> <span style="color:#8be9fd">void</span> <span style="color:#50fa7b">updateTrigger</span><span style="color:#ff79c6">(</span>String name<span style="color:#ff79c6">,</span> String group<span style="color:#ff79c6">,</span> NotificationScheduleDo schedule<span style="color:#ff79c6">)</span> <span style="color:#ff79c6">{</span>
-</span></span><span style="display:flex;"><span>        JobDetail jobDetail <span style="color:#ff79c6">=</span> createJobDetail<span style="color:#ff79c6">(</span>name<span style="color:#ff79c6">,</span> group<span style="color:#ff79c6">,</span> schedule<span style="color:#ff79c6">);</span>
-</span></span><span style="display:flex;"><span>        Trigger newTrigger <span style="color:#ff79c6">=</span> buildTrigger<span style="color:#ff79c6">(</span>jobDetail<span style="color:#ff79c6">,</span> schedule<span style="color:#ff79c6">.</span><span style="color:#50fa7b">getCron</span><span style="color:#ff79c6">(),</span> schedule<span style="color:#ff79c6">.</span><span style="color:#50fa7b">getTimezone</span><span style="color:#ff79c6">());</span>
-</span></span><span style="display:flex;"><span>        <span style="color:#ff79c6">try</span> <span style="color:#ff79c6">{</span>
-</span></span><span style="display:flex;"><span>            scheduler<span style="color:#ff79c6">.</span><span style="color:#50fa7b">rescheduleJob</span><span style="color:#ff79c6">(</span>TriggerKey<span style="color:#ff79c6">.</span><span style="color:#50fa7b">triggerKey</span><span style="color:#ff79c6">(</span>name<span style="color:#ff79c6">,</span> group<span style="color:#ff79c6">),</span> newTrigger<span style="color:#ff79c6">);</span>
-</span></span><span style="display:flex;"><span>            log<span style="color:#ff79c6">.</span><span style="color:#50fa7b">info</span><span style="color:#ff79c6">(</span><span style="color:#f1fa8c">&#34;Job with key - {} updated successfully&#34;</span><span style="color:#ff79c6">,</span> newTrigger<span style="color:#ff79c6">.</span><span style="color:#50fa7b">getJobKey</span><span style="color:#ff79c6">());</span>
-</span></span><span style="display:flex;"><span>        <span style="color:#ff79c6">}</span> <span style="color:#ff79c6">catch</span> <span style="color:#ff79c6">(</span>SchedulerException e<span style="color:#ff79c6">)</span> <span style="color:#ff79c6">{</span>
-</span></span><span style="display:flex;"><span>            log<span style="color:#ff79c6">.</span><span style="color:#50fa7b">error</span><span style="color:#ff79c6">(</span><span style="color:#f1fa8c">&#34;Could not update job with key - {} due to error - {}&#34;</span><span style="color:#ff79c6">,</span> newTrigger<span style="color:#ff79c6">.</span><span style="color:#50fa7b">getJobKey</span><span style="color:#ff79c6">(),</span> e<span style="color:#ff79c6">.</span><span style="color:#50fa7b">getMessage</span><span style="color:#ff79c6">());</span>
-</span></span><span style="display:flex;"><span>            e<span style="color:#ff79c6">.</span><span style="color:#50fa7b">printStackTrace</span><span style="color:#ff79c6">();</span>
-</span></span><span style="display:flex;"><span>        <span style="color:#ff79c6">}</span>
-</span></span><span style="display:flex;"><span>    <span style="color:#ff79c6">}</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#8be9fd;font-style:italic">private</span> <span style="color:#8be9fd">void</span> <span style="color:#50fa7b">updateTrigger</span>(String name, String group, NotificationScheduleDo schedule) {
+</span></span><span style="display:flex;"><span>        JobDetail jobDetail <span style="color:#ff79c6">=</span> createJobDetail(name, group, schedule);
+</span></span><span style="display:flex;"><span>        Trigger newTrigger <span style="color:#ff79c6">=</span> buildTrigger(jobDetail, schedule.<span style="color:#50fa7b">getCron</span>(), schedule.<span style="color:#50fa7b">getTimezone</span>());
+</span></span><span style="display:flex;"><span>        <span style="color:#ff79c6">try</span> {
+</span></span><span style="display:flex;"><span>            scheduler.<span style="color:#50fa7b">rescheduleJob</span>(TriggerKey.<span style="color:#50fa7b">triggerKey</span>(name, group), newTrigger);
+</span></span><span style="display:flex;"><span>            log.<span style="color:#50fa7b">info</span>(<span style="color:#f1fa8c">&#34;Job with key - {} updated successfully&#34;</span>, newTrigger.<span style="color:#50fa7b">getJobKey</span>());
+</span></span><span style="display:flex;"><span>        } <span style="color:#ff79c6">catch</span> (SchedulerException e) {
+</span></span><span style="display:flex;"><span>            log.<span style="color:#50fa7b">error</span>(<span style="color:#f1fa8c">&#34;Could not update job with key - {} due to error - {}&#34;</span>, newTrigger.<span style="color:#50fa7b">getJobKey</span>(), e.<span style="color:#50fa7b">getMessage</span>());
+</span></span><span style="display:flex;"><span>            e.<span style="color:#50fa7b">printStackTrace</span>();
+</span></span><span style="display:flex;"><span>        }
+</span></span><span style="display:flex;"><span>    }
 </span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span>    <span style="color:#8be9fd;font-style:italic">private</span> <span style="color:#8be9fd">void</span> <span style="color:#50fa7b">createTrigger</span><span style="color:#ff79c6">(</span>String name<span style="color:#ff79c6">,</span> String group<span style="color:#ff79c6">,</span> NotificationScheduleDo schedule<span style="color:#ff79c6">)</span> <span style="color:#8be9fd;font-style:italic">throws</span> SchedulerException <span style="color:#ff79c6">{</span>
-</span></span><span style="display:flex;"><span>        JobDetail jobDetail <span style="color:#ff79c6">=</span> createJobDetail<span style="color:#ff79c6">(</span>name<span style="color:#ff79c6">,</span> group<span style="color:#ff79c6">,</span> schedule<span style="color:#ff79c6">);</span>
-</span></span><span style="display:flex;"><span>        Trigger trigger <span style="color:#ff79c6">=</span> buildTrigger<span style="color:#ff79c6">(</span>jobDetail<span style="color:#ff79c6">,</span> schedule<span style="color:#ff79c6">.</span><span style="color:#50fa7b">getCron</span><span style="color:#ff79c6">(),</span> schedule<span style="color:#ff79c6">.</span><span style="color:#50fa7b">getTimezone</span><span style="color:#ff79c6">());</span>
-</span></span><span style="display:flex;"><span>        <span style="color:#ff79c6">try</span> <span style="color:#ff79c6">{</span>
-</span></span><span style="display:flex;"><span>            scheduler<span style="color:#ff79c6">.</span><span style="color:#50fa7b">scheduleJob</span><span style="color:#ff79c6">(</span>jobDetail<span style="color:#ff79c6">,</span> trigger<span style="color:#ff79c6">);</span>
-</span></span><span style="display:flex;"><span>            log<span style="color:#ff79c6">.</span><span style="color:#50fa7b">info</span><span style="color:#ff79c6">(</span><span style="color:#f1fa8c">&#34;Job with key - {} saved successfully&#34;</span><span style="color:#ff79c6">,</span> trigger<span style="color:#ff79c6">.</span><span style="color:#50fa7b">getJobKey</span><span style="color:#ff79c6">());</span>
-</span></span><span style="display:flex;"><span>        <span style="color:#ff79c6">}</span> <span style="color:#ff79c6">catch</span> <span style="color:#ff79c6">(</span>SchedulerException e<span style="color:#ff79c6">)</span> <span style="color:#ff79c6">{</span>
-</span></span><span style="display:flex;"><span>            log<span style="color:#ff79c6">.</span><span style="color:#50fa7b">error</span><span style="color:#ff79c6">(</span><span style="color:#f1fa8c">&#34;Could not save job with key - {} due to error - {}&#34;</span><span style="color:#ff79c6">,</span> trigger<span style="color:#ff79c6">.</span><span style="color:#50fa7b">getJobKey</span><span style="color:#ff79c6">(),</span> e<span style="color:#ff79c6">.</span><span style="color:#50fa7b">getMessage</span><span style="color:#ff79c6">());</span>
-</span></span><span style="display:flex;"><span>            e<span style="color:#ff79c6">.</span><span style="color:#50fa7b">printStackTrace</span><span style="color:#ff79c6">();</span>
-</span></span><span style="display:flex;"><span>        <span style="color:#ff79c6">}</span>
-</span></span><span style="display:flex;"><span>    <span style="color:#ff79c6">}</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#8be9fd;font-style:italic">private</span> <span style="color:#8be9fd">void</span> <span style="color:#50fa7b">createTrigger</span>(String name, String group, NotificationScheduleDo schedule) <span style="color:#8be9fd;font-style:italic">throws</span> SchedulerException {
+</span></span><span style="display:flex;"><span>        JobDetail jobDetail <span style="color:#ff79c6">=</span> createJobDetail(name, group, schedule);
+</span></span><span style="display:flex;"><span>        Trigger trigger <span style="color:#ff79c6">=</span> buildTrigger(jobDetail, schedule.<span style="color:#50fa7b">getCron</span>(), schedule.<span style="color:#50fa7b">getTimezone</span>());
+</span></span><span style="display:flex;"><span>        <span style="color:#ff79c6">try</span> {
+</span></span><span style="display:flex;"><span>            scheduler.<span style="color:#50fa7b">scheduleJob</span>(jobDetail, trigger);
+</span></span><span style="display:flex;"><span>            log.<span style="color:#50fa7b">info</span>(<span style="color:#f1fa8c">&#34;Job with key - {} saved successfully&#34;</span>, trigger.<span style="color:#50fa7b">getJobKey</span>());
+</span></span><span style="display:flex;"><span>        } <span style="color:#ff79c6">catch</span> (SchedulerException e) {
+</span></span><span style="display:flex;"><span>            log.<span style="color:#50fa7b">error</span>(<span style="color:#f1fa8c">&#34;Could not save job with key - {} due to error - {}&#34;</span>, trigger.<span style="color:#50fa7b">getJobKey</span>(), e.<span style="color:#50fa7b">getMessage</span>());
+</span></span><span style="display:flex;"><span>            e.<span style="color:#50fa7b">printStackTrace</span>();
+</span></span><span style="display:flex;"><span>        }
+</span></span><span style="display:flex;"><span>    }
 </span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span>    <span style="color:#8be9fd;font-style:italic">private</span> <span style="color:#8be9fd;font-style:italic">static</span> String <span style="color:#50fa7b">getName</span><span style="color:#ff79c6">(</span>NotificationScheduleDo schedule<span style="color:#ff79c6">)</span> <span style="color:#ff79c6">{</span>
-</span></span><span style="display:flex;"><span>        <span style="color:#ff79c6">return</span> String<span style="color:#ff79c6">.</span><span style="color:#50fa7b">valueOf</span><span style="color:#ff79c6">(</span>schedule<span style="color:#ff79c6">.</span><span style="color:#50fa7b">getId</span><span style="color:#ff79c6">());</span>
-</span></span><span style="display:flex;"><span>    <span style="color:#ff79c6">}</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#8be9fd;font-style:italic">private</span> <span style="color:#8be9fd;font-style:italic">static</span> String <span style="color:#50fa7b">getName</span>(NotificationScheduleDo schedule) {
+</span></span><span style="display:flex;"><span>        <span style="color:#ff79c6">return</span> String.<span style="color:#50fa7b">valueOf</span>(schedule.<span style="color:#50fa7b">getId</span>());
+</span></span><span style="display:flex;"><span>    }
 </span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span>    <span style="color:#8be9fd;font-style:italic">private</span> <span style="color:#8be9fd;font-style:italic">static</span> String <span style="color:#50fa7b">getGroup</span><span style="color:#ff79c6">(</span>NotificationScheduleDo schedule<span style="color:#ff79c6">)</span> <span style="color:#ff79c6">{</span>
-</span></span><span style="display:flex;"><span>        <span style="color:#ff79c6">return</span> String<span style="color:#ff79c6">.</span><span style="color:#50fa7b">valueOf</span><span style="color:#ff79c6">(</span>schedule<span style="color:#ff79c6">.</span><span style="color:#50fa7b">getTemplateId</span><span style="color:#ff79c6">());</span>
-</span></span><span style="display:flex;"><span>    <span style="color:#ff79c6">}</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#8be9fd;font-style:italic">private</span> <span style="color:#8be9fd;font-style:italic">static</span> String <span style="color:#50fa7b">getGroup</span>(NotificationScheduleDo schedule) {
+</span></span><span style="display:flex;"><span>        <span style="color:#ff79c6">return</span> String.<span style="color:#50fa7b">valueOf</span>(schedule.<span style="color:#50fa7b">getTemplateId</span>());
+</span></span><span style="display:flex;"><span>    }
 </span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span>    <span style="color:#8be9fd;font-style:italic">private</span> <span style="color:#8be9fd;font-style:italic">static</span> JobDetail <span style="color:#50fa7b">createJobDetail</span><span style="color:#ff79c6">(</span>String name<span style="color:#ff79c6">,</span> String group<span style="color:#ff79c6">,</span> NotificationScheduleDo schedule<span style="color:#ff79c6">)</span> <span style="color:#ff79c6">{</span>
-</span></span><span style="display:flex;"><span>        var jobDataMap <span style="color:#ff79c6">=</span> <span style="color:#ff79c6">new</span> JobDataMap<span style="color:#ff79c6">();</span>
-</span></span><span style="display:flex;"><span>        jobDataMap<span style="color:#ff79c6">.</span><span style="color:#50fa7b">put</span><span style="color:#ff79c6">(</span><span style="color:#f1fa8c">&#34;notificationSchedule&#34;</span><span style="color:#ff79c6">,</span> schedule<span style="color:#ff79c6">);</span>
-</span></span><span style="display:flex;"><span>        <span style="color:#ff79c6">return</span> JobBuilder<span style="color:#ff79c6">.</span><span style="color:#50fa7b">newJob</span><span style="color:#ff79c6">()</span>
-</span></span><span style="display:flex;"><span>                <span style="color:#ff79c6">.</span><span style="color:#50fa7b">ofType</span><span style="color:#ff79c6">(</span>NotificationJob<span style="color:#ff79c6">.</span><span style="color:#50fa7b">class</span><span style="color:#ff79c6">)</span>
-</span></span><span style="display:flex;"><span>                <span style="color:#ff79c6">.</span><span style="color:#50fa7b">requestRecovery</span><span style="color:#ff79c6">()</span>
-</span></span><span style="display:flex;"><span>                <span style="color:#ff79c6">.</span><span style="color:#50fa7b">storeDurably</span><span style="color:#ff79c6">()</span>
-</span></span><span style="display:flex;"><span>                <span style="color:#ff79c6">.</span><span style="color:#50fa7b">usingJobData</span><span style="color:#ff79c6">(</span>jobDataMap<span style="color:#ff79c6">)</span>
-</span></span><span style="display:flex;"><span>                <span style="color:#ff79c6">.</span><span style="color:#50fa7b">withIdentity</span><span style="color:#ff79c6">(</span>name<span style="color:#ff79c6">,</span> group<span style="color:#ff79c6">)</span>
-</span></span><span style="display:flex;"><span>                <span style="color:#ff79c6">.</span><span style="color:#50fa7b">build</span><span style="color:#ff79c6">();</span>
-</span></span><span style="display:flex;"><span>    <span style="color:#ff79c6">}</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#8be9fd;font-style:italic">private</span> <span style="color:#8be9fd;font-style:italic">static</span> JobDetail <span style="color:#50fa7b">createJobDetail</span>(String name, String group, NotificationScheduleDo schedule) {
+</span></span><span style="display:flex;"><span>        <span style="color:#8be9fd;font-style:italic">var</span> jobDataMap <span style="color:#ff79c6">=</span> <span style="color:#ff79c6">new</span> JobDataMap();
+</span></span><span style="display:flex;"><span>        jobDataMap.<span style="color:#50fa7b">put</span>(<span style="color:#f1fa8c">&#34;notificationSchedule&#34;</span>, schedule);
+</span></span><span style="display:flex;"><span>        <span style="color:#ff79c6">return</span> JobBuilder.<span style="color:#50fa7b">newJob</span>()
+</span></span><span style="display:flex;"><span>                .<span style="color:#50fa7b">ofType</span>(NotificationJob.<span style="color:#50fa7b">class</span>)
+</span></span><span style="display:flex;"><span>                .<span style="color:#50fa7b">requestRecovery</span>()
+</span></span><span style="display:flex;"><span>                .<span style="color:#50fa7b">storeDurably</span>()
+</span></span><span style="display:flex;"><span>                .<span style="color:#50fa7b">usingJobData</span>(jobDataMap)
+</span></span><span style="display:flex;"><span>                .<span style="color:#50fa7b">withIdentity</span>(name, group)
+</span></span><span style="display:flex;"><span>                .<span style="color:#50fa7b">build</span>();
+</span></span><span style="display:flex;"><span>    }
 </span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span>    <span style="color:#8be9fd;font-style:italic">private</span> <span style="color:#8be9fd;font-style:italic">static</span> Trigger <span style="color:#50fa7b">buildTrigger</span><span style="color:#ff79c6">(</span>JobDetail jobDetail<span style="color:#ff79c6">,</span> String cron<span style="color:#ff79c6">,</span> String zoneId<span style="color:#ff79c6">)</span> <span style="color:#ff79c6">{</span>
-</span></span><span style="display:flex;"><span>        <span style="color:#ff79c6">return</span> TriggerBuilder<span style="color:#ff79c6">.</span><span style="color:#50fa7b">newTrigger</span><span style="color:#ff79c6">()</span>
-</span></span><span style="display:flex;"><span>                <span style="color:#ff79c6">.</span><span style="color:#50fa7b">forJob</span><span style="color:#ff79c6">(</span>jobDetail<span style="color:#ff79c6">)</span>
-</span></span><span style="display:flex;"><span>                <span style="color:#ff79c6">.</span><span style="color:#50fa7b">withIdentity</span><span style="color:#ff79c6">(</span>jobDetail<span style="color:#ff79c6">.</span><span style="color:#50fa7b">getKey</span><span style="color:#ff79c6">().</span><span style="color:#50fa7b">getName</span><span style="color:#ff79c6">(),</span> jobDetail<span style="color:#ff79c6">.</span><span style="color:#50fa7b">getKey</span><span style="color:#ff79c6">().</span><span style="color:#50fa7b">getGroup</span><span style="color:#ff79c6">())</span>
-</span></span><span style="display:flex;"><span>                <span style="color:#ff79c6">.</span><span style="color:#50fa7b">usingJobData</span><span style="color:#ff79c6">(</span><span style="color:#f1fa8c">&#34;cron&#34;</span><span style="color:#ff79c6">,</span> cron<span style="color:#ff79c6">)</span>
-</span></span><span style="display:flex;"><span>                <span style="color:#ff79c6">.</span><span style="color:#50fa7b">startNow</span><span style="color:#ff79c6">()</span>
-</span></span><span style="display:flex;"><span>                <span style="color:#ff79c6">.</span><span style="color:#50fa7b">withSchedule</span><span style="color:#ff79c6">(</span>CronScheduleBuilder<span style="color:#ff79c6">.</span><span style="color:#50fa7b">cronSchedule</span><span style="color:#ff79c6">(</span>cron<span style="color:#ff79c6">)</span>
-</span></span><span style="display:flex;"><span>                        <span style="color:#ff79c6">.</span><span style="color:#50fa7b">withMisfireHandlingInstructionFireAndProceed</span><span style="color:#ff79c6">()</span>
-</span></span><span style="display:flex;"><span>                        <span style="color:#ff79c6">.</span><span style="color:#50fa7b">inTimeZone</span><span style="color:#ff79c6">(</span>TimeZone<span style="color:#ff79c6">.</span><span style="color:#50fa7b">getTimeZone</span><span style="color:#ff79c6">(</span>ZoneId<span style="color:#ff79c6">.</span><span style="color:#50fa7b">of</span><span style="color:#ff79c6">(</span>zoneId<span style="color:#ff79c6">))))</span>
-</span></span><span style="display:flex;"><span>                <span style="color:#ff79c6">.</span><span style="color:#50fa7b">build</span><span style="color:#ff79c6">();</span>
-</span></span><span style="display:flex;"><span>    <span style="color:#ff79c6">}</span>
-</span></span><span style="display:flex;"><span><span style="color:#ff79c6">}</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#8be9fd;font-style:italic">private</span> <span style="color:#8be9fd;font-style:italic">static</span> Trigger <span style="color:#50fa7b">buildTrigger</span>(JobDetail jobDetail, String cron, String zoneId) {
+</span></span><span style="display:flex;"><span>        <span style="color:#ff79c6">return</span> TriggerBuilder.<span style="color:#50fa7b">newTrigger</span>()
+</span></span><span style="display:flex;"><span>                .<span style="color:#50fa7b">forJob</span>(jobDetail)
+</span></span><span style="display:flex;"><span>                .<span style="color:#50fa7b">withIdentity</span>(jobDetail.<span style="color:#50fa7b">getKey</span>().<span style="color:#50fa7b">getName</span>(), jobDetail.<span style="color:#50fa7b">getKey</span>().<span style="color:#50fa7b">getGroup</span>())
+</span></span><span style="display:flex;"><span>                .<span style="color:#50fa7b">usingJobData</span>(<span style="color:#f1fa8c">&#34;cron&#34;</span>, cron)
+</span></span><span style="display:flex;"><span>                .<span style="color:#50fa7b">startNow</span>()
+</span></span><span style="display:flex;"><span>                .<span style="color:#50fa7b">withSchedule</span>(CronScheduleBuilder.<span style="color:#50fa7b">cronSchedule</span>(cron)
+</span></span><span style="display:flex;"><span>                        .<span style="color:#50fa7b">withMisfireHandlingInstructionFireAndProceed</span>()
+</span></span><span style="display:flex;"><span>                        .<span style="color:#50fa7b">inTimeZone</span>(TimeZone.<span style="color:#50fa7b">getTimeZone</span>(ZoneId.<span style="color:#50fa7b">of</span>(zoneId))))
+</span></span><span style="display:flex;"><span>                .<span style="color:#50fa7b">build</span>();
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>}
 </span></span></code></pre></div><p>這裡的重點就是用注入的 <code>Scheduler</code> 來操作建立、檢查、更新、刪除 <code>Trigger</code> 的動作</p>
 <p>這當中建立 <code>Trigger</code> 跟 <code>JobDetail</code> 的 name 及 group 不是一定要這樣定義，只要 unique 即可，再者 group 也不是必須</p>
 <p>這裡也有一個小細節，到底我們應該要實作 Quartz 提供的 <code>Job</code> 介面？還是繼承 Spring Boot 提供的 <code>QuartzJobBean</code> 類別？</p>
 <p>答案是看狀況，因為 <code>QuartzJobBean</code> 類別實際上也是實作 Quartz 的 <code>Job</code>，只是它額外提供幫你從 <code>JobDataMap</code> 裡面自動幫你將指定 key 的 value 注入的功能，所以如果有需要用到就用 <code>QuartzJobBean</code>，沒有需要就用 Quartz 原生的 <code>Job</code> 也是沒有問題</p>
 <p>不過這邊還有另外的問題，如果你想要讓 <code>QuartzJobBean</code> 自動幫你注入的是自訂物件而不是 primitive type 或 <code>String</code> 的話，可能要另外想辦法提供 converter，但我沒有找到哪邊可以提供這個部分</p>
 <p>寫完 <code>CreateNotificationSchedulerJob</code> 的邏輯後，就要把它的排程註冊起來</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-java" data-lang="java"><span style="display:flex;"><span><span style="color:#ff79c6">import</span> org.quartz.*<span style="color:#ff79c6">;</span>
-</span></span><span style="display:flex;"><span><span style="color:#ff79c6">import</span> org.springframework.context.annotation.Bean<span style="color:#ff79c6">;</span>
-</span></span><span style="display:flex;"><span><span style="color:#ff79c6">import</span> org.springframework.context.annotation.Configuration<span style="color:#ff79c6">;</span>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-java" data-lang="java"><span style="display:flex;"><span><span style="color:#ff79c6">import</span> org.quartz.*;
+</span></span><span style="display:flex;"><span><span style="color:#ff79c6">import</span> org.springframework.context.annotation.Bean;
+</span></span><span style="display:flex;"><span><span style="color:#ff79c6">import</span> org.springframework.context.annotation.Configuration;
 </span></span><span style="display:flex;"><span>
 </span></span><span style="display:flex;"><span>@Configuration
-</span></span><span style="display:flex;"><span><span style="color:#8be9fd;font-style:italic">public</span> <span style="color:#8be9fd;font-style:italic">class</span> <span style="color:#50fa7b">CreateNotificationScheduler</span> <span style="color:#ff79c6">{</span>
+</span></span><span style="display:flex;"><span><span style="color:#8be9fd;font-style:italic">public</span> <span style="color:#8be9fd;font-style:italic">class</span> <span style="color:#50fa7b">CreateNotificationScheduler</span> {
 </span></span><span style="display:flex;"><span>
 </span></span><span style="display:flex;"><span>    @Bean
-</span></span><span style="display:flex;"><span>    <span style="color:#8be9fd;font-style:italic">public</span> JobDetail <span style="color:#50fa7b">createNotificationSchedulerJobDetail</span><span style="color:#ff79c6">()</span> <span style="color:#ff79c6">{</span>
-</span></span><span style="display:flex;"><span>        <span style="color:#ff79c6">return</span> JobBuilder<span style="color:#ff79c6">.</span><span style="color:#50fa7b">newJob</span><span style="color:#ff79c6">()</span>
-</span></span><span style="display:flex;"><span>                <span style="color:#ff79c6">.</span><span style="color:#50fa7b">ofType</span><span style="color:#ff79c6">(</span>CreateNotificationSchedulerJob<span style="color:#ff79c6">.</span><span style="color:#50fa7b">class</span><span style="color:#ff79c6">)</span>
-</span></span><span style="display:flex;"><span>                <span style="color:#ff79c6">.</span><span style="color:#50fa7b">requestRecovery</span><span style="color:#ff79c6">(</span><span style="color:#ff79c6">false</span><span style="color:#ff79c6">)</span>
-</span></span><span style="display:flex;"><span>                <span style="color:#ff79c6">.</span><span style="color:#50fa7b">storeDurably</span><span style="color:#ff79c6">()</span>
-</span></span><span style="display:flex;"><span>                <span style="color:#ff79c6">.</span><span style="color:#50fa7b">withIdentity</span><span style="color:#ff79c6">(</span><span style="color:#f1fa8c">&#34;create_notification_scheduler&#34;</span><span style="color:#ff79c6">,</span> <span style="color:#f1fa8c">&#34;scheduler_creator&#34;</span><span style="color:#ff79c6">)</span>
-</span></span><span style="display:flex;"><span>                <span style="color:#ff79c6">.</span><span style="color:#50fa7b">build</span><span style="color:#ff79c6">();</span>
-</span></span><span style="display:flex;"><span>    <span style="color:#ff79c6">}</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#8be9fd;font-style:italic">public</span> JobDetail <span style="color:#50fa7b">createNotificationSchedulerJobDetail</span>() {
+</span></span><span style="display:flex;"><span>        <span style="color:#ff79c6">return</span> JobBuilder.<span style="color:#50fa7b">newJob</span>()
+</span></span><span style="display:flex;"><span>                .<span style="color:#50fa7b">ofType</span>(CreateNotificationSchedulerJob.<span style="color:#50fa7b">class</span>)
+</span></span><span style="display:flex;"><span>                .<span style="color:#50fa7b">requestRecovery</span>(<span style="color:#ff79c6">false</span>)
+</span></span><span style="display:flex;"><span>                .<span style="color:#50fa7b">storeDurably</span>()
+</span></span><span style="display:flex;"><span>                .<span style="color:#50fa7b">withIdentity</span>(<span style="color:#f1fa8c">&#34;create_notification_scheduler&#34;</span>, <span style="color:#f1fa8c">&#34;scheduler_creator&#34;</span>)
+</span></span><span style="display:flex;"><span>                .<span style="color:#50fa7b">build</span>();
+</span></span><span style="display:flex;"><span>    }
 </span></span><span style="display:flex;"><span>
 </span></span><span style="display:flex;"><span>    @Bean
-</span></span><span style="display:flex;"><span>    <span style="color:#8be9fd;font-style:italic">public</span> Trigger <span style="color:#50fa7b">createNotificationSchedulerTrigger</span><span style="color:#ff79c6">(</span>JobDetail createNotificationSchedulerJobDetail<span style="color:#ff79c6">)</span> <span style="color:#ff79c6">{</span>
-</span></span><span style="display:flex;"><span>        <span style="color:#ff79c6">return</span> TriggerBuilder<span style="color:#ff79c6">.</span><span style="color:#50fa7b">newTrigger</span><span style="color:#ff79c6">()</span>
-</span></span><span style="display:flex;"><span>                <span style="color:#ff79c6">.</span><span style="color:#50fa7b">forJob</span><span style="color:#ff79c6">(</span>createNotificationSchedulerJobDetail<span style="color:#ff79c6">)</span>
-</span></span><span style="display:flex;"><span>                <span style="color:#ff79c6">.</span><span style="color:#50fa7b">withIdentity</span><span style="color:#ff79c6">(</span><span style="color:#f1fa8c">&#34;create_notification_scheduler&#34;</span><span style="color:#ff79c6">,</span> <span style="color:#f1fa8c">&#34;scheduler_creator&#34;</span><span style="color:#ff79c6">)</span>
-</span></span><span style="display:flex;"><span>                <span style="color:#ff79c6">.</span><span style="color:#50fa7b">startNow</span><span style="color:#ff79c6">()</span>
-</span></span><span style="display:flex;"><span>                <span style="color:#ff79c6">.</span><span style="color:#50fa7b">withSchedule</span><span style="color:#ff79c6">(</span>SimpleScheduleBuilder<span style="color:#ff79c6">.</span><span style="color:#50fa7b">repeatSecondlyForever</span><span style="color:#ff79c6">(</span><span style="color:#bd93f9">30</span><span style="color:#ff79c6">))</span>
-</span></span><span style="display:flex;"><span>                <span style="color:#ff79c6">.</span><span style="color:#50fa7b">build</span><span style="color:#ff79c6">();</span>
-</span></span><span style="display:flex;"><span>    <span style="color:#ff79c6">}</span>
-</span></span><span style="display:flex;"><span><span style="color:#ff79c6">}</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#8be9fd;font-style:italic">public</span> Trigger <span style="color:#50fa7b">createNotificationSchedulerTrigger</span>(JobDetail createNotificationSchedulerJobDetail) {
+</span></span><span style="display:flex;"><span>        <span style="color:#ff79c6">return</span> TriggerBuilder.<span style="color:#50fa7b">newTrigger</span>()
+</span></span><span style="display:flex;"><span>                .<span style="color:#50fa7b">forJob</span>(createNotificationSchedulerJobDetail)
+</span></span><span style="display:flex;"><span>                .<span style="color:#50fa7b">withIdentity</span>(<span style="color:#f1fa8c">&#34;create_notification_scheduler&#34;</span>, <span style="color:#f1fa8c">&#34;scheduler_creator&#34;</span>)
+</span></span><span style="display:flex;"><span>                .<span style="color:#50fa7b">startNow</span>()
+</span></span><span style="display:flex;"><span>                .<span style="color:#50fa7b">withSchedule</span>(SimpleScheduleBuilder.<span style="color:#50fa7b">repeatSecondlyForever</span>(30))
+</span></span><span style="display:flex;"><span>                .<span style="color:#50fa7b">build</span>();
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>}
 </span></span></code></pre></div><p>最後的最後，就是要提供 <code>NotificationJob</code> 啦！</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-java" data-lang="java"><span style="display:flex;"><span><span style="color:#ff79c6">import</span> org.quartz.JobDataMap<span style="color:#ff79c6">;</span>
-</span></span><span style="display:flex;"><span><span style="color:#ff79c6">import</span> org.quartz.JobExecutionContext<span style="color:#ff79c6">;</span>
-</span></span><span style="display:flex;"><span><span style="color:#ff79c6">import</span> org.quartz.JobExecutionException<span style="color:#ff79c6">;</span>
-</span></span><span style="display:flex;"><span><span style="color:#ff79c6">import</span> org.springframework.scheduling.quartz.QuartzJobBean<span style="color:#ff79c6">;</span>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-java" data-lang="java"><span style="display:flex;"><span><span style="color:#ff79c6">import</span> org.quartz.JobDataMap;
+</span></span><span style="display:flex;"><span><span style="color:#ff79c6">import</span> org.quartz.JobExecutionContext;
+</span></span><span style="display:flex;"><span><span style="color:#ff79c6">import</span> org.quartz.JobExecutionException;
+</span></span><span style="display:flex;"><span><span style="color:#ff79c6">import</span> org.springframework.scheduling.quartz.QuartzJobBean;
 </span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span><span style="color:#8be9fd;font-style:italic">public</span> <span style="color:#8be9fd;font-style:italic">class</span> <span style="color:#50fa7b">NotificationJob</span> <span style="color:#8be9fd;font-style:italic">extends</span> QuartzJobBean <span style="color:#ff79c6">{</span>
+</span></span><span style="display:flex;"><span><span style="color:#8be9fd;font-style:italic">public</span> <span style="color:#8be9fd;font-style:italic">class</span> <span style="color:#50fa7b">NotificationJob</span> <span style="color:#8be9fd;font-style:italic">extends</span> QuartzJobBean {
 </span></span><span style="display:flex;"><span>
 </span></span><span style="display:flex;"><span>    @Override
-</span></span><span style="display:flex;"><span>    <span style="color:#8be9fd;font-style:italic">protected</span> <span style="color:#8be9fd">void</span> <span style="color:#50fa7b">executeInternal</span><span style="color:#ff79c6">(</span>JobExecutionContext context<span style="color:#ff79c6">)</span> <span style="color:#8be9fd;font-style:italic">throws</span> JobExecutionException <span style="color:#ff79c6">{</span>
-</span></span><span style="display:flex;"><span>        JobDataMap map <span style="color:#ff79c6">=</span> context<span style="color:#ff79c6">.</span><span style="color:#50fa7b">getMergedJobDataMap</span><span style="color:#ff79c6">();</span>
-</span></span><span style="display:flex;"><span>        System<span style="color:#ff79c6">.</span><span style="color:#50fa7b">out</span><span style="color:#ff79c6">.</span><span style="color:#50fa7b">format</span><span style="color:#ff79c6">(</span><span style="color:#f1fa8c">&#34;Map: [%s]\n&#34;</span><span style="color:#ff79c6">,</span> map<span style="color:#ff79c6">.</span><span style="color:#50fa7b">getWrappedMap</span><span style="color:#ff79c6">());</span>
-</span></span><span style="display:flex;"><span>    <span style="color:#ff79c6">}</span>
-</span></span><span style="display:flex;"><span><span style="color:#ff79c6">}</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#8be9fd;font-style:italic">protected</span> <span style="color:#8be9fd">void</span> <span style="color:#50fa7b">executeInternal</span>(JobExecutionContext context) <span style="color:#8be9fd;font-style:italic">throws</span> JobExecutionException {
+</span></span><span style="display:flex;"><span>        JobDataMap map <span style="color:#ff79c6">=</span> context.<span style="color:#50fa7b">getMergedJobDataMap</span>();
+</span></span><span style="display:flex;"><span>        System.<span style="color:#50fa7b">out</span>.<span style="color:#50fa7b">format</span>(<span style="color:#f1fa8c">&#34;Map: [%s]\n&#34;</span>, map.<span style="color:#50fa7b">getWrappedMap</span>());
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>}
 </span></span></code></pre></div><h1 id="結論">結論</h1>
 <p>其實 Quartz 提供 cluster 分散式排程的功能原理講起來很簡單，但它身為一個在 Java 生態系中廣泛使用的排程框架，內部有做了很多 fail safe 的處理並且經歷過時間跟廣大工程師群眾的考驗，所以雖然我們利用樂觀鎖也可以達成部分的功能，但可以不用重複造輪子，在 Quartz 能夠支援使用情境的前提下，可以幫大家省下很多測試修正的時間，也提供一定程度的保障</p>
 <h1 id="reference">Reference</h1>

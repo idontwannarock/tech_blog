@@ -7,19 +7,14 @@
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
     <copyright>This website by Howard Wang is licensed under a Creative Common Attribution-ShareAlike 4.0 International License.</copyright>
-    <lastBuildDate>Wed, 14 Dec 2022 14:14:44 +0800</lastBuildDate><atom:link href="https://blog.idontwannarock.me/tags/maven/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Wed, 14 Dec 2022 14:14:44 +0800</lastBuildDate>
+    <atom:link href="https://blog.idontwannarock.me/tags/maven/index.xml" rel="self" type="application/rss+xml" />
     <item>
       <title>Maven &#43; Docker Multi-stage Build</title>
       <link>https://blog.idontwannarock.me/2022/12/maven_docker_multi_stage_build/</link>
       <pubDate>Wed, 14 Dec 2022 14:14:44 +0800</pubDate>
-      
       <guid>https://blog.idontwannarock.me/2022/12/maven_docker_multi_stage_build/</guid>
-      <description>Java 專案整合 Docker multi-stage build 系列：
-Maven + Docker Multi-stage build Gradle + Docker Multi-stage build 現代常見的 CI/CD 流程經常會使用容器化 (containerized) 的方式來幫助建置環境及部署
-以 Java + Maven 專案舉例，一個比較通用的 Dockerfile 可能長這樣：
-FROM maven:3.8-openjdk-11 WORKDIR /opt/app COPY src/main/resources /opt/app/src/main/resources COPY src/main/java /opt/app/src/main/java COPY pom.xml . RUN mvn -B -e clean package EXPOSE 8080 ENTRYPOINT [&amp;#34;java&amp;#34;, &amp;#34;-jar&amp;#34;, &amp;#34;demo.jar&amp;#34;] 這個 Dockerfile 其實沒有問題，完全可以正常運行，但它使用上有一個地方不太方便，就是每次運行到 RUN mvn -B -e clean package 這行的時候，除非程式碼跟 pom.xml 都沒有變動，否則所有 dependencies 都會重新下載一遍，如果專案比較大型，那光下載 dependencies 可能就會要花很久的時間
-Docker Multi-stage Build 於是就有人使出了 Docker multi-stage build 這招</description>
+      <description>Java 專案整合 Docker multi-stage build 系列：&#xA;Maven + Docker Multi-stage build Gradle + Docker Multi-stage build 現代常見的 CI/CD 流程經常會使用容器化 (containerized) 的方式來幫助建置環境及部署&#xA;以 Java + Maven 專案舉例，一個比較通用的 Dockerfile 可能長這樣：&#xA;FROM maven:3.8-openjdk-11 WORKDIR /opt/app COPY src/main/resources /opt/app/src/main/resources COPY src/main/java /opt/app/src/main/java COPY pom.xml . RUN mvn -B -e clean package EXPOSE 8080 ENTRYPOINT [&amp;#34;java&amp;#34;, &amp;#34;-jar&amp;#34;, &amp;#34;demo.jar&amp;#34;] 這個 Dockerfile 其實沒有問題，完全可以正常運行，但它使用上有一個地方不太方便，就是每次運行到 RUN mvn -B -e clean package 這行的時候，除非程式碼跟 pom.xml 都沒有變動，否則所有 dependencies 都會重新下載一遍，如果專案比較大型，那光下載 dependencies 可能就會要花很久的時間&#xA;Docker Multi-stage Build 於是就有人使出了 Docker multi-stage build 這招</description>
     </item>
-    
   </channel>
 </rss>

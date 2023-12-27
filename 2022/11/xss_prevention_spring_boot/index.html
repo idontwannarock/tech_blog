@@ -404,10 +404,10 @@ if (!doNotTrack) {
 <h2 id="csp-header">CSP Header</h2>
 <p>如果專案有整合 Spring Security，Spring Security 原生就已經預設在 response header 中加入 <code>X-XSS-Protection: 1; mode=block</code>，但因為 CSP 需要自行設定資源允許的來源，所以 Spring Security 並沒有預設，需要在 <code>SecurityFilterChain</code> 當中設定，舉例如下：</p>
 <div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-java" data-lang="java"><span style="display:flex;"><span>@Bean
-</span></span><span style="display:flex;"><span>SecurityFilterChain <span style="color:#50fa7b">filterChain</span><span style="color:#ff79c6">(</span>HttpSecurity httpSecurity<span style="color:#ff79c6">)</span> <span style="color:#8be9fd;font-style:italic">throws</span> Exception <span style="color:#ff79c6">{</span>
-</span></span><span style="display:flex;"><span>  httpSecurity<span style="color:#ff79c6">.</span><span style="color:#50fa7b">headers</span><span style="color:#ff79c6">().</span><span style="color:#50fa7b">contentSecurityPolicy</span><span style="color:#ff79c6">(</span><span style="color:#f1fa8c">&#34;script-src &#39;self&#39;&#34;</span><span style="color:#ff79c6">);</span>
-</span></span><span style="display:flex;"><span>  <span style="color:#ff79c6">...</span>
-</span></span><span style="display:flex;"><span><span style="color:#ff79c6">}</span>
+</span></span><span style="display:flex;"><span>SecurityFilterChain <span style="color:#50fa7b">filterChain</span>(HttpSecurity httpSecurity) <span style="color:#8be9fd;font-style:italic">throws</span> Exception {
+</span></span><span style="display:flex;"><span>  httpSecurity.<span style="color:#50fa7b">headers</span>().<span style="color:#50fa7b">contentSecurityPolicy</span>(<span style="color:#f1fa8c">&#34;script-src &#39;self&#39;&#34;</span>);
+</span></span><span style="display:flex;"><span>  ...
+</span></span><span style="display:flex;"><span>}
 </span></span></code></pre></div><p>如此就會在 response header 中加入 <code>Content-Security-Policy: script-src 'self'</code>。</p>
 <h2 id="output-encoding">Output Encoding</h2>
 <p>再來，後端也可以對接收到或回傳的資料做 escape，例如採取將內容都做 escape，將符號都轉換成 HTML Entities 的方式。</p>
@@ -421,16 +421,16 @@ if (!doNotTrack) {
 <p>接著有幾處地方要處理，首先針對 request 的部分。</p>
 <h3 id="query-string-posted-form-data-and-header">Query String, Posted Form Data, and Header</h3>
 <p>先對 query string、posted form data 及 header 的部分作處理，首先我們建立一個 <code>HttpSevletRequestWrapper</code> 來加上從 request 取得 query string、posted form data 以及 header 時要做的處理：</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-java" data-lang="java"><span style="display:flex;"><span><span style="color:#ff79c6">import</span> org.apache.commons.text.StringEscapeUtils<span style="color:#ff79c6">;</span>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-java" data-lang="java"><span style="display:flex;"><span><span style="color:#ff79c6">import</span> org.apache.commons.text.StringEscapeUtils;
 </span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span><span style="color:#ff79c6">import</span> javax.servlet.http.HttpServletRequest<span style="color:#ff79c6">;</span>
-</span></span><span style="display:flex;"><span><span style="color:#ff79c6">import</span> javax.servlet.http.HttpServletRequestWrapper<span style="color:#ff79c6">;</span>
-</span></span><span style="display:flex;"><span><span style="color:#ff79c6">import</span> java.util.ArrayList<span style="color:#ff79c6">;</span>
-</span></span><span style="display:flex;"><span><span style="color:#ff79c6">import</span> java.util.Collections<span style="color:#ff79c6">;</span>
-</span></span><span style="display:flex;"><span><span style="color:#ff79c6">import</span> java.util.Enumeration<span style="color:#ff79c6">;</span>
-</span></span><span style="display:flex;"><span><span style="color:#ff79c6">import</span> java.util.List<span style="color:#ff79c6">;</span>
+</span></span><span style="display:flex;"><span><span style="color:#ff79c6">import</span> javax.servlet.http.HttpServletRequest;
+</span></span><span style="display:flex;"><span><span style="color:#ff79c6">import</span> javax.servlet.http.HttpServletRequestWrapper;
+</span></span><span style="display:flex;"><span><span style="color:#ff79c6">import</span> java.util.ArrayList;
+</span></span><span style="display:flex;"><span><span style="color:#ff79c6">import</span> java.util.Collections;
+</span></span><span style="display:flex;"><span><span style="color:#ff79c6">import</span> java.util.Enumeration;
+</span></span><span style="display:flex;"><span><span style="color:#ff79c6">import</span> java.util.List;
 </span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span><span style="color:#8be9fd;font-style:italic">public</span> <span style="color:#8be9fd;font-style:italic">class</span> <span style="color:#50fa7b">XssRequestWrapper</span> <span style="color:#8be9fd;font-style:italic">extends</span> HttpServletRequestWrapper <span style="color:#ff79c6">{</span>
+</span></span><span style="display:flex;"><span><span style="color:#8be9fd;font-style:italic">public</span> <span style="color:#8be9fd;font-style:italic">class</span> <span style="color:#50fa7b">XssRequestWrapper</span> <span style="color:#8be9fd;font-style:italic">extends</span> HttpServletRequestWrapper {
 </span></span><span style="display:flex;"><span>
 </span></span><span style="display:flex;"><span>    <span style="color:#6272a4">/**
 </span></span></span><span style="display:flex;"><span><span style="color:#6272a4">     * Constructs a request object wrapping the given request.
@@ -438,198 +438,198 @@ if (!doNotTrack) {
 </span></span></span><span style="display:flex;"><span><span style="color:#6272a4">     * @param request The request to wrap
 </span></span></span><span style="display:flex;"><span><span style="color:#6272a4">     * @throws IllegalArgumentException if the request is null
 </span></span></span><span style="display:flex;"><span><span style="color:#6272a4">     */</span>
-</span></span><span style="display:flex;"><span>    <span style="color:#8be9fd;font-style:italic">public</span> <span style="color:#50fa7b">XssRequestWrapper</span><span style="color:#ff79c6">(</span>HttpServletRequest request<span style="color:#ff79c6">)</span> <span style="color:#ff79c6">{</span>
-</span></span><span style="display:flex;"><span>        <span style="color:#8be9fd;font-style:italic">super</span><span style="color:#ff79c6">(</span>request<span style="color:#ff79c6">);</span>
-</span></span><span style="display:flex;"><span>    <span style="color:#ff79c6">}</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#8be9fd;font-style:italic">public</span> <span style="color:#50fa7b">XssRequestWrapper</span>(HttpServletRequest request) {
+</span></span><span style="display:flex;"><span>        <span style="color:#8be9fd;font-style:italic">super</span>(request);
+</span></span><span style="display:flex;"><span>    }
 </span></span><span style="display:flex;"><span>
 </span></span><span style="display:flex;"><span>    <span style="color:#6272a4">/**
 </span></span></span><span style="display:flex;"><span><span style="color:#6272a4">     * 處理請求參數 (單一值)&lt;br&gt;
 </span></span></span><span style="display:flex;"><span><span style="color:#6272a4">     * 此請求參數只會從 query string 或 posted form data 取得
 </span></span></span><span style="display:flex;"><span><span style="color:#6272a4">     */</span>
 </span></span><span style="display:flex;"><span>    @Override
-</span></span><span style="display:flex;"><span>    <span style="color:#8be9fd;font-style:italic">public</span> String <span style="color:#50fa7b">getParameter</span><span style="color:#ff79c6">(</span>String name<span style="color:#ff79c6">)</span> <span style="color:#ff79c6">{</span>
-</span></span><span style="display:flex;"><span>        String parameter <span style="color:#ff79c6">=</span> <span style="color:#8be9fd;font-style:italic">super</span><span style="color:#ff79c6">.</span><span style="color:#50fa7b">getParameter</span><span style="color:#ff79c6">(</span>name<span style="color:#ff79c6">);</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#8be9fd;font-style:italic">public</span> String <span style="color:#50fa7b">getParameter</span>(String name) {
+</span></span><span style="display:flex;"><span>        String parameter <span style="color:#ff79c6">=</span> <span style="color:#8be9fd;font-style:italic">super</span>.<span style="color:#50fa7b">getParameter</span>(name);
 </span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span>        <span style="color:#ff79c6">if</span> <span style="color:#ff79c6">(</span>StringUtil<span style="color:#ff79c6">.</span><span style="color:#50fa7b">isNotNullOrBlank</span><span style="color:#ff79c6">(</span>parameter<span style="color:#ff79c6">))</span> <span style="color:#ff79c6">{</span>
-</span></span><span style="display:flex;"><span>            parameter <span style="color:#ff79c6">=</span> StringEscapeUtils<span style="color:#ff79c6">.</span><span style="color:#50fa7b">escapeHtml4</span><span style="color:#ff79c6">(</span>parameter<span style="color:#ff79c6">);</span>
-</span></span><span style="display:flex;"><span>        <span style="color:#ff79c6">}</span>
+</span></span><span style="display:flex;"><span>        <span style="color:#ff79c6">if</span> (StringUtil.<span style="color:#50fa7b">isNotNullOrBlank</span>(parameter)) {
+</span></span><span style="display:flex;"><span>            parameter <span style="color:#ff79c6">=</span> StringEscapeUtils.<span style="color:#50fa7b">escapeHtml4</span>(parameter);
+</span></span><span style="display:flex;"><span>        }
 </span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span>        <span style="color:#ff79c6">return</span> parameter<span style="color:#ff79c6">;</span>
-</span></span><span style="display:flex;"><span>    <span style="color:#ff79c6">}</span>
+</span></span><span style="display:flex;"><span>        <span style="color:#ff79c6">return</span> parameter;
+</span></span><span style="display:flex;"><span>    }
 </span></span><span style="display:flex;"><span>
 </span></span><span style="display:flex;"><span>    <span style="color:#6272a4">/**
 </span></span></span><span style="display:flex;"><span><span style="color:#6272a4">     * 處理請求參數 (多值)&lt;br&gt;
 </span></span></span><span style="display:flex;"><span><span style="color:#6272a4">     * 此請求參數只會從 query string 或 posted form data 取得
 </span></span></span><span style="display:flex;"><span><span style="color:#6272a4">     */</span>
 </span></span><span style="display:flex;"><span>    @Override
-</span></span><span style="display:flex;"><span>    <span style="color:#8be9fd;font-style:italic">public</span> String<span style="color:#ff79c6">[]</span> <span style="color:#50fa7b">getParameterValues</span><span style="color:#ff79c6">(</span>String name<span style="color:#ff79c6">)</span> <span style="color:#ff79c6">{</span>
-</span></span><span style="display:flex;"><span>        String<span style="color:#ff79c6">[]</span> parameterValues <span style="color:#ff79c6">=</span> <span style="color:#8be9fd;font-style:italic">super</span><span style="color:#ff79c6">.</span><span style="color:#50fa7b">getParameterValues</span><span style="color:#ff79c6">(</span>name<span style="color:#ff79c6">);</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#8be9fd;font-style:italic">public</span> String<span style="color:#ff79c6">[]</span> <span style="color:#50fa7b">getParameterValues</span>(String name) {
+</span></span><span style="display:flex;"><span>        String<span style="color:#ff79c6">[]</span> parameterValues <span style="color:#ff79c6">=</span> <span style="color:#8be9fd;font-style:italic">super</span>.<span style="color:#50fa7b">getParameterValues</span>(name);
 </span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span>        <span style="color:#ff79c6">if</span> <span style="color:#ff79c6">(</span>parameterValues <span style="color:#ff79c6">==</span> <span style="color:#ff79c6">null</span><span style="color:#ff79c6">)</span> <span style="color:#ff79c6">return</span> <span style="color:#ff79c6">null</span><span style="color:#ff79c6">;</span>
+</span></span><span style="display:flex;"><span>        <span style="color:#ff79c6">if</span> (parameterValues <span style="color:#ff79c6">==</span> <span style="color:#ff79c6">null</span>) <span style="color:#ff79c6">return</span> <span style="color:#ff79c6">null</span>;
 </span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span>        <span style="color:#ff79c6">for</span> <span style="color:#ff79c6">(</span><span style="color:#8be9fd">int</span> index <span style="color:#ff79c6">=</span> <span style="color:#bd93f9">0</span><span style="color:#ff79c6">;</span> index <span style="color:#ff79c6">&lt;</span> parameterValues<span style="color:#ff79c6">.</span><span style="color:#50fa7b">length</span><span style="color:#ff79c6">;</span> index<span style="color:#ff79c6">++)</span> <span style="color:#ff79c6">{</span>
-</span></span><span style="display:flex;"><span>            parameterValues<span style="color:#ff79c6">[</span>index<span style="color:#ff79c6">]</span> <span style="color:#ff79c6">=</span> StringEscapeUtils<span style="color:#ff79c6">.</span><span style="color:#50fa7b">escapeHtml4</span><span style="color:#ff79c6">(</span>parameterValues<span style="color:#ff79c6">[</span>index<span style="color:#ff79c6">]);</span>
-</span></span><span style="display:flex;"><span>        <span style="color:#ff79c6">}</span>
+</span></span><span style="display:flex;"><span>        <span style="color:#ff79c6">for</span> (<span style="color:#8be9fd">int</span> index <span style="color:#ff79c6">=</span> 0; index <span style="color:#ff79c6">&lt;</span> parameterValues.<span style="color:#50fa7b">length</span>; index<span style="color:#ff79c6">++</span>) {
+</span></span><span style="display:flex;"><span>            parameterValues<span style="color:#ff79c6">[</span>index<span style="color:#ff79c6">]</span> <span style="color:#ff79c6">=</span> StringEscapeUtils.<span style="color:#50fa7b">escapeHtml4</span>(parameterValues<span style="color:#ff79c6">[</span>index<span style="color:#ff79c6">]</span>);
+</span></span><span style="display:flex;"><span>        }
 </span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span>        <span style="color:#ff79c6">return</span> parameterValues<span style="color:#ff79c6">;</span>
-</span></span><span style="display:flex;"><span>    <span style="color:#ff79c6">}</span>
+</span></span><span style="display:flex;"><span>        <span style="color:#ff79c6">return</span> parameterValues;
+</span></span><span style="display:flex;"><span>    }
 </span></span><span style="display:flex;"><span>
 </span></span><span style="display:flex;"><span>    <span style="color:#6272a4">/**
 </span></span></span><span style="display:flex;"><span><span style="color:#6272a4">     * 處理請求 header
 </span></span></span><span style="display:flex;"><span><span style="color:#6272a4">     */</span>
 </span></span><span style="display:flex;"><span>    @Override
-</span></span><span style="display:flex;"><span>    <span style="color:#8be9fd;font-style:italic">public</span> Enumeration<span style="color:#ff79c6">&lt;</span>String<span style="color:#ff79c6">&gt;</span> <span style="color:#50fa7b">getHeaders</span><span style="color:#ff79c6">(</span>String name<span style="color:#ff79c6">)</span> <span style="color:#ff79c6">{</span>
-</span></span><span style="display:flex;"><span>        Enumeration<span style="color:#ff79c6">&lt;</span>String<span style="color:#ff79c6">&gt;</span> headers <span style="color:#ff79c6">=</span> <span style="color:#8be9fd;font-style:italic">super</span><span style="color:#ff79c6">.</span><span style="color:#50fa7b">getHeaders</span><span style="color:#ff79c6">(</span>name<span style="color:#ff79c6">);</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#8be9fd;font-style:italic">public</span> Enumeration<span style="color:#ff79c6">&lt;</span>String<span style="color:#ff79c6">&gt;</span> <span style="color:#50fa7b">getHeaders</span>(String name) {
+</span></span><span style="display:flex;"><span>        Enumeration<span style="color:#ff79c6">&lt;</span>String<span style="color:#ff79c6">&gt;</span> headers <span style="color:#ff79c6">=</span> <span style="color:#8be9fd;font-style:italic">super</span>.<span style="color:#50fa7b">getHeaders</span>(name);
 </span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span>        List<span style="color:#ff79c6">&lt;</span>String<span style="color:#ff79c6">&gt;</span> result <span style="color:#ff79c6">=</span> <span style="color:#ff79c6">new</span> ArrayList<span style="color:#ff79c6">&lt;&gt;();</span>
-</span></span><span style="display:flex;"><span>        <span style="color:#ff79c6">while</span> <span style="color:#ff79c6">(</span>headers<span style="color:#ff79c6">.</span><span style="color:#50fa7b">hasMoreElements</span><span style="color:#ff79c6">())</span> <span style="color:#ff79c6">{</span>
-</span></span><span style="display:flex;"><span>            String<span style="color:#ff79c6">[]</span> tokens <span style="color:#ff79c6">=</span> headers<span style="color:#ff79c6">.</span><span style="color:#50fa7b">nextElement</span><span style="color:#ff79c6">().</span><span style="color:#50fa7b">split</span><span style="color:#ff79c6">(</span><span style="color:#f1fa8c">&#34;,&#34;</span><span style="color:#ff79c6">);</span>
-</span></span><span style="display:flex;"><span>            <span style="color:#ff79c6">for</span> <span style="color:#ff79c6">(</span>String token <span style="color:#ff79c6">:</span> tokens<span style="color:#ff79c6">)</span> <span style="color:#ff79c6">{</span>
-</span></span><span style="display:flex;"><span>                result<span style="color:#ff79c6">.</span><span style="color:#50fa7b">add</span><span style="color:#ff79c6">(</span>StringEscapeUtils<span style="color:#ff79c6">.</span><span style="color:#50fa7b">escapeHtml4</span><span style="color:#ff79c6">(</span>token<span style="color:#ff79c6">));</span>
-</span></span><span style="display:flex;"><span>            <span style="color:#ff79c6">}</span>
-</span></span><span style="display:flex;"><span>        <span style="color:#ff79c6">}</span>
+</span></span><span style="display:flex;"><span>        List<span style="color:#ff79c6">&lt;</span>String<span style="color:#ff79c6">&gt;</span> result <span style="color:#ff79c6">=</span> <span style="color:#ff79c6">new</span> ArrayList<span style="color:#ff79c6">&lt;&gt;</span>();
+</span></span><span style="display:flex;"><span>        <span style="color:#ff79c6">while</span> (headers.<span style="color:#50fa7b">hasMoreElements</span>()) {
+</span></span><span style="display:flex;"><span>            String<span style="color:#ff79c6">[]</span> tokens <span style="color:#ff79c6">=</span> headers.<span style="color:#50fa7b">nextElement</span>().<span style="color:#50fa7b">split</span>(<span style="color:#f1fa8c">&#34;,&#34;</span>);
+</span></span><span style="display:flex;"><span>            <span style="color:#ff79c6">for</span> (String token : tokens) {
+</span></span><span style="display:flex;"><span>                result.<span style="color:#50fa7b">add</span>(StringEscapeUtils.<span style="color:#50fa7b">escapeHtml4</span>(token));
+</span></span><span style="display:flex;"><span>            }
+</span></span><span style="display:flex;"><span>        }
 </span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span>        <span style="color:#ff79c6">return</span> Collections<span style="color:#ff79c6">.</span><span style="color:#50fa7b">enumeration</span><span style="color:#ff79c6">(</span>result<span style="color:#ff79c6">);</span>
-</span></span><span style="display:flex;"><span>    <span style="color:#ff79c6">}</span>
-</span></span><span style="display:flex;"><span><span style="color:#ff79c6">}</span>
+</span></span><span style="display:flex;"><span>        <span style="color:#ff79c6">return</span> Collections.<span style="color:#50fa7b">enumeration</span>(result);
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>}
 </span></span></code></pre></div><p>接下來要在 Spring Boot Web 框架處理 request 的過程中，用新建立的 <code>XssRequestWrapper</code> 去包裝原本的 <code>HttpServletRequest</code>。這部分其實有許多方式可以做處理，例如 <code>HandlerInterceptor</code> 或 <code>OncePerRequestFilter</code>。但這裡我選擇 <code>Filter</code>，因為其實方式都大同小異：</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-java" data-lang="java"><span style="display:flex;"><span><span style="color:#ff79c6">import</span> org.springframework.core.Ordered<span style="color:#ff79c6">;</span>
-</span></span><span style="display:flex;"><span><span style="color:#ff79c6">import</span> org.springframework.core.annotation.Order<span style="color:#ff79c6">;</span>
-</span></span><span style="display:flex;"><span><span style="color:#ff79c6">import</span> org.springframework.stereotype.Component<span style="color:#ff79c6">;</span>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-java" data-lang="java"><span style="display:flex;"><span><span style="color:#ff79c6">import</span> org.springframework.core.Ordered;
+</span></span><span style="display:flex;"><span><span style="color:#ff79c6">import</span> org.springframework.core.annotation.Order;
+</span></span><span style="display:flex;"><span><span style="color:#ff79c6">import</span> org.springframework.stereotype.Component;
 </span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span><span style="color:#ff79c6">import</span> javax.servlet.*<span style="color:#ff79c6">;</span>
-</span></span><span style="display:flex;"><span><span style="color:#ff79c6">import</span> javax.servlet.annotation.WebFilter<span style="color:#ff79c6">;</span>
-</span></span><span style="display:flex;"><span><span style="color:#ff79c6">import</span> javax.servlet.http.HttpServletRequest<span style="color:#ff79c6">;</span>
-</span></span><span style="display:flex;"><span><span style="color:#ff79c6">import</span> java.io.IOException<span style="color:#ff79c6">;</span>
+</span></span><span style="display:flex;"><span><span style="color:#ff79c6">import</span> javax.servlet.*;
+</span></span><span style="display:flex;"><span><span style="color:#ff79c6">import</span> javax.servlet.annotation.WebFilter;
+</span></span><span style="display:flex;"><span><span style="color:#ff79c6">import</span> javax.servlet.http.HttpServletRequest;
+</span></span><span style="display:flex;"><span><span style="color:#ff79c6">import</span> java.io.IOException;
 </span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span>@Order<span style="color:#ff79c6">(</span>Ordered<span style="color:#ff79c6">.</span><span style="color:#50fa7b">HIGHEST_PRECEDENCE</span><span style="color:#ff79c6">)</span>
-</span></span><span style="display:flex;"><span>@WebFilter<span style="color:#ff79c6">(</span>filterName <span style="color:#ff79c6">=</span> <span style="color:#f1fa8c">&#34;xssFilter&#34;</span><span style="color:#ff79c6">,</span> urlPatterns <span style="color:#ff79c6">=</span> <span style="color:#f1fa8c">&#34;/*&#34;</span><span style="color:#ff79c6">)</span>
+</span></span><span style="display:flex;"><span>@Order(Ordered.<span style="color:#50fa7b">HIGHEST_PRECEDENCE</span>)
+</span></span><span style="display:flex;"><span>@WebFilter(filterName <span style="color:#ff79c6">=</span> <span style="color:#f1fa8c">&#34;xssFilter&#34;</span>, urlPatterns <span style="color:#ff79c6">=</span> <span style="color:#f1fa8c">&#34;/*&#34;</span>)
 </span></span><span style="display:flex;"><span>@Component
-</span></span><span style="display:flex;"><span><span style="color:#8be9fd;font-style:italic">public</span> <span style="color:#8be9fd;font-style:italic">class</span> <span style="color:#50fa7b">XssFilter</span> <span style="color:#8be9fd;font-style:italic">implements</span> Filter <span style="color:#ff79c6">{</span>
+</span></span><span style="display:flex;"><span><span style="color:#8be9fd;font-style:italic">public</span> <span style="color:#8be9fd;font-style:italic">class</span> <span style="color:#50fa7b">XssFilter</span> <span style="color:#8be9fd;font-style:italic">implements</span> Filter {
 </span></span><span style="display:flex;"><span>
 </span></span><span style="display:flex;"><span>    @Override
-</span></span><span style="display:flex;"><span>    <span style="color:#8be9fd;font-style:italic">public</span> <span style="color:#8be9fd">void</span> <span style="color:#50fa7b">doFilter</span><span style="color:#ff79c6">(</span>ServletRequest servletRequest<span style="color:#ff79c6">,</span> ServletResponse servletResponse<span style="color:#ff79c6">,</span> FilterChain filterChain<span style="color:#ff79c6">)</span>
-</span></span><span style="display:flex;"><span>            <span style="color:#8be9fd;font-style:italic">throws</span> IOException<span style="color:#ff79c6">,</span> ServletException <span style="color:#ff79c6">{</span>
-</span></span><span style="display:flex;"><span>        filterChain<span style="color:#ff79c6">.</span><span style="color:#50fa7b">doFilter</span><span style="color:#ff79c6">(</span><span style="color:#ff79c6">new</span> XssRequestWrapper<span style="color:#ff79c6">((</span>HttpServletRequest<span style="color:#ff79c6">)</span> servletRequest<span style="color:#ff79c6">),</span> servletResponse<span style="color:#ff79c6">);</span>
-</span></span><span style="display:flex;"><span>    <span style="color:#ff79c6">}</span>
-</span></span><span style="display:flex;"><span><span style="color:#ff79c6">}</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#8be9fd;font-style:italic">public</span> <span style="color:#8be9fd">void</span> <span style="color:#50fa7b">doFilter</span>(ServletRequest servletRequest, ServletResponse servletResponse, FilterChain filterChain)
+</span></span><span style="display:flex;"><span>            <span style="color:#8be9fd;font-style:italic">throws</span> IOException, ServletException {
+</span></span><span style="display:flex;"><span>        filterChain.<span style="color:#50fa7b">doFilter</span>(<span style="color:#ff79c6">new</span> XssRequestWrapper((HttpServletRequest) servletRequest), servletResponse);
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>}
 </span></span></code></pre></div><p>此處可以注意的是，<code>@Order</code> 標籤是用來指定 <code>Filter</code> 的執行優先順序，內容是一個 <code>int</code>，值越大，優先度越高；另外就是 <code>@WebFilter</code> 這個標籤，裡面有一個 <code>urlPatterns</code> 的屬性，可以用來指定 <code>Filter</code> 適用的 url pattern，而且可以指定多個 pattern。</p>
 <h3 id="requestresponse-body---json">Request/Response Body - JSON</h3>
 <p>接著要處理 request/response body 的部分，先處理 JSON 格式的 body。</p>
 <p>因為 Spring Boot Web 預設處理 JSON 整合的是 Jackson 這個 library，所以可以直接利用 Jackson 本身的功能，直接針對類型為 <code>String</code> 的 value 做處理。</p>
 <p>將 JSON 轉換為物件的部分如下：</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-java" data-lang="java"><span style="display:flex;"><span><span style="color:#ff79c6">import</span> com.fasterxml.jackson.core.JsonParser<span style="color:#ff79c6">;</span>
-</span></span><span style="display:flex;"><span><span style="color:#ff79c6">import</span> com.fasterxml.jackson.core.JsonToken<span style="color:#ff79c6">;</span>
-</span></span><span style="display:flex;"><span><span style="color:#ff79c6">import</span> com.fasterxml.jackson.databind.DeserializationContext<span style="color:#ff79c6">;</span>
-</span></span><span style="display:flex;"><span><span style="color:#ff79c6">import</span> com.fasterxml.jackson.databind.JsonDeserializer<span style="color:#ff79c6">;</span>
-</span></span><span style="display:flex;"><span><span style="color:#ff79c6">import</span> org.apache.commons.text.StringEscapeUtils<span style="color:#ff79c6">;</span>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-java" data-lang="java"><span style="display:flex;"><span><span style="color:#ff79c6">import</span> com.fasterxml.jackson.core.JsonParser;
+</span></span><span style="display:flex;"><span><span style="color:#ff79c6">import</span> com.fasterxml.jackson.core.JsonToken;
+</span></span><span style="display:flex;"><span><span style="color:#ff79c6">import</span> com.fasterxml.jackson.databind.DeserializationContext;
+</span></span><span style="display:flex;"><span><span style="color:#ff79c6">import</span> com.fasterxml.jackson.databind.JsonDeserializer;
+</span></span><span style="display:flex;"><span><span style="color:#ff79c6">import</span> org.apache.commons.text.StringEscapeUtils;
 </span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span><span style="color:#ff79c6">import</span> java.io.IOException<span style="color:#ff79c6">;</span>
+</span></span><span style="display:flex;"><span><span style="color:#ff79c6">import</span> java.io.IOException;
 </span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span><span style="color:#8be9fd;font-style:italic">public</span> <span style="color:#8be9fd;font-style:italic">class</span> <span style="color:#50fa7b">XssJsonDeserializer</span> <span style="color:#8be9fd;font-style:italic">extends</span> JsonDeserializer<span style="color:#ff79c6">&lt;</span>String<span style="color:#ff79c6">&gt;</span> <span style="color:#ff79c6">{</span>
+</span></span><span style="display:flex;"><span><span style="color:#8be9fd;font-style:italic">public</span> <span style="color:#8be9fd;font-style:italic">class</span> <span style="color:#50fa7b">XssJsonDeserializer</span> <span style="color:#8be9fd;font-style:italic">extends</span> JsonDeserializer<span style="color:#ff79c6">&lt;</span>String<span style="color:#ff79c6">&gt;</span> {
 </span></span><span style="display:flex;"><span>
 </span></span><span style="display:flex;"><span>    @Override
-</span></span><span style="display:flex;"><span>    <span style="color:#8be9fd;font-style:italic">public</span> String <span style="color:#50fa7b">deserialize</span><span style="color:#ff79c6">(</span>JsonParser parser<span style="color:#ff79c6">,</span> DeserializationContext context<span style="color:#ff79c6">)</span> <span style="color:#8be9fd;font-style:italic">throws</span> IOException <span style="color:#ff79c6">{</span>
-</span></span><span style="display:flex;"><span>        <span style="color:#ff79c6">if</span> <span style="color:#ff79c6">(</span>parser<span style="color:#ff79c6">.</span><span style="color:#50fa7b">getCurrentToken</span><span style="color:#ff79c6">()</span> <span style="color:#ff79c6">==</span> JsonToken<span style="color:#ff79c6">.</span><span style="color:#50fa7b">VALUE_STRING</span><span style="color:#ff79c6">)</span> <span style="color:#ff79c6">{</span>
-</span></span><span style="display:flex;"><span>            <span style="color:#ff79c6">return</span> StringEscapeUtils<span style="color:#ff79c6">.</span><span style="color:#50fa7b">escapeHtml4</span><span style="color:#ff79c6">(</span>parser<span style="color:#ff79c6">.</span><span style="color:#50fa7b">getText</span><span style="color:#ff79c6">());</span>
-</span></span><span style="display:flex;"><span>        <span style="color:#ff79c6">}</span>
-</span></span><span style="display:flex;"><span>        <span style="color:#ff79c6">return</span> <span style="color:#ff79c6">null</span><span style="color:#ff79c6">;</span>
-</span></span><span style="display:flex;"><span>    <span style="color:#ff79c6">}</span>
-</span></span><span style="display:flex;"><span><span style="color:#ff79c6">}</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#8be9fd;font-style:italic">public</span> String <span style="color:#50fa7b">deserialize</span>(JsonParser parser, DeserializationContext context) <span style="color:#8be9fd;font-style:italic">throws</span> IOException {
+</span></span><span style="display:flex;"><span>        <span style="color:#ff79c6">if</span> (parser.<span style="color:#50fa7b">getCurrentToken</span>() <span style="color:#ff79c6">==</span> JsonToken.<span style="color:#50fa7b">VALUE_STRING</span>) {
+</span></span><span style="display:flex;"><span>            <span style="color:#ff79c6">return</span> StringEscapeUtils.<span style="color:#50fa7b">escapeHtml4</span>(parser.<span style="color:#50fa7b">getText</span>());
+</span></span><span style="display:flex;"><span>        }
+</span></span><span style="display:flex;"><span>        <span style="color:#ff79c6">return</span> <span style="color:#ff79c6">null</span>;
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>}
 </span></span></code></pre></div><p>將物件轉換為 JSON 的部分如下：</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-java" data-lang="java"><span style="display:flex;"><span><span style="color:#ff79c6">import</span> com.fasterxml.jackson.core.JsonGenerator<span style="color:#ff79c6">;</span>
-</span></span><span style="display:flex;"><span><span style="color:#ff79c6">import</span> com.fasterxml.jackson.databind.JsonSerializer<span style="color:#ff79c6">;</span>
-</span></span><span style="display:flex;"><span><span style="color:#ff79c6">import</span> com.fasterxml.jackson.databind.SerializerProvider<span style="color:#ff79c6">;</span>
-</span></span><span style="display:flex;"><span><span style="color:#ff79c6">import</span> org.apache.commons.text.StringEscapeUtils<span style="color:#ff79c6">;</span>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-java" data-lang="java"><span style="display:flex;"><span><span style="color:#ff79c6">import</span> com.fasterxml.jackson.core.JsonGenerator;
+</span></span><span style="display:flex;"><span><span style="color:#ff79c6">import</span> com.fasterxml.jackson.databind.JsonSerializer;
+</span></span><span style="display:flex;"><span><span style="color:#ff79c6">import</span> com.fasterxml.jackson.databind.SerializerProvider;
+</span></span><span style="display:flex;"><span><span style="color:#ff79c6">import</span> org.apache.commons.text.StringEscapeUtils;
 </span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span><span style="color:#ff79c6">import</span> java.io.IOException<span style="color:#ff79c6">;</span>
+</span></span><span style="display:flex;"><span><span style="color:#ff79c6">import</span> java.io.IOException;
 </span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span><span style="color:#8be9fd;font-style:italic">public</span> <span style="color:#8be9fd;font-style:italic">class</span> <span style="color:#50fa7b">XssJsonSerializer</span> <span style="color:#8be9fd;font-style:italic">extends</span> JsonSerializer<span style="color:#ff79c6">&lt;</span>String<span style="color:#ff79c6">&gt;</span> <span style="color:#ff79c6">{</span>
+</span></span><span style="display:flex;"><span><span style="color:#8be9fd;font-style:italic">public</span> <span style="color:#8be9fd;font-style:italic">class</span> <span style="color:#50fa7b">XssJsonSerializer</span> <span style="color:#8be9fd;font-style:italic">extends</span> JsonSerializer<span style="color:#ff79c6">&lt;</span>String<span style="color:#ff79c6">&gt;</span> {
 </span></span><span style="display:flex;"><span>
 </span></span><span style="display:flex;"><span>    @Override
-</span></span><span style="display:flex;"><span>    <span style="color:#8be9fd;font-style:italic">public</span> <span style="color:#8be9fd">void</span> <span style="color:#50fa7b">serialize</span><span style="color:#ff79c6">(</span>String value<span style="color:#ff79c6">,</span> JsonGenerator generator<span style="color:#ff79c6">,</span> SerializerProvider serializers<span style="color:#ff79c6">)</span> <span style="color:#8be9fd;font-style:italic">throws</span> IOException <span style="color:#ff79c6">{</span>
-</span></span><span style="display:flex;"><span>        <span style="color:#ff79c6">if</span> <span style="color:#ff79c6">(</span>value <span style="color:#ff79c6">==</span> <span style="color:#ff79c6">null</span><span style="color:#ff79c6">)</span> <span style="color:#ff79c6">{</span>
-</span></span><span style="display:flex;"><span>            <span style="color:#ff79c6">return</span><span style="color:#ff79c6">;</span>
-</span></span><span style="display:flex;"><span>        <span style="color:#ff79c6">}</span>
-</span></span><span style="display:flex;"><span>        generator<span style="color:#ff79c6">.</span><span style="color:#50fa7b">writeString</span><span style="color:#ff79c6">(</span>StringEscapeUtils<span style="color:#ff79c6">.</span><span style="color:#50fa7b">escapeHtml4</span><span style="color:#ff79c6">(</span>value<span style="color:#ff79c6">));</span>
-</span></span><span style="display:flex;"><span>    <span style="color:#ff79c6">}</span>
-</span></span><span style="display:flex;"><span><span style="color:#ff79c6">}</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#8be9fd;font-style:italic">public</span> <span style="color:#8be9fd">void</span> <span style="color:#50fa7b">serialize</span>(String value, JsonGenerator generator, SerializerProvider serializers) <span style="color:#8be9fd;font-style:italic">throws</span> IOException {
+</span></span><span style="display:flex;"><span>        <span style="color:#ff79c6">if</span> (value <span style="color:#ff79c6">==</span> <span style="color:#ff79c6">null</span>) {
+</span></span><span style="display:flex;"><span>            <span style="color:#ff79c6">return</span>;
+</span></span><span style="display:flex;"><span>        }
+</span></span><span style="display:flex;"><span>        generator.<span style="color:#50fa7b">writeString</span>(StringEscapeUtils.<span style="color:#50fa7b">escapeHtml4</span>(value));
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>}
 </span></span></code></pre></div><p>然後將 serializer 跟 deserializer 註冊到 Spring Boot Web 中，當有 Jackson 2 在依賴時會預設使用來對 JSON 做轉換的 <code>MappingJackson2HttpMessageConverter</code> 當中：</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-java" data-lang="java"><span style="display:flex;"><span><span style="color:#ff79c6">import</span> com.fasterxml.jackson.databind.module.SimpleModule<span style="color:#ff79c6">;</span>
-</span></span><span style="display:flex;"><span><span style="color:#ff79c6">import</span> org.example.config.security.xss.XssJsonDeserializer<span style="color:#ff79c6">;</span>
-</span></span><span style="display:flex;"><span><span style="color:#ff79c6">import</span> org.example.config.security.xss.XssJsonSerializer<span style="color:#ff79c6">;</span>
-</span></span><span style="display:flex;"><span><span style="color:#ff79c6">import</span> org.springframework.context.annotation.Configuration<span style="color:#ff79c6">;</span>
-</span></span><span style="display:flex;"><span><span style="color:#ff79c6">import</span> org.springframework.http.converter.HttpMessageConverter<span style="color:#ff79c6">;</span>
-</span></span><span style="display:flex;"><span><span style="color:#ff79c6">import</span> org.springframework.http.converter.json.MappingJackson2HttpMessageConverter<span style="color:#ff79c6">;</span>
-</span></span><span style="display:flex;"><span><span style="color:#ff79c6">import</span> org.springframework.web.servlet.config.annotation.WebMvcConfigurer<span style="color:#ff79c6">;</span>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-java" data-lang="java"><span style="display:flex;"><span><span style="color:#ff79c6">import</span> com.fasterxml.jackson.databind.module.SimpleModule;
+</span></span><span style="display:flex;"><span><span style="color:#ff79c6">import</span> org.example.config.security.xss.XssJsonDeserializer;
+</span></span><span style="display:flex;"><span><span style="color:#ff79c6">import</span> org.example.config.security.xss.XssJsonSerializer;
+</span></span><span style="display:flex;"><span><span style="color:#ff79c6">import</span> org.springframework.context.annotation.Configuration;
+</span></span><span style="display:flex;"><span><span style="color:#ff79c6">import</span> org.springframework.http.converter.HttpMessageConverter;
+</span></span><span style="display:flex;"><span><span style="color:#ff79c6">import</span> org.springframework.http.converter.json.MappingJackson2HttpMessageConverter;
+</span></span><span style="display:flex;"><span><span style="color:#ff79c6">import</span> org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 </span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span><span style="color:#ff79c6">import</span> java.util.List<span style="color:#ff79c6">;</span>
+</span></span><span style="display:flex;"><span><span style="color:#ff79c6">import</span> java.util.List;
 </span></span><span style="display:flex;"><span>
 </span></span><span style="display:flex;"><span>@Configuration
-</span></span><span style="display:flex;"><span><span style="color:#8be9fd;font-style:italic">public</span> <span style="color:#8be9fd;font-style:italic">class</span> <span style="color:#50fa7b">CustomWebConfigurer</span> <span style="color:#8be9fd;font-style:italic">implements</span> WebMvcConfigurer <span style="color:#ff79c6">{</span>
+</span></span><span style="display:flex;"><span><span style="color:#8be9fd;font-style:italic">public</span> <span style="color:#8be9fd;font-style:italic">class</span> <span style="color:#50fa7b">CustomWebConfigurer</span> <span style="color:#8be9fd;font-style:italic">implements</span> WebMvcConfigurer {
 </span></span><span style="display:flex;"><span>
 </span></span><span style="display:flex;"><span>    @Override
-</span></span><span style="display:flex;"><span>    <span style="color:#8be9fd;font-style:italic">public</span> <span style="color:#8be9fd">void</span> <span style="color:#50fa7b">extendMessageConverters</span><span style="color:#ff79c6">(</span>List<span style="color:#ff79c6">&lt;</span>HttpMessageConverter<span style="color:#ff79c6">&lt;?&gt;&gt;</span> converters<span style="color:#ff79c6">)</span> <span style="color:#ff79c6">{</span>        
-</span></span><span style="display:flex;"><span>        <span style="color:#6272a4">// register XssJsonDeserializer
-</span></span></span><span style="display:flex;"><span><span style="color:#6272a4"></span>        var module <span style="color:#ff79c6">=</span> <span style="color:#ff79c6">new</span> SimpleModule<span style="color:#ff79c6">();</span>
-</span></span><span style="display:flex;"><span>        module<span style="color:#ff79c6">.</span><span style="color:#50fa7b">addDeserializer</span><span style="color:#ff79c6">(</span>String<span style="color:#ff79c6">.</span><span style="color:#50fa7b">class</span><span style="color:#ff79c6">,</span> <span style="color:#ff79c6">new</span> XssJsonDeserializer<span style="color:#ff79c6">());</span>
-</span></span><span style="display:flex;"><span>        module<span style="color:#ff79c6">.</span><span style="color:#50fa7b">addSerializer</span><span style="color:#ff79c6">(</span>String<span style="color:#ff79c6">.</span><span style="color:#50fa7b">class</span><span style="color:#ff79c6">,</span> <span style="color:#ff79c6">new</span> XssJsonSerializer<span style="color:#ff79c6">());</span>
-</span></span><span style="display:flex;"><span>        converters<span style="color:#ff79c6">.</span><span style="color:#50fa7b">stream</span><span style="color:#ff79c6">()</span>
-</span></span><span style="display:flex;"><span>                <span style="color:#ff79c6">.</span><span style="color:#50fa7b">filter</span><span style="color:#ff79c6">(</span>converter <span style="color:#ff79c6">-&gt;</span> converter<span style="color:#ff79c6">.</span><span style="color:#50fa7b">getClass</span><span style="color:#ff79c6">().</span><span style="color:#50fa7b">getSimpleName</span><span style="color:#ff79c6">().</span><span style="color:#50fa7b">equals</span><span style="color:#ff79c6">(</span><span style="color:#f1fa8c">&#34;MappingJackson2HttpMessageConverter&#34;</span><span style="color:#ff79c6">))</span>
-</span></span><span style="display:flex;"><span>                <span style="color:#ff79c6">.</span><span style="color:#50fa7b">forEach</span><span style="color:#ff79c6">(</span>converter <span style="color:#ff79c6">-&gt;</span> <span style="color:#ff79c6">((</span>MappingJackson2HttpMessageConverter<span style="color:#ff79c6">)</span> converter<span style="color:#ff79c6">).</span><span style="color:#50fa7b">getObjectMapper</span><span style="color:#ff79c6">().</span><span style="color:#50fa7b">registerModule</span><span style="color:#ff79c6">(</span>module<span style="color:#ff79c6">));</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#8be9fd;font-style:italic">public</span> <span style="color:#8be9fd">void</span> <span style="color:#50fa7b">extendMessageConverters</span>(List<span style="color:#ff79c6">&lt;</span>HttpMessageConverter<span style="color:#ff79c6">&lt;?&gt;&gt;</span> converters) {        
+</span></span><span style="display:flex;"><span>        <span style="color:#6272a4">// register XssJsonDeserializer</span>
+</span></span><span style="display:flex;"><span>        <span style="color:#8be9fd;font-style:italic">var</span> module <span style="color:#ff79c6">=</span> <span style="color:#ff79c6">new</span> SimpleModule();
+</span></span><span style="display:flex;"><span>        module.<span style="color:#50fa7b">addDeserializer</span>(String.<span style="color:#50fa7b">class</span>, <span style="color:#ff79c6">new</span> XssJsonDeserializer());
+</span></span><span style="display:flex;"><span>        module.<span style="color:#50fa7b">addSerializer</span>(String.<span style="color:#50fa7b">class</span>, <span style="color:#ff79c6">new</span> XssJsonSerializer());
+</span></span><span style="display:flex;"><span>        converters.<span style="color:#50fa7b">stream</span>()
+</span></span><span style="display:flex;"><span>                .<span style="color:#50fa7b">filter</span>(converter <span style="color:#ff79c6">-&gt;</span> converter.<span style="color:#50fa7b">getClass</span>().<span style="color:#50fa7b">getSimpleName</span>().<span style="color:#50fa7b">equals</span>(<span style="color:#f1fa8c">&#34;MappingJackson2HttpMessageConverter&#34;</span>))
+</span></span><span style="display:flex;"><span>                .<span style="color:#50fa7b">forEach</span>(converter <span style="color:#ff79c6">-&gt;</span> ((MappingJackson2HttpMessageConverter) converter).<span style="color:#50fa7b">getObjectMapper</span>().<span style="color:#50fa7b">registerModule</span>(module));
 </span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span>        WebMvcConfigurer<span style="color:#ff79c6">.</span><span style="color:#50fa7b">super</span><span style="color:#ff79c6">.</span><span style="color:#50fa7b">extendMessageConverters</span><span style="color:#ff79c6">(</span>converters<span style="color:#ff79c6">);</span>
-</span></span><span style="display:flex;"><span>    <span style="color:#ff79c6">}</span>
-</span></span><span style="display:flex;"><span><span style="color:#ff79c6">}</span>
+</span></span><span style="display:flex;"><span>        WebMvcConfigurer.<span style="color:#50fa7b">super</span>.<span style="color:#50fa7b">extendMessageConverters</span>(converters);
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>}
 </span></span></code></pre></div><p>其實要註冊 serializer 跟 deserializer 也有好幾種方式，不論是用 <code>Jackson2ObjectMapperBuilder</code> 還是用 <code>Jackson2ObjectMapperBuilderCustomizer</code> 都可以。</p>
 <h3 id="requestresponse-body---string">Request/Response Body - String</h3>
 <p>最後要來處理 request/response body 裡面直接提供 <code>String</code> 的情況。</p>
 <p>首先要知道的是 Spring Boot Web 預設處理這種情況會使用的是 <code>StringHttpMessageConverter</code>，但這個 converter 本身並沒有什麼原生的方法接受客製調整，所以只好直接繼承開一個新的 converter：</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-java" data-lang="java"><span style="display:flex;"><span><span style="color:#ff79c6">import</span> org.apache.commons.text.StringEscapeUtils<span style="color:#ff79c6">;</span>
-</span></span><span style="display:flex;"><span><span style="color:#ff79c6">import</span> org.springframework.http.HttpInputMessage<span style="color:#ff79c6">;</span>
-</span></span><span style="display:flex;"><span><span style="color:#ff79c6">import</span> org.springframework.http.MediaType<span style="color:#ff79c6">;</span>
-</span></span><span style="display:flex;"><span><span style="color:#ff79c6">import</span> org.springframework.http.converter.StringHttpMessageConverter<span style="color:#ff79c6">;</span>
-</span></span><span style="display:flex;"><span><span style="color:#ff79c6">import</span> org.springframework.lang.Nullable<span style="color:#ff79c6">;</span>
-</span></span><span style="display:flex;"><span><span style="color:#ff79c6">import</span> org.springframework.util.Assert<span style="color:#ff79c6">;</span>
-</span></span><span style="display:flex;"><span><span style="color:#ff79c6">import</span> org.springframework.util.StreamUtils<span style="color:#ff79c6">;</span>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-java" data-lang="java"><span style="display:flex;"><span><span style="color:#ff79c6">import</span> org.apache.commons.text.StringEscapeUtils;
+</span></span><span style="display:flex;"><span><span style="color:#ff79c6">import</span> org.springframework.http.HttpInputMessage;
+</span></span><span style="display:flex;"><span><span style="color:#ff79c6">import</span> org.springframework.http.MediaType;
+</span></span><span style="display:flex;"><span><span style="color:#ff79c6">import</span> org.springframework.http.converter.StringHttpMessageConverter;
+</span></span><span style="display:flex;"><span><span style="color:#ff79c6">import</span> org.springframework.lang.Nullable;
+</span></span><span style="display:flex;"><span><span style="color:#ff79c6">import</span> org.springframework.util.Assert;
+</span></span><span style="display:flex;"><span><span style="color:#ff79c6">import</span> org.springframework.util.StreamUtils;
 </span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span><span style="color:#ff79c6">import</span> java.io.IOException<span style="color:#ff79c6">;</span>
-</span></span><span style="display:flex;"><span><span style="color:#ff79c6">import</span> java.nio.charset.Charset<span style="color:#ff79c6">;</span>
-</span></span><span style="display:flex;"><span><span style="color:#ff79c6">import</span> java.nio.charset.StandardCharsets<span style="color:#ff79c6">;</span>
+</span></span><span style="display:flex;"><span><span style="color:#ff79c6">import</span> java.io.IOException;
+</span></span><span style="display:flex;"><span><span style="color:#ff79c6">import</span> java.nio.charset.Charset;
+</span></span><span style="display:flex;"><span><span style="color:#ff79c6">import</span> java.nio.charset.StandardCharsets;
 </span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span><span style="color:#8be9fd;font-style:italic">public</span> <span style="color:#8be9fd;font-style:italic">class</span> <span style="color:#50fa7b">XssStringHttpMessageConverter</span> <span style="color:#8be9fd;font-style:italic">extends</span> StringHttpMessageConverter <span style="color:#ff79c6">{</span>
+</span></span><span style="display:flex;"><span><span style="color:#8be9fd;font-style:italic">public</span> <span style="color:#8be9fd;font-style:italic">class</span> <span style="color:#50fa7b">XssStringHttpMessageConverter</span> <span style="color:#8be9fd;font-style:italic">extends</span> StringHttpMessageConverter {
 </span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span>    <span style="color:#8be9fd;font-style:italic">private</span> <span style="color:#8be9fd;font-style:italic">static</span> <span style="color:#8be9fd;font-style:italic">final</span> MediaType APPLICATION_PLUS_JSON <span style="color:#ff79c6">=</span> <span style="color:#ff79c6">new</span> MediaType<span style="color:#ff79c6">(</span><span style="color:#f1fa8c">&#34;application&#34;</span><span style="color:#ff79c6">,</span> <span style="color:#f1fa8c">&#34;*+json&#34;</span><span style="color:#ff79c6">);</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#8be9fd;font-style:italic">private</span> <span style="color:#8be9fd;font-style:italic">static</span> <span style="color:#8be9fd;font-style:italic">final</span> MediaType APPLICATION_PLUS_JSON <span style="color:#ff79c6">=</span> <span style="color:#ff79c6">new</span> MediaType(<span style="color:#f1fa8c">&#34;application&#34;</span>, <span style="color:#f1fa8c">&#34;*+json&#34;</span>);
 </span></span><span style="display:flex;"><span>
 </span></span><span style="display:flex;"><span>    @Override
-</span></span><span style="display:flex;"><span>    <span style="color:#8be9fd;font-style:italic">protected</span> String <span style="color:#50fa7b">readInternal</span><span style="color:#ff79c6">(</span>Class<span style="color:#ff79c6">&lt;?</span> <span style="color:#8be9fd;font-style:italic">extends</span> String<span style="color:#ff79c6">&gt;</span> clazz<span style="color:#ff79c6">,</span> HttpInputMessage inputMessage<span style="color:#ff79c6">)</span> <span style="color:#8be9fd;font-style:italic">throws</span> IOException <span style="color:#ff79c6">{</span>
-</span></span><span style="display:flex;"><span>        Charset charset <span style="color:#ff79c6">=</span> getContentTypeCharset<span style="color:#ff79c6">(</span>inputMessage<span style="color:#ff79c6">.</span><span style="color:#50fa7b">getHeaders</span><span style="color:#ff79c6">().</span><span style="color:#50fa7b">getContentType</span><span style="color:#ff79c6">());</span>
-</span></span><span style="display:flex;"><span>        String input <span style="color:#ff79c6">=</span> StreamUtils<span style="color:#ff79c6">.</span><span style="color:#50fa7b">copyToString</span><span style="color:#ff79c6">(</span>inputMessage<span style="color:#ff79c6">.</span><span style="color:#50fa7b">getBody</span><span style="color:#ff79c6">(),</span> charset<span style="color:#ff79c6">);</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#8be9fd;font-style:italic">protected</span> String <span style="color:#50fa7b">readInternal</span>(Class<span style="color:#ff79c6">&lt;?</span> <span style="color:#8be9fd;font-style:italic">extends</span> String<span style="color:#ff79c6">&gt;</span> clazz, HttpInputMessage inputMessage) <span style="color:#8be9fd;font-style:italic">throws</span> IOException {
+</span></span><span style="display:flex;"><span>        Charset charset <span style="color:#ff79c6">=</span> getContentTypeCharset(inputMessage.<span style="color:#50fa7b">getHeaders</span>().<span style="color:#50fa7b">getContentType</span>());
+</span></span><span style="display:flex;"><span>        String input <span style="color:#ff79c6">=</span> StreamUtils.<span style="color:#50fa7b">copyToString</span>(inputMessage.<span style="color:#50fa7b">getBody</span>(), charset);
 </span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span>        <span style="color:#ff79c6">return</span> StringEscapeUtils<span style="color:#ff79c6">.</span><span style="color:#50fa7b">escapeHtml4</span><span style="color:#ff79c6">(</span>input<span style="color:#ff79c6">);</span>
-</span></span><span style="display:flex;"><span>    <span style="color:#ff79c6">}</span>
+</span></span><span style="display:flex;"><span>        <span style="color:#ff79c6">return</span> StringEscapeUtils.<span style="color:#50fa7b">escapeHtml4</span>(input);
+</span></span><span style="display:flex;"><span>    }
 </span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span>    <span style="color:#8be9fd;font-style:italic">private</span> Charset <span style="color:#50fa7b">getContentTypeCharset</span><span style="color:#ff79c6">(</span>@Nullable MediaType contentType<span style="color:#ff79c6">)</span> <span style="color:#ff79c6">{</span>
-</span></span><span style="display:flex;"><span>        <span style="color:#ff79c6">if</span> <span style="color:#ff79c6">(</span>contentType <span style="color:#ff79c6">!=</span> <span style="color:#ff79c6">null</span><span style="color:#ff79c6">)</span> <span style="color:#ff79c6">{</span>
-</span></span><span style="display:flex;"><span>            Charset charset <span style="color:#ff79c6">=</span> contentType<span style="color:#ff79c6">.</span><span style="color:#50fa7b">getCharset</span><span style="color:#ff79c6">();</span>
-</span></span><span style="display:flex;"><span>            <span style="color:#ff79c6">if</span> <span style="color:#ff79c6">(</span>charset <span style="color:#ff79c6">!=</span> <span style="color:#ff79c6">null</span><span style="color:#ff79c6">)</span> <span style="color:#ff79c6">{</span>
-</span></span><span style="display:flex;"><span>                <span style="color:#ff79c6">return</span> charset<span style="color:#ff79c6">;</span>
-</span></span><span style="display:flex;"><span>            <span style="color:#ff79c6">}</span>
-</span></span><span style="display:flex;"><span>            <span style="color:#ff79c6">else</span> <span style="color:#ff79c6">if</span> <span style="color:#ff79c6">(</span>contentType<span style="color:#ff79c6">.</span><span style="color:#50fa7b">isCompatibleWith</span><span style="color:#ff79c6">(</span>MediaType<span style="color:#ff79c6">.</span><span style="color:#50fa7b">APPLICATION_JSON</span><span style="color:#ff79c6">)</span> <span style="color:#ff79c6">||</span>
-</span></span><span style="display:flex;"><span>                    contentType<span style="color:#ff79c6">.</span><span style="color:#50fa7b">isCompatibleWith</span><span style="color:#ff79c6">(</span>APPLICATION_PLUS_JSON<span style="color:#ff79c6">))</span> <span style="color:#ff79c6">{</span>
-</span></span><span style="display:flex;"><span>                <span style="color:#6272a4">// Matching to AbstractJackson2HttpMessageConverter#DEFAULT_CHARSET
-</span></span></span><span style="display:flex;"><span><span style="color:#6272a4"></span>                <span style="color:#ff79c6">return</span> StandardCharsets<span style="color:#ff79c6">.</span><span style="color:#50fa7b">UTF_8</span><span style="color:#ff79c6">;</span>
-</span></span><span style="display:flex;"><span>            <span style="color:#ff79c6">}</span>
-</span></span><span style="display:flex;"><span>        <span style="color:#ff79c6">}</span>
-</span></span><span style="display:flex;"><span>        Charset charset <span style="color:#ff79c6">=</span> getDefaultCharset<span style="color:#ff79c6">();</span>
-</span></span><span style="display:flex;"><span>        Assert<span style="color:#ff79c6">.</span><span style="color:#50fa7b">state</span><span style="color:#ff79c6">(</span>charset <span style="color:#ff79c6">!=</span> <span style="color:#ff79c6">null</span><span style="color:#ff79c6">,</span> <span style="color:#f1fa8c">&#34;No default charset&#34;</span><span style="color:#ff79c6">);</span>
-</span></span><span style="display:flex;"><span>        <span style="color:#ff79c6">return</span> charset<span style="color:#ff79c6">;</span>
-</span></span><span style="display:flex;"><span>    <span style="color:#ff79c6">}</span>
-</span></span><span style="display:flex;"><span><span style="color:#ff79c6">}</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#8be9fd;font-style:italic">private</span> Charset <span style="color:#50fa7b">getContentTypeCharset</span>(@Nullable MediaType contentType) {
+</span></span><span style="display:flex;"><span>        <span style="color:#ff79c6">if</span> (contentType <span style="color:#ff79c6">!=</span> <span style="color:#ff79c6">null</span>) {
+</span></span><span style="display:flex;"><span>            Charset charset <span style="color:#ff79c6">=</span> contentType.<span style="color:#50fa7b">getCharset</span>();
+</span></span><span style="display:flex;"><span>            <span style="color:#ff79c6">if</span> (charset <span style="color:#ff79c6">!=</span> <span style="color:#ff79c6">null</span>) {
+</span></span><span style="display:flex;"><span>                <span style="color:#ff79c6">return</span> charset;
+</span></span><span style="display:flex;"><span>            }
+</span></span><span style="display:flex;"><span>            <span style="color:#ff79c6">else</span> <span style="color:#ff79c6">if</span> (contentType.<span style="color:#50fa7b">isCompatibleWith</span>(MediaType.<span style="color:#50fa7b">APPLICATION_JSON</span>) <span style="color:#ff79c6">||</span>
+</span></span><span style="display:flex;"><span>                    contentType.<span style="color:#50fa7b">isCompatibleWith</span>(APPLICATION_PLUS_JSON)) {
+</span></span><span style="display:flex;"><span>                <span style="color:#6272a4">// Matching to AbstractJackson2HttpMessageConverter#DEFAULT_CHARSET</span>
+</span></span><span style="display:flex;"><span>                <span style="color:#ff79c6">return</span> StandardCharsets.<span style="color:#50fa7b">UTF_8</span>;
+</span></span><span style="display:flex;"><span>            }
+</span></span><span style="display:flex;"><span>        }
+</span></span><span style="display:flex;"><span>        Charset charset <span style="color:#ff79c6">=</span> getDefaultCharset();
+</span></span><span style="display:flex;"><span>        Assert.<span style="color:#50fa7b">state</span>(charset <span style="color:#ff79c6">!=</span> <span style="color:#ff79c6">null</span>, <span style="color:#f1fa8c">&#34;No default charset&#34;</span>);
+</span></span><span style="display:flex;"><span>        <span style="color:#ff79c6">return</span> charset;
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>}
 </span></span></code></pre></div><p>接著也是要將這個客製的 converter 註冊起來，同樣在 <code>WebMvcConfigurer</code> 的 <code>extendMessageConverters</code> 方法裡面加上這兩行：</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-java" data-lang="java"><span style="display:flex;"><span><span style="color:#6272a4">// replace with customized StringHttpMessageConverter
-</span></span></span><span style="display:flex;"><span><span style="color:#6272a4"></span>converters<span style="color:#ff79c6">.</span><span style="color:#50fa7b">removeIf</span><span style="color:#ff79c6">(</span>converter <span style="color:#ff79c6">-&gt;</span> converter<span style="color:#ff79c6">.</span><span style="color:#50fa7b">getClass</span><span style="color:#ff79c6">().</span><span style="color:#50fa7b">getSimpleName</span><span style="color:#ff79c6">().</span><span style="color:#50fa7b">equals</span><span style="color:#ff79c6">(</span><span style="color:#f1fa8c">&#34;StringHttpMessageConverter&#34;</span><span style="color:#ff79c6">));</span>
-</span></span><span style="display:flex;"><span>converters<span style="color:#ff79c6">.</span><span style="color:#50fa7b">add</span><span style="color:#ff79c6">(</span><span style="color:#bd93f9">1</span><span style="color:#ff79c6">,</span> <span style="color:#ff79c6">new</span> XssStringHttpMessageConverter<span style="color:#ff79c6">());</span>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-java" data-lang="java"><span style="display:flex;"><span><span style="color:#6272a4">// replace with customized StringHttpMessageConverter</span>
+</span></span><span style="display:flex;"><span>converters.<span style="color:#50fa7b">removeIf</span>(converter <span style="color:#ff79c6">-&gt;</span> converter.<span style="color:#50fa7b">getClass</span>().<span style="color:#50fa7b">getSimpleName</span>().<span style="color:#50fa7b">equals</span>(<span style="color:#f1fa8c">&#34;StringHttpMessageConverter&#34;</span>));
+</span></span><span style="display:flex;"><span>converters.<span style="color:#50fa7b">add</span>(1, <span style="color:#ff79c6">new</span> XssStringHttpMessageConverter());
 </span></span></code></pre></div><p>注意 converters 是有順序的，Spring Boot Web 預設第一個 converter 是 <code>ByteArrayHttpMessageConverter</code>，第二個就是原本的 <code>StringHttpMessageConverter</code>，所以我們這邊直接用客製的 converter 取代原位置的 <code>StringHttpMessageConverter</code>。</p>
 <h2 id="結論">結論</h2>
 <p>XSS 攻擊的手段有很多種，而且因為各網站需求不同的關係，也沒有一個統一的方式可以做絕對的防範，其核心的防範概念主要就圍繞在對於各種 Input 的檢查是否符合預期。</p>

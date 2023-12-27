@@ -7,20 +7,14 @@
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
     <copyright>This website by Howard Wang is licensed under a Creative Common Attribution-ShareAlike 4.0 International License.</copyright>
-    <lastBuildDate>Tue, 16 Nov 2021 11:58:47 +0800</lastBuildDate><atom:link href="https://blog.idontwannarock.me/tags/sql-server/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Tue, 16 Nov 2021 11:58:47 +0800</lastBuildDate>
+    <atom:link href="https://blog.idontwannarock.me/tags/sql-server/index.xml" rel="self" type="application/rss+xml" />
     <item>
       <title>Sql Server 備份方式</title>
       <link>https://blog.idontwannarock.me/2021/11/sql_server_backup/</link>
       <pubDate>Tue, 16 Nov 2021 11:58:47 +0800</pubDate>
-      
       <guid>https://blog.idontwannarock.me/2021/11/sql_server_backup/</guid>
-      <description>最近工作上碰到需要對 Sql Server 做 snapshot 的場合，所以就順便來研究一下怎麼對 Sql Server 做備份
-按照過去的經驗，我第一個想法就是找 Sql Server 有沒有類似 mysqldump 或 pg_dump 的工具可以直接將 schema 及 data 導出成 SQL 檔，這樣方便閱讀也方便各種場景下重建資料庫，尤其是在資料庫的 table 數量及資料量並不算大的前提下
-結果，我太天真了，Microsoft 怎麼可能這麼好用 (誤)，人家就是要走自己的路！
-備份檔案格式 Sql Server 備份出來的檔案格式有以下幾種
-bak: schema + data + log + file，適合做定時備份，因為他會保持包含 index 在內的資料以維持 single point of time 的 transactionally consistent DACPAC: schema，適合建立測試環境或比對各環境版本；但也支持下參數加上 data 的備份。實際上是 xml 的壓縮檔 BACPAC: schema + data，適合轉移或 archive db。schema 部分與 DACPAC 相同，只是加上用 BCP 匯出資料 sql 備份工具 主要有以下幾種備份工具
-SqlCmd (官方) BCP (官方) SMO (官方) SqlPackage.</description>
+      <description>最近工作上碰到需要對 Sql Server 做 snapshot 的場合，所以就順便來研究一下怎麼對 Sql Server 做備份&#xA;按照過去的經驗，我第一個想法就是找 Sql Server 有沒有類似 mysqldump 或 pg_dump 的工具可以直接將 schema 及 data 導出成 SQL 檔，這樣方便閱讀也方便各種場景下重建資料庫，尤其是在資料庫的 table 數量及資料量並不算大的前提下&#xA;結果，我太天真了，Microsoft 怎麼可能這麼好用 (誤)，人家就是要走自己的路！&#xA;備份檔案格式 Sql Server 備份出來的檔案格式有以下幾種&#xA;bak: schema + data + log + file，適合做定時備份，因為他會保持包含 index 在內的資料以維持 single point of time 的 transactionally consistent DACPAC: schema，適合建立測試環境或比對各環境版本；但也支持下參數加上 data 的備份。實際上是 xml 的壓縮檔 BACPAC: schema + data，適合轉移或 archive db。schema 部分與 DACPAC 相同，只是加上用 BCP 匯出資料 sql 備份工具 主要有以下幾種備份工具&#xA;SqlCmd (官方) BCP (官方) SMO (官方) SqlPackage.</description>
     </item>
-    
   </channel>
 </rss>

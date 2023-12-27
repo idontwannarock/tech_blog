@@ -376,9 +376,9 @@ if (!doNotTrack) {
 </blockquote>
 <p>再來 <code>equals()</code> 方法就是調用方法裡面的實作去做比較，如果類別本身沒有實作，那就是找繼承的類別們當中，有實作 <code>equals()</code> 方法且繼承樹中最接近該類別的那個實作去執行比較，如果整顆繼承樹都沒有 override 過，那就是用 <code>Object</code> 預設的 <code>equals()</code> 方法</p>
 <p>接著就要再探究 <code>Object.equals()</code> 方法倒底是怎麼比較物件的呢？以 Java 11 的版本來說是這樣的</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-java" data-lang="java"><span style="display:flex;"><span><span style="color:#8be9fd;font-style:italic">public</span> <span style="color:#8be9fd">boolean</span> <span style="color:#50fa7b">equals</span><span style="color:#ff79c6">(</span>Object obj<span style="color:#ff79c6">)</span> <span style="color:#ff79c6">{</span>
-</span></span><span style="display:flex;"><span>    <span style="color:#ff79c6">return</span> <span style="color:#ff79c6">(</span><span style="color:#ff79c6">this</span> <span style="color:#ff79c6">==</span> obj<span style="color:#ff79c6">);</span>
-</span></span><span style="display:flex;"><span><span style="color:#ff79c6">}</span>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-java" data-lang="java"><span style="display:flex;"><span><span style="color:#8be9fd;font-style:italic">public</span> <span style="color:#8be9fd">boolean</span> <span style="color:#50fa7b">equals</span>(Object obj) {
+</span></span><span style="display:flex;"><span>    <span style="color:#ff79c6">return</span> (<span style="color:#ff79c6">this</span> <span style="color:#ff79c6">==</span> obj);
+</span></span><span style="display:flex;"><span>}
 </span></span></code></pre></div><p>也就是說他同樣會使用 <code>==</code> 來比較物件</p>
 <h2 id="optional-類別"><code>Optional</code> 類別</h2>
 <p><code>Optional</code> 是 Java 1.8 推出的新 feature，目的就是為了處理 Java 惡名昭彰的 <code>NullPointerException</code></p>
@@ -389,73 +389,73 @@ if (!doNotTrack) {
 <p>所以可見變數如果是 <code>Optional</code>，那變數裡面的值則是 <code>Optional</code> 實例在 heap 裡面的位址</p>
 <p>結合上一段的內容，當兩個 <code>Optional</code> 做 <code>==</code> 比較的時候，比較的是兩個實例在 heap 裡面的位址；而做 <code>equals()</code> 比較的時候呢？我們直接看 code，以下是 JDK 11 版本的 <code>Optional</code> 實作</p>
 <div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-java" data-lang="java"><span style="display:flex;"><span>@Override
-</span></span><span style="display:flex;"><span><span style="color:#8be9fd;font-style:italic">public</span> <span style="color:#8be9fd">boolean</span> <span style="color:#50fa7b">equals</span><span style="color:#ff79c6">(</span>Object obj<span style="color:#ff79c6">)</span> <span style="color:#ff79c6">{</span>
-</span></span><span style="display:flex;"><span>    <span style="color:#ff79c6">if</span> <span style="color:#ff79c6">(</span><span style="color:#ff79c6">this</span> <span style="color:#ff79c6">==</span> obj<span style="color:#ff79c6">)</span> <span style="color:#ff79c6">{</span>
-</span></span><span style="display:flex;"><span>        <span style="color:#ff79c6">return</span> <span style="color:#ff79c6">true</span><span style="color:#ff79c6">;</span>
-</span></span><span style="display:flex;"><span>    <span style="color:#ff79c6">}</span>
+</span></span><span style="display:flex;"><span><span style="color:#8be9fd;font-style:italic">public</span> <span style="color:#8be9fd">boolean</span> <span style="color:#50fa7b">equals</span>(Object obj) {
+</span></span><span style="display:flex;"><span>    <span style="color:#ff79c6">if</span> (<span style="color:#ff79c6">this</span> <span style="color:#ff79c6">==</span> obj) {
+</span></span><span style="display:flex;"><span>        <span style="color:#ff79c6">return</span> <span style="color:#ff79c6">true</span>;
+</span></span><span style="display:flex;"><span>    }
 </span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span>    <span style="color:#ff79c6">if</span> <span style="color:#ff79c6">(!(</span>obj <span style="color:#ff79c6">instanceof</span> Optional<span style="color:#ff79c6">))</span> <span style="color:#ff79c6">{</span>
-</span></span><span style="display:flex;"><span>        <span style="color:#ff79c6">return</span> <span style="color:#ff79c6">false</span><span style="color:#ff79c6">;</span>
-</span></span><span style="display:flex;"><span>    <span style="color:#ff79c6">}</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#ff79c6">if</span> (<span style="color:#ff79c6">!</span>(obj <span style="color:#ff79c6">instanceof</span> Optional)) {
+</span></span><span style="display:flex;"><span>        <span style="color:#ff79c6">return</span> <span style="color:#ff79c6">false</span>;
+</span></span><span style="display:flex;"><span>    }
 </span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span>    Optional<span style="color:#ff79c6">&lt;?&gt;</span> other <span style="color:#ff79c6">=</span> <span style="color:#ff79c6">(</span>Optional<span style="color:#ff79c6">&lt;?&gt;)</span> obj<span style="color:#ff79c6">;</span>
-</span></span><span style="display:flex;"><span>    <span style="color:#ff79c6">return</span> Objects<span style="color:#ff79c6">.</span><span style="color:#50fa7b">equals</span><span style="color:#ff79c6">(</span>value<span style="color:#ff79c6">,</span> other<span style="color:#ff79c6">.</span><span style="color:#50fa7b">value</span><span style="color:#ff79c6">);</span>
-</span></span><span style="display:flex;"><span><span style="color:#ff79c6">}</span>
+</span></span><span style="display:flex;"><span>    Optional<span style="color:#ff79c6">&lt;?&gt;</span> other <span style="color:#ff79c6">=</span> (Optional<span style="color:#ff79c6">&lt;?&gt;</span>) obj;
+</span></span><span style="display:flex;"><span>    <span style="color:#ff79c6">return</span> Objects.<span style="color:#50fa7b">equals</span>(value, other.<span style="color:#50fa7b">value</span>);
+</span></span><span style="display:flex;"><span>}
 </span></span></code></pre></div><p>其中 <code>Objects</code> 的 <code>equals()</code> 實作如下</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-java" data-lang="java"><span style="display:flex;"><span><span style="color:#8be9fd;font-style:italic">public</span> <span style="color:#8be9fd;font-style:italic">static</span> <span style="color:#8be9fd">boolean</span> <span style="color:#50fa7b">equals</span><span style="color:#ff79c6">(</span>Object a<span style="color:#ff79c6">,</span> Object b<span style="color:#ff79c6">)</span> <span style="color:#ff79c6">{</span>
-</span></span><span style="display:flex;"><span>    <span style="color:#ff79c6">return</span> <span style="color:#ff79c6">(</span>a <span style="color:#ff79c6">==</span> b<span style="color:#ff79c6">)</span> <span style="color:#ff79c6">||</span> <span style="color:#ff79c6">(</span>a <span style="color:#ff79c6">!=</span> <span style="color:#ff79c6">null</span> <span style="color:#ff79c6">&amp;&amp;</span> a<span style="color:#ff79c6">.</span><span style="color:#50fa7b">equals</span><span style="color:#ff79c6">(</span>b<span style="color:#ff79c6">));</span>
-</span></span><span style="display:flex;"><span><span style="color:#ff79c6">}</span>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-java" data-lang="java"><span style="display:flex;"><span><span style="color:#8be9fd;font-style:italic">public</span> <span style="color:#8be9fd;font-style:italic">static</span> <span style="color:#8be9fd">boolean</span> <span style="color:#50fa7b">equals</span>(Object a, Object b) {
+</span></span><span style="display:flex;"><span>    <span style="color:#ff79c6">return</span> (a <span style="color:#ff79c6">==</span> b) <span style="color:#ff79c6">||</span> (a <span style="color:#ff79c6">!=</span> <span style="color:#ff79c6">null</span> <span style="color:#ff79c6">&amp;&amp;</span> a.<span style="color:#50fa7b">equals</span>(b));
+</span></span><span style="display:flex;"><span>}
 </span></span></code></pre></div><p>從 code 我們可以看得出來，<code>Optional</code> 的 <code>equals()</code> 實際上都是用 <code>==</code> 的方式去做比較，頂多會驗證另外一個實例是否也為 <code>Optional</code> 類別而已</p>
 <h2 id="用-optional-當作類別的-field-時類別是怎麼做比較的">用 <code>Optional</code> 當作類別的 field 時，類別是怎麼做比較的？</h2>
 <p>其實講到這邊應該就可以了解為什麼 IntelliJ 會提示 <code>Optional</code> 不適合用來當作類別的 field 了吧？</p>
 <p>其實主要就在於執行比較動作的時候，採用 <code>Optional</code> 當作類別 field 容易造成一些不可預期的結果</p>
 <p>一般來說，應該相對少人會特別去自己 override <code>equals()</code> 方法吧？要不就是直接用 Lombok 或用 IDE 自動產生的 code</p>
 <p>首先我們先寫一個最簡單的類別</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-java" data-lang="java"><span style="display:flex;"><span><span style="color:#ff79c6">import</span> java.util.Optional<span style="color:#ff79c6">;</span>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-java" data-lang="java"><span style="display:flex;"><span><span style="color:#ff79c6">import</span> java.util.Optional;
 </span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span><span style="color:#8be9fd;font-style:italic">public</span> <span style="color:#8be9fd;font-style:italic">class</span> <span style="color:#50fa7b">Test</span> <span style="color:#ff79c6">{</span>
-</span></span><span style="display:flex;"><span>    <span style="color:#8be9fd;font-style:italic">private</span> Optional<span style="color:#ff79c6">&lt;</span>Integer<span style="color:#ff79c6">&gt;</span> aField<span style="color:#ff79c6">;</span>
-</span></span><span style="display:flex;"><span><span style="color:#ff79c6">}</span>
+</span></span><span style="display:flex;"><span><span style="color:#8be9fd;font-style:italic">public</span> <span style="color:#8be9fd;font-style:italic">class</span> <span style="color:#50fa7b">Test</span> {
+</span></span><span style="display:flex;"><span>    <span style="color:#8be9fd;font-style:italic">private</span> Optional<span style="color:#ff79c6">&lt;</span>Integer<span style="color:#ff79c6">&gt;</span> aField;
+</span></span><span style="display:flex;"><span>}
 </span></span></code></pre></div><p>如果採用 Lombok 的 <code>@Data</code> annotation 的話，實際 compile 出來的 <code>equals()</code> 是這樣的</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-java" data-lang="java"><span style="display:flex;"><span><span style="color:#8be9fd;font-style:italic">public</span> <span style="color:#8be9fd">boolean</span> <span style="color:#50fa7b">equals</span><span style="color:#ff79c6">(</span><span style="color:#8be9fd;font-style:italic">final</span> Object o<span style="color:#ff79c6">)</span> <span style="color:#ff79c6">{</span>
-</span></span><span style="display:flex;"><span>    <span style="color:#ff79c6">if</span> <span style="color:#ff79c6">(</span>o <span style="color:#ff79c6">==</span> <span style="color:#ff79c6">this</span><span style="color:#ff79c6">)</span> <span style="color:#ff79c6">{</span>
-</span></span><span style="display:flex;"><span>        <span style="color:#ff79c6">return</span> <span style="color:#ff79c6">true</span><span style="color:#ff79c6">;</span>
-</span></span><span style="display:flex;"><span>    <span style="color:#ff79c6">}</span> <span style="color:#ff79c6">else</span> <span style="color:#ff79c6">if</span> <span style="color:#ff79c6">(!(</span>o <span style="color:#ff79c6">instanceof</span> Test<span style="color:#ff79c6">))</span> <span style="color:#ff79c6">{</span>
-</span></span><span style="display:flex;"><span>        <span style="color:#ff79c6">return</span> <span style="color:#ff79c6">false</span><span style="color:#ff79c6">;</span>
-</span></span><span style="display:flex;"><span>    <span style="color:#ff79c6">}</span> <span style="color:#ff79c6">else</span> <span style="color:#ff79c6">{</span>
-</span></span><span style="display:flex;"><span>        Test other <span style="color:#ff79c6">=</span> <span style="color:#ff79c6">(</span>Test<span style="color:#ff79c6">)</span>o<span style="color:#ff79c6">;</span>
-</span></span><span style="display:flex;"><span>        <span style="color:#ff79c6">if</span> <span style="color:#ff79c6">(!</span>other<span style="color:#ff79c6">.</span><span style="color:#50fa7b">canEqual</span><span style="color:#ff79c6">(</span><span style="color:#ff79c6">this</span><span style="color:#ff79c6">))</span> <span style="color:#ff79c6">{</span>
-</span></span><span style="display:flex;"><span>            <span style="color:#ff79c6">return</span> <span style="color:#ff79c6">false</span><span style="color:#ff79c6">;</span>
-</span></span><span style="display:flex;"><span>        <span style="color:#ff79c6">}</span> <span style="color:#ff79c6">else</span> <span style="color:#ff79c6">{</span>
-</span></span><span style="display:flex;"><span>            Object <span style="color:#ff79c6">this</span>$aField <span style="color:#ff79c6">=</span> <span style="color:#ff79c6">this</span><span style="color:#ff79c6">.</span><span style="color:#50fa7b">getAField</span><span style="color:#ff79c6">();</span>
-</span></span><span style="display:flex;"><span>            Object other$aField <span style="color:#ff79c6">=</span> other<span style="color:#ff79c6">.</span><span style="color:#50fa7b">getAField</span><span style="color:#ff79c6">();</span>
-</span></span><span style="display:flex;"><span>            <span style="color:#ff79c6">if</span> <span style="color:#ff79c6">(</span><span style="color:#ff79c6">this</span>$aField <span style="color:#ff79c6">==</span> <span style="color:#ff79c6">null</span><span style="color:#ff79c6">)</span> <span style="color:#ff79c6">{</span>
-</span></span><span style="display:flex;"><span>                <span style="color:#ff79c6">if</span> <span style="color:#ff79c6">(</span>other$aField <span style="color:#ff79c6">!=</span> <span style="color:#ff79c6">null</span><span style="color:#ff79c6">)</span> <span style="color:#ff79c6">{</span>
-</span></span><span style="display:flex;"><span>                    <span style="color:#ff79c6">return</span> <span style="color:#ff79c6">false</span><span style="color:#ff79c6">;</span>
-</span></span><span style="display:flex;"><span>                <span style="color:#ff79c6">}</span>
-</span></span><span style="display:flex;"><span>            <span style="color:#ff79c6">}</span> <span style="color:#ff79c6">else</span> <span style="color:#ff79c6">if</span> <span style="color:#ff79c6">(!</span><span style="color:#ff79c6">this</span>$aField<span style="color:#ff79c6">.</span><span style="color:#50fa7b">equals</span><span style="color:#ff79c6">(</span>other$aField<span style="color:#ff79c6">))</span> <span style="color:#ff79c6">{</span>
-</span></span><span style="display:flex;"><span>                <span style="color:#ff79c6">return</span> <span style="color:#ff79c6">false</span><span style="color:#ff79c6">;</span>
-</span></span><span style="display:flex;"><span>            <span style="color:#ff79c6">}</span>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-java" data-lang="java"><span style="display:flex;"><span><span style="color:#8be9fd;font-style:italic">public</span> <span style="color:#8be9fd">boolean</span> <span style="color:#50fa7b">equals</span>(<span style="color:#8be9fd;font-style:italic">final</span> Object o) {
+</span></span><span style="display:flex;"><span>    <span style="color:#ff79c6">if</span> (o <span style="color:#ff79c6">==</span> <span style="color:#ff79c6">this</span>) {
+</span></span><span style="display:flex;"><span>        <span style="color:#ff79c6">return</span> <span style="color:#ff79c6">true</span>;
+</span></span><span style="display:flex;"><span>    } <span style="color:#ff79c6">else</span> <span style="color:#ff79c6">if</span> (<span style="color:#ff79c6">!</span>(o <span style="color:#ff79c6">instanceof</span> Test)) {
+</span></span><span style="display:flex;"><span>        <span style="color:#ff79c6">return</span> <span style="color:#ff79c6">false</span>;
+</span></span><span style="display:flex;"><span>    } <span style="color:#ff79c6">else</span> {
+</span></span><span style="display:flex;"><span>        Test other <span style="color:#ff79c6">=</span> (Test)o;
+</span></span><span style="display:flex;"><span>        <span style="color:#ff79c6">if</span> (<span style="color:#ff79c6">!</span>other.<span style="color:#50fa7b">canEqual</span>(<span style="color:#ff79c6">this</span>)) {
+</span></span><span style="display:flex;"><span>            <span style="color:#ff79c6">return</span> <span style="color:#ff79c6">false</span>;
+</span></span><span style="display:flex;"><span>        } <span style="color:#ff79c6">else</span> {
+</span></span><span style="display:flex;"><span>            Object <span style="color:#ff79c6">this</span>$aField <span style="color:#ff79c6">=</span> <span style="color:#ff79c6">this</span>.<span style="color:#50fa7b">getAField</span>();
+</span></span><span style="display:flex;"><span>            Object other$aField <span style="color:#ff79c6">=</span> other.<span style="color:#50fa7b">getAField</span>();
+</span></span><span style="display:flex;"><span>            <span style="color:#ff79c6">if</span> (<span style="color:#ff79c6">this</span>$aField <span style="color:#ff79c6">==</span> <span style="color:#ff79c6">null</span>) {
+</span></span><span style="display:flex;"><span>                <span style="color:#ff79c6">if</span> (other$aField <span style="color:#ff79c6">!=</span> <span style="color:#ff79c6">null</span>) {
+</span></span><span style="display:flex;"><span>                    <span style="color:#ff79c6">return</span> <span style="color:#ff79c6">false</span>;
+</span></span><span style="display:flex;"><span>                }
+</span></span><span style="display:flex;"><span>            } <span style="color:#ff79c6">else</span> <span style="color:#ff79c6">if</span> (<span style="color:#ff79c6">!</span><span style="color:#ff79c6">this</span>$aField.<span style="color:#50fa7b">equals</span>(other$aField)) {
+</span></span><span style="display:flex;"><span>                <span style="color:#ff79c6">return</span> <span style="color:#ff79c6">false</span>;
+</span></span><span style="display:flex;"><span>            }
 </span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span>            <span style="color:#ff79c6">return</span> <span style="color:#ff79c6">true</span><span style="color:#ff79c6">;</span>
-</span></span><span style="display:flex;"><span>        <span style="color:#ff79c6">}</span>
-</span></span><span style="display:flex;"><span>    <span style="color:#ff79c6">}</span>
-</span></span><span style="display:flex;"><span><span style="color:#ff79c6">}</span>
+</span></span><span style="display:flex;"><span>            <span style="color:#ff79c6">return</span> <span style="color:#ff79c6">true</span>;
+</span></span><span style="display:flex;"><span>        }
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>}
 </span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span><span style="color:#8be9fd;font-style:italic">protected</span> <span style="color:#8be9fd">boolean</span> <span style="color:#50fa7b">canEqual</span><span style="color:#ff79c6">(</span><span style="color:#8be9fd;font-style:italic">final</span> Object other<span style="color:#ff79c6">)</span> <span style="color:#ff79c6">{</span>
-</span></span><span style="display:flex;"><span>    <span style="color:#ff79c6">return</span> other <span style="color:#ff79c6">instanceof</span> Test<span style="color:#ff79c6">;</span>
-</span></span><span style="display:flex;"><span><span style="color:#ff79c6">}</span>
+</span></span><span style="display:flex;"><span><span style="color:#8be9fd;font-style:italic">protected</span> <span style="color:#8be9fd">boolean</span> <span style="color:#50fa7b">canEqual</span>(<span style="color:#8be9fd;font-style:italic">final</span> Object other) {
+</span></span><span style="display:flex;"><span>    <span style="color:#ff79c6">return</span> other <span style="color:#ff79c6">instanceof</span> Test;
+</span></span><span style="display:flex;"><span>}
 </span></span></code></pre></div><p>從代碼中我們可以看到實際上除了 <code>instanceof</code> 以外，其他的比較追根究柢還是用的是 <code>==</code> 做比較</p>
 <p>那我們改用 IDE 自動產生 code 來看看</p>
 <div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-java" data-lang="java"><span style="display:flex;"><span>@Override
-</span></span><span style="display:flex;"><span><span style="color:#8be9fd;font-style:italic">public</span> <span style="color:#8be9fd">boolean</span> <span style="color:#50fa7b">equals</span><span style="color:#ff79c6">(</span>Object o<span style="color:#ff79c6">)</span> <span style="color:#ff79c6">{</span>
-</span></span><span style="display:flex;"><span>    <span style="color:#ff79c6">if</span> <span style="color:#ff79c6">(</span><span style="color:#ff79c6">this</span> <span style="color:#ff79c6">==</span> o<span style="color:#ff79c6">)</span> <span style="color:#ff79c6">return</span> <span style="color:#ff79c6">true</span><span style="color:#ff79c6">;</span>
-</span></span><span style="display:flex;"><span>    <span style="color:#ff79c6">if</span> <span style="color:#ff79c6">(!(</span>o <span style="color:#ff79c6">instanceof</span> Test<span style="color:#ff79c6">))</span> <span style="color:#ff79c6">return</span> <span style="color:#ff79c6">false</span><span style="color:#ff79c6">;</span>
+</span></span><span style="display:flex;"><span><span style="color:#8be9fd;font-style:italic">public</span> <span style="color:#8be9fd">boolean</span> <span style="color:#50fa7b">equals</span>(Object o) {
+</span></span><span style="display:flex;"><span>    <span style="color:#ff79c6">if</span> (<span style="color:#ff79c6">this</span> <span style="color:#ff79c6">==</span> o) <span style="color:#ff79c6">return</span> <span style="color:#ff79c6">true</span>;
+</span></span><span style="display:flex;"><span>    <span style="color:#ff79c6">if</span> (<span style="color:#ff79c6">!</span>(o <span style="color:#ff79c6">instanceof</span> Test)) <span style="color:#ff79c6">return</span> <span style="color:#ff79c6">false</span>;
 </span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span>    Test test <span style="color:#ff79c6">=</span> <span style="color:#ff79c6">(</span>Test<span style="color:#ff79c6">)</span> o<span style="color:#ff79c6">;</span>
+</span></span><span style="display:flex;"><span>    Test test <span style="color:#ff79c6">=</span> (Test) o;
 </span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span>    <span style="color:#ff79c6">return</span> Objects<span style="color:#ff79c6">.</span><span style="color:#50fa7b">equals</span><span style="color:#ff79c6">(</span>aField<span style="color:#ff79c6">,</span> test<span style="color:#ff79c6">.</span><span style="color:#50fa7b">aField</span><span style="color:#ff79c6">);</span>
-</span></span><span style="display:flex;"><span><span style="color:#ff79c6">}</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#ff79c6">return</span> Objects.<span style="color:#50fa7b">equals</span>(aField, test.<span style="color:#50fa7b">aField</span>);
+</span></span><span style="display:flex;"><span>}
 </span></span></code></pre></div><p>可以看出它同樣也是用 <code>==</code> 來做比較</p>
 <h2 id="結論">結論</h2>
 <p>一般來說，我們要比較兩個相同類別的不同實例是否實質上相同時，通常都不會期待比較的是兩個實例在 heap 中的位址，而是希望比較物件內容，也就是物件包含的資料是否相同，換句話說應該是要比較物件內每個屬性是否相同</p>

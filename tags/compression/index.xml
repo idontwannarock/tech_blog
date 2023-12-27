@@ -7,20 +7,14 @@
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
     <copyright>This website by Howard Wang is licensed under a Creative Common Attribution-ShareAlike 4.0 International License.</copyright>
-    <lastBuildDate>Thu, 16 Dec 2021 15:32:25 +0800</lastBuildDate><atom:link href="https://blog.idontwannarock.me/tags/compression/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Thu, 16 Dec 2021 15:32:25 +0800</lastBuildDate>
+    <atom:link href="https://blog.idontwannarock.me/tags/compression/index.xml" rel="self" type="application/rss+xml" />
     <item>
       <title>在 Batch Script 壓縮檔案</title>
       <link>https://blog.idontwannarock.me/2021/12/zip_in_batch_script/</link>
       <pubDate>Thu, 16 Dec 2021 15:32:25 +0800</pubDate>
-      
       <guid>https://blog.idontwannarock.me/2021/12/zip_in_batch_script/</guid>
-      <description>因為目前公司沒有專職 SRE 或 DevOps 幫忙做 CI/CD，身為小小後端工程師只好自己想辦法，偏偏目前用到的 tech stack 包括 .net framework，所以必須跟 Windows 環境的 batch file 打交道來替代習慣的 shell 檔，其中有個步驟必須要壓縮/解壓縮資料夾
-Tar 研究了一下，很興奮的發現 tar 在 command prompt 跟 powershell 都可以用，那代表我在 batch 檔裡面使用沒問題ＲＲＲ
-所以可以這樣用
-:: zip tar -cvzf &amp;#34;path and name to archive.tar&amp;#34; &amp;#34;path to folder to compress&amp;#34; :: unzip tar -xvzf &amp;#34;path and name to archive.tar&amp;#34; Microsoft.Powershell.Archive Module 很可惜，這個方法有一個小小的問題
-tar 基本上是從 Windows 10 或 Windows Server 2019 才開始支援，很不巧，我手上有個環境是 Windows Server 2016&amp;hellip;
-基於可以用原生就絕不多安裝東西的自虐原則，好險又找到了另一個方法，powershell 有個 archive 的模組可以用！</description>
+      <description>因為目前公司沒有專職 SRE 或 DevOps 幫忙做 CI/CD，身為小小後端工程師只好自己想辦法，偏偏目前用到的 tech stack 包括 .net framework，所以必須跟 Windows 環境的 batch file 打交道來替代習慣的 shell 檔，其中有個步驟必須要壓縮/解壓縮資料夾&#xA;Tar 研究了一下，很興奮的發現 tar 在 command prompt 跟 powershell 都可以用，那代表我在 batch 檔裡面使用沒問題ＲＲＲ&#xA;所以可以這樣用&#xA;:: zip tar -cvzf &amp;#34;path and name to archive.tar&amp;#34; &amp;#34;path to folder to compress&amp;#34; :: unzip tar -xvzf &amp;#34;path and name to archive.tar&amp;#34; Microsoft.Powershell.Archive Module 很可惜，這個方法有一個小小的問題&#xA;tar 基本上是從 Windows 10 或 Windows Server 2019 才開始支援，很不巧，我手上有個環境是 Windows Server 2016&amp;hellip;&#xA;基於可以用原生就絕不多安裝東西的自虐原則，好險又找到了另一個方法，powershell 有個 archive 的模組可以用！</description>
     </item>
-    
   </channel>
 </rss>
