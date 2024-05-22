@@ -1,0 +1,909 @@
+<!DOCTYPE html>
+<html><head>
+<title>.gitattributes 引發的慘案</title>
+
+
+
+
+<meta charset="utf-8">
+<meta name="X-UA-Compatible" content="IE=edge">
+<meta name="google-site-verification" content="">
+<meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" name="viewport">
+<meta content="telephone=no" name="format-detection">
+<meta name="description" content="研究 Glowroot 作為 Java Agent 在 Docker 啟動時，碰到 Error opening zip file or JAR manifest missing 錯誤訊息的問題">
+<meta name="renderer" content="webkit">
+<meta name="theme-color" content="#ffffff">
+
+
+
+
+
+
+
+
+
+
+
+  
+    
+      <script async src="https://www.googletagmanager.com/gtag/js?id=G-JP1V61PPMJ"></script>
+      <script>
+        var doNotTrack = false;
+        if ( false ) {
+          var dnt = (navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack);
+          var doNotTrack = (dnt == "1" || dnt == "yes");
+        }
+        if (!doNotTrack) {
+          window.dataLayer = window.dataLayer || [];
+          function gtag(){dataLayer.push(arguments);}
+          gtag('js', new Date());
+          gtag('config', 'G-JP1V61PPMJ');
+        }
+      </script>
+    
+  
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+      <script src="https://blog.idontwannarock.me/js/toc.js"></script>
+    
+    <link type="text/css" rel="stylesheet" href="https://blog.idontwannarock.me/vendor/css/bootstrap.min.css">
+
+<link rel="stylesheet" href="https://blog.idontwannarock.me/scss/dark-mode.min.cb53f1bee2b8900cb4f082afbf00175d6618f281cf9a2fe8619e3b52d20b5721.css" integrity="sha256-y1PxvuK4kAy08IKvvwAXXWYY8oHPmi/oYZ47UtILVyE=" media="screen">
+
+
+<link rel="stylesheet"
+          href="https://fonts.googleapis.com/css?family=Material+Icons">
+
+
+
+
+
+
+
+
+
+
+
+
+<script src="https://cdn.jsdelivr.net/npm/vue-disqus@3/dist/vue-disqus.js"></script>
+
+
+
+
+
+
+
+
+</head>
+<body>
+    	<div id="app"><div class="single-column-drawer-container" id="drawer"
+     v-bind:class="{ 'single-column-drawer-container-active': isDrawerOpen }">
+    <div class="drawer-content">
+        <div class="drawer-menu">
+            
+            
+            
+                
+                
+                
+                
+                
+                <a class="a-block drawer-menu-item false" href="https://blog.idontwannarock.me/posts">
+                    Archive
+                </a>
+                
+            
+                
+                
+                
+                
+                
+                <a class="a-block drawer-menu-item false" href="https://blog.idontwannarock.me/categories">
+                    Categories
+                </a>
+                
+            
+                
+                
+                
+                
+                
+                <a class="a-block drawer-menu-item false" href="https://blog.idontwannarock.me/tags">
+                    Tags
+                </a>
+                
+            
+                
+                
+                
+                
+                
+                <a class="a-block drawer-menu-item false" href="https://blog.idontwannarock.me/about">
+                    About
+                </a>
+                
+            
+                
+                
+                
+                
+                
+                <a class="a-block drawer-menu-item false" href="https://blog.idontwannarock.me/index.xml">
+                    RSS Feed
+                </a>
+                
+            
+            
+            <div class="toc">
+
+
+	<div class="toc-content">
+	
+		
+		
+		
+		<center>- CATALOG -</center>
+		
+		
+		<ul>
+			
+				
+				
+					
+						
+						
+						
+						
+						
+							<li>
+								<a href="#%e6%83%85%e6%b3%81%e6%8f%8f%e8%bf%b0" class="nav-情況描述">
+									情況描述
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+						
+							<li>
+								<a href="#%e5%95%8f%e9%a1%8c%e5%8e%9f%e5%9b%a0" class="nav-問題原因">
+									問題原因
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+							
+								
+									<ul>
+								
+							
+						
+						
+							<li>
+								<a href="#%e6%ac%8a%e9%99%90%e5%95%8f%e9%a1%8c" class="nav-權限問題">
+									權限問題？
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+						
+							<li>
+								<a href="#jar-%e6%aa%94%e6%af%80%e6%90%8d" class="nav-jar-檔毀損">
+									Jar 檔毀損？
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+						
+							<li>
+								<a href="#gitattributes-4-ni" class="nav-gitattributes-4-ni">
+									.gitattributes 4 ni？！
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+							
+								</ul>
+							
+						
+						
+						
+							<li>
+								<a href="#%e8%a7%a3%e6%b1%ba%e8%be%a6%e6%b3%95" class="nav-解決辦法">
+									解決辦法
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+						
+							<li>
+								<a href="#%e5%be%8c%e8%a8%98" class="nav-後記">
+									後記
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+						
+							<li>
+								<a href="#reference" class="nav-reference">
+									Reference
+								</a>
+							</li>
+						
+						
+					
+				
+			
+		</ul>
+	</div>
+
+</div>
+            
+        </div>
+    </div>
+</div>
+<transition name="fade">
+    <div id="drawer-mask" v-bind:class="{ 'single-column-drawer-mask': mounted }" v-if="isDrawerOpen" v-on:click="toggleDrawer"></div>
+</transition>
+<nav id="navBar" class="navbar sticky-top navbar-light single-column-nav-container">
+    <div id="navBackground" class="nav-background"></div>
+    <div class="container container-narrow nav-content">
+        <button id="nav_dropdown_btn" class="nav-dropdown-toggle" type="button" v-on:click="toggleDrawer">
+            <i class="material-icons">
+                menu
+            </i>
+        </button>
+        <a id="navTitle" class="navbar-brand" href="https://blog.idontwannarock.me/">
+            Howard Tech Note
+        </a>
+        
+        <button type="button" class="nav-darkmode-toggle" id="darkModeToggleButton2">
+            <i class="material-icons" id="darkModeToggleIcon2">
+                dark_mode
+            </i>
+        </button>
+        
+    </div>
+</nav>
+<div class="single-column-header-container" id="pageHead"
+     v-bind:style="{ transform: 'translateZ(0px) translateY('+.3*scrollY+'px)', opacity: 1-navOpacity }">
+    <a href="https://blog.idontwannarock.me/">
+        <div class="single-column-header-title">Howard Tech Note</div>
+        
+        <div class="single-column-header-subtitle">Share * Record * Program</div>
+        
+
+    </a>
+</div>
+
+            <div id="content">
+                <div id="streamContainer" class="stream-container">
+
+    <div class="post-list-container post-list-container-shadow">
+        <div class="post">
+            
+            
+            
+                
+            
+
+            <div class="post-head-wrapper"
+                
+                    
+                    
+                    style="background-image: url('https://res.cloudinary.com/dcvgho2zc/image/upload/v1716343505/Tech%20Blog/git-logo-banner.jpg')"
+                    
+                
+            >
+                <div class="post-title">
+                    .gitattributes 引發的慘案
+                    
+                    <div class="post-subtitle">
+                        研究 Glowroot 作為 Java Agent 在 Docker 啟動時，碰到 Error opening zip file or JAR manifest missing 錯誤訊息的問題
+                    </div>
+                    
+                    <div class="post-meta">
+                        
+                        <time itemprop="datePublished">
+                            2024-05-22 09:25
+                        </time>
+                        
+
+                        
+                            <i class="material-icons" style="">folder</i>
+                                <a href="https://blog.idontwannarock.me/categories/bug">bug</a>
+                                &nbsp;
+                        
+
+                        
+                            <i class="material-icons" style="">label</i>
+                            
+                                <a href="https://blog.idontwannarock.me/tags/git">git</a>
+                                &nbsp;
+                            
+                                <a href="https://blog.idontwannarock.me/tags/gitattributes">gitattributes</a>
+                                &nbsp;
+                            
+                                <a href="https://blog.idontwannarock.me/tags/glowroot">glowroot</a>
+                                &nbsp;
+                            
+                                <a href="https://blog.idontwannarock.me/tags/javaagent">javaagent</a>
+                                &nbsp;
+                            
+                        
+                        
+                    </div>
+                </div>
+            </div>
+            
+            <div class="post-body-wrapper">
+                
+                <div class="post-body" v-pre>
+                
+                    <h1 id="情況描述">情況描述</h1>
+<p>最近在嘗試建立新專案的基礎專案架構，因為剛好看到常用的 APM 工具 <a href="https://github.com/glowroot/glowroot/releases/tag/v0.14.2">Glowroot 0.14.2 版 release</a> 開始支援 Java 21，讓我產生使用 <a href="https://blog.idontwannarock.me/2022/12/maven_docker_multi_stage_build/">multi-staged build</a> + <a href="https://docs.oracle.com/en/java/javase/11/tools/jlink.html">jlink</a> 盡量縮小 image 大小，並且掛上 <a href="https://glowroot.org/">Glowroot</a> 作為 Java Agent 來運行專案的念頭</p>
+<p>因為以往已經將 Glowroot 使用在 Java 8, 11, 17 等版本的專案上，所以 Dockerfile 的基本架構已經確立，理論上只需要調整 base image 為 Java 21 應該就沒問題</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-dockerfile" data-lang="dockerfile"><span style="display:flex;"><span><span style="color:#ff79c6">FROM</span><span style="color:#f1fa8c"> eclipse-temurin:21</span>
+</span></span><span style="display:flex;"><span><span style="color:#ff79c6">ENV</span> <span style="color:#8be9fd;font-style:italic">CONFIG_java_opts</span><span style="color:#ff79c6">=</span><span style="color:#f1fa8c">&#34;-server -XX:+UseG1GC&#34;</span>
+</span></span><span style="display:flex;"><span><span style="color:#ff79c6">COPY</span> extras/glowroot /extras/glowroot
+</span></span><span style="display:flex;"><span><span style="color:#ff79c6">COPY</span> target/*jar app.jar
+</span></span><span style="display:flex;"><span><span style="color:#ff79c6">ENTRYPOINT</span> <span style="color:#8be9fd;font-style:italic">exec</span> java <span style="color:#8be9fd;font-style:italic">$CONFIG_java_opts</span> -javaagent:/extras/glowroot/glowroot.jar -Dglowroot.collector.address<span style="color:#ff79c6">=</span><span style="color:#8be9fd;font-style:italic">$CONFIG_glowroot_address</span> -Dglowroot.agent.id<span style="color:#ff79c6">=</span><span style="color:#8be9fd;font-style:italic">$CONFIG_app_name</span>:: -jar /app.jar
+</span></span></code></pre></div><p>其中</p>
+<ul>
+<li><code>extras/glowroot</code> 資料夾包含我直接從 <a href="https://github.com/glowroot/glowroot/releases/tag/v0.14.2">Glowroot 0.14.2 Release</a> 這邊下載後解壓縮出來的 <code>glowroot.jar</code> 檔，並且直接 commit 到 git 上</li>
+<li><code>$CONFIG_java_opts</code>、<code>$CONFIG_glowroot_address</code> 及 <code>$CONFIG_app_name</code> 都是定義在 K8S config map 中的變數，會在 K8S 運行這個 image 的時候從 pod 的環境變數取得</li>
+</ul>
+<p>這樣的 Dockerfile 產出的 image 大約是 520MB，<code>app.jar</code> 檔大約 65MB，所以代表 image 的其他部分就有 455MB，其實有點大</p>
+<p>如果我專案複雜一點可能光 <code>app.jar</code> 就會來到 4-500MB，那 image 甚至可能會將近 1GB，這樣在 CICD 頻繁的情況下對於 image 傳輸的壓力太大，而且 K8S rolling start pod 的速度也會很慢，所以才要盡量改成 multi-staged build 來縮小 image 大小</p>
+<p>另外因為這套寫法已經在公司太多專案上運行了，所以我並沒有特別測試，就直接開始調整為 multi-staged build + jlink</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-dockerfile" data-lang="dockerfile"><span style="display:flex;"><span><span style="color:#ff79c6">FROM</span><span style="color:#f1fa8c"> eclipse-temurin:21 AS jre-build</span>
+</span></span><span style="display:flex;"><span><span style="color:#ff79c6">WORKDIR</span><span style="color:#f1fa8c"> /app</span>
+</span></span><span style="display:flex;"><span><span style="color:#ff79c6">COPY</span> target/*.jar app.jar
+</span></span><span style="display:flex;"><span><span style="color:#6272a4"># Analyze dependent modules of the app</span>
+</span></span><span style="display:flex;"><span><span style="color:#ff79c6">RUN</span> jar xf app.jar
+</span></span><span style="display:flex;"><span><span style="color:#ff79c6">RUN</span> jdeps <span style="color:#f1fa8c">\
+</span></span></span><span style="display:flex;"><span><span style="color:#f1fa8c"></span>        --ignore-missing-deps <span style="color:#f1fa8c">\
+</span></span></span><span style="display:flex;"><span><span style="color:#f1fa8c"></span>        --print-module-deps <span style="color:#f1fa8c">\
+</span></span></span><span style="display:flex;"><span><span style="color:#f1fa8c"></span>        --multi-release <span style="color:#bd93f9">21</span> <span style="color:#f1fa8c">\
+</span></span></span><span style="display:flex;"><span><span style="color:#f1fa8c"></span>        --recursive <span style="color:#f1fa8c">\
+</span></span></span><span style="display:flex;"><span><span style="color:#f1fa8c"></span>        --class-path <span style="color:#f1fa8c">&#39;BOOT-INF/lib/*&#39;</span> <span style="color:#f1fa8c">\
+</span></span></span><span style="display:flex;"><span><span style="color:#f1fa8c"></span>        app.jar &gt; modules.info
+</span></span><span style="display:flex;"><span><span style="color:#6272a4"># Create a custom Java runtime</span>
+</span></span><span style="display:flex;"><span><span style="color:#ff79c6">RUN</span> <span style="color:#8be9fd;font-style:italic">$JAVA_HOME</span>/bin/jlink <span style="color:#f1fa8c">\
+</span></span></span><span style="display:flex;"><span><span style="color:#f1fa8c"></span>        --add-modules <span style="color:#ff79c6">$(</span>cat modules.info<span style="color:#ff79c6">)</span> <span style="color:#f1fa8c">\
+</span></span></span><span style="display:flex;"><span><span style="color:#f1fa8c"></span>        --strip-debug <span style="color:#f1fa8c">\
+</span></span></span><span style="display:flex;"><span><span style="color:#f1fa8c"></span>        --no-man-pages <span style="color:#f1fa8c">\
+</span></span></span><span style="display:flex;"><span><span style="color:#f1fa8c"></span>        --no-header-files <span style="color:#f1fa8c">\
+</span></span></span><span style="display:flex;"><span><span style="color:#f1fa8c"></span>        --compress<span style="color:#ff79c6">=</span><span style="color:#bd93f9">0</span> <span style="color:#f1fa8c">\
+</span></span></span><span style="display:flex;"><span><span style="color:#f1fa8c"></span>        --output /javaruntime
+</span></span><span style="display:flex;"><span><span style="color:#6272a4"># Define base image</span>
+</span></span><span style="display:flex;"><span><span style="color:#ff79c6">FROM</span><span style="color:#f1fa8c"> debian:stable-slim</span>
+</span></span><span style="display:flex;"><span><span style="color:#ff79c6">ENV</span> <span style="color:#8be9fd;font-style:italic">JAVA_HOME</span><span style="color:#ff79c6">=</span>/opt/java/openjdk
+</span></span><span style="display:flex;"><span><span style="color:#ff79c6">ENV</span> PATH <span style="color:#f1fa8c">&#34;</span><span style="color:#f1fa8c">${</span><span style="color:#8be9fd;font-style:italic">JAVA_HOME</span><span style="color:#f1fa8c">}</span><span style="color:#f1fa8c">/bin:</span><span style="color:#f1fa8c">${</span><span style="color:#8be9fd;font-style:italic">PATH</span><span style="color:#f1fa8c">}</span><span style="color:#f1fa8c">&#34;</span>
+</span></span><span style="display:flex;"><span><span style="color:#ff79c6">COPY</span> --from<span style="color:#ff79c6">=</span>jre-build /javaruntime <span style="color:#8be9fd;font-style:italic">$JAVA_HOME</span>
+</span></span><span style="display:flex;"><span><span style="color:#6272a4"># Continue with app deployment</span>
+</span></span><span style="display:flex;"><span><span style="color:#ff79c6">ENV</span> <span style="color:#8be9fd;font-style:italic">CONFIG_java_opts</span><span style="color:#ff79c6">=</span><span style="color:#f1fa8c">&#34;-server -XX:+UseG1GC&#34;</span>
+</span></span><span style="display:flex;"><span><span style="color:#ff79c6">COPY</span> extras/glowroot /extras/glowroot
+</span></span><span style="display:flex;"><span><span style="color:#ff79c6">COPY</span> target/*.jar app.jar
+</span></span><span style="display:flex;"><span><span style="color:#ff79c6">ENTRYPOINT</span> <span style="color:#8be9fd;font-style:italic">exec</span> java <span style="color:#8be9fd;font-style:italic">$CONFIG_java_opts</span> -javaagent:/extras/glowroot/glowroot.jar -Dglowroot.collector.address<span style="color:#ff79c6">=</span><span style="color:#8be9fd;font-style:italic">$CONFIG_glowroot_address</span> -Dglowroot.agent.id<span style="color:#ff79c6">=</span><span style="color:#8be9fd;font-style:italic">$CONFIG_app_name</span>:: -jar /app.jar
+</span></span></code></pre></div><p>這邊 <code>app.jar</code> 檔一樣大約 65MB，<code>debian:stable-slim</code> image 本身大約 75MB，而我最終產出的 image 大約 252MB，也就是說 jlink 產出的 JRE 大約 112MB 而已 (原生的 Java 21 JRE 約 143MB)，這代表除去 <code>app.jar</code> 檔以外，image 本身只有 187MB，相較於前一份 Dockerfile 產出的 455MB，大幅縮減了約 288MB</p>
+<p>但是當我很開心的運行這個 image 的時候，卻碰到以下的錯誤訊息，導致程式完全無法運行</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-plaintext" data-lang="plaintext"><span style="display:flex;"><span>Error occurred during initialization of VM
+</span></span><span style="display:flex;"><span>agent library failed Agent_OnLoad: instrument
+</span></span><span style="display:flex;"><span>Error opening zip file or JAR manifest missing : /extras/glowroot/glowroot.jar
+</span></span></code></pre></div><h1 id="問題原因">問題原因</h1>
+<p>我整個矇，因為 Glowroot 0.14.2 這版 release 已經出了一個多月，如果 jar 檔有問題，應該很多人都會碰到才對，而且搜尋了一下，還真沒有人開 issue，表示真的沒有其他人碰到這個問題，我只好反求諸己</p>
+<h2 id="權限問題">權限問題？</h2>
+<p>我一開始的思路是權限問題，因為 stackoverflow 上很多碰到 <code>Error opening zip file or JAR manifest missing</code> 錯誤訊息的關鍵都是 jar 檔是否存在以及 jar 檔權限問題</p>
+<p>首先 image 裡面 <code>glowroot.jar</code> 檔肯定是存在的，所以我開始查是不是權限問題，這裡我直接把 Dockerfile 精簡做測試</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-dockerfile" data-lang="dockerfile"><span style="display:flex;"><span><span style="color:#ff79c6">FROM</span><span style="color:#f1fa8c"> eclipse-temurin:21</span>
+</span></span><span style="display:flex;"><span><span style="color:#ff79c6">COPY</span> target/*jar app.jar
+</span></span><span style="display:flex;"><span><span style="color:#ff79c6">ENTRYPOINT</span> <span style="color:#8be9fd;font-style:italic">exec</span> java -jar /app.jar
+</span></span></code></pre></div><p>這樣運行完全沒有問題</p>
+<p>於是簡單加上 Glowroot</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-dockerfile" data-lang="dockerfile"><span style="display:flex;"><span><span style="color:#ff79c6">FROM</span><span style="color:#f1fa8c"> eclipse-temurin:21</span>
+</span></span><span style="display:flex;"><span><span style="color:#ff79c6">COPY</span> extras/glowroot /extras/glowroot
+</span></span><span style="display:flex;"><span><span style="color:#ff79c6">COPY</span> target/*jar app.jar
+</span></span><span style="display:flex;"><span><span style="color:#ff79c6">ENTRYPOINT</span> <span style="color:#8be9fd;font-style:italic">exec</span> java -javaagent:/extras/glowroot/glowroot.jar -Dglowroot.collector.address<span style="color:#ff79c6">=</span><span style="color:#8be9fd;font-style:italic">$CONFIG_glowroot_address</span> -Dglowroot.agent.id<span style="color:#ff79c6">=</span><span style="color:#8be9fd;font-style:italic">$CONFIG_app_name</span>:: -jar /app.jar
+</span></span></code></pre></div><p>很抱歉，立刻就報 <code>Error opening zip file or JAR manifest missing</code> 錯誤</p>
+<p>這就很奇怪了，這邊 <code>glowroot.jar</code> 複製進 image 的方式跟 <code>app.jar</code> 一模一樣，<code>app.jar</code> 可以執行，沒有道理 <code>glowroot.jar</code> 會不行才對呀？</p>
+<p>挖賽，光在這邊我就卡關了兩天，一直查 Dockerfile 權限問題想找出兩個 jar 檔的差異</p>
+<p>直到我看到某一篇解答 <code>Error opening zip file or JAR manifest missing</code> 錯誤的時候提到</p>
+<blockquote>
+<p>除了檢查 jar 檔是否存在及權限以外，也要檢查 jar 檔本身是否毀損</p>
+</blockquote>
+<h2 id="jar-檔毀損">Jar 檔毀損？</h2>
+<p>我原本認為我是直接從官方 URL 下載下來的 jar 檔不可能有問題，但死馬當作活馬醫，於是我將 Dockerfile 改成每次都重新抓 Glowroot 的 jar 檔下來試試看</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-dockerfile" data-lang="dockerfile"><span style="display:flex;"><span><span style="color:#ff79c6">FROM</span><span style="color:#f1fa8c"> eclipse-temurin:21</span>
+</span></span><span style="display:flex;"><span><span style="color:#ff79c6">RUN</span> apt-get update <span style="color:#ff79c6">&amp;&amp;</span> apt-get install unzip
+</span></span><span style="display:flex;"><span><span style="color:#ff79c6">ADD</span> https://github.com/glowroot/glowroot/releases/download/v0.14.2/glowroot-0.14.2-dist.zip /tmp/glowroot.zip
+</span></span><span style="display:flex;"><span><span style="color:#ff79c6">RUN</span> mkdir /extras <span style="color:#ff79c6">&amp;&amp;</span> unzip /tmp/glowroot.zip -d /extras
+</span></span><span style="display:flex;"><span><span style="color:#ff79c6">COPY</span> target/*jar app.jar
+</span></span><span style="display:flex;"><span><span style="color:#ff79c6">ENTRYPOINT</span> <span style="color:#8be9fd;font-style:italic">exec</span> java -javaagent:/extras/glowroot/glowroot.jar -Dglowroot.collector.address<span style="color:#ff79c6">=</span><span style="color:#8be9fd;font-style:italic">$CONFIG_glowroot_address</span> -Dglowroot.agent.id<span style="color:#ff79c6">=</span><span style="color:#8be9fd;font-style:italic">$CONFIG_app_name</span>:: -jar /app.jar
+</span></span></code></pre></div><p>這樣還真的就可以運行了！！！</p>
+<p>看來是我 commit 上去的 <code>glowroot.jar</code> 檔真的是有問題，但我是從同一個 URL 下載下來的，怎麼可能有什麼問題呢？</p>
+<h2 id="gitattributes-4-ni"><code>.gitattributes</code> 4 ni？！</h2>
+<p>於是我回到專案本身去查有沒有哪裡有可能動到 jar 檔，最後還真的讓我想到可能的兇手：<code>.gitattributes</code></p>
+<p><code>.gitattributes</code> 檔是用來方便 Git 幫我們管理文件的屬性，Git 會在檔案在 repository, staging area 跟 working area 間轉換時，依照 <code>.gitattributes</code> 的設定調整對應的檔案，常用於統一設定檔案的換行符號</p>
+<p>例如我的專案當中的 <code>.gitattributes</code> 如下</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-plaintext" data-lang="plaintext"><span style="display:flex;"><span>* text=auto
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>* text eol=lf
+</span></span><span style="display:flex;"><span>*.java text eol=lf
+</span></span><span style="display:flex;"><span>*.xml text eol=lf
+</span></span><span style="display:flex;"><span>*.md text eol=lf
+</span></span><span style="display:flex;"><span>*.yml text eol=lf
+</span></span><span style="display:flex;"><span>*.yaml text eol=lf
+</span></span></code></pre></div><p>就我的理解，除了從第三行開始特別設定的檔案類型以外，Git 會先自己判斷檔案類型是 <code>text</code> 或 <code>binary</code>，如果是 <code>text</code> 類型的檔案，就會自動設定檔案的 eol(end-of-line) 為 <code>lf</code></p>
+<p>而一般人應該很自然地就會認為 jar 檔會被判斷為 <code>binary</code> 類型而不會受到影響</p>
+<p>BUT，就是這個 BUT</p>
+<p>我的第三行就設定了所有檔案都預設為 <code>text</code>&hellip;</p>
+<p>而且 Git 在自動判斷檔案是 <code>text</code> 或 <code>binary</code> 的時候是採用 heuristics 的方式，所以就算讓 Git 自行判斷也不能保證絕對正確</p>
+<p>而在我的情況，以往的 <code>glowroot.jar</code> 被視為 binary 檔因此沒有被改動，而這次卻被視為 <code>text</code> 類型的檔案，因此被 Git 改動而毀損</p>
+<h1 id="解決辦法">解決辦法</h1>
+<p>知道問題後就簡單了，在 <code>.gitattributes</code> 當中註明 jar 檔不是 text 檔如下</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-plaintext" data-lang="plaintext"><span style="display:flex;"><span>* text=auto
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>* text eol=lf
+</span></span><span style="display:flex;"><span>*.java text eol=lf
+</span></span><span style="display:flex;"><span>*.xml text eol=lf
+</span></span><span style="display:flex;"><span>*.md text eol=lf
+</span></span><span style="display:flex;"><span>*.yml text eol=lf
+</span></span><span style="display:flex;"><span>*.yaml text eol=lf
+</span></span><span style="display:flex;"><span>*.jar -text
+</span></span></code></pre></div><p>所以剛好藉此機會提醒自己，往後設定這種會變動到檔案的部分都要特別注意，在 <code>.gitattributes</code> 的部分，最好將所有會被 commit 的檔案類型都列出來，以避免 Git 判斷檔案類型會有出乎意料之外的問題</p>
+<h1 id="後記">後記</h1>
+<p>我在查資料的時候，還找到 <a href="https://github.com/gitattributes/gitattributes">gitattributes</a> 這個 repo，裡面紀錄了各種 <code>.gitattributes</code> 的樣板，裡面就有 Java 的版本，裡面就有特別將 <code>*.jar</code> 設定為 <code>binary</code></p>
+<p>還有這個 <a href="https://gitattributes.com/">網頁版的 <code>.gitattributes</code> 產生器</a>，類似 <a href="https://gitignore.io/">gitignore.io</a> 的用法，輸入語系就可以依照樣板產出對應的 <code>.gitattributes</code> 檔</p>
+<h1 id="reference">Reference</h1>
+<ul>
+<li><a href="https://github.com/glowroot/glowroot/releases/tag/v0.14.2">Release Version 0.14.2 · glowroot/glowroot</a></li>
+<li><a href="https://docs.oracle.com/en/java/javase/11/tools/jlink.html">jlink</a></li>
+<li><a href="https://glowroot.org/">Glowroot</a></li>
+<li><a href="https://hub.docker.com/_/eclipse-temurin">eclipse-temurin - Official Image | Docker Hub</a></li>
+<li><a href="https://medium.com/@snyksec/using-jlink-to-create-smaller-docker-images-for-your-spring-boot-java-application-5e21a3377965">Using JLink to create smaller Docker images for your Spring Boot Java application</a></li>
+<li><a href="https://dzone.com/articles/ways-to-reduce-jvm-docker-image-size">Ways To Reduce JVM Docker Image Size</a></li>
+<li><a href="https://git-scm.com/docs/gitattributes">Git - gitattributes Documentation</a></li>
+<li><a href="https://github.com/gitattributes/gitattributes">GitHub - gitattributes</a></li>
+<li><a href="https://gitattributes.com/">gitattributes.io - Create .gitattributes file for your project</a></li>
+<li><a href="https://gitignore.io/">gitignore.io</a></li>
+</ul>
+
+                    
+                    <HR width="100%" id="EOF">
+		    <p style="color:#777;">Last modified on 2024-05-22</p>
+                    
+                </div>
+            </div>
+            
+            
+            <nav class="post-pagination">
+
+                
+                <a class="newer-posts">
+			Next<br>No newer posts.
+                </a>
+                
+                
+                
+                <a class="older-posts" href="https://blog.idontwannarock.me/2023/12/java_time_mapping_mysql_datetime_timezone/">
+			Previous<br>Java Time 保存到 MySQL DATETIME 時區問題
+                </a>
+                
+            </nav>
+            <div class="post-comment-wrapper">
+                
+<div id="disqus_thread"></div>
+<script>
+    
+
+    var disqus_config = function () {
+        
+        this.page.url = 'https:\/\/blog.idontwannarock.me\/2024\/05\/gitattributes_glowroot_error\/';  
+        
+        
+        this.page.identifier = '\/2024\/05\/gitattributes_glowroot_error\/'; 
+    };
+    (function() {
+        var d = document, s = d.createElement('script');
+        s.src = 'https://howard-tech-blog.disqus.com/embed.js';
+        s.setAttribute('data-timestamp', +new Date());
+        (d.head || d.body).appendChild(s);
+    })();
+</script>
+<noscript> Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript" rel="nofollow"> comments powered by Disqus.  </a> </noscript>
+
+
+
+
+
+
+
+
+
+
+
+
+
+            </div>
+        </div>
+    </div>
+
+
+                    </div>
+            </div><div id="sideContainer" class="side-container">
+    
+    <a class="a-block nav-head false" href="https://blog.idontwannarock.me/">
+    
+        <div class="nav-title">
+            Howard Tech Note
+        </div>
+        
+        <div class="nav-subtitle">
+            Share * Record * Program
+        </div>
+        
+    </a>
+
+    <div class="nav-link-list">
+        
+        
+            
+            
+            
+            
+            
+            <a class="a-block nav-link-item false" href="https://blog.idontwannarock.me/posts">
+                Archive
+            </a>
+            
+        
+            
+            
+            
+            
+            
+            <a class="a-block nav-link-item false" href="https://blog.idontwannarock.me/categories">
+                Categories
+            </a>
+            
+        
+            
+            
+            
+            
+            
+            <a class="a-block nav-link-item false" href="https://blog.idontwannarock.me/tags">
+                Tags
+            </a>
+            
+        
+            
+            
+            
+            
+            
+            <a class="a-block nav-link-item false" href="https://blog.idontwannarock.me/about">
+                About
+            </a>
+            
+        
+            
+            
+            
+            
+            
+            <a class="a-block nav-link-item false" href="https://blog.idontwannarock.me/index.xml">
+                RSS Feed
+            </a>
+            
+        
+    </div>
+
+    
+
+    <div class="nav-footer">
+        
+Hugo Theme <a href="https://github.com/amazingrise/hugo-theme-diary">Diary</a> by <a href="https://risehere.net/">Rise</a>
+<br>
+Ported from <a href="https://mak1t0.cc/" target="_blank" rel="noreferrer noopener">Makito</a>'s <a href="https://github.com/SumiMakito/hexo-theme-journal/" target="_blank" rel="noreferrer noopener">Journal.</a> <br>
+<br>
+
+&copy;
+	
+	This website by Howard Wang is licensed under a Creative Common Attribution-ShareAlike 4.0 International License.
+	
+
+    </div>
+    
+</div><div id="extraContainer" class="extra-container">
+    <div class="toc-wrapper">
+        
+
+        
+        <div class="toc">
+
+
+	<div class="toc-content">
+	
+		
+		
+		
+		<center>- CATALOG -</center>
+		
+		
+		<ul>
+			
+				
+				
+					
+						
+						
+						
+						
+						
+							<li>
+								<a href="#%e6%83%85%e6%b3%81%e6%8f%8f%e8%bf%b0" class="nav-情況描述">
+									情況描述
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+						
+							<li>
+								<a href="#%e5%95%8f%e9%a1%8c%e5%8e%9f%e5%9b%a0" class="nav-問題原因">
+									問題原因
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+							
+								
+									<ul>
+								
+							
+						
+						
+							<li>
+								<a href="#%e6%ac%8a%e9%99%90%e5%95%8f%e9%a1%8c" class="nav-權限問題">
+									權限問題？
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+						
+							<li>
+								<a href="#jar-%e6%aa%94%e6%af%80%e6%90%8d" class="nav-jar-檔毀損">
+									Jar 檔毀損？
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+						
+							<li>
+								<a href="#gitattributes-4-ni" class="nav-gitattributes-4-ni">
+									.gitattributes 4 ni？！
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+							
+								</ul>
+							
+						
+						
+						
+							<li>
+								<a href="#%e8%a7%a3%e6%b1%ba%e8%be%a6%e6%b3%95" class="nav-解決辦法">
+									解決辦法
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+						
+							<li>
+								<a href="#%e5%be%8c%e8%a8%98" class="nav-後記">
+									後記
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+						
+							<li>
+								<a href="#reference" class="nav-reference">
+									Reference
+								</a>
+							</li>
+						
+						
+					
+				
+			
+		</ul>
+	</div>
+
+</div>
+        
+    </div>
+    <div class="pagination">
+        <a id="globalBackToTop" class="pagination-action animated-visibility" href="#top"
+            :class="{ invisible: scrollY == 0 }">
+            <i class="material-icons pagination-action-icon">
+                keyboard_arrow_up
+            </i>
+        </a>
+        
+        <a type="button" class="pagination-action" id="darkModeToggleButton">
+            <span class="material-icons pagination-action-icon" id="darkModeToggleIcon">
+                dark_mode
+            </span>
+        </a>
+        
+        
+    </div>
+</div>
+
+<div id="single-column-footer">
+Hugo Theme <a href="https://github.com/amazingrise/hugo-theme-diary">Diary</a> by <a href="https://risehere.net/">Rise</a>
+<br>
+Ported from <a href="https://mak1t0.cc/" target="_blank" rel="noreferrer noopener">Makito</a>'s <a href="https://github.com/SumiMakito/hexo-theme-journal/" target="_blank" rel="noreferrer noopener">Journal.</a> <br>
+<br>
+
+&copy;
+	
+	This website by Howard Wang is licensed under a Creative Common Attribution-ShareAlike 4.0 International License.
+	
+</div>
+            </div>
+    
+    <script src="https://blog.idontwannarock.me/js/journal.js"></script></body>
+</html>

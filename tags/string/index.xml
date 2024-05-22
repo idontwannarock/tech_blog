@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
-    <title>string on Howard Tech Note</title>
+    <title>String on Howard Tech Note</title>
     <link>https://blog.idontwannarock.me/tags/string/</link>
-    <description>Recent content in string on Howard Tech Note</description>
-    <generator>Hugo -- gohugo.io</generator>
+    <description>Recent content in String on Howard Tech Note</description>
+    <generator>Hugo</generator>
     <language>en-us</language>
     <copyright>This website by Howard Wang is licensed under a Creative Common Attribution-ShareAlike 4.0 International License.</copyright>
     <lastBuildDate>Tue, 06 Feb 2018 14:09:25 +0800</lastBuildDate>

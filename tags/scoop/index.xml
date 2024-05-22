@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
-    <title>scoop on Howard Tech Note</title>
+    <title>Scoop on Howard Tech Note</title>
     <link>https://blog.idontwannarock.me/tags/scoop/</link>
-    <description>Recent content in scoop on Howard Tech Note</description>
-    <generator>Hugo -- gohugo.io</generator>
+    <description>Recent content in Scoop on Howard Tech Note</description>
+    <generator>Hugo</generator>
     <language>en-us</language>
     <copyright>This website by Howard Wang is licensed under a Creative Common Attribution-ShareAlike 4.0 International License.</copyright>
     <lastBuildDate>Tue, 20 Jun 2023 10:51:39 +0800</lastBuildDate>

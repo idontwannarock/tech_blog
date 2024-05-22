@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
-    <title>integer on Howard Tech Note</title>
+    <title>Integer on Howard Tech Note</title>
     <link>https://blog.idontwannarock.me/tags/integer/</link>
-    <description>Recent content in integer on Howard Tech Note</description>
-    <generator>Hugo -- gohugo.io</generator>
+    <description>Recent content in Integer on Howard Tech Note</description>
+    <generator>Hugo</generator>
     <language>en-us</language>
     <copyright>This website by Howard Wang is licensed under a Creative Common Attribution-ShareAlike 4.0 International License.</copyright>
     <lastBuildDate>Sun, 01 Oct 2017 07:04:47 +0800</lastBuildDate>

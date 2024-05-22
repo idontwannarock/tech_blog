@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
-    <title>mac on Howard Tech Note</title>
+    <title>Mac on Howard Tech Note</title>
     <link>https://blog.idontwannarock.me/tags/mac/</link>
-    <description>Recent content in mac on Howard Tech Note</description>
-    <generator>Hugo -- gohugo.io</generator>
+    <description>Recent content in Mac on Howard Tech Note</description>
+    <generator>Hugo</generator>
     <language>en-us</language>
     <copyright>This website by Howard Wang is licensed under a Creative Common Attribution-ShareAlike 4.0 International License.</copyright>
     <lastBuildDate>Fri, 03 Nov 2017 09:05:02 +0800</lastBuildDate>

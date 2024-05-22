@@ -4,11 +4,18 @@
     <title>Posts on Howard Tech Note</title>
     <link>https://blog.idontwannarock.me/posts/</link>
     <description>Recent content in Posts on Howard Tech Note</description>
-    <generator>Hugo -- gohugo.io</generator>
+    <generator>Hugo</generator>
     <language>en-us</language>
     <copyright>This website by Howard Wang is licensed under a Creative Common Attribution-ShareAlike 4.0 International License.</copyright>
-    <lastBuildDate>Wed, 27 Dec 2023 09:26:23 +0800</lastBuildDate>
+    <lastBuildDate>Wed, 22 May 2024 09:25:13 +0800</lastBuildDate>
     <atom:link href="https://blog.idontwannarock.me/posts/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>.gitattributes 引發的慘案</title>
+      <link>https://blog.idontwannarock.me/2024/05/gitattributes_glowroot_error/</link>
+      <pubDate>Wed, 22 May 2024 09:25:13 +0800</pubDate>
+      <guid>https://blog.idontwannarock.me/2024/05/gitattributes_glowroot_error/</guid>
+      <description>情況描述 最近在嘗試建立新專案的基礎專案架構，因為剛好看到常用的 APM 工具 Glowroot 0.14.2 版 release 開始支援 Java 21，讓我產生使用 multi-staged build + jlink 盡量縮小 image 大小，並且掛上 Glowroot 作為 Java Agent 來運行專案的念頭&#xA;因為以往已經將 Glowroot 使用在 Java 8, 11, 17 等版本的專案上，所以 Dockerfile 的基本架構已經確立，理論上只需要調整 base image 為 Java 21 應該就沒問題&#xA;FROM eclipse-temurin:21 ENV CONFIG_java_opts=&amp;#34;-server -XX:+UseG1GC&amp;#34; COPY extras/glowroot /extras/glowroot COPY target/*jar app.jar ENTRYPOINT exec java $CONFIG_java_opts -javaagent:/extras/glowroot/glowroot.jar -Dglowroot.collector.address=$CONFIG_glowroot_address -Dglowroot.agent.id=$CONFIG_app_name:: -jar /app.jar 其中&#xA;extras/glowroot 資料夾包含我直接從 Glowroot 0.14.2 Release 這邊下載後解壓縮出來的 glowroot.jar 檔，並且直接 commit 到 git 上 $CONFIG_java_opts、$CONFIG_glowroot_address 及 $CONFIG_app_name 都是定義在 K8S config map 中的變數，會在 K8S 運行這個 image 的時候從 pod 的環境變數取得 這樣的 Dockerfile 產出的 image 大約是 520MB，app.</description>
+    </item>
     <item>
       <title>Java Time 保存到 MySQL DATETIME 時區問題</title>
       <link>https://blog.idontwannarock.me/2023/12/java_time_mapping_mysql_datetime_timezone/</link>
