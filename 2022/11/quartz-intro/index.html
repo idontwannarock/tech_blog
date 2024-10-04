@@ -7,7 +7,7 @@
 
 <meta charset="utf-8">
 <meta name="X-UA-Compatible" content="IE=edge">
-<meta name="google-site-verification" content="">
+<meta name="google-site-verification" content="G-JP1V61PPMJ">
 <meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" name="viewport">
 <meta content="telephone=no" name="format-detection">
 <meta name="description" content="簡介 Quartz 這個 Java 生態圈有名的排程框架">
@@ -24,8 +24,6 @@
 
 
 
-  
-    
       <script async src="https://www.googletagmanager.com/gtag/js?id=G-JP1V61PPMJ"></script>
       <script>
         var doNotTrack = false;
@@ -40,10 +38,6 @@
           gtag('config', 'G-JP1V61PPMJ');
         }
       </script>
-    
-  
-
-
 
 
 
@@ -507,58 +501,58 @@
 <h4 id="資料庫-schema">資料庫 schema</h4>
 <p>以下是 Quartz 2.3.2 版本採用 <code>JobStoreTX</code> 或 <code>JobStoreCMT</code> 所需要的 11 張資料表</p>
 <table>
-<thead>
-<tr>
-<th style="text-align:left">Table Name</th>
-<th style="text-align:left">Description</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td style="text-align:left">QRTZ_BLOB_TRIGGERS</td>
-<td style="text-align:left">以 Blob 類型保存的 <code>Trigger</code></td>
-</tr>
-<tr>
-<td style="text-align:left">QRTZ_CALENDARS</td>
-<td style="text-align:left">保存日曆資訊</td>
-</tr>
-<tr>
-<td style="text-align:left">QRTZ_CRON_TRIGGERS</td>
-<td style="text-align:left">保存 Cron 類型的 <code>Trigger</code>，包含 Quartz cron expression 及時區</td>
-</tr>
-<tr>
-<td style="text-align:left">QRTZ_FIRED_TRIGGERS</td>
-<td style="text-align:left">保存已觸發 <code>Trigger</code> 相關的狀態資訊，以及相關 <code>Job</code> 的執行資訊</td>
-</tr>
-<tr>
-<td style="text-align:left">QRTZ_JOB_DETAILS</td>
-<td style="text-align:left">保存 <code>JobDetail</code> 的設定跟資訊</td>
-</tr>
-<tr>
-<td style="text-align:left">QRTZ_LOCKS</td>
-<td style="text-align:left">保存悲觀鎖的資訊</td>
-</tr>
-<tr>
-<td style="text-align:left">QRTZ_PAUSED_TRIGGER_GRPS</td>
-<td style="text-align:left">保存已暫停的 <code>Trigger</code> 分組相關資訊</td>
-</tr>
-<tr>
-<td style="text-align:left">QRTZ_SCHEDULER_STATE</td>
-<td style="text-align:left">保存 <code>Scheduler</code> 相關的狀態資訊</td>
-</tr>
-<tr>
-<td style="text-align:left">QRTZ_SIMPLE_TRIGGERS</td>
-<td style="text-align:left">以 Simple 類型保存的 <code>Trigger</code>，包含重複次數、間隔及已觸發的次數</td>
-</tr>
-<tr>
-<td style="text-align:left">QRTZ_SIMPROP_TRIGGERS</td>
-<td style="text-align:left">作用未明</td>
-</tr>
-<tr>
-<td style="text-align:left">QRTZ_TRIGGERS</td>
-<td style="text-align:left">保存已設定的 <code>Trigger</code> 基本資訊</td>
-</tr>
-</tbody>
+  <thead>
+      <tr>
+          <th style="text-align: left">Table Name</th>
+          <th style="text-align: left">Description</th>
+      </tr>
+  </thead>
+  <tbody>
+      <tr>
+          <td style="text-align: left">QRTZ_BLOB_TRIGGERS</td>
+          <td style="text-align: left">以 Blob 類型保存的 <code>Trigger</code></td>
+      </tr>
+      <tr>
+          <td style="text-align: left">QRTZ_CALENDARS</td>
+          <td style="text-align: left">保存日曆資訊</td>
+      </tr>
+      <tr>
+          <td style="text-align: left">QRTZ_CRON_TRIGGERS</td>
+          <td style="text-align: left">保存 Cron 類型的 <code>Trigger</code>，包含 Quartz cron expression 及時區</td>
+      </tr>
+      <tr>
+          <td style="text-align: left">QRTZ_FIRED_TRIGGERS</td>
+          <td style="text-align: left">保存已觸發 <code>Trigger</code> 相關的狀態資訊，以及相關 <code>Job</code> 的執行資訊</td>
+      </tr>
+      <tr>
+          <td style="text-align: left">QRTZ_JOB_DETAILS</td>
+          <td style="text-align: left">保存 <code>JobDetail</code> 的設定跟資訊</td>
+      </tr>
+      <tr>
+          <td style="text-align: left">QRTZ_LOCKS</td>
+          <td style="text-align: left">保存悲觀鎖的資訊</td>
+      </tr>
+      <tr>
+          <td style="text-align: left">QRTZ_PAUSED_TRIGGER_GRPS</td>
+          <td style="text-align: left">保存已暫停的 <code>Trigger</code> 分組相關資訊</td>
+      </tr>
+      <tr>
+          <td style="text-align: left">QRTZ_SCHEDULER_STATE</td>
+          <td style="text-align: left">保存 <code>Scheduler</code> 相關的狀態資訊</td>
+      </tr>
+      <tr>
+          <td style="text-align: left">QRTZ_SIMPLE_TRIGGERS</td>
+          <td style="text-align: left">以 Simple 類型保存的 <code>Trigger</code>，包含重複次數、間隔及已觸發的次數</td>
+      </tr>
+      <tr>
+          <td style="text-align: left">QRTZ_SIMPROP_TRIGGERS</td>
+          <td style="text-align: left">作用未明</td>
+      </tr>
+      <tr>
+          <td style="text-align: left">QRTZ_TRIGGERS</td>
+          <td style="text-align: left">保存已設定的 <code>Trigger</code> 基本資訊</td>
+      </tr>
+  </tbody>
 </table>
 <h3 id="節點狀態更新及-failover">節點狀態更新及 Failover</h3>
 <p>前面有提到 Quartz 並不需要節點之間互相通訊，而是透過各節點自行定時保持心跳更新 <code>QRTZ_SCHEDULER_STATE</code> 當中的 <code>LAST_CHECKIN_TIME</code></p>

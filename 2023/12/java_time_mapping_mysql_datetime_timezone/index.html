@@ -7,7 +7,7 @@
 
 <meta charset="utf-8">
 <meta name="X-UA-Compatible" content="IE=edge">
-<meta name="google-site-verification" content="">
+<meta name="google-site-verification" content="G-JP1V61PPMJ">
 <meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" name="viewport">
 <meta content="telephone=no" name="format-detection">
 <meta name="description" content="研究 JPA/JDBC 如何對 Java Time 與 MySQL DATETIME 資料型態 mapping 時做時區轉換的機制">
@@ -24,8 +24,6 @@
 
 
 
-  
-    
       <script async src="https://www.googletagmanager.com/gtag/js?id=G-JP1V61PPMJ"></script>
       <script>
         var doNotTrack = false;
@@ -40,10 +38,6 @@
           gtag('config', 'G-JP1V61PPMJ');
         }
       </script>
-    
-  
-
-
 
 
 
@@ -553,22 +547,22 @@
 <p>另外還有一種方式就是在 JDBC Driver connection url 上加上設定參數去調整連線的 timezone，如這份文件「<a href="https://dev.mysql.com/doc/connector-j/en/connector-j-connp-props-datetime-types-processing.html">6.3.11 Datetime types processing</a>」說的 <code>connectionTimeZone</code> 及 <code>forceConnectionTimeZoneToSession</code> 參數也可以調整 session timezone，但是我也沒有做這個設定</p>
 <p>這邊我透過 <code>select @@system_time_zone, @@time_zone, @@global.time_zone, @@session.time_zone;</code> 實際去查 timezone 的結果如下</p>
 <table>
-<thead>
-<tr>
-<th style="text-align:left">@@system_time_zone</th>
-<th style="text-align:left">@@time_zone</th>
-<th style="text-align:left">@@global.time_zone</th>
-<th style="text-align:left">@@session.time_zone</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td style="text-align:left">CST</td>
-<td style="text-align:left">SYSTEM</td>
-<td style="text-align:left">SYSTEM</td>
-<td style="text-align:left">SYSTEM</td>
-</tr>
-</tbody>
+  <thead>
+      <tr>
+          <th style="text-align: left">@@system_time_zone</th>
+          <th style="text-align: left">@@time_zone</th>
+          <th style="text-align: left">@@global.time_zone</th>
+          <th style="text-align: left">@@session.time_zone</th>
+      </tr>
+  </thead>
+  <tbody>
+      <tr>
+          <td style="text-align: left">CST</td>
+          <td style="text-align: left">SYSTEM</td>
+          <td style="text-align: left">SYSTEM</td>
+          <td style="text-align: left">SYSTEM</td>
+      </tr>
+  </tbody>
 </table>
 <p>可以看到基本上全部 timezone 都是比照 <code>SYSTEM</code> 也就是 MySQL 的系統時區 CST(+8)</p>
 <p>那就很奇怪了，因為按照前面文件描述，<code>DATETIME</code> 欄位型態在面對插入的時間帶有時區的時候會按照 session timezone 來轉換時區後保存，但我面對的 session timezone 明明就是 +8，它到底是怎麼保存成 UTC 的呢？</p>

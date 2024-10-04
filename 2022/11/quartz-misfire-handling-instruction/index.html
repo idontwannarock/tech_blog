@@ -7,7 +7,7 @@
 
 <meta charset="utf-8">
 <meta name="X-UA-Compatible" content="IE=edge">
-<meta name="google-site-verification" content="">
+<meta name="google-site-verification" content="G-JP1V61PPMJ">
 <meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" name="viewport">
 <meta content="telephone=no" name="format-detection">
 <meta name="description" content="介紹 Quartz 遇到 misfire 的各種 handling instruction 跟情境">
@@ -24,8 +24,6 @@
 
 
 
-  
-    
       <script async src="https://www.googletagmanager.com/gtag/js?id=G-JP1V61PPMJ"></script>
       <script>
         var doNotTrack = false;
@@ -40,10 +38,6 @@
           gtag('config', 'G-JP1V61PPMJ');
         }
       </script>
-    
-  
-
-
 
 
 
@@ -449,147 +443,147 @@
 <p>因為 <code>SimpleTrigger</code> 有分為「不重複執行」、「執行固定次數」及「無限次執行」三種狀況，所以各種 misfire handling instruction 的實際執行狀況就會有所不同</p>
 <h3 id="不重複執行">不重複執行</h3>
 <table>
-<thead>
-<tr>
-<th style="text-align:left">Instruction</th>
-<th style="text-align:left">解釋</th>
-<th style="text-align:left">情境舉例</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td style="text-align:left"><code>MISFIRE_INSTRUCTION_SMART_POLICY</code></td>
-<td style="text-align:left">同 <code>MISFIRE_INSTRUCTION_FIRE_NOW</code></td>
-<td></td>
-</tr>
-<tr>
-<td style="text-align:left"><code>MISFIRE_INSTRUCTION_IGNORE_MISFIRE_POLICY</code></td>
-<td style="text-align:left">同 <code>MISFIRE_INSTRUCTION_FIRE_NOW</code></td>
-<td></td>
-</tr>
-<tr>
-<td style="text-align:left"><code>MISFIRE_INSTRUCTION_FIRE_NOW</code></td>
-<td style="text-align:left">當 Quartz 發現 job misfire，會立刻執行</td>
-<td style="text-align:left">例如有個原本預計在 12:00 執行的系統清理的 job，但 Quartz 應用程式可能因為維護的關係，13:00 才啟動<!-- raw HTML omitted -->所以 scheduler 在 13:00 一啟動的時候，就會立刻執行 misfire 的那次 job</td>
-</tr>
-<tr>
-<td style="text-align:left"><code>MISFIRE_INSTRUCTION_RESCHEDULE_NEXT_WITH_EXISTING_COUNT</code></td>
-<td style="text-align:left">同 <code>MISFIRE_INSTRUCTION_RESCHEDULE_NEXT_WITH_REMAINING_COUNT</code></td>
-<td></td>
-</tr>
-<tr>
-<td style="text-align:left"><code>MISFIRE_INSTRUCTION_RESCHEDULE_NEXT_WITH_REMAINING_COUNT</code></td>
-<td style="text-align:left">因為已經沒有下一次觸發，所以不執行任何動作</td>
-<td style="text-align:left">例如預計錄製一個電視節目，如果已經超過兩個小時才發現 misfire，已經沒有必要再執行錄製的工作</td>
-</tr>
-<tr>
-<td style="text-align:left"><code>MISFIRE_INSTRUCTION_RESCHEDULE_NOW_WITH_EXISTING_REPEAT_COUNT</code></td>
-<td style="text-align:left">同 <code>MISFIRE_INSTRUCTION_FIRE_NOW</code></td>
-<td></td>
-</tr>
-<tr>
-<td style="text-align:left"><code>MISFIRE_INSTRUCTION_RESCHEDULE_NOW_WITH_REMAINING_REPEAT_COUNT</code></td>
-<td style="text-align:left">同 <code>MISFIRE_INSTRUCTION_FIRE_NOW</code></td>
-<td></td>
-</tr>
-</tbody>
+  <thead>
+      <tr>
+          <th style="text-align: left">Instruction</th>
+          <th style="text-align: left">解釋</th>
+          <th style="text-align: left">情境舉例</th>
+      </tr>
+  </thead>
+  <tbody>
+      <tr>
+          <td style="text-align: left"><code>MISFIRE_INSTRUCTION_SMART_POLICY</code></td>
+          <td style="text-align: left">同 <code>MISFIRE_INSTRUCTION_FIRE_NOW</code></td>
+          <td style="text-align: left"></td>
+      </tr>
+      <tr>
+          <td style="text-align: left"><code>MISFIRE_INSTRUCTION_IGNORE_MISFIRE_POLICY</code></td>
+          <td style="text-align: left">同 <code>MISFIRE_INSTRUCTION_FIRE_NOW</code></td>
+          <td style="text-align: left"></td>
+      </tr>
+      <tr>
+          <td style="text-align: left"><code>MISFIRE_INSTRUCTION_FIRE_NOW</code></td>
+          <td style="text-align: left">當 Quartz 發現 job misfire，會立刻執行</td>
+          <td style="text-align: left">例如有個原本預計在 12:00 執行的系統清理的 job，但 Quartz 應用程式可能因為維護的關係，13:00 才啟動<br>所以 scheduler 在 13:00 一啟動的時候，就會立刻執行 misfire 的那次 job</td>
+      </tr>
+      <tr>
+          <td style="text-align: left"><code>MISFIRE_INSTRUCTION_RESCHEDULE_NEXT_WITH_EXISTING_COUNT</code></td>
+          <td style="text-align: left">同 <code>MISFIRE_INSTRUCTION_RESCHEDULE_NEXT_WITH_REMAINING_COUNT</code></td>
+          <td style="text-align: left"></td>
+      </tr>
+      <tr>
+          <td style="text-align: left"><code>MISFIRE_INSTRUCTION_RESCHEDULE_NEXT_WITH_REMAINING_COUNT</code></td>
+          <td style="text-align: left">因為已經沒有下一次觸發，所以不執行任何動作</td>
+          <td style="text-align: left">例如預計錄製一個電視節目，如果已經超過兩個小時才發現 misfire，已經沒有必要再執行錄製的工作</td>
+      </tr>
+      <tr>
+          <td style="text-align: left"><code>MISFIRE_INSTRUCTION_RESCHEDULE_NOW_WITH_EXISTING_REPEAT_COUNT</code></td>
+          <td style="text-align: left">同 <code>MISFIRE_INSTRUCTION_FIRE_NOW</code></td>
+          <td style="text-align: left"></td>
+      </tr>
+      <tr>
+          <td style="text-align: left"><code>MISFIRE_INSTRUCTION_RESCHEDULE_NOW_WITH_REMAINING_REPEAT_COUNT</code></td>
+          <td style="text-align: left">同 <code>MISFIRE_INSTRUCTION_FIRE_NOW</code></td>
+          <td style="text-align: left"></td>
+      </tr>
+  </tbody>
 </table>
 <h3 id="執行固定次數">執行固定次數</h3>
 <p>例如有個從今天 9:00 開始每隔一個小時執行一次，總共執行 8 次的任務，正常情況下應該在 16:00 執行最後一次</p>
 <p>但因為某種原因 scheduler 沒辦法執行 9:00 跟 10:00 這兩次任務，並且直到 10:15 才發現有 2 次 misfire:</p>
 <table>
-<thead>
-<tr>
-<th style="text-align:left">Instruction</th>
-<th style="text-align:left">解釋</th>
-<th style="text-align:left">情境舉例</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td style="text-align:left"><code>MISFIRE_INSTRUCTION_SMART_POLICY</code></td>
-<td style="text-align:left">同 <code>MISFIRE_INSTRUCTION_RESCHEDULE_NOW_WITH_EXISTING_REPEAT_COUNT</code></td>
-<td></td>
-</tr>
-<tr>
-<td style="text-align:left"><code>MISFIRE_INSTRUCTION_IGNORE_MISFIRE_POLICY</code></td>
-<td style="text-align:left">以最快的速度執行所有 misfire 的 job，然後再回到正常的 schedule</td>
-<td style="text-align:left">scheduler  會以最快的速度執行 9:00 及 10:00 這兩次 misfire 的 job，並等到 11:00 回復到正常的排程</td>
-</tr>
-<tr>
-<td style="text-align:left"><code>MISFIRE_INSTRUCTION_FIRE_NOW</code></td>
-<td style="text-align:left">同 <code>MISFIRE_INSTRUCTION_RESCHEDULE_NOW_WITH_REMAINING_REPEAT_COUNT</code></td>
-<td></td>
-</tr>
-<tr>
-<td style="text-align:left"><code>MISFIRE_INSTRUCTION_RESCHEDULE_NEXT_WITH_EXISTING_COUNT</code></td>
-<td style="text-align:left">scheduler 當下不會做任何動作，而是依照設定的執行間隔，在下一次預定執行的時間，重新開始執行所有 misfire 的任務</td>
-<td style="text-align:left">scheduler 會等到 11:00 再開始重新以每小時執行一次的間隔，依序執行原定的任務直到 18:00 結束</td>
-</tr>
-<tr>
-<td style="text-align:left"><code>MISFIRE_INSTRUCTION_RESCHEDULE_NEXT_WITH_REMAINING_COUNT</code></td>
-<td style="text-align:left">scheduler 會放棄 misfire 的任務，等到下次執行的時間，執行剩下的任務<!-- raw HTML omitted --><strong>任務總執行次數會比原本預計的較少</strong></td>
-<td style="text-align:left">scheduler 10:15 發現有 2 次 misfire，但會執行放棄那兩次 misfire，仍然等到 11:00 開始執行下次任務直到原訂的 16:00<!-- raw HTML omitted -->所以總執行次數只會有 6 次，而不是原定的 8 次</td>
-</tr>
-<tr>
-<td style="text-align:left"><code>MISFIRE_INSTRUCTION_RESCHEDULE_NOW_WITH_EXISTING_REPEAT_COUNT</code></td>
-<td style="text-align:left">第一次 misfire 會被立刻執行，其餘的 misfire 及原定任務會被以設定好的執行間隔，重新排程執行<!-- raw HTML omitted --><strong>任務總執行次數不會改變</strong></td>
-<td style="text-align:left">當 scheduler 10:15 發現有 2 次 misfire 時，第一個 misfire 會被立刻執行，然後 scheduler 會等待一個小時到 11:15 執行第二次任務，最後 8 次任務執行結束的時間為 17:15</td>
-</tr>
-<tr>
-<td style="text-align:left"><code>MISFIRE_INSTRUCTION_RESCHEDULE_NOW_WITH_REMAINING_REPEAT_COUNT</code></td>
-<td style="text-align:left">第一次 misfire 會被立刻執行，其他的 misfire 會被放棄，scheduler 會以設定好的執行間隔，重新排程執行剩下未被 misfire 的任務<!-- raw HTML omitted --><strong>如果 misfire 超過一次，任務總執行次數會比原本預定地少</strong></td>
-<td style="text-align:left">當 scheduler 10:15 發現有 2 次 misfire 時，第一個 misfire 會被立刻執行，第二個 misfire 會被放棄，然後 scheduler 會等待一個小時到 11:15 執行剩下的任務，最後 7 次任務執行結束時間為 16:15</td>
-</tr>
-</tbody>
+  <thead>
+      <tr>
+          <th style="text-align: left">Instruction</th>
+          <th style="text-align: left">解釋</th>
+          <th style="text-align: left">情境舉例</th>
+      </tr>
+  </thead>
+  <tbody>
+      <tr>
+          <td style="text-align: left"><code>MISFIRE_INSTRUCTION_SMART_POLICY</code></td>
+          <td style="text-align: left">同 <code>MISFIRE_INSTRUCTION_RESCHEDULE_NOW_WITH_EXISTING_REPEAT_COUNT</code></td>
+          <td style="text-align: left"></td>
+      </tr>
+      <tr>
+          <td style="text-align: left"><code>MISFIRE_INSTRUCTION_IGNORE_MISFIRE_POLICY</code></td>
+          <td style="text-align: left">以最快的速度執行所有 misfire 的 job，然後再回到正常的 schedule</td>
+          <td style="text-align: left">scheduler  會以最快的速度執行 9:00 及 10:00 這兩次 misfire 的 job，並等到 11:00 回復到正常的排程</td>
+      </tr>
+      <tr>
+          <td style="text-align: left"><code>MISFIRE_INSTRUCTION_FIRE_NOW</code></td>
+          <td style="text-align: left">同 <code>MISFIRE_INSTRUCTION_RESCHEDULE_NOW_WITH_REMAINING_REPEAT_COUNT</code></td>
+          <td style="text-align: left"></td>
+      </tr>
+      <tr>
+          <td style="text-align: left"><code>MISFIRE_INSTRUCTION_RESCHEDULE_NEXT_WITH_EXISTING_COUNT</code></td>
+          <td style="text-align: left">scheduler 當下不會做任何動作，而是依照設定的執行間隔，在下一次預定執行的時間，重新開始執行所有 misfire 的任務</td>
+          <td style="text-align: left">scheduler 會等到 11:00 再開始重新以每小時執行一次的間隔，依序執行原定的任務直到 18:00 結束</td>
+      </tr>
+      <tr>
+          <td style="text-align: left"><code>MISFIRE_INSTRUCTION_RESCHEDULE_NEXT_WITH_REMAINING_COUNT</code></td>
+          <td style="text-align: left">scheduler 會放棄 misfire 的任務，等到下次執行的時間，執行剩下的任務<br><strong>任務總執行次數會比原本預計的較少</strong></td>
+          <td style="text-align: left">scheduler 10:15 發現有 2 次 misfire，但會執行放棄那兩次 misfire，仍然等到 11:00 開始執行下次任務直到原訂的 16:00<br>所以總執行次數只會有 6 次，而不是原定的 8 次</td>
+      </tr>
+      <tr>
+          <td style="text-align: left"><code>MISFIRE_INSTRUCTION_RESCHEDULE_NOW_WITH_EXISTING_REPEAT_COUNT</code></td>
+          <td style="text-align: left">第一次 misfire 會被立刻執行，其餘的 misfire 及原定任務會被以設定好的執行間隔，重新排程執行<br><strong>任務總執行次數不會改變</strong></td>
+          <td style="text-align: left">當 scheduler 10:15 發現有 2 次 misfire 時，第一個 misfire 會被立刻執行，然後 scheduler 會等待一個小時到 11:15 執行第二次任務，最後 8 次任務執行結束的時間為 17:15</td>
+      </tr>
+      <tr>
+          <td style="text-align: left"><code>MISFIRE_INSTRUCTION_RESCHEDULE_NOW_WITH_REMAINING_REPEAT_COUNT</code></td>
+          <td style="text-align: left">第一次 misfire 會被立刻執行，其他的 misfire 會被放棄，scheduler 會以設定好的執行間隔，重新排程執行剩下未被 misfire 的任務<br><strong>如果 misfire 超過一次，任務總執行次數會比原本預定地少</strong></td>
+          <td style="text-align: left">當 scheduler 10:15 發現有 2 次 misfire 時，第一個 misfire 會被立刻執行，第二個 misfire 會被放棄，然後 scheduler 會等待一個小時到 11:15 執行剩下的任務，最後 7 次任務執行結束時間為 16:15</td>
+      </tr>
+  </tbody>
 </table>
 <h3 id="無限次執行">無限次執行</h3>
 <p>例如有一個任務從 9:00 開始每隔一個小時觸發，但因為某種原因 scheduler 沒辦法執行 9:00 跟 10:00 這兩次任務，並且直到 10:15 才發現有 2 次 misfire:</p>
 <table>
-<thead>
-<tr>
-<th style="text-align:left">Instruction</th>
-<th style="text-align:left">解釋</th>
-<th style="text-align:left">情境舉例</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td style="text-align:left"><code>MISFIRE_INSTRUCTION_SMART_POLICY</code></td>
-<td style="text-align:left">同 <code>MISFIRE_INSTRUCTION_RESCHEDULE_NEXT_WITH_REMAINING_COUNT</code></td>
-<td></td>
-</tr>
-<tr>
-<td style="text-align:left"><code>MISFIRE_INSTRUCTION_IGNORE_MISFIRE_POLICY</code></td>
-<td style="text-align:left">以最快的速度執行所有 misfire 的 job，然後再回到正常的 schedule</td>
-<td style="text-align:left">scheduler  會以最快的速度執行 9:00 及 10:00 這兩次 misfire 的 job，並等到 11:00 回復到正常的排程</td>
-</tr>
-<tr>
-<td style="text-align:left"><code>MISFIRE_INSTRUCTION_FIRE_NOW</code></td>
-<td style="text-align:left">同 <code>MISFIRE_INSTRUCTION_RESCHEDULE_NOW_WITH_REMAINING_REPEAT_COUNT</code></td>
-<td></td>
-</tr>
-<tr>
-<td style="text-align:left"><code>MISFIRE_INSTRUCTION_RESCHEDULE_NEXT_WITH_EXISTING_COUNT</code></td>
-<td style="text-align:left">同 <code>MISFIRE_INSTRUCTION_RESCHEDULE_NEXT_WITH_REMAINING_COUNT</code></td>
-<td></td>
-</tr>
-<tr>
-<td style="text-align:left"><code>MISFIRE_INSTRUCTION_RESCHEDULE_NEXT_WITH_REMAINING_COUNT</code></td>
-<td style="text-align:left">scheduler 會放棄 misfire 的任務，等到下次執行的時間，執行接下來的任務</td>
-<td style="text-align:left">scheduler 10:15 發現有 2 次 misfire，但會執行放棄那兩次 misfire，等到 11:00 開始執行下次任務</td>
-</tr>
-<tr>
-<td style="text-align:left"><code>MISFIRE_INSTRUCTION_RESCHEDULE_NOW_WITH_EXISTING_REPEAT_COUNT</code></td>
-<td style="text-align:left">同 <code>MISFIRE_INSTRUCTION_RESCHEDULE_NOW_WITH_REMAINING_REPEAT_COUNT</code></td>
-<td></td>
-</tr>
-<tr>
-<td style="text-align:left"><code>MISFIRE_INSTRUCTION_RESCHEDULE_NOW_WITH_REMAINING_REPEAT_COUNT</code></td>
-<td style="text-align:left">第一次 misfire 會被立刻執行，其他的 misfire 會被放棄，scheduler 會以設定好的執行間隔，重新排程執行接下來的任務</td>
-<td style="text-align:left">當 scheduler 10:15 發現有 2 次 misfire 時，第一個 misfire 會被立刻執行，第二個 misfire 會被放棄，然後 scheduler 會等待一個小時到 11:15 執行接下來的任務</td>
-</tr>
-</tbody>
+  <thead>
+      <tr>
+          <th style="text-align: left">Instruction</th>
+          <th style="text-align: left">解釋</th>
+          <th style="text-align: left">情境舉例</th>
+      </tr>
+  </thead>
+  <tbody>
+      <tr>
+          <td style="text-align: left"><code>MISFIRE_INSTRUCTION_SMART_POLICY</code></td>
+          <td style="text-align: left">同 <code>MISFIRE_INSTRUCTION_RESCHEDULE_NEXT_WITH_REMAINING_COUNT</code></td>
+          <td style="text-align: left"></td>
+      </tr>
+      <tr>
+          <td style="text-align: left"><code>MISFIRE_INSTRUCTION_IGNORE_MISFIRE_POLICY</code></td>
+          <td style="text-align: left">以最快的速度執行所有 misfire 的 job，然後再回到正常的 schedule</td>
+          <td style="text-align: left">scheduler  會以最快的速度執行 9:00 及 10:00 這兩次 misfire 的 job，並等到 11:00 回復到正常的排程</td>
+      </tr>
+      <tr>
+          <td style="text-align: left"><code>MISFIRE_INSTRUCTION_FIRE_NOW</code></td>
+          <td style="text-align: left">同 <code>MISFIRE_INSTRUCTION_RESCHEDULE_NOW_WITH_REMAINING_REPEAT_COUNT</code></td>
+          <td style="text-align: left"></td>
+      </tr>
+      <tr>
+          <td style="text-align: left"><code>MISFIRE_INSTRUCTION_RESCHEDULE_NEXT_WITH_EXISTING_COUNT</code></td>
+          <td style="text-align: left">同 <code>MISFIRE_INSTRUCTION_RESCHEDULE_NEXT_WITH_REMAINING_COUNT</code></td>
+          <td style="text-align: left"></td>
+      </tr>
+      <tr>
+          <td style="text-align: left"><code>MISFIRE_INSTRUCTION_RESCHEDULE_NEXT_WITH_REMAINING_COUNT</code></td>
+          <td style="text-align: left">scheduler 會放棄 misfire 的任務，等到下次執行的時間，執行接下來的任務</td>
+          <td style="text-align: left">scheduler 10:15 發現有 2 次 misfire，但會執行放棄那兩次 misfire，等到 11:00 開始執行下次任務</td>
+      </tr>
+      <tr>
+          <td style="text-align: left"><code>MISFIRE_INSTRUCTION_RESCHEDULE_NOW_WITH_EXISTING_REPEAT_COUNT</code></td>
+          <td style="text-align: left">同 <code>MISFIRE_INSTRUCTION_RESCHEDULE_NOW_WITH_REMAINING_REPEAT_COUNT</code></td>
+          <td style="text-align: left"></td>
+      </tr>
+      <tr>
+          <td style="text-align: left"><code>MISFIRE_INSTRUCTION_RESCHEDULE_NOW_WITH_REMAINING_REPEAT_COUNT</code></td>
+          <td style="text-align: left">第一次 misfire 會被立刻執行，其他的 misfire 會被放棄，scheduler 會以設定好的執行間隔，重新排程執行接下來的任務</td>
+          <td style="text-align: left">當 scheduler 10:15 發現有 2 次 misfire 時，第一個 misfire 會被立刻執行，第二個 misfire 會被放棄，然後 scheduler 會等待一個小時到 11:15 執行接下來的任務</td>
+      </tr>
+  </tbody>
 </table>
 <h2 id="crontrigger">CronTrigger</h2>
 <p><code>CronTrigger</code> 有提供以下四種 misfire handling instruction:</p>
@@ -601,35 +595,35 @@
 </ul>
 <p>舉例來說，我們安排了一個星期一到五，每天 9:00 到 17:00 之間，每隔一個小時執行一次的任務 (<code>0 0 9-17 ? * MON-FRI</code>)，但同樣的錯過了頭兩次執行，並在 10:15 發現有兩次 misfire:</p>
 <table>
-<thead>
-<tr>
-<th style="text-align:left">Instruction</th>
-<th style="text-align:left">解釋</th>
-<th style="text-align:left">情境舉例</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td style="text-align:left"><code>MISFIRE_INSTRUCTION_SMART_POLICY</code></td>
-<td style="text-align:left">同 <code>MISFIRE_INSTRUCTION_FIRE_ONCE_NOW</code></td>
-<td></td>
-</tr>
-<tr>
-<td style="text-align:left"><code>MISFIRE_INSTRUCTION_IGNORE_MISFIRE_POLICY</code></td>
-<td style="text-align:left">以最快的速度執行所有 misfire 的 job，然後再回到正常的 schedule</td>
-<td style="text-align:left">scheduler  會以最快的速度執行 9:00 及 10:00 這兩次 misfire 的 job，並等到 11:00 回復到正常的排程</td>
-</tr>
-<tr>
-<td style="text-align:left"><code>MISFIRE_INSTRUCTION_FIRE_ONCE_NOW</code></td>
-<td style="text-align:left">第一次 misfire 會被立刻執行，其他的 misfire 會被放棄，等到下次執行的時間，執行接下來的任務</td>
-<td style="text-align:left">當 scheduler 10:15 發現有 2 次 misfire 時，第一個 misfire 會被立刻執行，第二個 misfire 會被放棄，然後 scheduler 會等到 11:00 開始執行下次任務</td>
-</tr>
-<tr>
-<td style="text-align:left"><code>MISFIRE_INSTRUCTION_DO_NOTHING</code></td>
-<td style="text-align:left">scheduler 會放棄 misfire 的任務，等到下次執行的時間，執行接下來的任務</td>
-<td style="text-align:left">scheduler 10:15 發現有 2 次 misfire，但會執行放棄那兩次 misfire，等到 11:00 開始執行下次任務</td>
-</tr>
-</tbody>
+  <thead>
+      <tr>
+          <th style="text-align: left">Instruction</th>
+          <th style="text-align: left">解釋</th>
+          <th style="text-align: left">情境舉例</th>
+      </tr>
+  </thead>
+  <tbody>
+      <tr>
+          <td style="text-align: left"><code>MISFIRE_INSTRUCTION_SMART_POLICY</code></td>
+          <td style="text-align: left">同 <code>MISFIRE_INSTRUCTION_FIRE_ONCE_NOW</code></td>
+          <td style="text-align: left"></td>
+      </tr>
+      <tr>
+          <td style="text-align: left"><code>MISFIRE_INSTRUCTION_IGNORE_MISFIRE_POLICY</code></td>
+          <td style="text-align: left">以最快的速度執行所有 misfire 的 job，然後再回到正常的 schedule</td>
+          <td style="text-align: left">scheduler  會以最快的速度執行 9:00 及 10:00 這兩次 misfire 的 job，並等到 11:00 回復到正常的排程</td>
+      </tr>
+      <tr>
+          <td style="text-align: left"><code>MISFIRE_INSTRUCTION_FIRE_ONCE_NOW</code></td>
+          <td style="text-align: left">第一次 misfire 會被立刻執行，其他的 misfire 會被放棄，等到下次執行的時間，執行接下來的任務</td>
+          <td style="text-align: left">當 scheduler 10:15 發現有 2 次 misfire 時，第一個 misfire 會被立刻執行，第二個 misfire 會被放棄，然後 scheduler 會等到 11:00 開始執行下次任務</td>
+      </tr>
+      <tr>
+          <td style="text-align: left"><code>MISFIRE_INSTRUCTION_DO_NOTHING</code></td>
+          <td style="text-align: left">scheduler 會放棄 misfire 的任務，等到下次執行的時間，執行接下來的任務</td>
+          <td style="text-align: left">scheduler 10:15 發現有 2 次 misfire，但會執行放棄那兩次 misfire，等到 11:00 開始執行下次任務</td>
+      </tr>
+  </tbody>
 </table>
 <p>另外可以注意的是，還有以下兩種 trigger 也支援跟 <code>CronTrigger</code> 相同的 misfire handling instruction:</p>
 <ul>

@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <html><head>
-	<meta name="generator" content="Hugo 0.125.7">
+	<meta name="generator" content="Hugo 0.135.0">
 <title>Howard Tech Note</title>
 
 
@@ -10,7 +10,7 @@
 
 <meta charset="utf-8">
 <meta name="X-UA-Compatible" content="IE=edge">
-<meta name="google-site-verification" content="">
+<meta name="google-site-verification" content="G-JP1V61PPMJ">
 <meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" name="viewport">
 <meta content="telephone=no" name="format-detection">
 <meta name="description" content="">
@@ -27,8 +27,6 @@
 
 
 
-  
-    
       <script async src="https://www.googletagmanager.com/gtag/js?id=G-JP1V61PPMJ"></script>
       <script>
         var doNotTrack = false;
@@ -43,10 +41,6 @@
           gtag('config', 'G-JP1V61PPMJ');
         }
       </script>
-    
-  
-
-
 
 
 
@@ -292,9 +286,36 @@
                             </div>
                             <div class="post-item-summary">
                                 
-                                    大家有在寫 Java 1.8+ 的時候使用新出的 Optional 類別來處理 null 的問題嗎？
-那在使用的時候有沒有碰到 IntelliJ 提示 Optional 不推薦用來當作類別的 field 的黃色警告 (warning) 呢？訊息應該大致如下
-/** * A container object which may or may not contain a non-{@code null} value. * If a value is present, {@code isPresent()} returns {@code true}. If no * value is present, the object is considered &lt;i&gt;empty&lt;/i&gt; and * {@code isPresent()} returns {@code false}. * * &lt;p&gt;Additional methods that depend on the presence or absence of a contained * value are provided, such as {@link #orElse(Object) orElse()} * (returns a default value if no value is present) and * {@link #ifPresent(Consumer) ifPresent()} (performs an * action if a value is present).
+                                    <p>大家有在寫 Java 1.8+ 的時候使用新出的 <code>Optional</code> 類別來處理 <code>null</code> 的問題嗎？</p>
+<p>那在使用的時候有沒有碰到 IntelliJ 提示 <code>Optional</code> 不推薦用來當作類別的 field 的黃色警告 (warning) 呢？訊息應該大致如下</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-java" data-lang="java"><span style="display:flex;"><span><span style="color:#6272a4">/**
+</span></span></span><span style="display:flex;"><span><span style="color:#6272a4"> * A container object which may or may not contain a non-{@code null} value.
+</span></span></span><span style="display:flex;"><span><span style="color:#6272a4"> * If a value is present, {@code isPresent()} returns {@code true}. If no
+</span></span></span><span style="display:flex;"><span><span style="color:#6272a4"> * value is present, the object is considered &lt;i&gt;empty&lt;/i&gt; and
+</span></span></span><span style="display:flex;"><span><span style="color:#6272a4"> * {@code isPresent()} returns {@code false}.
+</span></span></span><span style="display:flex;"><span><span style="color:#6272a4"> *
+</span></span></span><span style="display:flex;"><span><span style="color:#6272a4"> * &lt;p&gt;Additional methods that depend on the presence or absence of a contained
+</span></span></span><span style="display:flex;"><span><span style="color:#6272a4"> * value are provided, such as {@link #orElse(Object) orElse()}
+</span></span></span><span style="display:flex;"><span><span style="color:#6272a4"> * (returns a default value if no value is present) and
+</span></span></span><span style="display:flex;"><span><span style="color:#6272a4"> * {@link #ifPresent(Consumer) ifPresent()} (performs an
+</span></span></span><span style="display:flex;"><span><span style="color:#6272a4"> * action if a value is present).
+</span></span></span><span style="display:flex;"><span><span style="color:#6272a4"> *
+</span></span></span><span style="display:flex;"><span><span style="color:#6272a4"> * &lt;p&gt;This is a &lt;a href=&#34;../lang/doc-files/ValueBased.html&#34;&gt;value-based&lt;/a&gt;
+</span></span></span><span style="display:flex;"><span><span style="color:#6272a4"> * class; use of identity-sensitive operations (including reference equality
+</span></span></span><span style="display:flex;"><span><span style="color:#6272a4"> * ({@code ==}), identity hash code, or synchronization) on instances of
+</span></span></span><span style="display:flex;"><span><span style="color:#6272a4"> * {@code Optional} may have unpredictable results and should be avoided.
+</span></span></span><span style="display:flex;"><span><span style="color:#6272a4"> *
+</span></span></span><span style="display:flex;"><span><span style="color:#6272a4"> * @apiNote
+</span></span></span><span style="display:flex;"><span><span style="color:#6272a4"> * {@code Optional} is primarily intended for use as a method return type where
+</span></span></span><span style="display:flex;"><span><span style="color:#6272a4"> * there is a clear need to represent &#34;no result,&#34; and where using {@code null}
+</span></span></span><span style="display:flex;"><span><span style="color:#6272a4"> * is likely to cause errors. A variable whose type is {@code Optional} should
+</span></span></span><span style="display:flex;"><span><span style="color:#6272a4"> * never itself be {@code null}; it should always point to an {@code Optional}
+</span></span></span><span style="display:flex;"><span><span style="color:#6272a4"> * instance.
+</span></span></span><span style="display:flex;"><span><span style="color:#6272a4"> *
+</span></span></span><span style="display:flex;"><span><span style="color:#6272a4"> * @param &lt;T&gt; the type of value
+</span></span></span><span style="display:flex;"><span><span style="color:#6272a4"> * @since 1.8
+</span></span></span><span style="display:flex;"><span><span style="color:#6272a4"> */</span>
+</span></span></code></pre></div><p>我剛碰到的時候感覺很奇怪，用 <code>Optional</code> 來當 field 表示我們想表達這個 field 有可能是 <code>null</code> 有什麼不對嗎？為什麼 IntelliJ 要警告我呢？</p>
                                 
                             </div>
                             <div class="post-item-meta">
@@ -512,12 +533,29 @@
                             </div>
                             <div class="post-item-summary">
                                 
-                                    最近工作上碰到需要對 Sql Server 做 snapshot 的場合，所以就順便來研究一下怎麼對 Sql Server 做備份
-按照過去的經驗，我第一個想法就是找 Sql Server 有沒有類似 mysqldump 或 pg_dump 的工具可以直接將 schema 及 data 導出成 SQL 檔，這樣方便閱讀也方便各種場景下重建資料庫，尤其是在資料庫的 table 數量及資料量並不算大的前提下
-結果，我太天真了，Microsoft 怎麼可能這麼好用 (誤)，人家就是要走自己的路！
-備份檔案格式 Sql Server 備份出來的檔案格式有以下幾種
-bak: schema + data + log + file，適合做定時備份，因為他會保持包含 index 在內的資料以維持 single point of time 的 transactionally consistent DACPAC: schema，適合建立測試環境或比對各環境版本；但也支持下參數加上 data 的備份。實際上是 xml 的壓縮檔 BACPAC: schema + data，適合轉移或 archive db。schema 部分與 DACPAC 相同，只是加上用 BCP 匯出資料 sql 備份工具 主要有以下幾種備份工具
-SqlCmd (官方) BCP (官方) SMO (官方) SqlPackage.
+                                    <p>最近工作上碰到需要對 Sql Server 做 snapshot 的場合，所以就順便來研究一下怎麼對 Sql Server 做備份</p>
+<p>按照過去的經驗，我第一個想法就是找 Sql Server 有沒有類似 mysqldump 或 pg_dump 的工具可以直接將 schema 及 data 導出成 SQL 檔，這樣方便閱讀也方便各種場景下重建資料庫，尤其是在資料庫的 table 數量及資料量並不算大的前提下</p>
+<p>結果，我太天真了，Microsoft 怎麼可能這麼好用 (誤)，人家就是要走自己的路！</p>
+<h2 id="備份檔案格式">備份檔案格式</h2>
+<p>Sql Server 備份出來的檔案格式有以下幾種</p>
+<ul>
+<li>bak: schema + data + log + file，適合做定時備份，因為他會保持包含 index 在內的資料以維持 single point of time 的 transactionally consistent</li>
+<li>DACPAC: schema，適合建立測試環境或比對各環境版本；但也支持下參數加上 data 的備份。實際上是 xml 的壓縮檔</li>
+<li>BACPAC: schema + data，適合轉移或 archive db。schema 部分與 DACPAC 相同，只是加上用 BCP 匯出資料</li>
+<li>sql</li>
+</ul>
+<h2 id="備份工具">備份工具</h2>
+<p>主要有以下幾種備份工具</p>
+<ul>
+<li><a href="https://docs.microsoft.com/en-us/sql/tools/sqlcmd-utility?view=sql-server-ver15">SqlCmd (官方)</a></li>
+<li><a href="https://docs.microsoft.com/en-us/sql/tools/bcp-utility?view=sql-server-ver15">BCP (官方)</a></li>
+<li><a href="https://docs.microsoft.com/en-us/sql/relational-databases/server-management-objects-smo/getting-started-in-smo?view=sql-server-ver15">SMO (官方)</a></li>
+<li><a href="https://docs.microsoft.com/en-us/sql/tools/sqlpackage/sqlpackage?view=sql-server-ver15">SqlPackage.exe (官方)</a></li>
+<li><a href="https://dbatools.io/">dbatools</a></li>
+<li><a href="https://github.com/Microsoft/mssql-scripter">mssql-scripter</a></li>
+</ul>
+<h3 id="sqlcmd-官方">SqlCmd (官方)</h3>
+<p>需要安裝 Sql Server 或 Microsoft Command Line Utility。若 powershell 要使用，還需要安裝 SqlServer 模組</p>
                                 
                             </div>
                             <div class="post-item-meta">

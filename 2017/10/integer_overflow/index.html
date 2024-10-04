@@ -7,7 +7,7 @@
 
 <meta charset="utf-8">
 <meta name="X-UA-Compatible" content="IE=edge">
-<meta name="google-site-verification" content="">
+<meta name="google-site-verification" content="G-JP1V61PPMJ">
 <meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" name="viewport">
 <meta content="telephone=no" name="format-detection">
 <meta name="description" content="從電腦的數字系統開始，討論電腦如何儲存整數，並探討為何會產生整數溢位">
@@ -24,8 +24,6 @@
 
 
 
-  
-    
       <script async src="https://www.googletagmanager.com/gtag/js?id=G-JP1V61PPMJ"></script>
       <script>
         var doNotTrack = false;
@@ -40,10 +38,6 @@
           gtag('config', 'G-JP1V61PPMJ');
         }
       </script>
-    
-  
-
-
 
 
 
@@ -404,70 +398,70 @@
 <p>那 1 bit 可以表達兩種狀態，以二進制來說就是可以表達 0 跟 1；那 2 bits 呢？是四種；那 3 bits 呢？是六種？錯，是八種。</p>
 <p>我們用列舉的方式說明，3 bits 意思是有三條電線各自有 0 跟 1 兩種狀態，因此我們可以列出有下列八種狀況：</p>
 <table>
-<thead>
-<tr>
-<th style="text-align:center">狀況</th>
-<th style="text-align:center">第一條電線</th>
-<th style="text-align:center">第二條電線</th>
-<th style="text-align:center">第三條電線</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td style="text-align:center">一</td>
-<td style="text-align:center">0</td>
-<td style="text-align:center">0</td>
-<td style="text-align:center">0</td>
-</tr>
-<tr>
-<td style="text-align:center">二</td>
-<td style="text-align:center">0</td>
-<td style="text-align:center">0</td>
-<td style="text-align:center">1</td>
-</tr>
-<tr>
-<td style="text-align:center">三</td>
-<td style="text-align:center">0</td>
-<td style="text-align:center">1</td>
-<td style="text-align:center">0</td>
-</tr>
-<tr>
-<td style="text-align:center">四</td>
-<td style="text-align:center">0</td>
-<td style="text-align:center">1</td>
-<td style="text-align:center">1</td>
-</tr>
-<tr>
-<td style="text-align:center">五</td>
-<td style="text-align:center">1</td>
-<td style="text-align:center">0</td>
-<td style="text-align:center">0</td>
-</tr>
-<tr>
-<td style="text-align:center">六</td>
-<td style="text-align:center">1</td>
-<td style="text-align:center">0</td>
-<td style="text-align:center">1</td>
-</tr>
-<tr>
-<td style="text-align:center">七</td>
-<td style="text-align:center">1</td>
-<td style="text-align:center">1</td>
-<td style="text-align:center">0</td>
-</tr>
-<tr>
-<td style="text-align:center">八</td>
-<td style="text-align:center">1</td>
-<td style="text-align:center">1</td>
-<td style="text-align:center">1</td>
-</tr>
-</tbody>
+  <thead>
+      <tr>
+          <th style="text-align: center">狀況</th>
+          <th style="text-align: center">第一條電線</th>
+          <th style="text-align: center">第二條電線</th>
+          <th style="text-align: center">第三條電線</th>
+      </tr>
+  </thead>
+  <tbody>
+      <tr>
+          <td style="text-align: center">一</td>
+          <td style="text-align: center">0</td>
+          <td style="text-align: center">0</td>
+          <td style="text-align: center">0</td>
+      </tr>
+      <tr>
+          <td style="text-align: center">二</td>
+          <td style="text-align: center">0</td>
+          <td style="text-align: center">0</td>
+          <td style="text-align: center">1</td>
+      </tr>
+      <tr>
+          <td style="text-align: center">三</td>
+          <td style="text-align: center">0</td>
+          <td style="text-align: center">1</td>
+          <td style="text-align: center">0</td>
+      </tr>
+      <tr>
+          <td style="text-align: center">四</td>
+          <td style="text-align: center">0</td>
+          <td style="text-align: center">1</td>
+          <td style="text-align: center">1</td>
+      </tr>
+      <tr>
+          <td style="text-align: center">五</td>
+          <td style="text-align: center">1</td>
+          <td style="text-align: center">0</td>
+          <td style="text-align: center">0</td>
+      </tr>
+      <tr>
+          <td style="text-align: center">六</td>
+          <td style="text-align: center">1</td>
+          <td style="text-align: center">0</td>
+          <td style="text-align: center">1</td>
+      </tr>
+      <tr>
+          <td style="text-align: center">七</td>
+          <td style="text-align: center">1</td>
+          <td style="text-align: center">1</td>
+          <td style="text-align: center">0</td>
+      </tr>
+      <tr>
+          <td style="text-align: center">八</td>
+          <td style="text-align: center">1</td>
+          <td style="text-align: center">1</td>
+          <td style="text-align: center">1</td>
+      </tr>
+  </tbody>
 </table>
-<p>簡略來說就是其實是有 2*2*2=8，也就是 2<!-- raw HTML omitted -->3<!-- raw HTML omitted --> 種狀況；以此類推，n bit（n 條電線）就有 2<!-- raw HTML omitted -->n<!-- raw HTML omitted --> 種狀況。</p>
+<p>簡略來說就是其實是有 2*2*2=8，也就是 2<sup>3</sup> 種狀況；以此類推，n bit（n 條電線）就有 2<sup>n</sup> 種狀況。</p>
 <p>那 1 byte 可以表達幾種狀況？</p>
-<p>前面說過 1 byte = 1 bit，所以 1 byte 就可以表達 2<!-- raw HTML omitted -->8<!-- raw HTML omitted --> = 256 種狀況。</p>
+<p>前面說過 1 byte = 8 bit，所以 1 byte 就可以表達 2<sup>8</sup> = 256 種狀況。</p>
 <p>前面也講過二進制怎麼換算十進制，也就代表了二進制的每一種狀況都對應到一個十進制的數字，至於對應到的是哪一個，就是用前面教過的換算方法換算。</p>
-<p>因此，1 byte 可以表達 256 種狀況，每一種狀況剛好表達了一個二進制數字；再以二進制對應十進制來考慮，也就是 1 byte 可以表達從 0  開始，最多到 255 的各種十進制數字。</p>
+<p>因此，1 byte 可以表達 256 種狀況，每一種狀況剛好表達了一個二進制數字；再以二進制對應十進制來考慮，也就是 1 byte 可以表達從 0  開始，最多到 255 的各種十進制的正整數數字。</p>
 <h1 id="資料型態">資料型態</h1>
 <p>到這邊可能就會有人問，那負數呢？</p>
 <p>沒錯，講到這邊我們都只處理了正整數（包括 0），還沒講到負整數。講負整數之前，順便先講一下資料型態。</p>
@@ -475,149 +469,260 @@
 <p>但 0-255 這樣的範圍很顯然太小了啊，儲存喝一杯可樂、吃一頓麥當勞的價格可能還可以，但要是我去麥當勞想點個六塊炸雞餐台幣 288 元怎麼辦？</p>
 <p>對，就只好用兩個小格子 2 bytes 來存啊，兩個 256 加一起總可以了吧？</p>
 <p>這句話只對了一半。</p>
-<p>的確是要用 2 bytes 來存，但請記住 2 bytes 是有 2<!-- raw HTML omitted -->8<!-- raw HTML omitted -->*2<!-- raw HTML omitted -->8<!-- raw HTML omitted --> = 2<!-- raw HTML omitted -->16<!-- raw HTML omitted --> = 65,536 種狀況，而不是 256+256=512 種狀況唷！就跟 2 bits = 2*2 種狀況一樣，2 bytes 也是 2<!-- raw HTML omitted -->8<!-- raw HTML omitted -->*2<!-- raw HTML omitted -->8<!-- raw HTML omitted --> 種狀況唷！至於有指數的數字相乘則指數相加這件事，請翻數學課本或上網谷哥。</p>
-<p>接著，我們已經知道 2 bytes 有 65536 種狀態，以正整數來說就是 2 bytes 就可以存 0-65535 這個範圍內任一整數，但某些狀況下，這個數字可能也不夠大怎麼辦？</p>
+<p>的確是要用 2 bytes 來存，但請記住 2 bytes 是有 2<sup>8</sup>*2<sup>8</sup> = 2<sup>16</sup> = 65,536 種狀況，而不是 256 + 256 = 512 種狀況唷！就跟 2 bits = 2*2 種狀況一樣，2 bytes 也是 2<sup>8</sup>*2<sup>8</sup> 種狀況唷！至於有指數的數字相乘則指數相加這件事，請翻數學課本或上網谷哥。</p>
+<p>接著，我們已經知道 2 bytes 有 65,536 種狀態，以正整數來說就是 2 bytes 就可以存 0-65535 這個範圍內任一整數，但某些狀況下，這個數字可能也不夠大怎麼辦？</p>
 <p>就只好多用幾個 byte 啊，至於要用幾個 byte 才夠，大家的意見就不太一樣了。</p>
-<p>舉例來說，在 Java 裡面，對於整數就有分成 Byte、Short、Integer、Long 四種資料型態，名稱不重要，重要的是 Java 規定 Byte 型態整數佔 1 Byte、Short 佔 2 Bytes、Integer 佔 4 Bytes、Long 佔 8 Bytes。</p>
+<p>舉例來說，在 Java 裡面，對於整數就有分成 <code>byte</code>、<code>short</code>、<code>int</code>、<code>long</code> 四種資料型態，名稱不重要，重要的是 Java 規定 <code>byte</code> 型態整數佔 1 byte、<code>short</code> 佔 2 bytes、<code>int</code> 佔 4 bytes、<code>long</code> 佔 8 bytes。</p>
 <h1 id="整數儲存方式">整數儲存方式</h1>
-<p>以 Byte 這個整數型態來舉例，儲存 <code>1</code> 這個正整數就是先轉成二進制，也就是 <code>0000 0001</code> 來存進 Byte 的八位元空間，大概可以表達成這樣：</p>
+<p>以 <code>byte</code> 這個整數型態來舉例，儲存 <code>1</code> 這個正整數就是先轉成二進制，也就是 <code>0000 0001</code> 來存進 <code>byte</code> 的 8 bytes 空間，大概可以表達成這樣：</p>
 <blockquote>
-<p>|0|0|0|0|0|0|0|1|</p>
+<p>| 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |</p>
 </blockquote>
-<p>八個位元，剛好一個位元存一個二進位數字。接著就可以來考慮負整數該怎麼辦了。</p>
-<p>一般來說，不論是 Byte、Short、Integer 還是 Long，都是用最左邊的那一個位元來儲存正負號，<code>0</code> 是正號，<code>1</code> 是負號。所以如果是 <code>-1</code> 就要表達成這樣：</p>
+<p>八個位元，剛好一個位元存一個二進位數字。</p>
+<p>接著就可以來考慮負整數該怎麼辦了。</p>
+<p>一般來說，不論是 <code>byte</code>、<code>short</code>、<code>int</code> 還是 <code>long</code>，都是用最左邊的那一個位元來儲存正負號，<code>0</code> 是正號，<code>1</code> 是負號。所以如果是負整數 <code>-1</code> 就要表達成這樣：</p>
 <blockquote>
-<p>|1|0|0|0|0|0|0|1|</p>
+<p>| 1 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |</p>
 </blockquote>
 <h1 id="1s-補數">1&rsquo;s 補數</h1>
 <p>但是，這樣表達會有另外一個問題。</p>
-<p>用最左邊的位元來儲存正負號，所以實際上八位元的空間只能儲存 2<!-- raw HTML omitted -->15<!-- raw HTML omitted --> 種狀況，而我們現在已經考慮到負整數，所以範圍就會變成 -2<!-- raw HTML omitted -->15<!-- raw HTML omitted -->~2<!-- raw HTML omitted -->15<!-- raw HTML omitted -->-1 這個範圍，那個扣掉的 1 是因為通常都把 <code>0</code> 算在正整數這邊，所以正整數的那邊就要扣掉 1。</p>
-<p>這邊就產生一個問題，照前面的邏輯，<code>0</code> 換成八位元的二進制應該表達為 <code>0000 0000</code>，那 <code>1000 0000</code> 豈不是 <code>-0</code>？？</p>
+<p>用最左邊的位元來儲存正負號，所以實際上八位元的空間只有七位元的空間能用來儲存數字，也就是只表示 2<sup>15</sup> 種狀況，加上我們現在已經考慮到負整數，所以理論上範圍就會變成 -2<sup>15</sup>~2<sup>15</sup> 這個範圍。</p>
+<p>這邊就產生一個問題，照前面的邏輯，<code>0</code> 換成八位元的二進制應該表達為 <code>0000 0000</code>，但是在第一個位元用來表示正負號的情況下，那豈不是會出現 <code>0000 0000</code> 代表 <code>+0</code> 以及 <code>1000 0000</code> 代表 <code>-0</code> 這種好像會有兩種 <code>0</code> 的奇怪的狀況？？</p>
 <p>有人想到解決的辦法，就是取補數。</p>
 <p>補數是什麼呢？</p>
 <p>我覺得比較簡單的講法就是兩個加起來會剛好開始進位的數字，互相之間就是補數，譬如在十進制中 <code>1</code> 跟 <code>9</code> 互為補數、<code>23</code> 跟 <code>77</code> 互為補數這樣。</p>
 <p>但是電腦是二進制啊，二進制補數怎麼算？二進制補數最簡單了，就是把 <code>0</code> 跟 <code>1</code> 通通反過來就好，譬如 <code>1001</code> 翻成 <code>0110</code> 就變成補數啦，不信可以自己加加看是不是剛好會進位。</p>
 <p>然後我們就可以利用補數來表達負整數的部分，所以像是 <code>0110</code> 換算成十進制是 <code>6</code>，而 <code>-6</code> 就利用補數法表達為 <code>1001</code>，剛好連最左邊正負號的欄位都同時翻轉成正確的正負號，是不是很方便呢？</p>
+<p>所以取 1&rsquo;s 補數後，以四位元來表達的整數組合就會變成如下：</p>
+<table>
+  <thead>
+      <tr>
+          <th style="text-align: center">一般十進制正整數</th>
+          <th style="text-align: center">對應二進制</th>
+          <th style="text-align: center">換算十進制整數</th>
+          <th style="text-align: center">1&rsquo;s補數法</th>
+      </tr>
+  </thead>
+  <tbody>
+      <tr>
+          <td style="text-align: center">0</td>
+          <td style="text-align: center">0000</td>
+          <td style="text-align: center">+0</td>
+          <td style="text-align: center">+0</td>
+      </tr>
+      <tr>
+          <td style="text-align: center">1</td>
+          <td style="text-align: center">0001</td>
+          <td style="text-align: center">+1</td>
+          <td style="text-align: center">+1</td>
+      </tr>
+      <tr>
+          <td style="text-align: center">2</td>
+          <td style="text-align: center">0010</td>
+          <td style="text-align: center">+2</td>
+          <td style="text-align: center">+2</td>
+      </tr>
+      <tr>
+          <td style="text-align: center">3</td>
+          <td style="text-align: center">0011</td>
+          <td style="text-align: center">+3</td>
+          <td style="text-align: center">+3</td>
+      </tr>
+      <tr>
+          <td style="text-align: center">4</td>
+          <td style="text-align: center">0100</td>
+          <td style="text-align: center">+4</td>
+          <td style="text-align: center">+4</td>
+      </tr>
+      <tr>
+          <td style="text-align: center">5</td>
+          <td style="text-align: center">0101</td>
+          <td style="text-align: center">+5</td>
+          <td style="text-align: center">+5</td>
+      </tr>
+      <tr>
+          <td style="text-align: center">6</td>
+          <td style="text-align: center">0110</td>
+          <td style="text-align: center">+6</td>
+          <td style="text-align: center">+6</td>
+      </tr>
+      <tr>
+          <td style="text-align: center">7</td>
+          <td style="text-align: center">0111</td>
+          <td style="text-align: center">+7</td>
+          <td style="text-align: center">+7</td>
+      </tr>
+      <tr>
+          <td style="text-align: center">8</td>
+          <td style="text-align: center">1000</td>
+          <td style="text-align: center">-0</td>
+          <td style="text-align: center">-7</td>
+      </tr>
+      <tr>
+          <td style="text-align: center">9</td>
+          <td style="text-align: center">1001</td>
+          <td style="text-align: center">-1</td>
+          <td style="text-align: center">-6</td>
+      </tr>
+      <tr>
+          <td style="text-align: center">10</td>
+          <td style="text-align: center">1010</td>
+          <td style="text-align: center">-2</td>
+          <td style="text-align: center">-5</td>
+      </tr>
+      <tr>
+          <td style="text-align: center">11</td>
+          <td style="text-align: center">1011</td>
+          <td style="text-align: center">-3</td>
+          <td style="text-align: center">-4</td>
+      </tr>
+      <tr>
+          <td style="text-align: center">12</td>
+          <td style="text-align: center">1100</td>
+          <td style="text-align: center">-4</td>
+          <td style="text-align: center">-3</td>
+      </tr>
+      <tr>
+          <td style="text-align: center">13</td>
+          <td style="text-align: center">1101</td>
+          <td style="text-align: center">-5</td>
+          <td style="text-align: center">-2</td>
+      </tr>
+      <tr>
+          <td style="text-align: center">14</td>
+          <td style="text-align: center">1110</td>
+          <td style="text-align: center">-6</td>
+          <td style="text-align: center">-1</td>
+      </tr>
+      <tr>
+          <td style="text-align: center">15</td>
+          <td style="text-align: center">1111</td>
+          <td style="text-align: center">-7</td>
+          <td style="text-align: center">-0</td>
+      </tr>
+  </tbody>
+</table>
 <p>這個方法就被稱作 1&rsquo;s 補數法，但要注意，是對二進制取補數來表達十進制的負整數，而不是對十進制取補數。</p>
 <h1 id="2s-補數">2&rsquo;s 補數</h1>
-<p>但是仔細想想，這樣還是沒有解決 <code>-0</code>，的問題啊，只是原本 <code>-0</code> 表達成 <code>1000</code>，現在 <code>0</code> 變成用 <code>1111</code> 來表達而已啊？</p>
+<p>但是仔細想想，這樣還是沒有解決會同時有 <code>+0</code> 跟 <code>-0</code>，的問題啊，只是原本 <code>-0</code> 表達成 <code>1000</code>，現在 <code>-0</code> 變成用 <code>1111</code> 來表達而已啊？</p>
 <p>所以為了徹底解決這個問題，於是就有了所謂的 2&rsquo;s 補數法來彌補這個問題。</p>
-<p>2&rsquo;s 補數法就是針對 1&rsquo;s 補數法會從 <code>-0</code> 開始排列而做的調整，原理就是利用 1&rsquo;s 補數法將正整數的二進制取補數變成負整數的二進制後，對二進制加一來代表原本 1&rsquo;s 補數法代表的十進制數字。</p>
-<p>一樣用十進制的 <code>6</code> 來當例子，十進制的 <code>6</code> 換成二進制變成 <code>0110</code>，而 <code>-6</code> 就是取 1&rsquo;s 補數變成 <code>1001</code>，然後對 <code>1001</code> 加一，也就是 <code>1010</code> 才代表原本 1&rsquo;s 補數所代表的 <code>-6</code>。</p>
+<p>2&rsquo;s 補數法就是針對 1&rsquo;s 補數法會從 <code>-0</code> 開始排列而做的調整，原理就是利用 1&rsquo;s 補數法將正整數的二進制取補數變成負整數的二進制後，對非代表正負號的二進制部分加 <code>1</code> 來代表原本 1&rsquo;s 補數法代表的十進制數字。</p>
+<p>一樣用十進制的 <code>6</code> 來當例子，十進制的 <code>6</code> 換成二進制變成 <code>0110</code>，而 <code>-6</code> 就是取 1&rsquo;s 補數變成 <code>1001</code>，然後對 <code>1001</code> 非代表正負號的二進制部分加 <code>1</code>，也就是 <code>001</code> + <code>1</code> = <code>010</code>，再將原本代表正負號的第一位 <code>1</code> 加回去，所以 <code>1010</code> 才代表原本 1&rsquo;s 補數所代表的 <code>-6</code>。</p>
+<p>在這樣的方式下，<code>-0</code> 會自然地消失，只剩下 <code>+0</code> 代表 <code>0</code>，也因此負整數會多一個，在 4 bits 的情況下，2&rsquo;s 補數法的負整數就會多出 <code>-8</code>。</p>
 <p>如果我們看四個位元的整數組合，可以表列如下，讓大家直觀明白 2&rsquo;s 補數法的對應關係。</p>
 <table>
-<thead>
-<tr>
-<th style="text-align:center">一般十進制正整數</th>
-<th style="text-align:center">對應二進制</th>
-<th style="text-align:center">1&rsquo;s補數法</th>
-<th style="text-align:center">2&rsquo;s補數法</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td style="text-align:center">0</td>
-<td style="text-align:center">0000</td>
-<td style="text-align:center">+0</td>
-<td style="text-align:center">+0</td>
-</tr>
-<tr>
-<td style="text-align:center">1</td>
-<td style="text-align:center">0001</td>
-<td style="text-align:center">+1</td>
-<td style="text-align:center">+1</td>
-</tr>
-<tr>
-<td style="text-align:center">2</td>
-<td style="text-align:center">0010</td>
-<td style="text-align:center">+2</td>
-<td style="text-align:center">+2</td>
-</tr>
-<tr>
-<td style="text-align:center">3</td>
-<td style="text-align:center">0011</td>
-<td style="text-align:center">+3</td>
-<td style="text-align:center">+3</td>
-</tr>
-<tr>
-<td style="text-align:center">4</td>
-<td style="text-align:center">0100</td>
-<td style="text-align:center">+4</td>
-<td style="text-align:center">+4</td>
-</tr>
-<tr>
-<td style="text-align:center">5</td>
-<td style="text-align:center">0101</td>
-<td style="text-align:center">+5</td>
-<td style="text-align:center">+5</td>
-</tr>
-<tr>
-<td style="text-align:center">6</td>
-<td style="text-align:center">0110</td>
-<td style="text-align:center">+6</td>
-<td style="text-align:center">+6</td>
-</tr>
-<tr>
-<td style="text-align:center">7</td>
-<td style="text-align:center">0111</td>
-<td style="text-align:center">+7</td>
-<td style="text-align:center">+7</td>
-</tr>
-<tr>
-<td style="text-align:center">8</td>
-<td style="text-align:center">1000</td>
-<td style="text-align:center">-7</td>
-<td style="text-align:center">-8</td>
-</tr>
-<tr>
-<td style="text-align:center">9</td>
-<td style="text-align:center">1001</td>
-<td style="text-align:center">-6</td>
-<td style="text-align:center">-7</td>
-</tr>
-<tr>
-<td style="text-align:center">10</td>
-<td style="text-align:center">1010</td>
-<td style="text-align:center">-5</td>
-<td style="text-align:center">-6</td>
-</tr>
-<tr>
-<td style="text-align:center">11</td>
-<td style="text-align:center">1011</td>
-<td style="text-align:center">-4</td>
-<td style="text-align:center">-5</td>
-</tr>
-<tr>
-<td style="text-align:center">12</td>
-<td style="text-align:center">1100</td>
-<td style="text-align:center">-3</td>
-<td style="text-align:center">-4</td>
-</tr>
-<tr>
-<td style="text-align:center">13</td>
-<td style="text-align:center">1101</td>
-<td style="text-align:center">-2</td>
-<td style="text-align:center">-3</td>
-</tr>
-<tr>
-<td style="text-align:center">14</td>
-<td style="text-align:center">1110</td>
-<td style="text-align:center">-1</td>
-<td style="text-align:center">-2</td>
-</tr>
-<tr>
-<td style="text-align:center">15</td>
-<td style="text-align:center">1111</td>
-<td style="text-align:center">-0</td>
-<td style="text-align:center">-1</td>
-</tr>
-</tbody>
+  <thead>
+      <tr>
+          <th style="text-align: center">一般十進制正整數</th>
+          <th style="text-align: center">對應二進制</th>
+          <th style="text-align: center">1&rsquo;s補數法</th>
+          <th style="text-align: center">2&rsquo;s補數法</th>
+      </tr>
+  </thead>
+  <tbody>
+      <tr>
+          <td style="text-align: center">0</td>
+          <td style="text-align: center">0000</td>
+          <td style="text-align: center">+0</td>
+          <td style="text-align: center">+0</td>
+      </tr>
+      <tr>
+          <td style="text-align: center">1</td>
+          <td style="text-align: center">0001</td>
+          <td style="text-align: center">+1</td>
+          <td style="text-align: center">+1</td>
+      </tr>
+      <tr>
+          <td style="text-align: center">2</td>
+          <td style="text-align: center">0010</td>
+          <td style="text-align: center">+2</td>
+          <td style="text-align: center">+2</td>
+      </tr>
+      <tr>
+          <td style="text-align: center">3</td>
+          <td style="text-align: center">0011</td>
+          <td style="text-align: center">+3</td>
+          <td style="text-align: center">+3</td>
+      </tr>
+      <tr>
+          <td style="text-align: center">4</td>
+          <td style="text-align: center">0100</td>
+          <td style="text-align: center">+4</td>
+          <td style="text-align: center">+4</td>
+      </tr>
+      <tr>
+          <td style="text-align: center">5</td>
+          <td style="text-align: center">0101</td>
+          <td style="text-align: center">+5</td>
+          <td style="text-align: center">+5</td>
+      </tr>
+      <tr>
+          <td style="text-align: center">6</td>
+          <td style="text-align: center">0110</td>
+          <td style="text-align: center">+6</td>
+          <td style="text-align: center">+6</td>
+      </tr>
+      <tr>
+          <td style="text-align: center">7</td>
+          <td style="text-align: center">0111</td>
+          <td style="text-align: center">+7</td>
+          <td style="text-align: center">+7</td>
+      </tr>
+      <tr>
+          <td style="text-align: center">8</td>
+          <td style="text-align: center">1000</td>
+          <td style="text-align: center">-7</td>
+          <td style="text-align: center">-8</td>
+      </tr>
+      <tr>
+          <td style="text-align: center">9</td>
+          <td style="text-align: center">1001</td>
+          <td style="text-align: center">-6</td>
+          <td style="text-align: center">-7</td>
+      </tr>
+      <tr>
+          <td style="text-align: center">10</td>
+          <td style="text-align: center">1010</td>
+          <td style="text-align: center">-5</td>
+          <td style="text-align: center">-6</td>
+      </tr>
+      <tr>
+          <td style="text-align: center">11</td>
+          <td style="text-align: center">1011</td>
+          <td style="text-align: center">-4</td>
+          <td style="text-align: center">-5</td>
+      </tr>
+      <tr>
+          <td style="text-align: center">12</td>
+          <td style="text-align: center">1100</td>
+          <td style="text-align: center">-3</td>
+          <td style="text-align: center">-4</td>
+      </tr>
+      <tr>
+          <td style="text-align: center">13</td>
+          <td style="text-align: center">1101</td>
+          <td style="text-align: center">-2</td>
+          <td style="text-align: center">-3</td>
+      </tr>
+      <tr>
+          <td style="text-align: center">14</td>
+          <td style="text-align: center">1110</td>
+          <td style="text-align: center">-1</td>
+          <td style="text-align: center">-2</td>
+      </tr>
+      <tr>
+          <td style="text-align: center">15</td>
+          <td style="text-align: center">1111</td>
+          <td style="text-align: center">-0</td>
+          <td style="text-align: center">-1</td>
+      </tr>
+  </tbody>
 </table>
 <p>所以 2&rsquo;s 補數法其實只是針對 1&rsquo;s 補數法的負整數部分調整其對應的十進制數字。</p>
 <h1 id="整數溢位-integer-overflow">整數溢位 Integer Overflow</h1>
 <p>終於要講到溢位了，yeah~</p>
-<p>所謂整數溢位就是超過整數資料型態能儲存的範圍，例如剛才提的例子是用 4bits 來儲存整數，所以有 2<!-- raw HTML omitted -->4<!-- raw HTML omitted --> 也就是 16 種狀況，對應到利用 2&rsquo;s 補數法調整過的十進制整數範圍就是 -2<!-- raw HTML omitted -->3<!-- raw HTML omitted -->~2<!-- raw HTML omitted -->3<!-- raw HTML omitted -->-1，也就是 -8~+7。</p>
-<p>那如果我利用這樣 4bits 的整數變數儲存正整數 <code>7</code>，但是變數在參與運算的時候不小心又加了一怎麼辦？這就會超出這個整數變數能儲存的範圍，那實際這個變數裡面的整數會怎麼樣？會變成 <code>-8</code>。</p>
+<p>所謂整數溢位就是超過整數資料型態能儲存的範圍，例如剛才提的例子是用 4 bits 來儲存整數，所以有 2<sup>4</sup> 也就是 16 種狀況，對應到利用 2&rsquo;s 補數法調整過的十進制整數範圍就是 -2<sup>3</sup><del>2<sup>3</sup>-1，也就是 -8</del>+7。</p>
+<p>那如果我利用這樣 4 bits 的整數變數儲存正整數 <code>7</code>，但是變數在參與運算的時候不小心又加了一怎麼辦？這就會超出這個整數變數能儲存的範圍，那實際這個變數裡面的整數會怎麼樣？會變成 <code>-8</code>。</p>
 <p>為什麼？我們來算算看。</p>
 <p><code>+7</code> 對應的二進制是 <code>0111</code>，不小心再加了一會變多少？用二進制運算就是 <code>1000</code>。然後讓我們看一下上面的表格，<code>1000</code> 對應的 2&rsquo;s 補數法那格是多少？就是 <code>-8</code>。</p>
 <p>反過來說，<code>-8</code> 對應的二進制是 <code>1000</code>，不小心又多減了一，<code>1000</code> 減一就變成 <code>0111</code>，那 <code>0111</code> 對應的十進制數字是多少？就是 <code>+7</code>。</p>
