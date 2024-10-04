@@ -5,9 +5,11 @@
 - Hugo 0.88+
 - Git 2.33.1+
 
-## Quick Publish
+## Init After Git Clone
 
-Commit any changes in main branch and then execute `publish.sh`.
+```git
+git submodule update --init --recursive
+```
 
 ## Hugo Basic Operation
 
@@ -15,6 +17,11 @@ Commit any changes in main branch and then execute `publish.sh`.
 - `hugo new pages/<fileName>.md`: generate new page in Markdown file
 - `hugo server`: test locally
 - `hugo`: generate site
+
+## Quick Publish
+
+1. Commit any changes in main branch.
+2. Execute `publish.sh`.
 
 ## Update Theme
 
