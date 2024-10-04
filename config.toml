@@ -31,8 +31,8 @@ posts = "/:year/:month/:slug"
 pages = "/:slug"
 
 [taxonomies]
-   tag = "tags"
-   category = "categories"
+  tag = "tags"
+  category = "categories"
 
 [[menu.main]]
 url = "/posts"
