@@ -8,7 +8,10 @@ licenseURL = "https://creativecommons.org/licenses/by-sa/4.0/"
 theme = "diary"
 canonifyURLs = true
 
-googleAnalytics = "G-JP1V61PPMJ"
+# Google Analytics
+[services]
+  [services.googleAnalytics]
+    id = "G-JP1V61PPMJ"
 
 [markup]
   [markup.highlight]
