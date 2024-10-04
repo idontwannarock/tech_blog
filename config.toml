@@ -24,6 +24,8 @@ canonifyURLs = true
     noClasses = true
     style = "dracula"
     tabWidth = 4
+  [markup.goldmark.renderer]
+    unsafe = true
 
 [params]
 subtitle = "Share * Record * Program"
