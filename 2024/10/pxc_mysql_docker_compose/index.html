@@ -1,0 +1,861 @@
+<!DOCTYPE html>
+<html><head>
+<title>Percona XtraDB Cluster MySQL with Docker Compose</title>
+
+
+
+
+<meta charset="utf-8">
+<meta name="X-UA-Compatible" content="IE=edge">
+<meta name="google-site-verification" content="G-JP1V61PPMJ">
+<meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" name="viewport">
+<meta content="telephone=no" name="format-detection">
+<meta name="description" content="How to run MySQL in cluster mode with Percona XtraDB Cluster using Docker Compose">
+<meta name="renderer" content="webkit">
+<meta name="theme-color" content="#ffffff">
+
+
+
+
+
+
+
+
+
+
+
+      <script async src="https://www.googletagmanager.com/gtag/js?id=G-JP1V61PPMJ"></script>
+      <script>
+        var doNotTrack = false;
+        if ( false ) {
+          var dnt = (navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack);
+          var doNotTrack = (dnt == "1" || dnt == "yes");
+        }
+        if (!doNotTrack) {
+          window.dataLayer = window.dataLayer || [];
+          function gtag(){dataLayer.push(arguments);}
+          gtag('js', new Date());
+          gtag('config', 'G-JP1V61PPMJ');
+        }
+      </script>
+
+
+
+
+
+
+  
+
+
+
+
+
+
+      <script src="https://blog.idontwannarock.me/js/toc.js"></script>
+    
+    <link type="text/css" rel="stylesheet" href="https://blog.idontwannarock.me/vendor/css/bootstrap.min.css">
+
+<link rel="stylesheet" href="https://blog.idontwannarock.me/scss/dark-mode.min.cb53f1bee2b8900cb4f082afbf00175d6618f281cf9a2fe8619e3b52d20b5721.css" integrity="sha256-y1PxvuK4kAy08IKvvwAXXWYY8oHPmi/oYZ47UtILVyE=" media="screen">
+
+
+<link rel="stylesheet"
+          href="https://fonts.googleapis.com/css?family=Material+Icons">
+
+
+
+
+
+
+
+
+
+
+
+
+<script src="https://cdn.jsdelivr.net/npm/vue-disqus@3/dist/vue-disqus.js"></script>
+
+
+
+
+
+
+
+
+</head>
+<body>
+    	<div id="app"><div class="single-column-drawer-container" id="drawer"
+     v-bind:class="{ 'single-column-drawer-container-active': isDrawerOpen }">
+    <div class="drawer-content">
+        <div class="drawer-menu">
+            
+            
+            
+                
+                
+                
+                
+                
+                <a class="a-block drawer-menu-item false" href="https://blog.idontwannarock.me/posts">
+                    Archive
+                </a>
+                
+            
+                
+                
+                
+                
+                
+                <a class="a-block drawer-menu-item false" href="https://blog.idontwannarock.me/categories">
+                    Categories
+                </a>
+                
+            
+                
+                
+                
+                
+                
+                <a class="a-block drawer-menu-item false" href="https://blog.idontwannarock.me/tags">
+                    Tags
+                </a>
+                
+            
+                
+                
+                
+                
+                
+                <a class="a-block drawer-menu-item false" href="https://blog.idontwannarock.me/about">
+                    About
+                </a>
+                
+            
+                
+                
+                
+                
+                
+                <a class="a-block drawer-menu-item false" href="https://blog.idontwannarock.me/index.xml">
+                    RSS Feed
+                </a>
+                
+            
+            
+            <div class="toc">
+
+
+	<div class="toc-content">
+	
+		
+		
+		
+		<center>- CATALOG -</center>
+		
+		
+		<ul>
+			
+				
+				
+					
+						
+						
+						
+						
+						
+							<li>
+								<a href="#%e7%92%b0%e5%a2%83" class="nav-環境">
+									環境
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+						
+							<li>
+								<a href="#%e4%bd%9c%e6%b3%95" class="nav-作法">
+									作法
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+							
+								
+									<ul>
+								
+							
+						
+						
+							<li>
+								<a href="#composeyml" class="nav-composeyml">
+									compose.yml
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+						
+							<li>
+								<a href="#confcustomcnf" class="nav-confcustomcnf">
+									conf/custom.cnf
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+						
+							<li>
+								<a href="#initsql" class="nav-initsql">
+									init.sql
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+						
+							<li>
+								<a href="#initsh" class="nav-initsh">
+									init.sh
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+							
+								</ul>
+							
+						
+						
+						
+							<li>
+								<a href="#%e4%bd%bf%e7%94%a8" class="nav-使用">
+									使用
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+						
+							<li>
+								<a href="#reference" class="nav-reference">
+									Reference
+								</a>
+							</li>
+						
+						
+					
+				
+			
+		</ul>
+	</div>
+
+</div>
+            
+        </div>
+    </div>
+</div>
+<transition name="fade">
+    <div id="drawer-mask" v-bind:class="{ 'single-column-drawer-mask': mounted }" v-if="isDrawerOpen" v-on:click="toggleDrawer"></div>
+</transition>
+<nav id="navBar" class="navbar sticky-top navbar-light single-column-nav-container">
+    <div id="navBackground" class="nav-background"></div>
+    <div class="container container-narrow nav-content">
+        <button id="nav_dropdown_btn" class="nav-dropdown-toggle" type="button" v-on:click="toggleDrawer">
+            <i class="material-icons">
+                menu
+            </i>
+        </button>
+        <a id="navTitle" class="navbar-brand" href="https://blog.idontwannarock.me/">
+            Howard Tech Note
+        </a>
+        
+        <button type="button" class="nav-darkmode-toggle" id="darkModeToggleButton2">
+            <i class="material-icons" id="darkModeToggleIcon2">
+                dark_mode
+            </i>
+        </button>
+        
+    </div>
+</nav>
+<div class="single-column-header-container" id="pageHead"
+     v-bind:style="{ transform: 'translateZ(0px) translateY('+.3*scrollY+'px)', opacity: 1-navOpacity }">
+    <a href="https://blog.idontwannarock.me/">
+        <div class="single-column-header-title">Howard Tech Note</div>
+        
+        <div class="single-column-header-subtitle">Share * Record * Program</div>
+        
+
+    </a>
+</div>
+
+            <div id="content">
+                <div id="streamContainer" class="stream-container">
+
+    <div class="post-list-container post-list-container-shadow">
+        <div class="post">
+            
+            
+            
+                
+            
+
+            <div class="post-head-wrapper"
+                
+                    
+                    
+                    style="background-image: url('https://res.cloudinary.com/dcvgho2zc/image/upload/v1728273129/Tech%20Blog/pxc_1200_1200.png')"
+                    
+                
+            >
+                <div class="post-title">
+                    Percona XtraDB Cluster MySQL with Docker Compose
+                    
+                    <div class="post-subtitle">
+                        How to run MySQL in cluster mode with Percona XtraDB Cluster using Docker Compose
+                    </div>
+                    
+                    <div class="post-meta">
+                        
+                        <time itemprop="datePublished">
+                            2024-10-16 11:06
+                        </time>
+                        
+
+                        
+                            <i class="material-icons" style="">folder</i>
+                                <a href="https://blog.idontwannarock.me/categories/implementation">implementation</a>
+                                &nbsp;
+                        
+
+                        
+                            <i class="material-icons" style="">label</i>
+                            
+                                <a href="https://blog.idontwannarock.me/tags/pxc">pxc</a>
+                                &nbsp;
+                            
+                                <a href="https://blog.idontwannarock.me/tags/percona-xtradb-cluster">percona-xtradb-cluster</a>
+                                &nbsp;
+                            
+                                <a href="https://blog.idontwannarock.me/tags/mysql">mysql</a>
+                                &nbsp;
+                            
+                                <a href="https://blog.idontwannarock.me/tags/docker">docker</a>
+                                &nbsp;
+                            
+                                <a href="https://blog.idontwannarock.me/tags/docker-compose">docker-compose</a>
+                                &nbsp;
+                            
+                        
+                        
+                    </div>
+                </div>
+            </div>
+            
+            <div class="post-body-wrapper">
+                
+                <div class="post-body" v-pre>
+                
+                    <p>因為公司 production 採用 Percona XtraDB Cluster 去架設 MySQL cluster，而 cluster mode 有很多預設的環境設定與非 cluster mode 的設定不同，例如 <code>pxc_strict_mode</code> 在 cluster mode 下，預設為 <code>ENFORCING</code> 或 <code>MASTER</code>，但非 cluster mode 的 <code>pxc_strict_mode</code> 預設為 <code>DISABLE</code> 而且還不能調整為 <code>ENFORCING</code>，導致有些 SQL 語法在 production 不支援</p>
+<p>為了能夠在本機直接比照 production 環境配置去測試 SQL，所以研究如何快速在本機搭建出 Percona XtraDB Cluster cluster mode 的 MySQL</p>
+<h1 id="環境">環境</h1>
+<ul>
+<li>WSL2 Ubuntu</li>
+<li>Docker and Docker Compose installed and accessible from terminal</li>
+</ul>
+<h1 id="作法">作法</h1>
+<p>先在同一個資料夾建立以下幾個文件</p>
+<h2 id="composeyml">compose.yml</h2>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-yaml" data-lang="yaml"><span style="display:flex;"><span><span style="color:#ff79c6">services</span>:
+</span></span><span style="display:flex;"><span>  <span style="color:#ff79c6">pxc-mysql</span>:
+</span></span><span style="display:flex;"><span>    <span style="color:#ff79c6">image</span>: percona/percona-xtradb-cluster:8.0
+</span></span><span style="display:flex;"><span>    <span style="color:#ff79c6">container_name</span>: pxc-mysql
+</span></span><span style="display:flex;"><span>    <span style="color:#ff79c6">restart</span>: always
+</span></span><span style="display:flex;"><span>    <span style="color:#ff79c6">privileged</span>: <span style="color:#ff79c6">true</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#ff79c6">environment</span>:
+</span></span><span style="display:flex;"><span>      - MYSQL_ROOT_PASSWORD=root
+</span></span><span style="display:flex;"><span>      - MYSQL_DATABASE=mmschat
+</span></span><span style="display:flex;"><span>      - CLUSTER_NAME=pxc-cluster
+</span></span><span style="display:flex;"><span>      - XTRABACKUP_PASSWORD=root
+</span></span><span style="display:flex;"><span>    <span style="color:#ff79c6">ports</span>:
+</span></span><span style="display:flex;"><span>      - <span style="color:#f1fa8c">&#34;3306:3306&#34;</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#ff79c6">volumes</span>:
+</span></span><span style="display:flex;"><span>      - <span style="color:#f1fa8c">&#34;pxc-mysql-data:/var/lib/mysql&#34;</span>
+</span></span><span style="display:flex;"><span>      - <span style="color:#f1fa8c">&#34;./cert:/cert&#34;</span>
+</span></span><span style="display:flex;"><span>      - <span style="color:#f1fa8c">&#34;./conf:/etc/percona-xtradb-cluster.conf.d&#34;</span>
+</span></span><span style="display:flex;"><span>      - <span style="color:#f1fa8c">&#34;./init.sql:/docker-entrypoint-initdb.d/init.sql&#34;</span>
+</span></span><span style="display:flex;"><span><span style="color:#ff79c6">volumes</span>:
+</span></span><span style="display:flex;"><span>  <span style="color:#ff79c6">pxc-mysql-data</span>:
+</span></span></code></pre></div><p>這份 docker compose 檔建立 pxc cluster mode 的 MySQL</p>
+<h2 id="confcustomcnf">conf/custom.cnf</h2>
+<p>在同位置建立 <code>conf</code> 資料夾，並在 <code>conf</code> 資料夾底下建立 <code>custom.cnf</code></p>
+<pre tabindex="0"><code class="language-conf" data-lang="conf">[mysqld]
+ssl-ca = /cert/ca.pem
+ssl-cert = /cert/server-cert.pem
+ssl-key = /cert/server-key.pem
+[client]
+ssl-ca = /cert/ca.pem
+ssl-cert = /cert/client-cert.pem
+ssl-key = /cert/client-key.pem
+[sst]
+encrypt = 4
+ssl-ca = /cert/ca.pem
+ssl-cert = /cert/server-cert.pem
+ssl-key = /cert/server-key.pem
+</code></pre><p>用來配置 SSL 相關檔案位置</p>
+<h2 id="initsql">init.sql</h2>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-sql" data-lang="sql"><span style="display:flex;"><span><span style="color:#ff79c6">GRANT</span> <span style="color:#ff79c6">ALL</span> <span style="color:#ff79c6">ON</span> <span style="color:#ff79c6">*</span>.<span style="color:#ff79c6">*</span> <span style="color:#ff79c6">TO</span> <span style="color:#f1fa8c">&#39;root&#39;</span><span style="color:#ff79c6">@</span><span style="color:#f1fa8c">&#39;%&#39;</span>;
+</span></span><span style="display:flex;"><span>FLUSH <span style="color:#ff79c6">PRIVILEGES</span>;
+</span></span></code></pre></div><p>讓 MySQL 啟動的時候，自動執行此 SQL 設定 root 帳號可以遠端存取</p>
+<h2 id="initsh">init.sh</h2>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span><span style="color:#ff79c6">#!/bin/bash
+</span></span></span><span style="display:flex;"><span><span style="color:#ff79c6"></span>rm -rf ./cert
+</span></span><span style="display:flex;"><span>mkdir -m <span style="color:#bd93f9">777</span> -p ./cert
+</span></span><span style="display:flex;"><span>docker run --name pxc-cert --rm -v ./cert:/cert percona/percona-xtradb-cluster:8.0 mysql_ssl_rsa_setup -d /cert
+</span></span></code></pre></div><p>這份 script 的步驟如下</p>
+<ol>
+<li>清除 <code>./cert</code> 資料夾以及其中的所有檔案</li>
+<li>重新建立 <code>./cert</code> 資料夾</li>
+<li>利用 pxc docker image 內建的功能產生 SSL 相關檔案到 <code>./cert</code> 資料夾</li>
+</ol>
+<h1 id="使用">使用</h1>
+<p>第一次啟動前需要先執行 <code>sh init.sh</code> 以建立 SSL 檔案，之後就可以用 docker compose 指令建立、啟動、關閉或銷毀服務</p>
+<p>啟動後可以進到 MySQL 使用以下 SQL 指令確認 cluster 狀態</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-sql" data-lang="sql"><span style="display:flex;"><span><span style="color:#ff79c6">show</span> status <span style="color:#ff79c6">like</span> <span style="color:#f1fa8c">&#39;wsrep%&#39;</span>;
+</span></span></code></pre></div><p>然後檢查以下這幾項的設定，就可以確認 cluster 是否有建立成功</p>
+<ul>
+<li><code>wsrep_local_state_comment</code>: <code>Synced</code></li>
+<li><code>wsrep_cluster_size</code>: <code>1</code></li>
+<li><code>wsrep_cluster_status</code>: <code>Primary</code></li>
+<li><code>wsrep_connected</code>: <code>ON</code></li>
+<li><code>wsrep_ready</code>: <code>ON</code></li>
+</ul>
+<p>另外可以使用以下 SQL 指令確認 pxc strict mode，若是 <code>ENFORCING</code> 或 <code>MASTER</code> 就是跟 production 集群相同</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-sql" data-lang="sql"><span style="display:flex;"><span><span style="color:#ff79c6">show</span> variables <span style="color:#ff79c6">like</span> <span style="color:#f1fa8c">&#39;pxc_strict_mode&#39;</span>;
+</span></span></code></pre></div><h1 id="reference">Reference</h1>
+<ul>
+<li><a href="https://docs.percona.com/percona-xtradb-cluster/8.0/docker.html">Running Percona XtraDB Cluster in a Docker Container</a></li>
+<li><a href="https://blog.csdn.net/alwaysbefine/article/details/110748717">使用docker-compose 快速搭建Percona XtraDB Cluster（pxc集群）</a></li>
+<li><a href="https://piaohua.github.io/post/mysql/20210523-mysql-pxc/">[MySQL] Percona XtraDB Cluster on docker-compose</a></li>
+<li><a href="https://docs.docker.com/compose/how-tos/startup-order/">Control startup and shutdown order in Compose</a></li>
+</ul>
+
+                    
+                    <HR width="100%" id="EOF">
+		    <p style="color:#777;">Last modified on 2024-10-16</p>
+                    
+                </div>
+            </div>
+            
+            
+            <nav class="post-pagination">
+
+                
+                <a class="newer-posts">
+			Next<br>No newer posts.
+                </a>
+                
+                
+                
+                <a class="older-posts" href="https://blog.idontwannarock.me/2024/05/gitattributes_glowroot_error/">
+			Previous<br>.gitattributes 引發的慘案
+                </a>
+                
+            </nav>
+            <div class="post-comment-wrapper">
+                
+<div id="disqus_thread"></div>
+<script>
+    
+
+    var disqus_config = function () {
+        
+        this.page.url = 'https:\/\/blog.idontwannarock.me\/2024\/10\/pxc_mysql_docker_compose\/';  
+        
+        
+        this.page.identifier = '\/2024\/10\/pxc_mysql_docker_compose\/'; 
+    };
+    (function() {
+        var d = document, s = d.createElement('script');
+        s.src = 'https://howard-tech-blog.disqus.com/embed.js';
+        s.setAttribute('data-timestamp', +new Date());
+        (d.head || d.body).appendChild(s);
+    })();
+</script>
+<noscript> Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript" rel="nofollow"> comments powered by Disqus.  </a> </noscript>
+
+
+
+
+
+
+
+
+
+
+
+
+
+            </div>
+        </div>
+    </div>
+
+
+                    </div>
+            </div><div id="sideContainer" class="side-container">
+    
+    <a class="a-block nav-head false" href="https://blog.idontwannarock.me/">
+    
+        <div class="nav-title">
+            Howard Tech Note
+        </div>
+        
+        <div class="nav-subtitle">
+            Share * Record * Program
+        </div>
+        
+    </a>
+
+    <div class="nav-link-list">
+        
+        
+            
+            
+            
+            
+            
+            <a class="a-block nav-link-item false" href="https://blog.idontwannarock.me/posts">
+                Archive
+            </a>
+            
+        
+            
+            
+            
+            
+            
+            <a class="a-block nav-link-item false" href="https://blog.idontwannarock.me/categories">
+                Categories
+            </a>
+            
+        
+            
+            
+            
+            
+            
+            <a class="a-block nav-link-item false" href="https://blog.idontwannarock.me/tags">
+                Tags
+            </a>
+            
+        
+            
+            
+            
+            
+            
+            <a class="a-block nav-link-item false" href="https://blog.idontwannarock.me/about">
+                About
+            </a>
+            
+        
+            
+            
+            
+            
+            
+            <a class="a-block nav-link-item false" href="https://blog.idontwannarock.me/index.xml">
+                RSS Feed
+            </a>
+            
+        
+    </div>
+
+    
+
+    <div class="nav-footer">
+        
+Hugo Theme <a href="https://github.com/amazingrise/hugo-theme-diary">Diary</a> by <a href="https://risehere.net/">Rise</a>
+<br>
+Ported from <a href="https://mak1t0.cc/" target="_blank" rel="noreferrer noopener">Makito</a>'s <a href="https://github.com/SumiMakito/hexo-theme-journal/" target="_blank" rel="noreferrer noopener">Journal.</a> <br>
+<br>
+
+&copy;
+	
+	This website by Howard Wang is licensed under a Creative Common Attribution-ShareAlike 4.0 International License.
+	
+
+    </div>
+    
+</div><div id="extraContainer" class="extra-container">
+    <div class="toc-wrapper">
+        
+
+        
+        <div class="toc">
+
+
+	<div class="toc-content">
+	
+		
+		
+		
+		<center>- CATALOG -</center>
+		
+		
+		<ul>
+			
+				
+				
+					
+						
+						
+						
+						
+						
+							<li>
+								<a href="#%e7%92%b0%e5%a2%83" class="nav-環境">
+									環境
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+						
+							<li>
+								<a href="#%e4%bd%9c%e6%b3%95" class="nav-作法">
+									作法
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+							
+								
+									<ul>
+								
+							
+						
+						
+							<li>
+								<a href="#composeyml" class="nav-composeyml">
+									compose.yml
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+						
+							<li>
+								<a href="#confcustomcnf" class="nav-confcustomcnf">
+									conf/custom.cnf
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+						
+							<li>
+								<a href="#initsql" class="nav-initsql">
+									init.sql
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+						
+							<li>
+								<a href="#initsh" class="nav-initsh">
+									init.sh
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+							
+								</ul>
+							
+						
+						
+						
+							<li>
+								<a href="#%e4%bd%bf%e7%94%a8" class="nav-使用">
+									使用
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+						
+							<li>
+								<a href="#reference" class="nav-reference">
+									Reference
+								</a>
+							</li>
+						
+						
+					
+				
+			
+		</ul>
+	</div>
+
+</div>
+        
+    </div>
+    <div class="pagination">
+        <a id="globalBackToTop" class="pagination-action animated-visibility" href="#top"
+            :class="{ invisible: scrollY == 0 }">
+            <i class="material-icons pagination-action-icon">
+                keyboard_arrow_up
+            </i>
+        </a>
+        
+        <a type="button" class="pagination-action" id="darkModeToggleButton">
+            <span class="material-icons pagination-action-icon" id="darkModeToggleIcon">
+                dark_mode
+            </span>
+        </a>
+        
+        
+    </div>
+</div>
+
+<div id="single-column-footer">
+Hugo Theme <a href="https://github.com/amazingrise/hugo-theme-diary">Diary</a> by <a href="https://risehere.net/">Rise</a>
+<br>
+Ported from <a href="https://mak1t0.cc/" target="_blank" rel="noreferrer noopener">Makito</a>'s <a href="https://github.com/SumiMakito/hexo-theme-journal/" target="_blank" rel="noreferrer noopener">Journal.</a> <br>
+<br>
+
+&copy;
+	
+	This website by Howard Wang is licensed under a Creative Common Attribution-ShareAlike 4.0 International License.
+	
+</div>
+            </div>
+    
+    <script src="https://blog.idontwannarock.me/js/journal.js"></script></body>
+</html>
