@@ -23,6 +23,18 @@ git submodule update --init --recursive
 1. Commit any changes in main branch.
 2. Execute `publish.sh`.
 
+Powershell
+
+```powershell
+bash publish.sh
+```
+
+Bash
+
+```bash
+sh publish.sh
+```
+
 ## Update Theme
 
 ```git
