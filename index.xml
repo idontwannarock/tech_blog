@@ -1240,12 +1240,12 @@ ssl-key = /cert/server-key.pem
       &lt;tr&gt;
           &lt;td style=&#34;text-align: left&#34;&gt;&lt;code&gt;MISFIRE_INSTRUCTION_SMART_POLICY&lt;/code&gt;&lt;/td&gt;
           &lt;td style=&#34;text-align: left&#34;&gt;同 &lt;code&gt;MISFIRE_INSTRUCTION_FIRE_NOW&lt;/code&gt;&lt;/td&gt;
-          &lt;td style=&#34;text-align: left&#34;&gt;&lt;/td&gt;
+          &lt;td&gt;&lt;/td&gt;
       &lt;/tr&gt;
       &lt;tr&gt;
           &lt;td style=&#34;text-align: left&#34;&gt;&lt;code&gt;MISFIRE_INSTRUCTION_IGNORE_MISFIRE_POLICY&lt;/code&gt;&lt;/td&gt;
           &lt;td style=&#34;text-align: left&#34;&gt;同 &lt;code&gt;MISFIRE_INSTRUCTION_FIRE_NOW&lt;/code&gt;&lt;/td&gt;
-          &lt;td style=&#34;text-align: left&#34;&gt;&lt;/td&gt;
+          &lt;td&gt;&lt;/td&gt;
       &lt;/tr&gt;
       &lt;tr&gt;
           &lt;td style=&#34;text-align: left&#34;&gt;&lt;code&gt;MISFIRE_INSTRUCTION_FIRE_NOW&lt;/code&gt;&lt;/td&gt;
@@ -1255,7 +1255,7 @@ ssl-key = /cert/server-key.pem
       &lt;tr&gt;
           &lt;td style=&#34;text-align: left&#34;&gt;&lt;code&gt;MISFIRE_INSTRUCTION_RESCHEDULE_NEXT_WITH_EXISTING_COUNT&lt;/code&gt;&lt;/td&gt;
           &lt;td style=&#34;text-align: left&#34;&gt;同 &lt;code&gt;MISFIRE_INSTRUCTION_RESCHEDULE_NEXT_WITH_REMAINING_COUNT&lt;/code&gt;&lt;/td&gt;
-          &lt;td style=&#34;text-align: left&#34;&gt;&lt;/td&gt;
+          &lt;td&gt;&lt;/td&gt;
       &lt;/tr&gt;
       &lt;tr&gt;
           &lt;td style=&#34;text-align: left&#34;&gt;&lt;code&gt;MISFIRE_INSTRUCTION_RESCHEDULE_NEXT_WITH_REMAINING_COUNT&lt;/code&gt;&lt;/td&gt;
@@ -1265,12 +1265,12 @@ ssl-key = /cert/server-key.pem
       &lt;tr&gt;
           &lt;td style=&#34;text-align: left&#34;&gt;&lt;code&gt;MISFIRE_INSTRUCTION_RESCHEDULE_NOW_WITH_EXISTING_REPEAT_COUNT&lt;/code&gt;&lt;/td&gt;
           &lt;td style=&#34;text-align: left&#34;&gt;同 &lt;code&gt;MISFIRE_INSTRUCTION_FIRE_NOW&lt;/code&gt;&lt;/td&gt;
-          &lt;td style=&#34;text-align: left&#34;&gt;&lt;/td&gt;
+          &lt;td&gt;&lt;/td&gt;
       &lt;/tr&gt;
       &lt;tr&gt;
           &lt;td style=&#34;text-align: left&#34;&gt;&lt;code&gt;MISFIRE_INSTRUCTION_RESCHEDULE_NOW_WITH_REMAINING_REPEAT_COUNT&lt;/code&gt;&lt;/td&gt;
           &lt;td style=&#34;text-align: left&#34;&gt;同 &lt;code&gt;MISFIRE_INSTRUCTION_FIRE_NOW&lt;/code&gt;&lt;/td&gt;
-          &lt;td style=&#34;text-align: left&#34;&gt;&lt;/td&gt;
+          &lt;td&gt;&lt;/td&gt;
       &lt;/tr&gt;
   &lt;/tbody&gt;
 &lt;/table&gt;
@@ -1289,7 +1289,7 @@ ssl-key = /cert/server-key.pem
       &lt;tr&gt;
           &lt;td style=&#34;text-align: left&#34;&gt;&lt;code&gt;MISFIRE_INSTRUCTION_SMART_POLICY&lt;/code&gt;&lt;/td&gt;
           &lt;td style=&#34;text-align: left&#34;&gt;同 &lt;code&gt;MISFIRE_INSTRUCTION_RESCHEDULE_NOW_WITH_EXISTING_REPEAT_COUNT&lt;/code&gt;&lt;/td&gt;
-          &lt;td style=&#34;text-align: left&#34;&gt;&lt;/td&gt;
+          &lt;td&gt;&lt;/td&gt;
       &lt;/tr&gt;
       &lt;tr&gt;
           &lt;td style=&#34;text-align: left&#34;&gt;&lt;code&gt;MISFIRE_INSTRUCTION_IGNORE_MISFIRE_POLICY&lt;/code&gt;&lt;/td&gt;
@@ -1299,7 +1299,7 @@ ssl-key = /cert/server-key.pem
       &lt;tr&gt;
           &lt;td style=&#34;text-align: left&#34;&gt;&lt;code&gt;MISFIRE_INSTRUCTION_FIRE_NOW&lt;/code&gt;&lt;/td&gt;
           &lt;td style=&#34;text-align: left&#34;&gt;同 &lt;code&gt;MISFIRE_INSTRUCTION_RESCHEDULE_NOW_WITH_REMAINING_REPEAT_COUNT&lt;/code&gt;&lt;/td&gt;
-          &lt;td style=&#34;text-align: left&#34;&gt;&lt;/td&gt;
+          &lt;td&gt;&lt;/td&gt;
       &lt;/tr&gt;
       &lt;tr&gt;
           &lt;td style=&#34;text-align: left&#34;&gt;&lt;code&gt;MISFIRE_INSTRUCTION_RESCHEDULE_NEXT_WITH_EXISTING_COUNT&lt;/code&gt;&lt;/td&gt;
@@ -1337,7 +1337,7 @@ ssl-key = /cert/server-key.pem
       &lt;tr&gt;
           &lt;td style=&#34;text-align: left&#34;&gt;&lt;code&gt;MISFIRE_INSTRUCTION_SMART_POLICY&lt;/code&gt;&lt;/td&gt;
           &lt;td style=&#34;text-align: left&#34;&gt;同 &lt;code&gt;MISFIRE_INSTRUCTION_RESCHEDULE_NEXT_WITH_REMAINING_COUNT&lt;/code&gt;&lt;/td&gt;
-          &lt;td style=&#34;text-align: left&#34;&gt;&lt;/td&gt;
+          &lt;td&gt;&lt;/td&gt;
       &lt;/tr&gt;
       &lt;tr&gt;
           &lt;td style=&#34;text-align: left&#34;&gt;&lt;code&gt;MISFIRE_INSTRUCTION_IGNORE_MISFIRE_POLICY&lt;/code&gt;&lt;/td&gt;
@@ -1347,12 +1347,12 @@ ssl-key = /cert/server-key.pem
       &lt;tr&gt;
           &lt;td style=&#34;text-align: left&#34;&gt;&lt;code&gt;MISFIRE_INSTRUCTION_FIRE_NOW&lt;/code&gt;&lt;/td&gt;
           &lt;td style=&#34;text-align: left&#34;&gt;同 &lt;code&gt;MISFIRE_INSTRUCTION_RESCHEDULE_NOW_WITH_REMAINING_REPEAT_COUNT&lt;/code&gt;&lt;/td&gt;
-          &lt;td style=&#34;text-align: left&#34;&gt;&lt;/td&gt;
+          &lt;td&gt;&lt;/td&gt;
       &lt;/tr&gt;
       &lt;tr&gt;
           &lt;td style=&#34;text-align: left&#34;&gt;&lt;code&gt;MISFIRE_INSTRUCTION_RESCHEDULE_NEXT_WITH_EXISTING_COUNT&lt;/code&gt;&lt;/td&gt;
           &lt;td style=&#34;text-align: left&#34;&gt;同 &lt;code&gt;MISFIRE_INSTRUCTION_RESCHEDULE_NEXT_WITH_REMAINING_COUNT&lt;/code&gt;&lt;/td&gt;
-          &lt;td style=&#34;text-align: left&#34;&gt;&lt;/td&gt;
+          &lt;td&gt;&lt;/td&gt;
       &lt;/tr&gt;
       &lt;tr&gt;
           &lt;td style=&#34;text-align: left&#34;&gt;&lt;code&gt;MISFIRE_INSTRUCTION_RESCHEDULE_NEXT_WITH_REMAINING_COUNT&lt;/code&gt;&lt;/td&gt;
@@ -1362,7 +1362,7 @@ ssl-key = /cert/server-key.pem
       &lt;tr&gt;
           &lt;td style=&#34;text-align: left&#34;&gt;&lt;code&gt;MISFIRE_INSTRUCTION_RESCHEDULE_NOW_WITH_EXISTING_REPEAT_COUNT&lt;/code&gt;&lt;/td&gt;
           &lt;td style=&#34;text-align: left&#34;&gt;同 &lt;code&gt;MISFIRE_INSTRUCTION_RESCHEDULE_NOW_WITH_REMAINING_REPEAT_COUNT&lt;/code&gt;&lt;/td&gt;
-          &lt;td style=&#34;text-align: left&#34;&gt;&lt;/td&gt;
+          &lt;td&gt;&lt;/td&gt;
       &lt;/tr&gt;
       &lt;tr&gt;
           &lt;td style=&#34;text-align: left&#34;&gt;&lt;code&gt;MISFIRE_INSTRUCTION_RESCHEDULE_NOW_WITH_REMAINING_REPEAT_COUNT&lt;/code&gt;&lt;/td&gt;
@@ -1392,7 +1392,7 @@ ssl-key = /cert/server-key.pem
       &lt;tr&gt;
           &lt;td style=&#34;text-align: left&#34;&gt;&lt;code&gt;MISFIRE_INSTRUCTION_SMART_POLICY&lt;/code&gt;&lt;/td&gt;
           &lt;td style=&#34;text-align: left&#34;&gt;同 &lt;code&gt;MISFIRE_INSTRUCTION_FIRE_ONCE_NOW&lt;/code&gt;&lt;/td&gt;
-          &lt;td style=&#34;text-align: left&#34;&gt;&lt;/td&gt;
+          &lt;td&gt;&lt;/td&gt;
       &lt;/tr&gt;
       &lt;tr&gt;
           &lt;td style=&#34;text-align: left&#34;&gt;&lt;code&gt;MISFIRE_INSTRUCTION_IGNORE_MISFIRE_POLICY&lt;/code&gt;&lt;/td&gt;
