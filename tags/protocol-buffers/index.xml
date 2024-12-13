@@ -2,18 +2,18 @@
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
     <title>Protocol Buffers on Howard Tech Note</title>
-    <link>https://blog.idontwannarock.me/tags/protocol-buffers/</link>
+    <link>https://blog.idontwannarock.dev/tags/protocol-buffers/</link>
     <description>Recent content in Protocol Buffers on Howard Tech Note</description>
     <generator>Hugo</generator>
     <language>en-us</language>
     <copyright>This website by Howard Wang is licensed under a Creative Common Attribution-ShareAlike 4.0 International License.</copyright>
     <lastBuildDate>Tue, 04 Jan 2022 15:36:17 +0800</lastBuildDate>
-    <atom:link href="https://blog.idontwannarock.me/tags/protocol-buffers/index.xml" rel="self" type="application/rss+xml" />
+    <atom:link href="https://blog.idontwannarock.dev/tags/protocol-buffers/index.xml" rel="self" type="application/rss+xml" />
     <item>
       <title>ProtoBuf FlatBuf Benchmark in Java</title>
-      <link>https://blog.idontwannarock.me/2022/01/protobuf_flatbuf_java/</link>
+      <link>https://blog.idontwannarock.dev/2022/01/protobuf_flatbuf_java/</link>
       <pubDate>Tue, 04 Jan 2022 15:36:17 +0800</pubDate>
-      <guid>https://blog.idontwannarock.me/2022/01/protobuf_flatbuf_java/</guid>
+      <guid>https://blog.idontwannarock.dev/2022/01/protobuf_flatbuf_java/</guid>
       <description>&lt;p&gt;繼續之前研究的 gRPC，除了 HTTP/2 以外，另外一個支柱就是 Protocol Buffers (ProtoBuf)&lt;/p&gt;&#xA;&lt;p&gt;ProtoBuf 是一種二進制的序列化資料格式，透過介面描述語言 (Interface description language, IDL) 來描述資料結構，再利用工具依據 IDL 產生程式碼，這些程式碼可以用來生成或解析代表這些資料結構的位元組流&lt;/p&gt;&#xA;&lt;p&gt;ProtoBuf 是 Google 原本用來內部使用的資料格式，但現在已開源，加上被 gRPC 原生支援，現在已經是重要的序列化 library&lt;/p&gt;&#xA;&lt;p&gt;Google 官方支援了許多語言的工具用來轉換 IDL 為代碼，但其中很不巧的不包含我目前工作上避不開的 Lua 或 TypeScript，所以我又另外找到同樣也是 Google 推出的 FlatBuffers (FlatBuf)，同樣也是二進制的序列化 library，但官方支援的語系就很多了，正好也包括 Lua 及 TypeScript&lt;/p&gt;&#xA;&lt;p&gt;雖然 Google 官方已經在努力讓 FlatBuf 也被 gRPC 支援，但目前官方文件上還只有 C++ 的版本，並沒有我日常使用的語言&lt;/p&gt;&#xA;&lt;p&gt;不過沒關係，我工作上的專案目前並不是一定要使用 gRPC，我完全可以利用其他傳輸協定例如 HTTP, WebSocket 或甚至 Socket 來傳輸資料，我只需要一種能夠讓各語系通用的資料格式，並且盡可能有官方長期支援即可&lt;/p&gt;&#xA;&lt;h2 id=&#34;benchmark-方法&#34;&gt;Benchmark 方法&lt;/h2&gt;&#xA;&lt;p&gt;雖然剛好 FlatBuf 都符合我的需求，但 FlatBuf 使用的人似乎還不多，雖然官方文件上說 Facebook 已經將 FlatBuf 使用在 Android App 上，不過總是沒有自己親身試驗來的準，也一併試驗開發的困難度&lt;/p&gt;&#xA;&lt;p&gt;所以乾脆來做 ProtoBuf 跟 FlatBuf 的 benchmark 來比較一下各自序列化的速度以及記憶體大致用量&lt;/p&gt;</description>
     </item>
   </channel>

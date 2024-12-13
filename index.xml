@@ -2,24 +2,24 @@
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
     <title>Howard Tech Note</title>
-    <link>https://blog.idontwannarock.me/</link>
+    <link>https://blog.idontwannarock.dev/</link>
     <description>Recent content on Howard Tech Note</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
     <copyright>This website by Howard Wang is licensed under a Creative Common Attribution-ShareAlike 4.0 International License.</copyright>
     <lastBuildDate>Wed, 16 Oct 2024 11:06:41 +0800</lastBuildDate>
     
-        <atom:link href="https://blog.idontwannarock.me/index.xml" rel="self" type="application/rss+xml" />
+        <atom:link href="https://blog.idontwannarock.dev/index.xml" rel="self" type="application/rss+xml" />
     
     
     
         <item>
         <title>Percona XtraDB Cluster MySQL with Docker Compose</title>
-        <link>https://blog.idontwannarock.me/2024/10/pxc_mysql_docker_compose/</link>
+        <link>https://blog.idontwannarock.dev/2024/10/pxc_mysql_docker_compose/</link>
         <pubDate>Wed, 16 Oct 2024 11:06:41 +0800</pubDate>
         
-        <guid>https://blog.idontwannarock.me/2024/10/pxc_mysql_docker_compose/</guid>
-        <description>Howard Tech Note https://blog.idontwannarock.me/2024/10/pxc_mysql_docker_compose/ -&lt;p&gt;因為公司 production 採用 Percona XtraDB Cluster 去架設 MySQL cluster，而 cluster mode 有很多預設的環境設定與非 cluster mode 的設定不同，例如 &lt;code&gt;pxc_strict_mode&lt;/code&gt; 在 cluster mode 下，預設為 &lt;code&gt;ENFORCING&lt;/code&gt; 或 &lt;code&gt;MASTER&lt;/code&gt;，但非 cluster mode 的 &lt;code&gt;pxc_strict_mode&lt;/code&gt; 預設為 &lt;code&gt;DISABLE&lt;/code&gt; 而且還不能調整為 &lt;code&gt;ENFORCING&lt;/code&gt;，導致有些 SQL 語法在 production 不支援&lt;/p&gt;
+        <guid>https://blog.idontwannarock.dev/2024/10/pxc_mysql_docker_compose/</guid>
+        <description>Howard Tech Note https://blog.idontwannarock.dev/2024/10/pxc_mysql_docker_compose/ -&lt;p&gt;因為公司 production 採用 Percona XtraDB Cluster 去架設 MySQL cluster，而 cluster mode 有很多預設的環境設定與非 cluster mode 的設定不同，例如 &lt;code&gt;pxc_strict_mode&lt;/code&gt; 在 cluster mode 下，預設為 &lt;code&gt;ENFORCING&lt;/code&gt; 或 &lt;code&gt;MASTER&lt;/code&gt;，但非 cluster mode 的 &lt;code&gt;pxc_strict_mode&lt;/code&gt; 預設為 &lt;code&gt;DISABLE&lt;/code&gt; 而且還不能調整為 &lt;code&gt;ENFORCING&lt;/code&gt;，導致有些 SQL 語法在 production 不支援&lt;/p&gt;
 &lt;p&gt;為了能夠在本機直接比照 production 環境配置去測試 SQL，所以研究如何快速在本機搭建出 Percona XtraDB Cluster cluster mode 的 MySQL&lt;/p&gt;
 &lt;h1 id=&#34;環境&#34;&gt;環境&lt;/h1&gt;
 &lt;ul&gt;
@@ -102,19 +102,19 @@ ssl-key = /cert/server-key.pem
 &lt;li&gt;&lt;a href=&#34;https://piaohua.github.io/post/mysql/20210523-mysql-pxc/&#34;&gt;[MySQL] Percona XtraDB Cluster on docker-compose&lt;/a&gt;&lt;/li&gt;
 &lt;li&gt;&lt;a href=&#34;https://docs.docker.com/compose/how-tos/startup-order/&#34;&gt;Control startup and shutdown order in Compose&lt;/a&gt;&lt;/li&gt;
 &lt;/ul&gt;
-- https://blog.idontwannarock.me/2024/10/pxc_mysql_docker_compose/ - This website by Howard Wang is licensed under a Creative Common Attribution-ShareAlike 4.0 International License.</description>
+- https://blog.idontwannarock.dev/2024/10/pxc_mysql_docker_compose/ - This website by Howard Wang is licensed under a Creative Common Attribution-ShareAlike 4.0 International License.</description>
         </item>
     
     
     
         <item>
         <title>.gitattributes 引發的慘案</title>
-        <link>https://blog.idontwannarock.me/2024/05/gitattributes_glowroot_error/</link>
+        <link>https://blog.idontwannarock.dev/2024/05/gitattributes_glowroot_error/</link>
         <pubDate>Wed, 22 May 2024 09:25:13 +0800</pubDate>
         
-        <guid>https://blog.idontwannarock.me/2024/05/gitattributes_glowroot_error/</guid>
-        <description>Howard Tech Note https://blog.idontwannarock.me/2024/05/gitattributes_glowroot_error/ -&lt;h1 id=&#34;情況描述&#34;&gt;情況描述&lt;/h1&gt;
-&lt;p&gt;最近在嘗試建立新專案的基礎專案架構，因為剛好看到常用的 APM 工具 &lt;a href=&#34;https://github.com/glowroot/glowroot/releases/tag/v0.14.2&#34;&gt;Glowroot 0.14.2 版 release&lt;/a&gt; 開始支援 Java 21，讓我產生使用 &lt;a href=&#34;https://blog.idontwannarock.me/2022/12/maven_docker_multi_stage_build/&#34;&gt;multi-staged build&lt;/a&gt; + &lt;a href=&#34;https://docs.oracle.com/en/java/javase/11/tools/jlink.html&#34;&gt;jlink&lt;/a&gt; 盡量縮小 image 大小，並且掛上 &lt;a href=&#34;https://glowroot.org/&#34;&gt;Glowroot&lt;/a&gt; 作為 Java Agent 來運行專案的念頭&lt;/p&gt;
+        <guid>https://blog.idontwannarock.dev/2024/05/gitattributes_glowroot_error/</guid>
+        <description>Howard Tech Note https://blog.idontwannarock.dev/2024/05/gitattributes_glowroot_error/ -&lt;h1 id=&#34;情況描述&#34;&gt;情況描述&lt;/h1&gt;
+&lt;p&gt;最近在嘗試建立新專案的基礎專案架構，因為剛好看到常用的 APM 工具 &lt;a href=&#34;https://github.com/glowroot/glowroot/releases/tag/v0.14.2&#34;&gt;Glowroot 0.14.2 版 release&lt;/a&gt; 開始支援 Java 21，讓我產生使用 &lt;a href=&#34;https://blog.idontwannarock.dev/2022/12/maven_docker_multi_stage_build/&#34;&gt;multi-staged build&lt;/a&gt; + &lt;a href=&#34;https://docs.oracle.com/en/java/javase/11/tools/jlink.html&#34;&gt;jlink&lt;/a&gt; 盡量縮小 image 大小，並且掛上 &lt;a href=&#34;https://glowroot.org/&#34;&gt;Glowroot&lt;/a&gt; 作為 Java Agent 來運行專案的念頭&lt;/p&gt;
 &lt;p&gt;因為以往已經將 Glowroot 使用在 Java 8, 11, 17 等版本的專案上，所以 Dockerfile 的基本架構已經確立，理論上只需要調整 base image 為 Java 21 應該就沒問題&lt;/p&gt;
 &lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;&#34;&gt;&lt;code class=&#34;language-dockerfile&#34; data-lang=&#34;dockerfile&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#ff79c6&#34;&gt;FROM&lt;/span&gt;&lt;span style=&#34;color:#f1fa8c&#34;&gt; eclipse-temurin:21&lt;/span&gt;
 &lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#ff79c6&#34;&gt;ENV&lt;/span&gt; &lt;span style=&#34;color:#8be9fd;font-style:italic&#34;&gt;CONFIG_java_opts&lt;/span&gt;&lt;span style=&#34;color:#ff79c6&#34;&gt;=&lt;/span&gt;&lt;span style=&#34;color:#f1fa8c&#34;&gt;&amp;#34;-server -XX:+UseG1GC&amp;#34;&lt;/span&gt;
@@ -241,18 +241,18 @@ ssl-key = /cert/server-key.pem
 &lt;li&gt;&lt;a href=&#34;https://gitattributes.com/&#34;&gt;gitattributes.io - Create .gitattributes file for your project&lt;/a&gt;&lt;/li&gt;
 &lt;li&gt;&lt;a href=&#34;https://gitignore.io/&#34;&gt;gitignore.io&lt;/a&gt;&lt;/li&gt;
 &lt;/ul&gt;
-- https://blog.idontwannarock.me/2024/05/gitattributes_glowroot_error/ - This website by Howard Wang is licensed under a Creative Common Attribution-ShareAlike 4.0 International License.</description>
+- https://blog.idontwannarock.dev/2024/05/gitattributes_glowroot_error/ - This website by Howard Wang is licensed under a Creative Common Attribution-ShareAlike 4.0 International License.</description>
         </item>
     
     
     
         <item>
         <title>Java Time 保存到 MySQL DATETIME 時區問題</title>
-        <link>https://blog.idontwannarock.me/2023/12/java_time_mapping_mysql_datetime_timezone/</link>
+        <link>https://blog.idontwannarock.dev/2023/12/java_time_mapping_mysql_datetime_timezone/</link>
         <pubDate>Wed, 27 Dec 2023 09:26:23 +0800</pubDate>
         
-        <guid>https://blog.idontwannarock.me/2023/12/java_time_mapping_mysql_datetime_timezone/</guid>
-        <description>Howard Tech Note https://blog.idontwannarock.me/2023/12/java_time_mapping_mysql_datetime_timezone/ -&lt;p&gt;最近開發遇到一個對我的系統需求來說很合適，但我感覺不合理的狀況&lt;/p&gt;
+        <guid>https://blog.idontwannarock.dev/2023/12/java_time_mapping_mysql_datetime_timezone/</guid>
+        <description>Howard Tech Note https://blog.idontwannarock.dev/2023/12/java_time_mapping_mysql_datetime_timezone/ -&lt;p&gt;最近開發遇到一個對我的系統需求來說很合適，但我感覺不合理的狀況&lt;/p&gt;
 &lt;p&gt;目前有 Spring Boot 系統在 JPA 是用 &lt;code&gt;OffsetDateTime&lt;/code&gt; 在 Entity 中對應 MySQL 表中的 &lt;code&gt;DATETIME&lt;/code&gt; 欄位，JVM 時區以及 MySQL 的系統時區都是 +8，沒有特別在任何地方進行時區設定，也就是所有地方應該都是預設設定&lt;/p&gt;
 &lt;p&gt;然而當 &lt;code&gt;OffsetDateTime&lt;/code&gt; 保存到 &lt;code&gt;DATETIME&lt;/code&gt; 當中時，卻會被自動轉換成 UTC 時區的時間保存，並且之後再用 JPA 重新取出後，&lt;code&gt;OffsetDateTime&lt;/code&gt; 也依然是 UTC 時區&lt;/p&gt;
 &lt;p&gt;這就讓人感覺很奇怪了，感覺要馬就應該是 MySQL &lt;code&gt;DATETIME&lt;/code&gt; 保存時用 JVM 跟 MySQL 相同的系統 +8 時區時間保存，取出也是 +8 時間；要馬就是保存時會轉成 UTC，但取出應該會自動轉換回 JVM 的 +8 才合理，畢竟 &lt;code&gt;DATETIME&lt;/code&gt; 欄位資料格式不保存時區資訊，所以要馬就是完全不轉換，要馬就是會依照某種機制保存時用 UTC，但使用時會自動轉換成 JVM 時區之類的模式才對&lt;/p&gt;
@@ -457,18 +457,18 @@ ssl-key = /cert/server-key.pem
 &lt;li&gt;&lt;a href=&#34;https://thorben-janssen.com/hibernate-jpa-date-and-time/#Working_with_ZonedDateTime&#34;&gt;Working with ZonedDateTime&lt;/a&gt;&lt;/li&gt;
 &lt;li&gt;&lt;a href=&#34;https://thorben-janssen.com/hibernate-6-offsetdatetime-and-zoneddatetime/&#34;&gt;TimezoneStorageType – Hibernate’s improved timezone mapping&lt;/a&gt;&lt;/li&gt;
 &lt;/ul&gt;
-- https://blog.idontwannarock.me/2023/12/java_time_mapping_mysql_datetime_timezone/ - This website by Howard Wang is licensed under a Creative Common Attribution-ShareAlike 4.0 International License.</description>
+- https://blog.idontwannarock.dev/2023/12/java_time_mapping_mysql_datetime_timezone/ - This website by Howard Wang is licensed under a Creative Common Attribution-ShareAlike 4.0 International License.</description>
         </item>
     
     
     
         <item>
         <title>MySQL 8.0 使用 UTC_TIMESTAMP() 當作 DATETIME 欄位預設值 bug</title>
-        <link>https://blog.idontwannarock.me/2023/10/mysql_8_utc_timestamp_as_datetime_default_bug/</link>
+        <link>https://blog.idontwannarock.dev/2023/10/mysql_8_utc_timestamp_as_datetime_default_bug/</link>
         <pubDate>Tue, 31 Oct 2023 11:59:03 +0800</pubDate>
         
-        <guid>https://blog.idontwannarock.me/2023/10/mysql_8_utc_timestamp_as_datetime_default_bug/</guid>
-        <description>Howard Tech Note https://blog.idontwannarock.me/2023/10/mysql_8_utc_timestamp_as_datetime_default_bug/ -&lt;h1 id=&#34;情境描述&#34;&gt;情境描述&lt;/h1&gt;
+        <guid>https://blog.idontwannarock.dev/2023/10/mysql_8_utc_timestamp_as_datetime_default_bug/</guid>
+        <description>Howard Tech Note https://blog.idontwannarock.dev/2023/10/mysql_8_utc_timestamp_as_datetime_default_bug/ -&lt;h1 id=&#34;情境描述&#34;&gt;情境描述&lt;/h1&gt;
 &lt;p&gt;最近在處理 MySQL 的時候採到一個坑&lt;/p&gt;
 &lt;p&gt;我的使用情境是需要一個 create date 紀錄資料產生時的 UTC 時間精準到 millisecond&lt;/p&gt;
 &lt;p&gt;首先考慮到 MySQL 的 &lt;code&gt;TIMESTAMP&lt;/code&gt; 資料型態是採用 epoch second 加上額外的 fractional seconds 精準到 microseconds，也就是最多記錄到 &amp;lsquo;2038-01-19 03:14:07.999999&amp;rsquo; 就會 overflow，如果採用 &lt;code&gt;DATETIME(3)&lt;/code&gt; 可以記錄到 &amp;lsquo;9999-12-31 23:59:59.999&amp;rsquo;&lt;/p&gt;
@@ -506,18 +506,18 @@ ssl-key = /cert/server-key.pem
 &lt;li&gt;&lt;a href=&#34;https://bugs.mysql.com/bug.php?id=101486&#34;&gt;Error when UTC_TIMESTAMP set as default value&lt;/a&gt;&lt;/li&gt;
 &lt;li&gt;&lt;a href=&#34;https://dev.mysql.com/doc/relnotes/mysql/8.0/en/news-8-0-24.html#mysqld-8-0-24-bug&#34;&gt;Changes in MySQL 8.0.24 (2021-04-20, General Availability)#Bug Fixed&lt;/a&gt;&lt;/li&gt;
 &lt;/ul&gt;
-- https://blog.idontwannarock.me/2023/10/mysql_8_utc_timestamp_as_datetime_default_bug/ - This website by Howard Wang is licensed under a Creative Common Attribution-ShareAlike 4.0 International License.</description>
+- https://blog.idontwannarock.dev/2023/10/mysql_8_utc_timestamp_as_datetime_default_bug/ - This website by Howard Wang is licensed under a Creative Common Attribution-ShareAlike 4.0 International License.</description>
         </item>
     
     
     
         <item>
         <title>Spring JPA Projection with Converter</title>
-        <link>https://blog.idontwannarock.me/2023/09/spring_jpa_projection_converter/</link>
+        <link>https://blog.idontwannarock.dev/2023/09/spring_jpa_projection_converter/</link>
         <pubDate>Wed, 20 Sep 2023 09:37:21 +0800</pubDate>
         
-        <guid>https://blog.idontwannarock.me/2023/09/spring_jpa_projection_converter/</guid>
-        <description>Howard Tech Note https://blog.idontwannarock.me/2023/09/spring_jpa_projection_converter/ -&lt;h1 id=&#34;pre-requisite&#34;&gt;Pre-requisite&lt;/h1&gt;
+        <guid>https://blog.idontwannarock.dev/2023/09/spring_jpa_projection_converter/</guid>
+        <description>Howard Tech Note https://blog.idontwannarock.dev/2023/09/spring_jpa_projection_converter/ -&lt;h1 id=&#34;pre-requisite&#34;&gt;Pre-requisite&lt;/h1&gt;
 &lt;ul&gt;
 &lt;li&gt;JDK 11+&lt;/li&gt;
 &lt;li&gt;Spring Boot 2+&lt;/li&gt;
@@ -757,18 +757,18 @@ ssl-key = /cert/server-key.pem
 &lt;li&gt;&lt;a href=&#34;https://docs.spring.io/spring-data/jpa/docs/current/reference/html/#projections&#34;&gt;Spring Data JPA - Reference Documentation&lt;/a&gt;&lt;/li&gt;
 &lt;li&gt;&lt;a href=&#34;https://stackoverflow.com/a/65355897&#34;&gt;Spring JPA - &amp;ldquo;java.lang.IllegalArgumentException: Projection type must be an interface!&amp;rdquo; (using native query)&lt;/a&gt;&lt;/li&gt;
 &lt;/ul&gt;
-- https://blog.idontwannarock.me/2023/09/spring_jpa_projection_converter/ - This website by Howard Wang is licensed under a Creative Common Attribution-ShareAlike 4.0 International License.</description>
+- https://blog.idontwannarock.dev/2023/09/spring_jpa_projection_converter/ - This website by Howard Wang is licensed under a Creative Common Attribution-ShareAlike 4.0 International License.</description>
         </item>
     
     
     
         <item>
         <title>Scoop 介紹及用法</title>
-        <link>https://blog.idontwannarock.me/2023/06/scoop/</link>
+        <link>https://blog.idontwannarock.dev/2023/06/scoop/</link>
         <pubDate>Tue, 20 Jun 2023 10:51:39 +0800</pubDate>
         
-        <guid>https://blog.idontwannarock.me/2023/06/scoop/</guid>
-        <description>Howard Tech Note https://blog.idontwannarock.me/2023/06/scoop/ -&lt;p&gt;Linux 有 &lt;a href=&#34;https://salsa.debian.org/apt-team/apt&#34;&gt;apt&lt;/a&gt;, &lt;a href=&#34;http://yum.baseurl.org/gitweb/&#34;&gt;yum&lt;/a&gt;、MacOS 有 &lt;a href=&#34;https://brew.sh/&#34;&gt;Homebrew&lt;/a&gt;、Windows 有 &lt;a href=&#34;https://chocolatey.org/&#34;&gt;Chocolatey&lt;/a&gt;&lt;/p&gt;
+        <guid>https://blog.idontwannarock.dev/2023/06/scoop/</guid>
+        <description>Howard Tech Note https://blog.idontwannarock.dev/2023/06/scoop/ -&lt;p&gt;Linux 有 &lt;a href=&#34;https://salsa.debian.org/apt-team/apt&#34;&gt;apt&lt;/a&gt;, &lt;a href=&#34;http://yum.baseurl.org/gitweb/&#34;&gt;yum&lt;/a&gt;、MacOS 有 &lt;a href=&#34;https://brew.sh/&#34;&gt;Homebrew&lt;/a&gt;、Windows 有 &lt;a href=&#34;https://chocolatey.org/&#34;&gt;Chocolatey&lt;/a&gt;&lt;/p&gt;
 &lt;p&gt;但今天要介紹 Windows 環境的另外一個 command line 套件管理工具 &lt;a href=&#34;https://scoop.sh/&#34;&gt;Scoop&lt;/a&gt;&lt;/p&gt;
 &lt;p&gt;在 Windows 環境，比較有名的 command line 套件管理工具是 Chocolatey，但今天要介紹的 Scoop 有一項 Chocolatey 沒辦法做到的好處，就是可以切換 Path Environment Variable&lt;/p&gt;
 &lt;h1 id=&#34;安裝&#34;&gt;安裝&lt;/h1&gt;
@@ -846,20 +846,20 @@ ssl-key = /cert/server-key.pem
 &lt;li&gt;&lt;a href=&#34;https://www.cygwin.com/&#34;&gt;Cygwin&lt;/a&gt;&lt;/li&gt;
 &lt;li&gt;&lt;a href=&#34;https://www.thisfaner.com/p/install-and-switch-versions-of-java-python-ruby-via-scoop/&#34;&gt;通过Scoop安装和切换Java(JDK)、Python、Ruby的版本&lt;/a&gt;&lt;/li&gt;
 &lt;/ul&gt;
-- https://blog.idontwannarock.me/2023/06/scoop/ - This website by Howard Wang is licensed under a Creative Common Attribution-ShareAlike 4.0 International License.</description>
+- https://blog.idontwannarock.dev/2023/06/scoop/ - This website by Howard Wang is licensed under a Creative Common Attribution-ShareAlike 4.0 International License.</description>
         </item>
     
     
     
         <item>
         <title>Gradle &#43; Docker Multi-stage build</title>
-        <link>https://blog.idontwannarock.me/2022/12/gradle_docker_multi_stage_build/</link>
+        <link>https://blog.idontwannarock.dev/2022/12/gradle_docker_multi_stage_build/</link>
         <pubDate>Thu, 15 Dec 2022 10:18:10 +0800</pubDate>
         
-        <guid>https://blog.idontwannarock.me/2022/12/gradle_docker_multi_stage_build/</guid>
-        <description>Howard Tech Note https://blog.idontwannarock.me/2022/12/gradle_docker_multi_stage_build/ -&lt;p&gt;Java 專案整合 Docker multi-stage build 系列：&lt;/p&gt;
+        <guid>https://blog.idontwannarock.dev/2022/12/gradle_docker_multi_stage_build/</guid>
+        <description>Howard Tech Note https://blog.idontwannarock.dev/2022/12/gradle_docker_multi_stage_build/ -&lt;p&gt;Java 專案整合 Docker multi-stage build 系列：&lt;/p&gt;
 &lt;ul&gt;
-&lt;li&gt;&lt;a href=&#34;https://blog.idontwannarock.me/2022/12/maven_docker_multi_stage_build/&#34;&gt;Maven + Docker Multi-stage build&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;https://blog.idontwannarock.dev/2022/12/maven_docker_multi_stage_build/&#34;&gt;Maven + Docker Multi-stage build&lt;/a&gt;&lt;/li&gt;
 &lt;li&gt;Gradle + Docker Multi-stage build&lt;/li&gt;
 &lt;/ul&gt;
 &lt;hr&gt;
@@ -900,21 +900,21 @@ ssl-key = /cert/server-key.pem
 &lt;li&gt;&lt;a href=&#34;https://stackoverflow.com/a/59133542/7605040&#34;&gt;Gradle dependency caching during docker multi stage build?&lt;/a&gt;&lt;/li&gt;
 &lt;li&gt;&lt;a href=&#34;https://stackoverflow.com/a/50219857/7605040&#34;&gt;gradle - task to only download maven dependencies&lt;/a&gt;&lt;/li&gt;
 &lt;/ul&gt;
-- https://blog.idontwannarock.me/2022/12/gradle_docker_multi_stage_build/ - This website by Howard Wang is licensed under a Creative Common Attribution-ShareAlike 4.0 International License.</description>
+- https://blog.idontwannarock.dev/2022/12/gradle_docker_multi_stage_build/ - This website by Howard Wang is licensed under a Creative Common Attribution-ShareAlike 4.0 International License.</description>
         </item>
     
     
     
         <item>
         <title>Maven &#43; Docker Multi-stage Build</title>
-        <link>https://blog.idontwannarock.me/2022/12/maven_docker_multi_stage_build/</link>
+        <link>https://blog.idontwannarock.dev/2022/12/maven_docker_multi_stage_build/</link>
         <pubDate>Wed, 14 Dec 2022 14:14:44 +0800</pubDate>
         
-        <guid>https://blog.idontwannarock.me/2022/12/maven_docker_multi_stage_build/</guid>
-        <description>Howard Tech Note https://blog.idontwannarock.me/2022/12/maven_docker_multi_stage_build/ -&lt;p&gt;Java 專案整合 Docker multi-stage build 系列：&lt;/p&gt;
+        <guid>https://blog.idontwannarock.dev/2022/12/maven_docker_multi_stage_build/</guid>
+        <description>Howard Tech Note https://blog.idontwannarock.dev/2022/12/maven_docker_multi_stage_build/ -&lt;p&gt;Java 專案整合 Docker multi-stage build 系列：&lt;/p&gt;
 &lt;ul&gt;
 &lt;li&gt;Maven + Docker Multi-stage build&lt;/li&gt;
-&lt;li&gt;&lt;a href=&#34;https://blog.idontwannarock.me/2022/12/gradle_docker_multi_stage_build/&#34;&gt;Gradle + Docker Multi-stage build&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;https://blog.idontwannarock.dev/2022/12/gradle_docker_multi_stage_build/&#34;&gt;Gradle + Docker Multi-stage build&lt;/a&gt;&lt;/li&gt;
 &lt;/ul&gt;
 &lt;hr&gt;
 &lt;p&gt;現代常見的 CI/CD 流程經常會使用容器化 (containerized) 的方式來幫助建置環境及部署&lt;/p&gt;
@@ -1107,18 +1107,18 @@ ssl-key = /cert/server-key.pem
 &lt;li&gt;&lt;a href=&#34;https://issues.apache.org/jira/browse/MNG-6965&#34;&gt;MNG-6965 Extensions suddenly have org.codehaus.plexus:plexus-utils:jar:1.1 on their classpath&lt;/a&gt;&lt;/li&gt;
 &lt;li&gt;&lt;a href=&#34;https://github.com/qaware/go-offline-maven-plugin&#34;&gt;Go Offline Maven Plugin&lt;/a&gt;&lt;/li&gt;
 &lt;/ul&gt;
-- https://blog.idontwannarock.me/2022/12/maven_docker_multi_stage_build/ - This website by Howard Wang is licensed under a Creative Common Attribution-ShareAlike 4.0 International License.</description>
+- https://blog.idontwannarock.dev/2022/12/maven_docker_multi_stage_build/ - This website by Howard Wang is licensed under a Creative Common Attribution-ShareAlike 4.0 International License.</description>
         </item>
     
     
     
         <item>
         <title>SpringFox to SpringDoc</title>
-        <link>https://blog.idontwannarock.me/2022/12/springfox_to_springdoc/</link>
+        <link>https://blog.idontwannarock.dev/2022/12/springfox_to_springdoc/</link>
         <pubDate>Mon, 12 Dec 2022 09:24:17 +0800</pubDate>
         
-        <guid>https://blog.idontwannarock.me/2022/12/springfox_to_springdoc/</guid>
-        <description>Howard Tech Note https://blog.idontwannarock.me/2022/12/springfox_to_springdoc/ -&lt;p&gt;以 Spring Boot 生態來說，比較主流的 documentation 方式應該就是 Swagger，以往應該多數人都是使用 SpringFox library，但近幾年也漸漸興起使用 SpringDoc，所以就做了一點筆記，紀錄要怎麼從 SpringFox 轉移到 SpringDoc&lt;/p&gt;
+        <guid>https://blog.idontwannarock.dev/2022/12/springfox_to_springdoc/</guid>
+        <description>Howard Tech Note https://blog.idontwannarock.dev/2022/12/springfox_to_springdoc/ -&lt;p&gt;以 Spring Boot 生態來說，比較主流的 documentation 方式應該就是 Swagger，以往應該多數人都是使用 SpringFox library，但近幾年也漸漸興起使用 SpringDoc，所以就做了一點筆記，紀錄要怎麼從 SpringFox 轉移到 SpringDoc&lt;/p&gt;
 &lt;h1 id=&#34;比較&#34;&gt;比較&lt;/h1&gt;
 &lt;p&gt;這兩者同樣都有實作 OpenAPI 3.0，為什麼我們需要從 SpringFox 轉移使用 SpringDoc？&lt;/p&gt;
 &lt;ul&gt;
@@ -1186,21 +1186,21 @@ ssl-key = /cert/server-key.pem
 &lt;li&gt;&lt;a href=&#34;https://stackoverflow.com/a/65672670/7605040&#34;&gt;Spring Boot REST API: SpringDoc + OpenAPI 3 (springdoc-openapi-ui) or Swagger2 v3 (springfox-boot-starter)&lt;/a&gt;&lt;/li&gt;
 &lt;li&gt;&lt;a href=&#34;https://github.com/springfox/springfox&#34;&gt;SpringFox GitHub&lt;/a&gt;&lt;/li&gt;
 &lt;/ul&gt;
-- https://blog.idontwannarock.me/2022/12/springfox_to_springdoc/ - This website by Howard Wang is licensed under a Creative Common Attribution-ShareAlike 4.0 International License.</description>
+- https://blog.idontwannarock.dev/2022/12/springfox_to_springdoc/ - This website by Howard Wang is licensed under a Creative Common Attribution-ShareAlike 4.0 International License.</description>
         </item>
     
     
     
         <item>
         <title>Quartz Misfire Handling Instruction</title>
-        <link>https://blog.idontwannarock.me/2022/11/quartz-misfire-handling-instruction/</link>
+        <link>https://blog.idontwannarock.dev/2022/11/quartz-misfire-handling-instruction/</link>
         <pubDate>Tue, 29 Nov 2022 15:21:19 +0800</pubDate>
         
-        <guid>https://blog.idontwannarock.me/2022/11/quartz-misfire-handling-instruction/</guid>
-        <description>Howard Tech Note https://blog.idontwannarock.me/2022/11/quartz-misfire-handling-instruction/ -&lt;p&gt;Quartz 系列：&lt;/p&gt;
+        <guid>https://blog.idontwannarock.dev/2022/11/quartz-misfire-handling-instruction/</guid>
+        <description>Howard Tech Note https://blog.idontwannarock.dev/2022/11/quartz-misfire-handling-instruction/ -&lt;p&gt;Quartz 系列：&lt;/p&gt;
 &lt;ul&gt;
-&lt;li&gt;&lt;a href=&#34;https://blog.idontwannarock.me/2022/11/quartz-intro/&#34;&gt;Quartz 介紹&lt;/a&gt;&lt;/li&gt;
-&lt;li&gt;&lt;a href=&#34;https://blog.idontwannarock.me/2022/11/quartz-cluster-fixed-and-dynamic-trigger-spring-boot-integration/&#34;&gt;Spring Boot 整合 Quartz 集群執行預設及動態排程&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;https://blog.idontwannarock.dev/2022/11/quartz-intro/&#34;&gt;Quartz 介紹&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;https://blog.idontwannarock.dev/2022/11/quartz-cluster-fixed-and-dynamic-trigger-spring-boot-integration/&#34;&gt;Spring Boot 整合 Quartz 集群執行預設及動態排程&lt;/a&gt;&lt;/li&gt;
 &lt;li&gt;Quartz Misfire Handling Instruction&lt;/li&gt;
 &lt;/ul&gt;
 &lt;p&gt;使用 Quartz 來幫助排程管理很方便，但還有一個需要注意的地方，就是設定 misfire handling instruction&lt;/p&gt;
@@ -1420,7 +1420,7 @@ ssl-key = /cert/server-key.pem
 &lt;ul&gt;
 &lt;li&gt;&lt;a href=&#34;https://nurkiewicz.com/2012/04/quartz-scheduler-misfire-instructions.html&#34;&gt;Quartz scheduler misfire instructions explained&lt;/a&gt;&lt;/li&gt;
 &lt;/ul&gt;
-- https://blog.idontwannarock.me/2022/11/quartz-misfire-handling-instruction/ - This website by Howard Wang is licensed under a Creative Common Attribution-ShareAlike 4.0 International License.</description>
+- https://blog.idontwannarock.dev/2022/11/quartz-misfire-handling-instruction/ - This website by Howard Wang is licensed under a Creative Common Attribution-ShareAlike 4.0 International License.</description>
         </item>
     
     

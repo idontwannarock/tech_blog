@@ -2,18 +2,18 @@
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
     <title>Compression on Howard Tech Note</title>
-    <link>https://blog.idontwannarock.me/tags/compression/</link>
+    <link>https://blog.idontwannarock.dev/tags/compression/</link>
     <description>Recent content in Compression on Howard Tech Note</description>
     <generator>Hugo</generator>
     <language>en-us</language>
     <copyright>This website by Howard Wang is licensed under a Creative Common Attribution-ShareAlike 4.0 International License.</copyright>
     <lastBuildDate>Thu, 16 Dec 2021 15:32:25 +0800</lastBuildDate>
-    <atom:link href="https://blog.idontwannarock.me/tags/compression/index.xml" rel="self" type="application/rss+xml" />
+    <atom:link href="https://blog.idontwannarock.dev/tags/compression/index.xml" rel="self" type="application/rss+xml" />
     <item>
       <title>在 Batch Script 壓縮檔案</title>
-      <link>https://blog.idontwannarock.me/2021/12/zip_in_batch_script/</link>
+      <link>https://blog.idontwannarock.dev/2021/12/zip_in_batch_script/</link>
       <pubDate>Thu, 16 Dec 2021 15:32:25 +0800</pubDate>
-      <guid>https://blog.idontwannarock.me/2021/12/zip_in_batch_script/</guid>
+      <guid>https://blog.idontwannarock.dev/2021/12/zip_in_batch_script/</guid>
       <description>&lt;p&gt;因為目前公司沒有專職 SRE 或 DevOps 幫忙做 CI/CD，身為小小後端工程師只好自己想辦法，偏偏目前用到的 tech stack 包括 .net framework，所以必須跟 Windows 環境的 batch file 打交道來替代習慣的 shell 檔，其中有個步驟必須要壓縮/解壓縮資料夾&lt;/p&gt;&#xA;&lt;h2 id=&#34;tar&#34;&gt;Tar&lt;/h2&gt;&#xA;&lt;p&gt;研究了一下，很興奮的發現 tar 在 command prompt 跟 powershell 都可以用，那代表我在 batch 檔裡面使用沒問題ＲＲＲ&lt;/p&gt;&#xA;&lt;p&gt;所以可以這樣用&lt;/p&gt;&#xA;&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;&#34;&gt;&lt;code class=&#34;language-batch&#34; data-lang=&#34;batch&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;:&lt;span style=&#34;color:#6272a4&#34;&gt;: zip&lt;/span&gt;&#xA;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;tar -cvzf &lt;span style=&#34;color:#f1fa8c&#34;&gt;&amp;#34;path and name to archive.tar&amp;#34;&lt;/span&gt; &lt;span style=&#34;color:#f1fa8c&#34;&gt;&amp;#34;path to folder to compress&amp;#34;&lt;/span&gt;&#xA;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&#xA;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;:&lt;span style=&#34;color:#6272a4&#34;&gt;: unzip&lt;/span&gt;&#xA;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;tar -xvzf &lt;span style=&#34;color:#f1fa8c&#34;&gt;&amp;#34;path and name to archive.tar&amp;#34;&lt;/span&gt;&#xA;&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h2 id=&#34;microsoftpowershellarchive-module&#34;&gt;Microsoft.Powershell.Archive Module&lt;/h2&gt;&#xA;&lt;p&gt;很可惜，這個方法有一個小小的問題&lt;/p&gt;&#xA;&lt;p&gt;tar 基本上是從 Windows 10 或 Windows Server 2019 才開始支援，很不巧，我手上有個環境是 Windows Server 2016&amp;hellip;&lt;/p&gt;&#xA;&lt;p&gt;基於可以用原生就絕不多安裝東西的自虐原則，好險又找到了另一個方法，powershell 有個 archive 的模組可以用！&lt;/p&gt;</description>
     </item>
   </channel>

@@ -2,24 +2,24 @@
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
     <title>Howard Tech Note</title>
-    <link>https://blog.idontwannarock.me/</link>
+    <link>https://blog.idontwannarock.dev/</link>
     <description>Recent content on Howard Tech Note</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
     <copyright>This website by Howard Wang is licensed under a Creative Common Attribution-ShareAlike 4.0 International License.</copyright>
     <lastBuildDate>Wed, 16 Oct 2024 11:06:41 +0800</lastBuildDate>
     
-        <atom:link href="https://blog.idontwannarock.me/index.xml" rel="self" type="application/rss+xml" />
+        <atom:link href="https://blog.idontwannarock.dev/index.xml" rel="self" type="application/rss+xml" />
     
     
     
         <item>
         <title>Sql Server 備份方式</title>
-        <link>https://blog.idontwannarock.me/2021/11/sql_server_backup/</link>
+        <link>https://blog.idontwannarock.dev/2021/11/sql_server_backup/</link>
         <pubDate>Tue, 16 Nov 2021 11:58:47 +0800</pubDate>
         
-        <guid>https://blog.idontwannarock.me/2021/11/sql_server_backup/</guid>
-        <description>Howard Tech Note https://blog.idontwannarock.me/2021/11/sql_server_backup/ -&lt;p&gt;最近工作上碰到需要對 Sql Server 做 snapshot 的場合，所以就順便來研究一下怎麼對 Sql Server 做備份&lt;/p&gt;
+        <guid>https://blog.idontwannarock.dev/2021/11/sql_server_backup/</guid>
+        <description>Howard Tech Note https://blog.idontwannarock.dev/2021/11/sql_server_backup/ -&lt;p&gt;最近工作上碰到需要對 Sql Server 做 snapshot 的場合，所以就順便來研究一下怎麼對 Sql Server 做備份&lt;/p&gt;
 &lt;p&gt;按照過去的經驗，我第一個想法就是找 Sql Server 有沒有類似 mysqldump 或 pg_dump 的工具可以直接將 schema 及 data 導出成 SQL 檔，這樣方便閱讀也方便各種場景下重建資料庫，尤其是在資料庫的 table 數量及資料量並不算大的前提下&lt;/p&gt;
 &lt;p&gt;結果，我太天真了，Microsoft 怎麼可能這麼好用 (誤)，人家就是要走自己的路！&lt;/p&gt;
 &lt;h2 id=&#34;備份檔案格式&#34;&gt;備份檔案格式&lt;/h2&gt;
@@ -174,18 +174,18 @@
 &lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;
 &lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    &lt;span style=&#34;color:#8be9fd;font-style:italic&#34;&gt;Write-Output&lt;/span&gt; &lt;span style=&#34;color:#f1fa8c&#34;&gt;&amp;#34;Finished backing up &lt;/span&gt;&lt;span style=&#34;color:#8be9fd;font-style:italic&#34;&gt;$databaseName&lt;/span&gt;&lt;span style=&#34;color:#f1fa8c&#34;&gt; to &lt;/span&gt;&lt;span style=&#34;color:#8be9fd;font-style:italic&#34;&gt;$backupFile&lt;/span&gt;&lt;span style=&#34;color:#f1fa8c&#34;&gt;&amp;#34;&lt;/span&gt;
 &lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;}
-&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;- https://blog.idontwannarock.me/2021/11/sql_server_backup/ - This website by Howard Wang is licensed under a Creative Common Attribution-ShareAlike 4.0 International License.</description>
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;- https://blog.idontwannarock.dev/2021/11/sql_server_backup/ - This website by Howard Wang is licensed under a Creative Common Attribution-ShareAlike 4.0 International License.</description>
         </item>
     
     
     
         <item>
         <title>Hugo 半自動部署</title>
-        <link>https://blog.idontwannarock.me/2021/11/hugo_semi_auto_deploy/</link>
+        <link>https://blog.idontwannarock.dev/2021/11/hugo_semi_auto_deploy/</link>
         <pubDate>Wed, 03 Nov 2021 16:29:03 +0800</pubDate>
         
-        <guid>https://blog.idontwannarock.me/2021/11/hugo_semi_auto_deploy/</guid>
-        <description>Howard Tech Note https://blog.idontwannarock.me/2021/11/hugo_semi_auto_deploy/ -&lt;p&gt;這篇主要在講將以往所有手動的步驟，包括網站建置及發佈到 GitHub Pages 等，盡量調整為一個 script 來處理&lt;/p&gt;
+        <guid>https://blog.idontwannarock.dev/2021/11/hugo_semi_auto_deploy/</guid>
+        <description>Howard Tech Note https://blog.idontwannarock.dev/2021/11/hugo_semi_auto_deploy/ -&lt;p&gt;這篇主要在講將以往所有手動的步驟，包括網站建置及發佈到 GitHub Pages 等，盡量調整為一個 script 來處理&lt;/p&gt;
 &lt;p&gt;起因是因為種種因素，所以這個 Blog 停更了很久，其實也就是懶，還有之前沒有找到符合我要求的佈景主題。所以把手動的步驟減少，懶惰的理由就少了一個&lt;/p&gt;
 &lt;p&gt;至於佈景主題我自己是有幾個要求:&lt;/p&gt;
 &lt;ol&gt;
@@ -268,18 +268,18 @@
 &lt;ul&gt;
 &lt;li&gt;&lt;a href=&#34;https://bwaycer.github.io/hugo_tutorial.hugo/tutorials/github-pages-blog/&#34;&gt;Hosting on GitHub Pages&lt;/a&gt;&lt;/li&gt;
 &lt;/ul&gt;
-- https://blog.idontwannarock.me/2021/11/hugo_semi_auto_deploy/ - This website by Howard Wang is licensed under a Creative Common Attribution-ShareAlike 4.0 International License.</description>
+- https://blog.idontwannarock.dev/2021/11/hugo_semi_auto_deploy/ - This website by Howard Wang is licensed under a Creative Common Attribution-ShareAlike 4.0 International License.</description>
         </item>
     
     
     
         <item>
         <title>Spring Boot 實作 API 版本控制</title>
-        <link>https://blog.idontwannarock.me/2019/09/spring_api_version_with_swagger_security/</link>
+        <link>https://blog.idontwannarock.dev/2019/09/spring_api_version_with_swagger_security/</link>
         <pubDate>Thu, 19 Sep 2019 15:53:36 +0800</pubDate>
         
-        <guid>https://blog.idontwannarock.me/2019/09/spring_api_version_with_swagger_security/</guid>
-        <description>Howard Tech Note https://blog.idontwannarock.me/2019/09/spring_api_version_with_swagger_security/ -&lt;p&gt;本文目的是為了探討在 Spring Boot Web 專案中，實作 API 版本控制，並兼容 Swagger 及 Spring Security 的解決方式&lt;/p&gt;
+        <guid>https://blog.idontwannarock.dev/2019/09/spring_api_version_with_swagger_security/</guid>
+        <description>Howard Tech Note https://blog.idontwannarock.dev/2019/09/spring_api_version_with_swagger_security/ -&lt;p&gt;本文目的是為了探討在 Spring Boot Web 專案中，實作 API 版本控制，並兼容 Swagger 及 Spring Security 的解決方式&lt;/p&gt;
 &lt;p&gt;需要有 Spring Boot、Spring MVC、Spring Security 及 Swagger 的基礎概念會比較好理解&lt;/p&gt;
 &lt;h1 id=&#34;api-版本控制&#34;&gt;API 版本控制&lt;/h1&gt;
 &lt;p&gt;常見的 API 版本控制方式有三種: URI, header, content-type&lt;/p&gt;
@@ -491,18 +491,18 @@
 &lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;}
 &lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;至此就可以把前面寫的 &lt;code&gt;WebMvcConfig&lt;/code&gt; 刪掉啦&lt;/p&gt;
 &lt;p&gt;至於沒找到 &lt;code&gt;WebMvcRegistrations&lt;/code&gt; 介面的朋友，要不就是你 Spring Boot 版本太低，不然就只能改用 &lt;code&gt;WebMvcRegistrationsAdpater&lt;/code&gt; 試試看了 (攤手)&lt;/p&gt;
-- https://blog.idontwannarock.me/2019/09/spring_api_version_with_swagger_security/ - This website by Howard Wang is licensed under a Creative Common Attribution-ShareAlike 4.0 International License.</description>
+- https://blog.idontwannarock.dev/2019/09/spring_api_version_with_swagger_security/ - This website by Howard Wang is licensed under a Creative Common Attribution-ShareAlike 4.0 International License.</description>
         </item>
     
     
     
         <item>
         <title>Spring Security 整合 RBAC</title>
-        <link>https://blog.idontwannarock.me/2019/05/spring_security_rbac/</link>
+        <link>https://blog.idontwannarock.dev/2019/05/spring_security_rbac/</link>
         <pubDate>Thu, 30 May 2019 15:33:07 +0800</pubDate>
         
-        <guid>https://blog.idontwannarock.me/2019/05/spring_security_rbac/</guid>
-        <description>Howard Tech Note https://blog.idontwannarock.me/2019/05/spring_security_rbac/ -&lt;p&gt;目前比較主流的 &lt;a href=&#34;https://en.wikipedia.org/wiki/Role-based_access_control&#34;&gt;Role-based Access Control, RBAC&lt;/a&gt; 算是比較成熟且彈性的權限架構，若要在 Spring Security 實作 RBAC 並搭配 JWT 或 OAuth 2.0，大概要探討兩個問題&lt;/p&gt;
+        <guid>https://blog.idontwannarock.dev/2019/05/spring_security_rbac/</guid>
+        <description>Howard Tech Note https://blog.idontwannarock.dev/2019/05/spring_security_rbac/ -&lt;p&gt;目前比較主流的 &lt;a href=&#34;https://en.wikipedia.org/wiki/Role-based_access_control&#34;&gt;Role-based Access Control, RBAC&lt;/a&gt; 算是比較成熟且彈性的權限架構，若要在 Spring Security 實作 RBAC 並搭配 JWT 或 OAuth 2.0，大概要探討兩個問題&lt;/p&gt;
 &lt;ol&gt;
 &lt;li&gt;是否值得為了減少查詢資料源的次數，而將角色或權限直接置入 JWT 或 Authorization Server 回傳的 token&lt;/li&gt;
 &lt;li&gt;是否採取 Spring Security 原生只使用最細粒度的權限來進行存取控制&lt;/li&gt;
@@ -552,18 +552,18 @@
 &lt;p&gt;&lt;a href=&#34;https://www.baeldung.com/spring-security-custom-voter&#34;&gt;Custom AccessDecisionVoters in Spring Security&lt;/a&gt;&lt;/p&gt;
 &lt;/blockquote&gt;
 &lt;p&gt;這部分就只能基於實際業務邏輯做考量&lt;/p&gt;
-- https://blog.idontwannarock.me/2019/05/spring_security_rbac/ - This website by Howard Wang is licensed under a Creative Common Attribution-ShareAlike 4.0 International License.</description>
+- https://blog.idontwannarock.dev/2019/05/spring_security_rbac/ - This website by Howard Wang is licensed under a Creative Common Attribution-ShareAlike 4.0 International License.</description>
         </item>
     
     
     
         <item>
         <title>Github Flow 簡介</title>
-        <link>https://blog.idontwannarock.me/2019/05/github_flow_intro/</link>
+        <link>https://blog.idontwannarock.dev/2019/05/github_flow_intro/</link>
         <pubDate>Wed, 29 May 2019 10:52:45 +0800</pubDate>
         
-        <guid>https://blog.idontwannarock.me/2019/05/github_flow_intro/</guid>
-        <description>Howard Tech Note https://blog.idontwannarock.me/2019/05/github_flow_intro/ -&lt;p&gt;&lt;a href=&#34;https://guides.github.com/introduction/flow/&#34;&gt;Understanding the GitHub flow&lt;/a&gt;&lt;/p&gt;
+        <guid>https://blog.idontwannarock.dev/2019/05/github_flow_intro/</guid>
+        <description>Howard Tech Note https://blog.idontwannarock.dev/2019/05/github_flow_intro/ -&lt;p&gt;&lt;a href=&#34;https://guides.github.com/introduction/flow/&#34;&gt;Understanding the GitHub flow&lt;/a&gt;&lt;/p&gt;
 &lt;p&gt;GitHub flow 只有一條原則：&lt;/p&gt;
 &lt;blockquote&gt;
 &lt;p&gt;&lt;strong&gt;在 master 的任何 commit 永遠都是可以被部署的&lt;/strong&gt;&lt;/p&gt;
@@ -583,18 +583,18 @@
 &lt;/blockquote&gt;
 &lt;p&gt;當變更通過部署在 production 的驗證後，就可以將該變更 merge 到 master，此時 PR 就結束，並會留下該變更的整個紀錄，讓其他人了解整個變更的流程以及脈絡&lt;/p&gt;
 &lt;p&gt;而且因為 PR 可以連結 Issue，當 PR 被 merge 後，關聯到的 Issue 也會同時關閉&lt;/p&gt;
-- https://blog.idontwannarock.me/2019/05/github_flow_intro/ - This website by Howard Wang is licensed under a Creative Common Attribution-ShareAlike 4.0 International License.</description>
+- https://blog.idontwannarock.dev/2019/05/github_flow_intro/ - This website by Howard Wang is licensed under a Creative Common Attribution-ShareAlike 4.0 International License.</description>
         </item>
     
     
     
         <item>
         <title>Hugo 入門教學</title>
-        <link>https://blog.idontwannarock.me/2019/05/hugo_tutorial/</link>
+        <link>https://blog.idontwannarock.dev/2019/05/hugo_tutorial/</link>
         <pubDate>Tue, 07 May 2019 16:03:07 +0800</pubDate>
         
-        <guid>https://blog.idontwannarock.me/2019/05/hugo_tutorial/</guid>
-        <description>Howard Tech Note https://blog.idontwannarock.me/2019/05/hugo_tutorial/ -&lt;p&gt;我個人在建立部落格的路上碰到了很多問題：&lt;/p&gt;
+        <guid>https://blog.idontwannarock.dev/2019/05/hugo_tutorial/</guid>
+        <description>Howard Tech Note https://blog.idontwannarock.dev/2019/05/hugo_tutorial/ -&lt;p&gt;我個人在建立部落格的路上碰到了很多問題：&lt;/p&gt;
 &lt;ul&gt;
 &lt;li&gt;Wordpress 要花錢，雖然好像不多，但作為一個沒有人看的部落格，這樣還要花錢就是不爽&lt;/li&gt;
 &lt;li&gt;沒有網路無法寫文章，就算寫了純文字的內容，等有網路後貼到 Wordpress 的編輯器還要重新設定字體大小等等&lt;/li&gt;
@@ -709,18 +709,18 @@
 &lt;p&gt;然後用 &lt;code&gt;git add .&lt;/code&gt;、&lt;code&gt;git commit -m &amp;quot;&amp;lt;commit message&amp;gt;&amp;quot;&lt;/code&gt;、&lt;code&gt;git push&lt;/code&gt; 的組合技把整個 test 資料夾 push 到指定的 repo master branch&lt;/p&gt;
 &lt;p&gt;最後到 Settings 的 GitHub Pages 區塊，下拉選單選 master branch /docs folder，如此 GitHub 就會自動讀取 docs 資料夾中的靜態網站資料&lt;/p&gt;
 &lt;p&gt;什麼？你跟我說不會 Git？再說一次，那你裝什麼逼？&lt;/p&gt;
-- https://blog.idontwannarock.me/2019/05/hugo_tutorial/ - This website by Howard Wang is licensed under a Creative Common Attribution-ShareAlike 4.0 International License.</description>
+- https://blog.idontwannarock.dev/2019/05/hugo_tutorial/ - This website by Howard Wang is licensed under a Creative Common Attribution-ShareAlike 4.0 International License.</description>
         </item>
     
     
     
         <item>
         <title>AOP 及 Spring AOP 簡述</title>
-        <link>https://blog.idontwannarock.me/2018/04/aop_and_spring_aop_basic/</link>
+        <link>https://blog.idontwannarock.dev/2018/04/aop_and_spring_aop_basic/</link>
         <pubDate>Tue, 10 Apr 2018 13:22:52 +0800</pubDate>
         
-        <guid>https://blog.idontwannarock.me/2018/04/aop_and_spring_aop_basic/</guid>
-        <description>Howard Tech Note https://blog.idontwannarock.me/2018/04/aop_and_spring_aop_basic/ -&lt;blockquote&gt;
+        <guid>https://blog.idontwannarock.dev/2018/04/aop_and_spring_aop_basic/</guid>
+        <description>Howard Tech Note https://blog.idontwannarock.dev/2018/04/aop_and_spring_aop_basic/ -&lt;blockquote&gt;
 &lt;p&gt;這篇文章是初學的時候撰寫的，其中一些觀念並不正確，步驟也可能因為更新或觀念問題而不適用或者多餘，此篇文章僅為留做紀錄&lt;/p&gt;
 &lt;/blockquote&gt;
 &lt;ul&gt;
@@ -812,18 +812,18 @@
 &lt;li&gt;再於 XML 文件中在&lt;code&gt;&amp;lt;aop:config&amp;gt;&amp;lt;/aop:config&amp;gt;&lt;/code&gt;元素內設定 AOP 有關設定&lt;/li&gt;
 &lt;li&gt;其中設定的元素跟屬性都跟註解相同&lt;/li&gt;
 &lt;/ul&gt;
-- https://blog.idontwannarock.me/2018/04/aop_and_spring_aop_basic/ - This website by Howard Wang is licensed under a Creative Common Attribution-ShareAlike 4.0 International License.</description>
+- https://blog.idontwannarock.dev/2018/04/aop_and_spring_aop_basic/ - This website by Howard Wang is licensed under a Creative Common Attribution-ShareAlike 4.0 International License.</description>
         </item>
     
     
     
         <item>
         <title>Java 字串判定</title>
-        <link>https://blog.idontwannarock.me/2018/02/java_string_check/</link>
+        <link>https://blog.idontwannarock.dev/2018/02/java_string_check/</link>
         <pubDate>Tue, 06 Feb 2018 14:09:25 +0800</pubDate>
         
-        <guid>https://blog.idontwannarock.me/2018/02/java_string_check/</guid>
-        <description>Howard Tech Note https://blog.idontwannarock.me/2018/02/java_string_check/ -&lt;p&gt;因為開始做專題，開始要作資料檢查，首先會要碰到的就是最基本的檢查是否有輸入資料，也就是要檢查字串，記錄一下 Java 當中有關字串檢查的東西。&lt;/p&gt;
+        <guid>https://blog.idontwannarock.dev/2018/02/java_string_check/</guid>
+        <description>Howard Tech Note https://blog.idontwannarock.dev/2018/02/java_string_check/ -&lt;p&gt;因為開始做專題，開始要作資料檢查，首先會要碰到的就是最基本的檢查是否有輸入資料，也就是要檢查字串，記錄一下 Java 當中有關字串檢查的東西。&lt;/p&gt;
 &lt;h1 id=&#34;去除字串空白&#34;&gt;去除字串空白&lt;/h1&gt;
 &lt;p&gt;這主要分兩個部分，一是去掉頭尾空白，一是去掉字串中間空白。&lt;/p&gt;
 &lt;p&gt;去掉頭尾空白就用 &lt;code&gt;.trim()&lt;/code&gt;，去掉字串中間空白則可以用 &lt;code&gt;.replaceAll(&amp;quot; &amp;quot;, &amp;quot;&amp;quot;)&lt;/code&gt; 的方式簡單完成。&lt;/p&gt;
@@ -857,18 +857,18 @@
 &lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h1 id=&#34;結語&#34;&gt;結語&lt;/h1&gt;
 &lt;p&gt;雖然最後一個方法最簡短，但其實可讀性不見得比較優秀；而倒數第二個方法雖然比較囉唆，但整體上可讀性比較好。&lt;/p&gt;
 &lt;p&gt;所以要用哪種方法還是要看簡潔跟可讀性怎麼取捨。&lt;/p&gt;
-- https://blog.idontwannarock.me/2018/02/java_string_check/ - This website by Howard Wang is licensed under a Creative Common Attribution-ShareAlike 4.0 International License.</description>
+- https://blog.idontwannarock.dev/2018/02/java_string_check/ - This website by Howard Wang is licensed under a Creative Common Attribution-ShareAlike 4.0 International License.</description>
         </item>
     
     
     
         <item>
         <title>Java 樂透抽取算法初探</title>
-        <link>https://blog.idontwannarock.me/2017/11/java_lottery_algorithm_basic/</link>
+        <link>https://blog.idontwannarock.dev/2017/11/java_lottery_algorithm_basic/</link>
         <pubDate>Wed, 15 Nov 2017 14:26:17 +0800</pubDate>
         
-        <guid>https://blog.idontwannarock.me/2017/11/java_lottery_algorithm_basic/</guid>
-        <description>Howard Tech Note https://blog.idontwannarock.me/2017/11/java_lottery_algorithm_basic/ -&lt;p&gt;因為做到這個經典練習演算法的題目，雖然是非常入門級的，也是讓我想了很久，覺得都做了這麼久，不記錄下來也是蠻可惜。&lt;/p&gt;
+        <guid>https://blog.idontwannarock.dev/2017/11/java_lottery_algorithm_basic/</guid>
+        <description>Howard Tech Note https://blog.idontwannarock.dev/2017/11/java_lottery_algorithm_basic/ -&lt;p&gt;因為做到這個經典練習演算法的題目，雖然是非常入門級的，也是讓我想了很久，覺得都做了這麼久，不記錄下來也是蠻可惜。&lt;/p&gt;
 &lt;h1 id=&#34;題目&#34;&gt;題目&lt;/h1&gt;
 &lt;p&gt;請隨機從正整數 1-42當中隨機抽出 6個數字，不用排序，但不可重複。&lt;/p&gt;
 &lt;h1 id=&#34;解法&#34;&gt;解法&lt;/h1&gt;
@@ -953,18 +953,18 @@
 &lt;p&gt;就我現在粗淺的理解，基本上還沒有能產生真正隨機數字的演算法；或者說，能用演算法產生的隨機數字都不是真正的隨機，只是趨近於隨機。&lt;/p&gt;
 &lt;p&gt;畢竟只要提到演算，就代表有一定規則，而透過一定規則產生出來的東西就無法稱為真正的隨機。&lt;/p&gt;
 &lt;p&gt;而 Java 提供的 &lt;code&gt;random()&lt;/code&gt; 方法則是透過線性同餘公式產生的偽隨機數，詳細可以參考 &lt;a href=&#34;https://zh.wikipedia.org/wiki/%E7%B7%9A%E6%80%A7%E5%90%8C%E9%A4%98%E6%96%B9%E6%B3%95&#34;&gt;維基&lt;/a&gt;。&lt;/p&gt;
-- https://blog.idontwannarock.me/2017/11/java_lottery_algorithm_basic/ - This website by Howard Wang is licensed under a Creative Common Attribution-ShareAlike 4.0 International License.</description>
+- https://blog.idontwannarock.dev/2017/11/java_lottery_algorithm_basic/ - This website by Howard Wang is licensed under a Creative Common Attribution-ShareAlike 4.0 International License.</description>
         </item>
     
     
     
         <item>
         <title>Macbook Pro 的設置 2017 版</title>
-        <link>https://blog.idontwannarock.me/2017/11/mbp_setup_2017/</link>
+        <link>https://blog.idontwannarock.dev/2017/11/mbp_setup_2017/</link>
         <pubDate>Fri, 03 Nov 2017 09:05:02 +0800</pubDate>
         
-        <guid>https://blog.idontwannarock.me/2017/11/mbp_setup_2017/</guid>
-        <description>Howard Tech Note https://blog.idontwannarock.me/2017/11/mbp_setup_2017/ -&lt;blockquote&gt;
+        <guid>https://blog.idontwannarock.dev/2017/11/mbp_setup_2017/</guid>
+        <description>Howard Tech Note https://blog.idontwannarock.dev/2017/11/mbp_setup_2017/ -&lt;blockquote&gt;
 &lt;p&gt;這篇文章是初學的時候撰寫的，其中一些觀念並不正確，步驟也可能因為更新或觀念問題而不適用或者多餘，此篇文章僅為留做紀錄&lt;/p&gt;
 &lt;/blockquote&gt;
 &lt;p&gt;一直以來都是 PC 人，從來沒用過任何 Apple 或 Linux 的相關產品，剛好有買筆電的需求，想趁機接觸一下不同的作業系統生態，而且久聞 Apple 筆電品質很好，就添購了 Macbook Pro 來當我人生第一台筆電。&lt;/p&gt;
@@ -1044,14 +1044,14 @@
 &lt;p&gt;首先講純開發的部分，比較簡單，前面提到的開發軟體或環境一樣都可以利用 Homebrew 或 Caskroom 下載安裝。&lt;/p&gt;
 &lt;p&gt;接著就是利用 &lt;a href=&#34;https://www.sourcetreeapp.com/&#34;&gt;Sourcetree&lt;/a&gt; 跟 &lt;a href=&#34;https://github.com/&#34;&gt;GitHub&lt;/a&gt; 來做 Git 版本管理同步。&lt;/p&gt;
 &lt;p&gt;所有專案、檔案，都透過 Sourcetree push 到 GitHub 的 repositories。然後每個裝置要編輯開發前，都先 pull Github 上的最新進度，這樣就可以簡單的保持各裝置開發進度相同。&lt;/p&gt;
-&lt;p&gt;當然，使用 Sourcetree 會需要一些 Git 觀念。有關 Git 的簡單觀念及操作，可以參考我寫的 &lt;a href=&#34;https://blog.idontwannarock.me/2017/09/git_and_github_basic/&#34;&gt;這一篇文章&lt;/a&gt;。&lt;/p&gt;
+&lt;p&gt;當然，使用 Sourcetree 會需要一些 Git 觀念。有關 Git 的簡單觀念及操作，可以參考我寫的 &lt;a href=&#34;https://blog.idontwannarock.dev/2017/09/git_and_github_basic/&#34;&gt;這一篇文章&lt;/a&gt;。&lt;/p&gt;
 &lt;h2 id=&#34;筆記同步&#34;&gt;筆記同步&lt;/h2&gt;
 &lt;p&gt;這部分比較麻煩一點，因為我習慣統一用 Markdown 語法寫筆記跟部落格，這樣規格統一，筆記跟部落格文章可以很方便地互相轉換。&lt;/p&gt;
-&lt;p&gt;Markdown 簡介跟語法可以參考我的 &lt;a href=&#34;https://blog.idontwannarock.me/2017/10/markdown_syntax/&#34;&gt;這一篇文章&lt;/a&gt;。&lt;/p&gt;
+&lt;p&gt;Markdown 簡介跟語法可以參考我的 &lt;a href=&#34;https://blog.idontwannarock.dev/2017/10/markdown_syntax/&#34;&gt;這一篇文章&lt;/a&gt;。&lt;/p&gt;
 &lt;p&gt;而我的筆記都習慣收在 Evernote，這樣可以隨時利用 Evernote 的分類以及搜尋功能，並且手機上也可以看。但要將 Markdown 筆記轉成 Evernote 讀得懂的格式並上傳到 Evernote 並不是很容易。&lt;/p&gt;
 &lt;p&gt;之前是選擇用 Sublime Text 加上開源的 Plug-in 來轉換並上傳，但最近 Evernote 將 developer token 的功能停止之後，這個方法就不能再使用了。&lt;/p&gt;
 &lt;p&gt;於是我換到 &lt;a href=&#34;https://marxi.co/&#34;&gt;Marxico&lt;/a&gt;，其實算是相當方便，只是要收費，但在找不到更好的替換工具之下，也只能忍痛花下去。但好處就是我只要寫好 Markdown 筆記，就可以很方便的上傳 Evernote，也可以匯出 Markdown、HTML，甚至是 PDF 檔。&lt;/p&gt;
-&lt;p&gt;另一方面部落格就真的很麻煩了，我原本只有 PC 的時候，就是寫 Markdown 草稿，然後用靜態部落格產生器 Hugo 轉換並生成部落格，再 Host 到 GitHub Pages 來部署我的靜態部落格，可以參考我 &lt;a href=&#34;https://blog.idontwannarock.me/2017/09/hugo_practice_2/&#34;&gt;這一篇&lt;/a&gt;。&lt;/p&gt;
+&lt;p&gt;另一方面部落格就真的很麻煩了，我原本只有 PC 的時候，就是寫 Markdown 草稿，然後用靜態部落格產生器 Hugo 轉換並生成部落格，再 Host 到 GitHub Pages 來部署我的靜態部落格，可以參考我 &lt;a href=&#34;https://blog.idontwannarock.dev/2017/09/hugo_practice_2/&#34;&gt;這一篇&lt;/a&gt;。&lt;/p&gt;
 &lt;p&gt;但這個方法的問題就是無法多部裝置間同步，因為 push 到 GitHub 的只有 Hugo 生成的 &lt;code&gt;public&lt;/code&gt; 資料夾，而不是整個包含 layout 跟 Markdown 原稿的完整資料夾，所以換一部裝置就要用很麻煩的方式另外傳送整個資料夾。&lt;/p&gt;
 &lt;p&gt;於是我嘗試了別的方法。&lt;/p&gt;
 &lt;h3 id=&#34;github-pages&#34;&gt;GitHub Pages&lt;/h3&gt;
@@ -1064,7 +1064,7 @@
 &lt;p&gt;而 GitHub Pages 的部署方式有三種，如同 &lt;a href=&#34;https://help.github.com/articles/configuring-a-publishing-source-for-github-pages/&#34;&gt;官網說明&lt;/a&gt;。&lt;/p&gt;
 &lt;h4 id=&#34;default-source-settings&#34;&gt;Default Source Settings&lt;/h4&gt;
 &lt;p&gt;第一種參考官網說明 &lt;a href=&#34;https://help.github.com/articles/configuring-a-publishing-source-for-github-pages/#default-source-settings-for-repositories-without-the-username-naming-scheme&#34;&gt;這一段&lt;/a&gt;。&lt;/p&gt;
-&lt;p&gt;就是我之前用的方式，在 &lt;a href=&#34;https://blog.idontwannarock.me/2017/09/hugo_practice_2/&#34;&gt;這一篇&lt;/a&gt; 裡有說明。&lt;/p&gt;
+&lt;p&gt;就是我之前用的方式，在 &lt;a href=&#34;https://blog.idontwannarock.dev/2017/09/hugo_practice_2/&#34;&gt;這一篇&lt;/a&gt; 裡有說明。&lt;/p&gt;
 &lt;p&gt;簡單來說，就是將 Hugo 預設產生的 &lt;code&gt;public&lt;/code&gt; 資料夾，直接 push 到 GitHub 的 Repo，GitHub 預設會直接讀取 Repo 中的檔案生成靜態網站。&lt;/p&gt;
 &lt;h4 id=&#34;publish-from-a-docs-folder-on-master-branch&#34;&gt;Publish From a &lt;code&gt;docs&lt;/code&gt; Folder on &lt;code&gt;master&lt;/code&gt; Branch&lt;/h4&gt;
 &lt;p&gt;第二種要做比較多設定，參考官網 &lt;a href=&#34;https://help.github.com/articles/configuring-a-publishing-source-for-github-pages/#publishing-your-github-pages-site-from-a-docs-folder-on-your-master-branch&#34;&gt;這段&lt;/a&gt;。&lt;/p&gt;
@@ -1085,7 +1085,7 @@
 &lt;p&gt;再切換到 &lt;code&gt;gh-pages&lt;/code&gt; 這個分支上，將除了 &lt;code&gt;public&lt;/code&gt; 資料夾以外的所有檔案都用 gitignore 屏蔽掉，然後一樣將 &lt;code&gt;public&lt;/code&gt; 資料夾 staging -&amp;gt; commit -&amp;gt; push 到 GitHub Repo 的 &lt;code&gt;gh-pages&lt;/code&gt; 分支。&lt;/p&gt;
 &lt;p&gt;這時候 GitHub 的 Repo 上就同樣有 &lt;code&gt;master&lt;/code&gt; 跟 &lt;code&gt;gh-pages&lt;/code&gt; 兩個不同版本的紀錄。&lt;/p&gt;
 &lt;p&gt;然後開啟瀏覽器進入 GitHub Repo，同樣選擇 Repo 名稱底下那排最右邊的 Settings，然後在 GitHub Pages 區塊的 source 下拉選單裡選擇 &lt;code&gt;gh-pages branch&lt;/code&gt;，然後點擊 &lt;code&gt;save&lt;/code&gt; 就完成了。&lt;/p&gt;
-- https://blog.idontwannarock.me/2017/11/mbp_setup_2017/ - This website by Howard Wang is licensed under a Creative Common Attribution-ShareAlike 4.0 International License.</description>
+- https://blog.idontwannarock.dev/2017/11/mbp_setup_2017/ - This website by Howard Wang is licensed under a Creative Common Attribution-ShareAlike 4.0 International License.</description>
         </item>
     
     

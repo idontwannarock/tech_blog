@@ -2,25 +2,25 @@
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
     <title>Pages on Howard Tech Note</title>
-    <link>https://blog.idontwannarock.me/pages/</link>
+    <link>https://blog.idontwannarock.dev/pages/</link>
     <description>Recent content in Pages on Howard Tech Note</description>
     <generator>Hugo</generator>
     <language>en-us</language>
     <copyright>This website by Howard Wang is licensed under a Creative Common Attribution-ShareAlike 4.0 International License.</copyright>
     <lastBuildDate>Mon, 08 May 2017 09:43:46 +0800</lastBuildDate>
-    <atom:link href="https://blog.idontwannarock.me/pages/index.xml" rel="self" type="application/rss+xml" />
+    <atom:link href="https://blog.idontwannarock.dev/pages/index.xml" rel="self" type="application/rss+xml" />
     <item>
       <title>作品介紹</title>
-      <link>https://blog.idontwannarock.me/works/</link>
+      <link>https://blog.idontwannarock.dev/works/</link>
       <pubDate>Mon, 08 May 2017 09:43:46 +0800</pubDate>
-      <guid>https://blog.idontwannarock.me/works/</guid>
+      <guid>https://blog.idontwannarock.dev/works/</guid>
       <description>&lt;p&gt;正在整理過去的作品，見諒&lt;/p&gt;</description>
     </item>
     <item>
       <title>About</title>
-      <link>https://blog.idontwannarock.me/about/</link>
+      <link>https://blog.idontwannarock.dev/about/</link>
       <pubDate>Sun, 07 May 2017 17:32:00 +0800</pubDate>
-      <guid>https://blog.idontwannarock.me/about/</guid>
+      <guid>https://blog.idontwannarock.dev/about/</guid>
       <description>&lt;p&gt;從自學 PHP 到北科上課學習 Java 入門，從事軟體工程師三年有餘，目前主要工作內容為網路應用開發&lt;/p&gt;&#xA;&lt;p&gt;過去接觸過的技術包括&lt;/p&gt;&#xA;&lt;p&gt;語言: Java, JavaScript, C#, Lua&lt;/p&gt;&#xA;&lt;p&gt;框架: Spring, .Net Framework, NodeJS&lt;/p&gt;&#xA;&lt;p&gt;資料庫: MySQL, Oracle, MongoDB, PostgresSQL, Sql Server, Redis, Elasticsearch&lt;/p&gt;&#xA;&lt;p&gt;測試: JUnit, Mockito, NUnit&lt;/p&gt;&#xA;&lt;p&gt;CI/CD: Git, GitHub, GitLab, Jenkins&lt;/p&gt;&#xA;&lt;p&gt;其他: Docker, Docker Compose, Kafka, Zabbix&lt;/p&gt;&#xA;&lt;p&gt;最熟練的是 Java 及 Spring 全家桶，Git Flow 或 GitHub Flow 版控，JUnit 及 Mockito 做單元測試及整合測試，Jenkins 搭配 GitHub/GitLab WebHook 做 CI/CD，同時也能利用 shell script、batch script 或 powershell script 搭配 docker-compose 達成基礎的 Infrastructure as Code&lt;/p&gt;</description>
     </item>
   </channel>

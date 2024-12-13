@@ -2,25 +2,25 @@
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
     <title>Markdown on Howard Tech Note</title>
-    <link>https://blog.idontwannarock.me/tags/markdown/</link>
+    <link>https://blog.idontwannarock.dev/tags/markdown/</link>
     <description>Recent content in Markdown on Howard Tech Note</description>
     <generator>Hugo</generator>
     <language>en-us</language>
     <copyright>This website by Howard Wang is licensed under a Creative Common Attribution-ShareAlike 4.0 International License.</copyright>
     <lastBuildDate>Sun, 22 Oct 2017 15:42:04 +0800</lastBuildDate>
-    <atom:link href="https://blog.idontwannarock.me/tags/markdown/index.xml" rel="self" type="application/rss+xml" />
+    <atom:link href="https://blog.idontwannarock.dev/tags/markdown/index.xml" rel="self" type="application/rss+xml" />
     <item>
       <title>Markdown 語法</title>
-      <link>https://blog.idontwannarock.me/2017/10/markdown_syntax/</link>
+      <link>https://blog.idontwannarock.dev/2017/10/markdown_syntax/</link>
       <pubDate>Sun, 22 Oct 2017 15:42:04 +0800</pubDate>
-      <guid>https://blog.idontwannarock.me/2017/10/markdown_syntax/</guid>
+      <guid>https://blog.idontwannarock.dev/2017/10/markdown_syntax/</guid>
       <description>&lt;h1 id=&#34;markdown-特色&#34;&gt;Markdown 特色&lt;/h1&gt;&#xA;&lt;h2 id=&#34;易編寫&#34;&gt;易編寫&lt;/h2&gt;&#xA;&lt;p&gt;相對於 HTML 需要注意各種 tag、屬性、特殊字元，Markdown 是更容易編寫的方式，雖然無法像 HTML 那樣可以直接透過各種屬性，甚至 CSS 來達到各種效果，但純粹以書寫來說，Markdown 的功能已經相當夠用。&lt;/p&gt;&#xA;&lt;h2 id=&#34;轉換-html&#34;&gt;轉換 HTML&lt;/h2&gt;&#xA;&lt;p&gt;不過如果有需要的話，Markdown 可以用各種方式轉換成 HTML，以方便我們發布成網頁或部落格文章，網路上有相當多的程式可以達到這點；相對之下，從 HTML 轉換回 Markdown 就沒這麼方便了，主要原因就是 HTML 有相當多屬性等並不被 Markdown 支援，所以有轉換回 Markdown 的困難。&lt;/p&gt;&#xA;&lt;p&gt;但還是有補救的辦法，在編寫 Markdown 文件的時候，其實還是可以使用 HTML 語法的，我使用過的轉換器都可以讀取 HTML 語法，並正常顯示以及轉換，所以真的有什麼 Markdown 找不到的 HTML 功能，就直接寫 HTML 吧！當然這就需要對 HTML 語法有更多認識了。&lt;/p&gt;&#xA;&lt;h2 id=&#34;編寫視覺&#34;&gt;編寫／視覺&lt;/h2&gt;&#xA;&lt;p&gt;跟 HTML 一樣，在編寫 Markdown 的時候呈現的畫面，跟實際呈現的畫面其實是不一樣的。&lt;/p&gt;&#xA;&lt;p&gt;例如我們編寫 Markdown 如下：&lt;/p&gt;&#xA;&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;&#34;&gt;&lt;code class=&#34;language-md&#34; data-lang=&#34;md&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#ff79c6&#34;&gt;-&lt;/span&gt; ***This*** is a [&lt;span style=&#34;color:#ff79c6&#34;&gt;sample&lt;/span&gt;](&lt;span style=&#34;color:#50fa7b&#34;&gt;http://example.com/ &amp;#34;example.com&amp;#34;&lt;/span&gt;).&#xA;&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;實際呈現的畫面其實是這樣的：&lt;/p&gt;&#xA;&lt;blockquote&gt;&#xA;&lt;ul&gt;&#xA;&lt;li&gt;&lt;em&gt;&lt;strong&gt;This&lt;/strong&gt;&lt;/em&gt; is a &lt;a href=&#34;http://example.com/&#34; title=&#34;example.com&#34;&gt;sample&lt;/a&gt;.&lt;/li&gt;&#xA;&lt;/ul&gt;&#xA;&lt;/blockquote&gt;&#xA;&lt;p&gt;所以在編寫 Markdown 的時候，最好找個可以隨時觀看實際畫面的編輯器來確認實際畫面。&lt;/p&gt;&#xA;&lt;h1 id=&#34;區塊元素&#34;&gt;區塊元素&lt;/h1&gt;&#xA;&lt;h2 id=&#34;換行&#34;&gt;換行&lt;/h2&gt;&#xA;&lt;p&gt;原則上按 Enter 鍵就是換行。&lt;/p&gt;</description>
     </item>
     <item>
       <title>Hugo 練習 (1)</title>
-      <link>https://blog.idontwannarock.me/2017/09/hugo_practice_1/</link>
+      <link>https://blog.idontwannarock.dev/2017/09/hugo_practice_1/</link>
       <pubDate>Sat, 09 Sep 2017 00:17:31 +0800</pubDate>
-      <guid>https://blog.idontwannarock.me/2017/09/hugo_practice_1/</guid>
+      <guid>https://blog.idontwannarock.dev/2017/09/hugo_practice_1/</guid>
       <description>&lt;blockquote&gt;&#xA;&lt;p&gt;這篇文章是初學的時候撰寫的，其中一些觀念並不正確，步驟也可能因為更新或觀念問題而不適用或者多餘，此篇文章僅為留做紀錄&lt;/p&gt;&#xA;&lt;/blockquote&gt;&#xA;&lt;h1 id=&#34;源起&#34;&gt;源起&lt;/h1&gt;&#xA;&lt;p&gt;2017 年 9 月 7 日在 ptt Soft_Job 版看到胡立大大 po 文準備作一個計劃-建立 Slack 群組來幫助大家練習討論一些網頁相關的東西，而我需要多作一些練習，並且最好能有人詢問或討論所以加入。&lt;/p&gt;&#xA;&lt;p&gt;而 9 月 8 日胡立大大就回信了，基本上就是解釋他想建立一個開放的群組，群組裡沒有老師，他擔任類似助教的腳色，會固定提出練習的題目，解答一些疑問跟提供一些資源這樣。&lt;/p&gt;&#xA;&lt;p&gt;其中胡立大大有提到希望大家能養成自學、解決問題以及歸納知識的習慣，我覺得很有道理很重要，所以剛好他也有提到希望大家學習「怎麼用靜態部落格產生系統」，可以練習怎麼使用靜態部落格產生系統、Git 的基本操作以及 Github 的相關知識。&lt;/p&gt;&#xA;&lt;p&gt;所以，就來吧！&lt;/p&gt;&#xA;&lt;h1 id=&#34;學習目標&#34;&gt;學習目標&lt;/h1&gt;&#xA;&lt;p&gt;學習怎麼用靜態部落格產生系統 Hugo，並且把部落格架在 Github Pages 上面。&lt;/p&gt;&#xA;&lt;h1 id=&#34;學習內容&#34;&gt;學習內容&lt;/h1&gt;&#xA;&lt;h2 id=&#34;什麼是靜態動態&#34;&gt;什麼是靜態、動態&lt;/h2&gt;&#xA;&lt;p&gt;就我看網路多種說法，歸納的概念大概是部落格或網站本身顯示不需要重複跟 server 端交流的就算靜態，反之就算動態；最近因為 SEO 的興起，還有一種偽靜態。&lt;/p&gt;&#xA;&lt;h2 id=&#34;什麼是靜態部落格-網頁-產生系統-static-site-generator&#34;&gt;什麼是靜態部落格 (網頁) 產生系統 Static Site Generator&lt;/h2&gt;&#xA;&lt;p&gt;在網路上找到 &lt;a href=&#34;https://www.sitepoint.com/7-reasons-use-static-site-generator/&#34;&gt;這篇文章&lt;/a&gt;，講得蠻清楚的。&lt;/p&gt;&#xA;&lt;p&gt;在講什麼是靜態部落格（網頁）產生系統 Static Site Generator(SSG) 之前，應該講一下內容管理系統 Content Management System(CMS)，例如 Wordpress。&lt;/p&gt;&#xA;&lt;p&gt;CMS 的理念是讓作者不用擔心部落格，也就是網頁輸出的各種技術問題，只需要選擇喜歡的模板 template，就可以使用 CMS 提供的文字編輯器寫作，節省很多技術上的麻煩，相信有用過 Wordpress 都能理解。&lt;/p&gt;&#xA;&lt;p&gt;但相對之下 CMS 就有一些壞處，例如只能使用 CMS 提供的編輯功能（不然還是要會網頁或程式知識去作修改）、因為很多動態功能所以伺服器工作比較重可能影響效能、可能因為某些軟體或功能升級或資料庫出問題而導致網頁也出問題。&lt;/p&gt;&#xA;&lt;p&gt;而 SSG 算是在 CMS 跟完全自己 coding 寫網頁架部落格的中間，比較知名的有 Jekyll 跟 Hugo，或胡立提到的 Hexo。&lt;/p&gt;</description>
     </item>
   </channel>

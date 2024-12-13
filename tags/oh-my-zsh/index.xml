@@ -2,18 +2,18 @@
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
     <title>Oh-My-Zsh on Howard Tech Note</title>
-    <link>https://blog.idontwannarock.me/tags/oh-my-zsh/</link>
+    <link>https://blog.idontwannarock.dev/tags/oh-my-zsh/</link>
     <description>Recent content in Oh-My-Zsh on Howard Tech Note</description>
     <generator>Hugo</generator>
     <language>en-us</language>
     <copyright>This website by Howard Wang is licensed under a Creative Common Attribution-ShareAlike 4.0 International License.</copyright>
     <lastBuildDate>Fri, 03 Nov 2017 09:05:02 +0800</lastBuildDate>
-    <atom:link href="https://blog.idontwannarock.me/tags/oh-my-zsh/index.xml" rel="self" type="application/rss+xml" />
+    <atom:link href="https://blog.idontwannarock.dev/tags/oh-my-zsh/index.xml" rel="self" type="application/rss+xml" />
     <item>
       <title>Macbook Pro 的設置 2017 版</title>
-      <link>https://blog.idontwannarock.me/2017/11/mbp_setup_2017/</link>
+      <link>https://blog.idontwannarock.dev/2017/11/mbp_setup_2017/</link>
       <pubDate>Fri, 03 Nov 2017 09:05:02 +0800</pubDate>
-      <guid>https://blog.idontwannarock.me/2017/11/mbp_setup_2017/</guid>
+      <guid>https://blog.idontwannarock.dev/2017/11/mbp_setup_2017/</guid>
       <description>&lt;blockquote&gt;&#xA;&lt;p&gt;這篇文章是初學的時候撰寫的，其中一些觀念並不正確，步驟也可能因為更新或觀念問題而不適用或者多餘，此篇文章僅為留做紀錄&lt;/p&gt;&#xA;&lt;/blockquote&gt;&#xA;&lt;p&gt;一直以來都是 PC 人，從來沒用過任何 Apple 或 Linux 的相關產品，剛好有買筆電的需求，想趁機接觸一下不同的作業系統生態，而且久聞 Apple 筆電品質很好，就添購了 Macbook Pro 來當我人生第一台筆電。&lt;/p&gt;&#xA;&lt;p&gt;剛拿到筆電總是需要一些設置，盡量讓 PC 跟 MBP 之間資訊同步以及應用軟體上相通或相容，以達到同步並簡化作業環境的目標，提高生產效率。&lt;/p&gt;&#xA;&lt;p&gt;於是跟朋友詢問以及上網稍作了解後，有了以下的設置。&lt;/p&gt;&#xA;&lt;h1 id=&#34;軟體環境設置&#34;&gt;軟體環境設置&lt;/h1&gt;&#xA;&lt;p&gt;因為是要習慣 Unix-based 的作業環境，所以我並沒有特別強求各方面都要設置到跟 Windows 環境類似，所以操作模式上並沒有更動。&lt;/p&gt;&#xA;&lt;p&gt;但安裝的軟體上就有些考量，希望能達到集中管理，這就不得不提每個 MacOS 都應該必備的 Homebrew。&lt;/p&gt;&#xA;&lt;h2 id=&#34;安裝-homebrew&#34;&gt;安裝 Homebrew&lt;/h2&gt;&#xA;&lt;p&gt;&lt;a href=&#34;https://brew.sh/&#34;&gt;Homebrew&lt;/a&gt; 是一套開源的 MacOS 系統的軟體套件管理系統，用來簡化 MacOS 系統上的軟體安裝、卸載等過程，是用 MacOS 內建的 Ruby 語言寫成。&lt;/p&gt;&#xA;&lt;p&gt;但 Homebrew 在安裝前需要先安裝 &lt;a href=&#34;https://itunes.apple.com/us/app/xcode/id497799835?mt=12&#34;&gt;Xcode&lt;/a&gt;，似乎是因為 Xcode 會一併安裝一些常用的 command line。&lt;/p&gt;&#xA;&lt;p&gt;還好 Xcode 也是免費軟體，可以直接透過 App Store 下載，要注意檔案蠻大的，下載安裝的過程會要花一點時間。&lt;/p&gt;&#xA;&lt;p&gt;Xcode 安裝好之後，就打開「終端機」，輸入下面這行來下載安裝 Homebrew：&lt;/p&gt;&#xA;&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;&#34;&gt;&lt;code class=&#34;language-bash&#34; data-lang=&#34;bash&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;$ ruby -e &lt;span style=&#34;color:#f1fa8c&#34;&gt;&amp;#34;&lt;/span&gt;&lt;span style=&#34;color:#ff79c6&#34;&gt;$(&lt;/span&gt;curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install&lt;span style=&#34;color:#ff79c6&#34;&gt;)&lt;/span&gt;&lt;span style=&#34;color:#f1fa8c&#34;&gt;&amp;#34;&lt;/span&gt;&#xA;&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;注意第一個 &lt;code&gt;$&lt;/code&gt; 是開啟終端機就會顯示在你可以打字的那一行的開頭，不用重複輸入。&lt;/p&gt;&#xA;&lt;p&gt;讓他自動跑完之後，就可以開始使用 &lt;code&gt;brew&lt;/code&gt; 指令來操作啦！&lt;/p&gt;&#xA;&lt;p&gt;日後要更新 Homebrew 這個軟體本身，也是一樣在終端機輸入 &lt;code&gt;brew update&lt;/code&gt; 以及 &lt;code&gt;brew tap homebrew/dupes&lt;/code&gt; 就可以了。&lt;/p&gt;</description>
     </item>
   </channel>

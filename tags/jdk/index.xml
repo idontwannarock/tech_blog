@@ -2,18 +2,18 @@
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
     <title>Jdk on Howard Tech Note</title>
-    <link>https://blog.idontwannarock.me/tags/jdk/</link>
+    <link>https://blog.idontwannarock.dev/tags/jdk/</link>
     <description>Recent content in Jdk on Howard Tech Note</description>
     <generator>Hugo</generator>
     <language>en-us</language>
     <copyright>This website by Howard Wang is licensed under a Creative Common Attribution-ShareAlike 4.0 International License.</copyright>
     <lastBuildDate>Tue, 20 Jun 2023 10:51:39 +0800</lastBuildDate>
-    <atom:link href="https://blog.idontwannarock.me/tags/jdk/index.xml" rel="self" type="application/rss+xml" />
+    <atom:link href="https://blog.idontwannarock.dev/tags/jdk/index.xml" rel="self" type="application/rss+xml" />
     <item>
       <title>Scoop 介紹及用法</title>
-      <link>https://blog.idontwannarock.me/2023/06/scoop/</link>
+      <link>https://blog.idontwannarock.dev/2023/06/scoop/</link>
       <pubDate>Tue, 20 Jun 2023 10:51:39 +0800</pubDate>
-      <guid>https://blog.idontwannarock.me/2023/06/scoop/</guid>
+      <guid>https://blog.idontwannarock.dev/2023/06/scoop/</guid>
       <description>&lt;p&gt;Linux 有 &lt;a href=&#34;https://salsa.debian.org/apt-team/apt&#34;&gt;apt&lt;/a&gt;, &lt;a href=&#34;http://yum.baseurl.org/gitweb/&#34;&gt;yum&lt;/a&gt;、MacOS 有 &lt;a href=&#34;https://brew.sh/&#34;&gt;Homebrew&lt;/a&gt;、Windows 有 &lt;a href=&#34;https://chocolatey.org/&#34;&gt;Chocolatey&lt;/a&gt;&lt;/p&gt;&#xA;&lt;p&gt;但今天要介紹 Windows 環境的另外一個 command line 套件管理工具 &lt;a href=&#34;https://scoop.sh/&#34;&gt;Scoop&lt;/a&gt;&lt;/p&gt;&#xA;&lt;p&gt;在 Windows 環境，比較有名的 command line 套件管理工具是 Chocolatey，但今天要介紹的 Scoop 有一項 Chocolatey 沒辦法做到的好處，就是可以切換 Path Environment Variable&lt;/p&gt;&#xA;&lt;h1 id=&#34;安裝&#34;&gt;安裝&lt;/h1&gt;&#xA;&lt;p&gt;Scoop 的安裝非常簡單，打開 &lt;strong&gt;非&lt;/strong&gt; Administrator (系統管理員) 的 Powershell，並輸入以下指令即可安裝&lt;/p&gt;&#xA;&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;&#34;&gt;&lt;code class=&#34;language-powershell&#34; data-lang=&#34;powershell&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#8be9fd;font-style:italic&#34;&gt;Set-ExecutionPolicy&lt;/span&gt; RemoteSigned -Scope CurrentUser&#xA;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#8be9fd;font-style:italic&#34;&gt;irm &lt;/span&gt;get.scoop.sh | &lt;span style=&#34;color:#8be9fd;font-style:italic&#34;&gt;iex&#xA;&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h1 id=&#34;使用&#34;&gt;使用&lt;/h1&gt;&#xA;&lt;p&gt;Scoop 既然是套件管理工具，那重要的工作就是安裝套件，而 Scoop 有支援什麼套件固然可以直接 Google 的到，但其實也不是沒有方式直接在 command line 搜尋&lt;/p&gt;&#xA;&lt;p&gt;例如想安裝 7zip 壓縮工具，可以在 powershell 當中這樣搜尋&lt;/p&gt;&#xA;&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;&#34;&gt;&lt;code class=&#34;language-powershell&#34; data-lang=&#34;powershell&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;scoop search 7zip&#xA;&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;應該會出現如下的結果&lt;/p&gt;&#xA;&lt;p&gt;&lt;img src=&#34;https://res.cloudinary.com/dcvgho2zc/image/upload/v1687230278/Tech%20Blog/Scoop/image-20230620-014307.png&#34; alt=&#34;Scoop Search Result&#34;&gt;&lt;/p&gt;&#xA;&lt;p&gt;第一行說明代表這次結果是在本地的 bucket 當中搜尋到的，表格當中的 Name 就是套件名稱，之後所有操作都要輸入 Name 當中顯示的完整名稱，Source 就是指套件所在的 bucket&lt;/p&gt;</description>
     </item>
   </channel>

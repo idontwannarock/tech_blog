@@ -2,18 +2,18 @@
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
     <title>Utc_timestamp on Howard Tech Note</title>
-    <link>https://blog.idontwannarock.me/tags/utc_timestamp/</link>
+    <link>https://blog.idontwannarock.dev/tags/utc_timestamp/</link>
     <description>Recent content in Utc_timestamp on Howard Tech Note</description>
     <generator>Hugo</generator>
     <language>en-us</language>
     <copyright>This website by Howard Wang is licensed under a Creative Common Attribution-ShareAlike 4.0 International License.</copyright>
     <lastBuildDate>Tue, 31 Oct 2023 11:59:03 +0800</lastBuildDate>
-    <atom:link href="https://blog.idontwannarock.me/tags/utc_timestamp/index.xml" rel="self" type="application/rss+xml" />
+    <atom:link href="https://blog.idontwannarock.dev/tags/utc_timestamp/index.xml" rel="self" type="application/rss+xml" />
     <item>
       <title>MySQL 8.0 使用 UTC_TIMESTAMP() 當作 DATETIME 欄位預設值 bug</title>
-      <link>https://blog.idontwannarock.me/2023/10/mysql_8_utc_timestamp_as_datetime_default_bug/</link>
+      <link>https://blog.idontwannarock.dev/2023/10/mysql_8_utc_timestamp_as_datetime_default_bug/</link>
       <pubDate>Tue, 31 Oct 2023 11:59:03 +0800</pubDate>
-      <guid>https://blog.idontwannarock.me/2023/10/mysql_8_utc_timestamp_as_datetime_default_bug/</guid>
+      <guid>https://blog.idontwannarock.dev/2023/10/mysql_8_utc_timestamp_as_datetime_default_bug/</guid>
       <description>&lt;h1 id=&#34;情境描述&#34;&gt;情境描述&lt;/h1&gt;&#xA;&lt;p&gt;最近在處理 MySQL 的時候採到一個坑&lt;/p&gt;&#xA;&lt;p&gt;我的使用情境是需要一個 create date 紀錄資料產生時的 UTC 時間精準到 millisecond&lt;/p&gt;&#xA;&lt;p&gt;首先考慮到 MySQL 的 &lt;code&gt;TIMESTAMP&lt;/code&gt; 資料型態是採用 epoch second 加上額外的 fractional seconds 精準到 microseconds，也就是最多記錄到 &amp;lsquo;2038-01-19 03:14:07.999999&amp;rsquo; 就會 overflow，如果採用 &lt;code&gt;DATETIME(3)&lt;/code&gt; 可以記錄到 &amp;lsquo;9999-12-31 23:59:59.999&amp;rsquo;&lt;/p&gt;&#xA;&lt;p&gt;接著因為欄位必填，所以考慮設定預設值，此時有幾種選擇，&lt;code&gt;NOW()&lt;/code&gt;、&lt;code&gt;CURRENT_TIMESTAMP&lt;/code&gt;、&lt;code&gt;UTC_TIMESTAMP&lt;/code&gt;，其中 &lt;code&gt;NOW()&lt;/code&gt; 與 &lt;code&gt;CURRENT_TIMESTAMP&lt;/code&gt; 都會依照 MySQL 系統時區產生時間，但是 &lt;code&gt;DATETIME&lt;/code&gt; 並不保存時區資訊，所以為了避免時區問題，所以選擇預設值設定為 &lt;code&gt;(UTC_TIMESTAMP(3))&lt;/code&gt;，剛好在 8.0.13 開始可以將 &lt;code&gt;DATETIME&lt;/code&gt; 資料型態的欄位預設值設為 function &lt;code&gt;(UTC_TIMESTAMP())&lt;/code&gt;&lt;/p&gt;&#xA;&lt;p&gt;但是設定完後發生了很奇怪的問題，後續進行的 &lt;code&gt;ALTER TABLE&lt;/code&gt; DDL 操作都會失敗並拋出 &lt;code&gt;ERROR 1067: Invalid default value for &amp;lt;columnName&amp;gt;&lt;/code&gt; 錯誤，例如執行以下 sql&lt;/p&gt;&#xA;&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;&#34;&gt;&lt;code class=&#34;language-sql&#34; data-lang=&#34;sql&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#ff79c6&#34;&gt;ALTER&lt;/span&gt; &lt;span style=&#34;color:#ff79c6&#34;&gt;TABLE&lt;/span&gt; tableName &lt;span style=&#34;color:#ff79c6&#34;&gt;ADD&lt;/span&gt; &lt;span style=&#34;color:#ff79c6&#34;&gt;COLUMN&lt;/span&gt; newColumnName &lt;span style=&#34;color:#8be9fd;font-style:italic&#34;&gt;BIGINT&lt;/span&gt; &lt;span style=&#34;color:#ff79c6&#34;&gt;NULL&lt;/span&gt;;&#xA;&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;明明新增的是 &lt;code&gt;BIGINT&lt;/code&gt; 而且沒有預設值，卻拋出 &lt;code&gt;ERROR 1067: Invalid default value for createdDateColumn&lt;/code&gt; 的錯誤，簡直莫名其妙讓人丈二和尚摸不著頭腦&lt;/p&gt;</description>
     </item>
   </channel>

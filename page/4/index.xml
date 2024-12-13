@@ -2,24 +2,24 @@
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
     <title>Howard Tech Note</title>
-    <link>https://blog.idontwannarock.me/</link>
+    <link>https://blog.idontwannarock.dev/</link>
     <description>Recent content on Howard Tech Note</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
     <copyright>This website by Howard Wang is licensed under a Creative Common Attribution-ShareAlike 4.0 International License.</copyright>
     <lastBuildDate>Wed, 16 Oct 2024 11:06:41 +0800</lastBuildDate>
     
-        <atom:link href="https://blog.idontwannarock.me/index.xml" rel="self" type="application/rss+xml" />
+        <atom:link href="https://blog.idontwannarock.dev/index.xml" rel="self" type="application/rss+xml" />
     
     
     
         <item>
         <title>Markdown 語法</title>
-        <link>https://blog.idontwannarock.me/2017/10/markdown_syntax/</link>
+        <link>https://blog.idontwannarock.dev/2017/10/markdown_syntax/</link>
         <pubDate>Sun, 22 Oct 2017 15:42:04 +0800</pubDate>
         
-        <guid>https://blog.idontwannarock.me/2017/10/markdown_syntax/</guid>
-        <description>Howard Tech Note https://blog.idontwannarock.me/2017/10/markdown_syntax/ -&lt;h1 id=&#34;markdown-特色&#34;&gt;Markdown 特色&lt;/h1&gt;
+        <guid>https://blog.idontwannarock.dev/2017/10/markdown_syntax/</guid>
+        <description>Howard Tech Note https://blog.idontwannarock.dev/2017/10/markdown_syntax/ -&lt;h1 id=&#34;markdown-特色&#34;&gt;Markdown 特色&lt;/h1&gt;
 &lt;h2 id=&#34;易編寫&#34;&gt;易編寫&lt;/h2&gt;
 &lt;p&gt;相對於 HTML 需要注意各種 tag、屬性、特殊字元，Markdown 是更容易編寫的方式，雖然無法像 HTML 那樣可以直接透過各種屬性，甚至 CSS 來達到各種效果，但純粹以書寫來說，Markdown 的功能已經相當夠用。&lt;/p&gt;
 &lt;h2 id=&#34;轉換-html&#34;&gt;轉換 HTML&lt;/h2&gt;
@@ -378,18 +378,18 @@ st-&amp;gt;op(right)-&amp;gt;con
 con(yes)-&amp;gt;e  
 con(no)-&amp;gt;op  
 &lt;/code&gt;&lt;/pre&gt;&lt;p&gt;（很顯然 Hugo 提供的轉換器並不支援這種擴充的繪圖功能）&lt;/p&gt;
-- https://blog.idontwannarock.me/2017/10/markdown_syntax/ - This website by Howard Wang is licensed under a Creative Common Attribution-ShareAlike 4.0 International License.</description>
+- https://blog.idontwannarock.dev/2017/10/markdown_syntax/ - This website by Howard Wang is licensed under a Creative Common Attribution-ShareAlike 4.0 International License.</description>
         </item>
     
     
     
         <item>
         <title>整數溢位 Integer Overflow</title>
-        <link>https://blog.idontwannarock.me/2017/10/integer_overflow/</link>
+        <link>https://blog.idontwannarock.dev/2017/10/integer_overflow/</link>
         <pubDate>Sun, 01 Oct 2017 07:04:47 +0800</pubDate>
         
-        <guid>https://blog.idontwannarock.me/2017/10/integer_overflow/</guid>
-        <description>Howard Tech Note https://blog.idontwannarock.me/2017/10/integer_overflow/ -&lt;p&gt;這是我查到一些資料後的理解，希望能多一點對整數溢位後為何會正負循環的了解。&lt;/p&gt;
+        <guid>https://blog.idontwannarock.dev/2017/10/integer_overflow/</guid>
+        <description>Howard Tech Note https://blog.idontwannarock.dev/2017/10/integer_overflow/ -&lt;p&gt;這是我查到一些資料後的理解，希望能多一點對整數溢位後為何會正負循環的了解。&lt;/p&gt;
 &lt;h1 id=&#34;數字系統&#34;&gt;數字系統&lt;/h1&gt;
 &lt;p&gt;首先要了解的是數字系統，因為一般電腦是採用二進制 (Binary) 來作數字計算，而不是我們習慣的十進制 (Decimal)。&lt;/p&gt;
 &lt;p&gt;我們一般人都是用十進制，十進制就是用 &lt;code&gt;0、1、2、3、4、5、6、7、8、9&lt;/code&gt; 十個數字來表達，一個位數就有十種狀態，從 0 開始往上累積，超過 9 就進一位。&lt;/p&gt;
@@ -733,18 +733,18 @@ con(no)-&amp;gt;op
 &lt;p&gt;&lt;code&gt;+7&lt;/code&gt; 對應的二進制是 &lt;code&gt;0111&lt;/code&gt;，不小心再加了一會變多少？用二進制運算就是 &lt;code&gt;1000&lt;/code&gt;。然後讓我們看一下上面的表格，&lt;code&gt;1000&lt;/code&gt; 對應的 2&amp;rsquo;s 補數法那格是多少？就是 &lt;code&gt;-8&lt;/code&gt;。&lt;/p&gt;
 &lt;p&gt;反過來說，&lt;code&gt;-8&lt;/code&gt; 對應的二進制是 &lt;code&gt;1000&lt;/code&gt;，不小心又多減了一，&lt;code&gt;1000&lt;/code&gt; 減一就變成 &lt;code&gt;0111&lt;/code&gt;，那 &lt;code&gt;0111&lt;/code&gt; 對應的十進制數字是多少？就是 &lt;code&gt;+7&lt;/code&gt;。&lt;/p&gt;
 &lt;p&gt;其實整數溢位會正反循環的道理就在這邊，不知道這樣講我十年後看不看得懂&amp;hellip;&amp;hellip;orz&lt;/p&gt;
-- https://blog.idontwannarock.me/2017/10/integer_overflow/ - This website by Howard Wang is licensed under a Creative Common Attribution-ShareAlike 4.0 International License.</description>
+- https://blog.idontwannarock.dev/2017/10/integer_overflow/ - This website by Howard Wang is licensed under a Creative Common Attribution-ShareAlike 4.0 International License.</description>
         </item>
     
     
     
         <item>
         <title>4th Practice: Twitter Clone</title>
-        <link>https://blog.idontwannarock.me/2017/09/twitter_clone/</link>
+        <link>https://blog.idontwannarock.dev/2017/09/twitter_clone/</link>
         <pubDate>Fri, 15 Sep 2017 10:27:28 +0800</pubDate>
         
-        <guid>https://blog.idontwannarock.me/2017/09/twitter_clone/</guid>
-        <description>Howard Tech Note https://blog.idontwannarock.me/2017/09/twitter_clone/ -&lt;h1 id=&#34;第四個目標&#34;&gt;第四個目標&lt;/h1&gt;
+        <guid>https://blog.idontwannarock.dev/2017/09/twitter_clone/</guid>
+        <description>Howard Tech Note https://blog.idontwannarock.dev/2017/09/twitter_clone/ -&lt;h1 id=&#34;第四個目標&#34;&gt;第四個目標&lt;/h1&gt;
 &lt;p&gt;練習 PHP、MySQL 跟 MVC，因為 Bootstrap 很方便，所以 HTML 跟 CSS 就這樣吧！廠廠~&lt;/p&gt;
 &lt;ul&gt;
 &lt;li&gt;作品：&lt;a href=&#34;https://goo.gl/PVUtXQ&#34;&gt;史上最簡陋 Twitter&lt;/a&gt;&lt;/li&gt;
@@ -769,18 +769,18 @@ con(no)-&amp;gt;op
 &lt;h2 id=&#34;ajax&#34;&gt;AJAX&lt;/h2&gt;
 &lt;p&gt;不太確定這算不算常識，但大家在使用 jQuery+AJAX 的時候要注意 jQuery 的版本，請不要用到 slim 版的喔， jQuery slim 版把 AJAX 功能拿掉了，所以最起碼要用 minified 或更完整的版本，切記切記！&lt;/p&gt;
 &lt;p&gt;尤其在套 Bootstrap 4 的模板的時候要注意，官方預設是載入 slim 版本的 jQuery，要記得自己去改 cdn。&lt;/p&gt;
-- https://blog.idontwannarock.me/2017/09/twitter_clone/ - This website by Howard Wang is licensed under a Creative Common Attribution-ShareAlike 4.0 International License.</description>
+- https://blog.idontwannarock.dev/2017/09/twitter_clone/ - This website by Howard Wang is licensed under a Creative Common Attribution-ShareAlike 4.0 International License.</description>
         </item>
     
     
     
         <item>
         <title>3rd Practice: Click Click Ben</title>
-        <link>https://blog.idontwannarock.me/2017/09/click_click_ben/</link>
+        <link>https://blog.idontwannarock.dev/2017/09/click_click_ben/</link>
         <pubDate>Fri, 15 Sep 2017 10:11:46 +0800</pubDate>
         
-        <guid>https://blog.idontwannarock.me/2017/09/click_click_ben/</guid>
-        <description>Howard Tech Note https://blog.idontwannarock.me/2017/09/click_click_ben/ -&lt;h1 id=&#34;第三個目標&#34;&gt;第三個目標&lt;/h1&gt;
+        <guid>https://blog.idontwannarock.dev/2017/09/click_click_ben/</guid>
+        <description>Howard Tech Note https://blog.idontwannarock.dev/2017/09/click_click_ben/ -&lt;h1 id=&#34;第三個目標&#34;&gt;第三個目標&lt;/h1&gt;
 &lt;p&gt;練習 JavaScript 跟 &lt;code&gt;random()&lt;/code&gt; 函數。&lt;/p&gt;
 &lt;ul&gt;
 &lt;li&gt;作品：&lt;a href=&#34;https://goo.gl/sgAjR3&#34;&gt;Click Click Ben&lt;/a&gt;&lt;/li&gt;
@@ -800,18 +800,18 @@ con(no)-&amp;gt;op
 &lt;p&gt;這也沒什麼好說的，只是做個記錄。&lt;/p&gt;
 &lt;p&gt;最基礎的做法就是設一個變數，然後用 &lt;code&gt;if&lt;/code&gt; 判斷來控制次數。&lt;/p&gt;
 &lt;p&gt;控制次數感覺可以用 &lt;code&gt;for&lt;/code&gt; 或 &lt;code&gt;while&lt;/code&gt; loop 來寫，但中間要卡一個按的功能，不知道能不能行？&lt;/p&gt;
-- https://blog.idontwannarock.me/2017/09/click_click_ben/ - This website by Howard Wang is licensed under a Creative Common Attribution-ShareAlike 4.0 International License.</description>
+- https://blog.idontwannarock.dev/2017/09/click_click_ben/ - This website by Howard Wang is licensed under a Creative Common Attribution-ShareAlike 4.0 International License.</description>
         </item>
     
     
     
         <item>
         <title>2nd Practice: Retina Morning Post</title>
-        <link>https://blog.idontwannarock.me/2017/09/retina_morning_post/</link>
+        <link>https://blog.idontwannarock.dev/2017/09/retina_morning_post/</link>
         <pubDate>Fri, 15 Sep 2017 09:44:03 +0800</pubDate>
         
-        <guid>https://blog.idontwannarock.me/2017/09/retina_morning_post/</guid>
-        <description>Howard Tech Note https://blog.idontwannarock.me/2017/09/retina_morning_post/ -&lt;h1 id=&#34;第二個目標&#34;&gt;第二個目標&lt;/h1&gt;
+        <guid>https://blog.idontwannarock.dev/2017/09/retina_morning_post/</guid>
+        <description>Howard Tech Note https://blog.idontwannarock.dev/2017/09/retina_morning_post/ -&lt;h1 id=&#34;第二個目標&#34;&gt;第二個目標&lt;/h1&gt;
 &lt;p&gt;練習報紙排版。&lt;/p&gt;
 &lt;ul&gt;
 &lt;li&gt;作品：&lt;a href=&#34;https://goo.gl/ZEByGt&#34;&gt;視網膜早報&lt;/a&gt;&lt;/li&gt;
@@ -869,18 +869,18 @@ con(no)-&amp;gt;op
 &lt;p&gt;Github 開源：&lt;a href=&#34;https://github.com/cmonos/TAKETORI-JS&#34;&gt;TAKETORI-JS&lt;/a&gt;&lt;/p&gt;
 &lt;h1 id=&#34;感想&#34;&gt;感想&lt;/h1&gt;
 &lt;p&gt;切版真的麻煩，而且我還沒做適應手機大小的版本，不過考慮到這是舊報紙版型，沒有也很正常對吧？（其實只是懶）&lt;/p&gt;
-- https://blog.idontwannarock.me/2017/09/retina_morning_post/ - This website by Howard Wang is licensed under a Creative Common Attribution-ShareAlike 4.0 International License.</description>
+- https://blog.idontwannarock.dev/2017/09/retina_morning_post/ - This website by Howard Wang is licensed under a Creative Common Attribution-ShareAlike 4.0 International License.</description>
         </item>
     
     
     
         <item>
         <title>1st Practice: Click Click Boom</title>
-        <link>https://blog.idontwannarock.me/2017/09/click_click_boom/</link>
+        <link>https://blog.idontwannarock.dev/2017/09/click_click_boom/</link>
         <pubDate>Fri, 15 Sep 2017 07:36:23 +0800</pubDate>
         
-        <guid>https://blog.idontwannarock.me/2017/09/click_click_boom/</guid>
-        <description>Howard Tech Note https://blog.idontwannarock.me/2017/09/click_click_boom/ -&lt;h1 id=&#34;第一個目標&#34;&gt;第一個目標&lt;/h1&gt;
+        <guid>https://blog.idontwannarock.dev/2017/09/click_click_boom/</guid>
+        <description>Howard Tech Note https://blog.idontwannarock.dev/2017/09/click_click_boom/ -&lt;h1 id=&#34;第一個目標&#34;&gt;第一個目標&lt;/h1&gt;
 &lt;p&gt;寫個簡單作品來練習 HTML 跟 CSS&lt;/p&gt;
 &lt;ul&gt;
 &lt;li&gt;作品：Click Click Boom
@@ -908,18 +908,18 @@ con(no)-&amp;gt;op
 &lt;p&gt;當然阿混很好心的幫我查好解法，結果是要用 JavaScript 來解，這跟我只想練習 HTML+CSS 本意不符，但找了一下好像真的沒有更好的解法，所以最後還是用了這個解法。&lt;/p&gt;
 &lt;h1 id=&#34;感想&#34;&gt;感想&lt;/h1&gt;
 &lt;p&gt;工程師真的很辛苦，但也很爽。能親手做出成品很有成就感！後續再來想要加什麼功能會更舒壓 XD&lt;/p&gt;
-- https://blog.idontwannarock.me/2017/09/click_click_boom/ - This website by Howard Wang is licensed under a Creative Common Attribution-ShareAlike 4.0 International License.</description>
+- https://blog.idontwannarock.dev/2017/09/click_click_boom/ - This website by Howard Wang is licensed under a Creative Common Attribution-ShareAlike 4.0 International License.</description>
         </item>
     
     
     
         <item>
         <title>Git 及 GitHub 基礎認識</title>
-        <link>https://blog.idontwannarock.me/2017/09/git_and_github_basic/</link>
+        <link>https://blog.idontwannarock.dev/2017/09/git_and_github_basic/</link>
         <pubDate>Thu, 14 Sep 2017 07:13:01 +0800</pubDate>
         
-        <guid>https://blog.idontwannarock.me/2017/09/git_and_github_basic/</guid>
-        <description>Howard Tech Note https://blog.idontwannarock.me/2017/09/git_and_github_basic/ -&lt;blockquote&gt;
+        <guid>https://blog.idontwannarock.dev/2017/09/git_and_github_basic/</guid>
+        <description>Howard Tech Note https://blog.idontwannarock.dev/2017/09/git_and_github_basic/ -&lt;blockquote&gt;
 &lt;p&gt;這篇文章是初學的時候撰寫的，其中一些觀念並不正確，步驟也可能因為更新或觀念問題而不適用或者多餘，此篇文章僅為留做紀錄&lt;/p&gt;
 &lt;/blockquote&gt;
 &lt;h1 id=&#34;學習目標&#34;&gt;學習目標&lt;/h1&gt;
@@ -953,7 +953,7 @@ con(no)-&amp;gt;op
 &lt;p&gt;接下來先作 Git 的環境設定，這樣之後就可以都在 Git Bash 操作各種指令，不用在 Git Bash 跟 PowerShell 視窗換來換去。如果是 Mac 用戶，則都可以用 MacOS 隨附的「終端機 Terminal」軟體，或安裝下載相同功能的 iTerm2 來操作 Git 指令。&lt;/p&gt;
 &lt;h2 id=&#34;git-環境設定&#34;&gt;Git 環境設定&lt;/h2&gt;
 &lt;p&gt;先說明我一般使用的是 Windows 10，兼有一台 Macbook Pro。但我是超級初心者，所以 Linux 我完全不會，抱歉。&lt;/p&gt;
-&lt;p&gt;先安裝 Git，這步驟很簡單。Windows 就到 &lt;a href=&#34;https://git-scm.com/&#34;&gt;Git官網&lt;/a&gt; 下載就好，而且一鍵安裝，這邊不需要多講；若是 MacOS 用戶，請利用 Homebrew 安裝 Git，安裝 Homebrew 跟 Git 的操作過程可以參考我的 &lt;a href=&#34;https://blog.idontwannarock.me/2017/11/mbp_setup_2017/#安裝Homebrew&#34;&gt;這篇文章&lt;/a&gt;，然後可以直接跳到下一個主題：設定 Git 識別資料。&lt;/p&gt;
+&lt;p&gt;先安裝 Git，這步驟很簡單。Windows 就到 &lt;a href=&#34;https://git-scm.com/&#34;&gt;Git官網&lt;/a&gt; 下載就好，而且一鍵安裝，這邊不需要多講；若是 MacOS 用戶，請利用 Homebrew 安裝 Git，安裝 Homebrew 跟 Git 的操作過程可以參考我的 &lt;a href=&#34;https://blog.idontwannarock.dev/2017/11/mbp_setup_2017/#安裝Homebrew&#34;&gt;這篇文章&lt;/a&gt;，然後可以直接跳到下一個主題：設定 Git 識別資料。&lt;/p&gt;
 &lt;p&gt;然後應該會在 Windows 按鈕（狀態列左邊 Windows 圖示的那顆）裡面的程式集多一個 Git 的資料夾，裡面有三個程式：Git Bash、Git CMD 跟 Git GUI。最常用的大概是 Git Bash，原則上都在這裡下各種 Git 指令；Git CMD 我不知道拿來幹嘛；Git GUI 是圖形介面，但設計的不太好用。&lt;/p&gt;
 &lt;p&gt;如果大家沒有要學太多 Git 指令，其實可以直接下載 &lt;a href=&#34;https://desktop.github.com/&#34;&gt;GitHub Desktop&lt;/a&gt; 或 &lt;a href=&#34;https://www.sourcetreeapp.com/&#34;&gt;Sourcetree&lt;/a&gt;，圖形化介面真的太好用，也不用記一堆 Git 指令。但今天沒有要教大家怎麼用 GitHub Desktop 跟 Sourcetree，或其實大家看完後面 Git 概念教學就大概會懂使用流程。&lt;/p&gt;
 &lt;h2 id=&#34;設定-git-識別資料&#34;&gt;設定 Git 識別資料&lt;/h2&gt;
@@ -1016,18 +1016,18 @@ git commit -m &amp;#34;說明文字&amp;#34;
 git push origin master
 &lt;/code&gt;&lt;/pre&gt;&lt;p&gt;就很簡單的搞定啦！&lt;/p&gt;
 &lt;p&gt;至於 branch 那種東西，等我搞懂再來新增吧。今天先這樣~~&lt;/p&gt;
-- https://blog.idontwannarock.me/2017/09/git_and_github_basic/ - This website by Howard Wang is licensed under a Creative Common Attribution-ShareAlike 4.0 International License.</description>
+- https://blog.idontwannarock.dev/2017/09/git_and_github_basic/ - This website by Howard Wang is licensed under a Creative Common Attribution-ShareAlike 4.0 International License.</description>
         </item>
     
     
     
         <item>
         <title>實作簡單登入會員系統 (1)</title>
-        <link>https://blog.idontwannarock.me/2017/09/login_signup_function_1/</link>
+        <link>https://blog.idontwannarock.dev/2017/09/login_signup_function_1/</link>
         <pubDate>Mon, 11 Sep 2017 07:11:59 +0800</pubDate>
         
-        <guid>https://blog.idontwannarock.me/2017/09/login_signup_function_1/</guid>
-        <description>Howard Tech Note https://blog.idontwannarock.me/2017/09/login_signup_function_1/ -&lt;blockquote&gt;
+        <guid>https://blog.idontwannarock.dev/2017/09/login_signup_function_1/</guid>
+        <description>Howard Tech Note https://blog.idontwannarock.dev/2017/09/login_signup_function_1/ -&lt;blockquote&gt;
 &lt;p&gt;這篇文章是初學的時候撰寫的，其中一些觀念並不正確，步驟也可能因為更新或觀念問題而不適用或者多餘，此篇文章僅為留做紀錄&lt;/p&gt;
 &lt;/blockquote&gt;
 &lt;h1 id=&#34;學習目標&#34;&gt;學習目標&lt;/h1&gt;
@@ -1046,7 +1046,7 @@ git push origin master
 &lt;p&gt;接著作 Sign Up 部分，接著剛剛驗證完資料正確後，檢查資料庫有無重複資料後，再把 &lt;code&gt;username&lt;/code&gt;、&lt;code&gt;email&lt;/code&gt; 跟 &lt;code&gt;password&lt;/code&gt; 存進資料庫。&lt;/p&gt;
 &lt;p&gt;最後再作 Login 部分，先用使用者輸入的 &lt;code&gt;username&lt;/code&gt; 比對資料庫有無紀錄，再比對 &lt;code&gt;password&lt;/code&gt;，最後輸出 Login 成功訊息。這邊會感覺會需要了解 &lt;code&gt;$_SESSION&lt;/code&gt; 跟 &lt;code&gt;$_COOKIE&lt;/code&gt; 怎麼運作，因為要幫 Sign Up/Login 成功的使用者加上 &lt;code&gt;$_SESSION&lt;/code&gt; 或 &lt;code&gt;$_COOKIE&lt;/code&gt;。&lt;/p&gt;
 &lt;p&gt;接著作 SQL Injection 及 XSS 攻擊的防範。最後再將使用者 Sign Up 時輸入的 &lt;code&gt;password&lt;/code&gt; 作 hash 處理。&lt;/p&gt;
-&lt;p&gt;另外以下是以只架站在自己 Windows 電腦的 XAMPP 上為前提，XAMPP 架站簡單教學可以看我之前寫的這篇筆記：&lt;a href=&#34;https://blog.idontwannarock.me/2017/09/xampp_setup_and_php_practice/&#34;&gt;XAMPP安裝設定及簡單 PHP練習&lt;/a&gt;。&lt;/p&gt;
+&lt;p&gt;另外以下是以只架站在自己 Windows 電腦的 XAMPP 上為前提，XAMPP 架站簡單教學可以看我之前寫的這篇筆記：&lt;a href=&#34;https://blog.idontwannarock.dev/2017/09/xampp_setup_and_php_practice/&#34;&gt;XAMPP安裝設定及簡單 PHP練習&lt;/a&gt;。&lt;/p&gt;
 &lt;p&gt;還有就是如果想要讓自己寫完的作品可以讓別人看到，可能要自己先想辦法查做法，我自己都還搞不太清楚。（攤手）&lt;/p&gt;
 &lt;h2 id=&#34;版面設定&#34;&gt;版面設定&lt;/h2&gt;
 &lt;p&gt;所以就從寫個 &lt;code&gt;form&lt;/code&gt;、三個 &lt;code&gt;input&lt;/code&gt; 跟兩個按鈕開始好了。我猶豫了一下要不要用 Bootstrap，還是用好了，畢竟練習的重點在後端，畫面就直接套用現成的版就好。&lt;/p&gt;
@@ -1199,18 +1199,18 @@ git push origin master
 &lt;li&gt;&lt;a href=&#34;http://idontwannarock-com.stackstaging.com/project/login-signup/&#34;&gt;作品網站 Sign Up Login Function&lt;/a&gt;&lt;/li&gt;
 &lt;li&gt;&lt;a href=&#34;https://github.com/idontwannarock/Tiny-Projects-and-Functions/tree/master/login-signup&#34;&gt;我放在 Github 的原始碼&lt;/a&gt;&lt;/li&gt;
 &lt;/ul&gt;
-- https://blog.idontwannarock.me/2017/09/login_signup_function_1/ - This website by Howard Wang is licensed under a Creative Common Attribution-ShareAlike 4.0 International License.</description>
+- https://blog.idontwannarock.dev/2017/09/login_signup_function_1/ - This website by Howard Wang is licensed under a Creative Common Attribution-ShareAlike 4.0 International License.</description>
         </item>
     
     
     
         <item>
         <title>XAMPP 安裝設定及簡單 PHP 練習</title>
-        <link>https://blog.idontwannarock.me/2017/09/xampp_setup_and_php_practice/</link>
+        <link>https://blog.idontwannarock.dev/2017/09/xampp_setup_and_php_practice/</link>
         <pubDate>Sun, 10 Sep 2017 07:39:23 +0800</pubDate>
         
-        <guid>https://blog.idontwannarock.me/2017/09/xampp_setup_and_php_practice/</guid>
-        <description>Howard Tech Note https://blog.idontwannarock.me/2017/09/xampp_setup_and_php_practice/ -&lt;blockquote&gt;
+        <guid>https://blog.idontwannarock.dev/2017/09/xampp_setup_and_php_practice/</guid>
+        <description>Howard Tech Note https://blog.idontwannarock.dev/2017/09/xampp_setup_and_php_practice/ -&lt;blockquote&gt;
 &lt;p&gt;這篇文章是初學的時候撰寫的，其中一些觀念並不正確，步驟也可能因為更新或觀念問題而不適用或者多餘，此篇文章僅為留做紀錄&lt;/p&gt;
 &lt;/blockquote&gt;
 &lt;h1 id=&#34;源起&#34;&gt;源起&lt;/h1&gt;
@@ -1244,18 +1244,18 @@ git push origin master
 &lt;p&gt;接下來寫個小 PHP 網頁，就隨便打開任何一種文字編輯器，Sublime Text、Brackets、Notepad++ 都可以。PHP 語法就是要自己學習的部分，我是輸入下列：&lt;/p&gt;
 &lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;&#34;&gt;&lt;code class=&#34;language-php&#34; data-lang=&#34;php&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#ff79c6&#34;&gt;&amp;lt;?&lt;/span&gt;php &lt;span style=&#34;color:#ff79c6&#34;&gt;echo&lt;/span&gt; &lt;span style=&#34;color:#f1fa8c&#34;&gt;&amp;#34;Hello World!&amp;#34;&lt;/span&gt;; &lt;span style=&#34;color:#ff79c6&#34;&gt;?&amp;gt;&lt;/span&gt;
 &lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;接著存檔取名 &lt;code&gt;helloworld.php&lt;/code&gt;，然後將檔案移到這個資料夾內 &lt;code&gt;C:\xampp\htdocs&lt;/code&gt;。開啟瀏覽器，輸入 &lt;code&gt;http://localhost:8080/helloworld.php&lt;/code&gt;，如果畫面有出現 Hello World! 字樣，就表示今天可以睡覺啦，謝謝大家~~~~&lt;/p&gt;
-- https://blog.idontwannarock.me/2017/09/xampp_setup_and_php_practice/ - This website by Howard Wang is licensed under a Creative Common Attribution-ShareAlike 4.0 International License.</description>
+- https://blog.idontwannarock.dev/2017/09/xampp_setup_and_php_practice/ - This website by Howard Wang is licensed under a Creative Common Attribution-ShareAlike 4.0 International License.</description>
         </item>
     
     
     
         <item>
         <title>Hugo 練習 (2)</title>
-        <link>https://blog.idontwannarock.me/2017/09/hugo_practice_2/</link>
+        <link>https://blog.idontwannarock.dev/2017/09/hugo_practice_2/</link>
         <pubDate>Sat, 09 Sep 2017 15:22:03 +0800</pubDate>
         
-        <guid>https://blog.idontwannarock.me/2017/09/hugo_practice_2/</guid>
-        <description>Howard Tech Note https://blog.idontwannarock.me/2017/09/hugo_practice_2/ -&lt;blockquote&gt;
+        <guid>https://blog.idontwannarock.dev/2017/09/hugo_practice_2/</guid>
+        <description>Howard Tech Note https://blog.idontwannarock.dev/2017/09/hugo_practice_2/ -&lt;blockquote&gt;
 &lt;p&gt;這篇文章是初學的時候撰寫的，其中一些觀念並不正確，步驟也可能因為更新或觀念問題而不適用或者多餘，此篇文章僅為留做紀錄&lt;/p&gt;
 &lt;/blockquote&gt;
 &lt;h1 id=&#34;學習目標&#34;&gt;學習目標&lt;/h1&gt;
@@ -1271,7 +1271,7 @@ git push origin master
 &lt;p&gt;然後為了確定是否有設定成功，請再右鍵點一次開始鍵，選「Windows PowerShell(系統管理員)(A)」來打開 PowerShell，然後直接輸入 &lt;code&gt;hugo version&lt;/code&gt; 後按 Enter 鍵，如果有顯示出版本資訊，那就是設定成功。&lt;/p&gt;
 &lt;h2 id=&#34;安裝-git申請-github-帳號及設定-ssh&#34;&gt;安裝 Git、申請 Github 帳號及設定 SSH&lt;/h2&gt;
 &lt;p&gt;這段建議直接參考另外一篇筆記來操作。&lt;/p&gt;
-&lt;p&gt;&lt;a href=&#34;https://blog.idontwannarock.me/2017/09/git_and_github_basic/&#34;&gt;Git及 Github基礎認識&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;&lt;a href=&#34;https://blog.idontwannarock.dev/2017/09/git_and_github_basic/&#34;&gt;Git及 Github基礎認識&lt;/a&gt;&lt;/p&gt;
 &lt;h2 id=&#34;生成基本網頁&#34;&gt;生成基本網頁&lt;/h2&gt;
 &lt;p&gt;這邊會用到一個簡單的指令，跟一些 Hugo 本身的指令。主要會用到移到資料夾位置的 &lt;code&gt;cd&lt;/code&gt; 指令，所以不太會的人可以谷哥了解一下。&lt;/p&gt;
 &lt;p&gt;請先打開前面建立好的 &lt;code&gt;C:\Hugo\Sites&lt;/code&gt; 資料夾，對資料夾內空白處點右鍵，選擇 Git Bash Here 開啟 Git Bash，這樣就預設好路徑是在 &lt;code&gt;Sites&lt;/code&gt; 資料夾內。&lt;/p&gt;
@@ -1378,8 +1378,8 @@ url = &amp;#34;/about&amp;#34;
 &lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;即可更新變動。&lt;/p&gt;
 &lt;p&gt;如果覺得這些 Git 指令太麻煩，其實可以用 Github Desktop 來完成上傳的操作，非常方便。&lt;/p&gt;
 &lt;p&gt;大 guy 4 醬。&lt;/p&gt;
-&lt;p&gt;如果對 Git 指令不熟悉，可以參考我另外寫的 &lt;a href=&#34;https://blog.idontwannarock.me/2017/09/git_and_github_basic/&#34;&gt;這篇筆記&lt;/a&gt;。&lt;/p&gt;
-- https://blog.idontwannarock.me/2017/09/hugo_practice_2/ - This website by Howard Wang is licensed under a Creative Common Attribution-ShareAlike 4.0 International License.</description>
+&lt;p&gt;如果對 Git 指令不熟悉，可以參考我另外寫的 &lt;a href=&#34;https://blog.idontwannarock.dev/2017/09/git_and_github_basic/&#34;&gt;這篇筆記&lt;/a&gt;。&lt;/p&gt;
+- https://blog.idontwannarock.dev/2017/09/hugo_practice_2/ - This website by Howard Wang is licensed under a Creative Common Attribution-ShareAlike 4.0 International License.</description>
         </item>
     
     
