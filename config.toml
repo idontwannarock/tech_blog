@@ -30,6 +30,8 @@ canonifyURLs = true
 [params]
 subtitle = "Share * Record * Program"
 disqusShortname = "howard-tech-blog"
+cloudflareToken = "69057f1b88b9492497f024d5a9bdc22e"
+googleAnalytics = "G-JP1V61PPMJ"
 
 [permalinks]
 posts = "/:year/:month/:slug"
