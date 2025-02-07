@@ -7,8 +7,22 @@
     <generator>Hugo</generator>
     <language>en-us</language>
     <copyright>This website by Howard Wang is licensed under a Creative Common Attribution-ShareAlike 4.0 International License.</copyright>
-    <lastBuildDate>Wed, 16 Oct 2024 11:06:41 +0800</lastBuildDate>
+    <lastBuildDate>Fri, 07 Feb 2025 09:39:10 +0800</lastBuildDate>
     <atom:link href="https://blog.idontwannarock.dev/tags/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Insert</title>
+      <link>https://blog.idontwannarock.dev/tags/insert/</link>
+      <pubDate>Fri, 07 Feb 2025 09:39:10 +0800</pubDate>
+      <guid>https://blog.idontwannarock.dev/tags/insert/</guid>
+      <description></description>
+    </item>
+    <item>
+      <title>Mysql</title>
+      <link>https://blog.idontwannarock.dev/tags/mysql/</link>
+      <pubDate>Fri, 07 Feb 2025 09:39:10 +0800</pubDate>
+      <guid>https://blog.idontwannarock.dev/tags/mysql/</guid>
+      <description></description>
+    </item>
     <item>
       <title>Docker</title>
       <link>https://blog.idontwannarock.dev/tags/docker/</link>
@@ -21,13 +35,6 @@
       <link>https://blog.idontwannarock.dev/tags/docker-compose/</link>
       <pubDate>Wed, 16 Oct 2024 11:06:41 +0800</pubDate>
       <guid>https://blog.idontwannarock.dev/tags/docker-compose/</guid>
-      <description></description>
-    </item>
-    <item>
-      <title>Mysql</title>
-      <link>https://blog.idontwannarock.dev/tags/mysql/</link>
-      <pubDate>Wed, 16 Oct 2024 11:06:41 +0800</pubDate>
-      <guid>https://blog.idontwannarock.dev/tags/mysql/</guid>
       <description></description>
     </item>
     <item>

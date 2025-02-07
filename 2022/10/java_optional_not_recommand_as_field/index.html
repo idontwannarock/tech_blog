@@ -382,8 +382,7 @@
 <p>有在寫 Java 的人應該都知道 primitive type 的比較可以直接用 <code>==</code>，但非 primitive type (也就是繼承了 <code>Object</code> 的類別) 的類別比較物件是否相同時應該使用 <code>equals()</code> 方法，而這兩個方式有什麼差別呢？</p>
 <p>首先，<code>==</code> 是直接比較變數中的值，這個值在 primitive type 來說，例如 <code>int a = 1; int b = 2; boolean isEqual = a == b;</code> 的變數 <code>a</code> 在跟變數 <code>b</code> 做比較的時候就是比較 1 是否等於 2；但若是非 primitive type 的時候，物件的值是什麼呢？就是該物件實例 (instance) 的 reference，也就是該物件在 JVM Heap 當中的位址</p>
 <blockquote>
-<p>重新順一次，非全域 (non-static) 變數本身原則上會保存在 JVM stack 當中；變數型態如果是 primitive type，則值就保存在 stack；變數如果是物件，那物件本身的內容實際上是保存在 JVM heap，而 stack 的變數則是保存指向 heap 當中的位址</p>
-</blockquote>
+<p>重新順一次，非全域 (non-static) 變數本身原則上會保存在 JVM stack 當中；變數型態如果是 primitive type，則值就保存在 stack；變數如果是物件，那物件本身的內容實際上是保存在 JVM heap，而 stack 的變數則是保存指向 heap 當中的位址</p></blockquote>
 <p>再來 <code>equals()</code> 方法就是調用方法裡面的實作去做比較，如果類別本身沒有實作，那就是找繼承的類別們當中，有實作 <code>equals()</code> 方法且繼承樹中最接近該類別的那個實作去執行比較，如果整顆繼承樹都沒有 override 過，那就是用 <code>Object</code> 預設的 <code>equals()</code> 方法</p>
 <p>接著就要再探究 <code>Object.equals()</code> 方法倒底是怎麼比較物件的呢？以 Java 11 的版本來說是這樣的</p>
 <div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-java" data-lang="java"><span style="display:flex;"><span><span style="color:#8be9fd;font-style:italic">public</span> <span style="color:#8be9fd">boolean</span> <span style="color:#50fa7b">equals</span>(Object obj) {
@@ -393,8 +392,7 @@
 <h2 id="optional-類別"><code>Optional</code> 類別</h2>
 <p><code>Optional</code> 是 Java 1.8 推出的新 feature，目的就是為了處理 Java 惡名昭彰的 <code>NullPointerException</code></p>
 <blockquote>
-<p>順帶一提 <a href="https://www.infoq.com/presentations/Null-References-The-Billion-Dollar-Mistake-Tony-Hoare/">Null Reference 的發明者 Tony Hoare 公開承認這是個錯誤</a></p>
-</blockquote>
+<p>順帶一提 <a href="https://www.infoq.com/presentations/Null-References-The-Billion-Dollar-Mistake-Tony-Hoare/">Null Reference 的發明者 Tony Hoare 公開承認這是個錯誤</a></p></blockquote>
 <p><code>Optional</code> 處理 <code>null</code> 的做法其實就是在物件外面做一個包裝，讓使用者間接操作物件；而要使用物件之前，<code>Optional</code> 的方法有很強的傾向讓使用者先檢查過物件是否為 <code>null</code> 後再來將物件取出來使用，從而避免 <code>NullPointerException</code></p>
 <p>所以可見變數如果是 <code>Optional</code>，那變數裡面的值則是 <code>Optional</code> 實例在 heap 裡面的位址</p>
 <p>結合上一段的內容，當兩個 <code>Optional</code> 做 <code>==</code> 比較的時候，比較的是兩個實例在 heap 裡面的位址；而做 <code>equals()</code> 比較的時候呢？我們直接看 code，以下是 JDK 11 版本的 <code>Optional</code> 實作</p>

@@ -471,8 +471,7 @@
 <h1 id="第二種情境描述">第二種情境描述</h1>
 <p>有時候我們會需要做一些複雜查詢，尤其是使用到其他 table 做 join 查詢，而且 select 的欄位不一定只選擇一個 entity 包含的欄位，此時就會需要利用 JPA 的 projection 功能</p>
 <blockquote>
-<p>有些情況可以用關聯來處理，但以下假設並沒有在 JPA 設定關聯，而是直接用 native SQL join 的方式做查詢</p>
-</blockquote>
+<p>有些情況可以用關聯來處理，但以下假設並沒有在 JPA 設定關聯，而是直接用 native SQL join 的方式做查詢</p></blockquote>
 <p>例如以下 table</p>
 <div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-sql" data-lang="sql"><span style="display:flex;"><span><span style="color:#ff79c6">CREATE</span> <span style="color:#ff79c6">TABLE</span> MESSAGE
 </span></span><span style="display:flex;"><span>(
@@ -623,8 +622,7 @@
 </span></span></code></pre></div><p>如此就可以利用框架自動 mapping Java <code>enum</code> 與 MySQL <code>int</code></p>
 <p>另外提一下，Java 的 <code>Instant</code> 或 <code>OffsetDateTime</code> 與 MySQL <code>datetime</code> 之間也有類似的問題，所以也需要提供一個 converter 做 <code>Instant</code> 或 <code>OffsetDateTime</code> 與 <code>java.sql.Timestamp</code> 之間做轉換</p>
 <blockquote>
-<p>JPA 會把 MySQL 的 <code>datetime</code> 以 <code>java.sql.Timestamp</code> 取出來</p>
-</blockquote>
+<p>JPA 會把 MySQL 的 <code>datetime</code> 以 <code>java.sql.Timestamp</code> 取出來</p></blockquote>
 <h1 id="reference">Reference</h1>
 <ul>
 <li><a href="https://docs.spring.io/spring-data/jpa/docs/current/reference/html/#projections">Spring Data JPA - Reference Documentation</a></li>

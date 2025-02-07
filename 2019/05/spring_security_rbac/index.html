@@ -347,8 +347,7 @@
 </li>
 </ul>
 <blockquote>
-<p><a href="https://www.baeldung.com/spring-security-granted-authority-vs-role">Granted Authority Versus Role in Spring Security</a></p>
-</blockquote>
+<p><a href="https://www.baeldung.com/spring-security-granted-authority-vs-role">Granted Authority Versus Role in Spring Security</a></p></blockquote>
 <p>所以概念上 Spring Security 的 Role 比較像是有特別命名方式 (ROLE_ 前綴) 的一種 Authority，因此在預設中，<code>hasAuthority('ROLE_ADMIN')</code> 跟 <code>hasRole('ADMIN')</code> 是一樣的</p>
 <p>在 Spring Security 中 Role as Authority 最明顯的例子就是 SimpleGrantedAuthority，建構子直接吃 role 字串，<code>getAuthority()</code> 方法也直接吐回 role 字串屬性</p>
 <p>因此，如果要建立 Role 跟 Authority 分離的權限架構，首先要確認的是在設定 access control 時，<code>hasRole()</code> 跟 <code>hasAuthority()</code> 兩個方法到底是用什麼機制、從哪裡取得</p>
@@ -371,8 +370,7 @@
 <li><code>UnanimousBased</code>: 所有 voter 通過或棄權，也就是不能有任何否決</li>
 </ul>
 <blockquote>
-<p><a href="https://www.baeldung.com/spring-security-custom-voter">Custom AccessDecisionVoters in Spring Security</a></p>
-</blockquote>
+<p><a href="https://www.baeldung.com/spring-security-custom-voter">Custom AccessDecisionVoters in Spring Security</a></p></blockquote>
 <p>這部分就只能基於實際業務邏輯做考量</p>
 
                     

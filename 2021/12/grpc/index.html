@@ -492,8 +492,7 @@
 <h2 id="概念">概念</h2>
 <p>gRPC 原本是 Google 內部的 RPC 系統，後來開源後，近年成為很熱門的 RPC 系統，採用 HTTP/2 做傳輸，ProtoBuf 作為介面描述語言 (interface description language)，提供身分驗證 (authentication)、雙向串流 (bidirectional streaming)、流量控制 (flow control)、阻塞或非阻塞綁定 (blocking or nonblocking binding)、取消 (cancellation) 及逾時 (timeouts) 等特性</p>
 <blockquote>
-<p>RPC Remote Procedure Call 遠端程序呼叫指服務之間互相溝通就如同呼叫本地程式一般，不須關注呼叫互動的細節。例如以前的 CORBA, Java RMI 等</p>
-</blockquote>
+<p>RPC Remote Procedure Call 遠端程序呼叫指服務之間互相溝通就如同呼叫本地程式一般，不須關注呼叫互動的細節。例如以前的 CORBA, Java RMI 等</p></blockquote>
 <h3 id="使用-grpc-api">使用 gRPC API</h3>
 <p>主要是透過 .proto 檔定義 service 結構，再透過 ProtoBuf compiler 的幫助產生各語言的 client/server 端代碼</p>
 <ul>
@@ -508,8 +507,7 @@
 <h3 id="四種類型的-service">四種類型的 Service</h3>
 <p>在 gRPC 中可以定義四種類型的 service</p>
 <blockquote>
-<p>就是定義在 ProtoBuf 的 .proto 檔</p>
-</blockquote>
+<p>就是定義在 ProtoBuf 的 .proto 檔</p></blockquote>
 <ul>
 <li>Unary RPC: 如同一般 function call 一樣，client 端發出一個 request，server 收到後回覆一個 response</li>
 <li>Server streaming RPC: client 端發出一個 request 並取得一個 stream 來讀取 server 回傳的一系列 messages</li>

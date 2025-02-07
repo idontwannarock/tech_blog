@@ -523,8 +523,7 @@
 <p>這就很奇怪啊，照理來說前一階段應該就把全部的 dependencies 都下載下來啦，畢竟這就是 <code>dependency:go-offline</code> 這個 goal 的目的不是嗎？</p>
 <p>但很抱歉，你要說這是 plugin 的 bug 或是原本的功能都好，總之，它只會下載 <code>pom.xml</code> 上面有明示列出的 artifact，而且甚至連 <code>&lt;plugin&gt;</code> 標籤內部的 <code>&lt;dependencies&gt;</code> 標籤當中的 artifact 都不會下載</p>
 <blockquote>
-<p>這個 issue 從 2007 年開到現在都還沒解決，可以參考 <a href="https://issues.apache.org/jira/browse/MDEP-82">MDEP-82</a></p>
-</blockquote>
+<p>這個 issue 從 2007 年開到現在都還沒解決，可以參考 <a href="https://issues.apache.org/jira/browse/MDEP-82">MDEP-82</a></p></blockquote>
 <p>再加上有些 maven 預設 lifecycle 或 goal 需要動態載入的 dependencies 也並不在下載的目標當中，就會造成在第二階段真正開始建置專案的時候會需要下載缺少的 dependencies</p>
 <p>某些 plugin 的 dependencies 甚至不是列在 <code>pom.xml</code> 當中，而是利用 class loader 的方式超級動態載入，這也是 <code>maven-dependency-plugin</code> 無能為力的部分</p>
 <p>如果建置過程都有連網還好，有些 CI/CD 的流程在建置這個階段是會跟網路隔離的，或是會利用建置這個步驟順便做測試，但為了測試環境的「乾淨」而限制連網功能，這個情況就很尷尬了，各種建置失敗</p>

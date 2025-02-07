@@ -403,8 +403,7 @@
 <p><code>git worktree</code> 指令是在 2.5 版 2015 年加入的，所以我只研究 <code>git worktree</code> 的作法</p>
 <p>首先先把 public 資料夾加入 .gitignore 檔，讓 public 資料夾的內容都不會被 commit 到放原始檔的 main 分支</p>
 <blockquote>
-<p>btw，之前 GitHub 為了政治正確，所以把行之有年的 master 分支名稱都改為 main，所以你看到官網的文件都只會看到 main 分支，指的就是 master。但其實你要用 master 也沒有不行的樣子</p>
-</blockquote>
+<p>btw，之前 GitHub 為了政治正確，所以把行之有年的 master 分支名稱都改為 main，所以你看到官網的文件都只會看到 main 分支，指的就是 master。但其實你要用 master 也沒有不行的樣子</p></blockquote>
 <p>接著建立要放靜態網站的分支 gh-pages (名稱應該也是隨意)，但要將其建立為 orphan branch 以免將原始碼帶進去，並建立一個空的 commit 並設定對應 GitHub 的遠端分支</p>
 <div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-shell" data-lang="shell"><span style="display:flex;"><span>git checkout --orphan gh-pages
 </span></span><span style="display:flex;"><span>git reset --hard

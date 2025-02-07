@@ -483,8 +483,7 @@
 <p><em>Image from <a href="https://switches-sensors.zf.com/energy-harvesting-faqs/what-is-the-difference-between-unidirectional-and-bidirectional-communication/#">ZF</a></em></p>
 <p>full-duplex 全雙工的意思是可以雙向「同時」傳送 data，也就是兩端都可以「同時」傳送以及接收 data；相對的還有 half-duplex (semiduplex) 半雙工，也就是容許雙向傳送 data，但不允許同時進行；最後還有相對於 duplex 雙工的 simplex 單工，定義上就是在特定時間底下只能單向傳送 data</p>
 <blockquote>
-<p>這邊討論的最多只到 Transport Layer 的邏輯傳輸，並不是討論 Data Link Layer 的傳輸，所以不討論分時雙工 (Time-Division Duplexing, TDD) 或分頻雙工 (Frequency-Division Duplexing, FDD)</p>
-</blockquote>
+<p>這邊討論的最多只到 Transport Layer 的邏輯傳輸，並不是討論 Data Link Layer 的傳輸，所以不討論分時雙工 (Time-Division Duplexing, TDD) 或分頻雙工 (Frequency-Division Duplexing, FDD)</p></blockquote>
 <p><img src="https://res.cloudinary.com/dcvgho2zc/image/upload/v1640570115/Tech%20Blog/simplex-half-duplex-full-duplex.jpg" alt="Simplex, half-duplex and full-duplex"></p>
 <p><em>Image from <a href="https://www.nicerf.com/articles/detail/single-and-duplex-wireless-module.html">G-NiceRF</a></em></p>
 <p>再來是 unsolicited communication，在網路通訊來說，就是指可以不經對方 request 就主動發出 message 給對方，或者說發出的 message 不是為了回覆對方某一個 request；相對應的就是基本的 request-response 模型</p>
@@ -500,8 +499,7 @@
 <p>不過這點只是需要知道就好，畢竟我們不見得需要真正的 server push，只要能達成效果就好，除非有特別的應用場景</p>
 <p>真的要達到 bidirectional、full-duplex、unsolicited communication，應該還是要考慮 WebSocket 或 WebRTC 這類的技術</p>
 <blockquote>
-<p>WebSocket 雖然一開始是利用 HTTP 建立連線，但同時也會「升級」成為別的通訊協定，所以這邊並不把 WebSocket 列入基於 HTTP 的技術來討論</p>
-</blockquote>
+<p>WebSocket 雖然一開始是利用 HTTP 建立連線，但同時也會「升級」成為別的通訊協定，所以這邊並不把 WebSocket 列入基於 HTTP 的技術來討論</p></blockquote>
 <h2 id="參考連結">參考連結</h2>
 <ul>
 <li><a href="https://en.wikipedia.org/wiki/Simplex_communication">Simplex communication</a></li>

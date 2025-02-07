@@ -515,8 +515,7 @@ root_type FlatPassenger;
 <p>其實在撰寫的過程可以感受到 Gson 的程式碼撰寫絕對是最容易的，即使是 mapper 也幾乎不用額外多寫太多程式碼，portable 方面絕對是最強的，被廣泛使用還是有道理的</p>
 <p>而 ProtoBuf 也是相對成熟的 library，雖然也不需要寫太多額外的程式碼，但它支援的資料型別就少很多了，像是不支援日期相關型別或 <code>BigDecimal</code> 這種</p>
 <blockquote>
-<p>當然，JSON 其實原生支援的型別也不多，但成熟的 library 讓你不需要考慮資料型別問題，幾乎 Java 所有原生型別全都能夠順利序列化再反序列化；而 ProtoBuf 轉換的程式碼是由工具自動產生，所以有很多型別是不可能會自動產生的</p>
-</blockquote>
+<p>當然，JSON 其實原生支援的型別也不多，但成熟的 library 讓你不需要考慮資料型別問題，幾乎 Java 所有原生型別全都能夠順利序列化再反序列化；而 ProtoBuf 轉換的程式碼是由工具自動產生，所以有很多型別是不可能會自動產生的</p></blockquote>
 <p>至於 FlatBuf 則是三者當中最不成熟的 library，沒辦法，這個專案 2014 才開始，不像 ProtoBuf 是從 2001 開始</p>
 <p>FlatBuf 在序列化上是相對最麻煩的一個，因為它其實在設定物件各 properties 的過程中就一併開始轉換二進制格式的機制；反序列化後的使用上倒是與其他 library 相同，可以直接從從物件取得 property，但受限於它原生支援的資料型別比 ProtoBuf 更少，所以不做 mapping 的話就更難使用一點</p>
 <p>最後，附上測試專案的程式碼以供參考</p>

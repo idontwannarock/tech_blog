@@ -409,8 +409,7 @@
 </ol>
 <p>身為一個 Java 後端工程師，今天要來討論如何在 Spring Boot 的後端專案進行 general 的 XSS 防範。</p>
 <blockquote>
-<p>請還是注意，general 的手段並不能很良好的防範 XSS 攻擊，而只是提供一個基本程度的防範。</p>
-</blockquote>
+<p>請還是注意，general 的手段並不能很良好的防範 XSS 攻擊，而只是提供一個基本程度的防範。</p></blockquote>
 <h2 id="csp-header">CSP Header</h2>
 <p>如果專案有整合 Spring Security，Spring Security 原生就已經預設在 response header 中加入 <code>X-XSS-Protection: 1; mode=block</code>，但因為 CSP 需要自行設定資源允許的來源，所以 Spring Security 並沒有預設，需要在 <code>SecurityFilterChain</code> 當中設定，舉例如下：</p>
 <div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-java" data-lang="java"><span style="display:flex;"><span>@Bean

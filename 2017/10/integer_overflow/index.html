@@ -483,14 +483,12 @@
 <h1 id="整數儲存方式">整數儲存方式</h1>
 <p>以 <code>byte</code> 這個整數型態來舉例，儲存 <code>1</code> 這個正整數就是先轉成二進制，也就是 <code>0000 0001</code> 來存進 <code>byte</code> 的 8 bytes 空間，大概可以表達成這樣：</p>
 <blockquote>
-<p>| 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |</p>
-</blockquote>
+<p>| 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |</p></blockquote>
 <p>八個位元，剛好一個位元存一個二進位數字。</p>
 <p>接著就可以來考慮負整數該怎麼辦了。</p>
 <p>一般來說，不論是 <code>byte</code>、<code>short</code>、<code>int</code> 還是 <code>long</code>，都是用最左邊的那一個位元來儲存正負號，<code>0</code> 是正號，<code>1</code> 是負號。所以如果是負整數 <code>-1</code> 就要表達成這樣：</p>
 <blockquote>
-<p>| 1 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |</p>
-</blockquote>
+<p>| 1 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |</p></blockquote>
 <h1 id="1s-補數">1&rsquo;s 補數</h1>
 <p>但是，這樣表達會有另外一個問題。</p>
 <p>用最左邊的位元來儲存正負號，所以實際上八位元的空間只有七位元的空間能用來儲存數字，也就是只表示 2<sup>15</sup> 種狀況，加上我們現在已經考慮到負整數，所以理論上範圍就會變成 -2<sup>15</sup>~2<sup>15</sup> 這個範圍。</p>

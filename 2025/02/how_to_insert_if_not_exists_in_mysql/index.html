@@ -1,0 +1,1347 @@
+<!DOCTYPE html>
+<html><head>
+<title>如何在 MySQL 中進行 insert if not exists</title>
+
+
+
+
+<meta charset="utf-8">
+<meta name="X-UA-Compatible" content="IE=edge">
+<meta name="google-site-verification" content="G-JP1V61PPMJ">
+<meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" name="viewport">
+<meta content="telephone=no" name="format-detection">
+<meta name="description" content="探討在 MySQL 當中如何用單一 statement 進行 insert if not exists">
+<meta name="renderer" content="webkit">
+<meta name="theme-color" content="#ffffff">
+
+
+
+
+
+
+
+
+
+
+
+      <script async src="https://www.googletagmanager.com/gtag/js?id=G-JP1V61PPMJ"></script>
+      <script>
+        var doNotTrack = false;
+        if ( false ) {
+          var dnt = (navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack);
+          var doNotTrack = (dnt == "1" || dnt == "yes");
+        }
+        if (!doNotTrack) {
+          window.dataLayer = window.dataLayer || [];
+          function gtag(){dataLayer.push(arguments);}
+          gtag('js', new Date());
+          gtag('config', 'G-JP1V61PPMJ');
+        }
+      </script>
+
+
+
+
+
+
+  
+
+
+
+
+
+
+      <script src="https://blog.idontwannarock.dev/js/toc.js"></script>
+    
+    <link type="text/css" rel="stylesheet" href="https://blog.idontwannarock.dev/vendor/css/bootstrap.min.css">
+
+<link rel="stylesheet" href="https://blog.idontwannarock.dev/scss/dark-mode.min.cb53f1bee2b8900cb4f082afbf00175d6618f281cf9a2fe8619e3b52d20b5721.css" integrity="sha256-y1PxvuK4kAy08IKvvwAXXWYY8oHPmi/oYZ47UtILVyE=" media="screen">
+
+
+<link rel="stylesheet"
+          href="https://fonts.googleapis.com/css?family=Material+Icons">
+
+
+
+<script defer
+	src='https://static.cloudflareinsights.com/beacon.min.js'
+	data-cf-beacon='{"token": "69057f1b88b9492497f024d5a9bdc22e"}'>
+</script>
+
+
+
+
+
+
+
+
+
+
+
+
+<script src="https://cdn.jsdelivr.net/npm/vue-disqus@3/dist/vue-disqus.js"></script>
+
+
+
+
+
+
+
+
+</head>
+<body>
+    	<div id="app"><div class="single-column-drawer-container" id="drawer"
+     v-bind:class="{ 'single-column-drawer-container-active': isDrawerOpen }">
+    <div class="drawer-content">
+        <div class="drawer-menu">
+            
+            
+            
+                
+                
+                
+                
+                
+                <a class="a-block drawer-menu-item false" href="https://blog.idontwannarock.dev/posts">
+                    Archive
+                </a>
+                
+            
+                
+                
+                
+                
+                
+                <a class="a-block drawer-menu-item false" href="https://blog.idontwannarock.dev/categories">
+                    Categories
+                </a>
+                
+            
+                
+                
+                
+                
+                
+                <a class="a-block drawer-menu-item false" href="https://blog.idontwannarock.dev/tags">
+                    Tags
+                </a>
+                
+            
+                
+                
+                
+                
+                
+                <a class="a-block drawer-menu-item false" href="https://blog.idontwannarock.dev/about">
+                    About
+                </a>
+                
+            
+                
+                
+                
+                
+                
+                <a class="a-block drawer-menu-item false" href="https://blog.idontwannarock.dev/index.xml">
+                    RSS Feed
+                </a>
+                
+            
+            
+            <div class="toc">
+
+
+	<div class="toc-content">
+	
+		
+		
+		
+		<center>- CATALOG -</center>
+		
+		
+		<ul>
+			
+				
+				
+					
+						
+						
+						
+						
+							
+								
+									<ul>
+								
+							
+						
+						
+							<li>
+								<a href="#%e6%ba%96%e5%82%99" class="nav-準備">
+									準備
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+						
+							<li>
+								<a href="#insert" class="nav-insert">
+									insert
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+						
+							<li>
+								<a href="#insert-ignore" class="nav-insert-ignore">
+									insert ignore
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+						
+							<li>
+								<a href="#replace" class="nav-replace">
+									replace
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+						
+							<li>
+								<a href="#insert--on-duplicate-key-update" class="nav-insert--on-duplicate-key-update">
+									insert … on duplicate key update
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+							
+								
+									<ul>
+								
+							
+						
+						
+							<li>
+								<a href="#insert--on-duplicate-key-update-id--id" class="nav-insert--on-duplicate-key-update-id--id">
+									insert … on duplicate key update id = id
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+							
+								</ul>
+							
+						
+						
+						
+							<li>
+								<a href="#insert--select--not-exists" class="nav-insert--select--not-exists">
+									insert … select … not exists
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+							
+								
+									<ul>
+								
+							
+						
+						
+							<li>
+								<a href="#insert--select--not-exists--on-duplicate-key" class="nav-insert--select--not-exists--on-duplicate-key">
+									insert … select … not exists … on duplicate key
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+						
+							<li>
+								<a href="#insert-ignore--select--not-exists" class="nav-insert-ignore--select--not-exists">
+									insert ignore … select … not exists
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+							
+								</ul>
+							
+						
+						
+						
+							<li>
+								<a href="#conclusion" class="nav-conclusion">
+									Conclusion
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+						
+							<li>
+								<a href="#reference" class="nav-reference">
+									Reference
+								</a>
+							</li>
+						
+						
+					
+				
+			
+		</ul>
+	</div>
+
+</div>
+            
+        </div>
+    </div>
+</div>
+<transition name="fade">
+    <div id="drawer-mask" v-bind:class="{ 'single-column-drawer-mask': mounted }" v-if="isDrawerOpen" v-on:click="toggleDrawer"></div>
+</transition>
+<nav id="navBar" class="navbar sticky-top navbar-light single-column-nav-container">
+    <div id="navBackground" class="nav-background"></div>
+    <div class="container container-narrow nav-content">
+        <button id="nav_dropdown_btn" class="nav-dropdown-toggle" type="button" v-on:click="toggleDrawer">
+            <i class="material-icons">
+                menu
+            </i>
+        </button>
+        <a id="navTitle" class="navbar-brand" href="https://blog.idontwannarock.dev/">
+            Howard Tech Note
+        </a>
+        
+        <button type="button" class="nav-darkmode-toggle" id="darkModeToggleButton2">
+            <i class="material-icons" id="darkModeToggleIcon2">
+                dark_mode
+            </i>
+        </button>
+        
+    </div>
+</nav>
+<div class="single-column-header-container" id="pageHead"
+     v-bind:style="{ transform: 'translateZ(0px) translateY('+.3*scrollY+'px)', opacity: 1-navOpacity }">
+    <a href="https://blog.idontwannarock.dev/">
+        <div class="single-column-header-title">Howard Tech Note</div>
+        
+        <div class="single-column-header-subtitle">Share * Record * Program</div>
+        
+
+    </a>
+</div>
+
+            <div id="content">
+                <div id="streamContainer" class="stream-container">
+
+    <div class="post-list-container post-list-container-shadow">
+        <div class="post">
+            
+            
+            
+
+            <div class="post-head-wrapper-text-only"
+                
+            >
+                <div class="post-title">
+                    如何在 MySQL 中進行 insert if not exists
+                    
+                    <div class="post-subtitle">
+                        探討在 MySQL 當中如何用單一 statement 進行 insert if not exists
+                    </div>
+                    
+                    <div class="post-meta">
+                        
+                        <time itemprop="datePublished">
+                            2025-02-07 09:39
+                        </time>
+                        
+
+                        
+                            <i class="material-icons" style="">folder</i>
+                                <a href="https://blog.idontwannarock.dev/categories/implementation">Implementation</a>
+                                &nbsp;
+                        
+
+                        
+                            <i class="material-icons" style="">label</i>
+                            
+                                <a href="https://blog.idontwannarock.dev/tags/mysql">mysql</a>
+                                &nbsp;
+                            
+                                <a href="https://blog.idontwannarock.dev/tags/insert">insert</a>
+                                &nbsp;
+                            
+                        
+                        
+                    </div>
+                </div>
+            </div>
+            
+            <div class="post-body-wrapper">
+                
+                <div class="post-body" v-pre>
+                
+                    <p>相信很多 Developer 都會真心的 <em><del>幹譙</del></em> 懷疑為什麼 MySQL 經過這麼多年都沒有 PostgreSQL 的 <code>INSERT … ON DUPLICATE KEY DO NOTHING</code> 語法，偏偏這真的是一個很常會碰到的使用情境</p>
+<p>所以接下來探討一些單一 SQL 語法方面可行的做法</p>
+<h2 id="準備">準備</h2>
+<p>環境為 MySQL server 8.0.37</p>
+<p>首先建立以下 table (只是為了情境驗證，合理性就先不計較)</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-sql" data-lang="sql"><span style="display:flex;"><span><span style="color:#ff79c6">drop</span> <span style="color:#ff79c6">table</span> <span style="color:#ff79c6">if</span> <span style="color:#ff79c6">exists</span> test_user;
+</span></span><span style="display:flex;"><span><span style="color:#ff79c6">create</span> <span style="color:#ff79c6">table</span> <span style="color:#ff79c6">if</span> <span style="color:#ff79c6">not</span> <span style="color:#ff79c6">exists</span> test_user (
+</span></span><span style="display:flex;"><span>    id <span style="color:#8be9fd;font-style:italic">int</span> unsigned auto_increment <span style="color:#ff79c6">primary</span> <span style="color:#ff79c6">key</span>,
+</span></span><span style="display:flex;"><span>    user_id <span style="color:#8be9fd;font-style:italic">int</span> unsigned <span style="color:#ff79c6">not</span> <span style="color:#ff79c6">null</span>,
+</span></span><span style="display:flex;"><span>    is_active <span style="color:#8be9fd;font-style:italic">boolean</span> <span style="color:#ff79c6">not</span> <span style="color:#ff79c6">null</span> <span style="color:#ff79c6">default</span> <span style="color:#bd93f9">1</span>,
+</span></span><span style="display:flex;"><span>    <span style="color:#ff79c6">constraint</span> uk_user_id_user <span style="color:#ff79c6">unique</span> (user_id)
+</span></span><span style="display:flex;"><span>) engine <span style="color:#ff79c6">=</span> innodb charset <span style="color:#ff79c6">=</span> utf8mb4 <span style="color:#ff79c6">collate</span> <span style="color:#ff79c6">=</span> utf8mb4_0900_ai_ci;
+</span></span></code></pre></div><p>情境就是要在表中新增一筆 user 紀錄，如果該 user id 已經存在，就不做任何變更</p>
+<blockquote>
+<p>每個情境測試前都會重新建立整個 table，以避免其他問題影響測試結果</p>
+<p>取得 auto increment 數字前，可能需要 <code>analyze table</code> 以校正數據</p></blockquote>
+<h2 id="insert"><code>insert</code></h2>
+<p>第一個方法就是直接 <code>insert</code></p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-sql" data-lang="sql"><span style="display:flex;"><span>mysql<span style="color:#ff79c6">&gt;</span> <span style="color:#ff79c6">insert</span> <span style="color:#ff79c6">into</span> test_user (user_id) value (<span style="color:#bd93f9">1</span>);
+</span></span><span style="display:flex;"><span>Query OK, <span style="color:#bd93f9">1</span> <span style="color:#ff79c6">row</span> affected (<span style="color:#bd93f9">0</span>.<span style="color:#bd93f9">01</span> sec)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>mysql<span style="color:#ff79c6">&gt;</span> <span style="color:#ff79c6">select</span> <span style="color:#ff79c6">*</span> <span style="color:#ff79c6">from</span> test_user;
+</span></span><span style="display:flex;"><span><span style="color:#ff79c6">+</span><span style="color:#6272a4">----+---------+-----------+
+</span></span></span><span style="display:flex;"><span><span style="color:#6272a4"></span><span style="color:#ff79c6">|</span> id <span style="color:#ff79c6">|</span> user_id <span style="color:#ff79c6">|</span> is_active <span style="color:#ff79c6">|</span>
+</span></span><span style="display:flex;"><span><span style="color:#ff79c6">+</span><span style="color:#6272a4">----+---------+-----------+
+</span></span></span><span style="display:flex;"><span><span style="color:#6272a4"></span><span style="color:#ff79c6">|</span>  <span style="color:#bd93f9">1</span> <span style="color:#ff79c6">|</span>       <span style="color:#bd93f9">1</span> <span style="color:#ff79c6">|</span>         <span style="color:#bd93f9">1</span> <span style="color:#ff79c6">|</span>
+</span></span><span style="display:flex;"><span><span style="color:#ff79c6">+</span><span style="color:#6272a4">----+---------+-----------+
+</span></span></span><span style="display:flex;"><span><span style="color:#6272a4"></span><span style="color:#bd93f9">1</span> <span style="color:#ff79c6">row</span> <span style="color:#ff79c6">in</span> <span style="color:#ff79c6">set</span> (<span style="color:#bd93f9">0</span>.<span style="color:#bd93f9">00</span> sec)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>mysql<span style="color:#ff79c6">&gt;</span> <span style="color:#ff79c6">select</span> <span style="color:#ff79c6">table_name</span>, auto_increment <span style="color:#ff79c6">from</span> information_schema.tables <span style="color:#ff79c6">where</span> table_schema <span style="color:#ff79c6">=</span> <span style="color:#ff79c6">database</span>() <span style="color:#ff79c6">and</span> <span style="color:#ff79c6">table_name</span> <span style="color:#ff79c6">=</span> <span style="color:#f1fa8c">&#39;test_user&#39;</span>;
+</span></span><span style="display:flex;"><span><span style="color:#ff79c6">+</span><span style="color:#6272a4">------------+----------------+
+</span></span></span><span style="display:flex;"><span><span style="color:#6272a4"></span><span style="color:#ff79c6">|</span> <span style="color:#ff79c6">TABLE_NAME</span> <span style="color:#ff79c6">|</span> AUTO_INCREMENT <span style="color:#ff79c6">|</span>
+</span></span><span style="display:flex;"><span><span style="color:#ff79c6">+</span><span style="color:#6272a4">------------+----------------+
+</span></span></span><span style="display:flex;"><span><span style="color:#6272a4"></span><span style="color:#ff79c6">|</span> test_user  <span style="color:#ff79c6">|</span>              <span style="color:#bd93f9">2</span> <span style="color:#ff79c6">|</span>
+</span></span><span style="display:flex;"><span><span style="color:#ff79c6">+</span><span style="color:#6272a4">------------+----------------+
+</span></span></span><span style="display:flex;"><span><span style="color:#6272a4"></span><span style="color:#bd93f9">1</span> <span style="color:#ff79c6">row</span> <span style="color:#ff79c6">in</span> <span style="color:#ff79c6">set</span> (<span style="color:#bd93f9">0</span>.<span style="color:#bd93f9">00</span> sec)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>mysql<span style="color:#ff79c6">&gt;</span> <span style="color:#ff79c6">insert</span> <span style="color:#ff79c6">into</span> test_user (user_id) value (<span style="color:#bd93f9">1</span>);
+</span></span><span style="display:flex;"><span>ERROR <span style="color:#bd93f9">1062</span> (<span style="color:#bd93f9">23000</span>): Duplicate entry <span style="color:#f1fa8c">&#39;1&#39;</span> <span style="color:#ff79c6">for</span> <span style="color:#ff79c6">key</span> <span style="color:#f1fa8c">&#39;test_user.uk_user_id_user&#39;</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>mysql<span style="color:#ff79c6">&gt;</span> <span style="color:#ff79c6">select</span> <span style="color:#ff79c6">*</span> <span style="color:#ff79c6">from</span> test_user;
+</span></span><span style="display:flex;"><span><span style="color:#ff79c6">+</span><span style="color:#6272a4">----+---------+-----------+
+</span></span></span><span style="display:flex;"><span><span style="color:#6272a4"></span><span style="color:#ff79c6">|</span> id <span style="color:#ff79c6">|</span> user_id <span style="color:#ff79c6">|</span> is_active <span style="color:#ff79c6">|</span>
+</span></span><span style="display:flex;"><span><span style="color:#ff79c6">+</span><span style="color:#6272a4">----+---------+-----------+
+</span></span></span><span style="display:flex;"><span><span style="color:#6272a4"></span><span style="color:#ff79c6">|</span>  <span style="color:#bd93f9">1</span> <span style="color:#ff79c6">|</span>       <span style="color:#bd93f9">1</span> <span style="color:#ff79c6">|</span>         <span style="color:#bd93f9">1</span> <span style="color:#ff79c6">|</span>
+</span></span><span style="display:flex;"><span><span style="color:#ff79c6">+</span><span style="color:#6272a4">----+---------+-----------+
+</span></span></span><span style="display:flex;"><span><span style="color:#6272a4"></span><span style="color:#bd93f9">1</span> <span style="color:#ff79c6">row</span> <span style="color:#ff79c6">in</span> <span style="color:#ff79c6">set</span> (<span style="color:#bd93f9">0</span>.<span style="color:#bd93f9">00</span> sec)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>mysql<span style="color:#ff79c6">&gt;</span> <span style="color:#ff79c6">select</span> <span style="color:#ff79c6">table_name</span>, auto_increment <span style="color:#ff79c6">from</span> information_schema.tables <span style="color:#ff79c6">where</span> table_schema <span style="color:#ff79c6">=</span> <span style="color:#ff79c6">database</span>() <span style="color:#ff79c6">and</span> <span style="color:#ff79c6">table_name</span> <span style="color:#ff79c6">=</span> <span style="color:#f1fa8c">&#39;test_user&#39;</span>;
+</span></span><span style="display:flex;"><span><span style="color:#ff79c6">+</span><span style="color:#6272a4">------------+----------------+
+</span></span></span><span style="display:flex;"><span><span style="color:#6272a4"></span><span style="color:#ff79c6">|</span> <span style="color:#ff79c6">TABLE_NAME</span> <span style="color:#ff79c6">|</span> AUTO_INCREMENT <span style="color:#ff79c6">|</span>
+</span></span><span style="display:flex;"><span><span style="color:#ff79c6">+</span><span style="color:#6272a4">------------+----------------+
+</span></span></span><span style="display:flex;"><span><span style="color:#6272a4"></span><span style="color:#ff79c6">|</span> test_user  <span style="color:#ff79c6">|</span>              <span style="color:#bd93f9">3</span> <span style="color:#ff79c6">|</span>
+</span></span><span style="display:flex;"><span><span style="color:#ff79c6">+</span><span style="color:#6272a4">------------+----------------+
+</span></span></span><span style="display:flex;"><span><span style="color:#6272a4"></span><span style="color:#bd93f9">1</span> <span style="color:#ff79c6">row</span> <span style="color:#ff79c6">in</span> <span style="color:#ff79c6">set</span> (<span style="color:#bd93f9">0</span>.<span style="color:#bd93f9">00</span> sec)
+</span></span></code></pre></div><p>可以看到功能完全可以達成</p>
+<p>但是有以下兩個問題</p>
+<ul>
+<li>第二次以後的 <code>insert</code> 就會直接噴 duplicate key error</li>
+<li>即使第二次實際上並沒有變更資料，auto increment 還是會 +1</li>
+</ul>
+<p>因為 <code>insert</code> 實際上會先按照原有的 auto increment 準備一個新的 row，然後 auto increment 會 +1，接著在檢查到 duplicate key 後，直接拋 duplicate key error 並 reject statement 的執行，auto increment 並不會 rollback</p>
+<p>如果這些問題可以處理或忽略，也不妨考慮這個方式，因為語意上比較明確，也可以讓 client 針對各種可能拋出的錯誤做不同的處理</p>
+<p>但有時候在某些考量下，例如 Java 的 catch exception 有其 overhead，還是希望有不會 raise duplicate key error 的作法</p>
+<h2 id="insert-ignore"><code>insert ignore</code></h2>
+<p>如果不希望 raise duplicate key error，首先可以考慮 <code>insert ignore</code></p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-sql" data-lang="sql"><span style="display:flex;"><span>mysql<span style="color:#ff79c6">&gt;</span> <span style="color:#ff79c6">insert</span> <span style="color:#ff79c6">ignore</span> <span style="color:#ff79c6">into</span> test_user (user_id) value (<span style="color:#bd93f9">1</span>);
+</span></span><span style="display:flex;"><span>Query OK, <span style="color:#bd93f9">1</span> <span style="color:#ff79c6">row</span> affected (<span style="color:#bd93f9">0</span>.<span style="color:#bd93f9">01</span> sec)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>mysql<span style="color:#ff79c6">&gt;</span> <span style="color:#ff79c6">select</span> <span style="color:#ff79c6">*</span> <span style="color:#ff79c6">from</span> test_user;
+</span></span><span style="display:flex;"><span><span style="color:#ff79c6">+</span><span style="color:#6272a4">----+---------+-----------+
+</span></span></span><span style="display:flex;"><span><span style="color:#6272a4"></span><span style="color:#ff79c6">|</span> id <span style="color:#ff79c6">|</span> user_id <span style="color:#ff79c6">|</span> is_active <span style="color:#ff79c6">|</span>
+</span></span><span style="display:flex;"><span><span style="color:#ff79c6">+</span><span style="color:#6272a4">----+---------+-----------+
+</span></span></span><span style="display:flex;"><span><span style="color:#6272a4"></span><span style="color:#ff79c6">|</span>  <span style="color:#bd93f9">1</span> <span style="color:#ff79c6">|</span>       <span style="color:#bd93f9">1</span> <span style="color:#ff79c6">|</span>         <span style="color:#bd93f9">1</span> <span style="color:#ff79c6">|</span>
+</span></span><span style="display:flex;"><span><span style="color:#ff79c6">+</span><span style="color:#6272a4">----+---------+-----------+
+</span></span></span><span style="display:flex;"><span><span style="color:#6272a4"></span><span style="color:#bd93f9">1</span> <span style="color:#ff79c6">row</span> <span style="color:#ff79c6">in</span> <span style="color:#ff79c6">set</span> (<span style="color:#bd93f9">0</span>.<span style="color:#bd93f9">00</span> sec)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>mysql<span style="color:#ff79c6">&gt;</span> <span style="color:#ff79c6">select</span> <span style="color:#ff79c6">table_name</span>, auto_increment <span style="color:#ff79c6">from</span> information_schema.tables <span style="color:#ff79c6">where</span> table_schema <span style="color:#ff79c6">=</span> <span style="color:#ff79c6">database</span>() <span style="color:#ff79c6">and</span> <span style="color:#ff79c6">table_name</span> <span style="color:#ff79c6">=</span> <span style="color:#f1fa8c">&#39;test_user&#39;</span>;
+</span></span><span style="display:flex;"><span><span style="color:#ff79c6">+</span><span style="color:#6272a4">------------+----------------+
+</span></span></span><span style="display:flex;"><span><span style="color:#6272a4"></span><span style="color:#ff79c6">|</span> <span style="color:#ff79c6">TABLE_NAME</span> <span style="color:#ff79c6">|</span> AUTO_INCREMENT <span style="color:#ff79c6">|</span>
+</span></span><span style="display:flex;"><span><span style="color:#ff79c6">+</span><span style="color:#6272a4">------------+----------------+
+</span></span></span><span style="display:flex;"><span><span style="color:#6272a4"></span><span style="color:#ff79c6">|</span> test_user  <span style="color:#ff79c6">|</span>              <span style="color:#bd93f9">2</span> <span style="color:#ff79c6">|</span>
+</span></span><span style="display:flex;"><span><span style="color:#ff79c6">+</span><span style="color:#6272a4">------------+----------------+
+</span></span></span><span style="display:flex;"><span><span style="color:#6272a4"></span><span style="color:#bd93f9">1</span> <span style="color:#ff79c6">row</span> <span style="color:#ff79c6">in</span> <span style="color:#ff79c6">set</span> (<span style="color:#bd93f9">0</span>.<span style="color:#bd93f9">00</span> sec)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>mysql<span style="color:#ff79c6">&gt;</span> <span style="color:#ff79c6">insert</span> <span style="color:#ff79c6">ignore</span> <span style="color:#ff79c6">into</span> test_user (user_id) value (<span style="color:#bd93f9">1</span>);
+</span></span><span style="display:flex;"><span>Query OK, <span style="color:#bd93f9">0</span> <span style="color:#ff79c6">rows</span> affected, <span style="color:#bd93f9">1</span> warning (<span style="color:#bd93f9">0</span>.<span style="color:#bd93f9">00</span> sec)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>mysql<span style="color:#ff79c6">&gt;</span> <span style="color:#ff79c6">show</span> warnings;
+</span></span><span style="display:flex;"><span><span style="color:#ff79c6">+</span><span style="color:#6272a4">---------+------+---------------------------------------------------------+
+</span></span></span><span style="display:flex;"><span><span style="color:#6272a4"></span><span style="color:#ff79c6">|</span> <span style="color:#ff79c6">Level</span>   <span style="color:#ff79c6">|</span> Code <span style="color:#ff79c6">|</span> Message                                                 <span style="color:#ff79c6">|</span>
+</span></span><span style="display:flex;"><span><span style="color:#ff79c6">+</span><span style="color:#6272a4">---------+------+---------------------------------------------------------+
+</span></span></span><span style="display:flex;"><span><span style="color:#6272a4"></span><span style="color:#ff79c6">|</span> Warning <span style="color:#ff79c6">|</span> <span style="color:#bd93f9">1062</span> <span style="color:#ff79c6">|</span> Duplicate entry <span style="color:#f1fa8c">&#39;1&#39;</span> <span style="color:#ff79c6">for</span> <span style="color:#ff79c6">key</span> <span style="color:#f1fa8c">&#39;test_user.uk_user_id_user&#39;</span> <span style="color:#ff79c6">|</span>
+</span></span><span style="display:flex;"><span><span style="color:#ff79c6">+</span><span style="color:#6272a4">---------+------+---------------------------------------------------------+
+</span></span></span><span style="display:flex;"><span><span style="color:#6272a4"></span><span style="color:#bd93f9">1</span> <span style="color:#ff79c6">row</span> <span style="color:#ff79c6">in</span> <span style="color:#ff79c6">set</span> (<span style="color:#bd93f9">0</span>.<span style="color:#bd93f9">00</span> sec)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>mysql<span style="color:#ff79c6">&gt;</span> <span style="color:#ff79c6">select</span> <span style="color:#ff79c6">*</span> <span style="color:#ff79c6">from</span> test_user;
+</span></span><span style="display:flex;"><span><span style="color:#ff79c6">+</span><span style="color:#6272a4">----+---------+-----------+
+</span></span></span><span style="display:flex;"><span><span style="color:#6272a4"></span><span style="color:#ff79c6">|</span> id <span style="color:#ff79c6">|</span> user_id <span style="color:#ff79c6">|</span> is_active <span style="color:#ff79c6">|</span>
+</span></span><span style="display:flex;"><span><span style="color:#ff79c6">+</span><span style="color:#6272a4">----+---------+-----------+
+</span></span></span><span style="display:flex;"><span><span style="color:#6272a4"></span><span style="color:#ff79c6">|</span>  <span style="color:#bd93f9">1</span> <span style="color:#ff79c6">|</span>       <span style="color:#bd93f9">1</span> <span style="color:#ff79c6">|</span>         <span style="color:#bd93f9">1</span> <span style="color:#ff79c6">|</span>
+</span></span><span style="display:flex;"><span><span style="color:#ff79c6">+</span><span style="color:#6272a4">----+---------+-----------+
+</span></span></span><span style="display:flex;"><span><span style="color:#6272a4"></span><span style="color:#bd93f9">1</span> <span style="color:#ff79c6">row</span> <span style="color:#ff79c6">in</span> <span style="color:#ff79c6">set</span> (<span style="color:#bd93f9">0</span>.<span style="color:#bd93f9">00</span> sec)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>mysql<span style="color:#ff79c6">&gt;</span> <span style="color:#ff79c6">select</span> <span style="color:#ff79c6">table_name</span>, auto_increment <span style="color:#ff79c6">from</span> information_schema.tables <span style="color:#ff79c6">where</span> table_schema <span style="color:#ff79c6">=</span> <span style="color:#ff79c6">database</span>() <span style="color:#ff79c6">and</span> <span style="color:#ff79c6">table_name</span> <span style="color:#ff79c6">=</span> <span style="color:#f1fa8c">&#39;test_user&#39;</span>;
+</span></span><span style="display:flex;"><span><span style="color:#ff79c6">+</span><span style="color:#6272a4">------------+----------------+
+</span></span></span><span style="display:flex;"><span><span style="color:#6272a4"></span><span style="color:#ff79c6">|</span> <span style="color:#ff79c6">TABLE_NAME</span> <span style="color:#ff79c6">|</span> AUTO_INCREMENT <span style="color:#ff79c6">|</span>
+</span></span><span style="display:flex;"><span><span style="color:#ff79c6">+</span><span style="color:#6272a4">------------+----------------+
+</span></span></span><span style="display:flex;"><span><span style="color:#6272a4"></span><span style="color:#ff79c6">|</span> test_user  <span style="color:#ff79c6">|</span>              <span style="color:#bd93f9">3</span> <span style="color:#ff79c6">|</span>
+</span></span><span style="display:flex;"><span><span style="color:#ff79c6">+</span><span style="color:#6272a4">------------+----------------+
+</span></span></span><span style="display:flex;"><span><span style="color:#6272a4"></span><span style="color:#bd93f9">1</span> <span style="color:#ff79c6">row</span> <span style="color:#ff79c6">in</span> <span style="color:#ff79c6">set</span> (<span style="color:#bd93f9">0</span>.<span style="color:#bd93f9">00</span> sec)
+</span></span></code></pre></div><p>可以看到 <code>insert ignore</code> 的結果基本上與 <code>insert</code> 幾乎一樣，只差在原本第二次 <code>insert</code> 的時候會拋 duplicate key error，現在會被 <code>ignore</code> 關鍵字 suppress 成 duplicate key warning</p>
+<p>這在使用上需要特別小心，因為 <code>ignore</code> 是真的會把所有 error 都忽略，可能會有些你意料之外的錯誤不應該忽略的也會被忽略</p>
+<p>而且如果是 insert multiple rows 而且只有其中一些 row 有問題的狀況下，沒有問題的 rows 仍然會被成功 insert 不會整個 insert statement 被 reject，當然這個看狀況可能是缺點也有可能是優點</p>
+<h2 id="replace"><code>replace</code></h2>
+<p>不希望 raise duplicate key error 另一個選擇是採用 <code>replace</code></p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-sql" data-lang="sql"><span style="display:flex;"><span>mysql<span style="color:#ff79c6">&gt;</span> <span style="color:#ff79c6">replace</span> <span style="color:#ff79c6">into</span> test_user (user_id) value (<span style="color:#bd93f9">1</span>);
+</span></span><span style="display:flex;"><span>Query OK, <span style="color:#bd93f9">1</span> <span style="color:#ff79c6">row</span> affected (<span style="color:#bd93f9">0</span>.<span style="color:#bd93f9">01</span> sec)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>mysql<span style="color:#ff79c6">&gt;</span> <span style="color:#ff79c6">select</span> <span style="color:#ff79c6">*</span> <span style="color:#ff79c6">from</span> test_user;
+</span></span><span style="display:flex;"><span><span style="color:#ff79c6">+</span><span style="color:#6272a4">----+---------+-----------+
+</span></span></span><span style="display:flex;"><span><span style="color:#6272a4"></span><span style="color:#ff79c6">|</span> id <span style="color:#ff79c6">|</span> user_id <span style="color:#ff79c6">|</span> is_active <span style="color:#ff79c6">|</span>
+</span></span><span style="display:flex;"><span><span style="color:#ff79c6">+</span><span style="color:#6272a4">----+---------+-----------+
+</span></span></span><span style="display:flex;"><span><span style="color:#6272a4"></span><span style="color:#ff79c6">|</span>  <span style="color:#bd93f9">1</span> <span style="color:#ff79c6">|</span>       <span style="color:#bd93f9">1</span> <span style="color:#ff79c6">|</span>         <span style="color:#bd93f9">1</span> <span style="color:#ff79c6">|</span>
+</span></span><span style="display:flex;"><span><span style="color:#ff79c6">+</span><span style="color:#6272a4">----+---------+-----------+
+</span></span></span><span style="display:flex;"><span><span style="color:#6272a4"></span><span style="color:#bd93f9">1</span> <span style="color:#ff79c6">row</span> <span style="color:#ff79c6">in</span> <span style="color:#ff79c6">set</span> (<span style="color:#bd93f9">0</span>.<span style="color:#bd93f9">00</span> sec)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>mysql<span style="color:#ff79c6">&gt;</span> <span style="color:#ff79c6">select</span> <span style="color:#ff79c6">table_name</span>, auto_increment <span style="color:#ff79c6">from</span> information_schema.tables <span style="color:#ff79c6">where</span> table_schema <span style="color:#ff79c6">=</span> <span style="color:#ff79c6">database</span>() <span style="color:#ff79c6">and</span> <span style="color:#ff79c6">table_name</span> <span style="color:#ff79c6">=</span> <span style="color:#f1fa8c">&#39;test_user&#39;</span>;
+</span></span><span style="display:flex;"><span><span style="color:#ff79c6">+</span><span style="color:#6272a4">------------+----------------+
+</span></span></span><span style="display:flex;"><span><span style="color:#6272a4"></span><span style="color:#ff79c6">|</span> <span style="color:#ff79c6">TABLE_NAME</span> <span style="color:#ff79c6">|</span> AUTO_INCREMENT <span style="color:#ff79c6">|</span>
+</span></span><span style="display:flex;"><span><span style="color:#ff79c6">+</span><span style="color:#6272a4">------------+----------------+
+</span></span></span><span style="display:flex;"><span><span style="color:#6272a4"></span><span style="color:#ff79c6">|</span> test_user  <span style="color:#ff79c6">|</span>              <span style="color:#bd93f9">2</span> <span style="color:#ff79c6">|</span>
+</span></span><span style="display:flex;"><span><span style="color:#ff79c6">+</span><span style="color:#6272a4">------------+----------------+
+</span></span></span><span style="display:flex;"><span><span style="color:#6272a4"></span><span style="color:#bd93f9">1</span> <span style="color:#ff79c6">row</span> <span style="color:#ff79c6">in</span> <span style="color:#ff79c6">set</span> (<span style="color:#bd93f9">0</span>.<span style="color:#bd93f9">00</span> sec)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>mysql<span style="color:#ff79c6">&gt;</span> <span style="color:#ff79c6">replace</span> <span style="color:#ff79c6">into</span> test_user (user_id) value (<span style="color:#bd93f9">1</span>);
+</span></span><span style="display:flex;"><span>Query OK, <span style="color:#bd93f9">2</span> <span style="color:#ff79c6">rows</span> affected (<span style="color:#bd93f9">0</span>.<span style="color:#bd93f9">04</span> sec)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>mysql<span style="color:#ff79c6">&gt;</span> <span style="color:#ff79c6">select</span> <span style="color:#ff79c6">*</span> <span style="color:#ff79c6">from</span> test_user;
+</span></span><span style="display:flex;"><span><span style="color:#ff79c6">+</span><span style="color:#6272a4">----+---------+-----------+
+</span></span></span><span style="display:flex;"><span><span style="color:#6272a4"></span><span style="color:#ff79c6">|</span> id <span style="color:#ff79c6">|</span> user_id <span style="color:#ff79c6">|</span> is_active <span style="color:#ff79c6">|</span>
+</span></span><span style="display:flex;"><span><span style="color:#ff79c6">+</span><span style="color:#6272a4">----+---------+-----------+
+</span></span></span><span style="display:flex;"><span><span style="color:#6272a4"></span><span style="color:#ff79c6">|</span>  <span style="color:#bd93f9">2</span> <span style="color:#ff79c6">|</span>       <span style="color:#bd93f9">1</span> <span style="color:#ff79c6">|</span>         <span style="color:#bd93f9">1</span> <span style="color:#ff79c6">|</span>
+</span></span><span style="display:flex;"><span><span style="color:#ff79c6">+</span><span style="color:#6272a4">----+---------+-----------+
+</span></span></span><span style="display:flex;"><span><span style="color:#6272a4"></span><span style="color:#bd93f9">1</span> <span style="color:#ff79c6">row</span> <span style="color:#ff79c6">in</span> <span style="color:#ff79c6">set</span> (<span style="color:#bd93f9">0</span>.<span style="color:#bd93f9">00</span> sec)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>mysql<span style="color:#ff79c6">&gt;</span> <span style="color:#ff79c6">select</span> <span style="color:#ff79c6">table_name</span>, auto_increment <span style="color:#ff79c6">from</span> information_schema.tables <span style="color:#ff79c6">where</span> table_schema <span style="color:#ff79c6">=</span> <span style="color:#ff79c6">database</span>() <span style="color:#ff79c6">and</span> <span style="color:#ff79c6">table_name</span> <span style="color:#ff79c6">=</span> <span style="color:#f1fa8c">&#39;test_user&#39;</span>;
+</span></span><span style="display:flex;"><span><span style="color:#ff79c6">+</span><span style="color:#6272a4">------------+----------------+
+</span></span></span><span style="display:flex;"><span><span style="color:#6272a4"></span><span style="color:#ff79c6">|</span> <span style="color:#ff79c6">TABLE_NAME</span> <span style="color:#ff79c6">|</span> AUTO_INCREMENT <span style="color:#ff79c6">|</span>
+</span></span><span style="display:flex;"><span><span style="color:#ff79c6">+</span><span style="color:#6272a4">------------+----------------+
+</span></span></span><span style="display:flex;"><span><span style="color:#6272a4"></span><span style="color:#ff79c6">|</span> test_user  <span style="color:#ff79c6">|</span>              <span style="color:#bd93f9">3</span> <span style="color:#ff79c6">|</span>
+</span></span><span style="display:flex;"><span><span style="color:#ff79c6">+</span><span style="color:#6272a4">------------+----------------+
+</span></span></span><span style="display:flex;"><span><span style="color:#6272a4"></span><span style="color:#bd93f9">1</span> <span style="color:#ff79c6">row</span> <span style="color:#ff79c6">in</span> <span style="color:#ff79c6">set</span> (<span style="color:#bd93f9">0</span>.<span style="color:#bd93f9">00</span> sec)
+</span></span></code></pre></div><p>可以看到 <code>replace</code> 跟 <code>insert</code> 也幾乎一樣，只差在第二次 <code>replace</code> 時是 2 rows affected 並且不會有 error 或 warning，並且在第二次 <code>replace</code> 後，該筆資料的 <code>id</code> 被變更為 2</p>
+<p>這是因為 <code>replace</code> 實際上是先做 <code>delete</code> 再做 <code>insert</code>，因此被影響的是 2 個 row，因此也不會有 duplicate key error，因為實際 insert 的時候，原本會 duplicate 的 row 已經被刪掉了</p>
+<p><code>replace</code> 除了 id 會被改變、auto increment 還是會 kind of 浪費一個以外，最大的問題是如果 id 被其他 table 設為 foreign key 的時候，可能會產生你意料之外的結果，例如 cascade delete</p>
+<h2 id="insert--on-duplicate-key-update"><code>insert … on duplicate key update</code></h2>
+<p>但如果我們既不想 id 被改變，也不希望 raise duplicate key error/warning 呢？</p>
+<p>那可以先考慮 <code>insert ... on duplicate key update</code> 的做法</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-sql" data-lang="sql"><span style="display:flex;"><span>mysql<span style="color:#ff79c6">&gt;</span> <span style="color:#ff79c6">insert</span> <span style="color:#ff79c6">into</span> test_user (user_id) value (<span style="color:#bd93f9">1</span>) <span style="color:#ff79c6">as</span> <span style="color:#ff79c6">new</span> <span style="color:#ff79c6">on</span> duplicate <span style="color:#ff79c6">key</span> <span style="color:#ff79c6">update</span> user_id <span style="color:#ff79c6">=</span> <span style="color:#ff79c6">new</span>.user_id;
+</span></span><span style="display:flex;"><span>Query OK, <span style="color:#bd93f9">1</span> <span style="color:#ff79c6">row</span> affected (<span style="color:#bd93f9">0</span>.<span style="color:#bd93f9">05</span> sec)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>mysql<span style="color:#ff79c6">&gt;</span> <span style="color:#ff79c6">select</span> <span style="color:#ff79c6">*</span> <span style="color:#ff79c6">from</span> test_user;
+</span></span><span style="display:flex;"><span><span style="color:#ff79c6">+</span><span style="color:#6272a4">----+---------+-----------+
+</span></span></span><span style="display:flex;"><span><span style="color:#6272a4"></span><span style="color:#ff79c6">|</span> id <span style="color:#ff79c6">|</span> user_id <span style="color:#ff79c6">|</span> is_active <span style="color:#ff79c6">|</span>
+</span></span><span style="display:flex;"><span><span style="color:#ff79c6">+</span><span style="color:#6272a4">----+---------+-----------+
+</span></span></span><span style="display:flex;"><span><span style="color:#6272a4"></span><span style="color:#ff79c6">|</span>  <span style="color:#bd93f9">1</span> <span style="color:#ff79c6">|</span>       <span style="color:#bd93f9">1</span> <span style="color:#ff79c6">|</span>         <span style="color:#bd93f9">1</span> <span style="color:#ff79c6">|</span>
+</span></span><span style="display:flex;"><span><span style="color:#ff79c6">+</span><span style="color:#6272a4">----+---------+-----------+
+</span></span></span><span style="display:flex;"><span><span style="color:#6272a4"></span><span style="color:#bd93f9">1</span> <span style="color:#ff79c6">row</span> <span style="color:#ff79c6">in</span> <span style="color:#ff79c6">set</span> (<span style="color:#bd93f9">0</span>.<span style="color:#bd93f9">00</span> sec)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>mysql<span style="color:#ff79c6">&gt;</span> <span style="color:#ff79c6">select</span> <span style="color:#ff79c6">table_name</span>, auto_increment <span style="color:#ff79c6">from</span> information_schema.tables <span style="color:#ff79c6">where</span> table_schema <span style="color:#ff79c6">=</span> <span style="color:#ff79c6">database</span>() <span style="color:#ff79c6">and</span> <span style="color:#ff79c6">table_name</span> <span style="color:#ff79c6">=</span> <span style="color:#f1fa8c">&#39;test_user&#39;</span>;
+</span></span><span style="display:flex;"><span><span style="color:#ff79c6">+</span><span style="color:#6272a4">------------+----------------+
+</span></span></span><span style="display:flex;"><span><span style="color:#6272a4"></span><span style="color:#ff79c6">|</span> <span style="color:#ff79c6">TABLE_NAME</span> <span style="color:#ff79c6">|</span> AUTO_INCREMENT <span style="color:#ff79c6">|</span>
+</span></span><span style="display:flex;"><span><span style="color:#ff79c6">+</span><span style="color:#6272a4">------------+----------------+
+</span></span></span><span style="display:flex;"><span><span style="color:#6272a4"></span><span style="color:#ff79c6">|</span> test_user  <span style="color:#ff79c6">|</span>              <span style="color:#bd93f9">2</span> <span style="color:#ff79c6">|</span>
+</span></span><span style="display:flex;"><span><span style="color:#ff79c6">+</span><span style="color:#6272a4">------------+----------------+
+</span></span></span><span style="display:flex;"><span><span style="color:#6272a4"></span><span style="color:#bd93f9">1</span> <span style="color:#ff79c6">row</span> <span style="color:#ff79c6">in</span> <span style="color:#ff79c6">set</span> (<span style="color:#bd93f9">0</span>.<span style="color:#bd93f9">00</span> sec)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>mysql<span style="color:#ff79c6">&gt;</span> <span style="color:#ff79c6">insert</span> <span style="color:#ff79c6">into</span> test_user (user_id) value (<span style="color:#bd93f9">1</span>) <span style="color:#ff79c6">as</span> <span style="color:#ff79c6">new</span> <span style="color:#ff79c6">on</span> duplicate <span style="color:#ff79c6">key</span> <span style="color:#ff79c6">update</span> user_id <span style="color:#ff79c6">=</span> <span style="color:#ff79c6">new</span>.user_id;
+</span></span><span style="display:flex;"><span>Query OK, <span style="color:#bd93f9">0</span> <span style="color:#ff79c6">rows</span> affected (<span style="color:#bd93f9">0</span>.<span style="color:#bd93f9">00</span> sec)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>mysql<span style="color:#ff79c6">&gt;</span> <span style="color:#ff79c6">select</span> <span style="color:#ff79c6">*</span> <span style="color:#ff79c6">from</span> test_user;
+</span></span><span style="display:flex;"><span><span style="color:#ff79c6">+</span><span style="color:#6272a4">----+---------+-----------+
+</span></span></span><span style="display:flex;"><span><span style="color:#6272a4"></span><span style="color:#ff79c6">|</span> id <span style="color:#ff79c6">|</span> user_id <span style="color:#ff79c6">|</span> is_active <span style="color:#ff79c6">|</span>
+</span></span><span style="display:flex;"><span><span style="color:#ff79c6">+</span><span style="color:#6272a4">----+---------+-----------+
+</span></span></span><span style="display:flex;"><span><span style="color:#6272a4"></span><span style="color:#ff79c6">|</span>  <span style="color:#bd93f9">1</span> <span style="color:#ff79c6">|</span>       <span style="color:#bd93f9">1</span> <span style="color:#ff79c6">|</span>         <span style="color:#bd93f9">1</span> <span style="color:#ff79c6">|</span>
+</span></span><span style="display:flex;"><span><span style="color:#ff79c6">+</span><span style="color:#6272a4">----+---------+-----------+
+</span></span></span><span style="display:flex;"><span><span style="color:#6272a4"></span><span style="color:#bd93f9">1</span> <span style="color:#ff79c6">row</span> <span style="color:#ff79c6">in</span> <span style="color:#ff79c6">set</span> (<span style="color:#bd93f9">0</span>.<span style="color:#bd93f9">00</span> sec)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>mysql<span style="color:#ff79c6">&gt;</span> <span style="color:#ff79c6">select</span> <span style="color:#ff79c6">table_name</span>, auto_increment <span style="color:#ff79c6">from</span> information_schema.tables <span style="color:#ff79c6">where</span> table_schema <span style="color:#ff79c6">=</span> <span style="color:#ff79c6">database</span>() <span style="color:#ff79c6">and</span> <span style="color:#ff79c6">table_name</span> <span style="color:#ff79c6">=</span> <span style="color:#f1fa8c">&#39;test_user&#39;</span>;
+</span></span><span style="display:flex;"><span><span style="color:#ff79c6">+</span><span style="color:#6272a4">------------+----------------+
+</span></span></span><span style="display:flex;"><span><span style="color:#6272a4"></span><span style="color:#ff79c6">|</span> <span style="color:#ff79c6">TABLE_NAME</span> <span style="color:#ff79c6">|</span> AUTO_INCREMENT <span style="color:#ff79c6">|</span>
+</span></span><span style="display:flex;"><span><span style="color:#ff79c6">+</span><span style="color:#6272a4">------------+----------------+
+</span></span></span><span style="display:flex;"><span><span style="color:#6272a4"></span><span style="color:#ff79c6">|</span> test_user  <span style="color:#ff79c6">|</span>              <span style="color:#bd93f9">3</span> <span style="color:#ff79c6">|</span>
+</span></span><span style="display:flex;"><span><span style="color:#ff79c6">+</span><span style="color:#6272a4">------------+----------------+
+</span></span></span><span style="display:flex;"><span><span style="color:#6272a4"></span><span style="color:#bd93f9">1</span> <span style="color:#ff79c6">row</span> <span style="color:#ff79c6">in</span> <span style="color:#ff79c6">set</span> (<span style="color:#bd93f9">0</span>.<span style="color:#bd93f9">00</span> sec)
+</span></span></code></pre></div><p>如此就達成既不會改變 id，也不會 raise duplicate key error/warning</p>
+<p>但是仍然會造成 auto increment 被多 +1</p>
+<p>另外，因為在 8.0.20 之後的 MySQL，<code>values()</code> 功能已 deprecated，所以改用 8.0.19 引入的 <code>alias</code> 語法以避免 warning</p>
+<p>如果是 8.0.20 以前的版本，可以改採用 <code>values()</code> 寫法以避免 syntax error</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-sql" data-lang="sql"><span style="display:flex;"><span><span style="color:#ff79c6">insert</span> <span style="color:#ff79c6">into</span> test_user (user_id) value (<span style="color:#bd93f9">1</span>) <span style="color:#ff79c6">on</span> duplicate <span style="color:#ff79c6">key</span> <span style="color:#ff79c6">update</span> user_id <span style="color:#ff79c6">=</span> <span style="color:#ff79c6">values</span>(user_id)
+</span></span></code></pre></div><h3 id="insert--on-duplicate-key-update-id--id"><code>insert … on duplicate key update id = id</code></h3>
+<p>這個方式還有一個變種，網路流傳這樣寫，MySQL 會自動辨認如果有 duplicate key 要改作 <code>update</code> 也不會造成 auto increment +1，立刻就來做流言驗證！</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-sql" data-lang="sql"><span style="display:flex;"><span>mysql<span style="color:#ff79c6">&gt;</span> <span style="color:#ff79c6">insert</span> <span style="color:#ff79c6">into</span> test_user (user_id) value (<span style="color:#bd93f9">1</span>) <span style="color:#ff79c6">on</span> duplicate <span style="color:#ff79c6">key</span> <span style="color:#ff79c6">update</span> id <span style="color:#ff79c6">=</span> id;
+</span></span><span style="display:flex;"><span>Query OK, <span style="color:#bd93f9">1</span> <span style="color:#ff79c6">row</span> affected (<span style="color:#bd93f9">0</span>.<span style="color:#bd93f9">06</span> sec)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>mysql<span style="color:#ff79c6">&gt;</span> <span style="color:#ff79c6">select</span> <span style="color:#ff79c6">*</span> <span style="color:#ff79c6">from</span> test_user;
+</span></span><span style="display:flex;"><span><span style="color:#ff79c6">+</span><span style="color:#6272a4">----+---------+-----------+
+</span></span></span><span style="display:flex;"><span><span style="color:#6272a4"></span><span style="color:#ff79c6">|</span> id <span style="color:#ff79c6">|</span> user_id <span style="color:#ff79c6">|</span> is_active <span style="color:#ff79c6">|</span>
+</span></span><span style="display:flex;"><span><span style="color:#ff79c6">+</span><span style="color:#6272a4">----+---------+-----------+
+</span></span></span><span style="display:flex;"><span><span style="color:#6272a4"></span><span style="color:#ff79c6">|</span>  <span style="color:#bd93f9">1</span> <span style="color:#ff79c6">|</span>       <span style="color:#bd93f9">1</span> <span style="color:#ff79c6">|</span>         <span style="color:#bd93f9">1</span> <span style="color:#ff79c6">|</span>
+</span></span><span style="display:flex;"><span><span style="color:#ff79c6">+</span><span style="color:#6272a4">----+---------+-----------+
+</span></span></span><span style="display:flex;"><span><span style="color:#6272a4"></span><span style="color:#bd93f9">1</span> <span style="color:#ff79c6">row</span> <span style="color:#ff79c6">in</span> <span style="color:#ff79c6">set</span> (<span style="color:#bd93f9">0</span>.<span style="color:#bd93f9">00</span> sec)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>mysql<span style="color:#ff79c6">&gt;</span> <span style="color:#ff79c6">select</span> <span style="color:#ff79c6">table_name</span>, auto_increment <span style="color:#ff79c6">from</span> information_schema.tables <span style="color:#ff79c6">where</span> <span style="color:#ff79c6">table_name</span> <span style="color:#ff79c6">=</span> <span style="color:#f1fa8c">&#39;test_user&#39;</span>;
+</span></span><span style="display:flex;"><span><span style="color:#ff79c6">+</span><span style="color:#6272a4">------------+----------------+
+</span></span></span><span style="display:flex;"><span><span style="color:#6272a4"></span><span style="color:#ff79c6">|</span> <span style="color:#ff79c6">TABLE_NAME</span> <span style="color:#ff79c6">|</span> AUTO_INCREMENT <span style="color:#ff79c6">|</span>
+</span></span><span style="display:flex;"><span><span style="color:#ff79c6">+</span><span style="color:#6272a4">------------+----------------+
+</span></span></span><span style="display:flex;"><span><span style="color:#6272a4"></span><span style="color:#ff79c6">|</span> test_user  <span style="color:#ff79c6">|</span>              <span style="color:#bd93f9">2</span> <span style="color:#ff79c6">|</span>
+</span></span><span style="display:flex;"><span><span style="color:#ff79c6">+</span><span style="color:#6272a4">------------+----------------+
+</span></span></span><span style="display:flex;"><span><span style="color:#6272a4"></span><span style="color:#bd93f9">1</span> <span style="color:#ff79c6">row</span> <span style="color:#ff79c6">in</span> <span style="color:#ff79c6">set</span> (<span style="color:#bd93f9">0</span>.<span style="color:#bd93f9">00</span> sec)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>mysql<span style="color:#ff79c6">&gt;</span> <span style="color:#ff79c6">insert</span> <span style="color:#ff79c6">into</span> test_user (user_id) value (<span style="color:#bd93f9">1</span>) <span style="color:#ff79c6">on</span> duplicate <span style="color:#ff79c6">key</span> <span style="color:#ff79c6">update</span> id <span style="color:#ff79c6">=</span> id;
+</span></span><span style="display:flex;"><span>Query OK, <span style="color:#bd93f9">0</span> <span style="color:#ff79c6">rows</span> affected (<span style="color:#bd93f9">0</span>.<span style="color:#bd93f9">00</span> sec)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>mysql<span style="color:#ff79c6">&gt;</span> <span style="color:#ff79c6">select</span> <span style="color:#ff79c6">*</span> <span style="color:#ff79c6">from</span> test_user;
+</span></span><span style="display:flex;"><span><span style="color:#ff79c6">+</span><span style="color:#6272a4">----+---------+-----------+
+</span></span></span><span style="display:flex;"><span><span style="color:#6272a4"></span><span style="color:#ff79c6">|</span> id <span style="color:#ff79c6">|</span> user_id <span style="color:#ff79c6">|</span> is_active <span style="color:#ff79c6">|</span>
+</span></span><span style="display:flex;"><span><span style="color:#ff79c6">+</span><span style="color:#6272a4">----+---------+-----------+
+</span></span></span><span style="display:flex;"><span><span style="color:#6272a4"></span><span style="color:#ff79c6">|</span>  <span style="color:#bd93f9">1</span> <span style="color:#ff79c6">|</span>       <span style="color:#bd93f9">1</span> <span style="color:#ff79c6">|</span>         <span style="color:#bd93f9">1</span> <span style="color:#ff79c6">|</span>
+</span></span><span style="display:flex;"><span><span style="color:#ff79c6">+</span><span style="color:#6272a4">----+---------+-----------+
+</span></span></span><span style="display:flex;"><span><span style="color:#6272a4"></span><span style="color:#bd93f9">1</span> <span style="color:#ff79c6">row</span> <span style="color:#ff79c6">in</span> <span style="color:#ff79c6">set</span> (<span style="color:#bd93f9">0</span>.<span style="color:#bd93f9">00</span> sec)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>mysql<span style="color:#ff79c6">&gt;</span> <span style="color:#ff79c6">select</span> <span style="color:#ff79c6">table_name</span>, auto_increment <span style="color:#ff79c6">from</span> information_schema.tables <span style="color:#ff79c6">where</span> <span style="color:#ff79c6">table_name</span> <span style="color:#ff79c6">=</span> <span style="color:#f1fa8c">&#39;test_user&#39;</span>;
+</span></span><span style="display:flex;"><span><span style="color:#ff79c6">+</span><span style="color:#6272a4">------------+----------------+
+</span></span></span><span style="display:flex;"><span><span style="color:#6272a4"></span><span style="color:#ff79c6">|</span> <span style="color:#ff79c6">TABLE_NAME</span> <span style="color:#ff79c6">|</span> AUTO_INCREMENT <span style="color:#ff79c6">|</span>
+</span></span><span style="display:flex;"><span><span style="color:#ff79c6">+</span><span style="color:#6272a4">------------+----------------+
+</span></span></span><span style="display:flex;"><span><span style="color:#6272a4"></span><span style="color:#ff79c6">|</span> test_user  <span style="color:#ff79c6">|</span>              <span style="color:#bd93f9">3</span> <span style="color:#ff79c6">|</span>
+</span></span><span style="display:flex;"><span><span style="color:#ff79c6">+</span><span style="color:#6272a4">------------+----------------+
+</span></span></span><span style="display:flex;"><span><span style="color:#6272a4"></span><span style="color:#bd93f9">1</span> <span style="color:#ff79c6">row</span> <span style="color:#ff79c6">in</span> <span style="color:#ff79c6">set</span> (<span style="color:#bd93f9">0</span>.<span style="color:#bd93f9">00</span> sec)
+</span></span></code></pre></div><p>結論不用多說了，MYTH BUSTED!</p>
+<h2 id="insert--select--not-exists"><code>insert … select … not exists</code></h2>
+<p>如果我們既不想 raise duplicate key error/warning，也不想改變 id，還不想造成 auto increment waste 呢？<em>(小孩子才做選擇，我全都要)</em></p>
+<p>直接上驗證結果</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-sql" data-lang="sql"><span style="display:flex;"><span>mysql<span style="color:#ff79c6">&gt;</span> <span style="color:#ff79c6">insert</span> <span style="color:#ff79c6">into</span> test_user (user_id) <span style="color:#ff79c6">select</span> temp.<span style="color:#ff79c6">*</span> <span style="color:#ff79c6">from</span> (<span style="color:#ff79c6">select</span> <span style="color:#bd93f9">1</span> <span style="color:#ff79c6">as</span> user_id) <span style="color:#ff79c6">as</span> temp <span style="color:#ff79c6">where</span> <span style="color:#ff79c6">not</span> <span style="color:#ff79c6">exists</span>(<span style="color:#ff79c6">select</span> <span style="color:#ff79c6">*</span> <span style="color:#ff79c6">from</span> test_user <span style="color:#ff79c6">where</span> user_id <span style="color:#ff79c6">=</span> <span style="color:#bd93f9">1</span>) <span style="color:#ff79c6">limit</span> <span style="color:#bd93f9">1</span>;
+</span></span><span style="display:flex;"><span>Query OK, <span style="color:#bd93f9">1</span> <span style="color:#ff79c6">row</span> affected (<span style="color:#bd93f9">0</span>.<span style="color:#bd93f9">06</span> sec)
+</span></span><span style="display:flex;"><span>Records: <span style="color:#bd93f9">1</span>  Duplicates: <span style="color:#bd93f9">0</span>  Warnings: <span style="color:#bd93f9">0</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>mysql<span style="color:#ff79c6">&gt;</span> <span style="color:#ff79c6">select</span> <span style="color:#ff79c6">*</span> <span style="color:#ff79c6">from</span> test_user;
+</span></span><span style="display:flex;"><span><span style="color:#ff79c6">+</span><span style="color:#6272a4">----+---------+-----------+
+</span></span></span><span style="display:flex;"><span><span style="color:#6272a4"></span><span style="color:#ff79c6">|</span> id <span style="color:#ff79c6">|</span> user_id <span style="color:#ff79c6">|</span> is_active <span style="color:#ff79c6">|</span>
+</span></span><span style="display:flex;"><span><span style="color:#ff79c6">+</span><span style="color:#6272a4">----+---------+-----------+
+</span></span></span><span style="display:flex;"><span><span style="color:#6272a4"></span><span style="color:#ff79c6">|</span>  <span style="color:#bd93f9">1</span> <span style="color:#ff79c6">|</span>       <span style="color:#bd93f9">1</span> <span style="color:#ff79c6">|</span>         <span style="color:#bd93f9">1</span> <span style="color:#ff79c6">|</span>
+</span></span><span style="display:flex;"><span><span style="color:#ff79c6">+</span><span style="color:#6272a4">----+---------+-----------+
+</span></span></span><span style="display:flex;"><span><span style="color:#6272a4"></span><span style="color:#bd93f9">1</span> <span style="color:#ff79c6">row</span> <span style="color:#ff79c6">in</span> <span style="color:#ff79c6">set</span> (<span style="color:#bd93f9">0</span>.<span style="color:#bd93f9">00</span> sec)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>mysql<span style="color:#ff79c6">&gt;</span> <span style="color:#ff79c6">select</span> <span style="color:#ff79c6">table_name</span>, auto_increment <span style="color:#ff79c6">from</span> information_schema.tables <span style="color:#ff79c6">where</span> table_schema <span style="color:#ff79c6">=</span> <span style="color:#ff79c6">database</span>() <span style="color:#ff79c6">and</span> <span style="color:#ff79c6">table_name</span> <span style="color:#ff79c6">=</span> <span style="color:#f1fa8c">&#39;test_user&#39;</span>;
+</span></span><span style="display:flex;"><span><span style="color:#ff79c6">+</span><span style="color:#6272a4">------------+----------------+
+</span></span></span><span style="display:flex;"><span><span style="color:#6272a4"></span><span style="color:#ff79c6">|</span> <span style="color:#ff79c6">TABLE_NAME</span> <span style="color:#ff79c6">|</span> AUTO_INCREMENT <span style="color:#ff79c6">|</span>
+</span></span><span style="display:flex;"><span><span style="color:#ff79c6">+</span><span style="color:#6272a4">------------+----------------+
+</span></span></span><span style="display:flex;"><span><span style="color:#6272a4"></span><span style="color:#ff79c6">|</span> test_user  <span style="color:#ff79c6">|</span>              <span style="color:#bd93f9">2</span> <span style="color:#ff79c6">|</span>
+</span></span><span style="display:flex;"><span><span style="color:#ff79c6">+</span><span style="color:#6272a4">------------+----------------+
+</span></span></span><span style="display:flex;"><span><span style="color:#6272a4"></span><span style="color:#bd93f9">1</span> <span style="color:#ff79c6">row</span> <span style="color:#ff79c6">in</span> <span style="color:#ff79c6">set</span> (<span style="color:#bd93f9">0</span>.<span style="color:#bd93f9">00</span> sec)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>mysql<span style="color:#ff79c6">&gt;</span> <span style="color:#ff79c6">insert</span> <span style="color:#ff79c6">into</span> test_user (user_id) <span style="color:#ff79c6">select</span> temp.<span style="color:#ff79c6">*</span> <span style="color:#ff79c6">from</span> (<span style="color:#ff79c6">select</span> <span style="color:#bd93f9">1</span> <span style="color:#ff79c6">as</span> user_id) <span style="color:#ff79c6">as</span> temp <span style="color:#ff79c6">where</span> <span style="color:#ff79c6">not</span> <span style="color:#ff79c6">exists</span>(<span style="color:#ff79c6">select</span> <span style="color:#ff79c6">*</span> <span style="color:#ff79c6">from</span> test_user <span style="color:#ff79c6">where</span> user_id <span style="color:#ff79c6">=</span> <span style="color:#bd93f9">1</span>) <span style="color:#ff79c6">limit</span> <span style="color:#bd93f9">1</span>;
+</span></span><span style="display:flex;"><span>Query OK, <span style="color:#bd93f9">0</span> <span style="color:#ff79c6">rows</span> affected (<span style="color:#bd93f9">0</span>.<span style="color:#bd93f9">00</span> sec)
+</span></span><span style="display:flex;"><span>Records: <span style="color:#bd93f9">0</span>  Duplicates: <span style="color:#bd93f9">0</span>  Warnings: <span style="color:#bd93f9">0</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>mysql<span style="color:#ff79c6">&gt;</span> <span style="color:#ff79c6">select</span> <span style="color:#ff79c6">*</span> <span style="color:#ff79c6">from</span> test_user;
+</span></span><span style="display:flex;"><span><span style="color:#ff79c6">+</span><span style="color:#6272a4">----+---------+-----------+
+</span></span></span><span style="display:flex;"><span><span style="color:#6272a4"></span><span style="color:#ff79c6">|</span> id <span style="color:#ff79c6">|</span> user_id <span style="color:#ff79c6">|</span> is_active <span style="color:#ff79c6">|</span>
+</span></span><span style="display:flex;"><span><span style="color:#ff79c6">+</span><span style="color:#6272a4">----+---------+-----------+
+</span></span></span><span style="display:flex;"><span><span style="color:#6272a4"></span><span style="color:#ff79c6">|</span>  <span style="color:#bd93f9">1</span> <span style="color:#ff79c6">|</span>       <span style="color:#bd93f9">1</span> <span style="color:#ff79c6">|</span>         <span style="color:#bd93f9">1</span> <span style="color:#ff79c6">|</span>
+</span></span><span style="display:flex;"><span><span style="color:#ff79c6">+</span><span style="color:#6272a4">----+---------+-----------+
+</span></span></span><span style="display:flex;"><span><span style="color:#6272a4"></span><span style="color:#bd93f9">1</span> <span style="color:#ff79c6">row</span> <span style="color:#ff79c6">in</span> <span style="color:#ff79c6">set</span> (<span style="color:#bd93f9">0</span>.<span style="color:#bd93f9">00</span> sec)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>mysql<span style="color:#ff79c6">&gt;</span> <span style="color:#ff79c6">select</span> <span style="color:#ff79c6">table_name</span>, auto_increment <span style="color:#ff79c6">from</span> information_schema.tables <span style="color:#ff79c6">where</span> table_schema <span style="color:#ff79c6">=</span> <span style="color:#ff79c6">database</span>() <span style="color:#ff79c6">and</span> <span style="color:#ff79c6">table_name</span> <span style="color:#ff79c6">=</span> <span style="color:#f1fa8c">&#39;test_user&#39;</span>;
+</span></span><span style="display:flex;"><span><span style="color:#ff79c6">+</span><span style="color:#6272a4">------------+----------------+
+</span></span></span><span style="display:flex;"><span><span style="color:#6272a4"></span><span style="color:#ff79c6">|</span> <span style="color:#ff79c6">TABLE_NAME</span> <span style="color:#ff79c6">|</span> AUTO_INCREMENT <span style="color:#ff79c6">|</span>
+</span></span><span style="display:flex;"><span><span style="color:#ff79c6">+</span><span style="color:#6272a4">------------+----------------+
+</span></span></span><span style="display:flex;"><span><span style="color:#6272a4"></span><span style="color:#ff79c6">|</span> test_user  <span style="color:#ff79c6">|</span>              <span style="color:#bd93f9">2</span> <span style="color:#ff79c6">|</span>
+</span></span><span style="display:flex;"><span><span style="color:#ff79c6">+</span><span style="color:#6272a4">------------+----------------+
+</span></span></span><span style="display:flex;"><span><span style="color:#6272a4"></span><span style="color:#bd93f9">1</span> <span style="color:#ff79c6">row</span> <span style="color:#ff79c6">in</span> <span style="color:#ff79c6">set</span> (<span style="color:#bd93f9">0</span>.<span style="color:#bd93f9">00</span> sec)
+</span></span></code></pre></div><p>在正常情況下，這個方式差不多已經是最優解，既不會 raise duplicate key error/warning，也不改變 id，還不造成 auto increment 浪費</p>
+<p>但這是正常情況下，當你有 high concurrent 的情況下就不見得如此了</p>
+<p>簡單來說是因為 <code>insert ... select</code> 不是保證 atomic 的，<code>select</code> 跟 <code>insert</code> 是分段進行</p>
+<p>如果剛好有相同 unique key 的兩次 <code>insert … select … not exists</code> 在幾乎相同的時間執行，可能還是會形成兩個 <code>select</code> 都認為沒有 duplicate row 而執行 <code>insert</code>，因而造成其中一個 statement 噴出 duplicate key error</p>
+<h3 id="insert--select--not-exists--on-duplicate-key"><code>insert … select … not exists … on duplicate key</code></h3>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-sql" data-lang="sql"><span style="display:flex;"><span>mysql<span style="color:#ff79c6">&gt;</span> <span style="color:#ff79c6">insert</span> <span style="color:#ff79c6">into</span> test_user (user_id) <span style="color:#ff79c6">select</span> temp.<span style="color:#ff79c6">*</span> <span style="color:#ff79c6">from</span> (<span style="color:#ff79c6">select</span> <span style="color:#bd93f9">1</span> <span style="color:#ff79c6">as</span> user_id) <span style="color:#ff79c6">as</span> temp <span style="color:#ff79c6">where</span> <span style="color:#ff79c6">not</span> <span style="color:#ff79c6">exists</span> (<span style="color:#ff79c6">select</span> <span style="color:#ff79c6">*</span> <span style="color:#ff79c6">from</span> test_user <span style="color:#ff79c6">where</span> user_id <span style="color:#ff79c6">=</span> <span style="color:#bd93f9">1</span>) <span style="color:#ff79c6">limit</span> <span style="color:#bd93f9">1</span> <span style="color:#ff79c6">on</span> duplicate <span style="color:#ff79c6">key</span> <span style="color:#ff79c6">update</span> id <span style="color:#ff79c6">=</span> id;
+</span></span><span style="display:flex;"><span>Query OK, <span style="color:#bd93f9">1</span> <span style="color:#ff79c6">row</span> affected (<span style="color:#bd93f9">0</span>.<span style="color:#bd93f9">04</span> sec)
+</span></span><span style="display:flex;"><span>Records: <span style="color:#bd93f9">1</span>  Duplicates: <span style="color:#bd93f9">0</span>  Warnings: <span style="color:#bd93f9">0</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>mysql<span style="color:#ff79c6">&gt;</span> <span style="color:#ff79c6">select</span> <span style="color:#ff79c6">*</span> <span style="color:#ff79c6">from</span> test_user;
+</span></span><span style="display:flex;"><span><span style="color:#ff79c6">+</span><span style="color:#6272a4">----+---------+-----------+
+</span></span></span><span style="display:flex;"><span><span style="color:#6272a4"></span><span style="color:#ff79c6">|</span> id <span style="color:#ff79c6">|</span> user_id <span style="color:#ff79c6">|</span> is_active <span style="color:#ff79c6">|</span>
+</span></span><span style="display:flex;"><span><span style="color:#ff79c6">+</span><span style="color:#6272a4">----+---------+-----------+
+</span></span></span><span style="display:flex;"><span><span style="color:#6272a4"></span><span style="color:#ff79c6">|</span>  <span style="color:#bd93f9">1</span> <span style="color:#ff79c6">|</span>       <span style="color:#bd93f9">1</span> <span style="color:#ff79c6">|</span>         <span style="color:#bd93f9">1</span> <span style="color:#ff79c6">|</span>
+</span></span><span style="display:flex;"><span><span style="color:#ff79c6">+</span><span style="color:#6272a4">----+---------+-----------+
+</span></span></span><span style="display:flex;"><span><span style="color:#6272a4"></span><span style="color:#bd93f9">1</span> <span style="color:#ff79c6">row</span> <span style="color:#ff79c6">in</span> <span style="color:#ff79c6">set</span> (<span style="color:#bd93f9">0</span>.<span style="color:#bd93f9">00</span> sec)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>mysql<span style="color:#ff79c6">&gt;</span> <span style="color:#ff79c6">select</span> <span style="color:#ff79c6">table_name</span>, auto_increment <span style="color:#ff79c6">from</span> information_schema.tables <span style="color:#ff79c6">where</span> <span style="color:#ff79c6">table_name</span> <span style="color:#ff79c6">=</span> <span style="color:#f1fa8c">&#39;test_user&#39;</span>;
+</span></span><span style="display:flex;"><span><span style="color:#ff79c6">+</span><span style="color:#6272a4">------------+----------------+
+</span></span></span><span style="display:flex;"><span><span style="color:#6272a4"></span><span style="color:#ff79c6">|</span> <span style="color:#ff79c6">TABLE_NAME</span> <span style="color:#ff79c6">|</span> AUTO_INCREMENT <span style="color:#ff79c6">|</span>
+</span></span><span style="display:flex;"><span><span style="color:#ff79c6">+</span><span style="color:#6272a4">------------+----------------+
+</span></span></span><span style="display:flex;"><span><span style="color:#6272a4"></span><span style="color:#ff79c6">|</span> test_user  <span style="color:#ff79c6">|</span>              <span style="color:#bd93f9">2</span> <span style="color:#ff79c6">|</span>
+</span></span><span style="display:flex;"><span><span style="color:#ff79c6">+</span><span style="color:#6272a4">------------+----------------+
+</span></span></span><span style="display:flex;"><span><span style="color:#6272a4"></span><span style="color:#bd93f9">1</span> <span style="color:#ff79c6">row</span> <span style="color:#ff79c6">in</span> <span style="color:#ff79c6">set</span> (<span style="color:#bd93f9">0</span>.<span style="color:#bd93f9">00</span> sec)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>mysql<span style="color:#ff79c6">&gt;</span> <span style="color:#ff79c6">insert</span> <span style="color:#ff79c6">into</span> test_user (user_id) <span style="color:#ff79c6">select</span> temp.<span style="color:#ff79c6">*</span> <span style="color:#ff79c6">from</span> (<span style="color:#ff79c6">select</span> <span style="color:#bd93f9">1</span> <span style="color:#ff79c6">as</span> user_id) <span style="color:#ff79c6">as</span> temp <span style="color:#ff79c6">where</span> <span style="color:#ff79c6">not</span> <span style="color:#ff79c6">exists</span> (<span style="color:#ff79c6">select</span> <span style="color:#ff79c6">*</span> <span style="color:#ff79c6">from</span> test_user <span style="color:#ff79c6">where</span> user_id <span style="color:#ff79c6">=</span> <span style="color:#bd93f9">1</span>) <span style="color:#ff79c6">limit</span> <span style="color:#bd93f9">1</span> <span style="color:#ff79c6">on</span> duplicate <span style="color:#ff79c6">key</span> <span style="color:#ff79c6">update</span> id <span style="color:#ff79c6">=</span> id;
+</span></span><span style="display:flex;"><span>Query OK, <span style="color:#bd93f9">0</span> <span style="color:#ff79c6">rows</span> affected (<span style="color:#bd93f9">0</span>.<span style="color:#bd93f9">00</span> sec)
+</span></span><span style="display:flex;"><span>Records: <span style="color:#bd93f9">0</span>  Duplicates: <span style="color:#bd93f9">0</span>  Warnings: <span style="color:#bd93f9">0</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>mysql<span style="color:#ff79c6">&gt;</span> <span style="color:#ff79c6">select</span> <span style="color:#ff79c6">*</span> <span style="color:#ff79c6">from</span> test_user;
+</span></span><span style="display:flex;"><span><span style="color:#ff79c6">+</span><span style="color:#6272a4">----+---------+-----------+
+</span></span></span><span style="display:flex;"><span><span style="color:#6272a4"></span><span style="color:#ff79c6">|</span> id <span style="color:#ff79c6">|</span> user_id <span style="color:#ff79c6">|</span> is_active <span style="color:#ff79c6">|</span>
+</span></span><span style="display:flex;"><span><span style="color:#ff79c6">+</span><span style="color:#6272a4">----+---------+-----------+
+</span></span></span><span style="display:flex;"><span><span style="color:#6272a4"></span><span style="color:#ff79c6">|</span>  <span style="color:#bd93f9">1</span> <span style="color:#ff79c6">|</span>       <span style="color:#bd93f9">1</span> <span style="color:#ff79c6">|</span>         <span style="color:#bd93f9">1</span> <span style="color:#ff79c6">|</span>
+</span></span><span style="display:flex;"><span><span style="color:#ff79c6">+</span><span style="color:#6272a4">----+---------+-----------+
+</span></span></span><span style="display:flex;"><span><span style="color:#6272a4"></span><span style="color:#bd93f9">1</span> <span style="color:#ff79c6">row</span> <span style="color:#ff79c6">in</span> <span style="color:#ff79c6">set</span> (<span style="color:#bd93f9">0</span>.<span style="color:#bd93f9">00</span> sec)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>mysql<span style="color:#ff79c6">&gt;</span> <span style="color:#ff79c6">select</span> <span style="color:#ff79c6">table_name</span>, auto_increment <span style="color:#ff79c6">from</span> information_schema.tables <span style="color:#ff79c6">where</span> <span style="color:#ff79c6">table_name</span> <span style="color:#ff79c6">=</span> <span style="color:#f1fa8c">&#39;test_user&#39;</span>;
+</span></span><span style="display:flex;"><span><span style="color:#ff79c6">+</span><span style="color:#6272a4">------------+----------------+
+</span></span></span><span style="display:flex;"><span><span style="color:#6272a4"></span><span style="color:#ff79c6">|</span> <span style="color:#ff79c6">TABLE_NAME</span> <span style="color:#ff79c6">|</span> AUTO_INCREMENT <span style="color:#ff79c6">|</span>
+</span></span><span style="display:flex;"><span><span style="color:#ff79c6">+</span><span style="color:#6272a4">------------+----------------+
+</span></span></span><span style="display:flex;"><span><span style="color:#6272a4"></span><span style="color:#ff79c6">|</span> test_user  <span style="color:#ff79c6">|</span>              <span style="color:#bd93f9">2</span> <span style="color:#ff79c6">|</span>
+</span></span><span style="display:flex;"><span><span style="color:#ff79c6">+</span><span style="color:#6272a4">------------+----------------+
+</span></span></span><span style="display:flex;"><span><span style="color:#6272a4"></span><span style="color:#bd93f9">1</span> <span style="color:#ff79c6">row</span> <span style="color:#ff79c6">in</span> <span style="color:#ff79c6">set</span> (<span style="color:#bd93f9">0</span>.<span style="color:#bd93f9">00</span> sec)
+</span></span></code></pre></div><p>這個方案算是結合 <code>insert … select … not exists</code> 跟 <code>insert … on duplicate key</code>，也就是當 <code>insert … select … not exists</code> 因為 concurrent 的關係準備要 <code>insert</code> 一個 duplicate row 的時候，就會改為執行 on duplicate key 的部分，而因為 <code>insert … on duplicate key</code> 是 atomic 的，所以這樣的操作不會拋出 duplicate key error/warning</p>
+<p>在正常的情況下這個 statement 不會拋出 duplicate key error，id 不會變化，也不會造成 auto increment 浪費</p>
+<p>但是在 concurrent 而形成其中一個 statement 會 insert duplicate row 的情況下，其實跟 <code>insert … on duplicate key</code> 的問題是相同的，就是有可能會造成 auto increment 浪費</p>
+<h3 id="insert-ignore--select--not-exists"><code>insert ignore … select … not exists</code></h3>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-sql" data-lang="sql"><span style="display:flex;"><span>mysql<span style="color:#ff79c6">&gt;</span> <span style="color:#ff79c6">insert</span> <span style="color:#ff79c6">ignore</span> <span style="color:#ff79c6">into</span> test_user (user_id) <span style="color:#ff79c6">select</span> temp.<span style="color:#ff79c6">*</span> <span style="color:#ff79c6">from</span> (<span style="color:#ff79c6">select</span> <span style="color:#bd93f9">1</span> <span style="color:#ff79c6">as</span> user_id) <span style="color:#ff79c6">as</span> temp <span style="color:#ff79c6">where</span> <span style="color:#ff79c6">not</span> <span style="color:#ff79c6">exists</span> (<span style="color:#ff79c6">select</span> <span style="color:#ff79c6">*</span> <span style="color:#ff79c6">from</span> test_user <span style="color:#ff79c6">where</span> user_id <span style="color:#ff79c6">=</span> <span style="color:#bd93f9">1</span>) <span style="color:#ff79c6">limit</span> <span style="color:#bd93f9">1</span>;
+</span></span><span style="display:flex;"><span>Query OK, <span style="color:#bd93f9">1</span> <span style="color:#ff79c6">row</span> affected (<span style="color:#bd93f9">0</span>.<span style="color:#bd93f9">05</span> sec)
+</span></span><span style="display:flex;"><span>Records: <span style="color:#bd93f9">1</span>  Duplicates: <span style="color:#bd93f9">0</span>  Warnings: <span style="color:#bd93f9">0</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>mysql<span style="color:#ff79c6">&gt;</span> <span style="color:#ff79c6">select</span> <span style="color:#ff79c6">*</span> <span style="color:#ff79c6">from</span> test_user;
+</span></span><span style="display:flex;"><span><span style="color:#ff79c6">+</span><span style="color:#6272a4">----+---------+-----------+
+</span></span></span><span style="display:flex;"><span><span style="color:#6272a4"></span><span style="color:#ff79c6">|</span> id <span style="color:#ff79c6">|</span> user_id <span style="color:#ff79c6">|</span> is_active <span style="color:#ff79c6">|</span>
+</span></span><span style="display:flex;"><span><span style="color:#ff79c6">+</span><span style="color:#6272a4">----+---------+-----------+
+</span></span></span><span style="display:flex;"><span><span style="color:#6272a4"></span><span style="color:#ff79c6">|</span>  <span style="color:#bd93f9">1</span> <span style="color:#ff79c6">|</span>       <span style="color:#bd93f9">1</span> <span style="color:#ff79c6">|</span>         <span style="color:#bd93f9">1</span> <span style="color:#ff79c6">|</span>
+</span></span><span style="display:flex;"><span><span style="color:#ff79c6">+</span><span style="color:#6272a4">----+---------+-----------+
+</span></span></span><span style="display:flex;"><span><span style="color:#6272a4"></span><span style="color:#bd93f9">1</span> <span style="color:#ff79c6">row</span> <span style="color:#ff79c6">in</span> <span style="color:#ff79c6">set</span> (<span style="color:#bd93f9">0</span>.<span style="color:#bd93f9">01</span> sec)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>mysql<span style="color:#ff79c6">&gt;</span> <span style="color:#ff79c6">select</span> <span style="color:#ff79c6">table_name</span>, auto_increment <span style="color:#ff79c6">from</span> information_schema.tables <span style="color:#ff79c6">where</span> <span style="color:#ff79c6">table_name</span> <span style="color:#ff79c6">=</span> <span style="color:#f1fa8c">&#39;test_user&#39;</span>;
+</span></span><span style="display:flex;"><span><span style="color:#ff79c6">+</span><span style="color:#6272a4">------------+----------------+
+</span></span></span><span style="display:flex;"><span><span style="color:#6272a4"></span><span style="color:#ff79c6">|</span> <span style="color:#ff79c6">TABLE_NAME</span> <span style="color:#ff79c6">|</span> AUTO_INCREMENT <span style="color:#ff79c6">|</span>
+</span></span><span style="display:flex;"><span><span style="color:#ff79c6">+</span><span style="color:#6272a4">------------+----------------+
+</span></span></span><span style="display:flex;"><span><span style="color:#6272a4"></span><span style="color:#ff79c6">|</span> test_user  <span style="color:#ff79c6">|</span>              <span style="color:#bd93f9">2</span> <span style="color:#ff79c6">|</span>
+</span></span><span style="display:flex;"><span><span style="color:#ff79c6">+</span><span style="color:#6272a4">------------+----------------+
+</span></span></span><span style="display:flex;"><span><span style="color:#6272a4"></span><span style="color:#bd93f9">1</span> <span style="color:#ff79c6">row</span> <span style="color:#ff79c6">in</span> <span style="color:#ff79c6">set</span> (<span style="color:#bd93f9">0</span>.<span style="color:#bd93f9">00</span> sec)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>mysql<span style="color:#ff79c6">&gt;</span> <span style="color:#ff79c6">insert</span> <span style="color:#ff79c6">ignore</span> <span style="color:#ff79c6">into</span> test_user (user_id) <span style="color:#ff79c6">select</span> temp.<span style="color:#ff79c6">*</span> <span style="color:#ff79c6">from</span> (<span style="color:#ff79c6">select</span> <span style="color:#bd93f9">1</span> <span style="color:#ff79c6">as</span> user_id) <span style="color:#ff79c6">as</span> temp <span style="color:#ff79c6">where</span> <span style="color:#ff79c6">not</span> <span style="color:#ff79c6">exists</span> (<span style="color:#ff79c6">select</span> <span style="color:#ff79c6">*</span> <span style="color:#ff79c6">from</span> test_user <span style="color:#ff79c6">where</span> user_id <span style="color:#ff79c6">=</span> <span style="color:#bd93f9">1</span>) <span style="color:#ff79c6">limit</span> <span style="color:#bd93f9">1</span>;
+</span></span><span style="display:flex;"><span>Query OK, <span style="color:#bd93f9">0</span> <span style="color:#ff79c6">rows</span> affected (<span style="color:#bd93f9">0</span>.<span style="color:#bd93f9">01</span> sec)
+</span></span><span style="display:flex;"><span>Records: <span style="color:#bd93f9">0</span>  Duplicates: <span style="color:#bd93f9">0</span>  Warnings: <span style="color:#bd93f9">0</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>mysql<span style="color:#ff79c6">&gt;</span> <span style="color:#ff79c6">select</span> <span style="color:#ff79c6">*</span> <span style="color:#ff79c6">from</span> test_user;
+</span></span><span style="display:flex;"><span><span style="color:#ff79c6">+</span><span style="color:#6272a4">----+---------+-----------+
+</span></span></span><span style="display:flex;"><span><span style="color:#6272a4"></span><span style="color:#ff79c6">|</span> id <span style="color:#ff79c6">|</span> user_id <span style="color:#ff79c6">|</span> is_active <span style="color:#ff79c6">|</span>
+</span></span><span style="display:flex;"><span><span style="color:#ff79c6">+</span><span style="color:#6272a4">----+---------+-----------+
+</span></span></span><span style="display:flex;"><span><span style="color:#6272a4"></span><span style="color:#ff79c6">|</span>  <span style="color:#bd93f9">1</span> <span style="color:#ff79c6">|</span>       <span style="color:#bd93f9">1</span> <span style="color:#ff79c6">|</span>         <span style="color:#bd93f9">1</span> <span style="color:#ff79c6">|</span>
+</span></span><span style="display:flex;"><span><span style="color:#ff79c6">+</span><span style="color:#6272a4">----+---------+-----------+
+</span></span></span><span style="display:flex;"><span><span style="color:#6272a4"></span><span style="color:#bd93f9">1</span> <span style="color:#ff79c6">row</span> <span style="color:#ff79c6">in</span> <span style="color:#ff79c6">set</span> (<span style="color:#bd93f9">0</span>.<span style="color:#bd93f9">00</span> sec)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>mysql<span style="color:#ff79c6">&gt;</span> <span style="color:#ff79c6">select</span> <span style="color:#ff79c6">table_name</span>, auto_increment <span style="color:#ff79c6">from</span> information_schema.tables <span style="color:#ff79c6">where</span> <span style="color:#ff79c6">table_name</span> <span style="color:#ff79c6">=</span> <span style="color:#f1fa8c">&#39;test_user&#39;</span>;
+</span></span><span style="display:flex;"><span><span style="color:#ff79c6">+</span><span style="color:#6272a4">------------+----------------+
+</span></span></span><span style="display:flex;"><span><span style="color:#6272a4"></span><span style="color:#ff79c6">|</span> <span style="color:#ff79c6">TABLE_NAME</span> <span style="color:#ff79c6">|</span> AUTO_INCREMENT <span style="color:#ff79c6">|</span>
+</span></span><span style="display:flex;"><span><span style="color:#ff79c6">+</span><span style="color:#6272a4">------------+----------------+
+</span></span></span><span style="display:flex;"><span><span style="color:#6272a4"></span><span style="color:#ff79c6">|</span> test_user  <span style="color:#ff79c6">|</span>              <span style="color:#bd93f9">2</span> <span style="color:#ff79c6">|</span>
+</span></span><span style="display:flex;"><span><span style="color:#ff79c6">+</span><span style="color:#6272a4">------------+----------------+
+</span></span></span><span style="display:flex;"><span><span style="color:#6272a4"></span><span style="color:#bd93f9">1</span> <span style="color:#ff79c6">row</span> <span style="color:#ff79c6">in</span> <span style="color:#ff79c6">set</span> (<span style="color:#bd93f9">0</span>.<span style="color:#bd93f9">00</span> sec)
+</span></span></code></pre></div><p>這個方案是將 <code>insert … select … not exists</code> 加上 <code>ingore</code> 關鍵字，也就式在 concurrent 時，如果發生 duplicate 的狀況，duplicate key error 會被 suppress 成 duplicate key warning</p>
+<p>在一般狀況下同樣不會拋出 duplicate key error，造成 id 改變，或造成 auto increment 浪費</p>
+<p>但是在 concurrent 而形成其中一個 statement 會 insert duplicate row 的情況下，其實跟 <code>insert ignore</code> 的問題是相同的，就是有可能會造成 auto increment 浪費，而且萬一有其他應該被處理的 error 也會同樣被 suppress</p>
+<h2 id="conclusion">Conclusion</h2>
+<p>直接做表格幫大家整理結論，MySQL 並沒有一個完美解決方案，只能根據狀況做取捨</p>
+<table>
+  <thead>
+      <tr>
+          <th style="text-align: left">statement</th>
+          <th style="text-align: left">raise duplicate key error/warning</th>
+          <th style="text-align: left">auto increment burn</th>
+          <th style="text-align: left">id change</th>
+      </tr>
+  </thead>
+  <tbody>
+      <tr>
+          <td style="text-align: left"><code>insert</code></td>
+          <td style="text-align: left">error and reject</td>
+          <td style="text-align: left">N</td>
+          <td style="text-align: left">N</td>
+      </tr>
+      <tr>
+          <td style="text-align: left"><code>insert ignore</code></td>
+          <td style="text-align: left">warning only</td>
+          <td style="text-align: left">Y</td>
+          <td style="text-align: left">N</td>
+      </tr>
+      <tr>
+          <td style="text-align: left"><code>replace</code></td>
+          <td style="text-align: left">NA</td>
+          <td style="text-align: left">Y</td>
+          <td style="text-align: left">Y</td>
+      </tr>
+      <tr>
+          <td style="text-align: left"><code>insert … on duplicate key update</code></td>
+          <td style="text-align: left">NA</td>
+          <td style="text-align: left">Y</td>
+          <td style="text-align: left">N</td>
+      </tr>
+      <tr>
+          <td style="text-align: left"><code>insert … select ... not exists</code></td>
+          <td style="text-align: left">possible error and reject when concurrent</td>
+          <td style="text-align: left">possible when concurrent</td>
+          <td style="text-align: left">N</td>
+      </tr>
+      <tr>
+          <td style="text-align: left"><code>insert … select ... not exists … on duplicate key update id = id</code></td>
+          <td style="text-align: left">NA</td>
+          <td style="text-align: left">possible when concurrent</td>
+          <td style="text-align: left">N</td>
+      </tr>
+      <tr>
+          <td style="text-align: left"><code>insert ignore … select … not exists</code></td>
+          <td style="text-align: left">possible warning when concurrent</td>
+          <td style="text-align: left">possible when concurrent</td>
+          <td style="text-align: left">N</td>
+      </tr>
+  </tbody>
+</table>
+<p>另外，本文僅針對各種單一 statement 的方法的硬限制作討論，並不涉及各 statement 速度、空間利用，也不比較 multiple statement 甚至牽涉 client 端的解決方案，而且僅針對預設設定做比較，不涉及改動 isolation level 或 MySQL server config</p>
+<h2 id="reference">Reference</h2>
+<ul>
+<li><a href="https://dev.mysql.com/doc/refman/8.0/en/insert.html">15.2.7 INSERT Statement</a></li>
+<li><a href="https://dev.mysql.com/doc/refman/8.0/en/insert-on-duplicate.html">15.2.7.2 INSERT &hellip; ON DUPLICATE KEY UPDATE Statement</a></li>
+<li><a href="https://dev.mysql.com/doc/refman/8.0/en/insert-select.html">15.2.7.1 INSERT &hellip; SELECT Statement</a></li>
+<li><a href="https://dev.mysql.com/doc/refman/8.0/en/innodb-locks-set.html">17.7.3 Locks Set by Different SQL Statements in InnoDB</a></li>
+<li><a href="https://dev.mysql.com/doc/refman/8.0/en/innodb-auto-increment-handling.html">17.6.1.6 AUTO_INCREMENT Handling in InnoDB</a></li>
+</ul>
+
+                    
+                    <HR width="100%" id="EOF">
+		    <p style="color:#777;">Last modified on 2025-02-07</p>
+                    
+                </div>
+            </div>
+            
+            
+            <nav class="post-pagination">
+
+                
+                <a class="newer-posts">
+			Next<br>No newer posts.
+                </a>
+                
+                
+                
+                <a class="older-posts" href="https://blog.idontwannarock.dev/2024/10/pxc_mysql_docker_compose/">
+			Previous<br>Percona XtraDB Cluster MySQL with Docker Compose
+                </a>
+                
+            </nav>
+            <div class="post-comment-wrapper">
+                
+<div id="disqus_thread"></div>
+<script>
+    
+
+    var disqus_config = function () {
+        
+        this.page.url = 'https:\/\/blog.idontwannarock.dev\/2025\/02\/how_to_insert_if_not_exists_in_mysql\/';  
+        
+        
+        this.page.identifier = '\/2025\/02\/how_to_insert_if_not_exists_in_mysql\/'; 
+    };
+    (function() {
+        var d = document, s = d.createElement('script');
+        s.src = 'https://howard-tech-blog.disqus.com/embed.js';
+        s.setAttribute('data-timestamp', +new Date());
+        (d.head || d.body).appendChild(s);
+    })();
+</script>
+<noscript> Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript" rel="nofollow"> comments powered by Disqus.  </a> </noscript>
+
+
+
+
+
+
+
+
+
+
+
+
+
+            </div>
+        </div>
+    </div>
+
+
+                    </div>
+            </div><div id="sideContainer" class="side-container">
+    
+    <a class="a-block nav-head false" href="https://blog.idontwannarock.dev/">
+    
+        <div class="nav-title">
+            Howard Tech Note
+        </div>
+        
+        <div class="nav-subtitle">
+            Share * Record * Program
+        </div>
+        
+    </a>
+
+    <div class="nav-link-list">
+        
+        
+            
+            
+            
+            
+            
+            <a class="a-block nav-link-item false" href="https://blog.idontwannarock.dev/posts">
+                Archive
+            </a>
+            
+        
+            
+            
+            
+            
+            
+            <a class="a-block nav-link-item false" href="https://blog.idontwannarock.dev/categories">
+                Categories
+            </a>
+            
+        
+            
+            
+            
+            
+            
+            <a class="a-block nav-link-item false" href="https://blog.idontwannarock.dev/tags">
+                Tags
+            </a>
+            
+        
+            
+            
+            
+            
+            
+            <a class="a-block nav-link-item false" href="https://blog.idontwannarock.dev/about">
+                About
+            </a>
+            
+        
+            
+            
+            
+            
+            
+            <a class="a-block nav-link-item false" href="https://blog.idontwannarock.dev/index.xml">
+                RSS Feed
+            </a>
+            
+        
+    </div>
+
+    
+
+    <div class="nav-footer">
+        
+Hugo Theme <a href="https://github.com/amazingrise/hugo-theme-diary">Diary</a> by <a href="https://risehere.net/">Rise</a>
+<br>
+Ported from <a href="https://mak1t0.cc/" target="_blank" rel="noreferrer noopener">Makito</a>'s <a href="https://github.com/SumiMakito/hexo-theme-journal/" target="_blank" rel="noreferrer noopener">Journal.</a> <br>
+<br>
+
+&copy;
+	
+	This website by Howard Wang is licensed under a Creative Common Attribution-ShareAlike 4.0 International License.
+	
+
+    </div>
+    
+</div><div id="extraContainer" class="extra-container">
+    <div class="toc-wrapper">
+        
+
+        
+        <div class="toc">
+
+
+	<div class="toc-content">
+	
+		
+		
+		
+		<center>- CATALOG -</center>
+		
+		
+		<ul>
+			
+				
+				
+					
+						
+						
+						
+						
+							
+								
+									<ul>
+								
+							
+						
+						
+							<li>
+								<a href="#%e6%ba%96%e5%82%99" class="nav-準備">
+									準備
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+						
+							<li>
+								<a href="#insert" class="nav-insert">
+									insert
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+						
+							<li>
+								<a href="#insert-ignore" class="nav-insert-ignore">
+									insert ignore
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+						
+							<li>
+								<a href="#replace" class="nav-replace">
+									replace
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+						
+							<li>
+								<a href="#insert--on-duplicate-key-update" class="nav-insert--on-duplicate-key-update">
+									insert … on duplicate key update
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+							
+								
+									<ul>
+								
+							
+						
+						
+							<li>
+								<a href="#insert--on-duplicate-key-update-id--id" class="nav-insert--on-duplicate-key-update-id--id">
+									insert … on duplicate key update id = id
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+							
+								</ul>
+							
+						
+						
+						
+							<li>
+								<a href="#insert--select--not-exists" class="nav-insert--select--not-exists">
+									insert … select … not exists
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+							
+								
+									<ul>
+								
+							
+						
+						
+							<li>
+								<a href="#insert--select--not-exists--on-duplicate-key" class="nav-insert--select--not-exists--on-duplicate-key">
+									insert … select … not exists … on duplicate key
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+						
+							<li>
+								<a href="#insert-ignore--select--not-exists" class="nav-insert-ignore--select--not-exists">
+									insert ignore … select … not exists
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+							
+								</ul>
+							
+						
+						
+						
+							<li>
+								<a href="#conclusion" class="nav-conclusion">
+									Conclusion
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+						
+							<li>
+								<a href="#reference" class="nav-reference">
+									Reference
+								</a>
+							</li>
+						
+						
+					
+				
+			
+		</ul>
+	</div>
+
+</div>
+        
+    </div>
+    <div class="pagination">
+        <a id="globalBackToTop" class="pagination-action animated-visibility" href="#top"
+            :class="{ invisible: scrollY == 0 }">
+            <i class="material-icons pagination-action-icon">
+                keyboard_arrow_up
+            </i>
+        </a>
+        
+        <a type="button" class="pagination-action" id="darkModeToggleButton">
+            <span class="material-icons pagination-action-icon" id="darkModeToggleIcon">
+                dark_mode
+            </span>
+        </a>
+        
+        
+    </div>
+</div>
+
+<div id="single-column-footer">
+Hugo Theme <a href="https://github.com/amazingrise/hugo-theme-diary">Diary</a> by <a href="https://risehere.net/">Rise</a>
+<br>
+Ported from <a href="https://mak1t0.cc/" target="_blank" rel="noreferrer noopener">Makito</a>'s <a href="https://github.com/SumiMakito/hexo-theme-journal/" target="_blank" rel="noreferrer noopener">Journal.</a> <br>
+<br>
+
+&copy;
+	
+	This website by Howard Wang is licensed under a Creative Common Attribution-ShareAlike 4.0 International License.
+	
+</div>
+            </div>
+    
+    <script src="https://blog.idontwannarock.dev/js/journal.js"></script></body>
+</html>

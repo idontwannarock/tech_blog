@@ -619,8 +619,7 @@
 </span></span></code></pre></div><p>所以我們可以得知 Quartz 更新節點狀態是依靠運行環境的時間來進行同步，所以實際情況下，如果各節點運行在不同環境，需要注意各環境之間時間的同步</p>
 <h3 id="保證任務執行的一致性">保證任務執行的一致性</h3>
 <blockquote>
-<p>以下討論皆以採用 <code>JobStroeTX</code> 並配合 MySQL 來繼續討論 Quartz 集群機制，可以比較清楚看到 Quartz 實作的步驟；若是採用 <code>JobStoreCMT</code> 則要看應用本身提供怎樣的 transaction 機制，例如 JTA，但除了 transaction 的部分，其他概念大致上還是相同，所以其餘步驟也是大致相同</p>
-</blockquote>
+<p>以下討論皆以採用 <code>JobStroeTX</code> 並配合 MySQL 來繼續討論 Quartz 集群機制，可以比較清楚看到 Quartz 實作的步驟；若是採用 <code>JobStoreCMT</code> 則要看應用本身提供怎樣的 transaction 機制，例如 JTA，但除了 transaction 的部分，其他概念大致上還是相同，所以其餘步驟也是大致相同</p></blockquote>
 <p>Quartz 保證任務執行一致性的方式實際上是在各節點認領 <code>Trigger</code> 時，先透過 database 本身支援的 row lock，例如 MySQL 在開啟 transaction 後，可透過 <code>select * from QRTZ_LOCKS where SCHED_NAME = &lt;scheduleName&gt; AND LOCK_NAME = ? for update</code> 語句取得 row lock 實作悲觀鎖，以確保任務不會被重複執行：</p>
 <div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-java" data-lang="java"><span style="display:flex;"><span><span style="color:#8be9fd;font-style:italic">protected</span> <span style="color:#ff79c6">&lt;</span>T<span style="color:#ff79c6">&gt;</span> T <span style="color:#50fa7b">executeInNonManagedTXLock</span>(
 </span></span><span style="display:flex;"><span>	String lockName, 

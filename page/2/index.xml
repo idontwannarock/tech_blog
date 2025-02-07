@@ -7,9 +7,242 @@
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
     <copyright>This website by Howard Wang is licensed under a Creative Common Attribution-ShareAlike 4.0 International License.</copyright>
-    <lastBuildDate>Wed, 16 Oct 2024 11:06:41 +0800</lastBuildDate>
+    <lastBuildDate>Fri, 07 Feb 2025 09:39:10 +0800</lastBuildDate>
     
         <atom:link href="https://blog.idontwannarock.dev/index.xml" rel="self" type="application/rss+xml" />
+    
+    
+    
+        <item>
+        <title>Quartz Misfire Handling Instruction</title>
+        <link>https://blog.idontwannarock.dev/2022/11/quartz-misfire-handling-instruction/</link>
+        <pubDate>Tue, 29 Nov 2022 15:21:19 +0800</pubDate>
+        
+        <guid>https://blog.idontwannarock.dev/2022/11/quartz-misfire-handling-instruction/</guid>
+        <description>Howard Tech Note https://blog.idontwannarock.dev/2022/11/quartz-misfire-handling-instruction/ -&lt;p&gt;Quartz 系列：&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;a href=&#34;https://blog.idontwannarock.dev/2022/11/quartz-intro/&#34;&gt;Quartz 介紹&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;https://blog.idontwannarock.dev/2022/11/quartz-cluster-fixed-and-dynamic-trigger-spring-boot-integration/&#34;&gt;Spring Boot 整合 Quartz 集群執行預設及動態排程&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;Quartz Misfire Handling Instruction&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;使用 Quartz 來幫助排程管理很方便，但還有一個需要注意的地方，就是設定 misfire handling instruction&lt;/p&gt;
+&lt;h1 id=&#34;misfire-概念&#34;&gt;Misfire 概念&lt;/h1&gt;
+&lt;p&gt;首先要來釐清在 Quartz 的架構下，什麼情況能稱為 misfire，其實講到底就只有一種：「Job 在到達預定該觸發的時間未觸發」&lt;/p&gt;
+&lt;p&gt;但怎樣算是未觸發，其實主要有兩個條件，第一個是設定的「觸發時間」，第二個則是「&lt;code&gt;misfireThreshold&lt;/code&gt;」&lt;/p&gt;
+&lt;p&gt;舉例來說如果有一個 Job 設定 12:00 觸發，並且 Quartz 的 &lt;code&gt;misfireThreshold&lt;/code&gt; 設定為 2min，因此當我在 12:01 準備要執行的時候，因為已經超過設定的觸發時間，但還沒有超過 &lt;code&gt;misfireThreshold&lt;/code&gt; 的 2min，所以並不會被 Quartz 認為是 misfire&lt;/p&gt;
+&lt;p&gt;那另一方面來說，以同樣的例子而言，如果 Quartz 準備要執行的時候已經是 12:03，那這個 Job 的這次執行就會被認為是 misfire，這時候 Quartz 就會依照設定好的 misfire handling instruction 來執行未觸發時的動作&lt;/p&gt;
+&lt;p&gt;這樣舉例就能很清楚的理解 &lt;code&gt;misfireThreshold&lt;/code&gt; 的意義&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;p&gt;要在 Spring Boot 整合 Quartz 專案中設定 &lt;code&gt;misfireThreshold&lt;/code&gt;，可在 properties 檔中設定 &lt;code&gt;spring.quartz.properties.org.quartz.jobStore.misfireThreshold=60000&lt;/code&gt;，這個參數的 default 就是 60000 milliseconds 也就是一分鐘&lt;/p&gt;&lt;/blockquote&gt;
+&lt;p&gt;而 misfire handling instruction 會因為不同類型的 Trigger 而會有些不同，以下來討論常見的 &lt;code&gt;SimpleTrigger&lt;/code&gt; 跟 &lt;code&gt;CronTrigger&lt;/code&gt; 有提供的 misfire handling instruction&lt;/p&gt;
+&lt;h1 id=&#34;misfire-handling-instruction&#34;&gt;Misfire Handling Instruction&lt;/h1&gt;
+&lt;h2 id=&#34;simpletrigger&#34;&gt;SimpleTrigger&lt;/h2&gt;
+&lt;p&gt;以 &lt;code&gt;SimpleTrigger&lt;/code&gt; 來說，有提供以下七種 misfire handling instruction：&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;code&gt;MISFIRE_INSTRUCTION_SMART_POLICY&lt;/code&gt;&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;MISFIRE_INSTRUCTION_IGNORE_MISFIRE_POLICY&lt;/code&gt;&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;MISFIRE_INSTRUCTION_FIRE_NOW&lt;/code&gt;&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;MISFIRE_INSTRUCTION_RESCHEDULE_NEXT_WITH_EXISTING_COUNT&lt;/code&gt;&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;MISFIRE_INSTRUCTION_RESCHEDULE_NEXT_WITH_REMAINING_COUNT&lt;/code&gt;&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;MISFIRE_INSTRUCTION_RESCHEDULE_NOW_WITH_EXISTING_REPEAT_COUNT&lt;/code&gt;&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;MISFIRE_INSTRUCTION_RESCHEDULE_NOW_WITH_REMAINING_REPEAT_COUNT&lt;/code&gt;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;因為 &lt;code&gt;SimpleTrigger&lt;/code&gt; 有分為「不重複執行」、「執行固定次數」及「無限次執行」三種狀況，所以各種 misfire handling instruction 的實際執行狀況就會有所不同&lt;/p&gt;
+&lt;h3 id=&#34;不重複執行&#34;&gt;不重複執行&lt;/h3&gt;
+&lt;table&gt;
+  &lt;thead&gt;
+      &lt;tr&gt;
+          &lt;th style=&#34;text-align: left&#34;&gt;Instruction&lt;/th&gt;
+          &lt;th style=&#34;text-align: left&#34;&gt;解釋&lt;/th&gt;
+          &lt;th style=&#34;text-align: left&#34;&gt;情境舉例&lt;/th&gt;
+      &lt;/tr&gt;
+  &lt;/thead&gt;
+  &lt;tbody&gt;
+      &lt;tr&gt;
+          &lt;td style=&#34;text-align: left&#34;&gt;&lt;code&gt;MISFIRE_INSTRUCTION_SMART_POLICY&lt;/code&gt;&lt;/td&gt;
+          &lt;td style=&#34;text-align: left&#34;&gt;同 &lt;code&gt;MISFIRE_INSTRUCTION_FIRE_NOW&lt;/code&gt;&lt;/td&gt;
+          &lt;td&gt;&lt;/td&gt;
+      &lt;/tr&gt;
+      &lt;tr&gt;
+          &lt;td style=&#34;text-align: left&#34;&gt;&lt;code&gt;MISFIRE_INSTRUCTION_IGNORE_MISFIRE_POLICY&lt;/code&gt;&lt;/td&gt;
+          &lt;td style=&#34;text-align: left&#34;&gt;同 &lt;code&gt;MISFIRE_INSTRUCTION_FIRE_NOW&lt;/code&gt;&lt;/td&gt;
+          &lt;td&gt;&lt;/td&gt;
+      &lt;/tr&gt;
+      &lt;tr&gt;
+          &lt;td style=&#34;text-align: left&#34;&gt;&lt;code&gt;MISFIRE_INSTRUCTION_FIRE_NOW&lt;/code&gt;&lt;/td&gt;
+          &lt;td style=&#34;text-align: left&#34;&gt;當 Quartz 發現 job misfire，會立刻執行&lt;/td&gt;
+          &lt;td style=&#34;text-align: left&#34;&gt;例如有個原本預計在 12:00 執行的系統清理的 job，但 Quartz 應用程式可能因為維護的關係，13:00 才啟動&lt;br&gt;所以 scheduler 在 13:00 一啟動的時候，就會立刻執行 misfire 的那次 job&lt;/td&gt;
+      &lt;/tr&gt;
+      &lt;tr&gt;
+          &lt;td style=&#34;text-align: left&#34;&gt;&lt;code&gt;MISFIRE_INSTRUCTION_RESCHEDULE_NEXT_WITH_EXISTING_COUNT&lt;/code&gt;&lt;/td&gt;
+          &lt;td style=&#34;text-align: left&#34;&gt;同 &lt;code&gt;MISFIRE_INSTRUCTION_RESCHEDULE_NEXT_WITH_REMAINING_COUNT&lt;/code&gt;&lt;/td&gt;
+          &lt;td&gt;&lt;/td&gt;
+      &lt;/tr&gt;
+      &lt;tr&gt;
+          &lt;td style=&#34;text-align: left&#34;&gt;&lt;code&gt;MISFIRE_INSTRUCTION_RESCHEDULE_NEXT_WITH_REMAINING_COUNT&lt;/code&gt;&lt;/td&gt;
+          &lt;td style=&#34;text-align: left&#34;&gt;因為已經沒有下一次觸發，所以不執行任何動作&lt;/td&gt;
+          &lt;td style=&#34;text-align: left&#34;&gt;例如預計錄製一個電視節目，如果已經超過兩個小時才發現 misfire，已經沒有必要再執行錄製的工作&lt;/td&gt;
+      &lt;/tr&gt;
+      &lt;tr&gt;
+          &lt;td style=&#34;text-align: left&#34;&gt;&lt;code&gt;MISFIRE_INSTRUCTION_RESCHEDULE_NOW_WITH_EXISTING_REPEAT_COUNT&lt;/code&gt;&lt;/td&gt;
+          &lt;td style=&#34;text-align: left&#34;&gt;同 &lt;code&gt;MISFIRE_INSTRUCTION_FIRE_NOW&lt;/code&gt;&lt;/td&gt;
+          &lt;td&gt;&lt;/td&gt;
+      &lt;/tr&gt;
+      &lt;tr&gt;
+          &lt;td style=&#34;text-align: left&#34;&gt;&lt;code&gt;MISFIRE_INSTRUCTION_RESCHEDULE_NOW_WITH_REMAINING_REPEAT_COUNT&lt;/code&gt;&lt;/td&gt;
+          &lt;td style=&#34;text-align: left&#34;&gt;同 &lt;code&gt;MISFIRE_INSTRUCTION_FIRE_NOW&lt;/code&gt;&lt;/td&gt;
+          &lt;td&gt;&lt;/td&gt;
+      &lt;/tr&gt;
+  &lt;/tbody&gt;
+&lt;/table&gt;
+&lt;h3 id=&#34;執行固定次數&#34;&gt;執行固定次數&lt;/h3&gt;
+&lt;p&gt;例如有個從今天 9:00 開始每隔一個小時執行一次，總共執行 8 次的任務，正常情況下應該在 16:00 執行最後一次&lt;/p&gt;
+&lt;p&gt;但因為某種原因 scheduler 沒辦法執行 9:00 跟 10:00 這兩次任務，並且直到 10:15 才發現有 2 次 misfire:&lt;/p&gt;
+&lt;table&gt;
+  &lt;thead&gt;
+      &lt;tr&gt;
+          &lt;th style=&#34;text-align: left&#34;&gt;Instruction&lt;/th&gt;
+          &lt;th style=&#34;text-align: left&#34;&gt;解釋&lt;/th&gt;
+          &lt;th style=&#34;text-align: left&#34;&gt;情境舉例&lt;/th&gt;
+      &lt;/tr&gt;
+  &lt;/thead&gt;
+  &lt;tbody&gt;
+      &lt;tr&gt;
+          &lt;td style=&#34;text-align: left&#34;&gt;&lt;code&gt;MISFIRE_INSTRUCTION_SMART_POLICY&lt;/code&gt;&lt;/td&gt;
+          &lt;td style=&#34;text-align: left&#34;&gt;同 &lt;code&gt;MISFIRE_INSTRUCTION_RESCHEDULE_NOW_WITH_EXISTING_REPEAT_COUNT&lt;/code&gt;&lt;/td&gt;
+          &lt;td&gt;&lt;/td&gt;
+      &lt;/tr&gt;
+      &lt;tr&gt;
+          &lt;td style=&#34;text-align: left&#34;&gt;&lt;code&gt;MISFIRE_INSTRUCTION_IGNORE_MISFIRE_POLICY&lt;/code&gt;&lt;/td&gt;
+          &lt;td style=&#34;text-align: left&#34;&gt;以最快的速度執行所有 misfire 的 job，然後再回到正常的 schedule&lt;/td&gt;
+          &lt;td style=&#34;text-align: left&#34;&gt;scheduler  會以最快的速度執行 9:00 及 10:00 這兩次 misfire 的 job，並等到 11:00 回復到正常的排程&lt;/td&gt;
+      &lt;/tr&gt;
+      &lt;tr&gt;
+          &lt;td style=&#34;text-align: left&#34;&gt;&lt;code&gt;MISFIRE_INSTRUCTION_FIRE_NOW&lt;/code&gt;&lt;/td&gt;
+          &lt;td style=&#34;text-align: left&#34;&gt;同 &lt;code&gt;MISFIRE_INSTRUCTION_RESCHEDULE_NOW_WITH_REMAINING_REPEAT_COUNT&lt;/code&gt;&lt;/td&gt;
+          &lt;td&gt;&lt;/td&gt;
+      &lt;/tr&gt;
+      &lt;tr&gt;
+          &lt;td style=&#34;text-align: left&#34;&gt;&lt;code&gt;MISFIRE_INSTRUCTION_RESCHEDULE_NEXT_WITH_EXISTING_COUNT&lt;/code&gt;&lt;/td&gt;
+          &lt;td style=&#34;text-align: left&#34;&gt;scheduler 當下不會做任何動作，而是依照設定的執行間隔，在下一次預定執行的時間，重新開始執行所有 misfire 的任務&lt;/td&gt;
+          &lt;td style=&#34;text-align: left&#34;&gt;scheduler 會等到 11:00 再開始重新以每小時執行一次的間隔，依序執行原定的任務直到 18:00 結束&lt;/td&gt;
+      &lt;/tr&gt;
+      &lt;tr&gt;
+          &lt;td style=&#34;text-align: left&#34;&gt;&lt;code&gt;MISFIRE_INSTRUCTION_RESCHEDULE_NEXT_WITH_REMAINING_COUNT&lt;/code&gt;&lt;/td&gt;
+          &lt;td style=&#34;text-align: left&#34;&gt;scheduler 會放棄 misfire 的任務，等到下次執行的時間，執行剩下的任務&lt;br&gt;&lt;strong&gt;任務總執行次數會比原本預計的較少&lt;/strong&gt;&lt;/td&gt;
+          &lt;td style=&#34;text-align: left&#34;&gt;scheduler 10:15 發現有 2 次 misfire，但會執行放棄那兩次 misfire，仍然等到 11:00 開始執行下次任務直到原訂的 16:00&lt;br&gt;所以總執行次數只會有 6 次，而不是原定的 8 次&lt;/td&gt;
+      &lt;/tr&gt;
+      &lt;tr&gt;
+          &lt;td style=&#34;text-align: left&#34;&gt;&lt;code&gt;MISFIRE_INSTRUCTION_RESCHEDULE_NOW_WITH_EXISTING_REPEAT_COUNT&lt;/code&gt;&lt;/td&gt;
+          &lt;td style=&#34;text-align: left&#34;&gt;第一次 misfire 會被立刻執行，其餘的 misfire 及原定任務會被以設定好的執行間隔，重新排程執行&lt;br&gt;&lt;strong&gt;任務總執行次數不會改變&lt;/strong&gt;&lt;/td&gt;
+          &lt;td style=&#34;text-align: left&#34;&gt;當 scheduler 10:15 發現有 2 次 misfire 時，第一個 misfire 會被立刻執行，然後 scheduler 會等待一個小時到 11:15 執行第二次任務，最後 8 次任務執行結束的時間為 17:15&lt;/td&gt;
+      &lt;/tr&gt;
+      &lt;tr&gt;
+          &lt;td style=&#34;text-align: left&#34;&gt;&lt;code&gt;MISFIRE_INSTRUCTION_RESCHEDULE_NOW_WITH_REMAINING_REPEAT_COUNT&lt;/code&gt;&lt;/td&gt;
+          &lt;td style=&#34;text-align: left&#34;&gt;第一次 misfire 會被立刻執行，其他的 misfire 會被放棄，scheduler 會以設定好的執行間隔，重新排程執行剩下未被 misfire 的任務&lt;br&gt;&lt;strong&gt;如果 misfire 超過一次，任務總執行次數會比原本預定地少&lt;/strong&gt;&lt;/td&gt;
+          &lt;td style=&#34;text-align: left&#34;&gt;當 scheduler 10:15 發現有 2 次 misfire 時，第一個 misfire 會被立刻執行，第二個 misfire 會被放棄，然後 scheduler 會等待一個小時到 11:15 執行剩下的任務，最後 7 次任務執行結束時間為 16:15&lt;/td&gt;
+      &lt;/tr&gt;
+  &lt;/tbody&gt;
+&lt;/table&gt;
+&lt;h3 id=&#34;無限次執行&#34;&gt;無限次執行&lt;/h3&gt;
+&lt;p&gt;例如有一個任務從 9:00 開始每隔一個小時觸發，但因為某種原因 scheduler 沒辦法執行 9:00 跟 10:00 這兩次任務，並且直到 10:15 才發現有 2 次 misfire:&lt;/p&gt;
+&lt;table&gt;
+  &lt;thead&gt;
+      &lt;tr&gt;
+          &lt;th style=&#34;text-align: left&#34;&gt;Instruction&lt;/th&gt;
+          &lt;th style=&#34;text-align: left&#34;&gt;解釋&lt;/th&gt;
+          &lt;th style=&#34;text-align: left&#34;&gt;情境舉例&lt;/th&gt;
+      &lt;/tr&gt;
+  &lt;/thead&gt;
+  &lt;tbody&gt;
+      &lt;tr&gt;
+          &lt;td style=&#34;text-align: left&#34;&gt;&lt;code&gt;MISFIRE_INSTRUCTION_SMART_POLICY&lt;/code&gt;&lt;/td&gt;
+          &lt;td style=&#34;text-align: left&#34;&gt;同 &lt;code&gt;MISFIRE_INSTRUCTION_RESCHEDULE_NEXT_WITH_REMAINING_COUNT&lt;/code&gt;&lt;/td&gt;
+          &lt;td&gt;&lt;/td&gt;
+      &lt;/tr&gt;
+      &lt;tr&gt;
+          &lt;td style=&#34;text-align: left&#34;&gt;&lt;code&gt;MISFIRE_INSTRUCTION_IGNORE_MISFIRE_POLICY&lt;/code&gt;&lt;/td&gt;
+          &lt;td style=&#34;text-align: left&#34;&gt;以最快的速度執行所有 misfire 的 job，然後再回到正常的 schedule&lt;/td&gt;
+          &lt;td style=&#34;text-align: left&#34;&gt;scheduler  會以最快的速度執行 9:00 及 10:00 這兩次 misfire 的 job，並等到 11:00 回復到正常的排程&lt;/td&gt;
+      &lt;/tr&gt;
+      &lt;tr&gt;
+          &lt;td style=&#34;text-align: left&#34;&gt;&lt;code&gt;MISFIRE_INSTRUCTION_FIRE_NOW&lt;/code&gt;&lt;/td&gt;
+          &lt;td style=&#34;text-align: left&#34;&gt;同 &lt;code&gt;MISFIRE_INSTRUCTION_RESCHEDULE_NOW_WITH_REMAINING_REPEAT_COUNT&lt;/code&gt;&lt;/td&gt;
+          &lt;td&gt;&lt;/td&gt;
+      &lt;/tr&gt;
+      &lt;tr&gt;
+          &lt;td style=&#34;text-align: left&#34;&gt;&lt;code&gt;MISFIRE_INSTRUCTION_RESCHEDULE_NEXT_WITH_EXISTING_COUNT&lt;/code&gt;&lt;/td&gt;
+          &lt;td style=&#34;text-align: left&#34;&gt;同 &lt;code&gt;MISFIRE_INSTRUCTION_RESCHEDULE_NEXT_WITH_REMAINING_COUNT&lt;/code&gt;&lt;/td&gt;
+          &lt;td&gt;&lt;/td&gt;
+      &lt;/tr&gt;
+      &lt;tr&gt;
+          &lt;td style=&#34;text-align: left&#34;&gt;&lt;code&gt;MISFIRE_INSTRUCTION_RESCHEDULE_NEXT_WITH_REMAINING_COUNT&lt;/code&gt;&lt;/td&gt;
+          &lt;td style=&#34;text-align: left&#34;&gt;scheduler 會放棄 misfire 的任務，等到下次執行的時間，執行接下來的任務&lt;/td&gt;
+          &lt;td style=&#34;text-align: left&#34;&gt;scheduler 10:15 發現有 2 次 misfire，但會執行放棄那兩次 misfire，等到 11:00 開始執行下次任務&lt;/td&gt;
+      &lt;/tr&gt;
+      &lt;tr&gt;
+          &lt;td style=&#34;text-align: left&#34;&gt;&lt;code&gt;MISFIRE_INSTRUCTION_RESCHEDULE_NOW_WITH_EXISTING_REPEAT_COUNT&lt;/code&gt;&lt;/td&gt;
+          &lt;td style=&#34;text-align: left&#34;&gt;同 &lt;code&gt;MISFIRE_INSTRUCTION_RESCHEDULE_NOW_WITH_REMAINING_REPEAT_COUNT&lt;/code&gt;&lt;/td&gt;
+          &lt;td&gt;&lt;/td&gt;
+      &lt;/tr&gt;
+      &lt;tr&gt;
+          &lt;td style=&#34;text-align: left&#34;&gt;&lt;code&gt;MISFIRE_INSTRUCTION_RESCHEDULE_NOW_WITH_REMAINING_REPEAT_COUNT&lt;/code&gt;&lt;/td&gt;
+          &lt;td style=&#34;text-align: left&#34;&gt;第一次 misfire 會被立刻執行，其他的 misfire 會被放棄，scheduler 會以設定好的執行間隔，重新排程執行接下來的任務&lt;/td&gt;
+          &lt;td style=&#34;text-align: left&#34;&gt;當 scheduler 10:15 發現有 2 次 misfire 時，第一個 misfire 會被立刻執行，第二個 misfire 會被放棄，然後 scheduler 會等待一個小時到 11:15 執行接下來的任務&lt;/td&gt;
+      &lt;/tr&gt;
+  &lt;/tbody&gt;
+&lt;/table&gt;
+&lt;h2 id=&#34;crontrigger&#34;&gt;CronTrigger&lt;/h2&gt;
+&lt;p&gt;&lt;code&gt;CronTrigger&lt;/code&gt; 有提供以下四種 misfire handling instruction:&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;code&gt;MISFIRE_INSTRUCTION_SMART_POLICY&lt;/code&gt;&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;MISFIRE_INSTRUCTION_IGNORE_MISFIRE_POLICY&lt;/code&gt;&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;MISFIRE_INSTRUCTION_FIRE_ONCE_NOW&lt;/code&gt;&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;MISFIRE_INSTRUCTION_DO_NOTHING&lt;/code&gt;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;舉例來說，我們安排了一個星期一到五，每天 9:00 到 17:00 之間，每隔一個小時執行一次的任務 (&lt;code&gt;0 0 9-17 ? * MON-FRI&lt;/code&gt;)，但同樣的錯過了頭兩次執行，並在 10:15 發現有兩次 misfire:&lt;/p&gt;
+&lt;table&gt;
+  &lt;thead&gt;
+      &lt;tr&gt;
+          &lt;th style=&#34;text-align: left&#34;&gt;Instruction&lt;/th&gt;
+          &lt;th style=&#34;text-align: left&#34;&gt;解釋&lt;/th&gt;
+          &lt;th style=&#34;text-align: left&#34;&gt;情境舉例&lt;/th&gt;
+      &lt;/tr&gt;
+  &lt;/thead&gt;
+  &lt;tbody&gt;
+      &lt;tr&gt;
+          &lt;td style=&#34;text-align: left&#34;&gt;&lt;code&gt;MISFIRE_INSTRUCTION_SMART_POLICY&lt;/code&gt;&lt;/td&gt;
+          &lt;td style=&#34;text-align: left&#34;&gt;同 &lt;code&gt;MISFIRE_INSTRUCTION_FIRE_ONCE_NOW&lt;/code&gt;&lt;/td&gt;
+          &lt;td&gt;&lt;/td&gt;
+      &lt;/tr&gt;
+      &lt;tr&gt;
+          &lt;td style=&#34;text-align: left&#34;&gt;&lt;code&gt;MISFIRE_INSTRUCTION_IGNORE_MISFIRE_POLICY&lt;/code&gt;&lt;/td&gt;
+          &lt;td style=&#34;text-align: left&#34;&gt;以最快的速度執行所有 misfire 的 job，然後再回到正常的 schedule&lt;/td&gt;
+          &lt;td style=&#34;text-align: left&#34;&gt;scheduler  會以最快的速度執行 9:00 及 10:00 這兩次 misfire 的 job，並等到 11:00 回復到正常的排程&lt;/td&gt;
+      &lt;/tr&gt;
+      &lt;tr&gt;
+          &lt;td style=&#34;text-align: left&#34;&gt;&lt;code&gt;MISFIRE_INSTRUCTION_FIRE_ONCE_NOW&lt;/code&gt;&lt;/td&gt;
+          &lt;td style=&#34;text-align: left&#34;&gt;第一次 misfire 會被立刻執行，其他的 misfire 會被放棄，等到下次執行的時間，執行接下來的任務&lt;/td&gt;
+          &lt;td style=&#34;text-align: left&#34;&gt;當 scheduler 10:15 發現有 2 次 misfire 時，第一個 misfire 會被立刻執行，第二個 misfire 會被放棄，然後 scheduler 會等到 11:00 開始執行下次任務&lt;/td&gt;
+      &lt;/tr&gt;
+      &lt;tr&gt;
+          &lt;td style=&#34;text-align: left&#34;&gt;&lt;code&gt;MISFIRE_INSTRUCTION_DO_NOTHING&lt;/code&gt;&lt;/td&gt;
+          &lt;td style=&#34;text-align: left&#34;&gt;scheduler 會放棄 misfire 的任務，等到下次執行的時間，執行接下來的任務&lt;/td&gt;
+          &lt;td style=&#34;text-align: left&#34;&gt;scheduler 10:15 發現有 2 次 misfire，但會執行放棄那兩次 misfire，等到 11:00 開始執行下次任務&lt;/td&gt;
+      &lt;/tr&gt;
+  &lt;/tbody&gt;
+&lt;/table&gt;
+&lt;p&gt;另外可以注意的是，還有以下兩種 trigger 也支援跟 &lt;code&gt;CronTrigger&lt;/code&gt; 相同的 misfire handling instruction:&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;code&gt;DailyTimeIntervalTrigger&lt;/code&gt;: 例如每 25 分鐘執行一次&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;CalendarIntervalTrigger&lt;/code&gt;: 例如每五個月執行一次&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h1 id=&#34;參考&#34;&gt;參考&lt;/h1&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;a href=&#34;https://nurkiewicz.com/2012/04/quartz-scheduler-misfire-instructions.html&#34;&gt;Quartz scheduler misfire instructions explained&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+- https://blog.idontwannarock.dev/2022/11/quartz-misfire-handling-instruction/ - This website by Howard Wang is licensed under a Creative Common Attribution-ShareAlike 4.0 International License.</description>
+        </item>
     
     
     
@@ -29,8 +262,7 @@
 &lt;p&gt;至於動態產生排程，網路上也很多教學，只是大多是採用 API 呼叫的方式去動態產生、運行、暫停、刪除排程等功能，而幾乎沒看到利用預設排程定時從 database 取得動態排程設定，並動態產生或移除排程的功能&lt;/p&gt;
 &lt;p&gt;接下來探討如何在 Spring Boot 整合 Quartz 的框架中實作以上需求，來達成依照自訂動態排程來發通知的需求&lt;/p&gt;
 &lt;blockquote&gt;
-&lt;p&gt;以下討論採用 Spring Boot 2.7.5 及 Quartz 2.3.2 版本並搭配 MySQL 做持久化&lt;/p&gt;
-&lt;/blockquote&gt;
+&lt;p&gt;以下討論採用 Spring Boot 2.7.5 及 Quartz 2.3.2 版本並搭配 MySQL 做持久化&lt;/p&gt;&lt;/blockquote&gt;
 &lt;h1 id=&#34;database-schema&#34;&gt;Database Schema&lt;/h1&gt;
 &lt;p&gt;首先需要在 MySQL 內建立相關的 schema，可以利用官方提供的這個 &lt;a href=&#34;https://github.com/quartz-scheduler/quartz/blob/master/quartz-core/src/main/resources/org/quartz/impl/jdbcjobstore/tables_mysql_innodb.sql&#34;&gt;script&lt;/a&gt; 來建立，並額外依照以下 sql 建立動態通知排程的 table：&lt;/p&gt;
 &lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;&#34;&gt;&lt;code class=&#34;language-sql&#34; data-lang=&#34;sql&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#ff79c6&#34;&gt;create&lt;/span&gt; &lt;span style=&#34;color:#ff79c6&#34;&gt;table&lt;/span&gt; &lt;span style=&#34;color:#ff79c6&#34;&gt;if&lt;/span&gt; &lt;span style=&#34;color:#ff79c6&#34;&gt;not&lt;/span&gt; exist NOTIFICATION_SCHEDULE
@@ -122,8 +354,7 @@
 &lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;}
 &lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;再來要將這個 JobFactory 設定到 &lt;code&gt;SchedulerFactoryBean&lt;/code&gt; 裡面，但這邊很多網路文章都教直接 &lt;code&gt;new&lt;/code&gt; 一個 &lt;code&gt;SchedulerFactoryBean&lt;/code&gt; 出來後再標記 &lt;code&gt;@Bean&lt;/code&gt; 的做法，但 &lt;a href=&#34;https://docs.spring.io/spring-boot/docs/current/reference/html/io.html#io.quartz&#34;&gt;官方文件&lt;/a&gt; (雖然只有短短幾行) 有提到&lt;/p&gt;
 &lt;blockquote&gt;
-&lt;p&gt;Quartz Scheduler configuration can be customized using &lt;code&gt;spring.quartz&lt;/code&gt; properties and &lt;code&gt;SchedulerFactoryBeanCustomizer&lt;/code&gt; beans, which allow programmatic &lt;code&gt;SchedulerFactoryBean&lt;/code&gt; customization.&lt;/p&gt;
-&lt;/blockquote&gt;
+&lt;p&gt;Quartz Scheduler configuration can be customized using &lt;code&gt;spring.quartz&lt;/code&gt; properties and &lt;code&gt;SchedulerFactoryBeanCustomizer&lt;/code&gt; beans, which allow programmatic &lt;code&gt;SchedulerFactoryBean&lt;/code&gt; customization.&lt;/p&gt;&lt;/blockquote&gt;
 &lt;p&gt;所以我們要利用 Spring Boot 整合 Quartz 提供的 &lt;code&gt;SchedulerFactoryBeanCustomizer&lt;/code&gt; 來做設定&lt;/p&gt;
 &lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;&#34;&gt;&lt;code class=&#34;language-java&#34; data-lang=&#34;java&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#ff79c6&#34;&gt;import&lt;/span&gt; lombok.RequiredArgsConstructor;
 &lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#ff79c6&#34;&gt;import&lt;/span&gt; org.springframework.boot.autoconfigure.quartz.SchedulerFactoryBeanCustomizer;
@@ -534,8 +765,7 @@
 &lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;所以我們可以得知 Quartz 更新節點狀態是依靠運行環境的時間來進行同步，所以實際情況下，如果各節點運行在不同環境，需要注意各環境之間時間的同步&lt;/p&gt;
 &lt;h3 id=&#34;保證任務執行的一致性&#34;&gt;保證任務執行的一致性&lt;/h3&gt;
 &lt;blockquote&gt;
-&lt;p&gt;以下討論皆以採用 &lt;code&gt;JobStroeTX&lt;/code&gt; 並配合 MySQL 來繼續討論 Quartz 集群機制，可以比較清楚看到 Quartz 實作的步驟；若是採用 &lt;code&gt;JobStoreCMT&lt;/code&gt; 則要看應用本身提供怎樣的 transaction 機制，例如 JTA，但除了 transaction 的部分，其他概念大致上還是相同，所以其餘步驟也是大致相同&lt;/p&gt;
-&lt;/blockquote&gt;
+&lt;p&gt;以下討論皆以採用 &lt;code&gt;JobStroeTX&lt;/code&gt; 並配合 MySQL 來繼續討論 Quartz 集群機制，可以比較清楚看到 Quartz 實作的步驟；若是採用 &lt;code&gt;JobStoreCMT&lt;/code&gt; 則要看應用本身提供怎樣的 transaction 機制，例如 JTA，但除了 transaction 的部分，其他概念大致上還是相同，所以其餘步驟也是大致相同&lt;/p&gt;&lt;/blockquote&gt;
 &lt;p&gt;Quartz 保證任務執行一致性的方式實際上是在各節點認領 &lt;code&gt;Trigger&lt;/code&gt; 時，先透過 database 本身支援的 row lock，例如 MySQL 在開啟 transaction 後，可透過 &lt;code&gt;select * from QRTZ_LOCKS where SCHED_NAME = &amp;lt;scheduleName&amp;gt; AND LOCK_NAME = ? for update&lt;/code&gt; 語句取得 row lock 實作悲觀鎖，以確保任務不會被重複執行：&lt;/p&gt;
 &lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;&#34;&gt;&lt;code class=&#34;language-java&#34; data-lang=&#34;java&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#8be9fd;font-style:italic&#34;&gt;protected&lt;/span&gt; &lt;span style=&#34;color:#ff79c6&#34;&gt;&amp;lt;&lt;/span&gt;T&lt;span style=&#34;color:#ff79c6&#34;&gt;&amp;gt;&lt;/span&gt; T &lt;span style=&#34;color:#50fa7b&#34;&gt;executeInNonManagedTXLock&lt;/span&gt;(
 &lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;	String lockName, 
@@ -602,8 +832,7 @@
 &lt;/ol&gt;
 &lt;p&gt;身為一個 Java 後端工程師，今天要來討論如何在 Spring Boot 的後端專案進行 general 的 XSS 防範。&lt;/p&gt;
 &lt;blockquote&gt;
-&lt;p&gt;請還是注意，general 的手段並不能很良好的防範 XSS 攻擊，而只是提供一個基本程度的防範。&lt;/p&gt;
-&lt;/blockquote&gt;
+&lt;p&gt;請還是注意，general 的手段並不能很良好的防範 XSS 攻擊，而只是提供一個基本程度的防範。&lt;/p&gt;&lt;/blockquote&gt;
 &lt;h2 id=&#34;csp-header&#34;&gt;CSP Header&lt;/h2&gt;
 &lt;p&gt;如果專案有整合 Spring Security，Spring Security 原生就已經預設在 response header 中加入 &lt;code&gt;X-XSS-Protection: 1; mode=block&lt;/code&gt;，但因為 CSP 需要自行設定資源允許的來源，所以 Spring Security 並沒有預設，需要在 &lt;code&gt;SecurityFilterChain&lt;/code&gt; 當中設定，舉例如下：&lt;/p&gt;
 &lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;&#34;&gt;&lt;code class=&#34;language-java&#34; data-lang=&#34;java&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;@Bean
@@ -892,19 +1121,16 @@
 &lt;h4 id=&#34;restful-api-with-content-security-policy-header&#34;&gt;RESTful API with Content-Security-Policy Header&lt;/h4&gt;
 &lt;p&gt;這邊額外研究一下如果是 RESTful API 還有需要加上 &lt;code&gt;Content-Security-Policy&lt;/code&gt; header 嗎？&lt;/p&gt;
 &lt;blockquote&gt;
-&lt;p&gt;這邊特別指定討論 RESTful API，其實是想表達後端 API 僅提供資料與前端溝通，而不負責提供待 render 的 HTML、CSS、JavaScript 等資源的情況，所以其他相同功能但並不特別遵守 REST 的 API 其實也適用此處的情況。&lt;/p&gt;
-&lt;/blockquote&gt;
+&lt;p&gt;這邊特別指定討論 RESTful API，其實是想表達後端 API 僅提供資料與前端溝通，而不負責提供待 render 的 HTML、CSS、JavaScript 等資源的情況，所以其他相同功能但並不特別遵守 REST 的 API 其實也適用此處的情況。&lt;/p&gt;&lt;/blockquote&gt;
 &lt;p&gt;通常這種情況多發生在前後端分離架構，前端透過 Ajax 呼叫後端 RESTful API 來取得資料進行畫面 render 的場景下，CSP 一般會直接配置在頁面 &lt;code&gt;&amp;lt;head&amp;gt;&lt;/code&gt; 中。所以原則上不需要後端回傳的 response 來提供 CSP 限制。&lt;/p&gt;
 &lt;p&gt;但若是硬要在後端 RESTful API 的 response header 中加入 CSP 會對前端造成什麼影響嗎？&lt;/p&gt;
 &lt;p&gt;我們可以從 W3C 提供的 CSP 文件中 &lt;a href=&#34;https://www.w3.org/TR/CSP2/#which-policy-applies&#34;&gt;3.5 Policy applicability&lt;/a&gt; 這段可以看到：&lt;/p&gt;
 &lt;blockquote&gt;
-&lt;p&gt;&amp;hellip;If a resource does not create a new execution context (for example, when including a script, image, or stylesheet into a document), then any policies delivered with that resource are discarded without effect. Its execution is subject to the policy or policies of the including context&amp;hellip;&lt;/p&gt;
-&lt;/blockquote&gt;
+&lt;p&gt;&amp;hellip;If a resource does not create a new execution context (for example, when including a script, image, or stylesheet into a document), then any policies delivered with that resource are discarded without effect. Its execution is subject to the policy or policies of the including context&amp;hellip;&lt;/p&gt;&lt;/blockquote&gt;
 &lt;p&gt;CSP 是否 apply 的關鍵是回傳的資源是否會產生新的執行上下文 (execution context)，這樣講很抽象，但可以參考 W3C 文件 &lt;a href=&#34;https://www.w3.org/TR/CSP2/#which-policy-applies&#34;&gt;3.5 Policy applicability&lt;/a&gt; 列出的表格來參照哪些資源回傳後 CSP 是否會 apply。&lt;/p&gt;
 &lt;p&gt;但同時也要注意，W3C 文件中同時也有指出其列出的 applicability 並非規範標準，所以實際各家瀏覽器如何實作可能並不一定相同。&lt;/p&gt;
 &lt;blockquote&gt;
-&lt;p&gt;&lt;em&gt;This section is not normative.&lt;/em&gt;&lt;/p&gt;
-&lt;/blockquote&gt;
+&lt;p&gt;&lt;em&gt;This section is not normative.&lt;/em&gt;&lt;/p&gt;&lt;/blockquote&gt;
 &lt;h2 id=&#34;參考&#34;&gt;參考&lt;/h2&gt;
 &lt;ul&gt;
 &lt;li&gt;&lt;a href=&#34;https://en.wikipedia.org/wiki/Cross-site_scripting&#34;&gt;Cross-site scripting&lt;/a&gt;&lt;/li&gt;
@@ -961,8 +1187,7 @@
 &lt;p&gt;有在寫 Java 的人應該都知道 primitive type 的比較可以直接用 &lt;code&gt;==&lt;/code&gt;，但非 primitive type (也就是繼承了 &lt;code&gt;Object&lt;/code&gt; 的類別) 的類別比較物件是否相同時應該使用 &lt;code&gt;equals()&lt;/code&gt; 方法，而這兩個方式有什麼差別呢？&lt;/p&gt;
 &lt;p&gt;首先，&lt;code&gt;==&lt;/code&gt; 是直接比較變數中的值，這個值在 primitive type 來說，例如 &lt;code&gt;int a = 1; int b = 2; boolean isEqual = a == b;&lt;/code&gt; 的變數 &lt;code&gt;a&lt;/code&gt; 在跟變數 &lt;code&gt;b&lt;/code&gt; 做比較的時候就是比較 1 是否等於 2；但若是非 primitive type 的時候，物件的值是什麼呢？就是該物件實例 (instance) 的 reference，也就是該物件在 JVM Heap 當中的位址&lt;/p&gt;
 &lt;blockquote&gt;
-&lt;p&gt;重新順一次，非全域 (non-static) 變數本身原則上會保存在 JVM stack 當中；變數型態如果是 primitive type，則值就保存在 stack；變數如果是物件，那物件本身的內容實際上是保存在 JVM heap，而 stack 的變數則是保存指向 heap 當中的位址&lt;/p&gt;
-&lt;/blockquote&gt;
+&lt;p&gt;重新順一次，非全域 (non-static) 變數本身原則上會保存在 JVM stack 當中；變數型態如果是 primitive type，則值就保存在 stack；變數如果是物件，那物件本身的內容實際上是保存在 JVM heap，而 stack 的變數則是保存指向 heap 當中的位址&lt;/p&gt;&lt;/blockquote&gt;
 &lt;p&gt;再來 &lt;code&gt;equals()&lt;/code&gt; 方法就是調用方法裡面的實作去做比較，如果類別本身沒有實作，那就是找繼承的類別們當中，有實作 &lt;code&gt;equals()&lt;/code&gt; 方法且繼承樹中最接近該類別的那個實作去執行比較，如果整顆繼承樹都沒有 override 過，那就是用 &lt;code&gt;Object&lt;/code&gt; 預設的 &lt;code&gt;equals()&lt;/code&gt; 方法&lt;/p&gt;
 &lt;p&gt;接著就要再探究 &lt;code&gt;Object.equals()&lt;/code&gt; 方法倒底是怎麼比較物件的呢？以 Java 11 的版本來說是這樣的&lt;/p&gt;
 &lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;&#34;&gt;&lt;code class=&#34;language-java&#34; data-lang=&#34;java&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#8be9fd;font-style:italic&#34;&gt;public&lt;/span&gt; &lt;span style=&#34;color:#8be9fd&#34;&gt;boolean&lt;/span&gt; &lt;span style=&#34;color:#50fa7b&#34;&gt;equals&lt;/span&gt;(Object obj) {
@@ -972,8 +1197,7 @@
 &lt;h2 id=&#34;optional-類別&#34;&gt;&lt;code&gt;Optional&lt;/code&gt; 類別&lt;/h2&gt;
 &lt;p&gt;&lt;code&gt;Optional&lt;/code&gt; 是 Java 1.8 推出的新 feature，目的就是為了處理 Java 惡名昭彰的 &lt;code&gt;NullPointerException&lt;/code&gt;&lt;/p&gt;
 &lt;blockquote&gt;
-&lt;p&gt;順帶一提 &lt;a href=&#34;https://www.infoq.com/presentations/Null-References-The-Billion-Dollar-Mistake-Tony-Hoare/&#34;&gt;Null Reference 的發明者 Tony Hoare 公開承認這是個錯誤&lt;/a&gt;&lt;/p&gt;
-&lt;/blockquote&gt;
+&lt;p&gt;順帶一提 &lt;a href=&#34;https://www.infoq.com/presentations/Null-References-The-Billion-Dollar-Mistake-Tony-Hoare/&#34;&gt;Null Reference 的發明者 Tony Hoare 公開承認這是個錯誤&lt;/a&gt;&lt;/p&gt;&lt;/blockquote&gt;
 &lt;p&gt;&lt;code&gt;Optional&lt;/code&gt; 處理 &lt;code&gt;null&lt;/code&gt; 的做法其實就是在物件外面做一個包裝，讓使用者間接操作物件；而要使用物件之前，&lt;code&gt;Optional&lt;/code&gt; 的方法有很強的傾向讓使用者先檢查過物件是否為 &lt;code&gt;null&lt;/code&gt; 後再來將物件取出來使用，從而避免 &lt;code&gt;NullPointerException&lt;/code&gt;&lt;/p&gt;
 &lt;p&gt;所以可見變數如果是 &lt;code&gt;Optional&lt;/code&gt;，那變數裡面的值則是 &lt;code&gt;Optional&lt;/code&gt; 實例在 heap 裡面的位址&lt;/p&gt;
 &lt;p&gt;結合上一段的內容，當兩個 &lt;code&gt;Optional&lt;/code&gt; 做 &lt;code&gt;==&lt;/code&gt; 比較的時候，比較的是兩個實例在 heap 裡面的位址；而做 &lt;code&gt;equals()&lt;/code&gt; 比較的時候呢？我們直接看 code，以下是 JDK 11 版本的 &lt;code&gt;Optional&lt;/code&gt; 實作&lt;/p&gt;
@@ -1248,8 +1472,7 @@ root_type FlatPassenger;
 &lt;p&gt;其實在撰寫的過程可以感受到 Gson 的程式碼撰寫絕對是最容易的，即使是 mapper 也幾乎不用額外多寫太多程式碼，portable 方面絕對是最強的，被廣泛使用還是有道理的&lt;/p&gt;
 &lt;p&gt;而 ProtoBuf 也是相對成熟的 library，雖然也不需要寫太多額外的程式碼，但它支援的資料型別就少很多了，像是不支援日期相關型別或 &lt;code&gt;BigDecimal&lt;/code&gt; 這種&lt;/p&gt;
 &lt;blockquote&gt;
-&lt;p&gt;當然，JSON 其實原生支援的型別也不多，但成熟的 library 讓你不需要考慮資料型別問題，幾乎 Java 所有原生型別全都能夠順利序列化再反序列化；而 ProtoBuf 轉換的程式碼是由工具自動產生，所以有很多型別是不可能會自動產生的&lt;/p&gt;
-&lt;/blockquote&gt;
+&lt;p&gt;當然，JSON 其實原生支援的型別也不多，但成熟的 library 讓你不需要考慮資料型別問題，幾乎 Java 所有原生型別全都能夠順利序列化再反序列化；而 ProtoBuf 轉換的程式碼是由工具自動產生，所以有很多型別是不可能會自動產生的&lt;/p&gt;&lt;/blockquote&gt;
 &lt;p&gt;至於 FlatBuf 則是三者當中最不成熟的 library，沒辦法，這個專案 2014 才開始，不像 ProtoBuf 是從 2001 開始&lt;/p&gt;
 &lt;p&gt;FlatBuf 在序列化上是相對最麻煩的一個，因為它其實在設定物件各 properties 的過程中就一併開始轉換二進制格式的機制；反序列化後的使用上倒是與其他 library 相同，可以直接從從物件取得 property，但受限於它原生支援的資料型別比 ProtoBuf 更少，所以不做 mapping 的話就更難使用一點&lt;/p&gt;
 &lt;p&gt;最後，附上測試專案的程式碼以供參考&lt;/p&gt;
@@ -1281,8 +1504,7 @@ root_type FlatPassenger;
 &lt;h2 id=&#34;概念&#34;&gt;概念&lt;/h2&gt;
 &lt;p&gt;gRPC 原本是 Google 內部的 RPC 系統，後來開源後，近年成為很熱門的 RPC 系統，採用 HTTP/2 做傳輸，ProtoBuf 作為介面描述語言 (interface description language)，提供身分驗證 (authentication)、雙向串流 (bidirectional streaming)、流量控制 (flow control)、阻塞或非阻塞綁定 (blocking or nonblocking binding)、取消 (cancellation) 及逾時 (timeouts) 等特性&lt;/p&gt;
 &lt;blockquote&gt;
-&lt;p&gt;RPC Remote Procedure Call 遠端程序呼叫指服務之間互相溝通就如同呼叫本地程式一般，不須關注呼叫互動的細節。例如以前的 CORBA, Java RMI 等&lt;/p&gt;
-&lt;/blockquote&gt;
+&lt;p&gt;RPC Remote Procedure Call 遠端程序呼叫指服務之間互相溝通就如同呼叫本地程式一般，不須關注呼叫互動的細節。例如以前的 CORBA, Java RMI 等&lt;/p&gt;&lt;/blockquote&gt;
 &lt;h3 id=&#34;使用-grpc-api&#34;&gt;使用 gRPC API&lt;/h3&gt;
 &lt;p&gt;主要是透過 .proto 檔定義 service 結構，再透過 ProtoBuf compiler 的幫助產生各語言的 client/server 端代碼&lt;/p&gt;
 &lt;ul&gt;
@@ -1297,8 +1519,7 @@ root_type FlatPassenger;
 &lt;h3 id=&#34;四種類型的-service&#34;&gt;四種類型的 Service&lt;/h3&gt;
 &lt;p&gt;在 gRPC 中可以定義四種類型的 service&lt;/p&gt;
 &lt;blockquote&gt;
-&lt;p&gt;就是定義在 ProtoBuf 的 .proto 檔&lt;/p&gt;
-&lt;/blockquote&gt;
+&lt;p&gt;就是定義在 ProtoBuf 的 .proto 檔&lt;/p&gt;&lt;/blockquote&gt;
 &lt;ul&gt;
 &lt;li&gt;Unary RPC: 如同一般 function call 一樣，client 端發出一個 request，server 收到後回覆一個 response&lt;/li&gt;
 &lt;li&gt;Server streaming RPC: client 端發出一個 request 並取得一個 stream 來讀取 server 回傳的一系列 messages&lt;/li&gt;
@@ -1388,8 +1609,7 @@ root_type FlatPassenger;
 &lt;p&gt;&lt;em&gt;Image from &lt;a href=&#34;https://switches-sensors.zf.com/energy-harvesting-faqs/what-is-the-difference-between-unidirectional-and-bidirectional-communication/#&#34;&gt;ZF&lt;/a&gt;&lt;/em&gt;&lt;/p&gt;
 &lt;p&gt;full-duplex 全雙工的意思是可以雙向「同時」傳送 data，也就是兩端都可以「同時」傳送以及接收 data；相對的還有 half-duplex (semiduplex) 半雙工，也就是容許雙向傳送 data，但不允許同時進行；最後還有相對於 duplex 雙工的 simplex 單工，定義上就是在特定時間底下只能單向傳送 data&lt;/p&gt;
 &lt;blockquote&gt;
-&lt;p&gt;這邊討論的最多只到 Transport Layer 的邏輯傳輸，並不是討論 Data Link Layer 的傳輸，所以不討論分時雙工 (Time-Division Duplexing, TDD) 或分頻雙工 (Frequency-Division Duplexing, FDD)&lt;/p&gt;
-&lt;/blockquote&gt;
+&lt;p&gt;這邊討論的最多只到 Transport Layer 的邏輯傳輸，並不是討論 Data Link Layer 的傳輸，所以不討論分時雙工 (Time-Division Duplexing, TDD) 或分頻雙工 (Frequency-Division Duplexing, FDD)&lt;/p&gt;&lt;/blockquote&gt;
 &lt;p&gt;&lt;img src=&#34;https://res.cloudinary.com/dcvgho2zc/image/upload/v1640570115/Tech%20Blog/simplex-half-duplex-full-duplex.jpg&#34; alt=&#34;Simplex, half-duplex and full-duplex&#34;&gt;&lt;/p&gt;
 &lt;p&gt;&lt;em&gt;Image from &lt;a href=&#34;https://www.nicerf.com/articles/detail/single-and-duplex-wireless-module.html&#34;&gt;G-NiceRF&lt;/a&gt;&lt;/em&gt;&lt;/p&gt;
 &lt;p&gt;再來是 unsolicited communication，在網路通訊來說，就是指可以不經對方 request 就主動發出 message 給對方，或者說發出的 message 不是為了回覆對方某一個 request；相對應的就是基本的 request-response 模型&lt;/p&gt;
@@ -1405,8 +1625,7 @@ root_type FlatPassenger;
 &lt;p&gt;不過這點只是需要知道就好，畢竟我們不見得需要真正的 server push，只要能達成效果就好，除非有特別的應用場景&lt;/p&gt;
 &lt;p&gt;真的要達到 bidirectional、full-duplex、unsolicited communication，應該還是要考慮 WebSocket 或 WebRTC 這類的技術&lt;/p&gt;
 &lt;blockquote&gt;
-&lt;p&gt;WebSocket 雖然一開始是利用 HTTP 建立連線，但同時也會「升級」成為別的通訊協定，所以這邊並不把 WebSocket 列入基於 HTTP 的技術來討論&lt;/p&gt;
-&lt;/blockquote&gt;
+&lt;p&gt;WebSocket 雖然一開始是利用 HTTP 建立連線，但同時也會「升級」成為別的通訊協定，所以這邊並不把 WebSocket 列入基於 HTTP 的技術來討論&lt;/p&gt;&lt;/blockquote&gt;
 &lt;h2 id=&#34;參考連結&#34;&gt;參考連結&lt;/h2&gt;
 &lt;ul&gt;
 &lt;li&gt;&lt;a href=&#34;https://en.wikipedia.org/wiki/Simplex_communication&#34;&gt;Simplex communication&lt;/a&gt;&lt;/li&gt;
@@ -1469,8 +1688,7 @@ root_type FlatPassenger;
 &lt;p&gt;也是因為這個問題，現今大部分瀏覽器並不支援 pipeline 機制，或預設被關閉，例如 Chrome 曾經支援但現已停止、Mozilla 預設關閉、IE11 不支援等等&lt;/p&gt;
 &lt;p&gt;另外，HTTP/1.1 的 HOL Blocking 問題是 Application Layer 層的問題，不是 Transport Layer 因為 TCP congestion control 造成的 HOL Blocking 問題&lt;/p&gt;
 &lt;blockquote&gt;
-&lt;p&gt;TCP 的 HOL Blocking 是指因為一個 packet 遺失，導致後續的 packet 必須等到該 packet 重新傳輸並接收到後才能繼續傳送的問題&lt;/p&gt;
-&lt;/blockquote&gt;
+&lt;p&gt;TCP 的 HOL Blocking 是指因為一個 packet 遺失，導致後續的 packet 必須等到該 packet 重新傳輸並接收到後才能繼續傳送的問題&lt;/p&gt;&lt;/blockquote&gt;
 &lt;h2 id=&#34;終於要講到-http2&#34;&gt;終於要講到 HTTP/2&lt;/h2&gt;
 &lt;p&gt;HTTP/1.1 固然是一個劃時代的結晶，直到今日還是瀏覽器主要使用的通訊協議之一，但在大環境的變化以致對於通訊協議的需求也有變化的今日，還是有它的侷限在&lt;/p&gt;
 &lt;p&gt;於是經過許多人的努力，HTTP/2 誕生了&lt;/p&gt;
@@ -1502,8 +1720,7 @@ root_type FlatPassenger;
 &lt;h4 id=&#34;multiplexing&#34;&gt;Multiplexing&lt;/h4&gt;
 &lt;p&gt;基於 Binary Protocol 的機制，HTTP/2 允許 client 透過同一個 TCP connection 同步發送多個 request 給 server，而 server 也能透過同一個 TCP connection 同步回傳，減少額外的 RTT，並且因為每個 frame 都能識別屬於哪一個 stream，所以不需要依照收到的順序回覆，而可以交錯的回傳 frame，client 端會依照 frame 本身攜帶的 stream header 組裝相關的 frame&lt;/p&gt;
 &lt;blockquote&gt;
-&lt;p&gt;multiplexing 多路複用通常表示在一個頻道上傳輸多路訊號或資料流的過程和技術&lt;/p&gt;
-&lt;/blockquote&gt;
+&lt;p&gt;multiplexing 多路複用通常表示在一個頻道上傳輸多路訊號或資料流的過程和技術&lt;/p&gt;&lt;/blockquote&gt;
 &lt;p&gt;以 stream 的角度來看，因為每條 stream 在同一時間只會容納一個 request 以及對應的一系列 response，所以 stream 並不能達成 multiplexing&lt;/p&gt;
 &lt;p&gt;&lt;img src=&#34;https://res.cloudinary.com/dcvgho2zc/image/upload/v1639989101/Tech%20Blog/stream.png&#34; alt=&#34;HTTP/2 Stream&#34;&gt;&lt;/p&gt;
 &lt;p&gt;&lt;em&gt;Image from &lt;a href=&#34;https://sookocheff.com/post/networking/how-does-http-2-work/&#34;&gt;How Does HTTP/2 Work?&lt;/a&gt;&lt;/em&gt;&lt;/p&gt;
@@ -1535,8 +1752,7 @@ root_type FlatPassenger;
 &lt;li&gt;Polling 是在 client 端設 timer 輪詢，以達到近似 server 端有準備好的資料就可以隨時推送到 client 端的效果&lt;/li&gt;
 &lt;li&gt;Long Polling 則是維持 request 直到 server 端準備好後送出 response，client 端收到後再立刻發出 request 等待下一次 server 端的 response，以達成類似 server 端隨時推送 response 的效果&lt;/li&gt;
 &lt;li&gt;SSE 則是利用 HTTP event-stream 讓 server 端可以針對同一個 request 多次回覆 response，來達成類似 server 端主動 push 的效果&lt;/li&gt;
-&lt;/ul&gt;
-&lt;/blockquote&gt;
+&lt;/ul&gt;&lt;/blockquote&gt;
 &lt;p&gt;實際上 HTTP/2 的 server push 在效果上等同 SSE，讓 server 端可以針對一個 request 進行多次的 response&lt;/p&gt;
 &lt;p&gt;由於不像 SSE 會占用一整個 TCP connection，HTTP/2 的一個 request 的 context 只佔用一個 stream，而不影響其他 stream，所以並不會阻塞其他 request/response，所以在許多應用情況下，這樣的 server push 已經跟真正不依賴 client request 而進行主動 server push 的效果相差無幾&lt;/p&gt;
 &lt;p&gt;&lt;img src=&#34;https://res.cloudinary.com/dcvgho2zc/image/upload/v1639994509/Tech%20Blog/server-push.webp&#34; alt=&#34;HTTP/2 Server Push&#34;&gt;&lt;/p&gt;
@@ -1551,13 +1767,11 @@ root_type FlatPassenger;
 &lt;h4 id=&#34;opportunistic-encryption&#34;&gt;Opportunistic Encryption&lt;/h4&gt;
 &lt;p&gt;另外還有被批評未能支援機會性加密 (opportunistic encryption)，類似 SMTP 常用的 STARTTLS，主要用來防禦被動監聽 (passive monitoring)&lt;/p&gt;
 &lt;blockquote&gt;
-&lt;p&gt;被動監聽就是利用複製網路流量來取得通訊訊息的手法，例如 wireshark 擷取封包。但其實被動監聽並不一定都用來攻擊，也常被用做 trouble shooting 的手段&lt;/p&gt;
-&lt;/blockquote&gt;
+&lt;p&gt;被動監聽就是利用複製網路流量來取得通訊訊息的手法，例如 wireshark 擷取封包。但其實被動監聽並不一定都用來攻擊，也常被用做 trouble shooting 的手段&lt;/p&gt;&lt;/blockquote&gt;
 &lt;p&gt;機會性加密不像 TLS 加密涉及到身分認證、金鑰管理並需要事先設定組態，否則無法開始安全通訊，因此變成要馬「完全安全」要馬「完全不安全」；機會性加密則不進行身分驗證，在建立連接時，如果對方也支援加密連接時才開始進行加密請求，如果加密請求失敗，則退回到明文&lt;/p&gt;
 &lt;p&gt;雖然機會性加密無法防禦主動攻擊 (例如中間人攻擊)，也不能替代完整的加密方案，但其主要用意就是在條件允許時就盡可能使用加密通訊&lt;/p&gt;
 &lt;blockquote&gt;
-&lt;p&gt;中間人攻擊就是類似同時對 client 偽造 server、對 server 偽造 client，並交換其所收到的資料，使兩端都認為它們正通過一個私密的連接與對方直接對話&lt;/p&gt;
-&lt;/blockquote&gt;
+&lt;p&gt;中間人攻擊就是類似同時對 client 偽造 server、對 server 偽造 client，並交換其所收到的資料，使兩端都認為它們正通過一個私密的連接與對方直接對話&lt;/p&gt;&lt;/blockquote&gt;
 &lt;p&gt;並且因為 IETF 制定的 RFC 7528 Best Current Practive 188 中指出，被動監聽應被當作一種攻擊，而 IETF 制定的標準應採取抵禦被動監聽的手段，因此 HTTP/2 也被批評違反 IETF 自身制定的準則&lt;/p&gt;
 &lt;h4 id=&#34;tcp-hol-blocking&#34;&gt;TCP HOL Blocking&lt;/h4&gt;
 &lt;p&gt;前面有提到 HTTP/2 解決了 Application Layer 的 HOL Blocking 問題，但並沒有處理 Transport Layer 的 TCP Blocking 問題&lt;/p&gt;
@@ -1594,40 +1808,6 @@ root_type FlatPassenger;
 &lt;li&gt;&lt;a href=&#34;https://livebook.manning.com/book/http2-in-action&#34;&gt;HTTP/2 in Action&lt;/a&gt;&lt;/li&gt;
 &lt;/ul&gt;
 - https://blog.idontwannarock.dev/2021/12/http2/ - This website by Howard Wang is licensed under a Creative Common Attribution-ShareAlike 4.0 International License.</description>
-        </item>
-    
-    
-    
-        <item>
-        <title>在 Batch Script 壓縮檔案</title>
-        <link>https://blog.idontwannarock.dev/2021/12/zip_in_batch_script/</link>
-        <pubDate>Thu, 16 Dec 2021 15:32:25 +0800</pubDate>
-        
-        <guid>https://blog.idontwannarock.dev/2021/12/zip_in_batch_script/</guid>
-        <description>Howard Tech Note https://blog.idontwannarock.dev/2021/12/zip_in_batch_script/ -&lt;p&gt;因為目前公司沒有專職 SRE 或 DevOps 幫忙做 CI/CD，身為小小後端工程師只好自己想辦法，偏偏目前用到的 tech stack 包括 .net framework，所以必須跟 Windows 環境的 batch file 打交道來替代習慣的 shell 檔，其中有個步驟必須要壓縮/解壓縮資料夾&lt;/p&gt;
-&lt;h2 id=&#34;tar&#34;&gt;Tar&lt;/h2&gt;
-&lt;p&gt;研究了一下，很興奮的發現 tar 在 command prompt 跟 powershell 都可以用，那代表我在 batch 檔裡面使用沒問題ＲＲＲ&lt;/p&gt;
-&lt;p&gt;所以可以這樣用&lt;/p&gt;
-&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;&#34;&gt;&lt;code class=&#34;language-batch&#34; data-lang=&#34;batch&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;:&lt;span style=&#34;color:#6272a4&#34;&gt;: zip&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;tar -cvzf &lt;span style=&#34;color:#f1fa8c&#34;&gt;&amp;#34;path and name to archive.tar&amp;#34;&lt;/span&gt; &lt;span style=&#34;color:#f1fa8c&#34;&gt;&amp;#34;path to folder to compress&amp;#34;&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;:&lt;span style=&#34;color:#6272a4&#34;&gt;: unzip&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;tar -xvzf &lt;span style=&#34;color:#f1fa8c&#34;&gt;&amp;#34;path and name to archive.tar&amp;#34;&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h2 id=&#34;microsoftpowershellarchive-module&#34;&gt;Microsoft.Powershell.Archive Module&lt;/h2&gt;
-&lt;p&gt;很可惜，這個方法有一個小小的問題&lt;/p&gt;
-&lt;p&gt;tar 基本上是從 Windows 10 或 Windows Server 2019 才開始支援，很不巧，我手上有個環境是 Windows Server 2016&amp;hellip;&lt;/p&gt;
-&lt;p&gt;基於可以用原生就絕不多安裝東西的自虐原則，好險又找到了另一個方法，powershell 有個 archive 的模組可以用！&lt;/p&gt;
-&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;&#34;&gt;&lt;code class=&#34;language-powershell&#34; data-lang=&#34;powershell&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#6272a4&#34;&gt;# zip&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#8be9fd;font-style:italic&#34;&gt;Compress-Archive&lt;/span&gt; -Path &lt;span style=&#34;color:#f1fa8c&#34;&gt;&amp;#34;path to folder to compress&amp;#34;&lt;/span&gt; -DestinationPath &lt;span style=&#34;color:#f1fa8c&#34;&gt;&amp;#34;path and name to archive.zip&amp;#34;&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#6272a4&#34;&gt;# unzip&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#8be9fd;font-style:italic&#34;&gt;Expand-Archive&lt;/span&gt; -Path &lt;span style=&#34;color:#f1fa8c&#34;&gt;&amp;#34;path and name to archive.zip&amp;#34;&lt;/span&gt; -DestinationPath &lt;span style=&#34;color:#f1fa8c&#34;&gt;&amp;#34;path to unzip archive.zip&amp;#34;&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h2 id=&#34;參考連結&#34;&gt;參考連結&lt;/h2&gt;
-&lt;ul&gt;
-&lt;li&gt;&lt;a href=&#34;https://techcommunity.microsoft.com/t5/containers/tar-and-curl-come-to-windows/ba-p/382409&#34;&gt;Tar and Curl Come to Windows!&lt;/a&gt;&lt;/li&gt;
-&lt;li&gt;&lt;a href=&#34;https://docs.microsoft.com/zh-tw/powershell/module/microsoft.powershell.archive/?view=powershell-7.2&amp;amp;viewFallbackFrom=powershell-5.0&#34;&gt;Microsoft.PowerShell.Archive&lt;/a&gt;&lt;/li&gt;
-&lt;/ul&gt;
-- https://blog.idontwannarock.dev/2021/12/zip_in_batch_script/ - This website by Howard Wang is licensed under a Creative Common Attribution-ShareAlike 4.0 International License.</description>
         </item>
     
     

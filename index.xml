@@ -7,9 +7,458 @@
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
     <copyright>This website by Howard Wang is licensed under a Creative Common Attribution-ShareAlike 4.0 International License.</copyright>
-    <lastBuildDate>Wed, 16 Oct 2024 11:06:41 +0800</lastBuildDate>
+    <lastBuildDate>Fri, 07 Feb 2025 09:39:10 +0800</lastBuildDate>
     
         <atom:link href="https://blog.idontwannarock.dev/index.xml" rel="self" type="application/rss+xml" />
+    
+    
+    
+        <item>
+        <title>如何在 MySQL 中進行 insert if not exists</title>
+        <link>https://blog.idontwannarock.dev/2025/02/how_to_insert_if_not_exists_in_mysql/</link>
+        <pubDate>Fri, 07 Feb 2025 09:39:10 +0800</pubDate>
+        
+        <guid>https://blog.idontwannarock.dev/2025/02/how_to_insert_if_not_exists_in_mysql/</guid>
+        <description>Howard Tech Note https://blog.idontwannarock.dev/2025/02/how_to_insert_if_not_exists_in_mysql/ -&lt;p&gt;相信很多 Developer 都會真心的 &lt;em&gt;&lt;del&gt;幹譙&lt;/del&gt;&lt;/em&gt; 懷疑為什麼 MySQL 經過這麼多年都沒有 PostgreSQL 的 &lt;code&gt;INSERT … ON DUPLICATE KEY DO NOTHING&lt;/code&gt; 語法，偏偏這真的是一個很常會碰到的使用情境&lt;/p&gt;
+&lt;p&gt;所以接下來探討一些單一 SQL 語法方面可行的做法&lt;/p&gt;
+&lt;h2 id=&#34;準備&#34;&gt;準備&lt;/h2&gt;
+&lt;p&gt;環境為 MySQL server 8.0.37&lt;/p&gt;
+&lt;p&gt;首先建立以下 table (只是為了情境驗證，合理性就先不計較)&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;&#34;&gt;&lt;code class=&#34;language-sql&#34; data-lang=&#34;sql&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#ff79c6&#34;&gt;drop&lt;/span&gt; &lt;span style=&#34;color:#ff79c6&#34;&gt;table&lt;/span&gt; &lt;span style=&#34;color:#ff79c6&#34;&gt;if&lt;/span&gt; &lt;span style=&#34;color:#ff79c6&#34;&gt;exists&lt;/span&gt; test_user;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#ff79c6&#34;&gt;create&lt;/span&gt; &lt;span style=&#34;color:#ff79c6&#34;&gt;table&lt;/span&gt; &lt;span style=&#34;color:#ff79c6&#34;&gt;if&lt;/span&gt; &lt;span style=&#34;color:#ff79c6&#34;&gt;not&lt;/span&gt; &lt;span style=&#34;color:#ff79c6&#34;&gt;exists&lt;/span&gt; test_user (
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    id &lt;span style=&#34;color:#8be9fd;font-style:italic&#34;&gt;int&lt;/span&gt; unsigned auto_increment &lt;span style=&#34;color:#ff79c6&#34;&gt;primary&lt;/span&gt; &lt;span style=&#34;color:#ff79c6&#34;&gt;key&lt;/span&gt;,
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    user_id &lt;span style=&#34;color:#8be9fd;font-style:italic&#34;&gt;int&lt;/span&gt; unsigned &lt;span style=&#34;color:#ff79c6&#34;&gt;not&lt;/span&gt; &lt;span style=&#34;color:#ff79c6&#34;&gt;null&lt;/span&gt;,
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    is_active &lt;span style=&#34;color:#8be9fd;font-style:italic&#34;&gt;boolean&lt;/span&gt; &lt;span style=&#34;color:#ff79c6&#34;&gt;not&lt;/span&gt; &lt;span style=&#34;color:#ff79c6&#34;&gt;null&lt;/span&gt; &lt;span style=&#34;color:#ff79c6&#34;&gt;default&lt;/span&gt; &lt;span style=&#34;color:#bd93f9&#34;&gt;1&lt;/span&gt;,
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    &lt;span style=&#34;color:#ff79c6&#34;&gt;constraint&lt;/span&gt; uk_user_id_user &lt;span style=&#34;color:#ff79c6&#34;&gt;unique&lt;/span&gt; (user_id)
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;) engine &lt;span style=&#34;color:#ff79c6&#34;&gt;=&lt;/span&gt; innodb charset &lt;span style=&#34;color:#ff79c6&#34;&gt;=&lt;/span&gt; utf8mb4 &lt;span style=&#34;color:#ff79c6&#34;&gt;collate&lt;/span&gt; &lt;span style=&#34;color:#ff79c6&#34;&gt;=&lt;/span&gt; utf8mb4_0900_ai_ci;
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;情境就是要在表中新增一筆 user 紀錄，如果該 user id 已經存在，就不做任何變更&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;p&gt;每個情境測試前都會重新建立整個 table，以避免其他問題影響測試結果&lt;/p&gt;
+&lt;p&gt;取得 auto increment 數字前，可能需要 &lt;code&gt;analyze table&lt;/code&gt; 以校正數據&lt;/p&gt;&lt;/blockquote&gt;
+&lt;h2 id=&#34;insert&#34;&gt;&lt;code&gt;insert&lt;/code&gt;&lt;/h2&gt;
+&lt;p&gt;第一個方法就是直接 &lt;code&gt;insert&lt;/code&gt;&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;&#34;&gt;&lt;code class=&#34;language-sql&#34; data-lang=&#34;sql&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;mysql&lt;span style=&#34;color:#ff79c6&#34;&gt;&amp;gt;&lt;/span&gt; &lt;span style=&#34;color:#ff79c6&#34;&gt;insert&lt;/span&gt; &lt;span style=&#34;color:#ff79c6&#34;&gt;into&lt;/span&gt; test_user (user_id) value (&lt;span style=&#34;color:#bd93f9&#34;&gt;1&lt;/span&gt;);
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;Query OK, &lt;span style=&#34;color:#bd93f9&#34;&gt;1&lt;/span&gt; &lt;span style=&#34;color:#ff79c6&#34;&gt;row&lt;/span&gt; affected (&lt;span style=&#34;color:#bd93f9&#34;&gt;0&lt;/span&gt;.&lt;span style=&#34;color:#bd93f9&#34;&gt;01&lt;/span&gt; sec)
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;mysql&lt;span style=&#34;color:#ff79c6&#34;&gt;&amp;gt;&lt;/span&gt; &lt;span style=&#34;color:#ff79c6&#34;&gt;select&lt;/span&gt; &lt;span style=&#34;color:#ff79c6&#34;&gt;*&lt;/span&gt; &lt;span style=&#34;color:#ff79c6&#34;&gt;from&lt;/span&gt; test_user;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#ff79c6&#34;&gt;+&lt;/span&gt;&lt;span style=&#34;color:#6272a4&#34;&gt;----+---------+-----------+
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#6272a4&#34;&gt;&lt;/span&gt;&lt;span style=&#34;color:#ff79c6&#34;&gt;|&lt;/span&gt; id &lt;span style=&#34;color:#ff79c6&#34;&gt;|&lt;/span&gt; user_id &lt;span style=&#34;color:#ff79c6&#34;&gt;|&lt;/span&gt; is_active &lt;span style=&#34;color:#ff79c6&#34;&gt;|&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#ff79c6&#34;&gt;+&lt;/span&gt;&lt;span style=&#34;color:#6272a4&#34;&gt;----+---------+-----------+
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#6272a4&#34;&gt;&lt;/span&gt;&lt;span style=&#34;color:#ff79c6&#34;&gt;|&lt;/span&gt;  &lt;span style=&#34;color:#bd93f9&#34;&gt;1&lt;/span&gt; &lt;span style=&#34;color:#ff79c6&#34;&gt;|&lt;/span&gt;       &lt;span style=&#34;color:#bd93f9&#34;&gt;1&lt;/span&gt; &lt;span style=&#34;color:#ff79c6&#34;&gt;|&lt;/span&gt;         &lt;span style=&#34;color:#bd93f9&#34;&gt;1&lt;/span&gt; &lt;span style=&#34;color:#ff79c6&#34;&gt;|&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#ff79c6&#34;&gt;+&lt;/span&gt;&lt;span style=&#34;color:#6272a4&#34;&gt;----+---------+-----------+
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#6272a4&#34;&gt;&lt;/span&gt;&lt;span style=&#34;color:#bd93f9&#34;&gt;1&lt;/span&gt; &lt;span style=&#34;color:#ff79c6&#34;&gt;row&lt;/span&gt; &lt;span style=&#34;color:#ff79c6&#34;&gt;in&lt;/span&gt; &lt;span style=&#34;color:#ff79c6&#34;&gt;set&lt;/span&gt; (&lt;span style=&#34;color:#bd93f9&#34;&gt;0&lt;/span&gt;.&lt;span style=&#34;color:#bd93f9&#34;&gt;00&lt;/span&gt; sec)
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;mysql&lt;span style=&#34;color:#ff79c6&#34;&gt;&amp;gt;&lt;/span&gt; &lt;span style=&#34;color:#ff79c6&#34;&gt;select&lt;/span&gt; &lt;span style=&#34;color:#ff79c6&#34;&gt;table_name&lt;/span&gt;, auto_increment &lt;span style=&#34;color:#ff79c6&#34;&gt;from&lt;/span&gt; information_schema.tables &lt;span style=&#34;color:#ff79c6&#34;&gt;where&lt;/span&gt; table_schema &lt;span style=&#34;color:#ff79c6&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color:#ff79c6&#34;&gt;database&lt;/span&gt;() &lt;span style=&#34;color:#ff79c6&#34;&gt;and&lt;/span&gt; &lt;span style=&#34;color:#ff79c6&#34;&gt;table_name&lt;/span&gt; &lt;span style=&#34;color:#ff79c6&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color:#f1fa8c&#34;&gt;&amp;#39;test_user&amp;#39;&lt;/span&gt;;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#ff79c6&#34;&gt;+&lt;/span&gt;&lt;span style=&#34;color:#6272a4&#34;&gt;------------+----------------+
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#6272a4&#34;&gt;&lt;/span&gt;&lt;span style=&#34;color:#ff79c6&#34;&gt;|&lt;/span&gt; &lt;span style=&#34;color:#ff79c6&#34;&gt;TABLE_NAME&lt;/span&gt; &lt;span style=&#34;color:#ff79c6&#34;&gt;|&lt;/span&gt; AUTO_INCREMENT &lt;span style=&#34;color:#ff79c6&#34;&gt;|&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#ff79c6&#34;&gt;+&lt;/span&gt;&lt;span style=&#34;color:#6272a4&#34;&gt;------------+----------------+
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#6272a4&#34;&gt;&lt;/span&gt;&lt;span style=&#34;color:#ff79c6&#34;&gt;|&lt;/span&gt; test_user  &lt;span style=&#34;color:#ff79c6&#34;&gt;|&lt;/span&gt;              &lt;span style=&#34;color:#bd93f9&#34;&gt;2&lt;/span&gt; &lt;span style=&#34;color:#ff79c6&#34;&gt;|&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#ff79c6&#34;&gt;+&lt;/span&gt;&lt;span style=&#34;color:#6272a4&#34;&gt;------------+----------------+
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#6272a4&#34;&gt;&lt;/span&gt;&lt;span style=&#34;color:#bd93f9&#34;&gt;1&lt;/span&gt; &lt;span style=&#34;color:#ff79c6&#34;&gt;row&lt;/span&gt; &lt;span style=&#34;color:#ff79c6&#34;&gt;in&lt;/span&gt; &lt;span style=&#34;color:#ff79c6&#34;&gt;set&lt;/span&gt; (&lt;span style=&#34;color:#bd93f9&#34;&gt;0&lt;/span&gt;.&lt;span style=&#34;color:#bd93f9&#34;&gt;00&lt;/span&gt; sec)
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;mysql&lt;span style=&#34;color:#ff79c6&#34;&gt;&amp;gt;&lt;/span&gt; &lt;span style=&#34;color:#ff79c6&#34;&gt;insert&lt;/span&gt; &lt;span style=&#34;color:#ff79c6&#34;&gt;into&lt;/span&gt; test_user (user_id) value (&lt;span style=&#34;color:#bd93f9&#34;&gt;1&lt;/span&gt;);
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;ERROR &lt;span style=&#34;color:#bd93f9&#34;&gt;1062&lt;/span&gt; (&lt;span style=&#34;color:#bd93f9&#34;&gt;23000&lt;/span&gt;): Duplicate entry &lt;span style=&#34;color:#f1fa8c&#34;&gt;&amp;#39;1&amp;#39;&lt;/span&gt; &lt;span style=&#34;color:#ff79c6&#34;&gt;for&lt;/span&gt; &lt;span style=&#34;color:#ff79c6&#34;&gt;key&lt;/span&gt; &lt;span style=&#34;color:#f1fa8c&#34;&gt;&amp;#39;test_user.uk_user_id_user&amp;#39;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;mysql&lt;span style=&#34;color:#ff79c6&#34;&gt;&amp;gt;&lt;/span&gt; &lt;span style=&#34;color:#ff79c6&#34;&gt;select&lt;/span&gt; &lt;span style=&#34;color:#ff79c6&#34;&gt;*&lt;/span&gt; &lt;span style=&#34;color:#ff79c6&#34;&gt;from&lt;/span&gt; test_user;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#ff79c6&#34;&gt;+&lt;/span&gt;&lt;span style=&#34;color:#6272a4&#34;&gt;----+---------+-----------+
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#6272a4&#34;&gt;&lt;/span&gt;&lt;span style=&#34;color:#ff79c6&#34;&gt;|&lt;/span&gt; id &lt;span style=&#34;color:#ff79c6&#34;&gt;|&lt;/span&gt; user_id &lt;span style=&#34;color:#ff79c6&#34;&gt;|&lt;/span&gt; is_active &lt;span style=&#34;color:#ff79c6&#34;&gt;|&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#ff79c6&#34;&gt;+&lt;/span&gt;&lt;span style=&#34;color:#6272a4&#34;&gt;----+---------+-----------+
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#6272a4&#34;&gt;&lt;/span&gt;&lt;span style=&#34;color:#ff79c6&#34;&gt;|&lt;/span&gt;  &lt;span style=&#34;color:#bd93f9&#34;&gt;1&lt;/span&gt; &lt;span style=&#34;color:#ff79c6&#34;&gt;|&lt;/span&gt;       &lt;span style=&#34;color:#bd93f9&#34;&gt;1&lt;/span&gt; &lt;span style=&#34;color:#ff79c6&#34;&gt;|&lt;/span&gt;         &lt;span style=&#34;color:#bd93f9&#34;&gt;1&lt;/span&gt; &lt;span style=&#34;color:#ff79c6&#34;&gt;|&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#ff79c6&#34;&gt;+&lt;/span&gt;&lt;span style=&#34;color:#6272a4&#34;&gt;----+---------+-----------+
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#6272a4&#34;&gt;&lt;/span&gt;&lt;span style=&#34;color:#bd93f9&#34;&gt;1&lt;/span&gt; &lt;span style=&#34;color:#ff79c6&#34;&gt;row&lt;/span&gt; &lt;span style=&#34;color:#ff79c6&#34;&gt;in&lt;/span&gt; &lt;span style=&#34;color:#ff79c6&#34;&gt;set&lt;/span&gt; (&lt;span style=&#34;color:#bd93f9&#34;&gt;0&lt;/span&gt;.&lt;span style=&#34;color:#bd93f9&#34;&gt;00&lt;/span&gt; sec)
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;mysql&lt;span style=&#34;color:#ff79c6&#34;&gt;&amp;gt;&lt;/span&gt; &lt;span style=&#34;color:#ff79c6&#34;&gt;select&lt;/span&gt; &lt;span style=&#34;color:#ff79c6&#34;&gt;table_name&lt;/span&gt;, auto_increment &lt;span style=&#34;color:#ff79c6&#34;&gt;from&lt;/span&gt; information_schema.tables &lt;span style=&#34;color:#ff79c6&#34;&gt;where&lt;/span&gt; table_schema &lt;span style=&#34;color:#ff79c6&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color:#ff79c6&#34;&gt;database&lt;/span&gt;() &lt;span style=&#34;color:#ff79c6&#34;&gt;and&lt;/span&gt; &lt;span style=&#34;color:#ff79c6&#34;&gt;table_name&lt;/span&gt; &lt;span style=&#34;color:#ff79c6&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color:#f1fa8c&#34;&gt;&amp;#39;test_user&amp;#39;&lt;/span&gt;;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#ff79c6&#34;&gt;+&lt;/span&gt;&lt;span style=&#34;color:#6272a4&#34;&gt;------------+----------------+
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#6272a4&#34;&gt;&lt;/span&gt;&lt;span style=&#34;color:#ff79c6&#34;&gt;|&lt;/span&gt; &lt;span style=&#34;color:#ff79c6&#34;&gt;TABLE_NAME&lt;/span&gt; &lt;span style=&#34;color:#ff79c6&#34;&gt;|&lt;/span&gt; AUTO_INCREMENT &lt;span style=&#34;color:#ff79c6&#34;&gt;|&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#ff79c6&#34;&gt;+&lt;/span&gt;&lt;span style=&#34;color:#6272a4&#34;&gt;------------+----------------+
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#6272a4&#34;&gt;&lt;/span&gt;&lt;span style=&#34;color:#ff79c6&#34;&gt;|&lt;/span&gt; test_user  &lt;span style=&#34;color:#ff79c6&#34;&gt;|&lt;/span&gt;              &lt;span style=&#34;color:#bd93f9&#34;&gt;3&lt;/span&gt; &lt;span style=&#34;color:#ff79c6&#34;&gt;|&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#ff79c6&#34;&gt;+&lt;/span&gt;&lt;span style=&#34;color:#6272a4&#34;&gt;------------+----------------+
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#6272a4&#34;&gt;&lt;/span&gt;&lt;span style=&#34;color:#bd93f9&#34;&gt;1&lt;/span&gt; &lt;span style=&#34;color:#ff79c6&#34;&gt;row&lt;/span&gt; &lt;span style=&#34;color:#ff79c6&#34;&gt;in&lt;/span&gt; &lt;span style=&#34;color:#ff79c6&#34;&gt;set&lt;/span&gt; (&lt;span style=&#34;color:#bd93f9&#34;&gt;0&lt;/span&gt;.&lt;span style=&#34;color:#bd93f9&#34;&gt;00&lt;/span&gt; sec)
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;可以看到功能完全可以達成&lt;/p&gt;
+&lt;p&gt;但是有以下兩個問題&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;第二次以後的 &lt;code&gt;insert&lt;/code&gt; 就會直接噴 duplicate key error&lt;/li&gt;
+&lt;li&gt;即使第二次實際上並沒有變更資料，auto increment 還是會 +1&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;因為 &lt;code&gt;insert&lt;/code&gt; 實際上會先按照原有的 auto increment 準備一個新的 row，然後 auto increment 會 +1，接著在檢查到 duplicate key 後，直接拋 duplicate key error 並 reject statement 的執行，auto increment 並不會 rollback&lt;/p&gt;
+&lt;p&gt;如果這些問題可以處理或忽略，也不妨考慮這個方式，因為語意上比較明確，也可以讓 client 針對各種可能拋出的錯誤做不同的處理&lt;/p&gt;
+&lt;p&gt;但有時候在某些考量下，例如 Java 的 catch exception 有其 overhead，還是希望有不會 raise duplicate key error 的作法&lt;/p&gt;
+&lt;h2 id=&#34;insert-ignore&#34;&gt;&lt;code&gt;insert ignore&lt;/code&gt;&lt;/h2&gt;
+&lt;p&gt;如果不希望 raise duplicate key error，首先可以考慮 &lt;code&gt;insert ignore&lt;/code&gt;&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;&#34;&gt;&lt;code class=&#34;language-sql&#34; data-lang=&#34;sql&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;mysql&lt;span style=&#34;color:#ff79c6&#34;&gt;&amp;gt;&lt;/span&gt; &lt;span style=&#34;color:#ff79c6&#34;&gt;insert&lt;/span&gt; &lt;span style=&#34;color:#ff79c6&#34;&gt;ignore&lt;/span&gt; &lt;span style=&#34;color:#ff79c6&#34;&gt;into&lt;/span&gt; test_user (user_id) value (&lt;span style=&#34;color:#bd93f9&#34;&gt;1&lt;/span&gt;);
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;Query OK, &lt;span style=&#34;color:#bd93f9&#34;&gt;1&lt;/span&gt; &lt;span style=&#34;color:#ff79c6&#34;&gt;row&lt;/span&gt; affected (&lt;span style=&#34;color:#bd93f9&#34;&gt;0&lt;/span&gt;.&lt;span style=&#34;color:#bd93f9&#34;&gt;01&lt;/span&gt; sec)
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;mysql&lt;span style=&#34;color:#ff79c6&#34;&gt;&amp;gt;&lt;/span&gt; &lt;span style=&#34;color:#ff79c6&#34;&gt;select&lt;/span&gt; &lt;span style=&#34;color:#ff79c6&#34;&gt;*&lt;/span&gt; &lt;span style=&#34;color:#ff79c6&#34;&gt;from&lt;/span&gt; test_user;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#ff79c6&#34;&gt;+&lt;/span&gt;&lt;span style=&#34;color:#6272a4&#34;&gt;----+---------+-----------+
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#6272a4&#34;&gt;&lt;/span&gt;&lt;span style=&#34;color:#ff79c6&#34;&gt;|&lt;/span&gt; id &lt;span style=&#34;color:#ff79c6&#34;&gt;|&lt;/span&gt; user_id &lt;span style=&#34;color:#ff79c6&#34;&gt;|&lt;/span&gt; is_active &lt;span style=&#34;color:#ff79c6&#34;&gt;|&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#ff79c6&#34;&gt;+&lt;/span&gt;&lt;span style=&#34;color:#6272a4&#34;&gt;----+---------+-----------+
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#6272a4&#34;&gt;&lt;/span&gt;&lt;span style=&#34;color:#ff79c6&#34;&gt;|&lt;/span&gt;  &lt;span style=&#34;color:#bd93f9&#34;&gt;1&lt;/span&gt; &lt;span style=&#34;color:#ff79c6&#34;&gt;|&lt;/span&gt;       &lt;span style=&#34;color:#bd93f9&#34;&gt;1&lt;/span&gt; &lt;span style=&#34;color:#ff79c6&#34;&gt;|&lt;/span&gt;         &lt;span style=&#34;color:#bd93f9&#34;&gt;1&lt;/span&gt; &lt;span style=&#34;color:#ff79c6&#34;&gt;|&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#ff79c6&#34;&gt;+&lt;/span&gt;&lt;span style=&#34;color:#6272a4&#34;&gt;----+---------+-----------+
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#6272a4&#34;&gt;&lt;/span&gt;&lt;span style=&#34;color:#bd93f9&#34;&gt;1&lt;/span&gt; &lt;span style=&#34;color:#ff79c6&#34;&gt;row&lt;/span&gt; &lt;span style=&#34;color:#ff79c6&#34;&gt;in&lt;/span&gt; &lt;span style=&#34;color:#ff79c6&#34;&gt;set&lt;/span&gt; (&lt;span style=&#34;color:#bd93f9&#34;&gt;0&lt;/span&gt;.&lt;span style=&#34;color:#bd93f9&#34;&gt;00&lt;/span&gt; sec)
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;mysql&lt;span style=&#34;color:#ff79c6&#34;&gt;&amp;gt;&lt;/span&gt; &lt;span style=&#34;color:#ff79c6&#34;&gt;select&lt;/span&gt; &lt;span style=&#34;color:#ff79c6&#34;&gt;table_name&lt;/span&gt;, auto_increment &lt;span style=&#34;color:#ff79c6&#34;&gt;from&lt;/span&gt; information_schema.tables &lt;span style=&#34;color:#ff79c6&#34;&gt;where&lt;/span&gt; table_schema &lt;span style=&#34;color:#ff79c6&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color:#ff79c6&#34;&gt;database&lt;/span&gt;() &lt;span style=&#34;color:#ff79c6&#34;&gt;and&lt;/span&gt; &lt;span style=&#34;color:#ff79c6&#34;&gt;table_name&lt;/span&gt; &lt;span style=&#34;color:#ff79c6&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color:#f1fa8c&#34;&gt;&amp;#39;test_user&amp;#39;&lt;/span&gt;;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#ff79c6&#34;&gt;+&lt;/span&gt;&lt;span style=&#34;color:#6272a4&#34;&gt;------------+----------------+
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#6272a4&#34;&gt;&lt;/span&gt;&lt;span style=&#34;color:#ff79c6&#34;&gt;|&lt;/span&gt; &lt;span style=&#34;color:#ff79c6&#34;&gt;TABLE_NAME&lt;/span&gt; &lt;span style=&#34;color:#ff79c6&#34;&gt;|&lt;/span&gt; AUTO_INCREMENT &lt;span style=&#34;color:#ff79c6&#34;&gt;|&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#ff79c6&#34;&gt;+&lt;/span&gt;&lt;span style=&#34;color:#6272a4&#34;&gt;------------+----------------+
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#6272a4&#34;&gt;&lt;/span&gt;&lt;span style=&#34;color:#ff79c6&#34;&gt;|&lt;/span&gt; test_user  &lt;span style=&#34;color:#ff79c6&#34;&gt;|&lt;/span&gt;              &lt;span style=&#34;color:#bd93f9&#34;&gt;2&lt;/span&gt; &lt;span style=&#34;color:#ff79c6&#34;&gt;|&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#ff79c6&#34;&gt;+&lt;/span&gt;&lt;span style=&#34;color:#6272a4&#34;&gt;------------+----------------+
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#6272a4&#34;&gt;&lt;/span&gt;&lt;span style=&#34;color:#bd93f9&#34;&gt;1&lt;/span&gt; &lt;span style=&#34;color:#ff79c6&#34;&gt;row&lt;/span&gt; &lt;span style=&#34;color:#ff79c6&#34;&gt;in&lt;/span&gt; &lt;span style=&#34;color:#ff79c6&#34;&gt;set&lt;/span&gt; (&lt;span style=&#34;color:#bd93f9&#34;&gt;0&lt;/span&gt;.&lt;span style=&#34;color:#bd93f9&#34;&gt;00&lt;/span&gt; sec)
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;mysql&lt;span style=&#34;color:#ff79c6&#34;&gt;&amp;gt;&lt;/span&gt; &lt;span style=&#34;color:#ff79c6&#34;&gt;insert&lt;/span&gt; &lt;span style=&#34;color:#ff79c6&#34;&gt;ignore&lt;/span&gt; &lt;span style=&#34;color:#ff79c6&#34;&gt;into&lt;/span&gt; test_user (user_id) value (&lt;span style=&#34;color:#bd93f9&#34;&gt;1&lt;/span&gt;);
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;Query OK, &lt;span style=&#34;color:#bd93f9&#34;&gt;0&lt;/span&gt; &lt;span style=&#34;color:#ff79c6&#34;&gt;rows&lt;/span&gt; affected, &lt;span style=&#34;color:#bd93f9&#34;&gt;1&lt;/span&gt; warning (&lt;span style=&#34;color:#bd93f9&#34;&gt;0&lt;/span&gt;.&lt;span style=&#34;color:#bd93f9&#34;&gt;00&lt;/span&gt; sec)
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;mysql&lt;span style=&#34;color:#ff79c6&#34;&gt;&amp;gt;&lt;/span&gt; &lt;span style=&#34;color:#ff79c6&#34;&gt;show&lt;/span&gt; warnings;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#ff79c6&#34;&gt;+&lt;/span&gt;&lt;span style=&#34;color:#6272a4&#34;&gt;---------+------+---------------------------------------------------------+
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#6272a4&#34;&gt;&lt;/span&gt;&lt;span style=&#34;color:#ff79c6&#34;&gt;|&lt;/span&gt; &lt;span style=&#34;color:#ff79c6&#34;&gt;Level&lt;/span&gt;   &lt;span style=&#34;color:#ff79c6&#34;&gt;|&lt;/span&gt; Code &lt;span style=&#34;color:#ff79c6&#34;&gt;|&lt;/span&gt; Message                                                 &lt;span style=&#34;color:#ff79c6&#34;&gt;|&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#ff79c6&#34;&gt;+&lt;/span&gt;&lt;span style=&#34;color:#6272a4&#34;&gt;---------+------+---------------------------------------------------------+
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#6272a4&#34;&gt;&lt;/span&gt;&lt;span style=&#34;color:#ff79c6&#34;&gt;|&lt;/span&gt; Warning &lt;span style=&#34;color:#ff79c6&#34;&gt;|&lt;/span&gt; &lt;span style=&#34;color:#bd93f9&#34;&gt;1062&lt;/span&gt; &lt;span style=&#34;color:#ff79c6&#34;&gt;|&lt;/span&gt; Duplicate entry &lt;span style=&#34;color:#f1fa8c&#34;&gt;&amp;#39;1&amp;#39;&lt;/span&gt; &lt;span style=&#34;color:#ff79c6&#34;&gt;for&lt;/span&gt; &lt;span style=&#34;color:#ff79c6&#34;&gt;key&lt;/span&gt; &lt;span style=&#34;color:#f1fa8c&#34;&gt;&amp;#39;test_user.uk_user_id_user&amp;#39;&lt;/span&gt; &lt;span style=&#34;color:#ff79c6&#34;&gt;|&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#ff79c6&#34;&gt;+&lt;/span&gt;&lt;span style=&#34;color:#6272a4&#34;&gt;---------+------+---------------------------------------------------------+
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#6272a4&#34;&gt;&lt;/span&gt;&lt;span style=&#34;color:#bd93f9&#34;&gt;1&lt;/span&gt; &lt;span style=&#34;color:#ff79c6&#34;&gt;row&lt;/span&gt; &lt;span style=&#34;color:#ff79c6&#34;&gt;in&lt;/span&gt; &lt;span style=&#34;color:#ff79c6&#34;&gt;set&lt;/span&gt; (&lt;span style=&#34;color:#bd93f9&#34;&gt;0&lt;/span&gt;.&lt;span style=&#34;color:#bd93f9&#34;&gt;00&lt;/span&gt; sec)
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;mysql&lt;span style=&#34;color:#ff79c6&#34;&gt;&amp;gt;&lt;/span&gt; &lt;span style=&#34;color:#ff79c6&#34;&gt;select&lt;/span&gt; &lt;span style=&#34;color:#ff79c6&#34;&gt;*&lt;/span&gt; &lt;span style=&#34;color:#ff79c6&#34;&gt;from&lt;/span&gt; test_user;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#ff79c6&#34;&gt;+&lt;/span&gt;&lt;span style=&#34;color:#6272a4&#34;&gt;----+---------+-----------+
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#6272a4&#34;&gt;&lt;/span&gt;&lt;span style=&#34;color:#ff79c6&#34;&gt;|&lt;/span&gt; id &lt;span style=&#34;color:#ff79c6&#34;&gt;|&lt;/span&gt; user_id &lt;span style=&#34;color:#ff79c6&#34;&gt;|&lt;/span&gt; is_active &lt;span style=&#34;color:#ff79c6&#34;&gt;|&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#ff79c6&#34;&gt;+&lt;/span&gt;&lt;span style=&#34;color:#6272a4&#34;&gt;----+---------+-----------+
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#6272a4&#34;&gt;&lt;/span&gt;&lt;span style=&#34;color:#ff79c6&#34;&gt;|&lt;/span&gt;  &lt;span style=&#34;color:#bd93f9&#34;&gt;1&lt;/span&gt; &lt;span style=&#34;color:#ff79c6&#34;&gt;|&lt;/span&gt;       &lt;span style=&#34;color:#bd93f9&#34;&gt;1&lt;/span&gt; &lt;span style=&#34;color:#ff79c6&#34;&gt;|&lt;/span&gt;         &lt;span style=&#34;color:#bd93f9&#34;&gt;1&lt;/span&gt; &lt;span style=&#34;color:#ff79c6&#34;&gt;|&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#ff79c6&#34;&gt;+&lt;/span&gt;&lt;span style=&#34;color:#6272a4&#34;&gt;----+---------+-----------+
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#6272a4&#34;&gt;&lt;/span&gt;&lt;span style=&#34;color:#bd93f9&#34;&gt;1&lt;/span&gt; &lt;span style=&#34;color:#ff79c6&#34;&gt;row&lt;/span&gt; &lt;span style=&#34;color:#ff79c6&#34;&gt;in&lt;/span&gt; &lt;span style=&#34;color:#ff79c6&#34;&gt;set&lt;/span&gt; (&lt;span style=&#34;color:#bd93f9&#34;&gt;0&lt;/span&gt;.&lt;span style=&#34;color:#bd93f9&#34;&gt;00&lt;/span&gt; sec)
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;mysql&lt;span style=&#34;color:#ff79c6&#34;&gt;&amp;gt;&lt;/span&gt; &lt;span style=&#34;color:#ff79c6&#34;&gt;select&lt;/span&gt; &lt;span style=&#34;color:#ff79c6&#34;&gt;table_name&lt;/span&gt;, auto_increment &lt;span style=&#34;color:#ff79c6&#34;&gt;from&lt;/span&gt; information_schema.tables &lt;span style=&#34;color:#ff79c6&#34;&gt;where&lt;/span&gt; table_schema &lt;span style=&#34;color:#ff79c6&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color:#ff79c6&#34;&gt;database&lt;/span&gt;() &lt;span style=&#34;color:#ff79c6&#34;&gt;and&lt;/span&gt; &lt;span style=&#34;color:#ff79c6&#34;&gt;table_name&lt;/span&gt; &lt;span style=&#34;color:#ff79c6&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color:#f1fa8c&#34;&gt;&amp;#39;test_user&amp;#39;&lt;/span&gt;;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#ff79c6&#34;&gt;+&lt;/span&gt;&lt;span style=&#34;color:#6272a4&#34;&gt;------------+----------------+
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#6272a4&#34;&gt;&lt;/span&gt;&lt;span style=&#34;color:#ff79c6&#34;&gt;|&lt;/span&gt; &lt;span style=&#34;color:#ff79c6&#34;&gt;TABLE_NAME&lt;/span&gt; &lt;span style=&#34;color:#ff79c6&#34;&gt;|&lt;/span&gt; AUTO_INCREMENT &lt;span style=&#34;color:#ff79c6&#34;&gt;|&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#ff79c6&#34;&gt;+&lt;/span&gt;&lt;span style=&#34;color:#6272a4&#34;&gt;------------+----------------+
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#6272a4&#34;&gt;&lt;/span&gt;&lt;span style=&#34;color:#ff79c6&#34;&gt;|&lt;/span&gt; test_user  &lt;span style=&#34;color:#ff79c6&#34;&gt;|&lt;/span&gt;              &lt;span style=&#34;color:#bd93f9&#34;&gt;3&lt;/span&gt; &lt;span style=&#34;color:#ff79c6&#34;&gt;|&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#ff79c6&#34;&gt;+&lt;/span&gt;&lt;span style=&#34;color:#6272a4&#34;&gt;------------+----------------+
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#6272a4&#34;&gt;&lt;/span&gt;&lt;span style=&#34;color:#bd93f9&#34;&gt;1&lt;/span&gt; &lt;span style=&#34;color:#ff79c6&#34;&gt;row&lt;/span&gt; &lt;span style=&#34;color:#ff79c6&#34;&gt;in&lt;/span&gt; &lt;span style=&#34;color:#ff79c6&#34;&gt;set&lt;/span&gt; (&lt;span style=&#34;color:#bd93f9&#34;&gt;0&lt;/span&gt;.&lt;span style=&#34;color:#bd93f9&#34;&gt;00&lt;/span&gt; sec)
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;可以看到 &lt;code&gt;insert ignore&lt;/code&gt; 的結果基本上與 &lt;code&gt;insert&lt;/code&gt; 幾乎一樣，只差在原本第二次 &lt;code&gt;insert&lt;/code&gt; 的時候會拋 duplicate key error，現在會被 &lt;code&gt;ignore&lt;/code&gt; 關鍵字 suppress 成 duplicate key warning&lt;/p&gt;
+&lt;p&gt;這在使用上需要特別小心，因為 &lt;code&gt;ignore&lt;/code&gt; 是真的會把所有 error 都忽略，可能會有些你意料之外的錯誤不應該忽略的也會被忽略&lt;/p&gt;
+&lt;p&gt;而且如果是 insert multiple rows 而且只有其中一些 row 有問題的狀況下，沒有問題的 rows 仍然會被成功 insert 不會整個 insert statement 被 reject，當然這個看狀況可能是缺點也有可能是優點&lt;/p&gt;
+&lt;h2 id=&#34;replace&#34;&gt;&lt;code&gt;replace&lt;/code&gt;&lt;/h2&gt;
+&lt;p&gt;不希望 raise duplicate key error 另一個選擇是採用 &lt;code&gt;replace&lt;/code&gt;&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;&#34;&gt;&lt;code class=&#34;language-sql&#34; data-lang=&#34;sql&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;mysql&lt;span style=&#34;color:#ff79c6&#34;&gt;&amp;gt;&lt;/span&gt; &lt;span style=&#34;color:#ff79c6&#34;&gt;replace&lt;/span&gt; &lt;span style=&#34;color:#ff79c6&#34;&gt;into&lt;/span&gt; test_user (user_id) value (&lt;span style=&#34;color:#bd93f9&#34;&gt;1&lt;/span&gt;);
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;Query OK, &lt;span style=&#34;color:#bd93f9&#34;&gt;1&lt;/span&gt; &lt;span style=&#34;color:#ff79c6&#34;&gt;row&lt;/span&gt; affected (&lt;span style=&#34;color:#bd93f9&#34;&gt;0&lt;/span&gt;.&lt;span style=&#34;color:#bd93f9&#34;&gt;01&lt;/span&gt; sec)
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;mysql&lt;span style=&#34;color:#ff79c6&#34;&gt;&amp;gt;&lt;/span&gt; &lt;span style=&#34;color:#ff79c6&#34;&gt;select&lt;/span&gt; &lt;span style=&#34;color:#ff79c6&#34;&gt;*&lt;/span&gt; &lt;span style=&#34;color:#ff79c6&#34;&gt;from&lt;/span&gt; test_user;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#ff79c6&#34;&gt;+&lt;/span&gt;&lt;span style=&#34;color:#6272a4&#34;&gt;----+---------+-----------+
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#6272a4&#34;&gt;&lt;/span&gt;&lt;span style=&#34;color:#ff79c6&#34;&gt;|&lt;/span&gt; id &lt;span style=&#34;color:#ff79c6&#34;&gt;|&lt;/span&gt; user_id &lt;span style=&#34;color:#ff79c6&#34;&gt;|&lt;/span&gt; is_active &lt;span style=&#34;color:#ff79c6&#34;&gt;|&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#ff79c6&#34;&gt;+&lt;/span&gt;&lt;span style=&#34;color:#6272a4&#34;&gt;----+---------+-----------+
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#6272a4&#34;&gt;&lt;/span&gt;&lt;span style=&#34;color:#ff79c6&#34;&gt;|&lt;/span&gt;  &lt;span style=&#34;color:#bd93f9&#34;&gt;1&lt;/span&gt; &lt;span style=&#34;color:#ff79c6&#34;&gt;|&lt;/span&gt;       &lt;span style=&#34;color:#bd93f9&#34;&gt;1&lt;/span&gt; &lt;span style=&#34;color:#ff79c6&#34;&gt;|&lt;/span&gt;         &lt;span style=&#34;color:#bd93f9&#34;&gt;1&lt;/span&gt; &lt;span style=&#34;color:#ff79c6&#34;&gt;|&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#ff79c6&#34;&gt;+&lt;/span&gt;&lt;span style=&#34;color:#6272a4&#34;&gt;----+---------+-----------+
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#6272a4&#34;&gt;&lt;/span&gt;&lt;span style=&#34;color:#bd93f9&#34;&gt;1&lt;/span&gt; &lt;span style=&#34;color:#ff79c6&#34;&gt;row&lt;/span&gt; &lt;span style=&#34;color:#ff79c6&#34;&gt;in&lt;/span&gt; &lt;span style=&#34;color:#ff79c6&#34;&gt;set&lt;/span&gt; (&lt;span style=&#34;color:#bd93f9&#34;&gt;0&lt;/span&gt;.&lt;span style=&#34;color:#bd93f9&#34;&gt;00&lt;/span&gt; sec)
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;mysql&lt;span style=&#34;color:#ff79c6&#34;&gt;&amp;gt;&lt;/span&gt; &lt;span style=&#34;color:#ff79c6&#34;&gt;select&lt;/span&gt; &lt;span style=&#34;color:#ff79c6&#34;&gt;table_name&lt;/span&gt;, auto_increment &lt;span style=&#34;color:#ff79c6&#34;&gt;from&lt;/span&gt; information_schema.tables &lt;span style=&#34;color:#ff79c6&#34;&gt;where&lt;/span&gt; table_schema &lt;span style=&#34;color:#ff79c6&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color:#ff79c6&#34;&gt;database&lt;/span&gt;() &lt;span style=&#34;color:#ff79c6&#34;&gt;and&lt;/span&gt; &lt;span style=&#34;color:#ff79c6&#34;&gt;table_name&lt;/span&gt; &lt;span style=&#34;color:#ff79c6&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color:#f1fa8c&#34;&gt;&amp;#39;test_user&amp;#39;&lt;/span&gt;;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#ff79c6&#34;&gt;+&lt;/span&gt;&lt;span style=&#34;color:#6272a4&#34;&gt;------------+----------------+
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#6272a4&#34;&gt;&lt;/span&gt;&lt;span style=&#34;color:#ff79c6&#34;&gt;|&lt;/span&gt; &lt;span style=&#34;color:#ff79c6&#34;&gt;TABLE_NAME&lt;/span&gt; &lt;span style=&#34;color:#ff79c6&#34;&gt;|&lt;/span&gt; AUTO_INCREMENT &lt;span style=&#34;color:#ff79c6&#34;&gt;|&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#ff79c6&#34;&gt;+&lt;/span&gt;&lt;span style=&#34;color:#6272a4&#34;&gt;------------+----------------+
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#6272a4&#34;&gt;&lt;/span&gt;&lt;span style=&#34;color:#ff79c6&#34;&gt;|&lt;/span&gt; test_user  &lt;span style=&#34;color:#ff79c6&#34;&gt;|&lt;/span&gt;              &lt;span style=&#34;color:#bd93f9&#34;&gt;2&lt;/span&gt; &lt;span style=&#34;color:#ff79c6&#34;&gt;|&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#ff79c6&#34;&gt;+&lt;/span&gt;&lt;span style=&#34;color:#6272a4&#34;&gt;------------+----------------+
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#6272a4&#34;&gt;&lt;/span&gt;&lt;span style=&#34;color:#bd93f9&#34;&gt;1&lt;/span&gt; &lt;span style=&#34;color:#ff79c6&#34;&gt;row&lt;/span&gt; &lt;span style=&#34;color:#ff79c6&#34;&gt;in&lt;/span&gt; &lt;span style=&#34;color:#ff79c6&#34;&gt;set&lt;/span&gt; (&lt;span style=&#34;color:#bd93f9&#34;&gt;0&lt;/span&gt;.&lt;span style=&#34;color:#bd93f9&#34;&gt;00&lt;/span&gt; sec)
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;mysql&lt;span style=&#34;color:#ff79c6&#34;&gt;&amp;gt;&lt;/span&gt; &lt;span style=&#34;color:#ff79c6&#34;&gt;replace&lt;/span&gt; &lt;span style=&#34;color:#ff79c6&#34;&gt;into&lt;/span&gt; test_user (user_id) value (&lt;span style=&#34;color:#bd93f9&#34;&gt;1&lt;/span&gt;);
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;Query OK, &lt;span style=&#34;color:#bd93f9&#34;&gt;2&lt;/span&gt; &lt;span style=&#34;color:#ff79c6&#34;&gt;rows&lt;/span&gt; affected (&lt;span style=&#34;color:#bd93f9&#34;&gt;0&lt;/span&gt;.&lt;span style=&#34;color:#bd93f9&#34;&gt;04&lt;/span&gt; sec)
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;mysql&lt;span style=&#34;color:#ff79c6&#34;&gt;&amp;gt;&lt;/span&gt; &lt;span style=&#34;color:#ff79c6&#34;&gt;select&lt;/span&gt; &lt;span style=&#34;color:#ff79c6&#34;&gt;*&lt;/span&gt; &lt;span style=&#34;color:#ff79c6&#34;&gt;from&lt;/span&gt; test_user;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#ff79c6&#34;&gt;+&lt;/span&gt;&lt;span style=&#34;color:#6272a4&#34;&gt;----+---------+-----------+
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#6272a4&#34;&gt;&lt;/span&gt;&lt;span style=&#34;color:#ff79c6&#34;&gt;|&lt;/span&gt; id &lt;span style=&#34;color:#ff79c6&#34;&gt;|&lt;/span&gt; user_id &lt;span style=&#34;color:#ff79c6&#34;&gt;|&lt;/span&gt; is_active &lt;span style=&#34;color:#ff79c6&#34;&gt;|&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#ff79c6&#34;&gt;+&lt;/span&gt;&lt;span style=&#34;color:#6272a4&#34;&gt;----+---------+-----------+
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#6272a4&#34;&gt;&lt;/span&gt;&lt;span style=&#34;color:#ff79c6&#34;&gt;|&lt;/span&gt;  &lt;span style=&#34;color:#bd93f9&#34;&gt;2&lt;/span&gt; &lt;span style=&#34;color:#ff79c6&#34;&gt;|&lt;/span&gt;       &lt;span style=&#34;color:#bd93f9&#34;&gt;1&lt;/span&gt; &lt;span style=&#34;color:#ff79c6&#34;&gt;|&lt;/span&gt;         &lt;span style=&#34;color:#bd93f9&#34;&gt;1&lt;/span&gt; &lt;span style=&#34;color:#ff79c6&#34;&gt;|&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#ff79c6&#34;&gt;+&lt;/span&gt;&lt;span style=&#34;color:#6272a4&#34;&gt;----+---------+-----------+
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#6272a4&#34;&gt;&lt;/span&gt;&lt;span style=&#34;color:#bd93f9&#34;&gt;1&lt;/span&gt; &lt;span style=&#34;color:#ff79c6&#34;&gt;row&lt;/span&gt; &lt;span style=&#34;color:#ff79c6&#34;&gt;in&lt;/span&gt; &lt;span style=&#34;color:#ff79c6&#34;&gt;set&lt;/span&gt; (&lt;span style=&#34;color:#bd93f9&#34;&gt;0&lt;/span&gt;.&lt;span style=&#34;color:#bd93f9&#34;&gt;00&lt;/span&gt; sec)
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;mysql&lt;span style=&#34;color:#ff79c6&#34;&gt;&amp;gt;&lt;/span&gt; &lt;span style=&#34;color:#ff79c6&#34;&gt;select&lt;/span&gt; &lt;span style=&#34;color:#ff79c6&#34;&gt;table_name&lt;/span&gt;, auto_increment &lt;span style=&#34;color:#ff79c6&#34;&gt;from&lt;/span&gt; information_schema.tables &lt;span style=&#34;color:#ff79c6&#34;&gt;where&lt;/span&gt; table_schema &lt;span style=&#34;color:#ff79c6&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color:#ff79c6&#34;&gt;database&lt;/span&gt;() &lt;span style=&#34;color:#ff79c6&#34;&gt;and&lt;/span&gt; &lt;span style=&#34;color:#ff79c6&#34;&gt;table_name&lt;/span&gt; &lt;span style=&#34;color:#ff79c6&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color:#f1fa8c&#34;&gt;&amp;#39;test_user&amp;#39;&lt;/span&gt;;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#ff79c6&#34;&gt;+&lt;/span&gt;&lt;span style=&#34;color:#6272a4&#34;&gt;------------+----------------+
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#6272a4&#34;&gt;&lt;/span&gt;&lt;span style=&#34;color:#ff79c6&#34;&gt;|&lt;/span&gt; &lt;span style=&#34;color:#ff79c6&#34;&gt;TABLE_NAME&lt;/span&gt; &lt;span style=&#34;color:#ff79c6&#34;&gt;|&lt;/span&gt; AUTO_INCREMENT &lt;span style=&#34;color:#ff79c6&#34;&gt;|&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#ff79c6&#34;&gt;+&lt;/span&gt;&lt;span style=&#34;color:#6272a4&#34;&gt;------------+----------------+
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#6272a4&#34;&gt;&lt;/span&gt;&lt;span style=&#34;color:#ff79c6&#34;&gt;|&lt;/span&gt; test_user  &lt;span style=&#34;color:#ff79c6&#34;&gt;|&lt;/span&gt;              &lt;span style=&#34;color:#bd93f9&#34;&gt;3&lt;/span&gt; &lt;span style=&#34;color:#ff79c6&#34;&gt;|&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#ff79c6&#34;&gt;+&lt;/span&gt;&lt;span style=&#34;color:#6272a4&#34;&gt;------------+----------------+
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#6272a4&#34;&gt;&lt;/span&gt;&lt;span style=&#34;color:#bd93f9&#34;&gt;1&lt;/span&gt; &lt;span style=&#34;color:#ff79c6&#34;&gt;row&lt;/span&gt; &lt;span style=&#34;color:#ff79c6&#34;&gt;in&lt;/span&gt; &lt;span style=&#34;color:#ff79c6&#34;&gt;set&lt;/span&gt; (&lt;span style=&#34;color:#bd93f9&#34;&gt;0&lt;/span&gt;.&lt;span style=&#34;color:#bd93f9&#34;&gt;00&lt;/span&gt; sec)
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;可以看到 &lt;code&gt;replace&lt;/code&gt; 跟 &lt;code&gt;insert&lt;/code&gt; 也幾乎一樣，只差在第二次 &lt;code&gt;replace&lt;/code&gt; 時是 2 rows affected 並且不會有 error 或 warning，並且在第二次 &lt;code&gt;replace&lt;/code&gt; 後，該筆資料的 &lt;code&gt;id&lt;/code&gt; 被變更為 2&lt;/p&gt;
+&lt;p&gt;這是因為 &lt;code&gt;replace&lt;/code&gt; 實際上是先做 &lt;code&gt;delete&lt;/code&gt; 再做 &lt;code&gt;insert&lt;/code&gt;，因此被影響的是 2 個 row，因此也不會有 duplicate key error，因為實際 insert 的時候，原本會 duplicate 的 row 已經被刪掉了&lt;/p&gt;
+&lt;p&gt;&lt;code&gt;replace&lt;/code&gt; 除了 id 會被改變、auto increment 還是會 kind of 浪費一個以外，最大的問題是如果 id 被其他 table 設為 foreign key 的時候，可能會產生你意料之外的結果，例如 cascade delete&lt;/p&gt;
+&lt;h2 id=&#34;insert--on-duplicate-key-update&#34;&gt;&lt;code&gt;insert … on duplicate key update&lt;/code&gt;&lt;/h2&gt;
+&lt;p&gt;但如果我們既不想 id 被改變，也不希望 raise duplicate key error/warning 呢？&lt;/p&gt;
+&lt;p&gt;那可以先考慮 &lt;code&gt;insert ... on duplicate key update&lt;/code&gt; 的做法&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;&#34;&gt;&lt;code class=&#34;language-sql&#34; data-lang=&#34;sql&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;mysql&lt;span style=&#34;color:#ff79c6&#34;&gt;&amp;gt;&lt;/span&gt; &lt;span style=&#34;color:#ff79c6&#34;&gt;insert&lt;/span&gt; &lt;span style=&#34;color:#ff79c6&#34;&gt;into&lt;/span&gt; test_user (user_id) value (&lt;span style=&#34;color:#bd93f9&#34;&gt;1&lt;/span&gt;) &lt;span style=&#34;color:#ff79c6&#34;&gt;as&lt;/span&gt; &lt;span style=&#34;color:#ff79c6&#34;&gt;new&lt;/span&gt; &lt;span style=&#34;color:#ff79c6&#34;&gt;on&lt;/span&gt; duplicate &lt;span style=&#34;color:#ff79c6&#34;&gt;key&lt;/span&gt; &lt;span style=&#34;color:#ff79c6&#34;&gt;update&lt;/span&gt; user_id &lt;span style=&#34;color:#ff79c6&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color:#ff79c6&#34;&gt;new&lt;/span&gt;.user_id;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;Query OK, &lt;span style=&#34;color:#bd93f9&#34;&gt;1&lt;/span&gt; &lt;span style=&#34;color:#ff79c6&#34;&gt;row&lt;/span&gt; affected (&lt;span style=&#34;color:#bd93f9&#34;&gt;0&lt;/span&gt;.&lt;span style=&#34;color:#bd93f9&#34;&gt;05&lt;/span&gt; sec)
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;mysql&lt;span style=&#34;color:#ff79c6&#34;&gt;&amp;gt;&lt;/span&gt; &lt;span style=&#34;color:#ff79c6&#34;&gt;select&lt;/span&gt; &lt;span style=&#34;color:#ff79c6&#34;&gt;*&lt;/span&gt; &lt;span style=&#34;color:#ff79c6&#34;&gt;from&lt;/span&gt; test_user;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#ff79c6&#34;&gt;+&lt;/span&gt;&lt;span style=&#34;color:#6272a4&#34;&gt;----+---------+-----------+
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#6272a4&#34;&gt;&lt;/span&gt;&lt;span style=&#34;color:#ff79c6&#34;&gt;|&lt;/span&gt; id &lt;span style=&#34;color:#ff79c6&#34;&gt;|&lt;/span&gt; user_id &lt;span style=&#34;color:#ff79c6&#34;&gt;|&lt;/span&gt; is_active &lt;span style=&#34;color:#ff79c6&#34;&gt;|&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#ff79c6&#34;&gt;+&lt;/span&gt;&lt;span style=&#34;color:#6272a4&#34;&gt;----+---------+-----------+
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#6272a4&#34;&gt;&lt;/span&gt;&lt;span style=&#34;color:#ff79c6&#34;&gt;|&lt;/span&gt;  &lt;span style=&#34;color:#bd93f9&#34;&gt;1&lt;/span&gt; &lt;span style=&#34;color:#ff79c6&#34;&gt;|&lt;/span&gt;       &lt;span style=&#34;color:#bd93f9&#34;&gt;1&lt;/span&gt; &lt;span style=&#34;color:#ff79c6&#34;&gt;|&lt;/span&gt;         &lt;span style=&#34;color:#bd93f9&#34;&gt;1&lt;/span&gt; &lt;span style=&#34;color:#ff79c6&#34;&gt;|&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#ff79c6&#34;&gt;+&lt;/span&gt;&lt;span style=&#34;color:#6272a4&#34;&gt;----+---------+-----------+
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#6272a4&#34;&gt;&lt;/span&gt;&lt;span style=&#34;color:#bd93f9&#34;&gt;1&lt;/span&gt; &lt;span style=&#34;color:#ff79c6&#34;&gt;row&lt;/span&gt; &lt;span style=&#34;color:#ff79c6&#34;&gt;in&lt;/span&gt; &lt;span style=&#34;color:#ff79c6&#34;&gt;set&lt;/span&gt; (&lt;span style=&#34;color:#bd93f9&#34;&gt;0&lt;/span&gt;.&lt;span style=&#34;color:#bd93f9&#34;&gt;00&lt;/span&gt; sec)
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;mysql&lt;span style=&#34;color:#ff79c6&#34;&gt;&amp;gt;&lt;/span&gt; &lt;span style=&#34;color:#ff79c6&#34;&gt;select&lt;/span&gt; &lt;span style=&#34;color:#ff79c6&#34;&gt;table_name&lt;/span&gt;, auto_increment &lt;span style=&#34;color:#ff79c6&#34;&gt;from&lt;/span&gt; information_schema.tables &lt;span style=&#34;color:#ff79c6&#34;&gt;where&lt;/span&gt; table_schema &lt;span style=&#34;color:#ff79c6&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color:#ff79c6&#34;&gt;database&lt;/span&gt;() &lt;span style=&#34;color:#ff79c6&#34;&gt;and&lt;/span&gt; &lt;span style=&#34;color:#ff79c6&#34;&gt;table_name&lt;/span&gt; &lt;span style=&#34;color:#ff79c6&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color:#f1fa8c&#34;&gt;&amp;#39;test_user&amp;#39;&lt;/span&gt;;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#ff79c6&#34;&gt;+&lt;/span&gt;&lt;span style=&#34;color:#6272a4&#34;&gt;------------+----------------+
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#6272a4&#34;&gt;&lt;/span&gt;&lt;span style=&#34;color:#ff79c6&#34;&gt;|&lt;/span&gt; &lt;span style=&#34;color:#ff79c6&#34;&gt;TABLE_NAME&lt;/span&gt; &lt;span style=&#34;color:#ff79c6&#34;&gt;|&lt;/span&gt; AUTO_INCREMENT &lt;span style=&#34;color:#ff79c6&#34;&gt;|&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#ff79c6&#34;&gt;+&lt;/span&gt;&lt;span style=&#34;color:#6272a4&#34;&gt;------------+----------------+
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#6272a4&#34;&gt;&lt;/span&gt;&lt;span style=&#34;color:#ff79c6&#34;&gt;|&lt;/span&gt; test_user  &lt;span style=&#34;color:#ff79c6&#34;&gt;|&lt;/span&gt;              &lt;span style=&#34;color:#bd93f9&#34;&gt;2&lt;/span&gt; &lt;span style=&#34;color:#ff79c6&#34;&gt;|&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#ff79c6&#34;&gt;+&lt;/span&gt;&lt;span style=&#34;color:#6272a4&#34;&gt;------------+----------------+
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#6272a4&#34;&gt;&lt;/span&gt;&lt;span style=&#34;color:#bd93f9&#34;&gt;1&lt;/span&gt; &lt;span style=&#34;color:#ff79c6&#34;&gt;row&lt;/span&gt; &lt;span style=&#34;color:#ff79c6&#34;&gt;in&lt;/span&gt; &lt;span style=&#34;color:#ff79c6&#34;&gt;set&lt;/span&gt; (&lt;span style=&#34;color:#bd93f9&#34;&gt;0&lt;/span&gt;.&lt;span style=&#34;color:#bd93f9&#34;&gt;00&lt;/span&gt; sec)
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;mysql&lt;span style=&#34;color:#ff79c6&#34;&gt;&amp;gt;&lt;/span&gt; &lt;span style=&#34;color:#ff79c6&#34;&gt;insert&lt;/span&gt; &lt;span style=&#34;color:#ff79c6&#34;&gt;into&lt;/span&gt; test_user (user_id) value (&lt;span style=&#34;color:#bd93f9&#34;&gt;1&lt;/span&gt;) &lt;span style=&#34;color:#ff79c6&#34;&gt;as&lt;/span&gt; &lt;span style=&#34;color:#ff79c6&#34;&gt;new&lt;/span&gt; &lt;span style=&#34;color:#ff79c6&#34;&gt;on&lt;/span&gt; duplicate &lt;span style=&#34;color:#ff79c6&#34;&gt;key&lt;/span&gt; &lt;span style=&#34;color:#ff79c6&#34;&gt;update&lt;/span&gt; user_id &lt;span style=&#34;color:#ff79c6&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color:#ff79c6&#34;&gt;new&lt;/span&gt;.user_id;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;Query OK, &lt;span style=&#34;color:#bd93f9&#34;&gt;0&lt;/span&gt; &lt;span style=&#34;color:#ff79c6&#34;&gt;rows&lt;/span&gt; affected (&lt;span style=&#34;color:#bd93f9&#34;&gt;0&lt;/span&gt;.&lt;span style=&#34;color:#bd93f9&#34;&gt;00&lt;/span&gt; sec)
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;mysql&lt;span style=&#34;color:#ff79c6&#34;&gt;&amp;gt;&lt;/span&gt; &lt;span style=&#34;color:#ff79c6&#34;&gt;select&lt;/span&gt; &lt;span style=&#34;color:#ff79c6&#34;&gt;*&lt;/span&gt; &lt;span style=&#34;color:#ff79c6&#34;&gt;from&lt;/span&gt; test_user;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#ff79c6&#34;&gt;+&lt;/span&gt;&lt;span style=&#34;color:#6272a4&#34;&gt;----+---------+-----------+
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#6272a4&#34;&gt;&lt;/span&gt;&lt;span style=&#34;color:#ff79c6&#34;&gt;|&lt;/span&gt; id &lt;span style=&#34;color:#ff79c6&#34;&gt;|&lt;/span&gt; user_id &lt;span style=&#34;color:#ff79c6&#34;&gt;|&lt;/span&gt; is_active &lt;span style=&#34;color:#ff79c6&#34;&gt;|&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#ff79c6&#34;&gt;+&lt;/span&gt;&lt;span style=&#34;color:#6272a4&#34;&gt;----+---------+-----------+
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#6272a4&#34;&gt;&lt;/span&gt;&lt;span style=&#34;color:#ff79c6&#34;&gt;|&lt;/span&gt;  &lt;span style=&#34;color:#bd93f9&#34;&gt;1&lt;/span&gt; &lt;span style=&#34;color:#ff79c6&#34;&gt;|&lt;/span&gt;       &lt;span style=&#34;color:#bd93f9&#34;&gt;1&lt;/span&gt; &lt;span style=&#34;color:#ff79c6&#34;&gt;|&lt;/span&gt;         &lt;span style=&#34;color:#bd93f9&#34;&gt;1&lt;/span&gt; &lt;span style=&#34;color:#ff79c6&#34;&gt;|&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#ff79c6&#34;&gt;+&lt;/span&gt;&lt;span style=&#34;color:#6272a4&#34;&gt;----+---------+-----------+
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#6272a4&#34;&gt;&lt;/span&gt;&lt;span style=&#34;color:#bd93f9&#34;&gt;1&lt;/span&gt; &lt;span style=&#34;color:#ff79c6&#34;&gt;row&lt;/span&gt; &lt;span style=&#34;color:#ff79c6&#34;&gt;in&lt;/span&gt; &lt;span style=&#34;color:#ff79c6&#34;&gt;set&lt;/span&gt; (&lt;span style=&#34;color:#bd93f9&#34;&gt;0&lt;/span&gt;.&lt;span style=&#34;color:#bd93f9&#34;&gt;00&lt;/span&gt; sec)
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;mysql&lt;span style=&#34;color:#ff79c6&#34;&gt;&amp;gt;&lt;/span&gt; &lt;span style=&#34;color:#ff79c6&#34;&gt;select&lt;/span&gt; &lt;span style=&#34;color:#ff79c6&#34;&gt;table_name&lt;/span&gt;, auto_increment &lt;span style=&#34;color:#ff79c6&#34;&gt;from&lt;/span&gt; information_schema.tables &lt;span style=&#34;color:#ff79c6&#34;&gt;where&lt;/span&gt; table_schema &lt;span style=&#34;color:#ff79c6&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color:#ff79c6&#34;&gt;database&lt;/span&gt;() &lt;span style=&#34;color:#ff79c6&#34;&gt;and&lt;/span&gt; &lt;span style=&#34;color:#ff79c6&#34;&gt;table_name&lt;/span&gt; &lt;span style=&#34;color:#ff79c6&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color:#f1fa8c&#34;&gt;&amp;#39;test_user&amp;#39;&lt;/span&gt;;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#ff79c6&#34;&gt;+&lt;/span&gt;&lt;span style=&#34;color:#6272a4&#34;&gt;------------+----------------+
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#6272a4&#34;&gt;&lt;/span&gt;&lt;span style=&#34;color:#ff79c6&#34;&gt;|&lt;/span&gt; &lt;span style=&#34;color:#ff79c6&#34;&gt;TABLE_NAME&lt;/span&gt; &lt;span style=&#34;color:#ff79c6&#34;&gt;|&lt;/span&gt; AUTO_INCREMENT &lt;span style=&#34;color:#ff79c6&#34;&gt;|&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#ff79c6&#34;&gt;+&lt;/span&gt;&lt;span style=&#34;color:#6272a4&#34;&gt;------------+----------------+
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#6272a4&#34;&gt;&lt;/span&gt;&lt;span style=&#34;color:#ff79c6&#34;&gt;|&lt;/span&gt; test_user  &lt;span style=&#34;color:#ff79c6&#34;&gt;|&lt;/span&gt;              &lt;span style=&#34;color:#bd93f9&#34;&gt;3&lt;/span&gt; &lt;span style=&#34;color:#ff79c6&#34;&gt;|&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#ff79c6&#34;&gt;+&lt;/span&gt;&lt;span style=&#34;color:#6272a4&#34;&gt;------------+----------------+
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#6272a4&#34;&gt;&lt;/span&gt;&lt;span style=&#34;color:#bd93f9&#34;&gt;1&lt;/span&gt; &lt;span style=&#34;color:#ff79c6&#34;&gt;row&lt;/span&gt; &lt;span style=&#34;color:#ff79c6&#34;&gt;in&lt;/span&gt; &lt;span style=&#34;color:#ff79c6&#34;&gt;set&lt;/span&gt; (&lt;span style=&#34;color:#bd93f9&#34;&gt;0&lt;/span&gt;.&lt;span style=&#34;color:#bd93f9&#34;&gt;00&lt;/span&gt; sec)
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;如此就達成既不會改變 id，也不會 raise duplicate key error/warning&lt;/p&gt;
+&lt;p&gt;但是仍然會造成 auto increment 被多 +1&lt;/p&gt;
+&lt;p&gt;另外，因為在 8.0.20 之後的 MySQL，&lt;code&gt;values()&lt;/code&gt; 功能已 deprecated，所以改用 8.0.19 引入的 &lt;code&gt;alias&lt;/code&gt; 語法以避免 warning&lt;/p&gt;
+&lt;p&gt;如果是 8.0.20 以前的版本，可以改採用 &lt;code&gt;values()&lt;/code&gt; 寫法以避免 syntax error&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;&#34;&gt;&lt;code class=&#34;language-sql&#34; data-lang=&#34;sql&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#ff79c6&#34;&gt;insert&lt;/span&gt; &lt;span style=&#34;color:#ff79c6&#34;&gt;into&lt;/span&gt; test_user (user_id) value (&lt;span style=&#34;color:#bd93f9&#34;&gt;1&lt;/span&gt;) &lt;span style=&#34;color:#ff79c6&#34;&gt;on&lt;/span&gt; duplicate &lt;span style=&#34;color:#ff79c6&#34;&gt;key&lt;/span&gt; &lt;span style=&#34;color:#ff79c6&#34;&gt;update&lt;/span&gt; user_id &lt;span style=&#34;color:#ff79c6&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color:#ff79c6&#34;&gt;values&lt;/span&gt;(user_id)
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h3 id=&#34;insert--on-duplicate-key-update-id--id&#34;&gt;&lt;code&gt;insert … on duplicate key update id = id&lt;/code&gt;&lt;/h3&gt;
+&lt;p&gt;這個方式還有一個變種，網路流傳這樣寫，MySQL 會自動辨認如果有 duplicate key 要改作 &lt;code&gt;update&lt;/code&gt; 也不會造成 auto increment +1，立刻就來做流言驗證！&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;&#34;&gt;&lt;code class=&#34;language-sql&#34; data-lang=&#34;sql&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;mysql&lt;span style=&#34;color:#ff79c6&#34;&gt;&amp;gt;&lt;/span&gt; &lt;span style=&#34;color:#ff79c6&#34;&gt;insert&lt;/span&gt; &lt;span style=&#34;color:#ff79c6&#34;&gt;into&lt;/span&gt; test_user (user_id) value (&lt;span style=&#34;color:#bd93f9&#34;&gt;1&lt;/span&gt;) &lt;span style=&#34;color:#ff79c6&#34;&gt;on&lt;/span&gt; duplicate &lt;span style=&#34;color:#ff79c6&#34;&gt;key&lt;/span&gt; &lt;span style=&#34;color:#ff79c6&#34;&gt;update&lt;/span&gt; id &lt;span style=&#34;color:#ff79c6&#34;&gt;=&lt;/span&gt; id;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;Query OK, &lt;span style=&#34;color:#bd93f9&#34;&gt;1&lt;/span&gt; &lt;span style=&#34;color:#ff79c6&#34;&gt;row&lt;/span&gt; affected (&lt;span style=&#34;color:#bd93f9&#34;&gt;0&lt;/span&gt;.&lt;span style=&#34;color:#bd93f9&#34;&gt;06&lt;/span&gt; sec)
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;mysql&lt;span style=&#34;color:#ff79c6&#34;&gt;&amp;gt;&lt;/span&gt; &lt;span style=&#34;color:#ff79c6&#34;&gt;select&lt;/span&gt; &lt;span style=&#34;color:#ff79c6&#34;&gt;*&lt;/span&gt; &lt;span style=&#34;color:#ff79c6&#34;&gt;from&lt;/span&gt; test_user;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#ff79c6&#34;&gt;+&lt;/span&gt;&lt;span style=&#34;color:#6272a4&#34;&gt;----+---------+-----------+
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#6272a4&#34;&gt;&lt;/span&gt;&lt;span style=&#34;color:#ff79c6&#34;&gt;|&lt;/span&gt; id &lt;span style=&#34;color:#ff79c6&#34;&gt;|&lt;/span&gt; user_id &lt;span style=&#34;color:#ff79c6&#34;&gt;|&lt;/span&gt; is_active &lt;span style=&#34;color:#ff79c6&#34;&gt;|&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#ff79c6&#34;&gt;+&lt;/span&gt;&lt;span style=&#34;color:#6272a4&#34;&gt;----+---------+-----------+
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#6272a4&#34;&gt;&lt;/span&gt;&lt;span style=&#34;color:#ff79c6&#34;&gt;|&lt;/span&gt;  &lt;span style=&#34;color:#bd93f9&#34;&gt;1&lt;/span&gt; &lt;span style=&#34;color:#ff79c6&#34;&gt;|&lt;/span&gt;       &lt;span style=&#34;color:#bd93f9&#34;&gt;1&lt;/span&gt; &lt;span style=&#34;color:#ff79c6&#34;&gt;|&lt;/span&gt;         &lt;span style=&#34;color:#bd93f9&#34;&gt;1&lt;/span&gt; &lt;span style=&#34;color:#ff79c6&#34;&gt;|&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#ff79c6&#34;&gt;+&lt;/span&gt;&lt;span style=&#34;color:#6272a4&#34;&gt;----+---------+-----------+
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#6272a4&#34;&gt;&lt;/span&gt;&lt;span style=&#34;color:#bd93f9&#34;&gt;1&lt;/span&gt; &lt;span style=&#34;color:#ff79c6&#34;&gt;row&lt;/span&gt; &lt;span style=&#34;color:#ff79c6&#34;&gt;in&lt;/span&gt; &lt;span style=&#34;color:#ff79c6&#34;&gt;set&lt;/span&gt; (&lt;span style=&#34;color:#bd93f9&#34;&gt;0&lt;/span&gt;.&lt;span style=&#34;color:#bd93f9&#34;&gt;00&lt;/span&gt; sec)
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;mysql&lt;span style=&#34;color:#ff79c6&#34;&gt;&amp;gt;&lt;/span&gt; &lt;span style=&#34;color:#ff79c6&#34;&gt;select&lt;/span&gt; &lt;span style=&#34;color:#ff79c6&#34;&gt;table_name&lt;/span&gt;, auto_increment &lt;span style=&#34;color:#ff79c6&#34;&gt;from&lt;/span&gt; information_schema.tables &lt;span style=&#34;color:#ff79c6&#34;&gt;where&lt;/span&gt; &lt;span style=&#34;color:#ff79c6&#34;&gt;table_name&lt;/span&gt; &lt;span style=&#34;color:#ff79c6&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color:#f1fa8c&#34;&gt;&amp;#39;test_user&amp;#39;&lt;/span&gt;;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#ff79c6&#34;&gt;+&lt;/span&gt;&lt;span style=&#34;color:#6272a4&#34;&gt;------------+----------------+
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#6272a4&#34;&gt;&lt;/span&gt;&lt;span style=&#34;color:#ff79c6&#34;&gt;|&lt;/span&gt; &lt;span style=&#34;color:#ff79c6&#34;&gt;TABLE_NAME&lt;/span&gt; &lt;span style=&#34;color:#ff79c6&#34;&gt;|&lt;/span&gt; AUTO_INCREMENT &lt;span style=&#34;color:#ff79c6&#34;&gt;|&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#ff79c6&#34;&gt;+&lt;/span&gt;&lt;span style=&#34;color:#6272a4&#34;&gt;------------+----------------+
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#6272a4&#34;&gt;&lt;/span&gt;&lt;span style=&#34;color:#ff79c6&#34;&gt;|&lt;/span&gt; test_user  &lt;span style=&#34;color:#ff79c6&#34;&gt;|&lt;/span&gt;              &lt;span style=&#34;color:#bd93f9&#34;&gt;2&lt;/span&gt; &lt;span style=&#34;color:#ff79c6&#34;&gt;|&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#ff79c6&#34;&gt;+&lt;/span&gt;&lt;span style=&#34;color:#6272a4&#34;&gt;------------+----------------+
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#6272a4&#34;&gt;&lt;/span&gt;&lt;span style=&#34;color:#bd93f9&#34;&gt;1&lt;/span&gt; &lt;span style=&#34;color:#ff79c6&#34;&gt;row&lt;/span&gt; &lt;span style=&#34;color:#ff79c6&#34;&gt;in&lt;/span&gt; &lt;span style=&#34;color:#ff79c6&#34;&gt;set&lt;/span&gt; (&lt;span style=&#34;color:#bd93f9&#34;&gt;0&lt;/span&gt;.&lt;span style=&#34;color:#bd93f9&#34;&gt;00&lt;/span&gt; sec)
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;mysql&lt;span style=&#34;color:#ff79c6&#34;&gt;&amp;gt;&lt;/span&gt; &lt;span style=&#34;color:#ff79c6&#34;&gt;insert&lt;/span&gt; &lt;span style=&#34;color:#ff79c6&#34;&gt;into&lt;/span&gt; test_user (user_id) value (&lt;span style=&#34;color:#bd93f9&#34;&gt;1&lt;/span&gt;) &lt;span style=&#34;color:#ff79c6&#34;&gt;on&lt;/span&gt; duplicate &lt;span style=&#34;color:#ff79c6&#34;&gt;key&lt;/span&gt; &lt;span style=&#34;color:#ff79c6&#34;&gt;update&lt;/span&gt; id &lt;span style=&#34;color:#ff79c6&#34;&gt;=&lt;/span&gt; id;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;Query OK, &lt;span style=&#34;color:#bd93f9&#34;&gt;0&lt;/span&gt; &lt;span style=&#34;color:#ff79c6&#34;&gt;rows&lt;/span&gt; affected (&lt;span style=&#34;color:#bd93f9&#34;&gt;0&lt;/span&gt;.&lt;span style=&#34;color:#bd93f9&#34;&gt;00&lt;/span&gt; sec)
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;mysql&lt;span style=&#34;color:#ff79c6&#34;&gt;&amp;gt;&lt;/span&gt; &lt;span style=&#34;color:#ff79c6&#34;&gt;select&lt;/span&gt; &lt;span style=&#34;color:#ff79c6&#34;&gt;*&lt;/span&gt; &lt;span style=&#34;color:#ff79c6&#34;&gt;from&lt;/span&gt; test_user;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#ff79c6&#34;&gt;+&lt;/span&gt;&lt;span style=&#34;color:#6272a4&#34;&gt;----+---------+-----------+
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#6272a4&#34;&gt;&lt;/span&gt;&lt;span style=&#34;color:#ff79c6&#34;&gt;|&lt;/span&gt; id &lt;span style=&#34;color:#ff79c6&#34;&gt;|&lt;/span&gt; user_id &lt;span style=&#34;color:#ff79c6&#34;&gt;|&lt;/span&gt; is_active &lt;span style=&#34;color:#ff79c6&#34;&gt;|&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#ff79c6&#34;&gt;+&lt;/span&gt;&lt;span style=&#34;color:#6272a4&#34;&gt;----+---------+-----------+
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#6272a4&#34;&gt;&lt;/span&gt;&lt;span style=&#34;color:#ff79c6&#34;&gt;|&lt;/span&gt;  &lt;span style=&#34;color:#bd93f9&#34;&gt;1&lt;/span&gt; &lt;span style=&#34;color:#ff79c6&#34;&gt;|&lt;/span&gt;       &lt;span style=&#34;color:#bd93f9&#34;&gt;1&lt;/span&gt; &lt;span style=&#34;color:#ff79c6&#34;&gt;|&lt;/span&gt;         &lt;span style=&#34;color:#bd93f9&#34;&gt;1&lt;/span&gt; &lt;span style=&#34;color:#ff79c6&#34;&gt;|&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#ff79c6&#34;&gt;+&lt;/span&gt;&lt;span style=&#34;color:#6272a4&#34;&gt;----+---------+-----------+
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#6272a4&#34;&gt;&lt;/span&gt;&lt;span style=&#34;color:#bd93f9&#34;&gt;1&lt;/span&gt; &lt;span style=&#34;color:#ff79c6&#34;&gt;row&lt;/span&gt; &lt;span style=&#34;color:#ff79c6&#34;&gt;in&lt;/span&gt; &lt;span style=&#34;color:#ff79c6&#34;&gt;set&lt;/span&gt; (&lt;span style=&#34;color:#bd93f9&#34;&gt;0&lt;/span&gt;.&lt;span style=&#34;color:#bd93f9&#34;&gt;00&lt;/span&gt; sec)
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;mysql&lt;span style=&#34;color:#ff79c6&#34;&gt;&amp;gt;&lt;/span&gt; &lt;span style=&#34;color:#ff79c6&#34;&gt;select&lt;/span&gt; &lt;span style=&#34;color:#ff79c6&#34;&gt;table_name&lt;/span&gt;, auto_increment &lt;span style=&#34;color:#ff79c6&#34;&gt;from&lt;/span&gt; information_schema.tables &lt;span style=&#34;color:#ff79c6&#34;&gt;where&lt;/span&gt; &lt;span style=&#34;color:#ff79c6&#34;&gt;table_name&lt;/span&gt; &lt;span style=&#34;color:#ff79c6&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color:#f1fa8c&#34;&gt;&amp;#39;test_user&amp;#39;&lt;/span&gt;;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#ff79c6&#34;&gt;+&lt;/span&gt;&lt;span style=&#34;color:#6272a4&#34;&gt;------------+----------------+
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#6272a4&#34;&gt;&lt;/span&gt;&lt;span style=&#34;color:#ff79c6&#34;&gt;|&lt;/span&gt; &lt;span style=&#34;color:#ff79c6&#34;&gt;TABLE_NAME&lt;/span&gt; &lt;span style=&#34;color:#ff79c6&#34;&gt;|&lt;/span&gt; AUTO_INCREMENT &lt;span style=&#34;color:#ff79c6&#34;&gt;|&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#ff79c6&#34;&gt;+&lt;/span&gt;&lt;span style=&#34;color:#6272a4&#34;&gt;------------+----------------+
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#6272a4&#34;&gt;&lt;/span&gt;&lt;span style=&#34;color:#ff79c6&#34;&gt;|&lt;/span&gt; test_user  &lt;span style=&#34;color:#ff79c6&#34;&gt;|&lt;/span&gt;              &lt;span style=&#34;color:#bd93f9&#34;&gt;3&lt;/span&gt; &lt;span style=&#34;color:#ff79c6&#34;&gt;|&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#ff79c6&#34;&gt;+&lt;/span&gt;&lt;span style=&#34;color:#6272a4&#34;&gt;------------+----------------+
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#6272a4&#34;&gt;&lt;/span&gt;&lt;span style=&#34;color:#bd93f9&#34;&gt;1&lt;/span&gt; &lt;span style=&#34;color:#ff79c6&#34;&gt;row&lt;/span&gt; &lt;span style=&#34;color:#ff79c6&#34;&gt;in&lt;/span&gt; &lt;span style=&#34;color:#ff79c6&#34;&gt;set&lt;/span&gt; (&lt;span style=&#34;color:#bd93f9&#34;&gt;0&lt;/span&gt;.&lt;span style=&#34;color:#bd93f9&#34;&gt;00&lt;/span&gt; sec)
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;結論不用多說了，MYTH BUSTED!&lt;/p&gt;
+&lt;h2 id=&#34;insert--select--not-exists&#34;&gt;&lt;code&gt;insert … select … not exists&lt;/code&gt;&lt;/h2&gt;
+&lt;p&gt;如果我們既不想 raise duplicate key error/warning，也不想改變 id，還不想造成 auto increment waste 呢？&lt;em&gt;(小孩子才做選擇，我全都要)&lt;/em&gt;&lt;/p&gt;
+&lt;p&gt;直接上驗證結果&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;&#34;&gt;&lt;code class=&#34;language-sql&#34; data-lang=&#34;sql&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;mysql&lt;span style=&#34;color:#ff79c6&#34;&gt;&amp;gt;&lt;/span&gt; &lt;span style=&#34;color:#ff79c6&#34;&gt;insert&lt;/span&gt; &lt;span style=&#34;color:#ff79c6&#34;&gt;into&lt;/span&gt; test_user (user_id) &lt;span style=&#34;color:#ff79c6&#34;&gt;select&lt;/span&gt; temp.&lt;span style=&#34;color:#ff79c6&#34;&gt;*&lt;/span&gt; &lt;span style=&#34;color:#ff79c6&#34;&gt;from&lt;/span&gt; (&lt;span style=&#34;color:#ff79c6&#34;&gt;select&lt;/span&gt; &lt;span style=&#34;color:#bd93f9&#34;&gt;1&lt;/span&gt; &lt;span style=&#34;color:#ff79c6&#34;&gt;as&lt;/span&gt; user_id) &lt;span style=&#34;color:#ff79c6&#34;&gt;as&lt;/span&gt; temp &lt;span style=&#34;color:#ff79c6&#34;&gt;where&lt;/span&gt; &lt;span style=&#34;color:#ff79c6&#34;&gt;not&lt;/span&gt; &lt;span style=&#34;color:#ff79c6&#34;&gt;exists&lt;/span&gt;(&lt;span style=&#34;color:#ff79c6&#34;&gt;select&lt;/span&gt; &lt;span style=&#34;color:#ff79c6&#34;&gt;*&lt;/span&gt; &lt;span style=&#34;color:#ff79c6&#34;&gt;from&lt;/span&gt; test_user &lt;span style=&#34;color:#ff79c6&#34;&gt;where&lt;/span&gt; user_id &lt;span style=&#34;color:#ff79c6&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color:#bd93f9&#34;&gt;1&lt;/span&gt;) &lt;span style=&#34;color:#ff79c6&#34;&gt;limit&lt;/span&gt; &lt;span style=&#34;color:#bd93f9&#34;&gt;1&lt;/span&gt;;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;Query OK, &lt;span style=&#34;color:#bd93f9&#34;&gt;1&lt;/span&gt; &lt;span style=&#34;color:#ff79c6&#34;&gt;row&lt;/span&gt; affected (&lt;span style=&#34;color:#bd93f9&#34;&gt;0&lt;/span&gt;.&lt;span style=&#34;color:#bd93f9&#34;&gt;06&lt;/span&gt; sec)
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;Records: &lt;span style=&#34;color:#bd93f9&#34;&gt;1&lt;/span&gt;  Duplicates: &lt;span style=&#34;color:#bd93f9&#34;&gt;0&lt;/span&gt;  Warnings: &lt;span style=&#34;color:#bd93f9&#34;&gt;0&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;mysql&lt;span style=&#34;color:#ff79c6&#34;&gt;&amp;gt;&lt;/span&gt; &lt;span style=&#34;color:#ff79c6&#34;&gt;select&lt;/span&gt; &lt;span style=&#34;color:#ff79c6&#34;&gt;*&lt;/span&gt; &lt;span style=&#34;color:#ff79c6&#34;&gt;from&lt;/span&gt; test_user;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#ff79c6&#34;&gt;+&lt;/span&gt;&lt;span style=&#34;color:#6272a4&#34;&gt;----+---------+-----------+
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#6272a4&#34;&gt;&lt;/span&gt;&lt;span style=&#34;color:#ff79c6&#34;&gt;|&lt;/span&gt; id &lt;span style=&#34;color:#ff79c6&#34;&gt;|&lt;/span&gt; user_id &lt;span style=&#34;color:#ff79c6&#34;&gt;|&lt;/span&gt; is_active &lt;span style=&#34;color:#ff79c6&#34;&gt;|&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#ff79c6&#34;&gt;+&lt;/span&gt;&lt;span style=&#34;color:#6272a4&#34;&gt;----+---------+-----------+
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#6272a4&#34;&gt;&lt;/span&gt;&lt;span style=&#34;color:#ff79c6&#34;&gt;|&lt;/span&gt;  &lt;span style=&#34;color:#bd93f9&#34;&gt;1&lt;/span&gt; &lt;span style=&#34;color:#ff79c6&#34;&gt;|&lt;/span&gt;       &lt;span style=&#34;color:#bd93f9&#34;&gt;1&lt;/span&gt; &lt;span style=&#34;color:#ff79c6&#34;&gt;|&lt;/span&gt;         &lt;span style=&#34;color:#bd93f9&#34;&gt;1&lt;/span&gt; &lt;span style=&#34;color:#ff79c6&#34;&gt;|&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#ff79c6&#34;&gt;+&lt;/span&gt;&lt;span style=&#34;color:#6272a4&#34;&gt;----+---------+-----------+
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#6272a4&#34;&gt;&lt;/span&gt;&lt;span style=&#34;color:#bd93f9&#34;&gt;1&lt;/span&gt; &lt;span style=&#34;color:#ff79c6&#34;&gt;row&lt;/span&gt; &lt;span style=&#34;color:#ff79c6&#34;&gt;in&lt;/span&gt; &lt;span style=&#34;color:#ff79c6&#34;&gt;set&lt;/span&gt; (&lt;span style=&#34;color:#bd93f9&#34;&gt;0&lt;/span&gt;.&lt;span style=&#34;color:#bd93f9&#34;&gt;00&lt;/span&gt; sec)
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;mysql&lt;span style=&#34;color:#ff79c6&#34;&gt;&amp;gt;&lt;/span&gt; &lt;span style=&#34;color:#ff79c6&#34;&gt;select&lt;/span&gt; &lt;span style=&#34;color:#ff79c6&#34;&gt;table_name&lt;/span&gt;, auto_increment &lt;span style=&#34;color:#ff79c6&#34;&gt;from&lt;/span&gt; information_schema.tables &lt;span style=&#34;color:#ff79c6&#34;&gt;where&lt;/span&gt; table_schema &lt;span style=&#34;color:#ff79c6&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color:#ff79c6&#34;&gt;database&lt;/span&gt;() &lt;span style=&#34;color:#ff79c6&#34;&gt;and&lt;/span&gt; &lt;span style=&#34;color:#ff79c6&#34;&gt;table_name&lt;/span&gt; &lt;span style=&#34;color:#ff79c6&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color:#f1fa8c&#34;&gt;&amp;#39;test_user&amp;#39;&lt;/span&gt;;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#ff79c6&#34;&gt;+&lt;/span&gt;&lt;span style=&#34;color:#6272a4&#34;&gt;------------+----------------+
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#6272a4&#34;&gt;&lt;/span&gt;&lt;span style=&#34;color:#ff79c6&#34;&gt;|&lt;/span&gt; &lt;span style=&#34;color:#ff79c6&#34;&gt;TABLE_NAME&lt;/span&gt; &lt;span style=&#34;color:#ff79c6&#34;&gt;|&lt;/span&gt; AUTO_INCREMENT &lt;span style=&#34;color:#ff79c6&#34;&gt;|&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#ff79c6&#34;&gt;+&lt;/span&gt;&lt;span style=&#34;color:#6272a4&#34;&gt;------------+----------------+
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#6272a4&#34;&gt;&lt;/span&gt;&lt;span style=&#34;color:#ff79c6&#34;&gt;|&lt;/span&gt; test_user  &lt;span style=&#34;color:#ff79c6&#34;&gt;|&lt;/span&gt;              &lt;span style=&#34;color:#bd93f9&#34;&gt;2&lt;/span&gt; &lt;span style=&#34;color:#ff79c6&#34;&gt;|&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#ff79c6&#34;&gt;+&lt;/span&gt;&lt;span style=&#34;color:#6272a4&#34;&gt;------------+----------------+
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#6272a4&#34;&gt;&lt;/span&gt;&lt;span style=&#34;color:#bd93f9&#34;&gt;1&lt;/span&gt; &lt;span style=&#34;color:#ff79c6&#34;&gt;row&lt;/span&gt; &lt;span style=&#34;color:#ff79c6&#34;&gt;in&lt;/span&gt; &lt;span style=&#34;color:#ff79c6&#34;&gt;set&lt;/span&gt; (&lt;span style=&#34;color:#bd93f9&#34;&gt;0&lt;/span&gt;.&lt;span style=&#34;color:#bd93f9&#34;&gt;00&lt;/span&gt; sec)
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;mysql&lt;span style=&#34;color:#ff79c6&#34;&gt;&amp;gt;&lt;/span&gt; &lt;span style=&#34;color:#ff79c6&#34;&gt;insert&lt;/span&gt; &lt;span style=&#34;color:#ff79c6&#34;&gt;into&lt;/span&gt; test_user (user_id) &lt;span style=&#34;color:#ff79c6&#34;&gt;select&lt;/span&gt; temp.&lt;span style=&#34;color:#ff79c6&#34;&gt;*&lt;/span&gt; &lt;span style=&#34;color:#ff79c6&#34;&gt;from&lt;/span&gt; (&lt;span style=&#34;color:#ff79c6&#34;&gt;select&lt;/span&gt; &lt;span style=&#34;color:#bd93f9&#34;&gt;1&lt;/span&gt; &lt;span style=&#34;color:#ff79c6&#34;&gt;as&lt;/span&gt; user_id) &lt;span style=&#34;color:#ff79c6&#34;&gt;as&lt;/span&gt; temp &lt;span style=&#34;color:#ff79c6&#34;&gt;where&lt;/span&gt; &lt;span style=&#34;color:#ff79c6&#34;&gt;not&lt;/span&gt; &lt;span style=&#34;color:#ff79c6&#34;&gt;exists&lt;/span&gt;(&lt;span style=&#34;color:#ff79c6&#34;&gt;select&lt;/span&gt; &lt;span style=&#34;color:#ff79c6&#34;&gt;*&lt;/span&gt; &lt;span style=&#34;color:#ff79c6&#34;&gt;from&lt;/span&gt; test_user &lt;span style=&#34;color:#ff79c6&#34;&gt;where&lt;/span&gt; user_id &lt;span style=&#34;color:#ff79c6&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color:#bd93f9&#34;&gt;1&lt;/span&gt;) &lt;span style=&#34;color:#ff79c6&#34;&gt;limit&lt;/span&gt; &lt;span style=&#34;color:#bd93f9&#34;&gt;1&lt;/span&gt;;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;Query OK, &lt;span style=&#34;color:#bd93f9&#34;&gt;0&lt;/span&gt; &lt;span style=&#34;color:#ff79c6&#34;&gt;rows&lt;/span&gt; affected (&lt;span style=&#34;color:#bd93f9&#34;&gt;0&lt;/span&gt;.&lt;span style=&#34;color:#bd93f9&#34;&gt;00&lt;/span&gt; sec)
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;Records: &lt;span style=&#34;color:#bd93f9&#34;&gt;0&lt;/span&gt;  Duplicates: &lt;span style=&#34;color:#bd93f9&#34;&gt;0&lt;/span&gt;  Warnings: &lt;span style=&#34;color:#bd93f9&#34;&gt;0&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;mysql&lt;span style=&#34;color:#ff79c6&#34;&gt;&amp;gt;&lt;/span&gt; &lt;span style=&#34;color:#ff79c6&#34;&gt;select&lt;/span&gt; &lt;span style=&#34;color:#ff79c6&#34;&gt;*&lt;/span&gt; &lt;span style=&#34;color:#ff79c6&#34;&gt;from&lt;/span&gt; test_user;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#ff79c6&#34;&gt;+&lt;/span&gt;&lt;span style=&#34;color:#6272a4&#34;&gt;----+---------+-----------+
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#6272a4&#34;&gt;&lt;/span&gt;&lt;span style=&#34;color:#ff79c6&#34;&gt;|&lt;/span&gt; id &lt;span style=&#34;color:#ff79c6&#34;&gt;|&lt;/span&gt; user_id &lt;span style=&#34;color:#ff79c6&#34;&gt;|&lt;/span&gt; is_active &lt;span style=&#34;color:#ff79c6&#34;&gt;|&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#ff79c6&#34;&gt;+&lt;/span&gt;&lt;span style=&#34;color:#6272a4&#34;&gt;----+---------+-----------+
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#6272a4&#34;&gt;&lt;/span&gt;&lt;span style=&#34;color:#ff79c6&#34;&gt;|&lt;/span&gt;  &lt;span style=&#34;color:#bd93f9&#34;&gt;1&lt;/span&gt; &lt;span style=&#34;color:#ff79c6&#34;&gt;|&lt;/span&gt;       &lt;span style=&#34;color:#bd93f9&#34;&gt;1&lt;/span&gt; &lt;span style=&#34;color:#ff79c6&#34;&gt;|&lt;/span&gt;         &lt;span style=&#34;color:#bd93f9&#34;&gt;1&lt;/span&gt; &lt;span style=&#34;color:#ff79c6&#34;&gt;|&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#ff79c6&#34;&gt;+&lt;/span&gt;&lt;span style=&#34;color:#6272a4&#34;&gt;----+---------+-----------+
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#6272a4&#34;&gt;&lt;/span&gt;&lt;span style=&#34;color:#bd93f9&#34;&gt;1&lt;/span&gt; &lt;span style=&#34;color:#ff79c6&#34;&gt;row&lt;/span&gt; &lt;span style=&#34;color:#ff79c6&#34;&gt;in&lt;/span&gt; &lt;span style=&#34;color:#ff79c6&#34;&gt;set&lt;/span&gt; (&lt;span style=&#34;color:#bd93f9&#34;&gt;0&lt;/span&gt;.&lt;span style=&#34;color:#bd93f9&#34;&gt;00&lt;/span&gt; sec)
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;mysql&lt;span style=&#34;color:#ff79c6&#34;&gt;&amp;gt;&lt;/span&gt; &lt;span style=&#34;color:#ff79c6&#34;&gt;select&lt;/span&gt; &lt;span style=&#34;color:#ff79c6&#34;&gt;table_name&lt;/span&gt;, auto_increment &lt;span style=&#34;color:#ff79c6&#34;&gt;from&lt;/span&gt; information_schema.tables &lt;span style=&#34;color:#ff79c6&#34;&gt;where&lt;/span&gt; table_schema &lt;span style=&#34;color:#ff79c6&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color:#ff79c6&#34;&gt;database&lt;/span&gt;() &lt;span style=&#34;color:#ff79c6&#34;&gt;and&lt;/span&gt; &lt;span style=&#34;color:#ff79c6&#34;&gt;table_name&lt;/span&gt; &lt;span style=&#34;color:#ff79c6&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color:#f1fa8c&#34;&gt;&amp;#39;test_user&amp;#39;&lt;/span&gt;;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#ff79c6&#34;&gt;+&lt;/span&gt;&lt;span style=&#34;color:#6272a4&#34;&gt;------------+----------------+
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#6272a4&#34;&gt;&lt;/span&gt;&lt;span style=&#34;color:#ff79c6&#34;&gt;|&lt;/span&gt; &lt;span style=&#34;color:#ff79c6&#34;&gt;TABLE_NAME&lt;/span&gt; &lt;span style=&#34;color:#ff79c6&#34;&gt;|&lt;/span&gt; AUTO_INCREMENT &lt;span style=&#34;color:#ff79c6&#34;&gt;|&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#ff79c6&#34;&gt;+&lt;/span&gt;&lt;span style=&#34;color:#6272a4&#34;&gt;------------+----------------+
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#6272a4&#34;&gt;&lt;/span&gt;&lt;span style=&#34;color:#ff79c6&#34;&gt;|&lt;/span&gt; test_user  &lt;span style=&#34;color:#ff79c6&#34;&gt;|&lt;/span&gt;              &lt;span style=&#34;color:#bd93f9&#34;&gt;2&lt;/span&gt; &lt;span style=&#34;color:#ff79c6&#34;&gt;|&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#ff79c6&#34;&gt;+&lt;/span&gt;&lt;span style=&#34;color:#6272a4&#34;&gt;------------+----------------+
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#6272a4&#34;&gt;&lt;/span&gt;&lt;span style=&#34;color:#bd93f9&#34;&gt;1&lt;/span&gt; &lt;span style=&#34;color:#ff79c6&#34;&gt;row&lt;/span&gt; &lt;span style=&#34;color:#ff79c6&#34;&gt;in&lt;/span&gt; &lt;span style=&#34;color:#ff79c6&#34;&gt;set&lt;/span&gt; (&lt;span style=&#34;color:#bd93f9&#34;&gt;0&lt;/span&gt;.&lt;span style=&#34;color:#bd93f9&#34;&gt;00&lt;/span&gt; sec)
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;在正常情況下，這個方式差不多已經是最優解，既不會 raise duplicate key error/warning，也不改變 id，還不造成 auto increment 浪費&lt;/p&gt;
+&lt;p&gt;但這是正常情況下，當你有 high concurrent 的情況下就不見得如此了&lt;/p&gt;
+&lt;p&gt;簡單來說是因為 &lt;code&gt;insert ... select&lt;/code&gt; 不是保證 atomic 的，&lt;code&gt;select&lt;/code&gt; 跟 &lt;code&gt;insert&lt;/code&gt; 是分段進行&lt;/p&gt;
+&lt;p&gt;如果剛好有相同 unique key 的兩次 &lt;code&gt;insert … select … not exists&lt;/code&gt; 在幾乎相同的時間執行，可能還是會形成兩個 &lt;code&gt;select&lt;/code&gt; 都認為沒有 duplicate row 而執行 &lt;code&gt;insert&lt;/code&gt;，因而造成其中一個 statement 噴出 duplicate key error&lt;/p&gt;
+&lt;h3 id=&#34;insert--select--not-exists--on-duplicate-key&#34;&gt;&lt;code&gt;insert … select … not exists … on duplicate key&lt;/code&gt;&lt;/h3&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;&#34;&gt;&lt;code class=&#34;language-sql&#34; data-lang=&#34;sql&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;mysql&lt;span style=&#34;color:#ff79c6&#34;&gt;&amp;gt;&lt;/span&gt; &lt;span style=&#34;color:#ff79c6&#34;&gt;insert&lt;/span&gt; &lt;span style=&#34;color:#ff79c6&#34;&gt;into&lt;/span&gt; test_user (user_id) &lt;span style=&#34;color:#ff79c6&#34;&gt;select&lt;/span&gt; temp.&lt;span style=&#34;color:#ff79c6&#34;&gt;*&lt;/span&gt; &lt;span style=&#34;color:#ff79c6&#34;&gt;from&lt;/span&gt; (&lt;span style=&#34;color:#ff79c6&#34;&gt;select&lt;/span&gt; &lt;span style=&#34;color:#bd93f9&#34;&gt;1&lt;/span&gt; &lt;span style=&#34;color:#ff79c6&#34;&gt;as&lt;/span&gt; user_id) &lt;span style=&#34;color:#ff79c6&#34;&gt;as&lt;/span&gt; temp &lt;span style=&#34;color:#ff79c6&#34;&gt;where&lt;/span&gt; &lt;span style=&#34;color:#ff79c6&#34;&gt;not&lt;/span&gt; &lt;span style=&#34;color:#ff79c6&#34;&gt;exists&lt;/span&gt; (&lt;span style=&#34;color:#ff79c6&#34;&gt;select&lt;/span&gt; &lt;span style=&#34;color:#ff79c6&#34;&gt;*&lt;/span&gt; &lt;span style=&#34;color:#ff79c6&#34;&gt;from&lt;/span&gt; test_user &lt;span style=&#34;color:#ff79c6&#34;&gt;where&lt;/span&gt; user_id &lt;span style=&#34;color:#ff79c6&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color:#bd93f9&#34;&gt;1&lt;/span&gt;) &lt;span style=&#34;color:#ff79c6&#34;&gt;limit&lt;/span&gt; &lt;span style=&#34;color:#bd93f9&#34;&gt;1&lt;/span&gt; &lt;span style=&#34;color:#ff79c6&#34;&gt;on&lt;/span&gt; duplicate &lt;span style=&#34;color:#ff79c6&#34;&gt;key&lt;/span&gt; &lt;span style=&#34;color:#ff79c6&#34;&gt;update&lt;/span&gt; id &lt;span style=&#34;color:#ff79c6&#34;&gt;=&lt;/span&gt; id;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;Query OK, &lt;span style=&#34;color:#bd93f9&#34;&gt;1&lt;/span&gt; &lt;span style=&#34;color:#ff79c6&#34;&gt;row&lt;/span&gt; affected (&lt;span style=&#34;color:#bd93f9&#34;&gt;0&lt;/span&gt;.&lt;span style=&#34;color:#bd93f9&#34;&gt;04&lt;/span&gt; sec)
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;Records: &lt;span style=&#34;color:#bd93f9&#34;&gt;1&lt;/span&gt;  Duplicates: &lt;span style=&#34;color:#bd93f9&#34;&gt;0&lt;/span&gt;  Warnings: &lt;span style=&#34;color:#bd93f9&#34;&gt;0&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;mysql&lt;span style=&#34;color:#ff79c6&#34;&gt;&amp;gt;&lt;/span&gt; &lt;span style=&#34;color:#ff79c6&#34;&gt;select&lt;/span&gt; &lt;span style=&#34;color:#ff79c6&#34;&gt;*&lt;/span&gt; &lt;span style=&#34;color:#ff79c6&#34;&gt;from&lt;/span&gt; test_user;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#ff79c6&#34;&gt;+&lt;/span&gt;&lt;span style=&#34;color:#6272a4&#34;&gt;----+---------+-----------+
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#6272a4&#34;&gt;&lt;/span&gt;&lt;span style=&#34;color:#ff79c6&#34;&gt;|&lt;/span&gt; id &lt;span style=&#34;color:#ff79c6&#34;&gt;|&lt;/span&gt; user_id &lt;span style=&#34;color:#ff79c6&#34;&gt;|&lt;/span&gt; is_active &lt;span style=&#34;color:#ff79c6&#34;&gt;|&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#ff79c6&#34;&gt;+&lt;/span&gt;&lt;span style=&#34;color:#6272a4&#34;&gt;----+---------+-----------+
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#6272a4&#34;&gt;&lt;/span&gt;&lt;span style=&#34;color:#ff79c6&#34;&gt;|&lt;/span&gt;  &lt;span style=&#34;color:#bd93f9&#34;&gt;1&lt;/span&gt; &lt;span style=&#34;color:#ff79c6&#34;&gt;|&lt;/span&gt;       &lt;span style=&#34;color:#bd93f9&#34;&gt;1&lt;/span&gt; &lt;span style=&#34;color:#ff79c6&#34;&gt;|&lt;/span&gt;         &lt;span style=&#34;color:#bd93f9&#34;&gt;1&lt;/span&gt; &lt;span style=&#34;color:#ff79c6&#34;&gt;|&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#ff79c6&#34;&gt;+&lt;/span&gt;&lt;span style=&#34;color:#6272a4&#34;&gt;----+---------+-----------+
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#6272a4&#34;&gt;&lt;/span&gt;&lt;span style=&#34;color:#bd93f9&#34;&gt;1&lt;/span&gt; &lt;span style=&#34;color:#ff79c6&#34;&gt;row&lt;/span&gt; &lt;span style=&#34;color:#ff79c6&#34;&gt;in&lt;/span&gt; &lt;span style=&#34;color:#ff79c6&#34;&gt;set&lt;/span&gt; (&lt;span style=&#34;color:#bd93f9&#34;&gt;0&lt;/span&gt;.&lt;span style=&#34;color:#bd93f9&#34;&gt;00&lt;/span&gt; sec)
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;mysql&lt;span style=&#34;color:#ff79c6&#34;&gt;&amp;gt;&lt;/span&gt; &lt;span style=&#34;color:#ff79c6&#34;&gt;select&lt;/span&gt; &lt;span style=&#34;color:#ff79c6&#34;&gt;table_name&lt;/span&gt;, auto_increment &lt;span style=&#34;color:#ff79c6&#34;&gt;from&lt;/span&gt; information_schema.tables &lt;span style=&#34;color:#ff79c6&#34;&gt;where&lt;/span&gt; &lt;span style=&#34;color:#ff79c6&#34;&gt;table_name&lt;/span&gt; &lt;span style=&#34;color:#ff79c6&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color:#f1fa8c&#34;&gt;&amp;#39;test_user&amp;#39;&lt;/span&gt;;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#ff79c6&#34;&gt;+&lt;/span&gt;&lt;span style=&#34;color:#6272a4&#34;&gt;------------+----------------+
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#6272a4&#34;&gt;&lt;/span&gt;&lt;span style=&#34;color:#ff79c6&#34;&gt;|&lt;/span&gt; &lt;span style=&#34;color:#ff79c6&#34;&gt;TABLE_NAME&lt;/span&gt; &lt;span style=&#34;color:#ff79c6&#34;&gt;|&lt;/span&gt; AUTO_INCREMENT &lt;span style=&#34;color:#ff79c6&#34;&gt;|&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#ff79c6&#34;&gt;+&lt;/span&gt;&lt;span style=&#34;color:#6272a4&#34;&gt;------------+----------------+
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#6272a4&#34;&gt;&lt;/span&gt;&lt;span style=&#34;color:#ff79c6&#34;&gt;|&lt;/span&gt; test_user  &lt;span style=&#34;color:#ff79c6&#34;&gt;|&lt;/span&gt;              &lt;span style=&#34;color:#bd93f9&#34;&gt;2&lt;/span&gt; &lt;span style=&#34;color:#ff79c6&#34;&gt;|&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#ff79c6&#34;&gt;+&lt;/span&gt;&lt;span style=&#34;color:#6272a4&#34;&gt;------------+----------------+
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#6272a4&#34;&gt;&lt;/span&gt;&lt;span style=&#34;color:#bd93f9&#34;&gt;1&lt;/span&gt; &lt;span style=&#34;color:#ff79c6&#34;&gt;row&lt;/span&gt; &lt;span style=&#34;color:#ff79c6&#34;&gt;in&lt;/span&gt; &lt;span style=&#34;color:#ff79c6&#34;&gt;set&lt;/span&gt; (&lt;span style=&#34;color:#bd93f9&#34;&gt;0&lt;/span&gt;.&lt;span style=&#34;color:#bd93f9&#34;&gt;00&lt;/span&gt; sec)
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;mysql&lt;span style=&#34;color:#ff79c6&#34;&gt;&amp;gt;&lt;/span&gt; &lt;span style=&#34;color:#ff79c6&#34;&gt;insert&lt;/span&gt; &lt;span style=&#34;color:#ff79c6&#34;&gt;into&lt;/span&gt; test_user (user_id) &lt;span style=&#34;color:#ff79c6&#34;&gt;select&lt;/span&gt; temp.&lt;span style=&#34;color:#ff79c6&#34;&gt;*&lt;/span&gt; &lt;span style=&#34;color:#ff79c6&#34;&gt;from&lt;/span&gt; (&lt;span style=&#34;color:#ff79c6&#34;&gt;select&lt;/span&gt; &lt;span style=&#34;color:#bd93f9&#34;&gt;1&lt;/span&gt; &lt;span style=&#34;color:#ff79c6&#34;&gt;as&lt;/span&gt; user_id) &lt;span style=&#34;color:#ff79c6&#34;&gt;as&lt;/span&gt; temp &lt;span style=&#34;color:#ff79c6&#34;&gt;where&lt;/span&gt; &lt;span style=&#34;color:#ff79c6&#34;&gt;not&lt;/span&gt; &lt;span style=&#34;color:#ff79c6&#34;&gt;exists&lt;/span&gt; (&lt;span style=&#34;color:#ff79c6&#34;&gt;select&lt;/span&gt; &lt;span style=&#34;color:#ff79c6&#34;&gt;*&lt;/span&gt; &lt;span style=&#34;color:#ff79c6&#34;&gt;from&lt;/span&gt; test_user &lt;span style=&#34;color:#ff79c6&#34;&gt;where&lt;/span&gt; user_id &lt;span style=&#34;color:#ff79c6&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color:#bd93f9&#34;&gt;1&lt;/span&gt;) &lt;span style=&#34;color:#ff79c6&#34;&gt;limit&lt;/span&gt; &lt;span style=&#34;color:#bd93f9&#34;&gt;1&lt;/span&gt; &lt;span style=&#34;color:#ff79c6&#34;&gt;on&lt;/span&gt; duplicate &lt;span style=&#34;color:#ff79c6&#34;&gt;key&lt;/span&gt; &lt;span style=&#34;color:#ff79c6&#34;&gt;update&lt;/span&gt; id &lt;span style=&#34;color:#ff79c6&#34;&gt;=&lt;/span&gt; id;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;Query OK, &lt;span style=&#34;color:#bd93f9&#34;&gt;0&lt;/span&gt; &lt;span style=&#34;color:#ff79c6&#34;&gt;rows&lt;/span&gt; affected (&lt;span style=&#34;color:#bd93f9&#34;&gt;0&lt;/span&gt;.&lt;span style=&#34;color:#bd93f9&#34;&gt;00&lt;/span&gt; sec)
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;Records: &lt;span style=&#34;color:#bd93f9&#34;&gt;0&lt;/span&gt;  Duplicates: &lt;span style=&#34;color:#bd93f9&#34;&gt;0&lt;/span&gt;  Warnings: &lt;span style=&#34;color:#bd93f9&#34;&gt;0&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;mysql&lt;span style=&#34;color:#ff79c6&#34;&gt;&amp;gt;&lt;/span&gt; &lt;span style=&#34;color:#ff79c6&#34;&gt;select&lt;/span&gt; &lt;span style=&#34;color:#ff79c6&#34;&gt;*&lt;/span&gt; &lt;span style=&#34;color:#ff79c6&#34;&gt;from&lt;/span&gt; test_user;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#ff79c6&#34;&gt;+&lt;/span&gt;&lt;span style=&#34;color:#6272a4&#34;&gt;----+---------+-----------+
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#6272a4&#34;&gt;&lt;/span&gt;&lt;span style=&#34;color:#ff79c6&#34;&gt;|&lt;/span&gt; id &lt;span style=&#34;color:#ff79c6&#34;&gt;|&lt;/span&gt; user_id &lt;span style=&#34;color:#ff79c6&#34;&gt;|&lt;/span&gt; is_active &lt;span style=&#34;color:#ff79c6&#34;&gt;|&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#ff79c6&#34;&gt;+&lt;/span&gt;&lt;span style=&#34;color:#6272a4&#34;&gt;----+---------+-----------+
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#6272a4&#34;&gt;&lt;/span&gt;&lt;span style=&#34;color:#ff79c6&#34;&gt;|&lt;/span&gt;  &lt;span style=&#34;color:#bd93f9&#34;&gt;1&lt;/span&gt; &lt;span style=&#34;color:#ff79c6&#34;&gt;|&lt;/span&gt;       &lt;span style=&#34;color:#bd93f9&#34;&gt;1&lt;/span&gt; &lt;span style=&#34;color:#ff79c6&#34;&gt;|&lt;/span&gt;         &lt;span style=&#34;color:#bd93f9&#34;&gt;1&lt;/span&gt; &lt;span style=&#34;color:#ff79c6&#34;&gt;|&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#ff79c6&#34;&gt;+&lt;/span&gt;&lt;span style=&#34;color:#6272a4&#34;&gt;----+---------+-----------+
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#6272a4&#34;&gt;&lt;/span&gt;&lt;span style=&#34;color:#bd93f9&#34;&gt;1&lt;/span&gt; &lt;span style=&#34;color:#ff79c6&#34;&gt;row&lt;/span&gt; &lt;span style=&#34;color:#ff79c6&#34;&gt;in&lt;/span&gt; &lt;span style=&#34;color:#ff79c6&#34;&gt;set&lt;/span&gt; (&lt;span style=&#34;color:#bd93f9&#34;&gt;0&lt;/span&gt;.&lt;span style=&#34;color:#bd93f9&#34;&gt;00&lt;/span&gt; sec)
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;mysql&lt;span style=&#34;color:#ff79c6&#34;&gt;&amp;gt;&lt;/span&gt; &lt;span style=&#34;color:#ff79c6&#34;&gt;select&lt;/span&gt; &lt;span style=&#34;color:#ff79c6&#34;&gt;table_name&lt;/span&gt;, auto_increment &lt;span style=&#34;color:#ff79c6&#34;&gt;from&lt;/span&gt; information_schema.tables &lt;span style=&#34;color:#ff79c6&#34;&gt;where&lt;/span&gt; &lt;span style=&#34;color:#ff79c6&#34;&gt;table_name&lt;/span&gt; &lt;span style=&#34;color:#ff79c6&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color:#f1fa8c&#34;&gt;&amp;#39;test_user&amp;#39;&lt;/span&gt;;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#ff79c6&#34;&gt;+&lt;/span&gt;&lt;span style=&#34;color:#6272a4&#34;&gt;------------+----------------+
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#6272a4&#34;&gt;&lt;/span&gt;&lt;span style=&#34;color:#ff79c6&#34;&gt;|&lt;/span&gt; &lt;span style=&#34;color:#ff79c6&#34;&gt;TABLE_NAME&lt;/span&gt; &lt;span style=&#34;color:#ff79c6&#34;&gt;|&lt;/span&gt; AUTO_INCREMENT &lt;span style=&#34;color:#ff79c6&#34;&gt;|&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#ff79c6&#34;&gt;+&lt;/span&gt;&lt;span style=&#34;color:#6272a4&#34;&gt;------------+----------------+
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#6272a4&#34;&gt;&lt;/span&gt;&lt;span style=&#34;color:#ff79c6&#34;&gt;|&lt;/span&gt; test_user  &lt;span style=&#34;color:#ff79c6&#34;&gt;|&lt;/span&gt;              &lt;span style=&#34;color:#bd93f9&#34;&gt;2&lt;/span&gt; &lt;span style=&#34;color:#ff79c6&#34;&gt;|&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#ff79c6&#34;&gt;+&lt;/span&gt;&lt;span style=&#34;color:#6272a4&#34;&gt;------------+----------------+
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#6272a4&#34;&gt;&lt;/span&gt;&lt;span style=&#34;color:#bd93f9&#34;&gt;1&lt;/span&gt; &lt;span style=&#34;color:#ff79c6&#34;&gt;row&lt;/span&gt; &lt;span style=&#34;color:#ff79c6&#34;&gt;in&lt;/span&gt; &lt;span style=&#34;color:#ff79c6&#34;&gt;set&lt;/span&gt; (&lt;span style=&#34;color:#bd93f9&#34;&gt;0&lt;/span&gt;.&lt;span style=&#34;color:#bd93f9&#34;&gt;00&lt;/span&gt; sec)
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;這個方案算是結合 &lt;code&gt;insert … select … not exists&lt;/code&gt; 跟 &lt;code&gt;insert … on duplicate key&lt;/code&gt;，也就是當 &lt;code&gt;insert … select … not exists&lt;/code&gt; 因為 concurrent 的關係準備要 &lt;code&gt;insert&lt;/code&gt; 一個 duplicate row 的時候，就會改為執行 on duplicate key 的部分，而因為 &lt;code&gt;insert … on duplicate key&lt;/code&gt; 是 atomic 的，所以這樣的操作不會拋出 duplicate key error/warning&lt;/p&gt;
+&lt;p&gt;在正常的情況下這個 statement 不會拋出 duplicate key error，id 不會變化，也不會造成 auto increment 浪費&lt;/p&gt;
+&lt;p&gt;但是在 concurrent 而形成其中一個 statement 會 insert duplicate row 的情況下，其實跟 &lt;code&gt;insert … on duplicate key&lt;/code&gt; 的問題是相同的，就是有可能會造成 auto increment 浪費&lt;/p&gt;
+&lt;h3 id=&#34;insert-ignore--select--not-exists&#34;&gt;&lt;code&gt;insert ignore … select … not exists&lt;/code&gt;&lt;/h3&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;&#34;&gt;&lt;code class=&#34;language-sql&#34; data-lang=&#34;sql&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;mysql&lt;span style=&#34;color:#ff79c6&#34;&gt;&amp;gt;&lt;/span&gt; &lt;span style=&#34;color:#ff79c6&#34;&gt;insert&lt;/span&gt; &lt;span style=&#34;color:#ff79c6&#34;&gt;ignore&lt;/span&gt; &lt;span style=&#34;color:#ff79c6&#34;&gt;into&lt;/span&gt; test_user (user_id) &lt;span style=&#34;color:#ff79c6&#34;&gt;select&lt;/span&gt; temp.&lt;span style=&#34;color:#ff79c6&#34;&gt;*&lt;/span&gt; &lt;span style=&#34;color:#ff79c6&#34;&gt;from&lt;/span&gt; (&lt;span style=&#34;color:#ff79c6&#34;&gt;select&lt;/span&gt; &lt;span style=&#34;color:#bd93f9&#34;&gt;1&lt;/span&gt; &lt;span style=&#34;color:#ff79c6&#34;&gt;as&lt;/span&gt; user_id) &lt;span style=&#34;color:#ff79c6&#34;&gt;as&lt;/span&gt; temp &lt;span style=&#34;color:#ff79c6&#34;&gt;where&lt;/span&gt; &lt;span style=&#34;color:#ff79c6&#34;&gt;not&lt;/span&gt; &lt;span style=&#34;color:#ff79c6&#34;&gt;exists&lt;/span&gt; (&lt;span style=&#34;color:#ff79c6&#34;&gt;select&lt;/span&gt; &lt;span style=&#34;color:#ff79c6&#34;&gt;*&lt;/span&gt; &lt;span style=&#34;color:#ff79c6&#34;&gt;from&lt;/span&gt; test_user &lt;span style=&#34;color:#ff79c6&#34;&gt;where&lt;/span&gt; user_id &lt;span style=&#34;color:#ff79c6&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color:#bd93f9&#34;&gt;1&lt;/span&gt;) &lt;span style=&#34;color:#ff79c6&#34;&gt;limit&lt;/span&gt; &lt;span style=&#34;color:#bd93f9&#34;&gt;1&lt;/span&gt;;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;Query OK, &lt;span style=&#34;color:#bd93f9&#34;&gt;1&lt;/span&gt; &lt;span style=&#34;color:#ff79c6&#34;&gt;row&lt;/span&gt; affected (&lt;span style=&#34;color:#bd93f9&#34;&gt;0&lt;/span&gt;.&lt;span style=&#34;color:#bd93f9&#34;&gt;05&lt;/span&gt; sec)
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;Records: &lt;span style=&#34;color:#bd93f9&#34;&gt;1&lt;/span&gt;  Duplicates: &lt;span style=&#34;color:#bd93f9&#34;&gt;0&lt;/span&gt;  Warnings: &lt;span style=&#34;color:#bd93f9&#34;&gt;0&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;mysql&lt;span style=&#34;color:#ff79c6&#34;&gt;&amp;gt;&lt;/span&gt; &lt;span style=&#34;color:#ff79c6&#34;&gt;select&lt;/span&gt; &lt;span style=&#34;color:#ff79c6&#34;&gt;*&lt;/span&gt; &lt;span style=&#34;color:#ff79c6&#34;&gt;from&lt;/span&gt; test_user;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#ff79c6&#34;&gt;+&lt;/span&gt;&lt;span style=&#34;color:#6272a4&#34;&gt;----+---------+-----------+
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#6272a4&#34;&gt;&lt;/span&gt;&lt;span style=&#34;color:#ff79c6&#34;&gt;|&lt;/span&gt; id &lt;span style=&#34;color:#ff79c6&#34;&gt;|&lt;/span&gt; user_id &lt;span style=&#34;color:#ff79c6&#34;&gt;|&lt;/span&gt; is_active &lt;span style=&#34;color:#ff79c6&#34;&gt;|&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#ff79c6&#34;&gt;+&lt;/span&gt;&lt;span style=&#34;color:#6272a4&#34;&gt;----+---------+-----------+
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#6272a4&#34;&gt;&lt;/span&gt;&lt;span style=&#34;color:#ff79c6&#34;&gt;|&lt;/span&gt;  &lt;span style=&#34;color:#bd93f9&#34;&gt;1&lt;/span&gt; &lt;span style=&#34;color:#ff79c6&#34;&gt;|&lt;/span&gt;       &lt;span style=&#34;color:#bd93f9&#34;&gt;1&lt;/span&gt; &lt;span style=&#34;color:#ff79c6&#34;&gt;|&lt;/span&gt;         &lt;span style=&#34;color:#bd93f9&#34;&gt;1&lt;/span&gt; &lt;span style=&#34;color:#ff79c6&#34;&gt;|&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#ff79c6&#34;&gt;+&lt;/span&gt;&lt;span style=&#34;color:#6272a4&#34;&gt;----+---------+-----------+
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#6272a4&#34;&gt;&lt;/span&gt;&lt;span style=&#34;color:#bd93f9&#34;&gt;1&lt;/span&gt; &lt;span style=&#34;color:#ff79c6&#34;&gt;row&lt;/span&gt; &lt;span style=&#34;color:#ff79c6&#34;&gt;in&lt;/span&gt; &lt;span style=&#34;color:#ff79c6&#34;&gt;set&lt;/span&gt; (&lt;span style=&#34;color:#bd93f9&#34;&gt;0&lt;/span&gt;.&lt;span style=&#34;color:#bd93f9&#34;&gt;01&lt;/span&gt; sec)
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;mysql&lt;span style=&#34;color:#ff79c6&#34;&gt;&amp;gt;&lt;/span&gt; &lt;span style=&#34;color:#ff79c6&#34;&gt;select&lt;/span&gt; &lt;span style=&#34;color:#ff79c6&#34;&gt;table_name&lt;/span&gt;, auto_increment &lt;span style=&#34;color:#ff79c6&#34;&gt;from&lt;/span&gt; information_schema.tables &lt;span style=&#34;color:#ff79c6&#34;&gt;where&lt;/span&gt; &lt;span style=&#34;color:#ff79c6&#34;&gt;table_name&lt;/span&gt; &lt;span style=&#34;color:#ff79c6&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color:#f1fa8c&#34;&gt;&amp;#39;test_user&amp;#39;&lt;/span&gt;;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#ff79c6&#34;&gt;+&lt;/span&gt;&lt;span style=&#34;color:#6272a4&#34;&gt;------------+----------------+
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#6272a4&#34;&gt;&lt;/span&gt;&lt;span style=&#34;color:#ff79c6&#34;&gt;|&lt;/span&gt; &lt;span style=&#34;color:#ff79c6&#34;&gt;TABLE_NAME&lt;/span&gt; &lt;span style=&#34;color:#ff79c6&#34;&gt;|&lt;/span&gt; AUTO_INCREMENT &lt;span style=&#34;color:#ff79c6&#34;&gt;|&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#ff79c6&#34;&gt;+&lt;/span&gt;&lt;span style=&#34;color:#6272a4&#34;&gt;------------+----------------+
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#6272a4&#34;&gt;&lt;/span&gt;&lt;span style=&#34;color:#ff79c6&#34;&gt;|&lt;/span&gt; test_user  &lt;span style=&#34;color:#ff79c6&#34;&gt;|&lt;/span&gt;              &lt;span style=&#34;color:#bd93f9&#34;&gt;2&lt;/span&gt; &lt;span style=&#34;color:#ff79c6&#34;&gt;|&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#ff79c6&#34;&gt;+&lt;/span&gt;&lt;span style=&#34;color:#6272a4&#34;&gt;------------+----------------+
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#6272a4&#34;&gt;&lt;/span&gt;&lt;span style=&#34;color:#bd93f9&#34;&gt;1&lt;/span&gt; &lt;span style=&#34;color:#ff79c6&#34;&gt;row&lt;/span&gt; &lt;span style=&#34;color:#ff79c6&#34;&gt;in&lt;/span&gt; &lt;span style=&#34;color:#ff79c6&#34;&gt;set&lt;/span&gt; (&lt;span style=&#34;color:#bd93f9&#34;&gt;0&lt;/span&gt;.&lt;span style=&#34;color:#bd93f9&#34;&gt;00&lt;/span&gt; sec)
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;mysql&lt;span style=&#34;color:#ff79c6&#34;&gt;&amp;gt;&lt;/span&gt; &lt;span style=&#34;color:#ff79c6&#34;&gt;insert&lt;/span&gt; &lt;span style=&#34;color:#ff79c6&#34;&gt;ignore&lt;/span&gt; &lt;span style=&#34;color:#ff79c6&#34;&gt;into&lt;/span&gt; test_user (user_id) &lt;span style=&#34;color:#ff79c6&#34;&gt;select&lt;/span&gt; temp.&lt;span style=&#34;color:#ff79c6&#34;&gt;*&lt;/span&gt; &lt;span style=&#34;color:#ff79c6&#34;&gt;from&lt;/span&gt; (&lt;span style=&#34;color:#ff79c6&#34;&gt;select&lt;/span&gt; &lt;span style=&#34;color:#bd93f9&#34;&gt;1&lt;/span&gt; &lt;span style=&#34;color:#ff79c6&#34;&gt;as&lt;/span&gt; user_id) &lt;span style=&#34;color:#ff79c6&#34;&gt;as&lt;/span&gt; temp &lt;span style=&#34;color:#ff79c6&#34;&gt;where&lt;/span&gt; &lt;span style=&#34;color:#ff79c6&#34;&gt;not&lt;/span&gt; &lt;span style=&#34;color:#ff79c6&#34;&gt;exists&lt;/span&gt; (&lt;span style=&#34;color:#ff79c6&#34;&gt;select&lt;/span&gt; &lt;span style=&#34;color:#ff79c6&#34;&gt;*&lt;/span&gt; &lt;span style=&#34;color:#ff79c6&#34;&gt;from&lt;/span&gt; test_user &lt;span style=&#34;color:#ff79c6&#34;&gt;where&lt;/span&gt; user_id &lt;span style=&#34;color:#ff79c6&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color:#bd93f9&#34;&gt;1&lt;/span&gt;) &lt;span style=&#34;color:#ff79c6&#34;&gt;limit&lt;/span&gt; &lt;span style=&#34;color:#bd93f9&#34;&gt;1&lt;/span&gt;;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;Query OK, &lt;span style=&#34;color:#bd93f9&#34;&gt;0&lt;/span&gt; &lt;span style=&#34;color:#ff79c6&#34;&gt;rows&lt;/span&gt; affected (&lt;span style=&#34;color:#bd93f9&#34;&gt;0&lt;/span&gt;.&lt;span style=&#34;color:#bd93f9&#34;&gt;01&lt;/span&gt; sec)
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;Records: &lt;span style=&#34;color:#bd93f9&#34;&gt;0&lt;/span&gt;  Duplicates: &lt;span style=&#34;color:#bd93f9&#34;&gt;0&lt;/span&gt;  Warnings: &lt;span style=&#34;color:#bd93f9&#34;&gt;0&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;mysql&lt;span style=&#34;color:#ff79c6&#34;&gt;&amp;gt;&lt;/span&gt; &lt;span style=&#34;color:#ff79c6&#34;&gt;select&lt;/span&gt; &lt;span style=&#34;color:#ff79c6&#34;&gt;*&lt;/span&gt; &lt;span style=&#34;color:#ff79c6&#34;&gt;from&lt;/span&gt; test_user;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#ff79c6&#34;&gt;+&lt;/span&gt;&lt;span style=&#34;color:#6272a4&#34;&gt;----+---------+-----------+
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#6272a4&#34;&gt;&lt;/span&gt;&lt;span style=&#34;color:#ff79c6&#34;&gt;|&lt;/span&gt; id &lt;span style=&#34;color:#ff79c6&#34;&gt;|&lt;/span&gt; user_id &lt;span style=&#34;color:#ff79c6&#34;&gt;|&lt;/span&gt; is_active &lt;span style=&#34;color:#ff79c6&#34;&gt;|&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#ff79c6&#34;&gt;+&lt;/span&gt;&lt;span style=&#34;color:#6272a4&#34;&gt;----+---------+-----------+
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#6272a4&#34;&gt;&lt;/span&gt;&lt;span style=&#34;color:#ff79c6&#34;&gt;|&lt;/span&gt;  &lt;span style=&#34;color:#bd93f9&#34;&gt;1&lt;/span&gt; &lt;span style=&#34;color:#ff79c6&#34;&gt;|&lt;/span&gt;       &lt;span style=&#34;color:#bd93f9&#34;&gt;1&lt;/span&gt; &lt;span style=&#34;color:#ff79c6&#34;&gt;|&lt;/span&gt;         &lt;span style=&#34;color:#bd93f9&#34;&gt;1&lt;/span&gt; &lt;span style=&#34;color:#ff79c6&#34;&gt;|&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#ff79c6&#34;&gt;+&lt;/span&gt;&lt;span style=&#34;color:#6272a4&#34;&gt;----+---------+-----------+
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#6272a4&#34;&gt;&lt;/span&gt;&lt;span style=&#34;color:#bd93f9&#34;&gt;1&lt;/span&gt; &lt;span style=&#34;color:#ff79c6&#34;&gt;row&lt;/span&gt; &lt;span style=&#34;color:#ff79c6&#34;&gt;in&lt;/span&gt; &lt;span style=&#34;color:#ff79c6&#34;&gt;set&lt;/span&gt; (&lt;span style=&#34;color:#bd93f9&#34;&gt;0&lt;/span&gt;.&lt;span style=&#34;color:#bd93f9&#34;&gt;00&lt;/span&gt; sec)
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;mysql&lt;span style=&#34;color:#ff79c6&#34;&gt;&amp;gt;&lt;/span&gt; &lt;span style=&#34;color:#ff79c6&#34;&gt;select&lt;/span&gt; &lt;span style=&#34;color:#ff79c6&#34;&gt;table_name&lt;/span&gt;, auto_increment &lt;span style=&#34;color:#ff79c6&#34;&gt;from&lt;/span&gt; information_schema.tables &lt;span style=&#34;color:#ff79c6&#34;&gt;where&lt;/span&gt; &lt;span style=&#34;color:#ff79c6&#34;&gt;table_name&lt;/span&gt; &lt;span style=&#34;color:#ff79c6&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color:#f1fa8c&#34;&gt;&amp;#39;test_user&amp;#39;&lt;/span&gt;;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#ff79c6&#34;&gt;+&lt;/span&gt;&lt;span style=&#34;color:#6272a4&#34;&gt;------------+----------------+
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#6272a4&#34;&gt;&lt;/span&gt;&lt;span style=&#34;color:#ff79c6&#34;&gt;|&lt;/span&gt; &lt;span style=&#34;color:#ff79c6&#34;&gt;TABLE_NAME&lt;/span&gt; &lt;span style=&#34;color:#ff79c6&#34;&gt;|&lt;/span&gt; AUTO_INCREMENT &lt;span style=&#34;color:#ff79c6&#34;&gt;|&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#ff79c6&#34;&gt;+&lt;/span&gt;&lt;span style=&#34;color:#6272a4&#34;&gt;------------+----------------+
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#6272a4&#34;&gt;&lt;/span&gt;&lt;span style=&#34;color:#ff79c6&#34;&gt;|&lt;/span&gt; test_user  &lt;span style=&#34;color:#ff79c6&#34;&gt;|&lt;/span&gt;              &lt;span style=&#34;color:#bd93f9&#34;&gt;2&lt;/span&gt; &lt;span style=&#34;color:#ff79c6&#34;&gt;|&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#ff79c6&#34;&gt;+&lt;/span&gt;&lt;span style=&#34;color:#6272a4&#34;&gt;------------+----------------+
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#6272a4&#34;&gt;&lt;/span&gt;&lt;span style=&#34;color:#bd93f9&#34;&gt;1&lt;/span&gt; &lt;span style=&#34;color:#ff79c6&#34;&gt;row&lt;/span&gt; &lt;span style=&#34;color:#ff79c6&#34;&gt;in&lt;/span&gt; &lt;span style=&#34;color:#ff79c6&#34;&gt;set&lt;/span&gt; (&lt;span style=&#34;color:#bd93f9&#34;&gt;0&lt;/span&gt;.&lt;span style=&#34;color:#bd93f9&#34;&gt;00&lt;/span&gt; sec)
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;這個方案是將 &lt;code&gt;insert … select … not exists&lt;/code&gt; 加上 &lt;code&gt;ingore&lt;/code&gt; 關鍵字，也就式在 concurrent 時，如果發生 duplicate 的狀況，duplicate key error 會被 suppress 成 duplicate key warning&lt;/p&gt;
+&lt;p&gt;在一般狀況下同樣不會拋出 duplicate key error，造成 id 改變，或造成 auto increment 浪費&lt;/p&gt;
+&lt;p&gt;但是在 concurrent 而形成其中一個 statement 會 insert duplicate row 的情況下，其實跟 &lt;code&gt;insert ignore&lt;/code&gt; 的問題是相同的，就是有可能會造成 auto increment 浪費，而且萬一有其他應該被處理的 error 也會同樣被 suppress&lt;/p&gt;
+&lt;h2 id=&#34;conclusion&#34;&gt;Conclusion&lt;/h2&gt;
+&lt;p&gt;直接做表格幫大家整理結論，MySQL 並沒有一個完美解決方案，只能根據狀況做取捨&lt;/p&gt;
+&lt;table&gt;
+  &lt;thead&gt;
+      &lt;tr&gt;
+          &lt;th style=&#34;text-align: left&#34;&gt;statement&lt;/th&gt;
+          &lt;th style=&#34;text-align: left&#34;&gt;raise duplicate key error/warning&lt;/th&gt;
+          &lt;th style=&#34;text-align: left&#34;&gt;auto increment burn&lt;/th&gt;
+          &lt;th style=&#34;text-align: left&#34;&gt;id change&lt;/th&gt;
+      &lt;/tr&gt;
+  &lt;/thead&gt;
+  &lt;tbody&gt;
+      &lt;tr&gt;
+          &lt;td style=&#34;text-align: left&#34;&gt;&lt;code&gt;insert&lt;/code&gt;&lt;/td&gt;
+          &lt;td style=&#34;text-align: left&#34;&gt;error and reject&lt;/td&gt;
+          &lt;td style=&#34;text-align: left&#34;&gt;N&lt;/td&gt;
+          &lt;td style=&#34;text-align: left&#34;&gt;N&lt;/td&gt;
+      &lt;/tr&gt;
+      &lt;tr&gt;
+          &lt;td style=&#34;text-align: left&#34;&gt;&lt;code&gt;insert ignore&lt;/code&gt;&lt;/td&gt;
+          &lt;td style=&#34;text-align: left&#34;&gt;warning only&lt;/td&gt;
+          &lt;td style=&#34;text-align: left&#34;&gt;Y&lt;/td&gt;
+          &lt;td style=&#34;text-align: left&#34;&gt;N&lt;/td&gt;
+      &lt;/tr&gt;
+      &lt;tr&gt;
+          &lt;td style=&#34;text-align: left&#34;&gt;&lt;code&gt;replace&lt;/code&gt;&lt;/td&gt;
+          &lt;td style=&#34;text-align: left&#34;&gt;NA&lt;/td&gt;
+          &lt;td style=&#34;text-align: left&#34;&gt;Y&lt;/td&gt;
+          &lt;td style=&#34;text-align: left&#34;&gt;Y&lt;/td&gt;
+      &lt;/tr&gt;
+      &lt;tr&gt;
+          &lt;td style=&#34;text-align: left&#34;&gt;&lt;code&gt;insert … on duplicate key update&lt;/code&gt;&lt;/td&gt;
+          &lt;td style=&#34;text-align: left&#34;&gt;NA&lt;/td&gt;
+          &lt;td style=&#34;text-align: left&#34;&gt;Y&lt;/td&gt;
+          &lt;td style=&#34;text-align: left&#34;&gt;N&lt;/td&gt;
+      &lt;/tr&gt;
+      &lt;tr&gt;
+          &lt;td style=&#34;text-align: left&#34;&gt;&lt;code&gt;insert … select ... not exists&lt;/code&gt;&lt;/td&gt;
+          &lt;td style=&#34;text-align: left&#34;&gt;possible error and reject when concurrent&lt;/td&gt;
+          &lt;td style=&#34;text-align: left&#34;&gt;possible when concurrent&lt;/td&gt;
+          &lt;td style=&#34;text-align: left&#34;&gt;N&lt;/td&gt;
+      &lt;/tr&gt;
+      &lt;tr&gt;
+          &lt;td style=&#34;text-align: left&#34;&gt;&lt;code&gt;insert … select ... not exists … on duplicate key update id = id&lt;/code&gt;&lt;/td&gt;
+          &lt;td style=&#34;text-align: left&#34;&gt;NA&lt;/td&gt;
+          &lt;td style=&#34;text-align: left&#34;&gt;possible when concurrent&lt;/td&gt;
+          &lt;td style=&#34;text-align: left&#34;&gt;N&lt;/td&gt;
+      &lt;/tr&gt;
+      &lt;tr&gt;
+          &lt;td style=&#34;text-align: left&#34;&gt;&lt;code&gt;insert ignore … select … not exists&lt;/code&gt;&lt;/td&gt;
+          &lt;td style=&#34;text-align: left&#34;&gt;possible warning when concurrent&lt;/td&gt;
+          &lt;td style=&#34;text-align: left&#34;&gt;possible when concurrent&lt;/td&gt;
+          &lt;td style=&#34;text-align: left&#34;&gt;N&lt;/td&gt;
+      &lt;/tr&gt;
+  &lt;/tbody&gt;
+&lt;/table&gt;
+&lt;p&gt;另外，本文僅針對各種單一 statement 的方法的硬限制作討論，並不涉及各 statement 速度、空間利用，也不比較 multiple statement 甚至牽涉 client 端的解決方案，而且僅針對預設設定做比較，不涉及改動 isolation level 或 MySQL server config&lt;/p&gt;
+&lt;h2 id=&#34;reference&#34;&gt;Reference&lt;/h2&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;a href=&#34;https://dev.mysql.com/doc/refman/8.0/en/insert.html&#34;&gt;15.2.7 INSERT Statement&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;https://dev.mysql.com/doc/refman/8.0/en/insert-on-duplicate.html&#34;&gt;15.2.7.2 INSERT &amp;hellip; ON DUPLICATE KEY UPDATE Statement&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;https://dev.mysql.com/doc/refman/8.0/en/insert-select.html&#34;&gt;15.2.7.1 INSERT &amp;hellip; SELECT Statement&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;https://dev.mysql.com/doc/refman/8.0/en/innodb-locks-set.html&#34;&gt;17.7.3 Locks Set by Different SQL Statements in InnoDB&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;https://dev.mysql.com/doc/refman/8.0/en/innodb-auto-increment-handling.html&#34;&gt;17.6.1.6 AUTO_INCREMENT Handling in InnoDB&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+- https://blog.idontwannarock.dev/2025/02/how_to_insert_if_not_exists_in_mysql/ - This website by Howard Wang is licensed under a Creative Common Attribution-ShareAlike 4.0 International License.</description>
+        </item>
     
     
     
@@ -183,8 +632,7 @@ ssl-key = /cert/server-key.pem
 &lt;p&gt;挖賽，光在這邊我就卡關了兩天，一直查 Dockerfile 權限問題想找出兩個 jar 檔的差異&lt;/p&gt;
 &lt;p&gt;直到我看到某一篇解答 &lt;code&gt;Error opening zip file or JAR manifest missing&lt;/code&gt; 錯誤的時候提到&lt;/p&gt;
 &lt;blockquote&gt;
-&lt;p&gt;除了檢查 jar 檔是否存在及權限以外，也要檢查 jar 檔本身是否毀損&lt;/p&gt;
-&lt;/blockquote&gt;
+&lt;p&gt;除了檢查 jar 檔是否存在及權限以外，也要檢查 jar 檔本身是否毀損&lt;/p&gt;&lt;/blockquote&gt;
 &lt;h2 id=&#34;jar-檔毀損&#34;&gt;Jar 檔毀損？&lt;/h2&gt;
 &lt;p&gt;我原本認為我是直接從官方 URL 下載下來的 jar 檔不可能有問題，但死馬當作活馬醫，於是我將 Dockerfile 改成每次都重新抓 Glowroot 的 jar 檔下來試試看&lt;/p&gt;
 &lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;&#34;&gt;&lt;code class=&#34;language-dockerfile&#34; data-lang=&#34;dockerfile&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#ff79c6&#34;&gt;FROM&lt;/span&gt;&lt;span style=&#34;color:#f1fa8c&#34;&gt; eclipse-temurin:21&lt;/span&gt;
@@ -269,13 +717,11 @@ ssl-key = /cert/server-key.pem
 &lt;p&gt;首先說明為什麼要選擇用 &lt;code&gt;OffsetDateTime&lt;/code&gt; 對應 MySQL &lt;code&gt;DATETIME&lt;/code&gt; 的考量&lt;/p&gt;
 &lt;p&gt;在 MySQL 當中可以同時保存日期及時間的格式只有 &lt;code&gt;TIMESTAMP&lt;/code&gt; 及 &lt;code&gt;DATETIME&lt;/code&gt; 兩種，其中 &lt;code&gt;TIMESTAMP&lt;/code&gt; 資料格式只支援到 &lt;code&gt;2038-01-19 03:14:07&lt;/code&gt; UTC，而 &lt;code&gt;DATETIME&lt;/code&gt; 格式可以支援到 &lt;code&gt;9999-12-31 23:59:59&lt;/code&gt;&lt;/p&gt;
 &lt;blockquote&gt;
-&lt;p&gt;MySQL 因為用 signed 32-bit integer 來保存 &lt;code&gt;TIMESTAMP&lt;/code&gt; 資料格式包含秒以上的資料，因此最多只能記錄到從 &lt;code&gt;1970-01-01 00:00:01&lt;/code&gt; UTC 開始後的 2147483647 秒，也就是 &lt;code&gt;2038-01-19 03:14:07&lt;/code&gt; UTC，超過一秒就會 stackoverflow；而 &lt;code&gt;DATETIME&lt;/code&gt; 則採用完全不同的保存策略，所以可以支援到 &lt;code&gt;9999-12-31 23:59:59&lt;/code&gt;&lt;/p&gt;
-&lt;/blockquote&gt;
+&lt;p&gt;MySQL 因為用 signed 32-bit integer 來保存 &lt;code&gt;TIMESTAMP&lt;/code&gt; 資料格式包含秒以上的資料，因此最多只能記錄到從 &lt;code&gt;1970-01-01 00:00:01&lt;/code&gt; UTC 開始後的 2147483647 秒，也就是 &lt;code&gt;2038-01-19 03:14:07&lt;/code&gt; UTC，超過一秒就會 stackoverflow；而 &lt;code&gt;DATETIME&lt;/code&gt; 則採用完全不同的保存策略，所以可以支援到 &lt;code&gt;9999-12-31 23:59:59&lt;/code&gt;&lt;/p&gt;&lt;/blockquote&gt;
 &lt;p&gt;另外 &lt;code&gt;TIMESTAMP&lt;/code&gt; 資料格式可能不見得適合在高併發的情況下使用，因為在 MySQL 官方文件的「&lt;a href=&#34;https://dev.mysql.com/doc/refman/8.0/en/time-zone-support.html#time-zone-variables&#34;&gt;5.1.15 MySQL Server Time Zone Support#Time Zone Variables&lt;/a&gt;」中有以下這段&lt;/p&gt;
 &lt;blockquote&gt;
 &lt;p&gt;&lt;strong&gt;Note&lt;/strong&gt;&lt;/p&gt;
-&lt;p&gt;If set to SYSTEM, every MySQL function call that requires a time zone calculation makes a system library call to determine the current system time zone. This call may be protected by a global mutex, resulting in contention.&lt;/p&gt;
-&lt;/blockquote&gt;
+&lt;p&gt;If set to SYSTEM, every MySQL function call that requires a time zone calculation makes a system library call to determine the current system time zone. This call may be protected by a global mutex, resulting in contention.&lt;/p&gt;&lt;/blockquote&gt;
 &lt;p&gt;這段是在說 MySQL 系統的 &lt;code&gt;time_zone&lt;/code&gt; 變數如果是預設的 &lt;code&gt;SYSTEM&lt;/code&gt;，在每次需要做時區運算的時候，MySQL 系統就會取得全域鎖 (global mutex) 來做資料正確性的確保，導致鎖爭用 (lock contention)&lt;/p&gt;
 &lt;p&gt;而因為 &lt;code&gt;TIMESTAMP&lt;/code&gt; 的時區自動轉換功能雖然能確保時間時區的正確性，卻容易導致每次存取都需要做時區轉換運算，進而導致鎖爭用發生，而對效能有影響&lt;/p&gt;
 &lt;p&gt;但另一方面來說，雖然 &lt;code&gt;DATETIME&lt;/code&gt; 並不記錄時區而避免鎖爭用的問題，但卻相對容易衍生時區相關的問題&lt;/p&gt;
@@ -291,12 +737,10 @@ ssl-key = /cert/server-key.pem
 &lt;h2 id=&#34;mysql-jdbc-driver-的時區轉換&#34;&gt;MySQL JDBC Driver 的時區轉換&lt;/h2&gt;
 &lt;p&gt;這邊我首先懷疑的是 JDBC Driver，因為 MySQL 的官網上很容易就能找到這份文件「&lt;a href=&#34;https://dev.mysql.com/doc/connector-j/en/connector-j-time-instants.html&#34;&gt;6.6.1 Preserving Time Instants&lt;/a&gt;」有以下說明&lt;/p&gt;
 &lt;blockquote&gt;
-&lt;p&gt;The situation is less straightforward with the &lt;code&gt;DATETIME&lt;/code&gt; data type: it does not represent an instant and, when no time zone offset is specified, there is no time zone conversion for &lt;code&gt;DATETIME&lt;/code&gt; values, so they are stored and retrieved as they are. However, with a specified time zone offset, the input value is converted to the session time zone before it is stored; the result is that, when retrieved in a different session with a different time zone offset as the specified one, the &lt;code&gt;DATETIME&lt;/code&gt; value becomes different from the original input value.&lt;/p&gt;
-&lt;/blockquote&gt;
+&lt;p&gt;The situation is less straightforward with the &lt;code&gt;DATETIME&lt;/code&gt; data type: it does not represent an instant and, when no time zone offset is specified, there is no time zone conversion for &lt;code&gt;DATETIME&lt;/code&gt; values, so they are stored and retrieved as they are. However, with a specified time zone offset, the input value is converted to the session time zone before it is stored; the result is that, when retrieved in a different session with a different time zone offset as the specified one, the &lt;code&gt;DATETIME&lt;/code&gt; value becomes different from the original input value.&lt;/p&gt;&lt;/blockquote&gt;
 &lt;p&gt;也就是說 &lt;code&gt;DATETIME&lt;/code&gt; 資料格式不會做時區轉換，所以怎麼保存就怎麼取出來；但是如果保存的時候有帶上時區，會先將時間轉換成 session timezone 後再保存，因此當取出時，是在不同 timezone 的 session 中，取得的值會跟原先保存的原始值不同&lt;/p&gt;
 &lt;blockquote&gt;
-&lt;p&gt;MySQL 依照 session timezone 轉換時區的效果可以參考官網這份文件「&lt;a href=&#34;https://dev.mysql.com/doc/refman/8.0/en/date-and-time-literals.html&#34;&gt;9.1.3 Date and Time Literals&lt;/a&gt;」&lt;/p&gt;
-&lt;/blockquote&gt;
+&lt;p&gt;MySQL 依照 session timezone 轉換時區的效果可以參考官網這份文件「&lt;a href=&#34;https://dev.mysql.com/doc/refman/8.0/en/date-and-time-literals.html&#34;&gt;9.1.3 Date and Time Literals&lt;/a&gt;」&lt;/p&gt;&lt;/blockquote&gt;
 &lt;p&gt;這聽起來好像有可能符合我遇到的狀況，所以問題就在於 session timezone 是怎麼決定的&lt;/p&gt;
 &lt;p&gt;MySQL server timezone 的設定可以在這份文件「&lt;a href=&#34;https://dev.mysql.com/doc/refman/8.0/en/time-zone-support.html&#34;&gt;5.1.15 MySQL Server Time Zone Support&lt;/a&gt;」，但在使用 ORM 的時候這裡面提到的方式都不是合適的方法，因為其中要不是全域設定就是要額外下 sql 去變動，而且我也沒有做任何類似的設定&lt;/p&gt;
 &lt;p&gt;另外還有一種方式就是在 JDBC Driver connection url 上加上設定參數去調整連線的 timezone，如這份文件「&lt;a href=&#34;https://dev.mysql.com/doc/connector-j/en/connector-j-connp-props-datetime-types-processing.html&#34;&gt;6.3.11 Datetime types processing&lt;/a&gt;」說的 &lt;code&gt;connectionTimeZone&lt;/code&gt; 及 &lt;code&gt;forceConnectionTimeZoneToSession&lt;/code&gt; 參數也可以調整 session timezone，但是我也沒有做這個設定&lt;/p&gt;
@@ -360,20 +804,17 @@ ssl-key = /cert/server-key.pem
 &lt;/ul&gt;
 &lt;p&gt;首先看名稱就知道是預設值的 &lt;code&gt;DEFAULT&lt;/code&gt;，而 &lt;code&gt;DEFAULT&lt;/code&gt; 到底是採取怎樣的策略呢？這邊我們可以直接參考 &lt;code&gt;DEFAULT&lt;/code&gt; 的說明&lt;/p&gt;
 &lt;blockquote&gt;
-&lt;p&gt;Stores the time zone either with &lt;code&gt;NATIVE&lt;/code&gt; if &lt;code&gt;Dialect.getTimeZoneSupport()&lt;/code&gt; is &lt;code&gt;org.hibernate.dialect.TimeZoneSupport.NATIVE&lt;/code&gt;, otherwise uses the &lt;code&gt;NORMALIZE_UTC&lt;/code&gt; strategy.&lt;/p&gt;
-&lt;/blockquote&gt;
+&lt;p&gt;Stores the time zone either with &lt;code&gt;NATIVE&lt;/code&gt; if &lt;code&gt;Dialect.getTimeZoneSupport()&lt;/code&gt; is &lt;code&gt;org.hibernate.dialect.TimeZoneSupport.NATIVE&lt;/code&gt;, otherwise uses the &lt;code&gt;NORMALIZE_UTC&lt;/code&gt; strategy.&lt;/p&gt;&lt;/blockquote&gt;
 &lt;p&gt;簡單來說就是除非有特別設定，預設就是 &lt;code&gt;NORMALIZE_UTC&lt;/code&gt;&lt;/p&gt;
 &lt;p&gt;那 &lt;code&gt;NORMALIZE_UTC&lt;/code&gt; 又是怎麼運作呢？這邊先講 &lt;code&gt;NORMALIZE&lt;/code&gt; 是怎麼運作的&lt;/p&gt;
 &lt;p&gt;&lt;code&gt;NORMALIZE&lt;/code&gt; 的機制基本上就跟 Hibernate 5 的處理方式一樣，只差在可以透過 &lt;code&gt;hibernate.jdbc.time_zone&lt;/code&gt; 這個參數設定 normalize 過程中要轉換的時區，也就是將帶時區時間轉換成無時區時間時，如果沒有設定 &lt;code&gt;hibernate.jdbc.time_zone&lt;/code&gt; 則一樣轉成 JVM 時區；若是有設定 &lt;code&gt;hibernate.jdbc.time_zone&lt;/code&gt; 就轉成 &lt;code&gt;hibernate.jdbc.time_zone&lt;/code&gt; 設定的時區；反過來要將無時區時間轉回帶時區時間的時候，沒有設定 &lt;code&gt;hibernate.jdbc.time_zone&lt;/code&gt; 就一樣直接帶上 JVM 時區，若是有設定則直接帶上 &lt;code&gt;hibernate.jdbc.time_zone&lt;/code&gt; 設定的時區&lt;/p&gt;
 &lt;blockquote&gt;
-&lt;p&gt;這就是設定 &lt;code&gt;hibernate.jdbc.time_zone&lt;/code&gt; 這個參數後的實際運作機制，如果使用 Spring Boot Data JPA 則是設定 &lt;code&gt;spring.jpa.properties.hibernate.jdbc.time_zone&lt;/code&gt;&lt;/p&gt;
-&lt;/blockquote&gt;
+&lt;p&gt;這就是設定 &lt;code&gt;hibernate.jdbc.time_zone&lt;/code&gt; 這個參數後的實際運作機制，如果使用 Spring Boot Data JPA 則是設定 &lt;code&gt;spring.jpa.properties.hibernate.jdbc.time_zone&lt;/code&gt;&lt;/p&gt;&lt;/blockquote&gt;
 &lt;p&gt;但這樣的機制仍然不能避免處理日光節約時間以及換時區的問題&lt;/p&gt;
 &lt;p&gt;所以就有 &lt;code&gt;NORMALIZE_UTC&lt;/code&gt; 的出現，其實機制跟 &lt;code&gt;NORMALIZE&lt;/code&gt; 非常相似，只差在它會強制將帶時區時間轉成 UTC 時間後再去掉時區資訊，轉回來的時候同樣也是直接將無時區資訊加上 UTC 時區&lt;/p&gt;
 &lt;p&gt;而因為任何時間在保存的時候都是保存成 UTC 的時間，取出來的時候也是一律轉換成 UTC 時間，所以就解決了日光節約時間以及換時區的問題&lt;/p&gt;
 &lt;blockquote&gt;
-&lt;p&gt;注意 &lt;code&gt;NORMALIZE_UTC&lt;/code&gt; 直到 Hibernate 6.0.1.Final 才修正成為以上機制，並且直到 Hibernate 6.2+ 後才成為預設處理 database 不支援帶時區時間的機制&lt;/p&gt;
-&lt;/blockquote&gt;
+&lt;p&gt;注意 &lt;code&gt;NORMALIZE_UTC&lt;/code&gt; 直到 Hibernate 6.0.1.Final 才修正成為以上機制，並且直到 Hibernate 6.2+ 後才成為預設處理 database 不支援帶時區時間的機制&lt;/p&gt;&lt;/blockquote&gt;
 &lt;p&gt;至此，這個機制的描述已經完全符合我觀測到的現象，但是盡信書不如無書，這邊還是要寫個測試來驗證一下&lt;/p&gt;
 &lt;h1 id=&#34;測試&#34;&gt;測試&lt;/h1&gt;
 &lt;p&gt;首先建立測試的 schema 如下&lt;/p&gt;
@@ -598,8 +1039,7 @@ ssl-key = /cert/server-key.pem
 &lt;h1 id=&#34;第二種情境描述&#34;&gt;第二種情境描述&lt;/h1&gt;
 &lt;p&gt;有時候我們會需要做一些複雜查詢，尤其是使用到其他 table 做 join 查詢，而且 select 的欄位不一定只選擇一個 entity 包含的欄位，此時就會需要利用 JPA 的 projection 功能&lt;/p&gt;
 &lt;blockquote&gt;
-&lt;p&gt;有些情況可以用關聯來處理，但以下假設並沒有在 JPA 設定關聯，而是直接用 native SQL join 的方式做查詢&lt;/p&gt;
-&lt;/blockquote&gt;
+&lt;p&gt;有些情況可以用關聯來處理，但以下假設並沒有在 JPA 設定關聯，而是直接用 native SQL join 的方式做查詢&lt;/p&gt;&lt;/blockquote&gt;
 &lt;p&gt;例如以下 table&lt;/p&gt;
 &lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;&#34;&gt;&lt;code class=&#34;language-sql&#34; data-lang=&#34;sql&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#ff79c6&#34;&gt;CREATE&lt;/span&gt; &lt;span style=&#34;color:#ff79c6&#34;&gt;TABLE&lt;/span&gt; MESSAGE
 &lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;(
@@ -750,8 +1190,7 @@ ssl-key = /cert/server-key.pem
 &lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;如此就可以利用框架自動 mapping Java &lt;code&gt;enum&lt;/code&gt; 與 MySQL &lt;code&gt;int&lt;/code&gt;&lt;/p&gt;
 &lt;p&gt;另外提一下，Java 的 &lt;code&gt;Instant&lt;/code&gt; 或 &lt;code&gt;OffsetDateTime&lt;/code&gt; 與 MySQL &lt;code&gt;datetime&lt;/code&gt; 之間也有類似的問題，所以也需要提供一個 converter 做 &lt;code&gt;Instant&lt;/code&gt; 或 &lt;code&gt;OffsetDateTime&lt;/code&gt; 與 &lt;code&gt;java.sql.Timestamp&lt;/code&gt; 之間做轉換&lt;/p&gt;
 &lt;blockquote&gt;
-&lt;p&gt;JPA 會把 MySQL 的 &lt;code&gt;datetime&lt;/code&gt; 以 &lt;code&gt;java.sql.Timestamp&lt;/code&gt; 取出來&lt;/p&gt;
-&lt;/blockquote&gt;
+&lt;p&gt;JPA 會把 MySQL 的 &lt;code&gt;datetime&lt;/code&gt; 以 &lt;code&gt;java.sql.Timestamp&lt;/code&gt; 取出來&lt;/p&gt;&lt;/blockquote&gt;
 &lt;h1 id=&#34;reference&#34;&gt;Reference&lt;/h1&gt;
 &lt;ul&gt;
 &lt;li&gt;&lt;a href=&#34;https://docs.spring.io/spring-data/jpa/docs/current/reference/html/#projections&#34;&gt;Spring Data JPA - Reference Documentation&lt;/a&gt;&lt;/li&gt;
@@ -1001,8 +1440,7 @@ ssl-key = /cert/server-key.pem
 &lt;p&gt;這就很奇怪啊，照理來說前一階段應該就把全部的 dependencies 都下載下來啦，畢竟這就是 &lt;code&gt;dependency:go-offline&lt;/code&gt; 這個 goal 的目的不是嗎？&lt;/p&gt;
 &lt;p&gt;但很抱歉，你要說這是 plugin 的 bug 或是原本的功能都好，總之，它只會下載 &lt;code&gt;pom.xml&lt;/code&gt; 上面有明示列出的 artifact，而且甚至連 &lt;code&gt;&amp;lt;plugin&amp;gt;&lt;/code&gt; 標籤內部的 &lt;code&gt;&amp;lt;dependencies&amp;gt;&lt;/code&gt; 標籤當中的 artifact 都不會下載&lt;/p&gt;
 &lt;blockquote&gt;
-&lt;p&gt;這個 issue 從 2007 年開到現在都還沒解決，可以參考 &lt;a href=&#34;https://issues.apache.org/jira/browse/MDEP-82&#34;&gt;MDEP-82&lt;/a&gt;&lt;/p&gt;
-&lt;/blockquote&gt;
+&lt;p&gt;這個 issue 從 2007 年開到現在都還沒解決，可以參考 &lt;a href=&#34;https://issues.apache.org/jira/browse/MDEP-82&#34;&gt;MDEP-82&lt;/a&gt;&lt;/p&gt;&lt;/blockquote&gt;
 &lt;p&gt;再加上有些 maven 預設 lifecycle 或 goal 需要動態載入的 dependencies 也並不在下載的目標當中，就會造成在第二階段真正開始建置專案的時候會需要下載缺少的 dependencies&lt;/p&gt;
 &lt;p&gt;某些 plugin 的 dependencies 甚至不是列在 &lt;code&gt;pom.xml&lt;/code&gt; 當中，而是利用 class loader 的方式超級動態載入，這也是 &lt;code&gt;maven-dependency-plugin&lt;/code&gt; 無能為力的部分&lt;/p&gt;
 &lt;p&gt;如果建置過程都有連網還好，有些 CI/CD 的流程在建置這個階段是會跟網路隔離的，或是會利用建置這個步驟順便做測試，但為了測試環境的「乾淨」而限制連網功能，這個情況就很尷尬了，各種建置失敗&lt;/p&gt;
@@ -1187,240 +1625,6 @@ ssl-key = /cert/server-key.pem
 &lt;li&gt;&lt;a href=&#34;https://github.com/springfox/springfox&#34;&gt;SpringFox GitHub&lt;/a&gt;&lt;/li&gt;
 &lt;/ul&gt;
 - https://blog.idontwannarock.dev/2022/12/springfox_to_springdoc/ - This website by Howard Wang is licensed under a Creative Common Attribution-ShareAlike 4.0 International License.</description>
-        </item>
-    
-    
-    
-        <item>
-        <title>Quartz Misfire Handling Instruction</title>
-        <link>https://blog.idontwannarock.dev/2022/11/quartz-misfire-handling-instruction/</link>
-        <pubDate>Tue, 29 Nov 2022 15:21:19 +0800</pubDate>
-        
-        <guid>https://blog.idontwannarock.dev/2022/11/quartz-misfire-handling-instruction/</guid>
-        <description>Howard Tech Note https://blog.idontwannarock.dev/2022/11/quartz-misfire-handling-instruction/ -&lt;p&gt;Quartz 系列：&lt;/p&gt;
-&lt;ul&gt;
-&lt;li&gt;&lt;a href=&#34;https://blog.idontwannarock.dev/2022/11/quartz-intro/&#34;&gt;Quartz 介紹&lt;/a&gt;&lt;/li&gt;
-&lt;li&gt;&lt;a href=&#34;https://blog.idontwannarock.dev/2022/11/quartz-cluster-fixed-and-dynamic-trigger-spring-boot-integration/&#34;&gt;Spring Boot 整合 Quartz 集群執行預設及動態排程&lt;/a&gt;&lt;/li&gt;
-&lt;li&gt;Quartz Misfire Handling Instruction&lt;/li&gt;
-&lt;/ul&gt;
-&lt;p&gt;使用 Quartz 來幫助排程管理很方便，但還有一個需要注意的地方，就是設定 misfire handling instruction&lt;/p&gt;
-&lt;h1 id=&#34;misfire-概念&#34;&gt;Misfire 概念&lt;/h1&gt;
-&lt;p&gt;首先要來釐清在 Quartz 的架構下，什麼情況能稱為 misfire，其實講到底就只有一種：「Job 在到達預定該觸發的時間未觸發」&lt;/p&gt;
-&lt;p&gt;但怎樣算是未觸發，其實主要有兩個條件，第一個是設定的「觸發時間」，第二個則是「&lt;code&gt;misfireThreshold&lt;/code&gt;」&lt;/p&gt;
-&lt;p&gt;舉例來說如果有一個 Job 設定 12:00 觸發，並且 Quartz 的 &lt;code&gt;misfireThreshold&lt;/code&gt; 設定為 2min，因此當我在 12:01 準備要執行的時候，因為已經超過設定的觸發時間，但還沒有超過 &lt;code&gt;misfireThreshold&lt;/code&gt; 的 2min，所以並不會被 Quartz 認為是 misfire&lt;/p&gt;
-&lt;p&gt;那另一方面來說，以同樣的例子而言，如果 Quartz 準備要執行的時候已經是 12:03，那這個 Job 的這次執行就會被認為是 misfire，這時候 Quartz 就會依照設定好的 misfire handling instruction 來執行未觸發時的動作&lt;/p&gt;
-&lt;p&gt;這樣舉例就能很清楚的理解 &lt;code&gt;misfireThreshold&lt;/code&gt; 的意義&lt;/p&gt;
-&lt;blockquote&gt;
-&lt;p&gt;要在 Spring Boot 整合 Quartz 專案中設定 &lt;code&gt;misfireThreshold&lt;/code&gt;，可在 properties 檔中設定 &lt;code&gt;spring.quartz.properties.org.quartz.jobStore.misfireThreshold=60000&lt;/code&gt;，這個參數的 default 就是 60000 milliseconds 也就是一分鐘&lt;/p&gt;
-&lt;/blockquote&gt;
-&lt;p&gt;而 misfire handling instruction 會因為不同類型的 Trigger 而會有些不同，以下來討論常見的 &lt;code&gt;SimpleTrigger&lt;/code&gt; 跟 &lt;code&gt;CronTrigger&lt;/code&gt; 有提供的 misfire handling instruction&lt;/p&gt;
-&lt;h1 id=&#34;misfire-handling-instruction&#34;&gt;Misfire Handling Instruction&lt;/h1&gt;
-&lt;h2 id=&#34;simpletrigger&#34;&gt;SimpleTrigger&lt;/h2&gt;
-&lt;p&gt;以 &lt;code&gt;SimpleTrigger&lt;/code&gt; 來說，有提供以下七種 misfire handling instruction：&lt;/p&gt;
-&lt;ul&gt;
-&lt;li&gt;&lt;code&gt;MISFIRE_INSTRUCTION_SMART_POLICY&lt;/code&gt;&lt;/li&gt;
-&lt;li&gt;&lt;code&gt;MISFIRE_INSTRUCTION_IGNORE_MISFIRE_POLICY&lt;/code&gt;&lt;/li&gt;
-&lt;li&gt;&lt;code&gt;MISFIRE_INSTRUCTION_FIRE_NOW&lt;/code&gt;&lt;/li&gt;
-&lt;li&gt;&lt;code&gt;MISFIRE_INSTRUCTION_RESCHEDULE_NEXT_WITH_EXISTING_COUNT&lt;/code&gt;&lt;/li&gt;
-&lt;li&gt;&lt;code&gt;MISFIRE_INSTRUCTION_RESCHEDULE_NEXT_WITH_REMAINING_COUNT&lt;/code&gt;&lt;/li&gt;
-&lt;li&gt;&lt;code&gt;MISFIRE_INSTRUCTION_RESCHEDULE_NOW_WITH_EXISTING_REPEAT_COUNT&lt;/code&gt;&lt;/li&gt;
-&lt;li&gt;&lt;code&gt;MISFIRE_INSTRUCTION_RESCHEDULE_NOW_WITH_REMAINING_REPEAT_COUNT&lt;/code&gt;&lt;/li&gt;
-&lt;/ul&gt;
-&lt;p&gt;因為 &lt;code&gt;SimpleTrigger&lt;/code&gt; 有分為「不重複執行」、「執行固定次數」及「無限次執行」三種狀況，所以各種 misfire handling instruction 的實際執行狀況就會有所不同&lt;/p&gt;
-&lt;h3 id=&#34;不重複執行&#34;&gt;不重複執行&lt;/h3&gt;
-&lt;table&gt;
-  &lt;thead&gt;
-      &lt;tr&gt;
-          &lt;th style=&#34;text-align: left&#34;&gt;Instruction&lt;/th&gt;
-          &lt;th style=&#34;text-align: left&#34;&gt;解釋&lt;/th&gt;
-          &lt;th style=&#34;text-align: left&#34;&gt;情境舉例&lt;/th&gt;
-      &lt;/tr&gt;
-  &lt;/thead&gt;
-  &lt;tbody&gt;
-      &lt;tr&gt;
-          &lt;td style=&#34;text-align: left&#34;&gt;&lt;code&gt;MISFIRE_INSTRUCTION_SMART_POLICY&lt;/code&gt;&lt;/td&gt;
-          &lt;td style=&#34;text-align: left&#34;&gt;同 &lt;code&gt;MISFIRE_INSTRUCTION_FIRE_NOW&lt;/code&gt;&lt;/td&gt;
-          &lt;td&gt;&lt;/td&gt;
-      &lt;/tr&gt;
-      &lt;tr&gt;
-          &lt;td style=&#34;text-align: left&#34;&gt;&lt;code&gt;MISFIRE_INSTRUCTION_IGNORE_MISFIRE_POLICY&lt;/code&gt;&lt;/td&gt;
-          &lt;td style=&#34;text-align: left&#34;&gt;同 &lt;code&gt;MISFIRE_INSTRUCTION_FIRE_NOW&lt;/code&gt;&lt;/td&gt;
-          &lt;td&gt;&lt;/td&gt;
-      &lt;/tr&gt;
-      &lt;tr&gt;
-          &lt;td style=&#34;text-align: left&#34;&gt;&lt;code&gt;MISFIRE_INSTRUCTION_FIRE_NOW&lt;/code&gt;&lt;/td&gt;
-          &lt;td style=&#34;text-align: left&#34;&gt;當 Quartz 發現 job misfire，會立刻執行&lt;/td&gt;
-          &lt;td style=&#34;text-align: left&#34;&gt;例如有個原本預計在 12:00 執行的系統清理的 job，但 Quartz 應用程式可能因為維護的關係，13:00 才啟動&lt;br&gt;所以 scheduler 在 13:00 一啟動的時候，就會立刻執行 misfire 的那次 job&lt;/td&gt;
-      &lt;/tr&gt;
-      &lt;tr&gt;
-          &lt;td style=&#34;text-align: left&#34;&gt;&lt;code&gt;MISFIRE_INSTRUCTION_RESCHEDULE_NEXT_WITH_EXISTING_COUNT&lt;/code&gt;&lt;/td&gt;
-          &lt;td style=&#34;text-align: left&#34;&gt;同 &lt;code&gt;MISFIRE_INSTRUCTION_RESCHEDULE_NEXT_WITH_REMAINING_COUNT&lt;/code&gt;&lt;/td&gt;
-          &lt;td&gt;&lt;/td&gt;
-      &lt;/tr&gt;
-      &lt;tr&gt;
-          &lt;td style=&#34;text-align: left&#34;&gt;&lt;code&gt;MISFIRE_INSTRUCTION_RESCHEDULE_NEXT_WITH_REMAINING_COUNT&lt;/code&gt;&lt;/td&gt;
-          &lt;td style=&#34;text-align: left&#34;&gt;因為已經沒有下一次觸發，所以不執行任何動作&lt;/td&gt;
-          &lt;td style=&#34;text-align: left&#34;&gt;例如預計錄製一個電視節目，如果已經超過兩個小時才發現 misfire，已經沒有必要再執行錄製的工作&lt;/td&gt;
-      &lt;/tr&gt;
-      &lt;tr&gt;
-          &lt;td style=&#34;text-align: left&#34;&gt;&lt;code&gt;MISFIRE_INSTRUCTION_RESCHEDULE_NOW_WITH_EXISTING_REPEAT_COUNT&lt;/code&gt;&lt;/td&gt;
-          &lt;td style=&#34;text-align: left&#34;&gt;同 &lt;code&gt;MISFIRE_INSTRUCTION_FIRE_NOW&lt;/code&gt;&lt;/td&gt;
-          &lt;td&gt;&lt;/td&gt;
-      &lt;/tr&gt;
-      &lt;tr&gt;
-          &lt;td style=&#34;text-align: left&#34;&gt;&lt;code&gt;MISFIRE_INSTRUCTION_RESCHEDULE_NOW_WITH_REMAINING_REPEAT_COUNT&lt;/code&gt;&lt;/td&gt;
-          &lt;td style=&#34;text-align: left&#34;&gt;同 &lt;code&gt;MISFIRE_INSTRUCTION_FIRE_NOW&lt;/code&gt;&lt;/td&gt;
-          &lt;td&gt;&lt;/td&gt;
-      &lt;/tr&gt;
-  &lt;/tbody&gt;
-&lt;/table&gt;
-&lt;h3 id=&#34;執行固定次數&#34;&gt;執行固定次數&lt;/h3&gt;
-&lt;p&gt;例如有個從今天 9:00 開始每隔一個小時執行一次，總共執行 8 次的任務，正常情況下應該在 16:00 執行最後一次&lt;/p&gt;
-&lt;p&gt;但因為某種原因 scheduler 沒辦法執行 9:00 跟 10:00 這兩次任務，並且直到 10:15 才發現有 2 次 misfire:&lt;/p&gt;
-&lt;table&gt;
-  &lt;thead&gt;
-      &lt;tr&gt;
-          &lt;th style=&#34;text-align: left&#34;&gt;Instruction&lt;/th&gt;
-          &lt;th style=&#34;text-align: left&#34;&gt;解釋&lt;/th&gt;
-          &lt;th style=&#34;text-align: left&#34;&gt;情境舉例&lt;/th&gt;
-      &lt;/tr&gt;
-  &lt;/thead&gt;
-  &lt;tbody&gt;
-      &lt;tr&gt;
-          &lt;td style=&#34;text-align: left&#34;&gt;&lt;code&gt;MISFIRE_INSTRUCTION_SMART_POLICY&lt;/code&gt;&lt;/td&gt;
-          &lt;td style=&#34;text-align: left&#34;&gt;同 &lt;code&gt;MISFIRE_INSTRUCTION_RESCHEDULE_NOW_WITH_EXISTING_REPEAT_COUNT&lt;/code&gt;&lt;/td&gt;
-          &lt;td&gt;&lt;/td&gt;
-      &lt;/tr&gt;
-      &lt;tr&gt;
-          &lt;td style=&#34;text-align: left&#34;&gt;&lt;code&gt;MISFIRE_INSTRUCTION_IGNORE_MISFIRE_POLICY&lt;/code&gt;&lt;/td&gt;
-          &lt;td style=&#34;text-align: left&#34;&gt;以最快的速度執行所有 misfire 的 job，然後再回到正常的 schedule&lt;/td&gt;
-          &lt;td style=&#34;text-align: left&#34;&gt;scheduler  會以最快的速度執行 9:00 及 10:00 這兩次 misfire 的 job，並等到 11:00 回復到正常的排程&lt;/td&gt;
-      &lt;/tr&gt;
-      &lt;tr&gt;
-          &lt;td style=&#34;text-align: left&#34;&gt;&lt;code&gt;MISFIRE_INSTRUCTION_FIRE_NOW&lt;/code&gt;&lt;/td&gt;
-          &lt;td style=&#34;text-align: left&#34;&gt;同 &lt;code&gt;MISFIRE_INSTRUCTION_RESCHEDULE_NOW_WITH_REMAINING_REPEAT_COUNT&lt;/code&gt;&lt;/td&gt;
-          &lt;td&gt;&lt;/td&gt;
-      &lt;/tr&gt;
-      &lt;tr&gt;
-          &lt;td style=&#34;text-align: left&#34;&gt;&lt;code&gt;MISFIRE_INSTRUCTION_RESCHEDULE_NEXT_WITH_EXISTING_COUNT&lt;/code&gt;&lt;/td&gt;
-          &lt;td style=&#34;text-align: left&#34;&gt;scheduler 當下不會做任何動作，而是依照設定的執行間隔，在下一次預定執行的時間，重新開始執行所有 misfire 的任務&lt;/td&gt;
-          &lt;td style=&#34;text-align: left&#34;&gt;scheduler 會等到 11:00 再開始重新以每小時執行一次的間隔，依序執行原定的任務直到 18:00 結束&lt;/td&gt;
-      &lt;/tr&gt;
-      &lt;tr&gt;
-          &lt;td style=&#34;text-align: left&#34;&gt;&lt;code&gt;MISFIRE_INSTRUCTION_RESCHEDULE_NEXT_WITH_REMAINING_COUNT&lt;/code&gt;&lt;/td&gt;
-          &lt;td style=&#34;text-align: left&#34;&gt;scheduler 會放棄 misfire 的任務，等到下次執行的時間，執行剩下的任務&lt;br&gt;&lt;strong&gt;任務總執行次數會比原本預計的較少&lt;/strong&gt;&lt;/td&gt;
-          &lt;td style=&#34;text-align: left&#34;&gt;scheduler 10:15 發現有 2 次 misfire，但會執行放棄那兩次 misfire，仍然等到 11:00 開始執行下次任務直到原訂的 16:00&lt;br&gt;所以總執行次數只會有 6 次，而不是原定的 8 次&lt;/td&gt;
-      &lt;/tr&gt;
-      &lt;tr&gt;
-          &lt;td style=&#34;text-align: left&#34;&gt;&lt;code&gt;MISFIRE_INSTRUCTION_RESCHEDULE_NOW_WITH_EXISTING_REPEAT_COUNT&lt;/code&gt;&lt;/td&gt;
-          &lt;td style=&#34;text-align: left&#34;&gt;第一次 misfire 會被立刻執行，其餘的 misfire 及原定任務會被以設定好的執行間隔，重新排程執行&lt;br&gt;&lt;strong&gt;任務總執行次數不會改變&lt;/strong&gt;&lt;/td&gt;
-          &lt;td style=&#34;text-align: left&#34;&gt;當 scheduler 10:15 發現有 2 次 misfire 時，第一個 misfire 會被立刻執行，然後 scheduler 會等待一個小時到 11:15 執行第二次任務，最後 8 次任務執行結束的時間為 17:15&lt;/td&gt;
-      &lt;/tr&gt;
-      &lt;tr&gt;
-          &lt;td style=&#34;text-align: left&#34;&gt;&lt;code&gt;MISFIRE_INSTRUCTION_RESCHEDULE_NOW_WITH_REMAINING_REPEAT_COUNT&lt;/code&gt;&lt;/td&gt;
-          &lt;td style=&#34;text-align: left&#34;&gt;第一次 misfire 會被立刻執行，其他的 misfire 會被放棄，scheduler 會以設定好的執行間隔，重新排程執行剩下未被 misfire 的任務&lt;br&gt;&lt;strong&gt;如果 misfire 超過一次，任務總執行次數會比原本預定地少&lt;/strong&gt;&lt;/td&gt;
-          &lt;td style=&#34;text-align: left&#34;&gt;當 scheduler 10:15 發現有 2 次 misfire 時，第一個 misfire 會被立刻執行，第二個 misfire 會被放棄，然後 scheduler 會等待一個小時到 11:15 執行剩下的任務，最後 7 次任務執行結束時間為 16:15&lt;/td&gt;
-      &lt;/tr&gt;
-  &lt;/tbody&gt;
-&lt;/table&gt;
-&lt;h3 id=&#34;無限次執行&#34;&gt;無限次執行&lt;/h3&gt;
-&lt;p&gt;例如有一個任務從 9:00 開始每隔一個小時觸發，但因為某種原因 scheduler 沒辦法執行 9:00 跟 10:00 這兩次任務，並且直到 10:15 才發現有 2 次 misfire:&lt;/p&gt;
-&lt;table&gt;
-  &lt;thead&gt;
-      &lt;tr&gt;
-          &lt;th style=&#34;text-align: left&#34;&gt;Instruction&lt;/th&gt;
-          &lt;th style=&#34;text-align: left&#34;&gt;解釋&lt;/th&gt;
-          &lt;th style=&#34;text-align: left&#34;&gt;情境舉例&lt;/th&gt;
-      &lt;/tr&gt;
-  &lt;/thead&gt;
-  &lt;tbody&gt;
-      &lt;tr&gt;
-          &lt;td style=&#34;text-align: left&#34;&gt;&lt;code&gt;MISFIRE_INSTRUCTION_SMART_POLICY&lt;/code&gt;&lt;/td&gt;
-          &lt;td style=&#34;text-align: left&#34;&gt;同 &lt;code&gt;MISFIRE_INSTRUCTION_RESCHEDULE_NEXT_WITH_REMAINING_COUNT&lt;/code&gt;&lt;/td&gt;
-          &lt;td&gt;&lt;/td&gt;
-      &lt;/tr&gt;
-      &lt;tr&gt;
-          &lt;td style=&#34;text-align: left&#34;&gt;&lt;code&gt;MISFIRE_INSTRUCTION_IGNORE_MISFIRE_POLICY&lt;/code&gt;&lt;/td&gt;
-          &lt;td style=&#34;text-align: left&#34;&gt;以最快的速度執行所有 misfire 的 job，然後再回到正常的 schedule&lt;/td&gt;
-          &lt;td style=&#34;text-align: left&#34;&gt;scheduler  會以最快的速度執行 9:00 及 10:00 這兩次 misfire 的 job，並等到 11:00 回復到正常的排程&lt;/td&gt;
-      &lt;/tr&gt;
-      &lt;tr&gt;
-          &lt;td style=&#34;text-align: left&#34;&gt;&lt;code&gt;MISFIRE_INSTRUCTION_FIRE_NOW&lt;/code&gt;&lt;/td&gt;
-          &lt;td style=&#34;text-align: left&#34;&gt;同 &lt;code&gt;MISFIRE_INSTRUCTION_RESCHEDULE_NOW_WITH_REMAINING_REPEAT_COUNT&lt;/code&gt;&lt;/td&gt;
-          &lt;td&gt;&lt;/td&gt;
-      &lt;/tr&gt;
-      &lt;tr&gt;
-          &lt;td style=&#34;text-align: left&#34;&gt;&lt;code&gt;MISFIRE_INSTRUCTION_RESCHEDULE_NEXT_WITH_EXISTING_COUNT&lt;/code&gt;&lt;/td&gt;
-          &lt;td style=&#34;text-align: left&#34;&gt;同 &lt;code&gt;MISFIRE_INSTRUCTION_RESCHEDULE_NEXT_WITH_REMAINING_COUNT&lt;/code&gt;&lt;/td&gt;
-          &lt;td&gt;&lt;/td&gt;
-      &lt;/tr&gt;
-      &lt;tr&gt;
-          &lt;td style=&#34;text-align: left&#34;&gt;&lt;code&gt;MISFIRE_INSTRUCTION_RESCHEDULE_NEXT_WITH_REMAINING_COUNT&lt;/code&gt;&lt;/td&gt;
-          &lt;td style=&#34;text-align: left&#34;&gt;scheduler 會放棄 misfire 的任務，等到下次執行的時間，執行接下來的任務&lt;/td&gt;
-          &lt;td style=&#34;text-align: left&#34;&gt;scheduler 10:15 發現有 2 次 misfire，但會執行放棄那兩次 misfire，等到 11:00 開始執行下次任務&lt;/td&gt;
-      &lt;/tr&gt;
-      &lt;tr&gt;
-          &lt;td style=&#34;text-align: left&#34;&gt;&lt;code&gt;MISFIRE_INSTRUCTION_RESCHEDULE_NOW_WITH_EXISTING_REPEAT_COUNT&lt;/code&gt;&lt;/td&gt;
-          &lt;td style=&#34;text-align: left&#34;&gt;同 &lt;code&gt;MISFIRE_INSTRUCTION_RESCHEDULE_NOW_WITH_REMAINING_REPEAT_COUNT&lt;/code&gt;&lt;/td&gt;
-          &lt;td&gt;&lt;/td&gt;
-      &lt;/tr&gt;
-      &lt;tr&gt;
-          &lt;td style=&#34;text-align: left&#34;&gt;&lt;code&gt;MISFIRE_INSTRUCTION_RESCHEDULE_NOW_WITH_REMAINING_REPEAT_COUNT&lt;/code&gt;&lt;/td&gt;
-          &lt;td style=&#34;text-align: left&#34;&gt;第一次 misfire 會被立刻執行，其他的 misfire 會被放棄，scheduler 會以設定好的執行間隔，重新排程執行接下來的任務&lt;/td&gt;
-          &lt;td style=&#34;text-align: left&#34;&gt;當 scheduler 10:15 發現有 2 次 misfire 時，第一個 misfire 會被立刻執行，第二個 misfire 會被放棄，然後 scheduler 會等待一個小時到 11:15 執行接下來的任務&lt;/td&gt;
-      &lt;/tr&gt;
-  &lt;/tbody&gt;
-&lt;/table&gt;
-&lt;h2 id=&#34;crontrigger&#34;&gt;CronTrigger&lt;/h2&gt;
-&lt;p&gt;&lt;code&gt;CronTrigger&lt;/code&gt; 有提供以下四種 misfire handling instruction:&lt;/p&gt;
-&lt;ul&gt;
-&lt;li&gt;&lt;code&gt;MISFIRE_INSTRUCTION_SMART_POLICY&lt;/code&gt;&lt;/li&gt;
-&lt;li&gt;&lt;code&gt;MISFIRE_INSTRUCTION_IGNORE_MISFIRE_POLICY&lt;/code&gt;&lt;/li&gt;
-&lt;li&gt;&lt;code&gt;MISFIRE_INSTRUCTION_FIRE_ONCE_NOW&lt;/code&gt;&lt;/li&gt;
-&lt;li&gt;&lt;code&gt;MISFIRE_INSTRUCTION_DO_NOTHING&lt;/code&gt;&lt;/li&gt;
-&lt;/ul&gt;
-&lt;p&gt;舉例來說，我們安排了一個星期一到五，每天 9:00 到 17:00 之間，每隔一個小時執行一次的任務 (&lt;code&gt;0 0 9-17 ? * MON-FRI&lt;/code&gt;)，但同樣的錯過了頭兩次執行，並在 10:15 發現有兩次 misfire:&lt;/p&gt;
-&lt;table&gt;
-  &lt;thead&gt;
-      &lt;tr&gt;
-          &lt;th style=&#34;text-align: left&#34;&gt;Instruction&lt;/th&gt;
-          &lt;th style=&#34;text-align: left&#34;&gt;解釋&lt;/th&gt;
-          &lt;th style=&#34;text-align: left&#34;&gt;情境舉例&lt;/th&gt;
-      &lt;/tr&gt;
-  &lt;/thead&gt;
-  &lt;tbody&gt;
-      &lt;tr&gt;
-          &lt;td style=&#34;text-align: left&#34;&gt;&lt;code&gt;MISFIRE_INSTRUCTION_SMART_POLICY&lt;/code&gt;&lt;/td&gt;
-          &lt;td style=&#34;text-align: left&#34;&gt;同 &lt;code&gt;MISFIRE_INSTRUCTION_FIRE_ONCE_NOW&lt;/code&gt;&lt;/td&gt;
-          &lt;td&gt;&lt;/td&gt;
-      &lt;/tr&gt;
-      &lt;tr&gt;
-          &lt;td style=&#34;text-align: left&#34;&gt;&lt;code&gt;MISFIRE_INSTRUCTION_IGNORE_MISFIRE_POLICY&lt;/code&gt;&lt;/td&gt;
-          &lt;td style=&#34;text-align: left&#34;&gt;以最快的速度執行所有 misfire 的 job，然後再回到正常的 schedule&lt;/td&gt;
-          &lt;td style=&#34;text-align: left&#34;&gt;scheduler  會以最快的速度執行 9:00 及 10:00 這兩次 misfire 的 job，並等到 11:00 回復到正常的排程&lt;/td&gt;
-      &lt;/tr&gt;
-      &lt;tr&gt;
-          &lt;td style=&#34;text-align: left&#34;&gt;&lt;code&gt;MISFIRE_INSTRUCTION_FIRE_ONCE_NOW&lt;/code&gt;&lt;/td&gt;
-          &lt;td style=&#34;text-align: left&#34;&gt;第一次 misfire 會被立刻執行，其他的 misfire 會被放棄，等到下次執行的時間，執行接下來的任務&lt;/td&gt;
-          &lt;td style=&#34;text-align: left&#34;&gt;當 scheduler 10:15 發現有 2 次 misfire 時，第一個 misfire 會被立刻執行，第二個 misfire 會被放棄，然後 scheduler 會等到 11:00 開始執行下次任務&lt;/td&gt;
-      &lt;/tr&gt;
-      &lt;tr&gt;
-          &lt;td style=&#34;text-align: left&#34;&gt;&lt;code&gt;MISFIRE_INSTRUCTION_DO_NOTHING&lt;/code&gt;&lt;/td&gt;
-          &lt;td style=&#34;text-align: left&#34;&gt;scheduler 會放棄 misfire 的任務，等到下次執行的時間，執行接下來的任務&lt;/td&gt;
-          &lt;td style=&#34;text-align: left&#34;&gt;scheduler 10:15 發現有 2 次 misfire，但會執行放棄那兩次 misfire，等到 11:00 開始執行下次任務&lt;/td&gt;
-      &lt;/tr&gt;
-  &lt;/tbody&gt;
-&lt;/table&gt;
-&lt;p&gt;另外可以注意的是，還有以下兩種 trigger 也支援跟 &lt;code&gt;CronTrigger&lt;/code&gt; 相同的 misfire handling instruction:&lt;/p&gt;
-&lt;ul&gt;
-&lt;li&gt;&lt;code&gt;DailyTimeIntervalTrigger&lt;/code&gt;: 例如每 25 分鐘執行一次&lt;/li&gt;
-&lt;li&gt;&lt;code&gt;CalendarIntervalTrigger&lt;/code&gt;: 例如每五個月執行一次&lt;/li&gt;
-&lt;/ul&gt;
-&lt;h1 id=&#34;參考&#34;&gt;參考&lt;/h1&gt;
-&lt;ul&gt;
-&lt;li&gt;&lt;a href=&#34;https://nurkiewicz.com/2012/04/quartz-scheduler-misfire-instructions.html&#34;&gt;Quartz scheduler misfire instructions explained&lt;/a&gt;&lt;/li&gt;
-&lt;/ul&gt;
-- https://blog.idontwannarock.dev/2022/11/quartz-misfire-handling-instruction/ - This website by Howard Wang is licensed under a Creative Common Attribution-ShareAlike 4.0 International License.</description>
         </item>
     
     

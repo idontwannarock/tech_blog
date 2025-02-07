@@ -613,8 +613,7 @@
 <p>也是因為這個問題，現今大部分瀏覽器並不支援 pipeline 機制，或預設被關閉，例如 Chrome 曾經支援但現已停止、Mozilla 預設關閉、IE11 不支援等等</p>
 <p>另外，HTTP/1.1 的 HOL Blocking 問題是 Application Layer 層的問題，不是 Transport Layer 因為 TCP congestion control 造成的 HOL Blocking 問題</p>
 <blockquote>
-<p>TCP 的 HOL Blocking 是指因為一個 packet 遺失，導致後續的 packet 必須等到該 packet 重新傳輸並接收到後才能繼續傳送的問題</p>
-</blockquote>
+<p>TCP 的 HOL Blocking 是指因為一個 packet 遺失，導致後續的 packet 必須等到該 packet 重新傳輸並接收到後才能繼續傳送的問題</p></blockquote>
 <h2 id="終於要講到-http2">終於要講到 HTTP/2</h2>
 <p>HTTP/1.1 固然是一個劃時代的結晶，直到今日還是瀏覽器主要使用的通訊協議之一，但在大環境的變化以致對於通訊協議的需求也有變化的今日，還是有它的侷限在</p>
 <p>於是經過許多人的努力，HTTP/2 誕生了</p>
@@ -646,8 +645,7 @@
 <h4 id="multiplexing">Multiplexing</h4>
 <p>基於 Binary Protocol 的機制，HTTP/2 允許 client 透過同一個 TCP connection 同步發送多個 request 給 server，而 server 也能透過同一個 TCP connection 同步回傳，減少額外的 RTT，並且因為每個 frame 都能識別屬於哪一個 stream，所以不需要依照收到的順序回覆，而可以交錯的回傳 frame，client 端會依照 frame 本身攜帶的 stream header 組裝相關的 frame</p>
 <blockquote>
-<p>multiplexing 多路複用通常表示在一個頻道上傳輸多路訊號或資料流的過程和技術</p>
-</blockquote>
+<p>multiplexing 多路複用通常表示在一個頻道上傳輸多路訊號或資料流的過程和技術</p></blockquote>
 <p>以 stream 的角度來看，因為每條 stream 在同一時間只會容納一個 request 以及對應的一系列 response，所以 stream 並不能達成 multiplexing</p>
 <p><img src="https://res.cloudinary.com/dcvgho2zc/image/upload/v1639989101/Tech%20Blog/stream.png" alt="HTTP/2 Stream"></p>
 <p><em>Image from <a href="https://sookocheff.com/post/networking/how-does-http-2-work/">How Does HTTP/2 Work?</a></em></p>
@@ -679,8 +677,7 @@
 <li>Polling 是在 client 端設 timer 輪詢，以達到近似 server 端有準備好的資料就可以隨時推送到 client 端的效果</li>
 <li>Long Polling 則是維持 request 直到 server 端準備好後送出 response，client 端收到後再立刻發出 request 等待下一次 server 端的 response，以達成類似 server 端隨時推送 response 的效果</li>
 <li>SSE 則是利用 HTTP event-stream 讓 server 端可以針對同一個 request 多次回覆 response，來達成類似 server 端主動 push 的效果</li>
-</ul>
-</blockquote>
+</ul></blockquote>
 <p>實際上 HTTP/2 的 server push 在效果上等同 SSE，讓 server 端可以針對一個 request 進行多次的 response</p>
 <p>由於不像 SSE 會占用一整個 TCP connection，HTTP/2 的一個 request 的 context 只佔用一個 stream，而不影響其他 stream，所以並不會阻塞其他 request/response，所以在許多應用情況下，這樣的 server push 已經跟真正不依賴 client request 而進行主動 server push 的效果相差無幾</p>
 <p><img src="https://res.cloudinary.com/dcvgho2zc/image/upload/v1639994509/Tech%20Blog/server-push.webp" alt="HTTP/2 Server Push"></p>
@@ -695,13 +692,11 @@
 <h4 id="opportunistic-encryption">Opportunistic Encryption</h4>
 <p>另外還有被批評未能支援機會性加密 (opportunistic encryption)，類似 SMTP 常用的 STARTTLS，主要用來防禦被動監聽 (passive monitoring)</p>
 <blockquote>
-<p>被動監聽就是利用複製網路流量來取得通訊訊息的手法，例如 wireshark 擷取封包。但其實被動監聽並不一定都用來攻擊，也常被用做 trouble shooting 的手段</p>
-</blockquote>
+<p>被動監聽就是利用複製網路流量來取得通訊訊息的手法，例如 wireshark 擷取封包。但其實被動監聽並不一定都用來攻擊，也常被用做 trouble shooting 的手段</p></blockquote>
 <p>機會性加密不像 TLS 加密涉及到身分認證、金鑰管理並需要事先設定組態，否則無法開始安全通訊，因此變成要馬「完全安全」要馬「完全不安全」；機會性加密則不進行身分驗證，在建立連接時，如果對方也支援加密連接時才開始進行加密請求，如果加密請求失敗，則退回到明文</p>
 <p>雖然機會性加密無法防禦主動攻擊 (例如中間人攻擊)，也不能替代完整的加密方案，但其主要用意就是在條件允許時就盡可能使用加密通訊</p>
 <blockquote>
-<p>中間人攻擊就是類似同時對 client 偽造 server、對 server 偽造 client，並交換其所收到的資料，使兩端都認為它們正通過一個私密的連接與對方直接對話</p>
-</blockquote>
+<p>中間人攻擊就是類似同時對 client 偽造 server、對 server 偽造 client，並交換其所收到的資料，使兩端都認為它們正通過一個私密的連接與對方直接對話</p></blockquote>
 <p>並且因為 IETF 制定的 RFC 7528 Best Current Practive 188 中指出，被動監聽應被當作一種攻擊，而 IETF 制定的標準應採取抵禦被動監聽的手段，因此 HTTP/2 也被批評違反 IETF 自身制定的準則</p>
 <h4 id="tcp-hol-blocking">TCP HOL Blocking</h4>
 <p>前面有提到 HTTP/2 解決了 Application Layer 的 HOL Blocking 問題，但並沒有處理 Transport Layer 的 TCP Blocking 問題</p>

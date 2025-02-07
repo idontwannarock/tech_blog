@@ -396,8 +396,7 @@
 <p>至於動態產生排程，網路上也很多教學，只是大多是採用 API 呼叫的方式去動態產生、運行、暫停、刪除排程等功能，而幾乎沒看到利用預設排程定時從 database 取得動態排程設定，並動態產生或移除排程的功能</p>
 <p>接下來探討如何在 Spring Boot 整合 Quartz 的框架中實作以上需求，來達成依照自訂動態排程來發通知的需求</p>
 <blockquote>
-<p>以下討論採用 Spring Boot 2.7.5 及 Quartz 2.3.2 版本並搭配 MySQL 做持久化</p>
-</blockquote>
+<p>以下討論採用 Spring Boot 2.7.5 及 Quartz 2.3.2 版本並搭配 MySQL 做持久化</p></blockquote>
 <h1 id="database-schema">Database Schema</h1>
 <p>首先需要在 MySQL 內建立相關的 schema，可以利用官方提供的這個 <a href="https://github.com/quartz-scheduler/quartz/blob/master/quartz-core/src/main/resources/org/quartz/impl/jdbcjobstore/tables_mysql_innodb.sql">script</a> 來建立，並額外依照以下 sql 建立動態通知排程的 table：</p>
 <div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-sql" data-lang="sql"><span style="display:flex;"><span><span style="color:#ff79c6">create</span> <span style="color:#ff79c6">table</span> <span style="color:#ff79c6">if</span> <span style="color:#ff79c6">not</span> exist NOTIFICATION_SCHEDULE
@@ -489,8 +488,7 @@
 </span></span><span style="display:flex;"><span>}
 </span></span></code></pre></div><p>再來要將這個 JobFactory 設定到 <code>SchedulerFactoryBean</code> 裡面，但這邊很多網路文章都教直接 <code>new</code> 一個 <code>SchedulerFactoryBean</code> 出來後再標記 <code>@Bean</code> 的做法，但 <a href="https://docs.spring.io/spring-boot/docs/current/reference/html/io.html#io.quartz">官方文件</a> (雖然只有短短幾行) 有提到</p>
 <blockquote>
-<p>Quartz Scheduler configuration can be customized using <code>spring.quartz</code> properties and <code>SchedulerFactoryBeanCustomizer</code> beans, which allow programmatic <code>SchedulerFactoryBean</code> customization.</p>
-</blockquote>
+<p>Quartz Scheduler configuration can be customized using <code>spring.quartz</code> properties and <code>SchedulerFactoryBeanCustomizer</code> beans, which allow programmatic <code>SchedulerFactoryBean</code> customization.</p></blockquote>
 <p>所以我們要利用 Spring Boot 整合 Quartz 提供的 <code>SchedulerFactoryBeanCustomizer</code> 來做設定</p>
 <div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-java" data-lang="java"><span style="display:flex;"><span><span style="color:#ff79c6">import</span> lombok.RequiredArgsConstructor;
 </span></span><span style="display:flex;"><span><span style="color:#ff79c6">import</span> org.springframework.boot.autoconfigure.quartz.SchedulerFactoryBeanCustomizer;

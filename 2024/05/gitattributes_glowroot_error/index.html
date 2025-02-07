@@ -491,8 +491,7 @@
 <p>挖賽，光在這邊我就卡關了兩天，一直查 Dockerfile 權限問題想找出兩個 jar 檔的差異</p>
 <p>直到我看到某一篇解答 <code>Error opening zip file or JAR manifest missing</code> 錯誤的時候提到</p>
 <blockquote>
-<p>除了檢查 jar 檔是否存在及權限以外，也要檢查 jar 檔本身是否毀損</p>
-</blockquote>
+<p>除了檢查 jar 檔是否存在及權限以外，也要檢查 jar 檔本身是否毀損</p></blockquote>
 <h2 id="jar-檔毀損">Jar 檔毀損？</h2>
 <p>我原本認為我是直接從官方 URL 下載下來的 jar 檔不可能有問題，但死馬當作活馬醫，於是我將 Dockerfile 改成每次都重新抓 Glowroot 的 jar 檔下來試試看</p>
 <div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-dockerfile" data-lang="dockerfile"><span style="display:flex;"><span><span style="color:#ff79c6">FROM</span><span style="color:#f1fa8c"> eclipse-temurin:21</span>

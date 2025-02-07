@@ -370,8 +370,7 @@
 <p>以 Java 來說，隨機就是使用 <code>java.lang.Math</code> 類別裡的靜態方法 <code>random()</code>，但要注意<code>Math.random()</code> 之後產生的是大於等於 0、小於 1，也就是 <code>0 &lt;= Math.random() &lt; 1</code> 的 <code>double</code> 型態浮點常數。<br>
 因此，以這題來說，還要記得利用 <code>(int)</code> 轉換型態成整數型態的常數。<br>
 另外，若不放心浮點數轉換為整數後的值，可以利用一樣是 <code>Math</code> 類別裡的靜態方法 <code>floor()</code> 或 <code>ceiling()</code> 來取無條件進位或無條件捨去後的整數值。
-而產生指定範圍內的亂數的公式為 <code>Math.random() * 範圍個數 + 初值</code></p>
-</blockquote>
+而產生指定範圍內的亂數的公式為 <code>Math.random() * 範圍個數 + 初值</code></p></blockquote>
 <p>然後因為已經確定要抽出的數目，所以可以使用元素個數不能變動的陣列，當然也可以用可以變動個數的 <code>Collection</code> 或其子介面去解決。關鍵就在於不可重複。</p>
 <p>這篇只討論陣列的解法。</p>
 <h2 id="暴力解重複檢查">暴力解：重複檢查</h2>

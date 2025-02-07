@@ -459,19 +459,16 @@
 <h4 id="restful-api-with-content-security-policy-header">RESTful API with Content-Security-Policy Header</h4>
 <p>這邊額外研究一下如果是 RESTful API 還有需要加上 <code>Content-Security-Policy</code> header 嗎？</p>
 <blockquote>
-<p>這邊特別指定討論 RESTful API，其實是想表達後端 API 僅提供資料與前端溝通，而不負責提供待 render 的 HTML、CSS、JavaScript 等資源的情況，所以其他相同功能但並不特別遵守 REST 的 API 其實也適用此處的情況。</p>
-</blockquote>
+<p>這邊特別指定討論 RESTful API，其實是想表達後端 API 僅提供資料與前端溝通，而不負責提供待 render 的 HTML、CSS、JavaScript 等資源的情況，所以其他相同功能但並不特別遵守 REST 的 API 其實也適用此處的情況。</p></blockquote>
 <p>通常這種情況多發生在前後端分離架構，前端透過 Ajax 呼叫後端 RESTful API 來取得資料進行畫面 render 的場景下，CSP 一般會直接配置在頁面 <code>&lt;head&gt;</code> 中。所以原則上不需要後端回傳的 response 來提供 CSP 限制。</p>
 <p>但若是硬要在後端 RESTful API 的 response header 中加入 CSP 會對前端造成什麼影響嗎？</p>
 <p>我們可以從 W3C 提供的 CSP 文件中 <a href="https://www.w3.org/TR/CSP2/#which-policy-applies">3.5 Policy applicability</a> 這段可以看到：</p>
 <blockquote>
-<p>&hellip;If a resource does not create a new execution context (for example, when including a script, image, or stylesheet into a document), then any policies delivered with that resource are discarded without effect. Its execution is subject to the policy or policies of the including context&hellip;</p>
-</blockquote>
+<p>&hellip;If a resource does not create a new execution context (for example, when including a script, image, or stylesheet into a document), then any policies delivered with that resource are discarded without effect. Its execution is subject to the policy or policies of the including context&hellip;</p></blockquote>
 <p>CSP 是否 apply 的關鍵是回傳的資源是否會產生新的執行上下文 (execution context)，這樣講很抽象，但可以參考 W3C 文件 <a href="https://www.w3.org/TR/CSP2/#which-policy-applies">3.5 Policy applicability</a> 列出的表格來參照哪些資源回傳後 CSP 是否會 apply。</p>
 <p>但同時也要注意，W3C 文件中同時也有指出其列出的 applicability 並非規範標準，所以實際各家瀏覽器如何實作可能並不一定相同。</p>
 <blockquote>
-<p><em>This section is not normative.</em></p>
-</blockquote>
+<p><em>This section is not normative.</em></p></blockquote>
 <h2 id="參考">參考</h2>
 <ul>
 <li><a href="https://en.wikipedia.org/wiki/Cross-site_scripting">Cross-site scripting</a></li>

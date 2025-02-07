@@ -3,21 +3,33 @@
   xmlns:xhtml="http://www.w3.org/1999/xhtml">
   <url>
     <loc>https://blog.idontwannarock.dev/categories/</loc>
-    <lastmod>2024-10-16T11:06:41+08:00</lastmod>
+    <lastmod>2025-02-07T09:39:10+08:00</lastmod>
+  </url><url>
+    <loc>https://blog.idontwannarock.dev/</loc>
+    <lastmod>2025-02-07T09:39:10+08:00</lastmod>
+  </url><url>
+    <loc>https://blog.idontwannarock.dev/categories/implementation/</loc>
+    <lastmod>2025-02-07T09:39:10+08:00</lastmod>
+  </url><url>
+    <loc>https://blog.idontwannarock.dev/tags/insert/</loc>
+    <lastmod>2025-02-07T09:39:10+08:00</lastmod>
+  </url><url>
+    <loc>https://blog.idontwannarock.dev/tags/mysql/</loc>
+    <lastmod>2025-02-07T09:39:10+08:00</lastmod>
+  </url><url>
+    <loc>https://blog.idontwannarock.dev/posts/</loc>
+    <lastmod>2025-02-07T09:39:10+08:00</lastmod>
+  </url><url>
+    <loc>https://blog.idontwannarock.dev/tags/</loc>
+    <lastmod>2025-02-07T09:39:10+08:00</lastmod>
+  </url><url>
+    <loc>https://blog.idontwannarock.dev/2025/02/how_to_insert_if_not_exists_in_mysql/</loc>
+    <lastmod>2025-02-07T09:39:10+08:00</lastmod>
   </url><url>
     <loc>https://blog.idontwannarock.dev/tags/docker/</loc>
     <lastmod>2024-10-16T11:06:41+08:00</lastmod>
   </url><url>
     <loc>https://blog.idontwannarock.dev/tags/docker-compose/</loc>
-    <lastmod>2024-10-16T11:06:41+08:00</lastmod>
-  </url><url>
-    <loc>https://blog.idontwannarock.dev/</loc>
-    <lastmod>2024-10-16T11:06:41+08:00</lastmod>
-  </url><url>
-    <loc>https://blog.idontwannarock.dev/categories/implementation/</loc>
-    <lastmod>2024-10-16T11:06:41+08:00</lastmod>
-  </url><url>
-    <loc>https://blog.idontwannarock.dev/tags/mysql/</loc>
     <lastmod>2024-10-16T11:06:41+08:00</lastmod>
   </url><url>
     <loc>https://blog.idontwannarock.dev/2024/10/pxc_mysql_docker_compose/</loc>
@@ -26,13 +38,7 @@
     <loc>https://blog.idontwannarock.dev/tags/percona-xtradb-cluster/</loc>
     <lastmod>2024-10-16T11:06:41+08:00</lastmod>
   </url><url>
-    <loc>https://blog.idontwannarock.dev/posts/</loc>
-    <lastmod>2024-10-16T11:06:41+08:00</lastmod>
-  </url><url>
     <loc>https://blog.idontwannarock.dev/tags/pxc/</loc>
-    <lastmod>2024-10-16T11:06:41+08:00</lastmod>
-  </url><url>
-    <loc>https://blog.idontwannarock.dev/tags/</loc>
     <lastmod>2024-10-16T11:06:41+08:00</lastmod>
   </url><url>
     <loc>https://blog.idontwannarock.dev/2024/05/gitattributes_glowroot_error/</loc>

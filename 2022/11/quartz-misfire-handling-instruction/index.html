@@ -432,8 +432,7 @@
 <p>那另一方面來說，以同樣的例子而言，如果 Quartz 準備要執行的時候已經是 12:03，那這個 Job 的這次執行就會被認為是 misfire，這時候 Quartz 就會依照設定好的 misfire handling instruction 來執行未觸發時的動作</p>
 <p>這樣舉例就能很清楚的理解 <code>misfireThreshold</code> 的意義</p>
 <blockquote>
-<p>要在 Spring Boot 整合 Quartz 專案中設定 <code>misfireThreshold</code>，可在 properties 檔中設定 <code>spring.quartz.properties.org.quartz.jobStore.misfireThreshold=60000</code>，這個參數的 default 就是 60000 milliseconds 也就是一分鐘</p>
-</blockquote>
+<p>要在 Spring Boot 整合 Quartz 專案中設定 <code>misfireThreshold</code>，可在 properties 檔中設定 <code>spring.quartz.properties.org.quartz.jobStore.misfireThreshold=60000</code>，這個參數的 default 就是 60000 milliseconds 也就是一分鐘</p></blockquote>
 <p>而 misfire handling instruction 會因為不同類型的 Trigger 而會有些不同，以下來討論常見的 <code>SimpleTrigger</code> 跟 <code>CronTrigger</code> 有提供的 misfire handling instruction</p>
 <h1 id="misfire-handling-instruction">Misfire Handling Instruction</h1>
 <h2 id="simpletrigger">SimpleTrigger</h2>
