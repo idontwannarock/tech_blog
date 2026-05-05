@@ -1,0 +1,35 @@
+{{/* Project-level override of themes/diary extended_head hook. */}}
+
+{{ if not .Params.canonicalUrl }}
+<link rel="canonical" href="{{ .Permalink }}" />
+{{ end }}
+
+{{ if .IsPage }}
+{{- $data := dict
+    "@context" "https://schema.org"
+    "@type" "BlogPosting"
+    "headline" .Title
+    "url" .Permalink
+    "datePublished" (.Date.Format "2006-01-02")
+    "dateModified" (.Lastmod.Format "2006-01-02")
+    "author" (dict
+        "@type" "Person"
+        "name" "Howard Wang"
+        "url" "https://github.com/idontwannarock")
+-}}
+{{- with .Params.description -}}
+  {{- $data = merge $data (dict "description" .) -}}
+{{- end -}}
+{{- with .Params.tags -}}
+  {{- $data = merge $data (dict "keywords" .) -}}
+{{- end }}
+<script type="application/ld+json">{{ $data | jsonify | safeJS }}</script>
+{{ else if .IsHome }}
+{{- $data := dict
+    "@context" "https://schema.org"
+    "@type" "WebSite"
+    "name" .Site.Title
+    "url" .Site.BaseURL
+-}}
+<script type="application/ld+json">{{ $data | jsonify | safeJS }}</script>
+{{ end }}
