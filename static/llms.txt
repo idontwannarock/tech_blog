@@ -1,0 +1,17 @@
+# Howard Tech Note
+
+> Personal technical blog by Howard Wang. Notes on Java, Spring, MySQL, Docker, CI/CD, and backend engineering.
+
+Author: Howard Wang (GitHub: idontwannarock). Content is licensed CC BY-SA 4.0. The site is open to AI/LLM crawlers — see [/robots.txt](https://blog.idontwannarock.dev/robots.txt).
+
+## Key pages
+
+- [About](https://blog.idontwannarock.dev/about): Author background and tech stack
+- [Archive](https://blog.idontwannarock.dev/posts): Full chronological post list
+- [Categories](https://blog.idontwannarock.dev/categories): Posts grouped by category
+- [Tags](https://blog.idontwannarock.dev/tags): Posts grouped by tag
+
+## Feeds
+
+- [RSS](https://blog.idontwannarock.dev/index.xml): RSS 2.0 feed of all posts
+- [Sitemap](https://blog.idontwannarock.dev/sitemap.xml): Full URL list with last-modified dates
