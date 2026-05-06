@@ -13,6 +13,9 @@ canonifyURLs = true
   [services.googleAnalytics]
     id = "G-JP1V61PPMJ"
 
+[outputs]
+  page = ["html", "markdown"]
+
 [markup]
   [markup.highlight]
     codeFences = true
