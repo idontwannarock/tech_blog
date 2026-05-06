@@ -1,11 +1,11 @@
 # Howard Tech Blog
 
-Hugo blog at <https://blog.idontwannarock.dev/>, deployed from `main` via GitHub Actions.
+Hugo blog at <https://blog.idontwannarock.dev/>, deployed from `main` via Cloudflare Pages.
 
 ## Prerequisite
 
 - Git 2.33.1+
-- Hugo extended 0.156+ (optional — only for local preview; CI handles publishing)
+- Hugo extended 0.156+ (optional — only for local preview; Cloudflare Pages handles publishing)
 
 ## Init After Git Clone
 
@@ -35,7 +35,18 @@ Commit and push to `main`:
 git push origin main
 ```
 
-The [`deploy.yml`](.github/workflows/deploy.yml) workflow builds the site with Hugo extended and deploys to GitHub Pages. End-to-end time is typically under a minute.
+[Cloudflare Pages](https://pages.cloudflare.com/) auto-builds the site with Hugo extended and deploys to <https://blog.idontwannarock.dev/>. Pushes to non-production branches and pull requests get unique preview URLs on the project's `*.pages.dev` domain. End-to-end time is typically 30-60 seconds.
+
+Build settings live in the Cloudflare Pages dashboard, not in the repo:
+
+- Build command: `hugo --gc --minify`
+- Build output directory: `public`
+- Environment variable: `HUGO_VERSION=0.161.1`
+
+Edge behaviour configured via repo files:
+
+- [`static/_headers`](static/_headers) — HTTP response headers (RFC 8288 `Link` header for AI agent discovery).
+- [`functions/_middleware.ts`](functions/_middleware.ts) — Cloudflare Pages middleware that honours `Accept: text/markdown` content negotiation, serving the raw post body in markdown.
 
 ## Update Theme
 
