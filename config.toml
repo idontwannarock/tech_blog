@@ -6,7 +6,6 @@ copyright = "This website by Howard Wang is licensed under a Creative Common Att
 license = "CC BY 4.0"
 licenseURL = "https://creativecommons.org/licenses/by-sa/4.0/"
 theme = "diary"
-canonifyURLs = true
 
 # Google Analytics
 [services]
